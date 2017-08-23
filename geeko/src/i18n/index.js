@@ -15,7 +15,6 @@ const messages = {
     zh: ZHMessage
 }
 
-
 export default new VueI18n({
     locale: window.locale || 'zh', // set locale
     messages, // set locale messages

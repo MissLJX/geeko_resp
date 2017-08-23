@@ -1,13 +1,22 @@
 <template>
-    <li>{{item.productName}}</li>
+    <li>
+        {{item.productName}}
+        <link-image :src="item.productUrl"/>
+    </li>
 </template>
 
-<style type="scss/text" lang="scss">
+<style scoped lang="scss">
 
 </style>
 
 <script type="text/ecmascript-6">
+
+    import LinkImage from '../../components/link-image.vue'
+
     export default{
-        props:['item']
+        props:['item'],
+        components:{
+            'link-image': LinkImage
+        }
     }
 </script>

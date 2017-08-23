@@ -4,6 +4,10 @@
 
 export default {
     message: {
-        shoppingCart:'Shopping Cart'
+        shoppingCart:'Shopping Cart',
+        loading:'loading'
+    },
+    label: {
+        address:'address'
     }
 }

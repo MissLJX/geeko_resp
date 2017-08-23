@@ -23,8 +23,8 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, './dist'),
         publicPath: '/',
-        filename: '[name].[chunkhash].js',
-        chunkFilename:'[name].[chunkhash].js'
+        filename: '[name].js',
+        chunkFilename:'[name].js'
     },
 
     module: {
@@ -37,67 +37,50 @@ module.exports = {
                 }
             },
             {
+                test: /\.vue$/,
+                loader: 'vue-loader',
+                options: {
+                    loaders: {
+                        'css': 'style-loader!css-loader!sass-loader'
+                    },
+                    extractCSS: process.env.NODE_ENV === 'production'
+                }
+            },
+            {
                 test: /\.css$/,
                 use: ExtractTextPlugin.extract({
                     fallback: "style-loader",
                     use: "css-loader"
                 })
             },
-
             {
                 test: /\.scss$/,
                 use: ExtractTextPlugin.extract({
                     fallback: "style-loader",
                     use: ['css-loader', 'sass-loader']
                 })
-            },
-
-            {
-                test: /\.vue$/,
-                loader: 'vue-loader',
-                options: {
-                    loaders: {
-                        'scss': 'style-loader!css-loader!sass-loader'
-                    },
-                    extractCSS: true
-                }
             }
         ]
     },
+
 
     plugins: [
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify('production')
         }),
-        new ExtractTextPlugin("style.css"),
         new HtmlWebpackPlugin({
             title: 'index',
             template: 'index.ejs',
             filename: 'index.html'
         }),
 
-        new webpack.HashedModuleIdsPlugin(),
-        new WebpackChunkHash(),
         new webpack.optimize.CommonsChunkPlugin({
             name: 'vendor',
             minChunks: function(module){
                 return module.context && module.context.indexOf("node_modules") > 0
             }
         }),
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'manifest',
-            minChunks: Infinity
-        }),
-
-        new ChunkManifestPlugin({
-            filename: "chunk-manifest.json",
-            manifestVariable: "webpackManifest",
-            inlineManifest: true
-        }),
-
-
-
-        // new CleanWebpackPlugin(['dist'])
+        new ExtractTextPlugin({filename: '[name].css'})
     ],
 
 
@@ -123,7 +106,6 @@ if (isProduction) {
             compress: {
                 warnings: false
             }
-        }),
-        new webpack.optimize.OccurrenceOrderPlugin()
+        })
     ])
 }

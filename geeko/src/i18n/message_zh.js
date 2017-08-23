@@ -4,6 +4,10 @@
 
 export default {
     message: {
-        shoppingCart:'购物车'
+        shoppingCart:'购物车',
+        loading:'加载'
+    },
+    label: {
+        address: '地址'
     }
 }

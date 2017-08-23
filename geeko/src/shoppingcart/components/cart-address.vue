@@ -1,7 +1,12 @@
 <template id="address-area">
-    <div>
-        <div class="hd">
-            <h3>Shipping Address</h3>
+    <div class="cart-address">
+        <div class="hd st-table">
+            <div class="st-cell st-v-m">
+                <strong>{{$t('label.address')}}</strong>
+            </div>
+            <div class="st-cell">
+
+            </div>
         </div>
         <div class="bd">
             <address>
@@ -13,22 +18,39 @@
     </div>
 </template>
 
-<style type="scss/text" lang="scss">
+<style scoped lang="scss">
+    .cart-address {
+        & > .hd {
+            height: 40px;
+            h3 {
+                font-size: 14px;
+                font-weight: 600;
+            }
+            padding: 0 10px;
+        }
 
+        & > .bd {
+            padding: 0 10px 10px;
+        }
+
+        address {
+
+        }
+    }
 </style>
 
 <script type="text/ecmascript-6">
     export default{
-        props:['shippingDetail'],
-        computed:{
+        props: ['shippingDetail'],
+        computed: {
             streetAddress(){
-                if(this.shippingDetail.unit)
-                    return this.shippingDetail.streetAddress1 + ' ,' +this.shippingDetail.unit
+                if (this.shippingDetail.unit)
+                    return this.shippingDetail.streetAddress1 + ' ,' + this.shippingDetail.unit
                 return this.shippingDetail.streetAddress1
             },
             stateCountry(){
-                if(this.shippingDetail.state)
-                    return this.shippingDetail.state.label +', '+ this.shippingDetail.country.label
+                if (this.shippingDetail.state)
+                    return this.shippingDetail.state.label + ', ' + this.shippingDetail.country.label
                 return this.shippingDetail.country.label
             }
         }
