@@ -3,7 +3,7 @@
         <list :items="addresses" @listing="listing" :loading="loading">
             <template slot="li" scope="props">
                 <li :key="props.item.id">
-                    <shipping-detail :address="props.item"/>
+                    <shipping-detail :address="props.item" @list-address-edit="listEditHandle" @make-default="makeDefaultHandle"/>
                 </li>
             </template>
         </list>
@@ -41,6 +41,12 @@
         methods: {
             listing(){
                 this.$emit('listing')
+            },
+            listEditHandle(address){
+                this.$emit('list-address-edit', address)
+            },
+            makeDefaultHandle(addressId){
+                this.$emit('make-default', addressId)
             }
         },
         components: {

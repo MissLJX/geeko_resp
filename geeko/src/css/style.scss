@@ -72,11 +72,11 @@ input:-webkit-autofill{
 /** ================icon font==================**/
 @font-face {
   font-family: 'iconfont';  /* project id 384296 */
-  src: url('//at.alicdn.com/t/font_384296_bbivw9x9m86w29.eot');
-  src: url('//at.alicdn.com/t/font_384296_bbivw9x9m86w29.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_384296_bbivw9x9m86w29.woff') format('woff'),
-  url('//at.alicdn.com/t/font_384296_bbivw9x9m86w29.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_384296_bbivw9x9m86w29.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_384296_oi3az1q4lm3oko6r.eot');
+  src: url('//at.alicdn.com/t/font_384296_oi3az1q4lm3oko6r.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_384296_oi3az1q4lm3oko6r.woff') format('woff'),
+  url('//at.alicdn.com/t/font_384296_oi3az1q4lm3oko6r.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_384296_oi3az1q4lm3oko6r.svg#iconfont') format('svg');
 }
 
 .iconfont{
@@ -93,6 +93,16 @@ input:-webkit-autofill{
 
 
 
+body{
+  font-size: 14px;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  -webkit-text-size-adjust: 100%;
+  color: #222928;
+}
+
+@import "base";
+
+
 
 .st-table{
   display: table;
@@ -104,6 +114,17 @@ input:-webkit-autofill{
 
 .st-cell{
   display: table-cell;
+}
+
+.st-flex{
+  display: flex;
+}
+
+.st-justify-b{
+  justify-content: space-between;
+}
+
+.st-flex-item{
 }
 
 .st-v-m{
@@ -118,6 +139,55 @@ input:-webkit-autofill{
   vertical-align: bottom;
 }
 
+.st-t-l{
+  text-align: left;
+}
+
+.st-t-r{
+  text-align: right;
+}
+
 .st-fullwidth{
   width: 100%;
 }
+
+.st-fc-r{
+  color: $red;
+}
+
+.st-clear{
+  &::after{
+    display: block;
+    content: '';
+    clear: both;
+  }
+}
+
+.st-ellipsis{
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+
+/**===========Form===============**/
+.st-control{
+  .st-input , .st-select{
+    display: block;
+    outline: none;
+    border:1px solid #dcdcdc;
+    &:focus{
+      border-color: #000;
+    }
+
+    &.st-input-danger{
+      border-color: #f19ca6;
+    }
+  }
+  .st-is-danger{
+    font-size: 11px;
+    color: #f19ca6;
+  }
+}
+
+/**===============================**/

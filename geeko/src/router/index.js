@@ -8,10 +8,12 @@ import Me from '../me/router'
 import Page404 from '../pages/404.vue'
 import Page500 from '../pages/500.vue'
 
+import store from '../store'
+
 Vue.use(VueRouter)
 
 const routes = [
-    {path:'*', name:'404', component: Page404},
+    {path: '*', name: '404', component: Page404},
     shoppingcart,
     ...Me
 ]
@@ -24,7 +26,15 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
     document.title = to.meta.title
-    next()
+    if (to.path.startsWith('/me')) {
+        store.dispatch('me/init').then(() => {
+            next()
+        })
+    } else {
+        next()
+    }
+
+
 })
 
 export default router

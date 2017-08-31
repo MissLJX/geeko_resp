@@ -50,6 +50,12 @@ const Me = [
         component: () => import('../pages/settings.vue'),
         name: 'settings',
         meta: {title: 'Settings'}
+    },
+    {
+        path: '/me/notification',
+        component: () => import('../pages/notification.vue'),
+        name: 'notification',
+        meta: {title: 'Notification'}
     }
 ]
 

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <ul>
+        <ul class="st-clear">
             <slot v-for="item in items" name="li" :item="item"></slot>
         </ul>
         <div v-show="loading">loading</div>

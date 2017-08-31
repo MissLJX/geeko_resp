@@ -1,13 +1,13 @@
 <template>
     <div>
-        <address-list :addresses="addresses" :loading="false" @listing="listing"/>
 
-        <button  @click="showeditor = !showeditor">Test</button>
+        <page-header><span>{{$t('label.addressBook')}}</span>  <span slot="oplabel">{{$t('label.add')}}</span></page-header>
+
+        <address-list :addresses="addresses" :loading="false" @listing="listing" @list-address-edit="listEditHandle" @make-default="makeDefaultHandle"/>
+
 
         <transition name="uper">
-            <div class="el-address-editor" v-if="showeditor">
-                <span @click="showeditor = !showeditor">close</span>
-            </div>
+            <address-editor v-if="showeditor" :address="editing" @close="close"/>
         </transition>
     </div>
 </template>
@@ -27,7 +27,7 @@
     }
 
     .uper-enter-active , .uper-leave-active{
-        transition: top .5s;
+        transition: top .3s;
     }
 
     .uper-leave-active , .uper-enter{
@@ -37,14 +37,17 @@
 
 <script type="text/ecmascript-6">
     import AddressList from '../components/address-list.vue'
+    import AddressEditor from '../../components/address-editor.vue'
     import store from '../../store'
     import {mapGetters} from 'vuex'
+    import PageHeader from '../components/page-header.vue'
 
     export default{
         data(){
             return {
                 loading: false,
-                showeditor: false
+                showeditor: false,
+                editing:null
             }
         },
         computed: {
@@ -54,13 +57,23 @@
             listing(){
                 console.log('listing....')
             },
-            testHandle(){
+            listEditHandle(address){
+                this.editing = address
                 this.showeditor = true
-                alert(this.showeditor)
+            },
+            close(){
+                this.showeditor = false
+            },
+            makeDefaultHandle(id){
+                store.dispatch('me/makeDefault', id).then(() => {
+
+                })
             }
         },
         components: {
             'address-list': AddressList,
+            'address-editor': AddressEditor,
+            'page-header': PageHeader
         },
         beforeRouteEnter(to, from, next){
             store.dispatch('me/getAddresses').then(() => {

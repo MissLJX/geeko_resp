@@ -20,9 +20,10 @@
         }
 
         &.dis{
-            background-color: #6b6b6b;
-            color: #fff;
+            background-color: #dcdcdc;
+            color: #666;
             cursor: default;
+            border-color: #dcdcdc;
         }
 
     }

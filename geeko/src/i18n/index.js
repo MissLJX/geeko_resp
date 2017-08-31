@@ -16,6 +16,6 @@ const messages = {
 }
 
 export default new VueI18n({
-    locale: window.locale || 'zh', // set locale
+    locale: window.locale || 'en', // set locale
     messages, // set locale messages
 })
