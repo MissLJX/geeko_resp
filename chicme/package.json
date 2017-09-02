@@ -1,0 +1,18 @@
+{
+  "name": "chicme",
+  "version": "1.0.0",
+  "description": "this is a chicme rebuild version",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "chicme"
+  ],
+  "author": "s_lei",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.4",
+    "mongoose": "^4.11.9"
+  }
+}
