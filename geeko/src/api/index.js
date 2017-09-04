@@ -3,15 +3,15 @@
  */
 import axios from './apiconfigs'
 
-export function getDictionary(type){
-    return axios.get('',{type: type}).then(data => data.result)
+export function getDictionary(type) {
+    return axios.get('/dictionary/anon/get', {typeCode: type}).then(data => data.result)
 }
 
 
-export function getCountries(){
+export function getCountries() {
     return getDictionary('country')
 }
 
 export function getStates(country) {
-    return getDictionary('state-'+country)
+    return getDictionary('state-' + country)
 }

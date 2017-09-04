@@ -25,8 +25,9 @@
                 return this.address.streetAddress1
             },
             stateCountry(){
-                if (this.address.state)
-                    return this.address.state.label + ', ' + this.address.country.label
+                var stateStr = this.address.state ? (this.address.state.label ? this.address.state.label : this.address.state.value) : '';
+                if(stateStr)
+                    return stateStr + ', ' + this.address.country.label
                 return this.address.country.label
             }
         }

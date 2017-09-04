@@ -17,10 +17,15 @@ Vue.use(VeeValidate)
 
 sync(store, router)
 
+
 new Vue({
     store,
     i18n,
     router,
     el:'#app',
     render: (h) => h(App)
-});
+})
+
+
+//init countries
+store.dispatch('getCountries')

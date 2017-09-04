@@ -1,6 +1,6 @@
 <template>
     <div>
-        <list :items="products" class="el-products">
+        <list :items="products" :loading="loading" :finished="finished" class="el-products" @listing="$emit('listing')">
             <template slot="li" scope="props">
                 <li :key="props.item.id">
                     <product :product="props.item"/>
@@ -30,6 +30,14 @@
             products: {
                 type: Array,
                 required: true
+            },
+            loading: {
+                type: Boolean,
+                default: false
+            },
+            finished:{
+                type: Boolean,
+                default: false
             }
         },
         components: {

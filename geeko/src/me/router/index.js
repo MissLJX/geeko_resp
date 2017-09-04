@@ -55,7 +55,35 @@ const Me = [
         path: '/me/notification',
         component: () => import('../pages/notification.vue'),
         name: 'notification',
-        meta: {title: 'Notification'}
+        meta: {title: 'Notification'},
+        children: [
+            {
+                path: '',
+                meta: {title: 'Notification promotion', depth: 1},
+                component: () => import('../pages/notification/notification-promotion.vue')
+            },
+            {
+                path: 'promotion',
+                meta: {title: 'Notification promotion', depth: 1},
+                component: () => import('../pages/notification/notification-promotion.vue')
+            },
+            {
+                path: 'order',
+                meta: {title: 'Notification order', depth: 2},
+                component: () => import('../pages/notification/notification-order.vue')
+            },
+            {
+                path: 'other',
+                meta: {title: 'Notification others', depth: 3},
+                component: () => import('../pages/notification/notification-other.vue')
+            }
+        ]
+    },
+    {
+        path: '/me/wishlist',
+        component: () => import('../pages/wishlist.vue'),
+        name:'wishlist',
+        meta:{title:'Wish List'}
     }
 ]
 

@@ -2,6 +2,7 @@
  * Created by shao_ on 2017/8/23.
  */
 
+import axios from '../../api/apiconfigs'
 
 var me_data = {
     "success": true,
@@ -4352,10 +4353,150 @@ var like_products = {
 }
 
 
+var order_notifications = {
+    "success": true,
+    "code": 200,
+    "result": [{
+        "id": "59928dcbe4b0329f25949942",
+        "customerId": "1F4Q3Z7A81P7G8G3w3D5m9a4w",
+        "sendTime": 1467010336748,
+        "readTime": 1504160680506,
+        "model": {
+            "image": "https://dgzfssf1la12s.cloudfront.net/medium/e584119c-2fba-4caa-9ce7-fa6a3e444e6b-pc",
+            "content": "<span style=\"color:#666;\">Order No: 1F4Q3Z7A81P7G8G3w3D5m9a4w</span><br><span style=\"color:#666;\">Tracking No: 1F4Q3Z7A81P7G8G3w3D5m9a4w</span><br>Your order has been shipped.",
+            "deepLink": {"type": 8, "params": ["17590j2p7p786n1V8n7e7A7i6k"]},
+            "type": "1"
+        },
+        "read": true
+    },{
+        "id": "59928dcbe4b0329f25949943",
+        "customerId": "1F4Q3Z7A81P7G8G3w3D5m9a4w",
+        "sendTime": 1467010336748,
+        "readTime": 1504160680506,
+        "model": {
+            "image": "https://dgzfssf1la12s.cloudfront.net/large/e399acac-357d-42f1-83c6-df84f2aff482-pc",
+            "content": "<span style=\"color:#666;\">Order No: 1F4Q3Z7A81P7G8G3w3D5m9a4w</span><br><span style=\"color:#666;\">Tracking No: 1F4Q3Z7A81P7G8G3w3D5m9a4w</span><br>Your order has been shipped.",
+            "deepLink": {"type": 8, "params": ["17590j2p7p786n1V8n7e7A7i6k"]},
+            "type": "1"
+        },
+        "read": true
+    },{
+        "id": "59928dcbe4b0329f25949943",
+        "customerId": "1F4Q3Z7A81P7G8G3w3D5m9a4w",
+        "sendTime": 1467010336748,
+        "readTime": 1504160680506,
+        "model": {
+            "image": "https://dgzfssf1la12s.cloudfront.net/large/e399acac-357d-42f1-83c6-df84f2aff482-pc",
+            "content": "This is a ticket response. ",
+            "deepLink": {"type": 8, "params": ["17590j2p7p786n1V8n7e7A7i6k"]},
+            "type": "3"
+        },
+        "read": true
+    },{
+        "id": "59928dcbe4b0329f25949943",
+        "customerId": "1F4Q3Z7A81P7G8G3w3D5m9a4w",
+        "sendTime": 1467010336748,
+        "readTime": 1504160680506,
+        "model": {
+            "image": "https://dgzfssf1la12s.cloudfront.net/large/e399acac-357d-42f1-83c6-df84f2aff482-pc",
+            "content": "This is a ticket response.",
+            "deepLink": {"type": 8, "params": ["17590j2p7p786n1V8n7e7A7i6k"]},
+            "type": "3"
+        },
+        "read": true
+    }]
+}
+
+var promotion_notifications = {
+    "success": true,
+    "code": 200,
+    "result": [{
+        "id": "59928dcbe4b0329f25949942",
+        "customerId": "1F4Q3Z7A81P7G8G3w3D5m9a4w",
+        "sendTime": 1467010336748,
+        "readTime": 1504160680506,
+        "model": {
+            "image": "https://dgzfssf1la12s.cloudfront.net/medium/f151e987-210e-4de9-842a-dbe9c81bedd7-pc-sec",
+            "content": "Pre-Order T-shirt is released<br> 60% Off Huge Sale.<br>Try It Now!",
+            "deepLink": {"type": 8, "params": ["17590j2p7p786n1V8n7e7A7i6k"]},
+            "type": "1"
+        },
+        "read": true
+    },{
+        "id": "59928dcbe4b0329f25949943",
+        "customerId": "1F4Q3Z7A81P7G8G3w3D5m9a4w",
+        "sendTime": 1467010336748,
+        "readTime": 1504160680506,
+        "model": {
+            "image": "https://dgzfssf1la12s.cloudfront.net/site/pc/icon329.png",
+            "content": "Two-Peiece also the best choice for early Autumn from $5.99 this time!",
+            "deepLink": {"type": 1, "params": ["17590j2p7p786n1V8n7e7A7i6k"]},
+            "type": "1"
+        },
+        "read": true
+    },{
+        "id": "59928dcbe4b0329f25949943",
+        "customerId": "1F4Q3Z7A81P7G8G3w3D5m9a4w",
+        "sendTime": 1467010336748,
+        "readTime": 1504160680506,
+        "model": {
+            "image": "https://dgzfssf1la12s.cloudfront.net/collection/6fbf237f-86a1-4adf-8074-798ad48023f6",
+            "content": "School bells ringing soon!<br>Complete Your Back To School.",
+            "deepLink": {"type": 8, "params": ["17590j2p7p786n1V8n7e7A7i6k"]},
+            "type": "2"
+        },
+        "read": true
+    }]
+}
+
+var other_notifications = {
+    "success": true,
+    "code": 200,
+    "result": [{
+        "id": "59928dcbe4b0329f25949942",
+        "customerId": "1F4Q3Z7A81P7G8G3w3D5m9a4w",
+        "sendTime": 1467010336748,
+        "readTime": 1504160680506,
+        "model": {
+            "content": "Sharing product on ChicMe/Facebook",
+            "num":30,
+            "deepLink": {"type": 8, "params": ["17590j2p7p786n1V8n7e7A7i6k"]},
+            "type": "4"
+        },
+        "read": true
+    },{
+        "id": "59928dcbe4b0329f25949943",
+        "customerId": "1F4Q3Z7A81P7G8G3w3D5m9a4w",
+        "sendTime": 1467010336748,
+        "readTime": 1504160680506,
+        "model": {
+            "content": "Buy a product from ChicMe by credit",
+            "num":-30,
+            "deepLink": {"type": 1, "params": ["17590j2p7p786n1V8n7e7A7i6k"]},
+            "type": "4"
+        },
+        "read": true
+    },{
+        "id": "59928dcbe4b0329f25949944",
+        "customerId": "1F4Q3Z7A81P7G8G3w3D5m9a4w",
+        "sendTime": 1467010336748,
+        "readTime": 1504160680506,
+        "model": {
+            "name":"50%",
+            "description": "Order over $39.0",
+            "startDate":1467010336748,
+            "endDate":1467010336748,
+            "code":"CM259",
+            "deepLink": {"type": 8, "params": ["17590j2p7p786n1V8n7e7A7i6k"]},
+            "type": "5"
+        },
+        "read": true
+    }]
+}
+
+
 export const get = () => {
-    return new Promise((resolve, reject) => {
-        resolve(me_data)
-    }).then(me_data => me_data.result)
+    return axios.get('/v7/customer/get', {}, {}).then(data => data.result)
 }
 
 export const getFeed = () => {
@@ -4366,9 +4507,9 @@ export const getFeed = () => {
 
 
 export const getShippingDetails = () => {
-    return new Promise((resolve, reject) => {
-        resolve(address_data)
-    }).then(address_data => address_data.result)
+    return axios.get('/v7/customer/get-shipping-details',{},{}).then((data) => {
+        return data.result
+    })
 }
 
 export const makeDefaultAddress = (id) => {
@@ -4383,10 +4524,10 @@ export const getCoupons = () => {
     }).then(coupons => coupons.result)
 }
 
-export const getCredits = () => {
-    return new Promise((resolve, reject) => {
-        resolve(credits)
-    }).then(credits => credits.result)
+export const getCredits = (skip) => {
+    return axios.get('/pointsHistory/'+skip+'/20/getAll',{},{}).then((data) => {
+        return data.result
+    })
 }
 
 export const getMayLikes = () => {
@@ -4399,4 +4540,29 @@ export const getWishlist = () => {
     return new Promise((resolve, reject) => {
         resolve(wish_list)
     }).then(wish_list => wish_list.result)
+}
+
+export const getOrderNotifications = (skip) => {
+    return new Promise((resolve, reject) => {
+        resolve(order_notifications)
+    }).then(order_notifications => order_notifications.result)
+}
+
+export const getPromotionNotification = (skip) => {
+    return new Promise((resolve, reject) => {
+        resolve(promotion_notifications)
+    }).then(promotion_notifications => promotion_notifications.result)
+}
+
+export const getOtherNotification = (skip) => {
+    return new Promise((resolve, reject) => {
+        resolve(other_notifications)
+    }).then(other_notifications => other_notifications.result)
+}
+
+
+export const getWishProducts = (skip) => {
+   return axios.get('/v7/wanna-list/anon/1F4Q3Z7A81P7G8G3w3D5m9a4w/'+skip+'/20/all-products', {}, {}).then((data) => {
+       return data.result
+   })
 }

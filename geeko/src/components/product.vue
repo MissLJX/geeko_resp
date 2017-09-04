@@ -2,7 +2,7 @@
     <div class="el-list-product">
         <a>
             <figure>
-                <div>
+                <div class="img">
                     <img :src="imageUrl"/>
                 </div>
 
@@ -25,9 +25,23 @@
 
 <style scoped lang="scss">
     .el-list-product {
+
+        .img{
+            position: relative;
+            &::after{
+                content: '';
+                display: block;
+                margin-top: 133%;
+            }
+            overflow: hidden;
+        }
+
         img {
             display: block;
+            position: absolute;
             width: 100%;
+            top: 0;
+            left: 0;
         }
 
         .el-product-price {
@@ -53,7 +67,7 @@
             & > * {
                 margin-top: 5px;
             }
-            padding-bottom: 10px;
+            height: 50px;
         }
     }
 </style>

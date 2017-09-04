@@ -10,10 +10,16 @@ const state = {
     addresses: null,
     coupons: null,
     feed: null,
-    credits: null,
+    credits: [],
     initialized: false,
     youlikes: null,
-    wishlist: null
+    wishlist: null,
+    orderNotifications: null,
+    promotionNotifications: null,
+    otherNotifications: null,
+    wishProducts: [],
+    wishskip: 0,
+    creditskip: 0
 }
 
 const getters = {
@@ -22,9 +28,15 @@ const getters = {
     addresses: state => state.addresses,
     coupons: state => state.coupons,
     credits: state => state.credits,
+    creditskip: state => state.creditskip,
     initialized: state => state.initialized,
     youlikes: state => state.youlikes,
-    wishlist: state => state.wishlist
+    wishlist: state => state.wishlist,
+    orderNotifications: state => state.orderNotifications,
+    promotionNotifications: state => state.promotionNotifications,
+    otherNotifications: state => state.otherNotifications,
+    wishProducts: state => state.wishProducts,
+    wishskip: state => state.wishskip
 }
 
 const mutations = {
@@ -41,7 +53,7 @@ const mutations = {
         state.coupons = _coupons
     },
     [types.ME_GET_CREDITS](state, _credits){
-        state.credits = _credits
+        state.credits = _.concat(state.credits, _credits)
     },
     [types.ME_INITIALIZED](state){
         state.initialized = true
@@ -51,7 +63,27 @@ const mutations = {
     },
     [types.ME_GET_WISH_LIST](state, wishlist){
         state.wishlist = wishlist
+    },
+    [types.ME_GET_NOTIFICATIONS_ORDER](state, orderNotifications){
+        state.orderNotifications = orderNotifications
+    },
+    [types.ME_GET_NOTIFICATIONS_PROMOTION](state, promotionNotifications){
+        state.promotionNotifications = promotionNotifications
+    },
+    [types.ME_GET_NOTIFICATIONS_OTHER](state, otherNotifications){
+        state.otherNotifications = otherNotifications
+    },
+    [types.ME_GET_WISH_PRODUCTS](state, wishProducts){
+        state.wishProducts = _.concat(state.wishProducts, wishProducts)
+    },
+    [types.ME_GET_WISH_SKIP](state){
+        state.wishskip += 20
+    },
+    [types.ME_GET_CREDITS_SKIP](state){
+        state.creditskip += 20
     }
+
+
 }
 
 const actions = {
@@ -134,15 +166,22 @@ const actions = {
         })
     },
 
-    getCredits({commit}){
-        return new Promise((resolve, reject) => {
-            api.getCredits().then(credits => {
+    getCredits({commit},{skip}){
+        return api.getCredits(skip).then((credits) => {
+            if(credits && credits.length){
                 commit(types.ME_GET_CREDITS, credits)
-                resolve()
-            }).catch(e => {
-                reject(e)
-            })
+                return {}
+            }else{
+                if(skip === 0){
+                    return {empty: true, finished: true}
+                }
+                return {finished: true}
+            }
         })
+    },
+
+    getCreditskip({commit}){
+        commit(types.ME_GET_CREDITS_SKIP)
     },
 
     getYoulikes({commit}){
@@ -165,6 +204,56 @@ const actions = {
                 reject(e)
             })
         })
+    },
+
+    getOrderNotifications({commit}, {skip}){
+        return new Promise((resolve, reject) => {
+            api.getOrderNotifications(skip).then(nts => {
+                commit(types.ME_GET_NOTIFICATIONS_ORDER, nts)
+                resolve({empty: skip === 0 && (!nts || !nts.length), nts})
+            }).catch(e => {
+                reject(e)
+            })
+        })
+    },
+
+    getPromotionNotifications({commit}, {skip}){
+        return new Promise((resolve, reject) => {
+            api.getPromotionNotification(skip).then(nts => {
+                commit(types.ME_GET_NOTIFICATIONS_PROMOTION, nts)
+                resolve({empty: skip === 0 && (!nts || !nts.length), nts})
+            }).catch(e => {
+                reject(e)
+            })
+        })
+    },
+
+    getOtherNotifications({commit}, {skip}){
+        return new Promise((resolve, reject) => {
+            api.getOtherNotification(skip).then(nts => {
+                commit(types.ME_GET_NOTIFICATIONS_OTHER, nts)
+                resolve({empty: skip === 0 && (!nts || !nts.length), nts})
+            }).catch(e => {
+                reject(e)
+            })
+        })
+    },
+
+    getWishproducts({commit}, {skip}){
+        return api.getWishProducts(skip).then((products) => {
+            if(products && products.length){
+                commit(types.ME_GET_WISH_PRODUCTS, products)
+            }else{
+                if(skip ===0){
+                    return {empty: true, finished: true}
+                }
+                return {finished: true}
+            }
+        })
+    },
+
+    getWishskip({commit}){
+        commit(types.ME_GET_WISH_SKIP)
     }
 }
 

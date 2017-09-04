@@ -4,6 +4,7 @@
             <slot v-for="item in items" name="li" :item="item"></slot>
         </ul>
         <div v-show="loading">loading</div>
+        <div v-show="finished">No more.</div>
     </div>
 </template>
 
@@ -25,6 +26,10 @@
             scrollable: {
                 type: Boolean,
                 default: true
+            },
+            finished: {
+                type: Boolean,
+                default: true
             }
         },
         methods: {
@@ -38,7 +43,7 @@
 
 
                 if (scrollTop + windowHeight >= documentHeight - 100) {
-                    if (!this.loading) {
+                    if (!this.loading && !this.finished) {
                         this.$emit('listing')
                     }
                 }

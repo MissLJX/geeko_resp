@@ -11,12 +11,14 @@
                 <div class="st-cell st-v-m">
                     <div class="el-me-headerImage">
                         <div>
-                            <div style="background-image: url(http://peach-1254218975.cossh.myqcloud.com/image/36d.jpg)"></div>
+                            <div :style="{'background-image': 'url('+headerImage+')' }"></div>
                         </div>
                     </div>
                 </div>
                 <div class="st-cell st-v-m">
-                    <span class="el-setting-icon"><i class="iconfont el-setting-font">&#xe633;</i></span>
+                    <router-link to="/me/notification">
+                        <span class="el-setting-icon"><i class="iconfont el-setting-font">&#xe633;</i></span>
+                    </router-link>
                 </div>
             </div>
 
@@ -74,6 +76,11 @@
                 </router-link>
             </li>
 
+            <li>
+                <router-link class="el-me-tool-list-item" to="/me/wishlist">
+                    <touch-go class="el-me-tool-list-touch" :label1="$t('label.wishlist')"/>
+                </router-link>
+            </li>
 
         </ul>
 
@@ -195,9 +202,9 @@
         margin-top: 15px;
         padding-left: 10px;
 
-        & > li{
+        & > li {
             border-top: 1px solid #dcdcdc;
-            &:first-child{
+            &:first-child {
                 border-top: none;
             }
         }
@@ -206,7 +213,7 @@
             text-decoration: none;
             display: block;
             color: #222928;
-            .el-me-tool-list-touch{
+            .el-me-tool-list-touch {
                 height: 40px;
                 width: 100%;
                 padding-right: 10px;
@@ -214,7 +221,7 @@
         }
     }
 
-    .el-me-like-area{
+    .el-me-like-area {
         background-color: #fff;
         margin-top: 15px;
     }
@@ -226,13 +233,19 @@
     import store from '../../store'
     import TouchGo from '../../components/touch-go.vue'
     import YouLikes from '../../components/you-likes.vue'
+    import * as utils from '../../utils/geekoutils'
+
+
     export default{
         computed: {
             ...mapGetters('me', [
-                'me','youlikes'
+                'me', 'youlikes'
             ]),
             fullName(){
                 return this.me.name.firstName + ' ' + this.me.name.lastName;
+            },
+            headerImage(){
+                return utils.IMAGE_PREFIX + '/icon/' + this.me.id
             }
         },
         methods: {},

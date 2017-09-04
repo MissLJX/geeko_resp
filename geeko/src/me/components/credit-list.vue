@@ -1,6 +1,6 @@
 <template>
     <div class="el-credits">
-        <list :items="credits" @listing="$emit('listing')" :scrollable="true">
+        <list :items="credits" :loading="loading" :finished="finished" @listing="$emit('listing')" :scrollable="true">
             <template slot="li" scope="props">
                 <li :key="props.item.id">
                     <credit class="el-credit" :credit="props.item"/>
@@ -11,14 +11,14 @@
 </template>
 
 <style scoped lang="scss">
-    .el-credits{
+    .el-credits {
         padding: 0 10px;
-        li{
-            border-top:1px solid #dcdcdc;
-            &:first-child{
+        li {
+            border-top: 1px solid #dcdcdc;
+            &:first-child {
                 border-top: none;
             }
-            .el-credit{
+            .el-credit {
                 width: 100%;
             }
             padding: 10px 0;
@@ -32,9 +32,17 @@
     import Credit from '../components/credit.vue'
 
     export default{
-        props:{
-            credits:{
+        props: {
+            credits: {
                 type: Array
+            },
+            loading: {
+                type: Boolean,
+                default: false
+            },
+            finished: {
+                type: Boolean,
+                default: false
             }
         },
         components: {

@@ -45,11 +45,9 @@
                         <div>
                             <label v-if="showLabel" :class="{'el-label':true}">{{$t('label.country')}}</label>
                             <p class="st-control">
-                                <select class="st-select" v-model="countrySelected">
+                                <select class="st-select" v-model="countrySelected" @change="changeCountry">
                                     <option disabled value="-1">Country</option>
-                                    <option>A</option>
-                                    <option>B</option>
-                                    <option>C</option>
+                                    <option v-for="c in countries" :value="c.value">{{c.label}}</option>
                                 </select>
                                 <span v-show="countrySelected == '-1'"
                                       class="st-is-danger">Please select a country</span>
@@ -61,9 +59,7 @@
                             <p class="st-control">
                                 <select class="st-select" v-model="stateSelected">
                                     <option disabled value="-1">State</option>
-                                    <option>A</option>
-                                    <option>B</option>
-                                    <option>C</option>
+                                    <option v-for="s in states" :value="s.value">{{s.label}}</option>
                                 </select>
                                 <span v-show="stateSelected == '-1'" class="st-is-danger">Please select a state</span>
                             </p>
@@ -180,10 +176,14 @@
 
     export default{
         data(){
+            var initCountry = this.address.country ? this.address.country.value : '-1'
+            var initState = this.address.state ? this.address.state.value : '-1'
             return {
                 shipping: this.address ? _.cloneDeep(this.address) : {},
-                countrySelected: '-1',
-                stateSelected: '-1'
+                countrySelected: initCountry,
+                stateSelected: initState,
+                initCountry,
+                initState
             }
         },
         props: {
@@ -194,6 +194,14 @@
                 type: Boolean,
                 required: false,
                 default: false
+            }
+        },
+        computed: {
+            countries(){
+                return this.$store.getters.countries
+            },
+            states(){
+                return this.$store.getters.states
             }
         },
         methods: {
@@ -209,10 +217,36 @@
 
                     alert('Correct them errors!')
                 });
+            },
+            getStates(isSelect){
+
+                if (isSelect) {
+//                    if (this.initCountry === this.countrySelected) {
+//                        this.stateSelected = this.initState
+//                    }else{
+                    this.stateSelected = '-1'
+//                    }
+                }
+
+                if (this.countrySelected && this.countrySelected != '-1') {
+                    this.$store.dispatch('getStates', {country: this.countrySelected})
+                } else {
+
+                }
+
+
+            },
+            changeCountry(evt){
+                evt.preventDefault()
+                this.stateSelected = '-1'
+                this.getStates(true)
             }
         },
         components: {
             'btn': Btn
+        },
+        created(){
+            this.getStates(false)
         }
 
 

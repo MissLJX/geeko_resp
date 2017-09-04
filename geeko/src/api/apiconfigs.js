@@ -8,7 +8,7 @@ const instance = axios.create({
     baseURL: window.ctx,
     timeout: 50000,
     headers: {
-        accessToken: 'c3802d2c-40b1-4f97-a8bb-8d88d134e620',
+        accessToken: 'ed38610b-59e8-447a-a036-17a1b662fad5',
         wid:'34ca61f6-6de1-89c6-0c26-2a75805978ae',
         appVersion:'3.2.0'
     }
