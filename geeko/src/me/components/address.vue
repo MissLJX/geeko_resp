@@ -7,7 +7,7 @@
                 <btn class="el-address-default" @click.native.prevent="makeDefaultHandle" v-else>Make Default</btn>
             </div>
             <div>
-                <btn class="el-address-op">Delete</btn>
+                <btn class="el-address-op" @click.native.prevent="deleteHandle">Delete</btn>
                 <btn class="el-address-op el-address-edit" @click.native.prevent="editHandle">Edit</btn>
             </div>
         </div>
@@ -70,6 +70,9 @@
             },
             makeDefaultHandle(){
                 this.$emit('make-default', this.address.id)
+            },
+            deleteHandle(){
+                this.$emit('delete', this.address.id)
             }
         },
         components: {

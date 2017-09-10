@@ -1,11 +1,12 @@
 <template>
     <div class="notification-body">
-        <notification-list :notifications="notifications"/>
+        <notification-list @listing="listingHandle" :loading="loading" :finished="finished"
+                           :notifications="notifications"/>
     </div>
 </template>
 
 <style scoped lang="scss">
-    .notification-body{
+    .notification-body {
         background-color: #efefef;
     }
 </style>
@@ -16,23 +17,43 @@
     import store from '../../../store'
 
     export default{
-        computed:{
+        data(){
+            return {
+                loading: false
+            }
+        },
+        computed: {
             notifications(){
                 return store.getters['me/promotionNotifications']
+            },
+            skip(){
+                return store.getters['me/promotionNtSkip']
+            },
+            loaded(){
+                return store.getters['me/promotionNtLoaded']
+            },
+            empty(){
+                return this.loaded && (!this.notifications || !this.notifications.length)
+            },
+            finished(){
+                return store.getters['me/promotionNtFinished']
+            }
+        },
+        methods: {
+            listingHandle(){
+                this.loading = true
+                store.dispatch("me/getPromotionNotifications", {skip: this.skip}).then(() => {
+                    this.loading = false
+                    store.dispatch("me/getPromotionNtSkip")
+                })
             }
         },
         components: {
             'notification-list': NotificationList
         },
-        beforeRouteEnter(to, from, next){
-            var notifications = store.getters['me/promotionNotifications']
-            if(notifications && notifications.length){
-                next()
-            }else{
-                store.dispatch('me/getPromotionNotifications', {skip:0}).then(() => {
-                    next()
-                })
-            }
+        created(){
+            if (!this.notifications || !this.notifications.length)
+                this.listingHandle()
         }
     }
 </script>

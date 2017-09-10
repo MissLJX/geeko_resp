@@ -34,7 +34,7 @@
                     <div>
                         <label v-if="showLabel" :class="{'el-label':true}">{{$t('label.unit')}}</label>
                         <p class="st-control">
-                            <input name="unit"
+                            <input name="unit" v-model="shipping.unit"
                                    :class="{'st-input':true}" type="text"
                                    :placeholder="$t('label.unit')"/>
                         </p>
@@ -45,7 +45,8 @@
                         <div>
                             <label v-if="showLabel" :class="{'el-label':true}">{{$t('label.country')}}</label>
                             <p class="st-control">
-                                <select class="st-select" v-model="countrySelected" @change="changeCountry">
+                                <select ref="country" class="st-select" v-model="countrySelected"
+                                        @change="changeCountry">
                                     <option disabled value="-1">Country</option>
                                     <option v-for="c in countries" :value="c.value">{{c.label}}</option>
                                 </select>
@@ -56,12 +57,18 @@
 
                         <div>
                             <label v-if="showLabel" :class="{'el-label':true}">{{$t('label.state')}}</label>
-                            <p class="st-control">
-                                <select class="st-select" v-model="stateSelected">
-                                    <option disabled value="-1">State</option>
+
+
+                            <p class="st-control" v-if="hasStates">
+                                <select ref="state" class="st-select" v-model="stateSelected">
+                                    <option disabled value="-1">State *</option>
                                     <option v-for="s in states" :value="s.value">{{s.label}}</option>
                                 </select>
                                 <span v-show="stateSelected == '-1'" class="st-is-danger">Please select a state</span>
+                            </p>
+
+                            <p class="st-control" v-else>
+                                <input ref="state" placeholder="State" name="state" v-model="stateInputed"/>
                             </p>
                         </div>
                     </div>
@@ -102,7 +109,8 @@
                     </div>
 
                     <div>
-                        <btn class="fill el-address-submit" type="submit">{{$t('label.submit')}}</btn>
+                        <btn v-if="!submiting" class="fill el-address-submit" type="submit">{{$t('label.submit')}}</btn>
+                        <btn class="dis el-address-submit" disabled="true" v-else>{{$t('label.submit')}}</btn>
                     </div>
                 </div>
             </form>
@@ -176,14 +184,25 @@
 
     export default{
         data(){
-            var initCountry = this.address.country ? this.address.country.value : '-1'
-            var initState = this.address.state ? this.address.state.value : '-1'
+            var initCountry = this.address && this.address.country ? this.address.country.value : '-1'
+            var initState = this.address && this.address.state ? this.address.state.value : '-1'
             return {
-                shipping: this.address ? _.cloneDeep(this.address) : {},
+                shipping: this.address ? _.cloneDeep(this.address) : {
+                    name: null,
+                    streetAddress1: null,
+                    unit: null,
+                    country: null,
+                    state: null,
+                    city: null,
+                    zipCode: null,
+                    phoneNumber: null
+                },
                 countrySelected: initCountry,
                 stateSelected: initState,
+                stateInputed: this.address && this.address.state ? this.address.state.value : '',
                 initCountry,
-                initState
+                initState,
+                submiting: false
             }
         },
         props: {
@@ -202,6 +221,9 @@
             },
             states(){
                 return this.$store.getters.states
+            },
+            hasStates(){
+                return _.indexOf(['US', 'CA'], this.countrySelected) >= 0
             }
         },
         methods: {
@@ -211,21 +233,38 @@
             validateBeforeSubmit(){
                 this.$validator.validateAll().then((result) => {
                     if (result) {
-                        alert('From Submitted!')
+                        this.shipping.country = this.$refs.country.value
+                        this.shipping.state = this.$refs.state.value
+
+                        this.submiting = true
+                        if (this.shipping.id) {
+                            this.$store.dispatch('me/updateAddress', this.shipping).then(() => {
+                                this.submiting = false
+                                this.$emit('close')
+                            }).catch((r) => {
+                                alert(r.result)
+                                this.submiting = false
+                            })
+                        } else {
+                            this.$store.dispatch('me/addAddress', this.shipping).then(() => {
+                                this.submiting = false
+                                this.$emit('close')
+                            }).catch((r) => {
+                                alert(r.result)
+                                this.submiting = false
+                            })
+                        }
+
+
                         return;
                     }
-
-                    alert('Correct them errors!')
                 });
             },
             getStates(isSelect){
 
                 if (isSelect) {
-//                    if (this.initCountry === this.countrySelected) {
-//                        this.stateSelected = this.initState
-//                    }else{
                     this.stateSelected = '-1'
-//                    }
+                    this.stateInputed = ''
                 }
 
                 if (this.countrySelected && this.countrySelected != '-1') {

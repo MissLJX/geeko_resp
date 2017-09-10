@@ -22,9 +22,10 @@ module.exports = {
 
     output: {
         path: path.resolve(__dirname, './dist'),
-        publicPath: '/',
+        // publicPath: '/joyshoetique/resources/vue/me/js/',
+        publicPath: '/resources/vue/me/js/',
         filename: '[name].js',
-        chunkFilename:'[name].js'
+        chunkFilename: '[name].js'
     },
 
     module: {
@@ -88,6 +89,7 @@ module.exports = {
         alias: {
             'vue$': 'vue/dist/vue.esm.js'
         }
+
     },
     devServer: {
         historyApiFallback: true,

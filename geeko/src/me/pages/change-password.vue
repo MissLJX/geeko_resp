@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="el-change-pass-body">
         <page-header>
             <span>{{$t('label.changePassword')}}</span>
             <span slot="oplabel" @click="changePasswordHandle">{{$t('label.save')}}</span>
@@ -19,9 +19,9 @@
                 <div class="el-change-block">
                     <label class="el-change-label">New Password</label>
                     <p class="st-control el-change-control">
-                        <input name="newPassword" v-model="info.newPassword" v-validate="'required'"
-                               :class="{'st-input':true, 'st-input-danger':errors.has('newPassword')}" type="text"/>
-                        <span v-show="errors.has('newPassword')" class="st-is-danger">{{errors.first('newPassword')}}</span>
+                        <input name="password" v-model="info.newPassword" v-validate="'required'"
+                               :class="{'st-input':true, 'st-input-danger':errors.has('password')}" type="text"/>
+                        <span v-show="errors.has('password')" class="st-is-danger">{{errors.first('password')}}</span>
                     </p>
                 </div>
 
@@ -61,6 +61,10 @@
         }
         margin-top: 5px;
     }
+
+    .el-change-pass-body{
+        background-color: #fff;
+    }
 </style>
 
 <script type="text/ecmascript-6">
@@ -83,10 +87,13 @@
                 this.$validator.validateAll().then((result) => {
                     this.confirmed = this.info.confirmPassword === this.info.newPassword
                     if (result && this.confirmed) {
-                        alert('From Submitted!')
+                        this.$store.dispatch('me/changePassword', this.info).then(() => {
+                            this.$router.go(-1)
+                        }).catch(e => {
+                            alert(e.result)
+                        })
                         return;
                     }
-                    alert('Correct them errors!')
                 });
             }
 

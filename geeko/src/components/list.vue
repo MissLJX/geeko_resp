@@ -1,15 +1,38 @@
 <template>
     <div>
         <ul class="st-clear">
-            <slot v-for="item in items" name="li" :item="item"></slot>
+            <slot v-for="item in items" name="li" :item="item" track-by="$index"></slot>
         </ul>
-        <div v-show="loading">loading</div>
-        <div v-show="finished">No more.</div>
+        <div v-show="loading" class="el-list-loading"><i class="iconfont">&#xe69f;</i></div>
+        <div class="el-no-more" v-show="finished && scrollable">No more.</div>
     </div>
 </template>
 
 <style type="scss/text" lang="scss">
+    .el-no-more {
+        padding: 10px 0;
+        text-align: center;
+        color: #666;
+    }
 
+    .el-list-loading {
+        text-align: center;
+        padding: 10px 0;
+        i {
+            font-size: 24px;
+            display: inline-block;
+            animation: list-loading 1.5s infinite linear;
+        }
+    }
+
+    @keyframes list-loading {
+        from {
+            transform: rotate(0);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
 </style>
 
 <script type="text/ecmascript-6">

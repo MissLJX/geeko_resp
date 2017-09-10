@@ -9,8 +9,8 @@
         </div>
 
         <div class="st-cell st-v-m st-t-r">
-            <btn v-if="coupon.isAvailable">Use</btn>
-            <btn class="dis" v-else>Use</btn>
+            <btn @click.native="useHandle" class="el-coupon-use" v-if="coupon.isAvailable">Use</btn>
+            <btn class="el-coupon-use dis" v-else>Use</btn>
         </div>
     </div>
 </template>
@@ -45,6 +45,10 @@
         & > .el-coupon-info > div {
             margin-top: 5px;
         }
+
+        .el-coupon-use {
+            width: 60px;
+        }
     }
 
 
@@ -74,12 +78,19 @@
                 var [beginDate, endDate] = [this.coupon.coupon.beginDate, this.coupon.coupon.endDate]
 
 
-                if(beginDate && endDate){
+                if (beginDate && endDate) {
                     return fecha.format(new Date(beginDate), 'mediumDate') + '-' + fecha.format(new Date(endDate), 'mediumDate')
                 }
 
                 return ''
 
+            }
+        },
+        methods: {
+            useHandle(){
+                this.$store.dispatch('useCoupon', this.coupon.coupon.id).then(() => {
+                    window.location.href = window.ctx + '/shoppingcart/show'
+                })
             }
         },
         components: {

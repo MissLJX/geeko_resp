@@ -1,9 +1,9 @@
 <template>
     <div>
         <div class="el-slide-nav-container">
-            <ul class="el-slide-nav" ref="navdom" :style="{width:total+'px'}">
+            <ul class="el-slide-nav" ref="navdom" :style="{width:'100%'}">
                 <li v-for="nav in navs" :class="{'active':nav.active}" @click="navHandle(event, nav.id)">
-                    <router-link replace  :to="nav.path">{{nav.name}}</router-link>
+                    <router-link replace  :to="{name:nav.path}">{{nav.name}}</router-link>
                 </li>
             </ul>
         </div>
@@ -18,6 +18,7 @@
 
     .el-slide-nav-container {
         overflow: hidden;
+        background-color: #fff;
     }
 
     .el-slide-nav {

@@ -1,13 +1,13 @@
 <template>
     <div class="el-list-product">
-        <a>
+        <a :href="productUrl">
             <figure>
                 <div class="img">
                     <img :src="imageUrl"/>
                 </div>
 
                 <figcaption>
-                    <p class="st-ellipsis">{{product.name}}</p>
+                    <p class="st-ellipsis el-product-name">{{product.name}}</p>
                     <div class="st-table st-fullwidth">
                         <div class="st-cell st-v-m">
                             <span class="el-product-price">{{price}}</span>
@@ -26,6 +26,14 @@
 <style scoped lang="scss">
     .el-list-product {
 
+        .el-product-name{
+            font-size: 12px;
+        }
+
+        a{
+            text-decoration: none;
+            color: #222928;
+        }
         .img{
             position: relative;
             &::after{
@@ -73,7 +81,7 @@
 </style>
 
 <script type="text/ecmascript-6">
-    import {imageutil, unitprice} from '../utils/geekoutils'
+    import {imageutil, unitprice , producturl} from '../utils/geekoutils'
     import _ from 'lodash'
 
     export default{
@@ -105,17 +113,20 @@
                 }
 
                 return false
+            },
+            productUrl(){
+                return window.ctx + '/' + producturl(this.product)
             }
 
         },
         methods: {
             likeHandle(){
                 var wishlist = this.$store.getters['me/wishlist']
-                var index = _.indexOf(wishlist[0].productIds, this.product.id), _this = this
+                var index = _.indexOf(wishlist[0].productIds, this.product.id)
                 if (index < 0) {
-                    wishlist[0].productIds.push(this.product.id)
+                    this.$store.dispatch('like', this.product.id)
                 } else {
-                    wishlist[0].productIds.splice(index, 1)
+                    this.$store.dispatch('unlike',  this.product.id)
                 }
             }
         }

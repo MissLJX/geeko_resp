@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="el-wishlist-body">
         <page-header>Wish list</page-header>
         <div>
             <product-list :products="products" :loading="loading" :finished="finished" @listing="listingHandle"/>
@@ -8,7 +8,9 @@
 </template>
 
 <style scoped lang="scss">
-
+    .el-wishlist-body{
+        background-color: #fff;
+    }
 </style>
 
 <script type="text/ecmascript-6">

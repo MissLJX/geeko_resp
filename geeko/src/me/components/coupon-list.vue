@@ -1,6 +1,6 @@
 <template>
     <div class="el-coupons">
-        <list :items="coupons">
+        <list :items="coupons" :scrollable="false">
             <template slot="li" scope="props">
                 <li :key="props.item.coupon.id">
                     <coupon class="el-coupon" :coupon="props.item"/>

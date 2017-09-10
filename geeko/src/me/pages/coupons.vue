@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="el-coupons-body">
         <page-header>
             <span>Coupons</span>
         </page-header>
@@ -8,7 +8,9 @@
 </template>
 
 <style scoped lang="scss">
-
+    .el-coupons-body {
+        background-color: #fff;
+    }
 </style>
 
 <script type="text/ecmascript-6">
@@ -28,9 +30,7 @@
             'page-header': PageHeader
         },
 
-        methods:{
-
-        },
+        methods: {},
 
         beforeRouteEnter(to, from, next){
             store.dispatch('me/getCoupons').then(() => {

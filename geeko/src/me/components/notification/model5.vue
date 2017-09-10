@@ -1,23 +1,25 @@
 <template>
     <div>
-        <div class="st-table st-fullwidth">
-            <div class="st-cell st-v-t">
-                <p>{{model.description}}</p>
-                <div class="el-expire-date">
-                    {{expireDate}}
+        <a :href="url">
+            <div class="st-table st-fullwidth">
+                <div class="st-cell st-v-t">
+                    <p>{{model.description}}</p>
+                    <div class="el-expire-date">
+                        {{expireDate}}
+                    </div>
                 </div>
-            </div>
 
-            <div class="st-cell st-t-r st-v-t">
-                <div class="el-coupon-off">
-                    <span class="coupon-name">{{model.name}}</span>
-                    <span class="coupon-off">off</span>
+                <div class="st-cell st-t-r st-v-t">
+                    <div class="el-coupon-off">
+                        <span class="coupon-name">{{model.name}}</span>
+                        <span class="coupon-off">off</span>
+                    </div>
+                    <span class="el-coupon-code">
+                        {{model.code}}
+                    </span>
                 </div>
-                <span class="el-coupon-code">
-                    {{model.code}}
-                </span>
             </div>
-        </div>
+        </a>
     </div>
 </template>
 
@@ -50,6 +52,7 @@
 </style>
 
 <script type="text/ecmascript-6">
+    import deeplinkmixin from '../../mixins/deeplink'
     import fecha from 'fecha'
 
     export default{
@@ -70,6 +73,7 @@
                 return ''
 
             }
-        }
+        },
+        mixins: [deeplinkmixin]
     }
 </script>

@@ -1,6 +1,6 @@
 <template>
     <div class="el-notifications">
-        <list :items="notifications" @listing="$emit('listing')" :scrollable="true">
+        <list :items="notifications" @listing="$emit('listing')" :loading="loading" :finished="finished">
             <template slot="li" scope="props">
                 <li :key="props.item.id">
                     <notification class="el-notification" :notification="props.item"/>
@@ -11,12 +11,12 @@
 </template>
 
 <style scoped lang="scss">
-    .el-notifications{
-        li{
-            &:first-child{
+    .el-notifications {
+        li {
+            &:first-child {
                 margin-top: 0;
             }
-            .el-notification{
+            .el-notification {
                 width: 100%;
             }
             padding: 15px 10px 0 10px;
@@ -33,9 +33,17 @@
     import Notification from './notification.vue'
 
     export default{
-        props:{
-            notifications:{
+        props: {
+            notifications: {
                 type: Array
+            },
+            loading: {
+                type: Boolean,
+                default: false
+            },
+            finished: {
+                type: Boolean,
+                default: false
             }
         },
         components: {

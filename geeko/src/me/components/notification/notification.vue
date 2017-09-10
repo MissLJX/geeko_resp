@@ -1,5 +1,5 @@
 <template>
-    <div class="el-notification">
+    <div class="el-notification" :class="{'read':notification.read}">
         <model-1 :model="notification.model" v-if="notification.model.type == '1'"/>
         <model-2 :model="notification.model" v-if="notification.model.type == '2'"/>
         <model-3 :model="notification.model" v-if="notification.model.type == '3'"/>
@@ -20,6 +20,9 @@
 
     .el-notification{
         background-color: #fff;
+        &.read{
+
+        }
     }
 </style>
 

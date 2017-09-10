@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="el-credit-body">
         <page-header>Credits</page-header>
 
         <div>
@@ -15,6 +15,9 @@
     .el-credits-total {
         text-align: center;
         margin-top: 10px;
+    }
+    .el-credit-body{
+        background-color: #fff;
     }
 </style>
 

@@ -2,7 +2,7 @@
     <div class="el-setting-body">
         <page-header>
             <span>{{$t('label.editProfile')}}</span>
-            <span slot="oplabel">{{$t('label.save')}}</span>
+            <span slot="oplabel" @click="infoSaveHandle">{{$t('label.save')}}</span>
         </page-header>
         <div class="el-setting-blocks">
             <div class="el-setting-block">
@@ -13,14 +13,14 @@
                         </div>
                         <div class="st-cell st-v-m st-t-r">
                             <span class="el-setting-picture"
-                                  style="background-image: url(http://peach-1254218975.cossh.myqcloud.com/image/36d.jpg);"></span>
+                                  :style="{'background-image':'url('+headerImage+')'}"></span>
                         </div>
                         <div class="st-cell st-v-m st-t-r">
                             <i class="iconfont el-setting-go">&#xe694;</i>
                         </div>
                     </div>
+                    <form ref="file"><input name="imageFile" class="el-birth-input" type="file" @change="headerImageHandle"/></form>
 
-                    <input class="el-birth-input" type="file"/>
                 </div>
 
 
@@ -84,7 +84,7 @@
 
 
             <div class="el-setting-block">
-                <router-link class="el-setting-router-link" to="/me/change-password">
+                <router-link class="el-setting-router-link" :to="{name: 'change-password'}">
                     <div class="st-table el-setting-li-02" style="border-top:none">
                         <div class="st-cell st-v-m">
                             <span class="el-setting-label">{{$t('label.changePassword')}}</span>
@@ -95,7 +95,7 @@
                     </div>
                 </router-link>
 
-                <router-link class="el-setting-router-link" to="/me/change-email">
+                <router-link class="el-setting-router-link" :to="{name: 'change-email'}">
                     <div class="st-table el-setting-li-02">
                         <div class="st-cell st-v-m">
                             <span class="el-setting-label">{{$t('label.changeEmail')}}</span>
@@ -211,7 +211,7 @@
             }
         },
         computed: {
-            ...mapGetters('me', ['me']),
+            ...mapGetters('me', ['me', 'headerImage']),
             birth(){
                 return fecha.format(new Date(this.info.birthday), 'mediumDate')
             },
@@ -219,10 +219,34 @@
                 return this.info.gender == 1 ? 'Men' : (this.info.gender == 2 ? 'Woman' : 'Other')
             }
         },
+        methods: {
+            infoSaveHandle(){
+                var postData = {
+                    'id': this.info.id,
+                    'name.firstName': this.info.name.firstName,
+                    'name.lastName': this.info.name.lastName,
+                    'gender':this.info.gender,
+                    'birthday':this.info.birthday
+                }
+                this.$store.dispatch('me/postProfile', postData).then(() => {
+                    return this.$store.dispatch('me/getMe')
+                }).then(() => {
+                    alert('success')
+                })
+            },
+            headerImageHandle(evt){
+                var files = evt.target.files,file = files[0]
+                var src = window.navigator.userAgent.indexOf("Chrome") >= 1 || window.navigator.userAgent.indexOf("Safari") >= 1 ? window.webkitURL.createObjectURL(file) : window.URL.createObjectURL(file);
+
+                var formData = new FormData(this.$refs.file)
+
+                this.$store.dispatch('me/setHeaderImage', {formData,imageUrl: src})
+            }
+        },
         components: {
             'page-header': PageHeader
         },
-        beforeMount(){
+        created(){
             this.info = _.cloneDeep(this.me)
         }
     }

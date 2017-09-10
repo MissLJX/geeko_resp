@@ -4,6 +4,7 @@
 import * as types from './mutation_types'
 import * as api  from '../api'
 import _ from 'lodash'
+import * as utils from '../../utils/geekoutils'
 
 const state = {
     me: null,
@@ -19,7 +20,18 @@ const state = {
     otherNotifications: null,
     wishProducts: [],
     wishskip: 0,
-    creditskip: 0
+    creditskip: 0,
+    headerImage: null,
+    promotionNtSkip: 0,
+    promotionNtLoaded: false,
+    promotionNtFinished: false,
+    orderNtSkip: 0,
+    orderNtLoaded: false,
+    orderNtFinished: false,
+    otherNtSkip: 0,
+    otherNtLoaded: false,
+    otherNtFinished: false,
+    notificationCount: 0
 }
 
 const getters = {
@@ -36,12 +48,24 @@ const getters = {
     promotionNotifications: state => state.promotionNotifications,
     otherNotifications: state => state.otherNotifications,
     wishProducts: state => state.wishProducts,
-    wishskip: state => state.wishskip
+    wishskip: state => state.wishskip,
+    headerImage: state => state.headerImage,
+    promotionNtSkip: state => state.promotionNtSkip,
+    promotionNtLoaded: state => state.promotionNtLoaded,
+    promotionNtFinished: state => state.promotionNtFinished,
+    orderNtSkip: state => state.orderNtSkip,
+    orderNtLoaded: state => state.orderNtLoaded,
+    orderNtFinished: state => state.orderNtFinished,
+    otherNtSkip: state => state.otherNtSkip,
+    otherNtLoaded: state => state.otherNtLoaded,
+    otherNtFinished: state => state.otherNtFinished,
+    notificationCount: state => state.notificationCount
 }
 
 const mutations = {
     [types.ME_GET](state, _me){
         state.me = _me
+        state.headerImage = utils.IMAGE_PREFIX + '/icon/' + _me.id
     },
     [types.ME_GET_FEED](state, _feed){
         state.feed = _feed
@@ -67,11 +91,38 @@ const mutations = {
     [types.ME_GET_NOTIFICATIONS_ORDER](state, orderNotifications){
         state.orderNotifications = orderNotifications
     },
+    [types.ME_GET_NOTIFICATION_O_SKIP](state){
+        state.orderNtSkip += 20
+    },
+    [types.ME_GET_NOTIFICATION_O_LOADED](state){
+        state.orderNtLoaded = true
+    },
+    [types.ME_GET_NOTIFICATION_O_FINISHED](state){
+        state.orderNtFinished = true
+    },
     [types.ME_GET_NOTIFICATIONS_PROMOTION](state, promotionNotifications){
         state.promotionNotifications = promotionNotifications
     },
+    [types.ME_GET_NOTIFICATION_P_SKIP](state){
+        state.promotionNtSkip += 20
+    },
+    [types.ME_GET_NOTIFICATION_P_LOADED](state){
+        state.promotionNtLoaded = true
+    },
+    [types.ME_GET_NOTIFICATION_P_FINISHED](state){
+        state.promotionNtFinished = true
+    },
     [types.ME_GET_NOTIFICATIONS_OTHER](state, otherNotifications){
         state.otherNotifications = otherNotifications
+    },
+    [types.ME_GET_NOTIFICATION_OT_SKIP](state){
+        state.otherNtSkip += 20
+    },
+    [types.ME_GET_NOTIFICATION_OT_LOADED](state){
+        state.otherNtLoaded = true
+    },
+    [types.ME_GET_NOTIFICATION_OT_FINISHED](state){
+        state.otherNtFinished = true
     },
     [types.ME_GET_WISH_PRODUCTS](state, wishProducts){
         state.wishProducts = _.concat(state.wishProducts, wishProducts)
@@ -81,6 +132,43 @@ const mutations = {
     },
     [types.ME_GET_CREDITS_SKIP](state){
         state.creditskip += 20
+    },
+    [types.ME_HEADER_IMAGE](state, headerImage){
+        state.headerImage = headerImage
+    },
+    [types.ME_CHANGE_EMAIL](state, email){
+        state.me.communicationEmail = email
+    },
+    [types.ME_UPDATE_ADDRESS](state, address){
+        var _address
+        if (state.addresses && (_address = state.addresses.find(o => o.id === address.id))) {
+            _address.name = address.name
+            _address.country = address.country
+            _address.phoneNumber = address.phoneNumber
+            _address.zipCode = address.zipCode
+            _address.unit = address.unit
+            _address.state = address.state
+            _address.streetAddress1 = address.streetAddress1
+            _address.city = address.city
+
+        }
+
+    },
+    [types.ME_DELETE_ADDRESS](state, addressId){
+        var _index = 0
+        _.each(state.addresses, (address, index) => {
+            if (address.id === addressId) {
+                _index = index
+                return false
+            }
+        })
+        state.addresses.splice(_index, 1)
+    },
+    [types.ME_ADD_ADDRESS](state, address){
+        state.addresses.unshift(address)
+    },
+    [types.ME_GET_NOTIFICATION_COUNT](state, count){
+        state.notificationCount = count
     }
 
 
@@ -91,13 +179,16 @@ const actions = {
         if (!state.initialized) {
             return Promise.all([
                 dispatch('getMe'),
-                dispatch('getFeed'),
                 dispatch('getWishlist')
-            ]).then(([me, feed, wishlist]) => {
+            ]).then(([me, wishlist]) => {
                 commit(types.ME_GET, me)
+                commit(types.ME_GET_WISH_LIST, wishlist)
+                return me
+            }).then((me) => {
+                return dispatch('getFeed', me.id)
+            }).then((feed) => {
                 commit(types.ME_GET_FEED, feed)
                 commit(types.ME_INITIALIZED)
-                commit(types.ME_GET_WISH_LIST, wishlist)
             })
         }
 
@@ -114,9 +205,9 @@ const actions = {
         })
 
     },
-    getFeed({commit}){
+    getFeed({commit}, customerId){
         return new Promise((resolve, reject) => {
-            api.getFeed().then(feed => {
+            api.getFeed(customerId).then(feed => {
                 commit(types.ME_GET_FEED, feed)
                 resolve(feed)
             }).catch(e => {
@@ -125,7 +216,6 @@ const actions = {
         })
     },
     getAddresses({commit}){
-
         return new Promise((resolve, reject) => {
             api.getShippingDetails().then(addresses => {
                 commit(types.ME_GET_ADDRESSES, addresses)
@@ -134,8 +224,6 @@ const actions = {
                 reject(e)
             })
         })
-
-
     },
     getCoupons({commit}){
         return new Promise((resolve, reject) => {
@@ -166,13 +254,13 @@ const actions = {
         })
     },
 
-    getCredits({commit},{skip}){
+    getCredits({commit}, {skip}){
         return api.getCredits(skip).then((credits) => {
-            if(credits && credits.length){
+            if (credits && credits.length) {
                 commit(types.ME_GET_CREDITS, credits)
                 return {}
-            }else{
-                if(skip === 0){
+            } else {
+                if (skip === 0) {
                     return {empty: true, finished: true}
                 }
                 return {finished: true}
@@ -207,53 +295,114 @@ const actions = {
     },
 
     getOrderNotifications({commit}, {skip}){
-        return new Promise((resolve, reject) => {
-            api.getOrderNotifications(skip).then(nts => {
+        return api.getOrderNotifications(skip).then((nts) => {
+            commit(types.ME_GET_NOTIFICATION_O_LOADED)
+
+            if (nts && nts.length) {
                 commit(types.ME_GET_NOTIFICATIONS_ORDER, nts)
-                resolve({empty: skip === 0 && (!nts || !nts.length), nts})
-            }).catch(e => {
-                reject(e)
-            })
+            } else {
+                commit(types.ME_GET_NOTIFICATION_O_FINISHED)
+            }
         })
+    },
+
+    getOrderNtSkip({commit}){
+        commit(types.ME_GET_NOTIFICATION_O_SKIP)
     },
 
     getPromotionNotifications({commit}, {skip}){
-        return new Promise((resolve, reject) => {
-            api.getPromotionNotification(skip).then(nts => {
+        return api.getPromotionNotification(skip).then((nts) => {
+            commit(types.ME_GET_NOTIFICATION_P_LOADED)
+            if (nts && nts.length) {
                 commit(types.ME_GET_NOTIFICATIONS_PROMOTION, nts)
-                resolve({empty: skip === 0 && (!nts || !nts.length), nts})
-            }).catch(e => {
-                reject(e)
-            })
+            } else {
+                commit(types.ME_GET_NOTIFICATION_P_FINISHED)
+            }
         })
+    },
+    getPromotionNtSkip({commit}){
+        commit(types.ME_GET_NOTIFICATION_P_SKIP)
     },
 
     getOtherNotifications({commit}, {skip}){
-        return new Promise((resolve, reject) => {
-            api.getOtherNotification(skip).then(nts => {
+        return api.getOtherNotification(skip).then((nts) => {
+            commit(types.ME_GET_NOTIFICATION_OT_LOADED)
+            if (nts && nts.length) {
                 commit(types.ME_GET_NOTIFICATIONS_OTHER, nts)
-                resolve({empty: skip === 0 && (!nts || !nts.length), nts})
-            }).catch(e => {
-                reject(e)
-            })
+            } else {
+                commit(types.ME_GET_NOTIFICATION_OT_FINISHED)
+            }
         })
     },
 
-    getWishproducts({commit}, {skip}){
-        return api.getWishProducts(skip).then((products) => {
-            if(products && products.length){
+    getOtherNtSkip({commit}){
+        commit(types.ME_GET_NOTIFICATION_OT_SKIP)
+    },
+
+    getWishproducts({commit, state}, {skip}){
+        return api.getWishProducts(state.me.id, skip).then((products) => {
+            if (products && products.length) {
                 commit(types.ME_GET_WISH_PRODUCTS, products)
-            }else{
-                if(skip ===0){
+            } else {
+                if (skip === 0) {
                     return {empty: true, finished: true}
                 }
                 return {finished: true}
             }
+
+            return {}
         })
     },
 
     getWishskip({commit}){
         commit(types.ME_GET_WISH_SKIP)
+    },
+
+    postProfile({}, postData){
+        return api.postProfile(postData)
+    },
+
+    setHeaderImage({commit}, {formData, imageUrl}){
+        commit(types.ME_HEADER_IMAGE, imageUrl)
+        return api.postHeaderImage(formData)
+    },
+
+    changePassword(context, data){
+        return api.changePassword(data)
+    },
+
+    changeAccountEmail(context, data){
+        return api.changeAccountEmail(data)
+    },
+
+    changeEmail({commit}, data){
+        return api.changeEmail(data).then(() => {
+            commit(types.ME_CHANGE_EMAIL, data.email)
+        })
+    },
+
+    updateAddress({commit}, data){
+        return api.updateAddress(data).then((address) => {
+            commit(types.ME_UPDATE_ADDRESS, address)
+        })
+    },
+
+    deleteAddress({commit}, {id}){
+        return api.deleteAddress(id).then(() => {
+            commit(types.ME_DELETE_ADDRESS, id)
+        })
+    },
+
+    addAddress({commit}, address){
+        return api.addAddress(address).then((address) => {
+            commit(types.ME_ADD_ADDRESS, address)
+        })
+    },
+
+    countNotifications({commit}){
+        return api.countUnreadNotification().then((count) => {
+            commit(types.ME_GET_NOTIFICATION_COUNT, count)
+        })
     }
 }
 

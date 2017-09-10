@@ -21,7 +21,7 @@
         computed: {
             streetAddress(){
                 if (this.address.unit)
-                    return this.address.streetAddress1 + ' ,' + this.address.unit
+                    return this.address.streetAddress1 + ', ' + this.address.unit
                 return this.address.streetAddress1
             },
             stateCountry(){

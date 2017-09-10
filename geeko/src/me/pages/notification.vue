@@ -20,9 +20,9 @@
         data(){
             return {
                 navs: [
-                    {id: '1', name: 'Promotion', path: '/me/notification/promotion', active: '/me/notification/promotion' == this.$route.path || '/me/notification' == this.$route.path},
-                    {id: '2', name: 'Orders', path: '/me/notification/order', active: '/me/notification/order' == this.$route.path},
-                    {id: '3', name: 'Others', path: '/me/notification/other', active: '/me/notification/other' == this.$route.path}
+                    {id: '1', name: 'Promotion', path: 'notification-promotion', active: 'notification-promotion' == this.$route.name || 'notification' == this.$route.path},
+                    {id: '2', name: 'Orders', path: 'notification-order', active: 'notification-order' == this.$route.name},
+                    {id: '3', name: 'Others', path: 'notification-other', active: 'notification-other' == this.$route.name}
                 ]
             }
         },

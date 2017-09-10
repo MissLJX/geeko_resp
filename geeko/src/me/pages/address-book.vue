@@ -1,9 +1,9 @@
 <template>
-    <div>
+    <div class="el-address-book-body">
 
-        <page-header><span>{{$t('label.addressBook')}}</span>  <span slot="oplabel">{{$t('label.add')}}</span></page-header>
+        <page-header><span>{{$t('label.addressBook')}}</span>  <span @click="addAddressHandle" slot="oplabel">{{$t('label.add')}}</span></page-header>
 
-        <address-list :addresses="addresses" :loading="false" @listing="listing" @list-address-edit="listEditHandle" @make-default="makeDefaultHandle"/>
+        <address-list :addresses="addresses" :loading="false" @listing="listing" @delete="deleteHandle" @list-address-edit="listEditHandle" @make-default="makeDefaultHandle"/>
 
 
         <transition name="uper">
@@ -13,6 +13,10 @@
 </template>
 
 <style scoped lang="scss">
+
+    .el-address-book-body{
+        background-color: #fff;
+    }
 
     .el-address-editor{
         position: fixed;
@@ -68,6 +72,13 @@
                 store.dispatch('me/makeDefault', id).then(() => {
 
                 })
+            },
+            deleteHandle(id){
+                store.dispatch('me/deleteAddress', {id})
+            },
+            addAddressHandle(){
+                this.editing = null
+                this.showeditor = true
             }
         },
         components: {
