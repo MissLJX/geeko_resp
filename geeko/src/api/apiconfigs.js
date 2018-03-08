@@ -12,7 +12,7 @@ const instance = axios.create({
     baseURL: window.ctx,
     timeout: 50000,
     headers: {
-        // accessToken: '4b05a991-cabe-439b-a1ae-a0d9441e3584',
+        accessToken: 'de95a547-2a57-458a-af3f-1c73fb4e2802',
         appVersion: utils.APP_VERSION,
         countryCode: utils.getCountry(),
         wid: utils.getWid()

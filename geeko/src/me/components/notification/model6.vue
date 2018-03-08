@@ -36,7 +36,7 @@
 
     .el-model-6{
         .content{
-            font-size: 12px;
+            font-size: 13px;
             padding-top: 5px;
             line-height: 20px;
         }

@@ -7,7 +7,7 @@
 <style scoped lang="scss">
     .el-model-3-content {
         line-height: 20px;
-        font-size: 12px;
+        font-size: 13px;
     }
 </style>
 
