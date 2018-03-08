@@ -38,6 +38,8 @@ export default {
         birthday: 'birthday',
         changePassword: 'Change password',
         changeEmail: 'Change email',
-        wishlist: 'Wish list'
+        changeCurrency: 'Change currency',
+        wishlist: 'Wish list',
+        settings: 'settings'
     }
 }

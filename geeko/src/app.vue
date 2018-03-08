@@ -12,6 +12,9 @@
             <router-view v-if="$route.meta.keepAlive"></router-view>
         </keep-alive>
         <router-view v-if="!$route.meta.keepAlive"></router-view>
+        <i v-if="screenLoading" class="iconfont st-screen-loading">
+            &#xe62d;
+        </i>
     </div>
 </template>
 
@@ -61,6 +64,9 @@
         computed:{
             paging(){
                 return this.$store.getters.paging
+            },
+            screenLoading(){
+                return this.$store.getters.screenLoading
             }
         }
     }

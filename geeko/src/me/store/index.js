@@ -15,9 +15,9 @@ const state = {
     initialized: false,
     youlikes: null,
     wishlist: null,
-    orderNotifications: null,
-    promotionNotifications: null,
-    otherNotifications: null,
+    orderNotifications: [],
+    promotionNotifications: [],
+    otherNotifications: [],
     wishProducts: [],
     wishskip: 0,
     creditskip: 0,
@@ -31,7 +31,12 @@ const state = {
     otherNtSkip: 0,
     otherNtLoaded: false,
     otherNtFinished: false,
-    notificationCount: 0
+    notificationCount: 0,
+
+    orderCountProcessing: 0,
+    orderCountShipped: 0,
+    orderCountReceipt: 0,
+    orderCountCanceled: 0
 }
 
 const getters = {
@@ -59,7 +64,11 @@ const getters = {
     otherNtSkip: state => state.otherNtSkip,
     otherNtLoaded: state => state.otherNtLoaded,
     otherNtFinished: state => state.otherNtFinished,
-    notificationCount: state => state.notificationCount
+    notificationCount: state => state.notificationCount,
+    orderCountProcessing: state => state.orderCountProcessing,
+    orderCountShipped: state => state.orderCountShipped,
+    orderCountReceipt: state => state.orderCountReceipt,
+    orderCountCanceled: state => state.orderCountCanceled
 }
 
 const mutations = {
@@ -89,7 +98,7 @@ const mutations = {
         state.wishlist = wishlist
     },
     [types.ME_GET_NOTIFICATIONS_ORDER](state, orderNotifications){
-        state.orderNotifications = orderNotifications
+        state.orderNotifications = _.concat(state.orderNotifications,orderNotifications)
     },
     [types.ME_GET_NOTIFICATION_O_SKIP](state){
         state.orderNtSkip += 20
@@ -101,7 +110,7 @@ const mutations = {
         state.orderNtFinished = true
     },
     [types.ME_GET_NOTIFICATIONS_PROMOTION](state, promotionNotifications){
-        state.promotionNotifications = promotionNotifications
+        state.promotionNotifications = _.concat(state.promotionNotifications, promotionNotifications)
     },
     [types.ME_GET_NOTIFICATION_P_SKIP](state){
         state.promotionNtSkip += 20
@@ -113,7 +122,7 @@ const mutations = {
         state.promotionNtFinished = true
     },
     [types.ME_GET_NOTIFICATIONS_OTHER](state, otherNotifications){
-        state.otherNotifications = otherNotifications
+        state.otherNotifications = _.concat(state.otherNotifications, otherNotifications)
     },
     [types.ME_GET_NOTIFICATION_OT_SKIP](state){
         state.otherNtSkip += 20
@@ -169,6 +178,21 @@ const mutations = {
     },
     [types.ME_GET_NOTIFICATION_COUNT](state, count){
         state.notificationCount = count
+    },
+    [types.ME_CHANGE_CURRENCY](state, currency){
+        state.me.currency = currency
+    },
+    [types.ME_ORDER_COUNT_PROCESSING](state, count){
+        state.orderCountProcessing = count
+    },
+    [types.ME_ORDER_COUNT_SHIPPED](state, count){
+        state.orderCountShipped = count
+    },
+    [types.ME_ORDER_COUNT_RECEIPT](state, count){
+        state.orderCountReceipt = count
+    },
+    [types.ME_ORDER_COUNT_CANCELED](state, count){
+        state.orderCountCanceled = count
     }
 
 
@@ -402,6 +426,37 @@ const actions = {
     countNotifications({commit}){
         return api.countUnreadNotification().then((count) => {
             commit(types.ME_GET_NOTIFICATION_COUNT, count)
+        })
+    },
+
+    changeCurrency({commit},currency){
+        return api.changeCurrency(currency.value).then(() => {
+            commit(types.ME_CHANGE_CURRENCY, currency)
+        })
+    },
+
+
+    getOrderCountProcessing({commit}){
+        return api.getOrderCountProcessing().then((count) => {
+            commit(types.ME_ORDER_COUNT_PROCESSING, count)
+        })
+    },
+
+    getOrderCountShipped({commit}){
+        return api.getOrderCountShipped().then((count) => {
+            commit(types.ME_ORDER_COUNT_SHIPPED, count)
+        })
+    },
+
+    getOrderCountReceipt({commit}){
+        return api.getOrderCountReceipt().then((count) => {
+            commit(types.ME_ORDER_COUNT_RECEIPT, count)
+        })
+    },
+
+    getOrderCountCanceled({commit}){
+        return api.getOrderCountCanceled().then((count) => {
+            commit(types.ME_ORDER_COUNT_CANCELED, count)
         })
     }
 }

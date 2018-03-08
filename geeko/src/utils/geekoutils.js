@@ -17,7 +17,7 @@ const _url_analyst = function (name) {
 export const VERSION = 'v7'
 export const APP_VERSION = '3.2.0'
 export const VPATH = '/' + VERSION
-//export const PROJECT = '/joyshoetique'
+// export const PROJECT = '/wanna'
 export const PROJECT = ''
 export const ROUTER_PATH_ME = PROJECT + '/me/m'
 

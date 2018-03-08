@@ -42,13 +42,14 @@
                         <a :href="getOrderHref('processing')">
                             <i class="iconfont">&#xe60a;</i>
                             <span>{{$t('label.processing')}}</span>
+                            <span v-if="orderCountProcessing > 0" class="el-me-order-count">{{orderCountProcessing}}</span>
                         </a>
                     </div>
                     <div>
                         <a :href="getOrderHref('shipped')">
                             <i class="iconfont">&#xe609;</i>
                             <span>{{$t('label.shipped')}}</span>
-                            <span class="el-me-order-count">{{feed.orderShippedCount}}</span>
+                            <span v-if="orderCountShipped > 0" class="el-me-order-count">{{orderCountShipped}}</span>
                         </a>
                     </div>
                 </div>
@@ -57,13 +58,14 @@
                         <a :href="getOrderHref('confirmed')">
                             <i class="iconfont">&#xe607;</i>
                             <span>{{$t('label.confirmed')}}</span>
-                            <span class="el-me-order-count">{{feed.awaitingDeliveryCount}}</span>
+                            <span v-if="orderCountReceipt > 0" class="el-me-order-count">{{orderCountReceipt}}</span>
                         </a>
                     </div>
                     <div>
                         <a :href="getOrderHref('canceled')">
                             <i class="iconfont">&#xe608;</i>
                             <span>{{$t('label.canceled')}}</span>
+                            <span v-if="orderCountCanceled > 0" class="el-me-order-count">{{orderCountCanceled}}</span>
                         </a>
                     </div>
                 </div>
@@ -73,25 +75,33 @@
         <ul class="el-me-tool-list">
             <li>
                 <router-link class="el-me-tool-list-item" :to="{name: 'address-book'}">
-                    <touch-go class="el-me-tool-list-touch" :label1="$t('label.addressBook')"/>
+                    <touch-go class="el-me-tool-list-touch" :label1="$t('label.addressBook')">
+                        <i slot="icon" class="iconfont">&#xe60f;</i>
+                    </touch-go>
                 </router-link>
             </li>
 
             <li>
                 <router-link class="el-me-tool-list-item" :to="{name: 'coupons'}">
-                    <touch-go class="el-me-tool-list-touch" :label1="$t('label.coupons')"/>
+                    <touch-go class="el-me-tool-list-touch" :label1="$t('label.coupons')">
+                        <i slot="icon" class="iconfont">&#xe616;</i>
+                    </touch-go>
                 </router-link>
             </li>
 
             <li>
                 <router-link class="el-me-tool-list-item" :to="{name: 'credits'}">
-                    <touch-go class="el-me-tool-list-touch" :label1="$t('label.credits')"/>
+                    <touch-go class="el-me-tool-list-touch" :label1="$t('label.credits')">
+                        <i slot="icon" class="iconfont">&#xe614;</i>
+                    </touch-go>
                 </router-link>
             </li>
 
             <li>
                 <router-link class="el-me-tool-list-item" :to="{name: 'wishlist'}">
-                    <touch-go class="el-me-tool-list-touch" :label1="$t('label.wishlist')"/>
+                    <touch-go class="el-me-tool-list-touch" :label1="$t('label.wishlist')">
+                        <i slot="icon" class="iconfont">&#xe615;</i>
+                    </touch-go>
                 </router-link>
             </li>
 
@@ -288,7 +298,7 @@
     export default{
         computed: {
             ...mapGetters('me', [
-                'me', 'youlikes', 'feed', 'headerImage', 'notificationCount'
+                'me', 'youlikes', 'feed', 'headerImage', 'notificationCount','orderCountProcessing','orderCountShipped','orderCountReceipt','orderCountCanceled'
             ]),
             fullName(){
                 return this.me.name.firstName + ' ' + this.me.name.lastName;
@@ -309,6 +319,14 @@
             }
 
             store.dispatch('me/countNotifications')
+
+            store.dispatch('me/getOrderCountProcessing')
+
+            store.dispatch('me/getOrderCountShipped')
+
+            store.dispatch('me/getOrderCountReceipt')
+
+            store.dispatch('me/getOrderCountCanceled')
         }
     }
 </script>

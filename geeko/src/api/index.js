@@ -17,6 +17,10 @@ export function getStates(country) {
     return getDictionary('state-' + country)
 }
 
+export function getCurrencies(){
+    return getDictionary('currency')
+}
+
 export function like(productId) {
     return axios.get(VPATH + '/wanna-list/' + productId + '/add-product').then(data => data.result)
 }
@@ -27,4 +31,8 @@ export function unlike(productId) {
 
 export function useCoupon(id) {
     return axios.get(VPATH + '/shopping-cart/anon/use-coupon/' + id).then(data => data.result)
+}
+
+export function logout(){
+    return axios.get(VPATH + '/login-customer/logout')
 }

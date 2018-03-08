@@ -2,7 +2,7 @@
     <a :href="url">
         <div class="st-table">
             <div class="st-cell el-model-1-image st-v-t" :class="{'deep1': isSqure}">
-                <img :src="model.image">
+                <img :src="imageUrl">
             </div>
             <div class="st-cell el-model-1-content st-v-t" v-html="model.content"></div>
         </div>
@@ -33,6 +33,8 @@
 <script type="text/ecmascript-6">
     import _ from 'lodash'
     import deeplinkmixin from '../../mixins/deeplink'
+    import imageUrlmixin from '../../mixins/imageUrl'
+
     export default{
         props: {
             model: {
@@ -40,10 +42,10 @@
                 required: true
             }
         },
-        mixins: [deeplinkmixin],
+        mixins: [deeplinkmixin, imageUrlmixin],
         computed: {
             isSqure(){
-                return _.indexOf([1, 16], this.model.deepLink.type) >= 0
+                return false
             }
         }
     }

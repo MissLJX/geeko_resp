@@ -19,7 +19,7 @@
                 <div class="el-change-block">
                     <label class="el-change-label">New Password</label>
                     <p class="st-control el-change-control">
-                        <input name="password" v-model="info.newPassword" v-validate="'required'"
+                        <input name="password" v-model="info.newPassword" v-validate="{ required: true, min: 6, max:20 }"
                                :class="{'st-input':true, 'st-input-danger':errors.has('password')}" type="text"/>
                         <span v-show="errors.has('password')" class="st-is-danger">{{errors.first('password')}}</span>
                     </p>
@@ -32,7 +32,7 @@
                         <input name="confirmPassword"  v-validate="'required'" v-model="info.confirmPassword"
                                :class="{'st-input':true, 'st-input-danger':!confirmed || errors.has('confirmPassword')}" type="text"/>
                         <span v-show="errors.has('confirmPassword')" class="st-is-danger">{{errors.first('confirmPassword')}}</span>
-                        <span v-show="!confirmed" class="st-is-danger">请确认您的密码.</span>
+                        <span v-show="!confirmed" class="st-is-danger">Confirm Password must equals to the new password. </span>
                     </p>
                 </div>
             </form>
@@ -58,6 +58,7 @@
             height: 30px;
             width: 100%;
             background-color: #eee;
+            padding-left: 10px;
         }
         margin-top: 5px;
     }

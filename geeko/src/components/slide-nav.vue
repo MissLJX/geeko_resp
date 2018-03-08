@@ -2,7 +2,7 @@
     <div>
         <div class="el-slide-nav-container">
             <ul class="el-slide-nav" ref="navdom" :style="{width:'100%'}">
-                <li v-for="nav in navs" :class="{'active':nav.active}" @click="navHandle(event, nav.id)">
+                <li v-for="nav in navs" :class="{'active':nav.active}" @click="navHandle(event, nav.id)" :style="{width:100*(1/navs.length)+'%'}">
                     <router-link replace  :to="{name:nav.path}">{{nav.name}}</router-link>
                 </li>
             </ul>
@@ -24,6 +24,7 @@
     .el-slide-nav {
         & > li {
             float: left;
+            text-align: center;
             a {
                 display: block;
                 text-decoration: none;
@@ -44,7 +45,7 @@
     }
 
     .child-view {
-        position: absolute;
+        //position: absolute;
         transition: all .5s cubic-bezier(.4, 0, .1, 1);
         width: 100%;
     }
@@ -56,6 +57,7 @@
     }
 
     .slide-left-leave-active, .slide-right-enter {
+        position: absolute;
         opacity: 0;
         -webkit-transform: translate(-30px, 0);
         transform: translate(-30px, 0);

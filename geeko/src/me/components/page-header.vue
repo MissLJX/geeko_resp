@@ -16,6 +16,7 @@
             height: 50px;
             line-height: 50px;
             font-weight: bold;
+            text-transform: capitalize;
         }
 
         .el-back-font{

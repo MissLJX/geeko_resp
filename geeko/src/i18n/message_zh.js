@@ -38,6 +38,8 @@ export default {
         birthday: '生日',
         changePassword: '修改密码',
         changeEmail: '修改邮箱',
-        wishlist: '我的心愿单'
+        changeCurrency: '更改币种',
+        wishlist: '我的心愿单',
+        settings: '设置'
     }
 }

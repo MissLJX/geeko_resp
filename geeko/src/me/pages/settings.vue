@@ -1,7 +1,7 @@
 <template>
     <div class="el-setting-body">
         <page-header>
-            <span>{{$t('label.editProfile')}}</span>
+            <span>{{$t('label.settings')}}</span>
             <span slot="oplabel" @click="infoSaveHandle">{{$t('label.save')}}</span>
         </page-header>
         <div class="el-setting-blocks">
@@ -105,7 +105,32 @@
                         </div>
                     </div>
                 </router-link>
+
+
+                <div class="el-setting-gender">
+                    <div class="st-table el-setting-li-01">
+                        <div class="st-cell st-v-m">
+                            <span class="el-setting-label">{{$t('label.changeCurrency')}}</span>
+                        </div>
+                        <div class="st-cell st-v-m">
+                            <span class="el-setting-value">{{currency.label}}</span>
+                        </div>
+                        <div class="st-cell st-v-m st-t-r">
+                            <i class="iconfont el-setting-go">&#xe694;</i>
+                        </div>
+                    </div>
+                    <select class="el-gender-select" @change="currencyChangeHandle">
+                        <option :selected="cu.value == currency.value" v-if="curriencies && curriencies.length > 0" v-for="cu in curriencies" :value="JSON.stringify(cu)">
+                            {{cu.label}}
+                        </option>
+                    </select>
+
+                </div>
+
             </div>
+
+
+            <button class="el-logout-btn" @click="logoutHandle">Logout</button>
         </div>
     </div>
 </template>
@@ -174,7 +199,7 @@
             color: #888e9a;
         }
         & > div:first-child {
-            width: 100px;
+            width: 125px;
         }
     }
 
@@ -195,6 +220,20 @@
         }
     }
 
+    .el-logout-btn{
+        outline: none;
+        box-shadow: none;
+        background-color: #222928;
+        color: #fff;
+        border: none;
+        width: 80%;
+        margin: 20px auto;
+        display: block;
+        height: 40px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
 </style>
 
 <script type="text/ecmascript-6">
@@ -207,16 +246,20 @@
     export default{
         data(){
             return {
-                info: null
+                info: null,
+                currency: null
             }
         },
         computed: {
             ...mapGetters('me', ['me', 'headerImage']),
+            curriencies(){
+                return this.$store.getters.currencies
+            },
             birth(){
                 return fecha.format(new Date(this.info.birthday), 'mediumDate')
             },
             gender(){
-                return this.info.gender == 1 ? 'Men' : (this.info.gender == 2 ? 'Woman' : 'Other')
+                return this.info.gender == 1 ? 'Man' : (this.info.gender == 2 ? 'Woman' : 'Other')
             }
         },
         methods: {
@@ -228,6 +271,20 @@
                     'gender':this.info.gender,
                     'birthday':this.info.birthday
                 }
+
+
+                if(!this.info.name.firstName){
+                    alert('First Name is required.')
+                    return;
+                }
+
+                if(!this.info.name.lastName){
+                    alert('Last Name is required.')
+                    return;
+                }
+
+
+
                 this.$store.dispatch('me/postProfile', postData).then(() => {
                     return this.$store.dispatch('me/getMe')
                 }).then(() => {
@@ -241,6 +298,16 @@
                 var formData = new FormData(this.$refs.file)
 
                 this.$store.dispatch('me/setHeaderImage', {formData,imageUrl: src})
+            },
+            logoutHandle(){
+                this.$store.dispatch('logout').then(() => {
+                    window.location.href = '/'
+                })
+            },
+            currencyChangeHandle(evt){
+                var value = evt.target.value
+                this.currency = JSON.parse(value)
+                this.$store.dispatch('me/changeCurrency', this.currency)
             }
         },
         components: {
@@ -248,6 +315,11 @@
         },
         created(){
             this.info = _.cloneDeep(this.me)
+            this.currency = _.cloneDeep(this.me.currency)
+
+            this.$store.dispatch('getCurrencies').then(() => {
+
+            })
         }
     }
 </script>

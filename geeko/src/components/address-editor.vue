@@ -121,10 +121,20 @@
 
 <style scoped lang="scss">
     .el-address-editor {
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
         input, select {
             width: 100%;
             height: 30px;
             padding: 0 10px;
+        }
+
+        .el-label{
+            margin-bottom: 20px;
+            position: relative;
+            bottom: 3px;
+            left: 1px;
+            font-size: 12px;
         }
 
         .hd {
@@ -167,11 +177,11 @@
     .el-address-submit {
         width: 200px;
         height: 40px;
-        display: block;
-        padding: 0;
         line-height: 40px;
         font-size: 16px;
         margin: 25px auto 15px auto;
+        display: block !important;
+        padding: 0 !important;
     }
 
 
@@ -232,25 +242,31 @@
             },
             validateBeforeSubmit(){
                 this.$validator.validateAll().then((result) => {
-                    if (result) {
+
+                    if (result && (this.stateSelected != '-1' || !this.hasStates) && this.countrySelected != '-1') {
                         this.shipping.country = this.$refs.country.value
                         this.shipping.state = this.$refs.state.value
 
                         this.submiting = true
+                        this.$store.dispatch('screenLoading', {loading: true})
                         if (this.shipping.id) {
                             this.$store.dispatch('me/updateAddress', this.shipping).then(() => {
                                 this.submiting = false
+                                this.$store.dispatch('screenLoading', {loading: false})
                                 this.$emit('close')
                             }).catch((r) => {
                                 alert(r.result)
+                                this.$store.dispatch('screenLoading', {loading: false})
                                 this.submiting = false
                             })
                         } else {
                             this.$store.dispatch('me/addAddress', this.shipping).then(() => {
                                 this.submiting = false
+                                this.$store.dispatch('screenLoading', {loading: false})
                                 this.$emit('close')
                             }).catch((r) => {
                                 alert(r.result)
+                                this.$store.dispatch('screenLoading', {loading: false})
                                 this.submiting = false
                             })
                         }

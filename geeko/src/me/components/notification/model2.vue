@@ -2,10 +2,12 @@
     <div class="el-model-2">
         <a :href="url">
             <figure>
-                <img :src="model.image"/>
                 <figcaption>
                     <div v-html="model.content"></div>
                 </figcaption>
+
+                <img :src="imageUrl"/>
+
             </figure>
         </a>
     </div>
@@ -19,9 +21,12 @@
         }
 
         figcaption {
-            padding: 10px 0 0 0;
+            padding: 0 0 10px 0;
+            border-bottom: 2px solid #e7e7e7;
+            margin-bottom:10px;
             font-size: 12px;
             line-height: 18px;
+            text-align: center;
         }
     }
 </style>
@@ -29,6 +34,7 @@
 <script type="text/ecmascript-6">
 
     import deeplinkmixin from '../../mixins/deeplink'
+    import imageUrlmixin from '../../mixins/imageUrl'
 
     export default{
         props: {
@@ -37,6 +43,6 @@
                 required: true
             }
         },
-        mixins: [deeplinkmixin]
+        mixins: [deeplinkmixin, imageUrlmixin]
     }
 </script>

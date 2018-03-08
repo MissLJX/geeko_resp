@@ -7,7 +7,7 @@
 
 
         <transition name="uper">
-            <address-editor v-if="showeditor" :address="editing" @close="close"/>
+            <address-editor v-if="showeditor" :showLabel="true" :address="editing" @close="close"/>
         </transition>
     </div>
 </template>

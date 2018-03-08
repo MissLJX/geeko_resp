@@ -22,7 +22,7 @@ module.exports = {
 
     output: {
         path: path.resolve(__dirname, './dist'),
-        // publicPath: '/joyshoetique/resources/vue/me/js/',
+        // publicPath: '/wanna/resources/vue/me/js/',
         publicPath: '/resources/vue/me/js/',
         filename: '[name].js',
         chunkFilename: '[name].js'

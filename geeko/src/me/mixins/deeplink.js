@@ -7,49 +7,54 @@ export default {
             var deepLink = this.model.deepLink, _url
             switch (deepLink.type) {
                 case 1:
-                    _url = window.ctx + '/i/collection/products?collectionId=' + deepLink.params[0]
+                    _url = '/i/collection/products?collectionId=' + deepLink.params[0]
                     break
                 case 2:
-                    _url = window.ctx + '/i/product_detail?productId=' + deepLink.params[0]
+                    _url = '/i/product_detail?productId=' + deepLink.params[0]
                     break
                 case 3:
-                    _url = window.ctx + '/me/coupons'
+                    _url = '/me/m/coupons'
                     break
                 case 7:
-                    _url = window.ctx + '/me/credits'
+                    _url = '/me/m/credits'
                     break
                 case 8:
-                    _url = window.ctx + '/me/orders/detail/' + deepLink.params[0]
+                    _url = '/me/m/order/detail/' + deepLink.params[0]
                     break
                 case 9:
-                    _url = window.ctx + '/me/orders/contact/' + deepLink.params[1]
+                    _url = '/me/m/order/ticket/' + deepLink.params[0]
                     break
                 case 10:
-                    _url = window.ctx + '/i/lottery'
+                    _url = '/i/lottery'
                     break
                 case 11:
-                    _url = window.ctx + '/i/early-bird'
+                    _url = '/i/early-bird'
                     break
                 case 12:
-                    _url = window.ctx + '/i/flash/products'
+                    _url = '/i/flash/products'
                     break
                 case 13:
-                    _url = window.ctx + '/i/new-arrivals'
+                    _url = '/i/new-arrivals'
                     break
                 case 14:
-                    _url = window.ctx + '/i/trending-now'
+                    _url = '/i/trending-now'
                     break
                 case 15:
-                    _url = window.ctx + '/i/category/products'
+                    _url = '/i/category/products'
+                    break
+                case 16:
+                    _url = deepLink.params[0]
                     break
                 case 17:
-                    _url = window.ctx + '/shoppingcart/show'
+                    _url = '/shoppingcart/show'
                     break
                 default:
                     _url = '#'
             }
-
             return _url
         }
     }
 }
+
+
+

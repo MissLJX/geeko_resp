@@ -104,6 +104,27 @@ export const addAddress = (address) => {
     return axios.cpost(VPATH + '/customer/add-address', address).then(data => data.result)
 }
 
+export const changeCurrency = (currency) => {
+    return axios.get(VPATH + '/customer/update-currency',{currency}).then(data => data.result)
+}
+
+
+export const getOrderCountProcessing = () => {
+    return axios.get(VPATH + '/msite/order/unshipped-order-count').then(data => data.result)
+}
+
+export const getOrderCountShipped = () => {
+    return axios.get(VPATH + '/msite/order/shipped-order-count').then(data => data.result)
+}
+
+export const getOrderCountCanceled = () => {
+    return axios.get(VPATH + '/msite/order/canceled-count').then(data => data.result)
+}
+
+export const getOrderCountReceipt = () => {
+    return axios.get(VPATH + '/msite/order/receipt-count').then(data => data.result)
+}
+
 
 
 

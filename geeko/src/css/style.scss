@@ -72,11 +72,11 @@ input:-webkit-autofill{
 /** ================icon font==================**/
 @font-face {
   font-family: 'iconfont';  /* project id 384296 */
-  src: url('//at.alicdn.com/t/font_384296_l57a9b5fhzd7vi.eot');
-  src: url('//at.alicdn.com/t/font_384296_l57a9b5fhzd7vi.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_384296_l57a9b5fhzd7vi.woff') format('woff'),
-  url('//at.alicdn.com/t/font_384296_l57a9b5fhzd7vi.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_384296_l57a9b5fhzd7vi.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_384296_zy0yzfqbvf4rt3xr.eot');
+  src: url('//at.alicdn.com/t/font_384296_zy0yzfqbvf4rt3xr.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_384296_zy0yzfqbvf4rt3xr.woff') format('woff'),
+  url('//at.alicdn.com/t/font_384296_zy0yzfqbvf4rt3xr.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_384296_zy0yzfqbvf4rt3xr.svg#iconfont') format('svg');
 }
 
 .iconfont{
@@ -208,3 +208,27 @@ a{
 }
 
 /**===============================**/
+
+
+/**================loading===========**/
+.st-screen-loading{
+  position: fixed;
+  z-index: 500;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  animation: st-rotating 2s infinite linear;
+}
+
+
+
+@keyframes st-rotating {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/**==================================**/

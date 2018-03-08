@@ -19,9 +19,7 @@
             .el-notification {
                 width: 100%;
             }
-            padding: 15px 10px 0 10px;
             background-color: #fff;
-            margin-top: 10px;
 
         }
 
