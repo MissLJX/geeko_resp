@@ -71,8 +71,8 @@ const Me = [
             },
             {
                 path: 'order',
-                name: 'notification-order',
-                meta: {title: 'Notification order', depth: 2},
+                name: 'notification-me',
+                meta: {title: 'Notification me', depth: 2},
                 component: () => import('../pages/notification/notification-order.vue')
             },
             {

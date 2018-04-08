@@ -19,10 +19,10 @@ export default {
                     _url = '/me/m/credits'
                     break
                 case 8:
-                    _url = '/me/m/order/detail/' + deepLink.params[0]
+                    _url = '/me/m/me/detail/' + deepLink.params[0]
                     break
                 case 9:
-                    _url = '/me/m/order/ticket/' + deepLink.params[0]
+                    _url = '/me/m/me/ticket/' + deepLink.params[0]
                     break
                 case 10:
                     _url = '/i/lottery'

@@ -19,10 +19,10 @@ export default {
                     _url = window.ctx + '/me/m/credits'
                     break
                 case 8:
-                    _url = window.ctx + '/me/m/order/detail/' + deepLink.params[0]
+                    _url = window.ctx + '/me/m/me/detail/' + deepLink.params[0]
                     break
                 case 9:
-                    _url = window.ctx + '/me/m/order/contact/' + deepLink.params[1]
+                    _url = window.ctx + '/me/m/me/contact/' + deepLink.params[1]
                     break
                 // case 10:
                 //     _url = '#'
