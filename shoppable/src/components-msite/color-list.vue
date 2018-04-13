@@ -26,11 +26,12 @@
 <style lang="scss" scoped>
     .c-color-list{
         display: block;
-        margin-top: 20px;
-        margin-left: 20px;
-        margin-bottom: 15px;
+        margin-top: 10px;
+        margin-left: 10px;
+        margin-bottom: 8px;
         .label{
-            width: 10%;
+            font-size: 12px;
+            width: 15%;
             display: inline-block;
         }
         .content{

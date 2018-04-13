@@ -1,13 +1,20 @@
 <template>
     <div class="wrapper">
-        <div class="theme-wrapper">
+        <div v-show="loading" class="c-loading">
+            <span class="x-loading">
+              <span></span>
+              <span></span>
+              <span></span>
+            </span>
+        </div>
+        <div class="theme-wrapper" v-show="isgetproducts">
             <div class="theme-header">
                 <div class="themetit">PARTY QUEEN<p>—— Be the queen shine the party.</p></div>
                 <div class="viewmore">VIEWMORE></div>
             </div>
             <product-row  v-for="productVO in products" :productVO="productVO" :key="productVO.product.id" @edit="editHandle" :isEditing="editingId === productVO.product.id ||editingId === productVO.products[0].id ||editingId === productVO.products[1].id "/>
         </div>
-        <div class="theme-wrapper">
+        <div class="theme-wrapper" v-show="isgetproducts">
             <div class="theme-header">
                 <div class="themetit">PARTY QUEEN<p>—— Be the queen shine the party.</p></div>
                 <div class="viewmore">VIEWMORE></div>
@@ -26,9 +33,14 @@
             ProductRow
         },
         created(){
-            api.getproducts(0 , 2).then((result) => {
-                this.products =result;
-            })
+            if(!this.loading){
+                this.loading = true
+                api.getproducts(0 , 2).then((result) => {
+                    this.products =result;
+                    this.loading = false;
+                    this.isgetproducts = true;
+                })
+            }
         },
         data(){
             return{
@@ -55,35 +67,33 @@
         padding-top: 1px;
         padding-bottom: 80px;
         .theme-wrapper{
-            width: 700px;
-            margin: 0 auto;
-            margin-top: 80px;
+            margin: 16px;
+            margin-bottom: 40px;
             background-color: white;
-            padding-left: 38px;
+            padding-left: 12px;
             border: 1px solid white;
-            border-radius: 8px;
-            box-shadow: 0px 2px 17px rgba(0,0,0,45);
             .theme-header{
                 width: 100%;
-                line-height: 32px;
-                margin-top: 40px;
+                line-height: 16px;
+                margin-top: 20px;
                 .themetit{
                     float: left;
                     font-weight: bold;
-                    font-size: 32px;
+                    font-size: 16px;
                     p{
                         font-weight: normal;
-                        font-size: 22px;
+                        font-size: 11px;
                         color: #666;
                     }
                 }
                 .viewmore{
                     float: right;
-                    width: 220px;
-                    height: 42px;
-                    margin-right: 30px;
-                    line-height: 42px;
-                    font-size: 20px;
+                    width: 110px;
+                    height: 20px;
+                    margin-top: 20px;
+                    margin-right: 15px;
+                    line-height: 20px;
+                    font-size: 12px;
                     color: white;
                     cursor: pointer;
                     text-align: center;
@@ -95,6 +105,48 @@
                 display: block;
                 clear: both;
             }
+        }
+        .c-loading{
+            height: 700px;
+            line-height: 700px;
+            text-align: center;
+            .x-loading {
+                display: inline-block;
+                & > span {
+                    display: inline-block;
+                    background-color: #909393;
+                    width: 5px;
+                    margin-left: 2px;
+                    &:nth-child(1) {
+                        height: 12px;
+                        margin-left: 0;
+                        animation-delay: 0s;
+                    }
+                    &:nth-child(2) {
+                        height: 14px;
+                        animation-delay: 0.25s;
+                    }
+                    &:nth-child(3) {
+                        height: 16px;
+                        animation-delay: 0.5s;
+                    }
+
+                    animation-name: x-loading-move;
+                    animation-duration: 0.5s;
+                    animation-iteration-count: infinite;
+                }
+            }
+        }
+    }
+    @keyframes x-loading-move {
+        0% {
+            background-color: #909393;
+        }
+        50% {
+            background-color: #000;
+        }
+        100% {
+            background-color: #909393;
         }
     }
 </style>

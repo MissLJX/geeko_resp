@@ -17,10 +17,11 @@
 <style scoped>
     .c-size{
         margin-right: 10px;
-        padding: 2px 4px;
+        padding: 10px 15px;
         border: 1px solid #f5b2a2;
         display: inline-block;
         cursor: pointer;
+        margin-top: 10px;
     }
 
     .c-size.selected{

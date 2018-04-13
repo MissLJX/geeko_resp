@@ -16,9 +16,9 @@
 
 <style lang="scss" scoped>
     .plusicon{
-        width: 32px;
-        height: 32px;
+        width: 16px;
+        height: 16px;
         float: left;
-        padding: 150px 8px;
+        padding: 60px 3px;
     }
 </style>

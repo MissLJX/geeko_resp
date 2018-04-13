@@ -40,16 +40,17 @@
 <style lang="scss" scoped>
 .product-item{
     float: left;
+    width: 28%;
     .item-img{
         img{
-            width: 184px;
-            height: 247px;
+            width: 100%;
+            height: 150px;
         }
         span{
             display: block;
-            font-size: 22px;
+            font-size: 10px;
             color: #000;
-            margin: 15px 0;
+            margin: 10px 0;
             font-weight: bold;
         }
     }

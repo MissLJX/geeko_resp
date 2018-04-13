@@ -28,10 +28,11 @@
 <style lang="scss" scoped>
     .c-size-list{
         display: block;
-        margin-left: 20px;
+        margin-left: 10px;
         margin-bottom: 15px;
         .label{
-            width: 10%;
+            width: 15%;
+            font-size: 12px;
             display: inline-block;
         }
         .content{

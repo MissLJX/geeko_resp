@@ -38,23 +38,23 @@
         url('//at.alicdn.com/t/font_384296_bl0c0weph0cf2yb9.svg#iconfont') format('svg');
     }
     .c-item-selector{
-        width: 184px;
-        height: 42px;
-        line-height: 42px;
+        width: 94%;
+        height: 21px;
+        line-height: 21px;
         cursor: pointer;
         color:#666;
-        font-size: 22px;
+        font-size: 11px;
         border: 1px solid #e3e3e3;
-        margin-bottom: 40px;
+        margin-bottom: 20px;
         position: relative;
         span{
-            margin-left: 10px;
+            margin-left: 3px;
         }
         &::after {
             content: '\e692';
             font-family: 'iconfont';
             position: absolute;
-            right: 10px;
+            right: 2px;
         }
     }
 </style>

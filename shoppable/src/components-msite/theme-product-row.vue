@@ -133,8 +133,8 @@
 
     .c-product-row {
         position: relative;
-        margin-top: 40px;
-        border-bottom: 1px solid #e3e3e3;
+        margin-top: 20px;
+        margin-bottom: 15px;
     }
 
     .c-product-row .cells::after {

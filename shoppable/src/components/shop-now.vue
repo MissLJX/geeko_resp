@@ -88,6 +88,7 @@
         text-align: center;
         cursor: pointer;
         margin-top: 24px;
+        font-weight: bold;
         background-color:#f5b2a2;
         span{
             font-size: 16px;

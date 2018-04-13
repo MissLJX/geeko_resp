@@ -95,6 +95,8 @@ export default {
   }
 
   .c-loading{
+    height: 900px;
+    line-height: 900px;
     text-align: center;
     .x-loading {
       display: inline-block;
@@ -104,16 +106,16 @@ export default {
         width: 5px;
         margin-left: 2px;
         &:nth-child(1) {
-          height: 8px;
+          height: 12px;
           margin-left: 0;
           animation-delay: 0s;
         }
         &:nth-child(2) {
-          height: 10px;
+          height: 14px;
           animation-delay: 0.25s;
         }
         &:nth-child(3) {
-          height: 12px;
+          height: 16px;
           animation-delay: 0.5s;
         }
 

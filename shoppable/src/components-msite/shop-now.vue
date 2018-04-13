@@ -64,39 +64,39 @@
 <style lang="scss" scoped>
 .product-shop-now{
     width: 90%;
-    margin-left: 32px;
-    margin-bottom: 35px;
+    margin-bottom: 18px;
+    padding-left: 10px;
     .price-block{
         float: left;
         .product-total-price{
             span{
-                font-size: 26px;
+                font-size: 13px;
                 color: #000;
             }
             strong{
-                font-size: 22px;
+                font-size: 11px;
                 color: #f5b2a2;
             }
         }
         .product-save-price{
-            padding-top: 16px;
+            padding-top: 8px;
             span{
-                font-size: 22px;
+                font-size: 11px;
                 color: #666666;
             }
         }
     }
     .shop-btn{
         float: right;
-        width: 212px;
-        height: 40px;
-        line-height: 40px;
+        width: 106px;
+        height: 20px;
+        line-height: 20px;
         text-align: center;
         cursor: pointer;
-        margin-top: 24px;
+        margin-top: 12px;
         background-color:#f5b2a2;
         span{
-            font-size: 16px;
+            font-size: 12px;
             color: white;
         }
     }

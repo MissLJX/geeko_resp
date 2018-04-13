@@ -130,10 +130,9 @@
 </script>
 
 <style scoped>
-
     .c-product-row {
         position: relative;
-        margin-top: 40px;
+        margin-top: 20px;
         border-bottom: 1px solid #e3e3e3;
     }
 

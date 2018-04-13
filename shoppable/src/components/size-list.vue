@@ -31,7 +31,8 @@
         margin-left: 20px;
         margin-bottom: 15px;
         .label{
-            width: 10%;
+            width: 12%;
+            font-size: 18px;
             display: inline-block;
         }
         .content{

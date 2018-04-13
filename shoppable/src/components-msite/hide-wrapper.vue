@@ -1,9 +1,18 @@
 <template>
     <div class="c-variant-selecor">
         <div class="c-close"><i class="iconfont" @click="handleClose">&#xe69a;</i></div>
-        <color-list :products="products" @color-select="handleColor"/>
-        <size-list v-if="hasSize" :variants="variants" @size-select="handleSize"/>
-        <div class="confirm-btn" @click="handleConfirm">Confirm</div>
+        <div v-show="isloading" class="c-loading">
+            <span class="x-loading">
+              <span></span>
+              <span></span>
+              <span></span>
+            </span>
+        </div>
+        <div v-show="isGetInfo">
+            <color-list :products="products" @color-select="handleColor"/>
+            <size-list v-if="hasSize" :variants="variants" @size-select="handleSize"/>
+            <div class="confirm-btn" @click="handleConfirm">Confirm</div>
+        </div>
     </div>
 </template>
 
@@ -23,7 +32,9 @@
                 variants: [],
                 selectedProductId: this.productId,
                 selectedVariantId: this.variantId,
-                selectedSize: this.size
+                selectedSize: this.size,
+                isloading:false,
+                isGetInfo:false,
             }
         },
         computed: {
@@ -33,10 +44,15 @@
         },
         methods: {
             initGroupProducts(){
-                api.getgroupproducts(this.groupId).then((pds) => {
-                    this.products = pds.map(p => this.productGenerator(p));
-                    this.variants = this.products.find(p => p.selected).variants.map(v => this.variantGenerator(v));
-                })
+                if(!this.isloading){
+                    this.isloading = true
+                    api.getgroupproducts(this.groupId).then((pds) => {
+                        this.products = pds.map(p => this.productGenerator(p));
+                        this.variants = this.products.find(p => p.selected).variants.map(v => this.variantGenerator(v));
+                        this.isloading = false;
+                        this.isGetInfo = true;
+                    })
+                }
             },
 
 
@@ -153,14 +169,15 @@
         position: absolute;
         background-color: #fff;
         border: 1px solid #e3e3e3;
-        width: 655px;
-        top: 360px;
+        cursor: pointer;
+        width: 94%;
+        top: 215px;
         left: 0;
         z-index: 2;
         .c-close{
             width: 100%;
-            height: 25px;
-            line-height: 25px;
+            height: 18px;
+            line-height: 18px;
             background-color: #e3e3e3;
             i{
                 float: right;
@@ -172,16 +189,56 @@
             }
         }
         .confirm-btn{
-            width: 212px;
-            height: 42px;
+            width: 106px;
+            height: 32px;
             margin: 0 auto;
             margin-bottom: 15px;
-            line-height: 42px;
+            line-height: 32px;
             cursor: pointer;
             text-align: center;
             background-color: #f5b2a2;
             color: white;
 
+        }
+        .c-loading{
+            text-align: center;
+            .x-loading {
+                display: inline-block;
+                & > span {
+                    display: inline-block;
+                    background-color: #909393;
+                    width: 5px;
+                    margin-left: 2px;
+                    &:nth-child(1) {
+                        height: 8px;
+                        margin-left: 0;
+                        animation-delay: 0s;
+                    }
+                    &:nth-child(2) {
+                        height: 10px;
+                        animation-delay: 0.25s;
+                    }
+                    &:nth-child(3) {
+                        height: 12px;
+                        animation-delay: 0.5s;
+                    }
+
+                    animation-name: x-loading-move;
+                    animation-duration: 0.5s;
+                    animation-iteration-count: infinite;
+                }
+            }
+        }
+        @keyframes x-loading-move {
+            0% {
+                background-color: #909393;
+            }
+            50% {
+                background-color: #000;
+            }
+            100% {
+                background-color: #909393;
+            }
         }
     }
 </style>
