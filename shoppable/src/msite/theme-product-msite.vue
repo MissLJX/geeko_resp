@@ -1,0 +1,100 @@
+<template>
+    <div class="wrapper">
+        <div class="theme-wrapper">
+            <div class="theme-header">
+                <div class="themetit">PARTY QUEEN<p>—— Be the queen shine the party.</p></div>
+                <div class="viewmore">VIEWMORE></div>
+            </div>
+            <product-row  v-for="productVO in products" :productVO="productVO" :key="productVO.product.id" @edit="editHandle" :isEditing="editingId === productVO.product.id ||editingId === productVO.products[0].id ||editingId === productVO.products[1].id "/>
+        </div>
+        <div class="theme-wrapper">
+            <div class="theme-header">
+                <div class="themetit">PARTY QUEEN<p>—— Be the queen shine the party.</p></div>
+                <div class="viewmore">VIEWMORE></div>
+            </div>
+            <product-row  v-for="productVO in products" :productVO="productVO" :key="productVO.product.id" @edit="editHandle" :isEditing="editingId === productVO.product.id ||editingId === productVO.products[0].id ||editingId === productVO.products[1].id "/>
+        </div>
+    </div>
+</template>
+<script>
+    import * as api from '../api/shoppable'
+    import ProductRow from '../components-msite/theme-product-row.vue'
+
+    export default {
+        name:'list-product',
+        components:{
+            ProductRow
+        },
+        created(){
+            api.getproducts(0 , 2).then((result) => {
+                this.products =result;
+            })
+        },
+        data(){
+            return{
+                products: [],
+                editingId: null
+            }
+        },
+        computed: {
+
+        },
+        methods:{
+            editHandle(relatedId){
+                this.editingId = relatedId;
+            }
+        }
+    }
+</script>
+<style lang="scss" scoped>
+    .wrapper{
+        width: 100%;
+        height: 100%;
+        background-image: url("https://s3-us-west-2.amazonaws.com/static.geeko.online/image/joy/p/bg-outfits-msite.jpg");
+        margin: 0 auto;
+        padding-top: 1px;
+        padding-bottom: 80px;
+        .theme-wrapper{
+            width: 700px;
+            margin: 0 auto;
+            margin-top: 80px;
+            background-color: white;
+            padding-left: 38px;
+            border: 1px solid white;
+            border-radius: 8px;
+            box-shadow: 0px 2px 17px rgba(0,0,0,45);
+            .theme-header{
+                width: 100%;
+                line-height: 32px;
+                margin-top: 40px;
+                .themetit{
+                    float: left;
+                    font-weight: bold;
+                    font-size: 32px;
+                    p{
+                        font-weight: normal;
+                        font-size: 22px;
+                        color: #666;
+                    }
+                }
+                .viewmore{
+                    float: right;
+                    width: 220px;
+                    height: 42px;
+                    margin-right: 30px;
+                    line-height: 42px;
+                    font-size: 20px;
+                    color: white;
+                    cursor: pointer;
+                    text-align: center;
+                    background-color: #f5b2a2;
+                }
+            }
+            .theme-header::after{
+                content: '';
+                display: block;
+                clear: both;
+            }
+        }
+    }
+</style>

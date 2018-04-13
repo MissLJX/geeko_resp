@@ -84,11 +84,10 @@ export default {
   post(url, data, headers){
     return new Promise((resolve, reject) => {
       instance.post(url,
-        JSON.stringify(data),
+        data,
         {
           headers: {
-            ...headers,
-            'Content-Type': 'application/x-www-form-urlencoded'
+            ...headers
           }
         }
       ).then((res) => {
