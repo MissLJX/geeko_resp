@@ -21,7 +21,8 @@ module.exports = {
     contentBase: './dist',
     proxy: {
       "/api": {
-        target: "https://www.joyshoetique.com",
+        // target: "https://www.joyshoetique.com",
+        target: "http://localhost:8080/joyshoetique",
         pathRewrite: {"^/api" : ""},
         secure: false
       }
