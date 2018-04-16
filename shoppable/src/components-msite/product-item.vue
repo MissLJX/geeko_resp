@@ -1,9 +1,9 @@
 <template>
     <div class="product-item">
-        <div class="item-img">
+        <a class="item-img" :href="producturl">
             <img :src="image">
             <span>{{price}}</span>
-        </div>
+        </a>
         <item-selector :variant="selectedVariant" @size-color-select="handleSizeColor"/>
     </div>
 </template>
@@ -26,6 +26,10 @@
             },
             selectedVariant(){
                 return this.product.variants.find(v => v.selected)
+            },
+            producturl(){
+                let name = this.product.name.replace(/\s/g,'_');
+                return `/product/${name}/${this.product.id}.html`
             }
 
         },
@@ -42,9 +46,11 @@
     float: left;
     width: 28%;
     .item-img{
+        display: block;
+        text-decoration: none;
         img{
             width: 100%;
-            height: 150px;
+            height: 116px;
         }
         span{
             display: block;

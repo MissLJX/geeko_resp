@@ -89,7 +89,6 @@
     .shop-btn{
         float: right;
         width: 106px;
-        height: 20px;
         line-height: 20px;
         text-align: center;
         cursor: pointer;

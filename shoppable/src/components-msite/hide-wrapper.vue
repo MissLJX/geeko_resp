@@ -171,7 +171,7 @@
         border: 1px solid #e3e3e3;
         cursor: pointer;
         width: 94%;
-        top: 215px;
+        top: 183px;
         left: 0;
         z-index: 2;
         .c-close{
@@ -189,6 +189,7 @@
             }
         }
         .confirm-btn{
+            font-size: 14px;
             width: 106px;
             height: 32px;
             margin: 0 auto;

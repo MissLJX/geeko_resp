@@ -19,6 +19,6 @@
         width: 16px;
         height: 16px;
         float: left;
-        padding: 60px 3px;
+        padding: 45px 3px;
     }
 </style>

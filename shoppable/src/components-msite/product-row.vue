@@ -89,6 +89,7 @@
                     pcMainImage: p.pcMainImage,
                     price: realPrice,
                     groupId: p.groupId,
+                    name:p.name,
                     variants: p.variants.map(v => ({
                         id: v.id,
                         size: v.size,

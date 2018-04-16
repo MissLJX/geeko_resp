@@ -1,6 +1,8 @@
 <template>
     <div class="c-item-selector" @click="handleSizeColor">
-        <span>{{sizecolor}}</span>
+        <div class="p_des">
+            <span>{{sizecolor}}</span>
+        </div>
     </div>
 </template>
 
@@ -47,14 +49,21 @@
         border: 1px solid #e3e3e3;
         margin-bottom: 40px;
         position: relative;
-        span{
-            margin-left: 15px;
+        .p_des{
+            width: 80%;
+            white-space:nowrap;
+            text-overflow:ellipsis;
+            overflow:hidden;
+            span{
+                margin-left: 15px;
+            }
         }
         &::after {
             content: '\e692';
             font-family: 'iconfont';
             position: absolute;
-            right: 10px;
+            top: 0px;
+            right: 15px;
         }
     }
 </style>

@@ -7,21 +7,13 @@
               <span></span>
             </span>
         </div>
-        <div class="theme-wrapper" v-show="isgetproducts">
+        <div class="theme-wrapper" v-show="isgetproducts" v-for="collproduct in collproducts">
             <div class="theme-header">
-                <span class="themetit">PARTY QUEEN</span>
-                <span class="themecon">—— Be the queen shine the party.</span>
+                <span class="themetit">{{collproduct.collection.name}}</span>
+                <span class="themecon">—— {{collproduct.collection.description}}</span>
             </div>
-            <product-row  v-for="productVO in products" :productVO="productVO" :key="productVO.product.id" @edit="editHandle" :isEditing="editingId === productVO.product.id ||editingId === productVO.products[0].id ||editingId === productVO.products[1].id "/>
-            <div class="view-more"><a href="javascript:">VIEW MORE</a></div>
-        </div>
-        <div class="theme-wrapper" v-show="isgetproducts">
-            <div class="theme-header">
-                <span class="themetit">PARTY QUEEN</span>
-                <span class="themecon">—— Be the queen shine the party.</span>
-            </div>
-            <product-row  v-for="productVO in products" :productVO="productVO" :key="productVO.product.id" @edit="editHandle" :isEditing="editingId === productVO.product.id ||editingId === productVO.products[0].id ||editingId === productVO.products[1].id "/>
-            <div class="view-more"><a href="javascript:">VIEW MORE</a></div>
+            <product-row  v-for="productVO in collproduct.products" :productVO="productVO" :key="productVO.product.id" @edit="editHandle" :isEditing="editingId === productVO.product.id ||editingId === productVO.products[0].id ||editingId === productVO.products[1].id "/>
+            <div class="view-more"><a :href="collectionurl(collproduct.collection)">VIEW MORE</a></div>
         </div>
     </div>
 </template>
@@ -37,8 +29,8 @@
         created(){
             if(!this.loading){
                 this.loading = true
-                api.getproducts(0 , 2).then((result) => {
-                    this.products =result;
+                api.getthemeproducts(0,10).then((result) => {
+                    this.collproducts =result;
                     this.loading = false;
                     this.isgetproducts = true;
                 })
@@ -46,7 +38,7 @@
         },
         data(){
             return{
-                products: [],
+                collproducts:[],
                 editingId: null,
                 isgetproducts:false,
                 loading:false
@@ -59,6 +51,9 @@
             editHandle(relatedId){
                 this.editingId = relatedId;
             },
+            collectionurl: function(collection){
+                return `/page/out-fits?collectionId=${collection.id}`
+            }
         }
     }
 </script>

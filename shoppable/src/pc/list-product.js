@@ -1,6 +1,5 @@
 import Vue from 'vue'
-/*import App from '../msite/theme-product-msite.vue'*/
-import App from './theme-product.vue'
+import App from './list-product.vue'
 
 const root = document.createElement('div')
 root.id = 'root'

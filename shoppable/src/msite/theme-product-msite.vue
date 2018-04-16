@@ -7,19 +7,12 @@
               <span></span>
             </span>
         </div>
-        <div class="theme-wrapper" v-show="isgetproducts">
+        <div class="theme-wrapper" v-show="isgetproducts" v-for="collproduct in collproducts">
             <div class="theme-header">
-                <div class="themetit">PARTY QUEEN<p>—— Be the queen shine the party.</p></div>
-                <div class="viewmore">VIEWMORE></div>
+                <div class="themetit">{{collproduct.collection.name}}<p>—— {{collproduct.collection.description}}</p></div>
+                <div class="viewmore" ><a :href="collectionurl(collproduct.collection)">VIEW MORE</a></div>
             </div>
-            <product-row  v-for="productVO in products" :productVO="productVO" :key="productVO.product.id" @edit="editHandle" :isEditing="editingId === productVO.product.id ||editingId === productVO.products[0].id ||editingId === productVO.products[1].id "/>
-        </div>
-        <div class="theme-wrapper" v-show="isgetproducts">
-            <div class="theme-header">
-                <div class="themetit">PARTY QUEEN<p>—— Be the queen shine the party.</p></div>
-                <div class="viewmore">VIEWMORE></div>
-            </div>
-            <product-row  v-for="productVO in products" :productVO="productVO" :key="productVO.product.id" @edit="editHandle" :isEditing="editingId === productVO.product.id ||editingId === productVO.products[0].id ||editingId === productVO.products[1].id "/>
+            <product-row  v-for="productVO in collproduct.products" :productVO="productVO" :key="productVO.product.id" @edit="editHandle" :isEditing="editingId === productVO.product.id ||editingId === productVO.products[0].id ||editingId === productVO.products[1].id "/>
         </div>
     </div>
 </template>
@@ -35,8 +28,8 @@
         created(){
             if(!this.loading){
                 this.loading = true
-                api.getproducts(0 , 2).then((result) => {
-                    this.products =result;
+                api.getthemeproducts(0,10).then((result) => {
+                    this.collproducts =result;
                     this.loading = false;
                     this.isgetproducts = true;
                 })
@@ -44,7 +37,7 @@
         },
         data(){
             return{
-                products: [],
+                collproducts:[],
                 editingId: null
             }
         },
@@ -54,6 +47,9 @@
         methods:{
             editHandle(relatedId){
                 this.editingId = relatedId;
+            },
+            collectionurl: function(collection){
+                return `/page/out-fits?collectionId=${collection.id}`
             }
         }
     }
@@ -98,6 +94,10 @@
                     cursor: pointer;
                     text-align: center;
                     background-color: #f5b2a2;
+                    a{
+                        text-decoration: none;
+                        color: white;
+                    }
                 }
             }
             .theme-header::after{

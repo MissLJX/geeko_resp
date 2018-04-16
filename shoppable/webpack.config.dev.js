@@ -21,7 +21,7 @@ module.exports = {
     contentBase: './dist',
     proxy: {
       "/api": {
-        // target: "http://localhost:8080/joyshoetique",
+        /*target: "http://localhost:8080/joyshoetique",*/
         target: "https://www.joyshoetique.com",
         pathRewrite: {"^/api" : ""},
         secure: false
@@ -35,7 +35,7 @@ module.exports = {
         use: {
           loader: 'vue-loader',
           options: {
-            loaders: ['css-loader', 'style-loader']
+            loaders: ['sass-loader', 'css-loader', 'style-loader']
           }
         },
       },

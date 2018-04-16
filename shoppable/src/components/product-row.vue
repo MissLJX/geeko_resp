@@ -60,6 +60,7 @@
             this.product0 = this.productGeneator(this.productVO.product);
             this.product1 = this.productGeneator(this.productVO.products[0]);
             this.product2 = this.productGeneator(this.productVO.products[1]);
+
             this.product0.variants[0].selected = true;
             this.product1.variants[0].selected = true;
             this.product2.variants[0].selected = true;
@@ -89,6 +90,7 @@
                     pcMainImage: p.pcMainImage,
                     price: realPrice,
                     groupId: p.groupId,
+                    name: p.name,
                     variants: p.variants.map(v => ({
                         id: v.id,
                         size: v.size,

@@ -44,6 +44,7 @@ export default {
                 if(!this.loading){
                     this.loading = true;
                     api.getproducts(this.skip , this.limit).then((result) => {
+                    // api.getproductsbycollectionid(window.collectionId, this.skip , this.limit).then((result) => {
                         if(result.length < 1){
                             this.finished = true;
                         }

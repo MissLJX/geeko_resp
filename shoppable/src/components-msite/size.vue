@@ -17,6 +17,7 @@
 <style scoped>
     .c-size{
         margin-right: 10px;
+        font-size: 12px;
         padding: 2px 4px;
         margin-bottom: 5px;
         border: 1px solid #f5b2a2;
