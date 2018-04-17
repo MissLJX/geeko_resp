@@ -12,6 +12,7 @@ module.exports = {
   },
   output: {
     filename: '[name].bundle.js',
+    // chunkFilename : '[name].chunk.js',
     path: path.resolve(__dirname, './dist')
   },
   module: {
@@ -37,7 +38,27 @@ module.exports = {
     ]
   },
   plugins: [
-    new webpack.optimize.SplitChunksPlugin(),
+    new webpack.optimize.SplitChunksPlugin({
+      chunks: "all",
+      minSize: 30000,
+      minChunks: 1,
+      maxAsyncRequests: 5,
+      maxInitialRequests: 3,
+      name: true,
+      cacheGroups: {
+        default: {
+          minChunks: 2,
+          priority: -20,
+          reuseExistingChunk: true,
+          name: 'common'
+        },
+        vendors: {
+          test: /[\\/]node_modules[\\/]/,
+          priority: -10,
+          name: "vendor"
+        }
+      }
+    }),
     new UglifyJSPlugin({
       sourceMap: true
     })
