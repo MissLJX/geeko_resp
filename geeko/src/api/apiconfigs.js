@@ -9,10 +9,10 @@ import * as utils from '../utils/geekoutils'
 
 
 const instance = axios.create({
-    baseURL: window.ctx,
+    baseURL: typeof window.ctx == 'undefined' ? '/api': window.ctx,
     timeout: 50000,
     headers: {
-        accessToken: 'de95a547-2a57-458a-af3f-1c73fb4e2802',
+        accessToken: '6f216d89-05df-47d2-b8f9-e7b92ec251ff',
         appVersion: utils.APP_VERSION,
         countryCode: utils.getCountry(),
         wid: utils.getWid()

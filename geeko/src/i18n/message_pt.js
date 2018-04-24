@@ -1,0 +1,45 @@
+/**
+ * Created by shao_ on 2017/7/14.
+ */
+
+export default {
+    message: {
+        shoppingCart: 'Carrinho de compras',
+        loading: 'a carregar',
+        addressTip: '',
+    },
+    label: {
+        save: 'Guardar',
+        add: 'Adicionar',
+        order: 'Encomendas',
+        editAddress: '',
+        address: '',
+        fullName: 'Nome Completo',
+        streetAddress: 'Morada',
+        unit: 'Apt/Suíte/Bloco(Opcional))',
+        country: '',
+        state: 'Estado',
+        zipCode: '',
+        phoneNumber: '',
+        city: 'Cidade',
+        submit: 'Submeter',
+        addressBook: 'Livro de endereços',
+        coupons: 'Cupões',
+        credits: 'Creditos',
+        processing: 'Processamento',
+        shipped: 'Encomenda enviada',
+        confirmed: 'Encomenda confirmada',
+        canceled: 'Cancelar encomenda',
+        editProfile: 'Editar perfil',
+        changProfilePicture: '',
+        firstName: 'Primeiro nome',
+        lastName: 'Ultimo nome',
+        gender: 'Gênero',
+        birthday: 'Data de nascimento',
+        changePassword: 'Mudar palavra-passe',
+        changeEmail: 'Mudar e-mail',
+        changeCurrency: '',
+        wishlist: 'Lista de desejos',
+        settings: 'Definições'
+    }
+}

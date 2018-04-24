@@ -17,7 +17,7 @@ export default {
         fullName: 'Full name',
         streetAddress: 'Street address',
         unit: 'Apt / Suit / Unit(Optional)',
-        country: 'Country',
+            country: 'Country',
         state: 'State',
         zipCode: 'Zip code',
         phoneNumber: 'Phone Number',

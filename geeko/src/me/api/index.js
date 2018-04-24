@@ -50,7 +50,7 @@ export const getWishlist = () => {
 }
 
 export const getOrderNotifications = (skip) => {
-    return axios.get('/notification/' + skip + '/20/get-me-notifications').then(data => data.result)
+    return axios.get('/notification/' + skip + '/20/get-order-notifications').then(data => data.result)
 }
 
 export const getPromotionNotification = (skip) => {
@@ -110,19 +110,19 @@ export const changeCurrency = (currency) => {
 
 
 export const getOrderCountProcessing = () => {
-    return axios.get(VPATH + '/msite/me/unshipped-me-count').then(data => data.result)
+    return axios.get(VPATH + '/msite/order/unshipped-order-count').then(data => data.result)
 }
 
 export const getOrderCountShipped = () => {
-    return axios.get(VPATH + '/msite/me/shipped-me-count').then(data => data.result)
+    return axios.get(VPATH + '/msite/order/shipped-order-count').then(data => data.result)
 }
 
 export const getOrderCountCanceled = () => {
-    return axios.get(VPATH + '/msite/me/canceled-count').then(data => data.result)
+    return axios.get(VPATH + '/msite/order/canceled-count').then(data => data.result)
 }
 
 export const getOrderCountReceipt = () => {
-    return axios.get(VPATH + '/msite/me/receipt-count').then(data => data.result)
+    return axios.get(VPATH + '/msite/order/receipt-count').then(data => data.result)
 }
 
 
