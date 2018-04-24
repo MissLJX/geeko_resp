@@ -52,7 +52,7 @@
                 this.editingId = relatedId;
             },
             collectionurl: function(collection){
-                return `/page/out-fits?collectionId=${collection.id}`
+                return `${(window.ctx || '')}/page/out-fits?collectionId=${collection.id}`
             }
         }
     }

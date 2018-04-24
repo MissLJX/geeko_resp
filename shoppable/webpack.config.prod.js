@@ -7,6 +7,8 @@ module.exports = {
   entry: {
     collection: path.resolve(__dirname, './src/pc/theme-product.js'),
     product: path.resolve(__dirname, './src/pc/list-product.js'),
+    collectionmsite: path.resolve(__dirname, './src/msite/theme-product-msite.js'),
+    productmsite: path.resolve(__dirname, './src/msite/list-product-msite.js')
     // collection: path.resolve(__dirname, './src/msite/theme-product.js'),
     // product: path.resolve(__dirname, './src/msite/list-product.js')
   },
@@ -61,6 +63,9 @@ module.exports = {
     }),
     new UglifyJSPlugin({
       sourceMap: true
+    }),
+    new webpack.DefinePlugin({
+        'process.env.NODE_ENV': JSON.stringify('production')
     })
   ]
 };

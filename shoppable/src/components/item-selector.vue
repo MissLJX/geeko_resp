@@ -14,12 +14,11 @@
             sizecolor: function(){
                 if(this.variant.size && this.variant.color){
                     return `${this.variant.size} + ${this.variant.color}`;
-                }else if (this.variant.size==null){
-                    return `${this.variant.color}`;
+                }else if (this.variant.size){
+                    return this.variant.size;
                 }else if (this.variant.color){
-                    return `${this.variant.size}`;
+                    return this.variant.color;
                 }
-
             }
         },
         methods: {

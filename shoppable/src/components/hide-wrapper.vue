@@ -54,8 +54,6 @@
                     })
                 }
             },
-
-
             refreshProducts(spid, s){
                 this.products.forEach(pd => {
                      pd.selected = pd.id === spid

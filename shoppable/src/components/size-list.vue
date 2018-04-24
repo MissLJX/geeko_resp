@@ -2,7 +2,7 @@
     <div class="c-size-list">
         <div class="label">SIZE</div>
         <div class="content" v-if="variants.length">
-            <size v-for="variant in variants" :variant="variant"  class="c-size" @size-select="handleSize"/>
+            <size v-for="variant in variants" :variant="variant" :key="variant.id"  class="c-size" @size-select="handleSize"/>
         </div>
     </div>
 </template>

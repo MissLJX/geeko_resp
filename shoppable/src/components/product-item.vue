@@ -1,6 +1,5 @@
 <template>
     <div class="product-item">
-
         <a class="item-img" :href="producturl">
             <img :src="image">
             <span>{{price}}</span>

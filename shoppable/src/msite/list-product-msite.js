@@ -1,7 +1,5 @@
 import Vue from 'vue'
-import App from './theme-product.vue'
-
-
+import App from './list-product-msite.vue'
 
 if(process.env.NODE_ENV === 'development'){
     const root = document.createElement('div')
@@ -10,6 +8,6 @@ if(process.env.NODE_ENV === 'development'){
 }
 
 new Vue({
-  el: '#root',
-  render: (h) => h(App)
+    el: '#root',
+    render: (h) => h(App)
 })

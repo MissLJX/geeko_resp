@@ -1,6 +1,6 @@
 <template>
 <div class="wrapper">
-  <product-row  v-for="productVO in products" :productVO="productVO" :key="productVO.product.id" @edit="editHandle" :isEditing="editingId === productVO.product.id ||editingId === productVO.products[0].id ||editingId === productVO.products[1].id "/>
+  <product-row  v-for="productVO in products" :productVO="productVO" :key="productVO.product.id" @edit="editHandle" :isEditing="isEditing"/>
   <div v-show="loading" class="c-loading">
     <span class="x-loading">
       <span></span>
@@ -40,12 +40,10 @@ export default {
 
         getproducts(){
             if(!this.finished){
-
                 if(!this.loading){
                     this.loading = true;
                     api.getproducts(this.skip , this.limit).then((result) => {
-                    // api.getproductsbycollectionid(window.collectionId, this.skip , this.limit).then((result) => {
-                        if(result.length < 1){
+                        if(result.length<1 || result.length<this.limit){
                             this.finished = true;
                         }
                         this.products.push(...result);
@@ -67,11 +65,24 @@ export default {
                 document.body.clientHeight,
                 window.screen.height
             ]
-
-
             if (scrollTop + windowHeight >= documentHeight - 100) {
                 this.getproducts()
             }
+        },
+
+        isEditing(){
+            if(productVO.product.id && productVO.products[0].id && productVO.products[1].id){
+                if(this.editingId === productVO.product.id ||this.editingId === productVO.products[0].id ||this.editingId === productVO.products[1].id){
+                    return true
+                }
+            }else if(productVO.product.id && productVO.products[0].id ){
+                if(this.editingId === productVO.product.id ||this.editingId === productVO.products[0].id ||this.editingId === productVO.products[1].id){
+                    return true
+                }
+            }else{
+                return false
+            }
+
         }
     },
     mounted(){

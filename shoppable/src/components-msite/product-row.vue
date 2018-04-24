@@ -3,9 +3,9 @@
         <div class="cells">
             <product-item :product="product0" @size-color-select="handleSizeColor" />
             <plus-icon/>
-            <product-item :product="product1" @size-color-select="handleSizeColor"/>
+            <product-item v-if="hasProduct1" :product="product1" @size-color-select="handleSizeColor"/>
             <plus-icon/>
-            <product-item :product="product2" @size-color-select="handleSizeColor"/>
+            <product-item v-if="hasProduct2" :product="product2" @size-color-select="handleSizeColor"/>
             <shop-now :msg="productVO" :variantsid="getVariantsId" v-on:click.native="handleAdd"/>
         </div>
 
@@ -42,7 +42,9 @@
                 selectedVariantId: null,
                 selectedGroupId: null,
                 selectedSize: null,
-                showSelector: false
+                showSelector: false,
+                hasProduct1:false,
+                hasProduct2:false,
             };
         },
         computed: {
@@ -54,15 +56,21 @@
             }
         },
         created() {
-            if (!this.productVO || this.productVO.products.length < 2)
+            if (!this.productVO)
                 throw "product vo is empty";
 
             this.product0 = this.productGeneator(this.productVO.product);
             this.product1 = this.productGeneator(this.productVO.products[0]);
             this.product2 = this.productGeneator(this.productVO.products[1]);
             this.product0.variants[0].selected = true;
-            this.product1.variants[0].selected = true;
-            this.product2.variants[0].selected = true;
+            if(this.product1){
+                this.hasProduct1 = true
+                this.product1.variants[0].selected = true;
+            }
+            if(this.product2){
+                this.hasProduct2 = true
+                this.product2.variants[0].selected = true;
+            }
         },
         methods: {
             handleSizeColor({groupId, productId, variant}) {
