@@ -17,7 +17,7 @@ export default {
         fullName: 'Full name',
         streetAddress: 'Street address',
         unit: 'Apt / Suit / Unit(Optional)',
-            country: 'Country',
+        country: 'Country',
         state: 'State',
         zipCode: 'Zip code',
         phoneNumber: 'Phone Number',
@@ -40,6 +40,9 @@ export default {
         changeEmail: 'Change email',
         changeCurrency: 'Change currency',
         wishlist: 'Wish list',
-        settings: 'settings'
+        settings: 'settings',
+        mayLike:'YOU MAY ALSO LIKE',
+        logout:'Log out',
+        logoff:'Log off'
     }
 }

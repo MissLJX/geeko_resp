@@ -306,7 +306,7 @@
         },
         methods: {
             getOrderHref(path){
-                return utils.PROJECT + '/me/m/me/' + path
+                return utils.PROJECT + '/me/m/order/' + path
             }
         },
         components: {

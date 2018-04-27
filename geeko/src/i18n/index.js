@@ -5,7 +5,6 @@ import Vue from 'vue'
 import VueI18n from 'vue-i18n'
 
 import ENMessage from './message_en'
-import ZHMessage from './message_zh'
 import DEMessage from './message_de'
 import ESMessage from './message_es'
 import FRMessage from './message_fr'
@@ -15,15 +14,14 @@ Vue.use(VueI18n)
 
 
 const messages = {
-    en: ENMessage,
-    zh: ZHMessage,
-    de: DEMessage,
-    es: ESMessage,//翻译不全
-    fr: FRMessage,
-    pt: PTMessage
+    en_US: ENMessage,
+    de_DE: DEMessage,
+    es_ES: ESMessage,
+    fr_FR: FRMessage,
+    pt_BR: PTMessage
 }
 
 export default new VueI18n({
-    locale: window.locale || 'pt', // set locale
+    locale: window.locale || 'de_DE', // set locale
     messages, // set locale messages
 })

@@ -6,21 +6,21 @@ export default {
     message: {
         shoppingCart: 'Warenkorb',
         loading: 'Läd',
-        addressTip: '',
+        addressTip: '* Zeigt an, dass ein Feld erforderlich ist',
     },
     label: {
         save: 'Speichern',
         add: 'Hinzufügen',
         order: 'Bestellungen',
-        editAddress: '',
-        address: '',
+        editAddress: 'Adresse bearbeiten',
+        address: 'Adresse',
         fullName: 'Voller Name',
         streetAddress: 'Straße',
         unit: 'Apt/Suite/Einheit(Optional)',
-        country: '',
+        country: 'Land',
         state: 'Staat',
-        zipCode: '',
-        phoneNumber: '',
+        zipCode: 'PLZ',
+        phoneNumber: 'Telefonnummer',
         city: 'Stadt',
         submit: 'Absenden',
         addressBook: 'Adressbuch',
@@ -38,8 +38,11 @@ export default {
         birthday: 'Geburtstag',
         changePassword: 'Passwort ändern',
         changeEmail: 'Email ändern',
-        changeCurrency: '',
+        changeCurrency: 'Währung ändern',
         wishlist: 'Wunschliste',
-        settings: 'Einstellungen'
+        settings: 'Einstellungen',
+        mayLike:'KÖNNTE DIR AUCH GEFALLEN',
+        logout:'Abmelden',
+        logoff:'Abmelden'
     }
 }

@@ -1,7 +1,7 @@
 <template>
     <div class="el-you-likes">
         <div class="hd">
-            You May Also Like
+            {{$t("label.mayLike")}}
         </div>
         <div class="bd">
             <product-list v-if="products" :products="products"/>

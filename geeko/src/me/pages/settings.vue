@@ -44,7 +44,7 @@
                     </div>
                 </div>
 
-                <div class="el-setting-gender">
+                <!--<div class="el-setting-gender">
                     <div class="st-table el-setting-li-01">
                         <div class="st-cell st-v-m">
                             <span class="el-setting-label">{{$t('label.gender')}}</span>
@@ -79,7 +79,7 @@
                     </div>
 
                     <input class="el-birth-input" type="date" v-model="info.birthday"/>
-                </div>
+                </div>-->
             </div>
 
 
@@ -124,15 +124,16 @@
                             {{cu.label}}
                         </option>
                     </select>
-
                 </div>
-
             </div>
+            <button class="el-logout-btn" @click="logoutHandle">{{$t('label.logout')}}</button>
+        </div>
+        <span class="el-logoff-btn" @click="logoffHandle">{{$t('label.logoff')}}</span>
+        <div class="logoff-tip">
 
-
-            <button class="el-logout-btn" @click="logoutHandle">Logout</button>
         </div>
     </div>
+
 </template>
 
 <style scoped lang="scss">
@@ -233,7 +234,19 @@
         font-size: 16px;
         cursor: pointer;
     }
-
+    .el-logoff-btn{
+        display: block;
+        width: 100%;
+        text-align: center;
+        margin-top: 200px;
+        text-decoration: underline;
+    }
+    .logoff-tip{
+        width: 300px;
+        height: 400px;
+        background: rgba(0,0,0,0.2);
+        display: none;
+    }
 </style>
 
 <script type="text/ecmascript-6">
@@ -303,6 +316,9 @@
                 this.$store.dispatch('logout').then(() => {
                     window.location.href = '/'
                 })
+            },
+            logoffHandle(){
+
             },
             currencyChangeHandle(evt){
                 var value = evt.target.value
