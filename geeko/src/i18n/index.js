@@ -21,7 +21,15 @@ const messages = {
     pt_BR: PTMessage
 }
 
+const languages = [
+    'en_US',
+    'de_DE',
+    'es_ES',
+    'fr_FR',
+    'pt_BR'
+]
+
 export default new VueI18n({
-    locale: window.locale || 'de_DE', // set locale
+    locale: languages.find(language => language === window.locale) || 'en_US', // set locale
     messages, // set locale messages
 })
