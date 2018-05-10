@@ -27,6 +27,7 @@ export default {
         coupons: 'Coupons',
         credits: 'Punkte',
         processing: 'Verarbeitung',
+        unpaid: 'Unbezahlt',
         shipped: 'Bestellung versandt',
         confirmed: 'Bestellung bestätigt',
         canceled: 'Bestellung storniert',

@@ -5,7 +5,7 @@
         </div>
         <div class="st-cell st-v-m el-touch-go-label1">{{label1}}</div>
         <div class="st-cell st-v-m st-t-r">
-            <span v-if="label2" class="el-touch-go-label2">{{label2}}</span>
+            <span v-if="label2" :style="label2Style" class="el-touch-go-label2">{{label2}}</span>
             <i class="iconfont el-go">&#xe694;</i>
         </div>
     </div>
@@ -14,6 +14,7 @@
 <style scoped lang="scss">
     .el-go{
         font-size: 20px;
+        vertical-align: middle;
     }
 
     .el-touch-go-label1{
@@ -37,7 +38,8 @@
     export default{
         props:[
             'label1',
-            'label2'
+            'label2',
+            'label2Style'
         ]
     }
 </script>

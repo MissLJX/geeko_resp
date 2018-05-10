@@ -233,7 +233,7 @@
                 return this.$store.getters.states
             },
             hasStates(){
-                return _.indexOf(['US', 'CA'], this.countrySelected) >= 0
+                return this.$store.getters.states && this.$store.getters.states.length
             }
         },
         methods: {

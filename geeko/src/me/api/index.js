@@ -125,6 +125,10 @@ export const getOrderCountReceipt = () => {
     return axios.get(VPATH + '/msite/order/receipt-count').then(data => data.result)
 }
 
+export const getOrderCountUnpaid = () => {
+  return axios.get(VPATH + '/msite/order/unpayed-order-count').then(data => data.result)
+}
+
 
 
 

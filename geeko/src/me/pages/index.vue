@@ -1,7 +1,7 @@
 <template>
     <div class="el-me-body">
 
-        <div class="el-me-wall">
+        <div class="el-me-wall" :style="{'background':background}">
             <div class="st-table el-me-header-area">
                 <div class="st-cell st-v-m">
                     <router-link :to="{name: 'settings'}">
@@ -16,7 +16,8 @@
                     </div>
                 </div>
                 <div class="st-cell st-v-m">
-                    <router-link :to="{name: 'notification-promotion'}" :class="{'el-noti-count':notificationCount > 0}">
+                    <router-link :to="{name: 'notification-promotion'}"
+                                 :class="{'el-noti-count':notificationCount > 0}">
                         <span class="el-setting-icon"><i class="iconfont el-setting-font">&#xe60b;</i></span>
                         <span class="el-noti-num">{{notificationCount}}</span>
                     </router-link>
@@ -32,8 +33,11 @@
 
         <div class="el-me-order-area">
             <div class="hd">
-                <a :href="getOrderHref('')">
-                    <touch-go class="el-me-order-touch" :label1="$t('label.order')"/>
+                <a :href="orderHref">
+                    <touch-go class="el-me-order-touch" :label1="$t('label.order')" :label2="orderhreflabel"
+                              :label2Style="{color:'#e5004f', fontWeight:'bold'}">
+                        <i slot="icon" class="iconfont" style="font-size:18px;">&#xe600;</i>
+                    </touch-go>
                 </a>
             </div>
             <div class="bd">
@@ -42,7 +46,8 @@
                         <a :href="getOrderHref('processing')">
                             <i class="iconfont">&#xe60a;</i>
                             <span>{{$t('label.processing')}}</span>
-                            <span v-if="orderCountProcessing > 0" class="el-me-order-count">{{orderCountProcessing}}</span>
+                            <span v-if="orderCountProcessing > 0"
+                                  class="el-me-order-count">{{orderCountProcessing}}</span>
                         </a>
                     </div>
                     <div>
@@ -120,7 +125,7 @@
 
     .el-me-wall {
         height: 150px;
-        background: url(https://dgzfssf1la12s.cloudfront.net/me/msite/me-back-red.jpg) no-repeat center/cover;
+        background: #e5004f;
         padding: 10px;
     }
 
@@ -288,45 +293,66 @@
 
 <script type="text/ecmascript-6">
 
-    import {mapGetters, mapActions} from 'vuex'
-    import store from '../../store'
-    import TouchGo from '../../components/touch-go.vue'
-    import YouLikes from '../../components/you-likes.vue'
-    import * as utils from '../../utils/geekoutils'
+  import { mapGetters, mapActions } from 'vuex';
+  import store from '../../store';
+  import TouchGo from '../../components/touch-go.vue';
+  import YouLikes from '../../components/you-likes.vue';
+  import * as utils from '../../utils/geekoutils';
 
 
-    export default{
-        computed: {
-            ...mapGetters('me', [
-                'me', 'youlikes', 'feed', 'headerImage', 'notificationCount','orderCountProcessing','orderCountShipped','orderCountReceipt','orderCountCanceled'
-            ]),
-            fullName(){
-                return this.me.name.firstName + ' ' + this.me.name.lastName;
-            }
-        },
-        methods: {
-            getOrderHref(path){
-                return utils.PROJECT + '/me/m/order/' + path
-            }
-        },
-        components: {
-            'touch-go': TouchGo,
-            'you-likes': YouLikes
-        },
-        created(){
-            if (!this.youlikes || !this.youlikes.length) {
-                store.dispatch('me/getYoulikes')
-            }
 
-            store.dispatch('me/countNotifications')
-
-            store.dispatch('me/getOrderCountProcessing')
-
-            store.dispatch('me/getOrderCountShipped')
-
-            store.dispatch('me/getOrderCountReceipt')
-
-            store.dispatch('me/getOrderCountCanceled')
+  export default {
+    computed: {
+      ...mapGetters('me', [
+        'me', 'youlikes', 'feed', 'headerImage', 'notificationCount', 'orderCountProcessing', 'orderCountShipped', 'orderCountReceipt', 'orderCountCanceled','orderCountUnpaid'
+      ]),
+      fullName() {
+        return this.me.name.firstName + ' ' + this.me.name.lastName;
+      },
+      orderHref(){
+        let path = '';
+        if(this.orderCountUnpaid > 0)
+          path = 'unpaid'
+        return utils.PROJECT + '/me/m/order/' + path;
+      },
+      orderhreflabel(){
+        return this.orderCountUnpaid ? `${this.$t('label.unpaid')}(${this.orderCountUnpaid})` : ''
+      },
+      background(){
+        if(site == 'chicme'){
+          return '#e5004f';
+        }else if(site == 'ivrose'){
+          return '#e9546b';
+        }else{
+          return '#337ab7';
         }
+      }
+    },
+    methods: {
+      getOrderHref(path) {
+        return utils.PROJECT + '/me/m/order/' + path;
+      }
+    },
+    components: {
+      'touch-go': TouchGo,
+      'you-likes': YouLikes
+    },
+    created() {
+      if (!this.youlikes || !this.youlikes.length) {
+        store.dispatch('me/getYoulikes');
+      }
+
+      store.dispatch('me/countNotifications');
+
+      store.dispatch('me/getOrderCountProcessing');
+
+      store.dispatch('me/getOrderCountShipped');
+
+      store.dispatch('me/getOrderCountReceipt');
+
+      store.dispatch('me/getOrderCountCanceled');
+
+      store.dispatch('me/getOrderCountUnpaid');
     }
+  };
 </script>

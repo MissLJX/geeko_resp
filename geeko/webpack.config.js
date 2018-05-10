@@ -81,7 +81,10 @@ module.exports = {
         return module.context && module.context.indexOf('node_modules') > 0;
       }
     }),
-    new ExtractTextPlugin({ filename: '[name].css' })
+    new ExtractTextPlugin({ filename: '[name].css' }),
+    new webpack.DefinePlugin({
+      'site':JSON.stringify("ivrose")
+    })
   ],
 
 
@@ -99,7 +102,7 @@ module.exports = {
     contentBase: './dist',
     proxy: {
       '/api': {
-        target: 'http://localhost:8080/wanna',
+        target: 'http://localhost:8080/ivrose',
         pathRewrite: { '^/api': '' },
         secure: false
       }

@@ -36,7 +36,8 @@ const state = {
     orderCountProcessing: 0,
     orderCountShipped: 0,
     orderCountReceipt: 0,
-    orderCountCanceled: 0
+    orderCountCanceled: 0,
+    orderCountUnpaid: 0
 }
 
 const getters = {
@@ -68,7 +69,8 @@ const getters = {
     orderCountProcessing: state => state.orderCountProcessing,
     orderCountShipped: state => state.orderCountShipped,
     orderCountReceipt: state => state.orderCountReceipt,
-    orderCountCanceled: state => state.orderCountCanceled
+    orderCountCanceled: state => state.orderCountCanceled,
+    orderCountUnpaid: state => state.orderCountUnpaid
 }
 
 const mutations = {
@@ -193,6 +195,9 @@ const mutations = {
     },
     [types.ME_ORDER_COUNT_CANCELED](state, count){
         state.orderCountCanceled = count
+    },
+    [types.ME_ORDER_COUNT_UNPAID](state, count){
+        state.orderCountUnpaid = count
     }
 
 
@@ -457,6 +462,12 @@ const actions = {
     getOrderCountCanceled({commit}){
         return api.getOrderCountCanceled().then((count) => {
             commit(types.ME_ORDER_COUNT_CANCELED, count)
+        })
+    },
+
+    getOrderCountUnpaid({commit}){
+        return api.getOrderCountUnpaid().then((count) => {
+          commit(types.ME_ORDER_COUNT_UNPAID, count)
         })
     }
 }

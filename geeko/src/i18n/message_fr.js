@@ -27,6 +27,7 @@ export default {
         coupons: 'Coupons',
         credits: 'Crédit',
         processing: 'En cours',
+        unpaid: 'Non payé',
         shipped: 'Commande expédiée',
         confirmed: 'Commande Confirmée',
         canceled: 'Commande Annulée',
