@@ -34,7 +34,7 @@ export default {
         editProfile: 'Modifier le Profil',
         changProfilePicture: 'Cambiar Avatar',
         firstName: 'Nombre',
-        lastName: 'Nachname',
+        lastName: 'Apellido',
         gender: 'Apellido',
         birthday: 'Cumpleaños',
         changePassword: 'Cambiar contraseña',

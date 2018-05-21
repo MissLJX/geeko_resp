@@ -87,5 +87,8 @@ export const actions = {
     },
     logout(){
         return api.logout()
+    },
+    logoff(closedReason){
+        return api.logoff(closedReason)
     }
 }

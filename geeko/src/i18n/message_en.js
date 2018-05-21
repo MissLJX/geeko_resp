@@ -33,7 +33,7 @@ export default {
         canceled: 'Canceled',
         editProfile: 'Edit Profile',
         changProfilePicture: 'Change profile picture',
-        firstName: 'FirstName',
+        firstName: 'First Name',
         lastName: 'Last name',
         gender: 'Gender',
         birthday: 'birthday',

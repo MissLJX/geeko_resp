@@ -125,12 +125,51 @@
                         </option>
                     </select>
                 </div>
+
+                <div class="el-del-account" @click="toggle">
+                    <div class="st-table el-setting-li-02" style="border-top:none">
+                        <div class="st-cell st-v-m">
+                            <span class="el-setting-label">Delete Account</span>
+                        </div>
+                        <div class="st-cell st-v-m st-t-r">
+                            <i class="iconfont el-setting-go">&#xe694;</i>
+                        </div>
+                    </div>
+                </div>
             </div>
             <button class="el-logout-btn" @click="logoutHandle">{{$t('label.logout')}}</button>
         </div>
-        <span class="el-logoff-btn" @click="logoffHandle">{{$t('label.logoff')}}</span>
-        <div class="logoff-tip">
 
+        <div v-show="isShow" class="del-reason">
+            <ul class="reason-select">
+                <li>
+                    <input type="radio" id="one" value="Too many marketing mails" v-model="pickedReason">
+                    <label for="one">Too many marketing mails</label>
+                </li>
+                <li>
+                    <input type="radio" id="two" value="For privacy reason" v-model="pickedReason">
+                    <label for="two">For privacy reason</label>
+                </li>
+                <li>
+                    <input type="radio" id="three" value="No products favord on the website" v-model="pickedReason">
+                    <label for="one">No products favord on the website</label>
+                </li>
+                <li>
+                    <input type="radio" id="four" value="Dissatisfied with the product" v-model="pickedReason">
+                    <label for="two">Dissatisfied with the product</label>
+                </li>
+                <li>
+                    <input type="radio" id="five" value="Dissatisfied with the shipping " v-model="pickedReason">
+                    <label for="one">Dissatisfied with the shipping</label>
+                </li>
+                <li>
+                    <input type="radio" id="six" value="Others" v-model="pickedReason">
+                    <label for="two">Others</label>
+                </li>
+                <textarea v-if="(this.pickedReason=='Others')" v-model="inputReason" class="inputReason" placeholder="Would you please tell us why?" required></textarea>
+                <button class="cancel-btn" @click="cancelDel">Cancel</button>
+                <button class="del-btn" @click="delAccount">Delete</button>
+            </ul>
         </div>
     </div>
 
@@ -220,7 +259,6 @@
             opacity: 0;
         }
     }
-
     .el-logout-btn{
         outline: none;
         box-shadow: none;
@@ -234,19 +272,45 @@
         font-size: 16px;
         cursor: pointer;
     }
-    .el-logoff-btn{
-        display: block;
+    .el-del-account{
+        border-top: 1px solid #e3e3e3;
+    }
+    .del-reason{
+        position: fixed;
         width: 100%;
-        text-align: center;
-        margin-top: 200px;
-        text-decoration: underline;
+        height: 100%;
+        top: 0;
+        left: 0;
+        padding: 20px 0;
+        background-color: rgba(0,0,0,0.3);
     }
-    .logoff-tip{
-        width: 300px;
-        height: 400px;
-        background: rgba(0,0,0,0.2);
-        display: none;
+    .reason-select{
+        width: 85%;
+        margin: 150px auto;
+        padding: 20px 30px;
+        background-color: white;
     }
+    .reason-select li{
+        width: 100%;
+        font-size: 14px;
+        height: 50px;
+        line-height: 50px;
+        border-bottom: 1px solid #eeeeee;
+    }
+    li:nth-child(6){
+        border-bottom: none;
+    }
+    .cancel-btn,.del-btn{
+        width: 49%;
+        height: 30px;
+        line-height: 30px;
+        margin-top: 20px;
+    }
+    .inputReason{
+        width: 100%;
+        height: 50px;
+    }
+
 </style>
 
 <script type="text/ecmascript-6">
@@ -260,7 +324,11 @@
         data(){
             return {
                 info: null,
-                currency: null
+                currency: null,
+                isShow:false,
+                pickedReason: 'Too many marketing mails',
+                showOthers:false,
+                inputReason:''
             }
         },
         computed: {
@@ -317,13 +385,24 @@
                     window.location.href = '/'
                 })
             },
-            logoffHandle(){
-
-            },
             currencyChangeHandle(evt){
                 var value = evt.target.value
                 this.currency = JSON.parse(value)
                 this.$store.dispatch('me/changeCurrency', this.currency)
+            },
+            toggle:function(){
+                this.isShow = !this.isShow;
+            },
+            cancelDel:function(){
+                this.isShow = false
+            },
+            delAccount:function(){
+                if(this.pickedReason === 'Others'){
+                    this.pickedReason = this.inputReason
+                }
+                this.$store.dispatch('logoff',this.pickedReason).then(() => {
+                    window.location.href = '/'
+                })
             }
         },
         components: {

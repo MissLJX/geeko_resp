@@ -36,3 +36,6 @@ export function useCoupon(id) {
 export function logout(){
     return axios.get(VPATH + '/login-customer/logout')
 }
+export function logoff(closedReason) {
+    return axios.post(VPATH+'/login-customer/close',closedReason)
+}

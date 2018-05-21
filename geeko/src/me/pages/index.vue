@@ -33,6 +33,12 @@
 
         <div class="el-me-order-area">
             <div class="hd">
+<!--                <a :href="orderHref">
+                    <touch-go class="el-me-order-touch" :label1="$t('label.order')" :label2="orderhreflabel"
+                              :label2Style="{color:'#e5004f', fontWeight:'bold'}">
+                        <i slot="icon" class="iconfont" style="font-size:18px;">&#xe600;</i>
+                    </touch-go>
+                </a>-->
                 <a :href="orderHref">
                     <touch-go class="el-me-order-touch" :label1="$t('label.order')" :label2="orderhreflabel"
                               :label2Style="{color:'#e5004f', fontWeight:'bold'}">
