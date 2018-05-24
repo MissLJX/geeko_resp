@@ -32,13 +32,14 @@
 
 
         <div class="el-me-order-area">
+<!--            邮件确认
+            <div class="con-email">
+                <router-link :to="{name: 'confirm-email'}">
+                    <email-confirm class="el-confirm-email"></email-confirm>
+                </router-link>
+            </div>
+            end 邮件确认-->
             <div class="hd">
-<!--                <a :href="orderHref">
-                    <touch-go class="el-me-order-touch" :label1="$t('label.order')" :label2="orderhreflabel"
-                              :label2Style="{color:'#e5004f', fontWeight:'bold'}">
-                        <i slot="icon" class="iconfont" style="font-size:18px;">&#xe600;</i>
-                    </touch-go>
-                </a>-->
                 <a :href="orderHref">
                     <touch-go class="el-me-order-touch" :label1="$t('label.order')" :label2="orderhreflabel"
                               :label2Style="{color:'#e5004f', fontWeight:'bold'}">
@@ -197,6 +198,15 @@
             padding: 0 10px;
         }
 
+        &> .con-email{
+            padding: 0 10px;
+            background-color: #eeeeee;
+            color: #666666;
+            line-height: 26px;
+            border-bottom: 1px solid #e4e3e3;
+        }
+
+
         & > .bd {
             border-top: 1px solid #dcdcdc;
 
@@ -295,6 +305,10 @@
             padding: 3px 7px;
         }
     }
+    .el-confirm-email
+    {
+        width: 100%;
+    }
 </style>
 
 <script type="text/ecmascript-6">
@@ -303,6 +317,7 @@
   import store from '../../store';
   import TouchGo from '../../components/touch-go.vue';
   import YouLikes from '../../components/you-likes.vue';
+  import EmailConfirm from '../../components/confirm-email.vue';
   import * as utils from '../../utils/geekoutils';
 
 
@@ -321,6 +336,9 @@
           path = 'unpaid'
         return utils.PROJECT + '/me/m/order/' + path;
       },
+       confirmHref(){
+          return utils.PROJECT + '/me/m/order/confirm-email';
+        },
       orderhreflabel(){
         return this.orderCountUnpaid ? `${this.$t('label.unpaid')}(${this.orderCountUnpaid})` : ''
       },
@@ -341,7 +359,8 @@
     },
     components: {
       'touch-go': TouchGo,
-      'you-likes': YouLikes
+      'you-likes': YouLikes,
+        'email-confirm':EmailConfirm,
     },
     created() {
       if (!this.youlikes || !this.youlikes.length) {
