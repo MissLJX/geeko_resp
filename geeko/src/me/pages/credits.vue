@@ -1,9 +1,9 @@
 <template>
     <div class="el-credit-body">
-        <page-header>Credits</page-header>
+        <page-header>{{$t('label.credits')}}</page-header>
 
         <div>
-            <div class="el-credits-total"><strong>Total: </strong>{{feed.points}}</div>
+            <div class="el-credits-total"><strong>{{$t('label.total')}}: </strong>{{feed.points}}</div>
             <credit-list :credits="credits" @listing="listingHandle" :loading="loading" :finished="finished"/>
         </div>
 

@@ -44,6 +44,12 @@ export default {
         settings: 'Configuración',
         mayLike:'TAMBIÉN LE PUEDE GUSTAR',
         logout:'Salir de Sesión',
-        logoff:'Cerrar sesión'
+        logoff:'Cerrar sesión',
+        delete:'Borrar',
+        edit:'Editar',
+        defaultAddress:'Dirección predeterminada',
+        notification:'Notificaciones',
+        total:'Total',
+        others:'Otros'
     }
 }

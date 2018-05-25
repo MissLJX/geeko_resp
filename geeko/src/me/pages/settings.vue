@@ -290,9 +290,12 @@
     }
     .reason-select{
         width: 85%;
-        margin: 150px auto;
         padding: 20px 30px;
-        background-color: white;
+        background-color: #fff;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
     }
     .reason-select li{
         width: 100%;

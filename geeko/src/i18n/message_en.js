@@ -44,6 +44,12 @@ export default {
         settings: 'settings',
         mayLike:'YOU MAY ALSO LIKE',
         logout:'Log out',
-        logoff:'Log off'
+        logoff:'Log off',
+        delete:'Delete',
+        edit:'Edit',
+        defaultAddress:'Default Address',
+        notification:'Notification',
+        total:'Total',
+        others:'Others'
     }
 }

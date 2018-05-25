@@ -44,6 +44,12 @@ export default {
         settings: 'Definições',
         mayLike:'TAMBÉM PODE GOSTAR',
         logout:'Desconectar',
-        logoff:'Sair'
+        logoff:'Sair',
+        delete:'Apagar',
+        edit:'Editar',
+        defaultAddress:'Morada predefinida',
+        notification:'Notificações',
+        total:'Total',
+        others:'Outros'
     }
 }

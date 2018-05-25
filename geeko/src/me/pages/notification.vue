@@ -1,6 +1,6 @@
 <template>
     <div>
-        <page-header>Notification</page-header>
+        <page-header>{{$t('label.notification')}}</page-header>
         <div>
             <slide-nav :navs="navs" @navchange="navchange"/>
         </div>
@@ -21,8 +21,8 @@
             return {
                 navs: [
                     {id: '1', name: 'Promotion', path: 'notification-promotion', active: 'notification-promotion' == this.$route.name || 'notification' == this.$route.path},
-                    {id: '2', name: 'Orders', path: 'notification-me', active: 'notification-me' == this.$route.name},
-                    {id: '3', name: 'Others', path: 'notification-other', active: 'notification-other' == this.$route.name}
+                    {id: '2', name: this.$t('label.order'), path: 'notification-me', active: 'notification-me' == this.$route.name},
+                    {id: '3', name: this.$t('label.others'), path: 'notification-other', active: 'notification-other' == this.$route.name}
                 ]
             }
         },

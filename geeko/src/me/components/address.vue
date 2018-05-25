@@ -3,12 +3,12 @@
         <common-address :address="address"/>
         <div class="st-flex el-address-btns">
             <div>
-                <btn v-if="address.isDefaultAddress" class="el-address-default fill">Default Address</btn>
+                <btn v-if="address.isDefaultAddress" class="el-address-default fill">{{$t('label.defaultAddress')}}</btn>
                 <btn class="el-address-default" @click.native.prevent="makeDefaultHandle" v-else>Make Default</btn>
             </div>
             <div>
-                <btn class="el-address-op" @click.native.prevent="deleteHandle">Delete</btn>
-                <btn class="el-address-op el-address-edit" @click.native.prevent="editHandle">Edit</btn>
+                <btn class="el-address-op" @click.native.prevent="deleteHandle">{{$t('label.delete')}}</btn>
+                <btn class="el-address-op el-address-edit" @click.native.prevent="editHandle">{{$t('label.edit')}}</btn>
             </div>
         </div>
     </div>
