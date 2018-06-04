@@ -53,6 +53,12 @@ const Me = [
         meta: {title: 'Settings'}
     },
     {
+        path: ROUTER_PATH_ME + '/confirm-email',
+        component: () => import('../pages/confirm-email.vue'),
+        name: 'confirm-email',
+        meta: {title: 'Login Protection'}
+    },
+    {
         path: ROUTER_PATH_ME + '/notification',
         component: () => import('../pages/notification.vue'),
         name: 'notification',

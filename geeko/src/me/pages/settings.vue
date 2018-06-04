@@ -107,7 +107,7 @@
                 </router-link>
 
 
-                <div class="el-setting-gender">
+<!--                <div class="el-setting-gender">
                     <div class="st-table el-setting-li-01">
                         <div class="st-cell st-v-m">
                             <span class="el-setting-label">{{$t('label.changeCurrency')}}</span>
@@ -124,7 +124,7 @@
                             {{cu.label}}
                         </option>
                     </select>
-                </div>
+                </div>-->
 
                 <div class="el-del-account" @click="toggle">
                     <div class="st-table el-setting-li-02" style="border-top:none">
@@ -152,19 +152,19 @@
                 </li>
                 <li>
                     <input type="radio" id="three" value="No products favord on the website" v-model="pickedReason">
-                    <label for="one">No products favord on the website</label>
+                    <label for="three">No products favord on the website</label>
                 </li>
                 <li>
                     <input type="radio" id="four" value="Dissatisfied with the product" v-model="pickedReason">
-                    <label for="two">Dissatisfied with the product</label>
+                    <label for="four">Dissatisfied with the product</label>
                 </li>
                 <li>
                     <input type="radio" id="five" value="Dissatisfied with the shipping " v-model="pickedReason">
-                    <label for="one">Dissatisfied with the shipping</label>
+                    <label for="five">Dissatisfied with the shipping</label>
                 </li>
                 <li>
                     <input type="radio" id="six" value="Others" v-model="pickedReason">
-                    <label for="two">Others</label>
+                    <label for="six">Others</label>
                 </li>
                 <textarea v-if="(this.pickedReason=='Others')" v-model="inputReason" class="inputReason" placeholder="Would you please tell us why?" required></textarea>
                 <button class="cancel-btn" @click="cancelDel">Cancel</button>
@@ -283,6 +283,10 @@
         left: 0;
         padding: 20px 0;
         background-color: rgba(0,0,0,0.3);
+    }
+    .del-reason ul li input{
+        -webkit-appearance:radio;
+        -moz-appearance:radio;
     }
     .reason-select{
         width: 85%;
