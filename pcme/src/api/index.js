@@ -1,4 +1,4 @@
 import axios from './apiconfigs'
-import { VPATH } from '../../../geeko/src/utils/geekoutils';
 
+const VPATH = '/v7'
 export const get = () =>  axios.get(VPATH + '/customer/get')
