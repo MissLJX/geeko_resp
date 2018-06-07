@@ -13,7 +13,7 @@
                         </div>
                         <div class="st-cell st-v-m st-t-r">
                             <span class="el-setting-picture"
-                                  :style="{'background-image':'url('+headerImage+')'}"></span>
+                                  :style="{'background-image':'url('+headerImage+'),url('+baseHeaderUrl+')'}"></span>
                         </div>
                         <div class="st-cell st-v-m st-t-r">
                             <i class="iconfont el-setting-go">&#xe694;</i>
@@ -290,7 +290,7 @@
     }
     .reason-select{
         width: 85%;
-        padding: 20px 30px;
+        padding: 10px;
         background-color: #fff;
         position: absolute;
         top: 50%;
@@ -348,6 +348,15 @@
             },
             gender(){
                 return this.info.gender == 1 ? 'Man' : (this.info.gender == 2 ? 'Woman' : 'Other')
+            },
+            baseHeaderUrl() {
+                if (site == 'chicme') {
+                    return 'https://dgzfssf1la12s.cloudfront.net/site/pc/icon35.png';
+                } else if (site == 'ivrose') {
+                    return 'https://dgzfssf1la12s.cloudfront.net/site/ivrose/icon47.png';
+                } else {
+                    return 'https://dgzfssf1la12s.cloudfront.net/site/bouti/logo02.png';
+                }
             }
         },
         methods: {

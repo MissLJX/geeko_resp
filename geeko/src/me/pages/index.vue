@@ -11,7 +11,7 @@
                 <div class="st-cell st-v-m">
                     <div class="el-me-headerImage">
                         <div>
-                            <div :style="{'background-image': 'url('+headerImage+')' }"></div>
+                            <div :style="{'background-image': 'url('+headerImage+'),url('+baseHeaderUrl+')' }"></div>
                         </div>
                     </div>
                 </div>
@@ -32,13 +32,13 @@
 
 
         <div class="el-me-order-area">
-<!--            邮件确认
-            <div class="con-email">
-                <router-link :to="{name: 'confirm-email'}">
-                    <email-confirm class="el-confirm-email"></email-confirm>
-                </router-link>
-            </div>
-            end 邮件确认-->
+            <!--            邮件确认
+                        <div class="con-email">
+                            <router-link :to="{name: 'confirm-email'}">
+                                <email-confirm class="el-confirm-email"></email-confirm>
+                            </router-link>
+                        </div>
+                        end 邮件确认-->
             <div class="hd">
                 <a :href="orderHref">
                     <touch-go class="el-me-order-touch" :label1="$t('label.order')" :label2="orderhreflabel"
@@ -198,14 +198,13 @@
             padding: 0 10px;
         }
 
-        &> .con-email{
+        & > .con-email {
             padding: 0 10px;
             background-color: #eeeeee;
             color: #666666;
             line-height: 26px;
             border-bottom: 1px solid #e4e3e3;
         }
-
 
         & > .bd {
             border-top: 1px solid #dcdcdc;
@@ -305,79 +304,88 @@
             padding: 3px 7px;
         }
     }
-    .el-confirm-email
-    {
+
+    .el-confirm-email {
         width: 100%;
     }
 </style>
 
 <script type="text/ecmascript-6">
 
-  import { mapGetters, mapActions } from 'vuex';
-  import store from '../../store';
-  import TouchGo from '../../components/touch-go.vue';
-  import YouLikes from '../../components/you-likes.vue';
-  import EmailConfirm from '../../components/confirm-email.vue';
-  import * as utils from '../../utils/geekoutils';
+    import {mapGetters, mapActions} from 'vuex';
+    import store from '../../store';
+    import TouchGo from '../../components/touch-go.vue';
+    import YouLikes from '../../components/you-likes.vue';
+    import EmailConfirm from '../../components/confirm-email.vue';
+    import * as utils from '../../utils/geekoutils';
 
 
-
-  export default {
-    computed: {
-      ...mapGetters('me', [
-        'me', 'youlikes', 'feed', 'headerImage', 'notificationCount', 'orderCountProcessing', 'orderCountShipped', 'orderCountReceipt', 'orderCountCanceled','orderCountUnpaid'
-      ]),
-      fullName() {
-        return this.me.name.firstName + ' ' + this.me.name.lastName;
-      },
-      orderHref(){
-        let path = '';
-        if(this.orderCountUnpaid > 0)
-          path = 'unpaid'
-        return utils.PROJECT + '/me/m/order/' + path;
-      },
-       confirmHref(){
-          return utils.PROJECT + '/me/m/order/confirm-email';
+    export default {
+        computed: {
+            ...mapGetters('me', [
+                'me', 'youlikes', 'feed', 'headerImage', 'notificationCount', 'orderCountProcessing', 'orderCountShipped', 'orderCountReceipt', 'orderCountCanceled', 'orderCountUnpaid'
+            ]),
+            fullName() {
+                return this.me.name.firstName + ' ' + this.me.name.lastName;
+            },
+            orderHref() {
+                let path = '';
+                if (this.orderCountUnpaid > 0)
+                    path = 'unpaid'
+                return utils.PROJECT + '/me/m/order/' + path;
+            },
+            confirmHref() {
+                return utils.PROJECT + '/me/m/order/confirm-email';
+            },
+            orderhreflabel() {
+                return this.orderCountUnpaid ? `${this.$t('label.unpaid')}(${this.orderCountUnpaid})` : ''
+            },
+            background() {
+                if (site == 'chicme') {
+                    return '#e5004f';
+                } else if (site == 'ivrose') {
+                    return '#e9546b';
+                } else {
+                    return '#337ab7';
+                }
+            },
+            baseHeaderUrl() {
+                if (site == 'chicme') {
+                    return 'https://dgzfssf1la12s.cloudfront.net/site/pc/icon35.png';
+                } else if (site == 'ivrose') {
+                    return 'https://dgzfssf1la12s.cloudfront.net/site/ivrose/icon47.png';
+                } else {
+                    return 'https://dgzfssf1la12s.cloudfront.net/site/bouti/logo02.png';
+                }
+            }
         },
-      orderhreflabel(){
-        return this.orderCountUnpaid ? `${this.$t('label.unpaid')}(${this.orderCountUnpaid})` : ''
-      },
-      background(){
-        if(site == 'chicme'){
-          return '#e5004f';
-        }else if(site == 'ivrose'){
-          return '#e9546b';
-        }else{
-          return '#337ab7';
+
+        methods: {
+            getOrderHref(path) {
+                return utils.PROJECT + '/me/m/order/' + path;
+            }
+        },
+        components: {
+            'touch-go': TouchGo,
+            'you-likes': YouLikes,
+            'email-confirm': EmailConfirm,
+        },
+        created() {
+            if (!this.youlikes || !this.youlikes.length) {
+                store.dispatch('me/getYoulikes');
+            }
+
+            store.dispatch('me/countNotifications');
+
+            store.dispatch('me/getOrderCountProcessing');
+
+            store.dispatch('me/getOrderCountShipped');
+
+            store.dispatch('me/getOrderCountReceipt');
+
+            store.dispatch('me/getOrderCountCanceled');
+
+            store.dispatch('me/getOrderCountUnpaid');
         }
-      }
-    },
-    methods: {
-      getOrderHref(path) {
-        return utils.PROJECT + '/me/m/order/' + path;
-      }
-    },
-    components: {
-      'touch-go': TouchGo,
-      'you-likes': YouLikes,
-        'email-confirm':EmailConfirm,
-    },
-    created() {
-      if (!this.youlikes || !this.youlikes.length) {
-        store.dispatch('me/getYoulikes');
-      }
-
-      store.dispatch('me/countNotifications');
-
-      store.dispatch('me/getOrderCountProcessing');
-
-      store.dispatch('me/getOrderCountShipped');
-
-      store.dispatch('me/getOrderCountReceipt');
-
-      store.dispatch('me/getOrderCountCanceled');
-
-      store.dispatch('me/getOrderCountUnpaid');
-    }
-  };
+    };
 </script>
