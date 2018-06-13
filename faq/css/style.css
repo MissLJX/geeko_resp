@@ -1,0 +1,182 @@
+/*
+html5doctor.com Reset Stylesheet
+v1.4.1
+2010-03-01
+Author: Richard Clark - http://richclarkdesign.com
+*/
+
+html, body, div, span, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+abbr, address, cite, code,
+del, dfn, em, img, ins, kbd, q, samp,
+small, strong, sub, sup, var,
+b, i,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section, summary,
+time, mark, audio, video {
+  margin:0;
+  padding:0;
+  border:0;
+  outline:0;
+  vertical-align:baseline;
+  background:transparent;
+}
+
+article,aside,canvas,details,figcaption,figure,
+footer,header,hgroup,menu,nav,section,summary {
+  display:block;
+}
+
+nav ul {
+  list-style:none;
+}
+
+ul,ol{
+  list-style-type: none;
+}
+
+blockquote, q {
+  quotes:none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content:'';
+  content:none;
+}
+
+table {
+  border-collapse:collapse;
+  border-spacing:0;
+}
+
+input , select , textarea{
+  border-radius: 0;
+  outline:none;
+  box-shadow:none;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+*, *::after, *::before{
+  box-sizing:border-box;
+}
+
+input:-webkit-autofill{
+  background-color: transparent;
+}
+
+@font-face {
+  font-family: 'iconfont';  /* project id 384296 */
+  src: url('//at.alicdn.com/t/font_384296_mwohqvkw1f9zr529.eot');
+  src: url('//at.alicdn.com/t/font_384296_mwohqvkw1f9zr529.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_384296_mwohqvkw1f9zr529.woff') format('woff'),
+  url('//at.alicdn.com/t/font_384296_mwohqvkw1f9zr529.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_384296_mwohqvkw1f9zr529.svg#iconfont') format('svg');
+}
+
+.iconfont {
+  font-family:"iconfont" !important;
+  font-size:16px;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body{
+  font-size: 14px;
+  color: #222;
+  background-color: #efefef;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.x-color-theme{
+
+}
+
+.x-fw{
+  width: 100%;
+}
+
+.x-fh{
+  height: 100%;
+}
+
+.x-table{
+  display: table;
+}
+
+
+
+.x-row{
+  display: table-row;
+}
+
+.x-cell{
+  display: table-cell;
+}
+
+.x-table.__vm .x-cell{
+  vertical-align: middle;
+}
+
+.x-flex{
+  display: flex;
+}
+
+.x-flex.__column{
+  flex-direction: column;
+}
+
+.x-flex.__around{
+  justify-content: space-around;
+}
+
+.x-flex.__between{
+  justify-content: space-between;
+}
+
+.x-flex.__nowrap{
+  flex-wrap: nowrap;
+}
+
+
+
+/**
+  富文本渲染
+
+
+**/
+
+.x-rich h1{
+  font-size: 16px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.x-rich.__list h1{
+  color: #3383f4;
+}
+
+.x-rich h2{
+  font-size: 14px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.x-rich p, .x-rich li{
+  font-size: 14px;
+  line-height: 21px;
+}
+
+.x-rich p, .x-rich ul, .x-rich ol{
+  margin-top: 10px;
+}
+
+.x-rich img.block{
+  display: block;
+}
+
+
