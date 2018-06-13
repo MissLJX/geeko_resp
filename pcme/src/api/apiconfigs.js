@@ -11,7 +11,7 @@ const instance = axios.create({
         appVersion: '3.5.7',
         countryCode: 'US',
         wid: '1234567u8i9956789456',
-        accessToken: 'c6b2045b-cd96-4e23-888b-e5e0861b0f50'
+        /*accessToken: 'c6b2045b-cd96-4e23-888b-e5e0861b0f50'*/
     }
 })
 
