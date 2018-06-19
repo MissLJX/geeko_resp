@@ -3,15 +3,44 @@
  */
 import axios from 'axios'
 import qs from 'qs'
+import Cookie from 'js-cookie'
+
+const getCountry = () => {
+  var language = navigator.language
+  if (language && language.indexOf('-') >= 0) {
+    var keys = language.split('-')
+    if (keys.length <= 1) { return 'US' }
+    return keys[1].toUpperCase()
+  }
+  return 'US'
+}
+
+const getUUID = () => {
+  function S4 () {
+    return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
+  }
+
+  return (S4() + S4() + '-' + S4() + '-' + S4() + '-' + S4() + '-' + S4() + S4() + S4())
+}
+
+const getWid = () => {
+  var wid = ''
+  wid = Cookie.get('clientId')
+  if (!wid) {
+    Cookie.set('clientId', getUUID(), {expires: 365})
+    wid = Cookie.get('clientId')
+  }
+  return wid
+}
 
 const instance = axios.create({
   baseURL: typeof window.ctx === 'undefined' ? '/api' : window.ctx,
   timeout: 50000,
   headers: {
     appVersion: '3.5.7',
-    countryCode: 'US',
-    wid: '1234567u8i9956789456',
-    accessToken: '2d49593c-2d8a-46ce-b1c8-68c8cc286007'
+    countryCode: getCountry(),
+    wid: getWid(),
+    accessToken: window.accessToken || ''
   }
 })
 

@@ -1,10 +1,11 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
-import {get, sendImage, sendTicket} from '../api'
+import {get, getByOrderId, sendImage, sendTicket} from '../api'
 import styled from 'styled-components'
-import {GeekoSelect, ColoredButton} from '../components/buttons.jsx'
+import {GeekoSelect, ColoredButton, PageHeader, PageContanier} from '../components/buttons.jsx'
 import _ from 'lodash'
 import {gloabvars} from '../commons/instance.js'
+import {FormattedMessage, injectIntl} from 'react-intl'
 
 import {
   OrderSelector,
@@ -19,7 +20,7 @@ import {
   ImageLoader
 } from '../components/styled-ticket.jsx'
 
-export default class Ticket extends React.Component {
+const Ticket = class extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -32,7 +33,10 @@ export default class Ticket extends React.Component {
     	// controlled
       subject: 0,
       message: '',
-      image: null
+      image: null,
+
+      orderInvalid: false,
+      messageInvalid: false
     }
     this.handleImage = this.handleImage.bind(this)
     this.handleTicket = this.handleTicket.bind(this)
@@ -40,6 +44,9 @@ export default class Ticket extends React.Component {
 
   handleImage (evt) {
   	evt.preventDefault()
+    if (!this.validate(true)) {
+      return false
+    }
 
   	const files = evt.currentTarget.files
     const maxSize = 2097152
@@ -64,7 +71,8 @@ export default class Ticket extends React.Component {
 	  		ticket.ticketReplies = replies
 
 	  		this.setState({
-	  			ticket
+	  			ticket,
+          message: ''
 	  		})
 
 	  		this.initScroll()
@@ -74,13 +82,25 @@ export default class Ticket extends React.Component {
     }
   }
 
+  validate (ignoreMessage) {
+    this.setState({
+      orderInvalid: !this.state.order,
+      messageInvalid: !this.state.message && !ignoreMessage
+    })
+    return this.state.order && (this.state.message || ignoreMessage)
+  }
+
   handleTicket (evt) {
+    if (!this.validate()) {
+      return false
+    }
+
   	sendTicket({
   		operaId: this.state.order.id,
   		subject: this.state.subject,
   		message: this.state.message
   	}).then((data) => {
-  		let ticket = this.state.ticket
+  		let ticket = this.state.ticket || {}
   		let replies = (ticket.ticketReplies || []).concat([])
   		replies.push({
   			sender: 'buyers',
@@ -124,24 +144,51 @@ export default class Ticket extends React.Component {
 	  		this.initScroll()
   		})
   	} else {
-  		this.setState({
-	  		isNew: true,
-	  		loading: false,
-	  		order: gloabvars.selectedOrder
-	  	})
+      if (gloabvars.selectedOrder) {
+        getByOrderId(gloabvars.selectedOrder.id).then(({result}) => {
+          const {ticket, order, cusomerName, headSculptureUrl} = result
+          this.setState({
+            isNew: true,
+            ticket,
+            order,
+            cusomerName,
+            headSculptureUrl,
+            loading: false,
+            subject: ticket ? ticket.subject : 0
+          })
+          this.initScroll()
+        })
+      } else {
+        this.setState({
+          isNew: true,
+          loading: false,
+          order: gloabvars.selectedOrder
+        })
+      }
   	}
   }
 
   render () {
+    const {intl} = this.props
+
+    //   subjectsizecolor: '尺码相关',
+    // subjectaddress: '更改收货地址',
+    // subjectshipping: '物流以及预计到达日期',
+    // subjectwrong: '物品收错',
+    // subjectshippingmethod: '更改物流方式',
+    // subjectreturn: '退货或调换',
+    // subjectrefund: '退款 / 取消订单',
+    // subjectother: '其他'
+
   	const questions = [
-      {label: 'Size/Color Preference', value: '0', selected: false},
-      {label: 'Change Shipping Address', value: '2', selected: false},
-      {label: 'Shipping Status or ETA Inquery', value: '3', selected: false},
-      {label: 'Received Damaged or Wrong Item', value: '4', selected: false},
-      {label: 'Upgrade Shipping Method', value: '5', selected: false},
-      {label: 'Return Or Exchange', value: '6', selected: false},
-      {label: 'Request Refund/Cancel Order', value: '8', selected: false},
-      {label: 'Others', value: '7', selected: false}
+      {label: intl.formatMessage({id: 'subjectsizecolor'}), value: '0', selected: false},
+      {label: intl.formatMessage({id: 'subjectaddress'}), value: '2', selected: false},
+      {label: intl.formatMessage({id: 'subjectshipping'}), value: '3', selected: false},
+      {label: intl.formatMessage({id: 'subjectwrong'}), value: '4', selected: false},
+      {label: intl.formatMessage({id: 'subjectshippingmethod'}), value: '5', selected: false},
+      {label: intl.formatMessage({id: 'subjectreturn'}), value: '6', selected: false},
+      {label: intl.formatMessage({id: 'subjectrefund'}), value: '8', selected: false},
+      {label: intl.formatMessage({id: 'subjectother'}), value: '7', selected: false}
     ]
 
   	const LabelValue = (props) => {
@@ -157,13 +204,15 @@ export default class Ticket extends React.Component {
 
   	const ticketOrder = this.state.order ? (
   			<LabelValueContainer>
-  				<LabelValue label="Order No" value={this.state.order.id}/>
-  				<LabelValue label="Time of payment" value={paymentTime(this.state.order.paymentTime)}/>
+  				<LabelValue label={intl.formatMessage({id: 'orderno'})} value={this.state.order.id}/>
+  				<LabelValue label={intl.formatMessage({id: 'paymenttime'})} value={paymentTime(this.state.order.paymentTime)}/>
+        {this.state.isNew && <Link to="/support/orders" className="iconfont">&#xe66b;</Link>}
+
   			</LabelValueContainer>
   		) : (
-      		<OrderSelector>
-	      		<Link to="/orders">
-	      			<span>Please select your order</span>
+      		<OrderSelector className={this.state.orderInvalid ? 'invalid' : ''}>
+	      		<Link to="/support/orders">
+	      			<FormattedMessage id="selectorder"/>
 	      			<i className="iconfont">&#xe694;</i>
 	      		</Link>
 	      	</OrderSelector>
@@ -198,9 +247,9 @@ export default class Ticket extends React.Component {
   				</ChatTip>
   	}
 
-  	const HeaderImage = ({image}) => {
+  	const HeaderImage = ({image, sender}) => {
   		return <div style={{
-  			backgroundImage: `url(https://dgzfssf1la12s.cloudfront.net/icon/${image})`,
+  			backgroundImage: sender === 'buyers' ? `url(https://dgzfssf1la12s.cloudfront.net/icon/${image}) ,url(https://dgzfssf1la12s.cloudfront.net/site/pc/icon35.png)` : 'url(https://dgzfssf1la12s.cloudfront.net/icon/support.jpg)',
   			backgroundSize: 'cover',
   			display: 'inline-block',
   			width: '50px',
@@ -216,7 +265,7 @@ export default class Ticket extends React.Component {
   				{
 		  			replies.map((reply, index) => (
 			  			<ChatRow className={reply.sender === 'buyers' ? 'buyer' : 'seller'} key={index}>
-			  				<HeaderImage image={props.headSculptureUrl} />
+			  				<HeaderImage image={props.headSculptureUrl} sender={reply.sender} />
 			  				<ReplyTip reply={reply} />
 			  			</ChatRow>
 		  			))
@@ -225,18 +274,20 @@ export default class Ticket extends React.Component {
   	}
 
     return <div>
-      { this.state.loading ? (
-      	<div>
-      		loading
+      <PageHeader label={intl.formatMessage({id: 'submitticket'})}/>
+      <PageContanier>
+        { this.state.loading ? (
+      	<div style={{height: '50px', lineHeight: '50px', fontSize: '12px', textAlign: 'center', color: '#666'}}>
+      		<FormattedMessage id="loading"/>
       	</div>
 
-      ) : (
+        ) : (
 
       	<ChatContainer className="x-flex __column">
       		<OrderInfoContainer>
       			{ticketOrder}
       			<div style={{borderTop: '1px solid #cacaca', paddingTop: '20px', paddingLeft: '20px', paddingRight: '20px', paddingBottom: '15px'}}>
-      				<h1 style={{fontSize: '18px', fontWeight: '400', textAlign: 'center'}}>How can we help you?</h1>
+      				<h1 style={{fontSize: '18px', fontWeight: '400', textAlign: 'center'}}><FormattedMessage id="helpyou"/></h1>
       				<div>
       					<GeekoSelect value={this.state.subject} onChange={(evt) => { this.setState({subject: evt.currentTarget.value}) }} style={{width: '100%', height: '40px', marginTop: '10px'}}>
       						{questions.map(q => (
@@ -244,7 +295,7 @@ export default class Ticket extends React.Component {
       						))}
       					</GeekoSelect>
       				</div>
-      				<div style={{fontSize: '13px', textAlign: 'center', color: '#999', marginTop: '10px'}}>Expected response time: 1 business day(s)</div>
+      				<div style={{fontSize: '13px', textAlign: 'center', color: '#999', marginTop: '10px'}}><FormattedMessage id="responetime"/></div>
       			</div>
       		</OrderInfoContainer>
 
@@ -257,7 +308,7 @@ export default class Ticket extends React.Component {
       			))}
       		</Chat>
       		<ChatSendor>
-      			<textarea onChange={(evt) => { this.setState({message: evt.currentTarget.value}) }} value={this.state.message} style={{border: '1px solid #666', width: '100%', height: '80px'}}></textarea>
+      			<textarea className={this.state.messageInvalid ? 'invalid' : ''} onChange={(evt) => { this.setState({message: evt.currentTarget.value, messageInvalid: false}) }} value={this.state.message} style={{border: '1px solid #666', width: '100%', height: '80px'}}></textarea>
       			<div style={{marginTop: '5px'}}>
 	      				<div className="x-fw x-table __vm">
 	      					<div className="x-cell">
@@ -272,14 +323,17 @@ export default class Ticket extends React.Component {
 	      					</div>
 
 	      					<div className="x-cell" style={{textAlign: 'right'}}>
-	      						<ColoredButton onClick={this.handleTicket} style={{fontSize: '14px', fontWeight: '400', height: '30px', width: '70px'}} btnColor="#000">Send</ColoredButton>
+	      						<ColoredButton onClick={this.handleTicket} style={{fontSize: '14px', fontWeight: '400', height: '30px', width: '70px'}} btnColor="#000"><FormattedMessage id="send"/></ColoredButton>
 	      					</div>
 	      				</div>
       			</div>
       		</ChatSendor>
       	</ChatContainer>
 
-      ) }
+        ) }
+      </PageContanier>
     </div>
   }
 }
+
+export default injectIntl(Ticket)

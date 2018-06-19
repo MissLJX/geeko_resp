@@ -1,19 +1,25 @@
 import Data from './data.js'
+import PtData from './data_pt.js'
+import DeData from './data_de.js'
 
 const messages = {
-  en_US: Data
+  en: Data,
+  pt: PtData,
+  de: DeData
 }
 
 const languages = [
-  'en_US',
-  'de_DE',
-  'es_ES',
-  'fr_FR',
-  'pt_BR'
+  'en',
+  'de',
+  'es',
+  'fr',
+  'pt'
 ]
 
-const lang = languages.find(l => l == window.locale) || 'en_US'
+const localelang = (window.lang || 'en').substring(0, 2)
 
-const {questions, secondaries} = messages[lang]
+const lang = languages.find(l => l == localelang)
+
+const {questions, secondaries} = messages[lang] || messages['en']
 
 export {questions, secondaries}

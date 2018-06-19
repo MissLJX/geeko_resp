@@ -1,8 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
+import {PageHeader, PageContanier} from '../components/buttons.jsx'
 import Search from '../components/search.jsx'
 import qs from 'query-string'
-import Data from '../data'
+import {secondaries, questions} from '../data'
+
+import {FormattedMessage} from 'react-intl'
 
 export default class SearchResult extends React.Component {
   constructor (props) {
@@ -52,10 +55,7 @@ export default class SearchResult extends React.Component {
   				width: 100%;
   				position: absolute;
   				bottom: 0;
-  				background: -webkit-linear-gradient(transparent, #fff); /* Safari 5.1 - 6.0 */
-  				background: -o-linear-gradient(transparent, #fff); /* Opera 11.1 - 12.0 */
-  				background: -moz-linear-gradient(transparent, #fff); /* Firefox 3.6 - 15 */
-  				background: linear-gradient(transparent, #fff); /* 标准的语法 */
+  				
   			}
 
   			& > div{
@@ -66,25 +66,38 @@ export default class SearchResult extends React.Component {
 
   	`
 
+    // background: -webkit-linear-gradient(transparent, #fff); /* Safari 5.1 - 6.0 */
+    // background: -o-linear-gradient(transparent, #fff); /* Opera 11.1 - 12.0 */
+    // background: -moz-linear-gradient(transparent, #fff); /* Firefox 3.6 - 15 */
+    // background: linear-gradient(transparent, #fff); /* 标准的语法 */
+
   	return (
 	  	<div style={{backgroundColor: '#fff'}}>
-	  		<div style={{padding: '20px 10px 0 10px'}}>
-	  			<Search inputStyle={{border: '1px solid #cacaca'}} searchKey={this.state.key}/>
-	  			<div>
-		  			<h1 style={{fontSize: '24px', fontWeight: '400', marginTop: '20px'}}>Search results</h1>
-		  			<p style={{marginTop: '5px'}}><i>{`${this.state.size} results for "${this.state.key}"`}</i></p>
-	  			</div>
-	  		</div>
 
-	  		<ListWrapper className="x-rich __list">
+        <PageHeader label="FAQ"/>
+        <PageContanier>
+  	  		<div style={{padding: '20px 10px 0 10px'}}>
+  	  			<Search inputStyle={{border: '1px solid #cacaca'}} searchKey={this.state.key}/>
+  	  			<div>
+  		  			<h1 style={{fontSize: '24px', fontWeight: '400', marginTop: '20px'}}>
+                <FormattedMessage id='searchresults'/>
+              </h1>
+  		  			<p style={{marginTop: '5px'}}>
+                <FormattedMessage tagName="i" id="searchcount" values={{count: this.state.size, key: this.state.key}}/>
+              </p>
+  	  			</div>
+  	  		</div>
 
-	  			{this.state.list.map(item => (
-	  				<li key={item.id} onClick={() => { this.props.history.push(`/question/${item.id}`) }}>
-	  					<div dangerouslySetInnerHTML={{__html: item.richText}}/>
-	  				</li>
+  	  		<ListWrapper className="x-rich __list">
 
-	  			))}
-	  		</ListWrapper>
+  	  			{this.state.list.map(item => (
+  	  				<li key={item.id} onClick={() => { this.props.history.push(`/support/question/${item.id}`) }}>
+  	  					<div dangerouslySetInnerHTML={{__html: item.richText}}/>
+  	  				</li>
+
+  	  			))}
+  	  		</ListWrapper>
+        </PageContanier>
 	  	</div>
   	)
   }

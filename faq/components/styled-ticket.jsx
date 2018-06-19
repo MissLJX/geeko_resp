@@ -15,16 +15,32 @@ export const OrderSelector = styled.div`
       span{
         font-size: 16px;
       }
+      &.invalid{
+        & > a{
+          color: red;
+        }
+      }
     `
 
 export const LabelValueContainer = styled.div`
       padding: 15px 0;
+      position: relative;
       & > div{
         margin-top: 5px;
         &:first-child{
           margin-top: 0;
         }
 
+      }
+
+      & > a{
+        cursor: pointer;
+        font-size: 18px;
+        position: absolute;
+        right: 10px;
+        top: calc(50% - 9px);
+        text-decoration: none;
+        color: #222;
       }
     `
 
@@ -39,6 +55,9 @@ export const ChatTip = styled.div`
   		background-color: ${props => props.tipColor};
   		border-radius: 5px;
   		display: inline-block;
+      position: relative;
+      top: 5px;
+  
 
   		&.buyer{
   			background-color: #1a95d3;
@@ -109,7 +128,7 @@ export const ChatContainer = styled.div`
           overflow: hidden;
         }
         &:nth-child(2){
-          height: calc(100vh - 340px);
+          height: calc(100vh - 390px);
           overflow: auto;
         }
       }
@@ -120,6 +139,13 @@ export const ChatSendor = styled.div`
       padding-left: 10px;
       padding-right: 10px;
       padding-top: 10px;
+
+      textarea{
+        &.invalid{
+          box-shadow: inset 0 0 1px red !important;
+          border-color: red !important;
+        }
+      }
     `
 
 export const ImageLoader = styled.div`

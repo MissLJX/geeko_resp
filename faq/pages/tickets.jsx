@@ -1,9 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 import {list} from '../api'
-import {Link} from 'react-router-dom'
+import {Link, Redirect} from 'react-router-dom'
 import {withScroll} from '../HoCs/list.jsx'
-import {ColoredButton} from '../components/buttons.jsx'
+import {ColoredButton, PageHeader, PageContanier} from '../components/buttons.jsx'
+import {gloabvars} from '../commons/instance.js'
+import {FormattedMessage, injectIntl} from 'react-intl'
 
 class TicketList extends React.Component {
   constructor (props) {
@@ -11,6 +13,8 @@ class TicketList extends React.Component {
   }
 
   render () {
+    const {intl} = this.props
+
   	const StatusText = styled.label`
   		&::before{
   			content:'';
@@ -29,13 +33,13 @@ class TicketList extends React.Component {
   		let rendered
   		switch (props.state) {
   			case 1:
-  				rendered = <StatusText color="#ff7700">No replied</StatusText>
+  				rendered = <StatusText color="#ff7700"><FormattedMessage id="statusunreplied"/></StatusText>
   				break
   			case 2:
-  				rendered = <StatusText color="#208d00">Replied</StatusText>
+  				rendered = <StatusText color="#208d00"><FormattedMessage id="statusreplied"/></StatusText>
   				break
   			default:
-  				rendered = <StatusText color="#666">Resolved</StatusText>
+  				rendered = <StatusText color="#666"><FormattedMessage id="statusresolved"/></StatusText>
   				break
   		}
   		return rendered
@@ -89,7 +93,7 @@ class TicketList extends React.Component {
 
   	const getMessage = (reply) => {
   		if (reply.imageUrls && reply.imageUrls.length) {
-  			return `[Image] ${reply.message === '-' ? '' : reply.message}`
+  			return `[${intl.formatMessage({id: 'image'})}] ${reply.message === '-' ? '' : reply.message}`
   		}
   		return reply.message === '-' ? '' : reply.message
   	}
@@ -99,10 +103,10 @@ class TicketList extends React.Component {
     			ticket.ticketReplies &&
     			<TicketLI key={ticket.id}>
 
-    				<Link to={`/ticket/${ticket.id}`}>
+    				<Link to={`/support/ticket/${ticket.id}`}>
     			    	<TicketHD className="x-table __vm">
 	    					<div className="x-cell">
-	    						<TicketGrey>Ticket ID: </TicketGrey>
+	    						<TicketGrey><FormattedMessage id="ticketid"/>: </TicketGrey>
 	    						<TicketGrey>{ticket.id}</TicketGrey>
 	    					</div>
 	    					<div className="x-cell" style={{textAlign: 'right'}}>
@@ -112,7 +116,7 @@ class TicketList extends React.Component {
 
 	    				<TicketBD>
 	    					<div>
-	    						<TicketContent>Last message: {getMessage(ticket.ticketReplies[0])}</TicketContent>
+	    						<TicketContent><FormattedMessage id="lastmessage"/>: {getMessage(ticket.ticketReplies[ticket.ticketReplies.length - 1])}</TicketContent>
 	    					</div>
 	    					<div>
 	    						<Status state={ticket.state}/>
@@ -129,7 +133,7 @@ class TicketList extends React.Component {
   }
 }
 
-export default class Tickets extends React.Component {
+const Tickets = class extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -161,30 +165,38 @@ export default class Tickets extends React.Component {
   	this.scrollHandler()
   }
   render () {
-  	const ScrolledTicketList = withScroll(TicketList)
+    const {intl} = this.props
 
-  	const BottomText = this.state.finished ? <span>No more</span> : (this.state.loading ? <span>Loading...</span> : null)
+  	const ScrolledTicketList = injectIntl(withScroll(TicketList))
 
-  	return (
-  			<div>
-  				<ScrolledTicketList scrollHandler={this.scrollHandler} tickets={this.state.tickets}/>
-  				<div style={{height: '50px', textAlign: 'center'}}>
-  					{BottomText}
-  				</div>
-        <div style={{position: 'fixed', bottom: 0, width: '100%'}}>
-          <Link style={{
-            display: 'block',
-            textAlign: 'center',
-            height: '45px',
-            lineHeight: '45px',
-            backgroundColor: '#222',
-            color: '#fff',
-            textTransform: 'uppercase',
-            textDecoration: 'none'
-          }}
-          to="/ticket/add">Submit a Ticket</Link>
-        </div>
+  	const BottomText = this.state.finished ? <span>No more</span> : (this.state.loading ? <FormattedMessage id="loading"/> : null)
+
+  	return <div>
+      {this.state.finished && this.state.skip === this.state.limit ? <Redirect to="/support/ticket/add"/> : <div>
+        <PageHeader label={intl.formatMessage({id: 'tickets'})} to="/support/"/>
+        <PageContanier>
+      				<ScrolledTicketList scrollHandler={this.scrollHandler} tickets={this.state.tickets}/>
+      				<div style={{height: '50px', textAlign: 'center', lineHeight: '50px', marginBottom: '50px'}}>
+      					{BottomText}
+      				</div>
+          <div style={{position: 'fixed', bottom: 0, width: '100%'}}>
+            <Link onClick={() => { gloabvars.selectedOrder = null }} style={{
+              display: 'block',
+              textAlign: 'center',
+              height: '45px',
+              lineHeight: '45px',
+              backgroundColor: '#222',
+              color: '#fff',
+              textTransform: 'uppercase',
+              textDecoration: 'none'
+            }}
+            to="/support/ticket/add"><FormattedMessage id="submitticket"/></Link>
+          </div>
+        </PageContanier>
+      </div>
+      }
   			</div>
-  			)
   }
 }
+
+export default injectIntl(Tickets)

@@ -14,7 +14,7 @@ export function withScroll (WrappedComponent) {
         window.screen.height
       ]
 
-      if (scrollTop + windowHeight >= documentHeight - 100) {
+      if (scrollTop + windowHeight >= documentHeight - 200) {
       	this.props.scrollHandler(evt)
       }
     }

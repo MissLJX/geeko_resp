@@ -1,20 +1,28 @@
 import React from 'react'
-import {SupportButton} from '../components/buttons.jsx'
+import {SupportButton, PageHeader, PageContanier} from '../components/buttons.jsx'
 import styled from 'styled-components'
 import Search from '../components/search.jsx'
 import Accordion from '../components/accordion.jsx'
 import {questions} from '../data'
 import {Link} from 'react-router-dom'
+import {FormattedMessage, injectIntl} from 'react-intl'
 
-export default class Support extends React.Component {
+const Support = class extends React.Component {
   constructor (props) {
     super(props)
   }
+
   render () {
+    const {intl} = this.props
+
   	const supportbuttons = <ul className='x-flex __around'>
-  		<li><SupportButton color="#599386" label="Online Help">&#xe665;</SupportButton></li>
-  		<li><SupportButton color="#4797b3" label="Message Us">&#xe664;</SupportButton></li>
-  		<li><SupportButton href="/tickets" color="#cc5139" label="Tickets">&#xe666;</SupportButton></li>
+  		<li>
+        <Link to="/support/online-help">
+          <SupportButton onClick={() => { return false }} href="#" color="#599386" label={intl.formatMessage({id: 'onlinehelp'})}>&#xe665;</SupportButton>
+        </Link>
+      </li>
+  		<li><SupportButton href="https://m.me/804997446264798" color="#4797b3" label={intl.formatMessage({id: 'messageus'})}>&#xe664;</SupportButton></li>
+  		<li><SupportButton href="/support/ticket" color="#cc5139" label={intl.formatMessage({id: 'tickets'})}>&#xe666;</SupportButton></li>
   	</ul>
 
   	const styleSupportbuttons = {
@@ -46,7 +54,7 @@ export default class Support extends React.Component {
 			width: 100%;
 			height: 100%;
 			z-index: -1;
-			background: url(https://img.ltwebstatic.com/images2_pi/2018/04/18/15240464072605457524_thumbnail_600x.jpg) no-repeat;
+			background: url(https://dgzfssf1la12s.cloudfront.net/faq/faqback.jpg) no-repeat;
 			background-size: 100%;
   		}
 
@@ -97,47 +105,61 @@ export default class Support extends React.Component {
         text-overflow: ellipsis;
   		}
   	`
+
     return (
+
     	<div>
-	        <div style={styleSupportbuttons}>
-	      		{supportbuttons}
-	        </div>
+        <PageHeader label={intl.formatMessage({id: 'support'})} href="/index"/>
+        <PageContanier>
 
-	        <SearchArea>
-	        	<h1 style={styleSearchTitle}>How Can I Help You?</h1>
-	        	<Search style={{width: '90%', margin: '15px auto auto auto'}}/>
-	        </SearchArea>
+  	        <div style={styleSupportbuttons}>
+  	      		{supportbuttons}
+  	        </div>
 
-	        <div style={{backgroundColor: '#efefef'}}>
-		        <h2 style={styleFAQTitle}>
-		        	faq
-		        </h2>
-		        <Accordions>
+  	        <SearchArea>
+  	        	<h1 style={styleSearchTitle}>
+              <FormattedMessage
+                id='helpyou'
+                defaultMessage='How Can I Help You?'
+              />
 
-		        	{
-		        		questions.map(
-		        			(question) => (
-			        			<li key={question.id}>
-			        				<Accordion title={question.title}>
-			        					<SecondaryUL>
-			        					{
-			        						(question.questions || []).map((q) => (
-			        							<li key={q.id}>
-			        								<Link style={{color: '#666'}} activeStyle={{color: '#e5004f'}} to={`/question/${q.id}`}>{q.title}</Link>
-			        							</li>
-			        						))
-			        					}
-			        					</SecondaryUL>
-			        				</Accordion>
-			        			</li>
-		        			)
-		        		)
-		        	}
+            </h1>
+  	        	<Search style={{width: '90%', margin: '15px auto auto auto'}}/>
+  	        </SearchArea>
 
-		        </Accordions>
-	        </div>
+  	        <div style={{backgroundColor: '#efefef'}}>
+  		        <h2 style={styleFAQTitle}>
+  		        	faq
+  		        </h2>
+  		        <Accordions>
+
+  		        	{
+  		        		questions.map(
+  		        			(question) => (
+  			        			<li key={question.id}>
+  			        				<Accordion title={question.title}>
+  			        					<SecondaryUL>
+  			        					{
+  			        						(question.questions || []).map((q) => (
+  			        							<li key={q.id}>
+  			        								<Link style={{color: '#666'}} activeStyle={{color: '#e5004f'}} to={`/support/question/${q.id}`}>{q.title}</Link>
+  			        							</li>
+  			        						))
+  			        					}
+  			        					</SecondaryUL>
+  			        				</Accordion>
+  			        			</li>
+  		        			)
+  		        		)
+  		        	}
+
+  		        </Accordions>
+  	        </div>
+        </PageContanier>
 
     	</div>
     )
   }
 }
+
+export default injectIntl(Support)

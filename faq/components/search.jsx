@@ -4,6 +4,8 @@ import {secondaries} from '../data'
 import {SearchInput, SearchButton, SearchInputContainer, Wrapper} from './styled-search.jsx'
 import {Link, withRouter} from 'react-router-dom'
 
+import {injectIntl} from 'react-intl'
+
 class Search extends React.Component {
   constructor (props) {
   	super(props)
@@ -48,7 +50,7 @@ class Search extends React.Component {
     const key = this.state.key
 
     if (key) {
-      history.push(`/search?key=${this.state.key}`)
+      history.push(`/support/search?key=${this.state.key}`)
     }
   }
 
@@ -82,6 +84,8 @@ class Search extends React.Component {
 
     `
 
+    const {intl} = this.props
+
   	return (
   		<Wrapper style={this.props.style} >
 
@@ -89,7 +93,7 @@ class Search extends React.Component {
 	  			<SearchButton onClick={this.handleSubmit} style={{float: 'right'}}>&#xe61e;</SearchButton>
 	  			<div style={{overFlow: 'hidden'}}>
             <form onSubmit={this.handleSubmit}>
-	  				 <SearchInput type="text" value={this.state.key} onFocus={(e) => { this.setState({showResult: true}) }} onChange={this.search} placeholder="Products, Delivery, Payment..."/>
+	  				 <SearchInput type="text" value={this.state.key} onFocus={(e) => { this.setState({showResult: true}) }} onChange={this.search} placeholder={intl.formatMessage({id: 'searchholder'})}/>
 	  			  </form>
           </div>
 	  		</SearchInputContainer>
@@ -100,7 +104,7 @@ class Search extends React.Component {
           <SearchResultWrapper>
             {this.state.searchResult.map((q) => (
               <li key={q.id}>
-                <Link to={`/question/${q.id}`}>{q.title}</Link>
+                <Link to={`/support/question/${q.id}`}>{q.title}</Link>
               </li>
             ))}
           </SearchResultWrapper>
@@ -111,4 +115,4 @@ class Search extends React.Component {
   }
 }
 
-export default withRouter(Search)
+export default withRouter(injectIntl(Search))
