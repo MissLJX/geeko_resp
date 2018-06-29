@@ -1,6 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
-const HTMLWebpackPlugin = require('html-webpack-plugin')
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 
 const ROOT_PATH = path.resolve(__dirname)
 const BUILD_PATH = path.resolve(ROOT_PATH, 'dist')
@@ -14,23 +14,8 @@ module.exports = {
     publicPath: '/',
   	filename: '[name].bundle.js'
   },
-  mode: 'development',
-  // enable dev source map
-  devtool: 'eval-source-map',
-  // enable dev server
-  devServer: {
-    historyApiFallback: true,
-    hot: true,
-    inline: true,
-    progress: true,
-    proxy: {
-      '/api': {
-        target: 'http://localhost:8080/wanna',
-        pathRewrite: { '^/api': '' },
-        secure: false
-      }
-    }
-  },
+  mode: 'production',
+  devtool: 'source-map',
   resolve: {
     modules: [__dirname, 'node_modules'],
     extensions: ['.js', '.jsx']
@@ -49,13 +34,11 @@ module.exports = {
     ]
   },
   plugins: [
-    new HTMLWebpackPlugin({
-      title: 'Shopping Cart',
-      meta: 'width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no',
-      template: 'index.html'
+    new UglifyJSPlugin({
+      sourceMap: true
     }),
-
-    new webpack.NamedModulesPlugin(),
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('production')
+    })
   ]
 }

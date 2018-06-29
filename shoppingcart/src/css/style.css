@@ -1,0 +1,82 @@
+ul, li{
+  list-style-type: none;
+}
+
+@font-face {
+  font-family: 'iconfont';  /* project id 384296 */
+  src: url('//at.alicdn.com/t/font_384296_3vjfdn9vo81.eot');
+  src: url('//at.alicdn.com/t/font_384296_3vjfdn9vo81.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_384296_3vjfdn9vo81.woff') format('woff'),
+  url('//at.alicdn.com/t/font_384296_3vjfdn9vo81.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_384296_3vjfdn9vo81.svg#iconfont') format('svg');
+}
+.iconfont {
+  font-family:"iconfont" !important;
+  font-size:16px;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body{
+  font-size: 14px;
+  color: #222;
+  background-color: #efefef;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.x-color-theme{
+
+}
+
+.x-fw{
+  width: 100%;
+}
+
+.x-fh{
+  height: 100%;
+}
+
+.x-table{
+  display: table;
+}
+
+.x-table.__fixed{
+  table-layout: fixed;
+}
+
+.x-row{
+  display: table-row;
+}
+
+.x-cell{
+  display: table-cell;
+}
+
+.x-cell.__right{
+  text-align: right;
+}
+
+.x-table.__vm .x-cell{
+  vertical-align: middle;
+}
+
+.x-flex{
+  display: flex;
+}
+
+.x-flex.__column{
+  flex-direction: column;
+}
+
+.x-flex.__around{
+  justify-content: space-around;
+}
+
+.x-flex.__between{
+  justify-content: space-between;
+}
+
+.x-flex.__nowrap{
+  flex-wrap: nowrap;
+}
