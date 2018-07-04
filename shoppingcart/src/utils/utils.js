@@ -6,3 +6,5 @@ export const strconcat = (...strs) => {
 export const unitprice = (money) => {
   return money ? (money.unit + money.amount) : ''
 }
+
+export const __route_root__ = '/cart'

@@ -8,6 +8,7 @@ const Turn = styled.span`
 	background-color: #cacaca;
 	display: inline-block;
 	position: relative;
+	cursor: pointer;
 	& > span{
 		width: 18px;
 		height: 18px;
@@ -18,6 +19,7 @@ const Turn = styled.span`
 		background-color: #fff;
 		border-radius: 50%;
 		transition: left .2s;
+		cursor: pointer;
 	}
 
 	&.active{
@@ -29,6 +31,6 @@ const Turn = styled.span`
 	}
 `
 
-export default (props) => <Turn className={props.turnAcitve ? 'active' : ''}>
+export default (props) => <Turn {...props} className={props.turnAcitve ? 'active' : ''}>
   <span></span>
 </Turn>

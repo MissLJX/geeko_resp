@@ -8,8 +8,6 @@ export default class AddressEditor extends React.Component {
   render () {
   	const { location } = this.props
 
-  	console.log(location.state)
-
   	return <div>Address</div>
   }
 }

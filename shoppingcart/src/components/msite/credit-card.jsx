@@ -5,9 +5,11 @@ import {Red, Grey} from '../text.jsx'
 import Money from '../money.jsx'
 import {BigButton} from './buttons.jsx'
 
-import {Form, Input} from './control.jsx'
+import {Form, Input, Select} from './control.jsx'
 import {required} from '../validator.jsx'
 import {StyledControl} from './styled-control.jsx'
+
+import {unitprice} from '../../utils/utils.js'
 
 const HD = styled.div`
 	height: 50px;
@@ -25,6 +27,7 @@ const HD = styled.div`
 		right: 10px;
 		font-size: 20px;
 		top: 0;
+
 	}
 `
 
@@ -50,11 +53,11 @@ const StyledCard = styled.div`
 `
 
 const Card = props => <StyledCard>
-  <div className="x-table __fixed __vm x-fw x-fh">
+  <div onClick={() => { props.cardSelect(props.card) }} className="x-table __fixed __vm x-fw x-fh">
     <div className="x-cell"><span>Card No.</span> { props.card.quickpayRecord.cardNumber }</div>
     {
       props.card.isSelected && <div className="x-cell __right">
-        <Icon>&#xe638;</Icon>
+        <Icon style={{color: '#e5004f'}}>&#xe638;</Icon>
       </div>
     }
   </div>
@@ -76,8 +79,8 @@ const MercadoPlugin = class extends React.Component {
 
   render () {
     return <div>
-      <Form id="mercadoform">
-        <input type="hidden" name="cardId" data-checkout="cardId"/>
+      <Form id="mercadoform" ref={this.props.mercadoref} onSubmit={this.props.handleMercado}>
+        <input type="hidden" value={this.props.card.quickpayRecord.quickpayId} name="cardId" data-checkout="cardId"/>
         <div className="x-table">
           <div className="x-cell">Security Code</div>
           <div className="x-cell" style={{paddingLeft: 10}}>
@@ -97,11 +100,66 @@ const MercadoPlugin = class extends React.Component {
   }
 }
 
+const BraizlPlugin = class extends React.Component {
+  constructor (props) {
+    super(props)
+  }
+  render () {
+    const {installmentoptions} = this.props
+
+    return <div style={{marginTop: 10}}>
+      <Form id="brazilform" ref={this.props.brazilref} onSubmit={this.props.handleBrazil}>
+        <div className="x-table x-fw __fixed __vm">
+          <div className="x-cell" style={{width: 95}}>CPF</div>
+          <div className="x-cell">
+            <StyledControl>
+              <Input
+                style={{width: '100%'}}
+                name="cpf"
+                data-checkout="cpf"
+                value={this.props.cpf}
+                validations={[required]}
+                placeholder="123"
+                onChange={this.props.handleInputChange}/>
+            </StyledControl>
+          </div>
+        </div>
+
+        <div className="x-table x-fw __fixed __vm" style={{marginTop: 10}}>
+          <div className="x-cell" style={{width: 95}}>Installments</div>
+          <div className="x-cell">
+            <StyledControl>
+              <Select
+                style={{width: '100%'}}
+                name="installments"
+                data-checkout="installments"
+                value={this.props.installments}
+                onChange={this.props.handleInputChange}>
+                <option>1*{unitprice(this.props.orderTotal)}  </option>
+                {
+
+                  installmentoptions.map(i => (
+                    <option key={i.number} value={i.number}>
+                      {i.number}*{unitprice(i.stagePrice)}
+                    </option>
+                  ))
+                }
+              </Select>
+            </StyledControl>
+          </div>
+        </div>
+
+      </Form>
+    </div>
+  }
+}
+
 const getPayPlugin = (payMethod, props) => {
-  console.log(payMethod)
   switch (payMethod) {
     case '19':
       return <MercadoPlugin {...props}/>
+    case '17':
+      return <BraizlPlugin {...props}/>
     default:
       return null
   }
@@ -112,6 +170,16 @@ const CreditCard = class extends React.Component {
     super(props)
     this.state = {
     	status: 0
+    }
+    this.checkout = this.checkout.bind(this)
+  }
+
+  checkout (evt, currentCard) {
+    const {payMethod} = currentCard
+    if (payMethod === '19') {
+      this.props.handleMercado(evt)
+    } else {
+      this.props.handleCredit(evt)
     }
   }
 
@@ -131,7 +199,7 @@ const CreditCard = class extends React.Component {
   				<CREDITWRAPPER>
   					<HD>
   						<h1>Credit Card</h1>
-  						<Icon>&#xe69a;</Icon>
+  						<Icon onClick={this.props.creditClose}>&#xe69a;</Icon>
   					</HD>
 
   					<BD>
@@ -143,7 +211,7 @@ const CreditCard = class extends React.Component {
   							 <Red><Money money={orderTotal}/></Red>
   						</div>
 
-  						{getPayPlugin(currentCard.quickpayRecord.payMethod, {card: currentCard})}
+  						{getPayPlugin(currentCard.quickpayRecord.payMethod, {card: currentCard, ...this.props})}
 
   						<div style={{position: 'absolute', bottom: 0, left: 0, paddingBottom: 10, paddingLeft: 10, paddingRight: 10}}>
   							<div className="x-table __vm __fixed x-fw">
@@ -157,7 +225,7 @@ const CreditCard = class extends React.Component {
   								</div>
   							</div>
   							<div style={{marginTop: 10}}>
-  								<BigButton bgColor="#e5004f">Check Out</BigButton>
+  								<BigButton bgColor="#e5004f" onClick={(evt) => { this.checkout(evt, currentCard) }}>Check Out</BigButton>
   							</div>
 
   						</div>
@@ -174,8 +242,8 @@ const CreditCard = class extends React.Component {
   						<ul>
   							{
   								cards.map(card => (
-  									<li key={card.id}>
-  										<Card card={card}/>
+  									<li key={card.quickpayRecord.id}>
+  										<Card cardSelect={this.props.cardSelect} card={card}/>
   									</li>
   								))
   							}

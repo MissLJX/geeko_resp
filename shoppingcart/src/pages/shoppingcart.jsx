@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import {Switch, Route, Link} from 'react-router-dom'
+import {Switch, Route, Link, Redirect} from 'react-router-dom'
 import Loading from '../components/msite/loading.jsx'
 import Empty from '../components/msite/empty.jsx'
 import {Boxs, Box, BoxClickHead, BoxBody, LineBox, BoxHead} from '../components/msite/layout.jsx'
@@ -10,13 +10,30 @@ import {Grey, Red} from '../components/text.jsx'
 import TurnTool from '../components/msite/turn-tool.jsx'
 import Money from '../components/money.jsx'
 import { connect } from 'react-redux'
-import {fetchAll, selectItem, editing, edited, editItem, selectPay, CPF, EMAIL, getMercadoCards, toggleCredit} from '../store/actions.js'
+import {fetchAll, refreshCart, selectItem, editing,
+  edited, editItem, selectPay, CPF, EMAIL, getCreditCards,
+  getMercadoCards, toggleCredit, setSecurityCode, setInstallments} from '../store/actions.js'
 import ProductEditor from '../components/msite/product-editor.jsx'
 import Mask from '../components/mask.jsx'
 import _ from 'lodash'
 import PayMethodList from '../components/msite/paymethod-list.jsx'
 import {BigButton} from '../components/msite/buttons.jsx'
 import CreditCard from '../components/msite/credit-card.jsx'
+import { useMercadocard, mercadopay, usePoint, useInsurance, creditpay, paypalpay } from '../api'
+import {__route_root__} from '../utils/utils.js'
+
+const OrderSummary = styled.div`
+  padding: 5px 10px;
+
+
+  & > div.__summary{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font{
+      font-size: 16px !important;
+    }
+  }
+`
 
 const Checkout = styled.div`
   &>div{
@@ -48,6 +65,9 @@ const mapDispatchToProps = (dispatch) => {
     INIT: () => {
       dispatch(fetchAll())
     },
+    REFRESHCART: (cart) => {
+      dispatch(refreshCart(cart))
+    },
     SELECT: (params) => {
       dispatch(selectItem(params))
     },
@@ -78,8 +98,17 @@ const mapDispatchToProps = (dispatch) => {
     GETMERCADOCARDS: () => {
       dispatch(getMercadoCards())
     },
+    GETCREDITCARDS: () => {
+      dispatch(getCreditCards())
+    },
     TOGGLECREDIT: (isShow) => {
       dispatch(toggleCredit(isShow))
+    },
+    SETSECURITYCODE: (securityCode) => {
+      dispatch(setSecurityCode(securityCode))
+    },
+    SETINSTALLMENTS: (installments) => {
+      dispatch(setInstallments(installments))
     }
   }
 }
@@ -92,10 +121,80 @@ const ShoppingCart = class extends React.Component {
     this.itemEdit = this.itemEdit.bind(this)
     this.itemConfirmHandle = this.itemConfirmHandle.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
+    this.sdkResponseHandler = this.sdkResponseHandler.bind(this)
   }
 
   componentDidMount () {
     this.props.INIT()
+    Mercadopago.setPublishableKey('TEST-aa971175-51cd-4be7-8ae4-f12006ac536d')
+  }
+
+  mercadoref (c) {
+    this.mercadoform = c
+  }
+
+  handleMercado (event) {
+
+  }
+
+  checkmercado (event) {
+    event.preventDefault()
+    this.mercadoform.validateAll()
+    const $dommercado = document.getElementById('mercadoform')
+    Mercadopago.createToken($dommercado, this.sdkResponseHandler)
+  }
+
+  checkout (event) {
+    event.preventDefault()
+    const { payMethod, cart, paypal } = this.props
+
+    if (!cart.shippingDetail) {
+      this.props.history.push(`${window.ctx || ''}${__route_root__}/address`)
+      return
+    }
+
+    if (payMethod === '3' || payMethod === '17') {
+      this.props.TOGGLECREDIT(true)
+      this.props.GETCREDITCARDS()
+    } else if (payMethod === '19') {
+      this.props.TOGGLECREDIT(true)
+      this.props.GETMERCADOCARDS()
+    } else if (payMethod === '1') {
+      paypalpay('normal').then(data => data.result).then(({TOKEN, success, transactionId, ACK, L_LONGMESSAGE0}) => {
+        if (success && transactionId && !TOKEN) {
+          window.location.href = `${window.ctx || ''}/v7/order/confirm/free?transationId=${transactionId}`
+          return
+        }
+        if (ACK === 'Failure') {
+          alert(L_LONGMESSAGE0)
+          return
+        }
+
+        if (TOKEN && paypal) {
+          window.location.href = paypal + TOKEN
+        }
+      })
+    }
+  }
+
+  sdkResponseHandler (status, response) {
+    if (status != 200 && status != 201) {
+      alert('verify filled data')
+    } else {
+      this.setState({
+        token: response.id
+      })
+
+      mercadopay({
+        token: response.id
+      }).then(data => data.result).then(({success, transactionId, details, solutions}) => {
+        if (success) {
+          window.location.href = `${window.ctx || ''}/order/confirm/web/ocean?transactionId=${transactionId}`
+        } else {
+          alert(details + '\n' + solutions)
+        }
+      })
+    }
   }
 
   handleInputChange (event) {
@@ -109,8 +208,23 @@ const ShoppingCart = class extends React.Component {
       case 'email':
         this.props.SETEMAIL(value)
         break
+      case 'securityCode':
+        this.props.SETSECURITYCODE(value)
+        break
+      case 'installments':
+        this.props.SETINSTALLMENTS(value)
       default:
         break
+    }
+  }
+
+  cardSelect (card) {
+    if (card.quickpayRecord.payMethod == '19') {
+      useMercadocard(card.quickpayRecord.quickpayId).then(() => {
+        this.props.GETMERCADOCARDS()
+      })
+    } else {
+
     }
   }
 
@@ -140,18 +254,43 @@ const ShoppingCart = class extends React.Component {
     })
   }
 
+  openPoints () {
+    usePoint(!this.props.cart.openPointUse).then(data => data.result).then((cart) => {
+      this.props.REFRESHCART(cart)
+    })
+  }
+
+  openInsurance () {
+    useInsurance(!this.props.cart.insurance).then(data => data.result).then(cart => {
+      this.props.REFRESHCART(cart)
+    })
+  }
+
+  handleCredit (evt) {
+    evt.preventDefault()
+    const {cpf, installments} = this.props
+
+    creditpay({payCpf: cpf, payInstallments: installments}).then(data => data.result).then(({success, transactionId, details, solutions}) => {
+      if (success) {
+        window.location.href = `${window.ctx || ''}/order/confirm/web/ocean?transactionId=${transactionId}`
+      } else {
+        alert(details + '\n' + solutions)
+      }
+    })
+  }
+
   render () {
-    const {cart, loading, empty, editing, isCreditShow, mercadocards} = this.props
+    const {cart, loading, empty, editing, isCreditShow, mercadocards, creditcards, noCard} = this.props
 
   	return loading ? <Loading/> : (empty ? <Empty/> : (
-  		cart && <div>
+  		cart && <div style={{opacity: this.props.refreshing ? 0.9 : 1}}>
         <Boxs>
           {
             cart.shippingDetail && (
               <Box>
                 <BoxClickHead title="Address">
                   <Grey>
-                    <Link style={{color: '#222', textDecoration: 'none'}} to={`${window.ctx || ''}/address`}>Edit</Link>
+                    <Link style={{color: '#222', textDecoration: 'none'}} to={`${window.ctx || ''}${__route_root__}/address`}>Edit</Link>
                   </Grey>
                 </BoxClickHead>
                 <BoxBody>
@@ -177,15 +316,15 @@ const ShoppingCart = class extends React.Component {
             <LineBox style={{paddingLeft: 10, paddingRight: 10}}>
               {
                 cart.shippingInsurancePrice2 && (
-                  <TurnTool turnAcitve={cart.insurance}>
+                  <TurnTool open={this.openInsurance.bind(this)} turnAcitve={cart.insurance}>
                     <span style={{fontSize: 15}}>Add Shipping Insurance(<Red><Money money={cart.shippingInsurancePrice2}/></Red>)</span>
                   </TurnTool>
                 )
               }
 
               {
-                cart.expectedPoints && (
-                  <TurnTool turnAcitve={cart.openPointUse}>
+                cart.expectedPoints > 0 && (
+                  <TurnTool open={this.openPoints.bind(this)} turnAcitve={cart.openPointUse}>
                     <span style={{fontSize: 15}}>Apply {cart.expectedPoints} (<Red><Money money={cart.expectedPointDiscount}/></Red>) To This Order?</span>
                   </TurnTool>
                 )
@@ -201,6 +340,22 @@ const ShoppingCart = class extends React.Component {
           </Box>
 
           <Box>
+            <BoxHead title="Order Summary"/>
+            <OrderSummary>
+
+              {
+                cart.orderSummary.display.map(display => (
+                  <div key={display.value} className="x-flex __between __summary">
+                    <span dangerouslySetInnerHTML={{__html: display.label}}/>
+                    <span dangerouslySetInnerHTML={{__html: display.value}}/>
+                  </div>
+                ))
+              }
+
+            </OrderSummary>
+          </Box>
+
+          {/* <Box>
             <Link to={`${window.ctx || ''}/mercado`}>Mercado</Link>
 
             <div>
@@ -210,7 +365,7 @@ const ShoppingCart = class extends React.Component {
               }}>Credit Card</button>
 
             </div>
-          </Box>
+          </Box> */}
 
           <Box>
             <div style={{height: 90}}>
@@ -219,7 +374,7 @@ const ShoppingCart = class extends React.Component {
                   <span>Total: </span>
                   <Red><Money money={cart.orderSummary.orderTotal}/></Red>
                 </div>
-                <BigButton className="__btn" height={47} bgColor="#e5004f">Check Out</BigButton>
+                <BigButton onClick={this.checkout.bind(this)} className="__btn" height={47} bgColor="#e5004f">Check Out</BigButton>
               </Checkout>
             </div>
           </Box>
@@ -236,10 +391,42 @@ const ShoppingCart = class extends React.Component {
         }
 
         {
-          isCreditShow && mercadocards && (
+          isCreditShow && this.props.payMethod === '19' && mercadocards && mercadocards.length && (
             <React.Fragment>
               <Mask/>
-              <CreditCard cards={mercadocards} orderTotal={cart.orderSummary.orderTotal}/>
+              <CreditCard
+                payMethod = {this.props.payMethod}
+                securityCode = {this.props.securityCode}
+                handleMercado = {this.checkmercado.bind(this)}
+                mercadoref = {this.mercadoref.bind(this)}
+                handleInputChange = { this.handleInputChange }
+                creditClose={() => { this.props.TOGGLECREDIT(false) }}
+                cardSelect={ this.cardSelect.bind(this)}
+                cards={mercadocards}
+                orderTotal={cart.orderSummary.orderTotal}/>
+            </React.Fragment>
+          )
+        }
+
+        {
+          isCreditShow && noCard && this.props.payMethod === '19' && <Redirect push to={`${window.ctx || ''}${__route_root__}/mercado`}/>
+        }
+
+        {
+          isCreditShow && (this.props.payMethod === '3' || this.props.payMethod === '17') && creditcards && creditcards.length && (
+            <React.Fragment>
+              <Mask/>
+              <CreditCard
+                cards={creditcards}
+                payMethod = {this.props.payMethod}
+                orderTotal={cart.orderSummary.orderTotal}
+                cpf={this.props.cpf}
+                handleCredit = {this.handleCredit.bind(this)}
+                handleInputChange = { this.handleInputChange }
+                creditClose={() => { this.props.TOGGLECREDIT(false) }}
+                installmentoptions={this.props.cart.payInstalmentsByOceanpaymentBRACreditCard}
+                installments={this.props.installments}
+              />
             </React.Fragment>
           )
         }

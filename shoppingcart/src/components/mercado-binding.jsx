@@ -69,7 +69,6 @@ const MercadoBinding = class extends React.Component {
 	        	paymentMethod: response[0].id,
 	        	paymentMethodIcon: response[0].secure_thumbnail
 	        })
-	        console.log(response)
 	    }
   }
 
@@ -100,6 +99,12 @@ const MercadoBinding = class extends React.Component {
       	email: this.state.email,
       	paymentMethodId: this.state.paymentMethod,
       	token: response.id
+      }).then(data => data.result).then(({success, transactionId, details, solutions}) => {
+        if (success) {
+          window.location.href = `${window.ctx || ''}/order/confirm/web/ocean?transactionId=${transactionId}`
+        } else {
+          alert(details + '\n' + solutions)
+        }
       })
     }
   }
