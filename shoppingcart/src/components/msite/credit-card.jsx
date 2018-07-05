@@ -175,7 +175,7 @@ const CreditCard = class extends React.Component {
   }
 
   checkout (evt, currentCard) {
-    const {payMethod} = currentCard
+    const {payMethod} = currentCard.quickpayRecord
     if (payMethod === '19') {
       this.props.handleMercado(evt)
     } else {

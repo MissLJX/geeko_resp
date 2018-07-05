@@ -189,7 +189,7 @@ const ShoppingCart = class extends React.Component {
         token: response.id
       }).then(data => data.result).then(({success, transactionId, details, solutions}) => {
         if (success) {
-          window.location.href = `${window.ctx || ''}/order/confirm/web/ocean?transactionId=${transactionId}`
+          window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
         } else {
           alert(details + '\n' + solutions)
         }
