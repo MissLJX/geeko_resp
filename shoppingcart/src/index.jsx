@@ -6,14 +6,15 @@ import ShoppingCart from './pages/shoppingcart.jsx'
 import AddressModal from './pages/address-modal.jsx'
 import ShippingMethods from './pages/shipping-methods.jsx'
 import Mercado from './pages/mercado.jsx'
+import {__route_root__} from './utils/utils.js'
 
 export default () => (
 
   	<div>
-    	<Route path={`${window.ctx || ''}/`} component={ShoppingCart}/>
-    	<Route path={`${window.ctx || ''}/address`} component={AddressModal}/>
-    	<Route path={`${window.ctx || ''}/shipping-methods`} component={ShippingMethods}/>
-    	<Route path={`${window.ctx || ''}/mercado`} component={Mercado}/>
+    	<Route path={`${window.ctx || ''}${__route_root__}/`} component={ShoppingCart}/>
+    	<Route path={`${window.ctx || ''}${__route_root__}/address`} component={AddressModal}/>
+    	<Route path={`${window.ctx || ''}${__route_root__}/shipping-methods`} component={ShippingMethods}/>
+    	<Route path={`${window.ctx || ''}${__route_root__}/mercado`} component={Mercado}/>
   	</div>
 
 )

@@ -5,7 +5,9 @@ import {get,
   me,
   changeShippingMethod,
   editProduct,
-  mercadocards} from '../api'
+  mercadocards,
+  creditcards,
+  getpaypal} from '../api'
 
 export const LOADING = 'LOADING'
 export const LOADED = 'LOADED'
@@ -20,6 +22,9 @@ export const CPF = 'CPF'
 export const EMAIL = 'EMAIL'
 export const MERCADO_CARDS = 'MERCADO_CARDS'
 export const TOGGLE_CREDIT = 'TOGGLE_CREDIT'
+export const SET_SECURITY_CODE = 'SET_SECURITY_CODE'
+export const CREDIT_CARDS = 'CREDIT_CARDS'
+export const SET_INSTALLMENTS = 'SET_INSTALLMENTS'
 
 export const loading = () => {
   return {
@@ -81,20 +86,49 @@ export const toggleCredit = (isShow) => {
   }
 }
 
-export const fetchAll = () => {
-  const fetchCart = get().then(data => data.result)
-  const fetchMe = me().then(data => data.result)
-
-  return dispatch => {
-    dispatch(loading())
-    return Promise.all([fetchCart, fetchMe]).then(values => dispatch(loaded(values)))
+export const setSecurityCode = (code) => {
+  return {
+    type: SET_SECURITY_CODE,
+    securityCode: code
   }
 }
 
-export const refreshCart = () => {
+export const setInstallments = (installments) => {
+  return {
+    type: SET_INSTALLMENTS,
+    installments
+  }
+}
+
+export const setCreditCards = (cards) => {
+  return {
+    type: 'CREDIT_CARDS',
+    cards
+  }
+}
+
+export const fetchAll = () => {
+  const fetchCart = get().then(data => data.result)
+  const fetchMe = me().then(data => data.result)
+  const paypalUrl = getpaypal().then(data => data.result)
+
   return dispatch => {
-    dispatch(refresing())
-    return get().then(data => data.result).then(cart => dispatch(refreshed(cart)))
+    dispatch(loading())
+    return Promise.all([fetchCart, fetchMe, paypalUrl]).then(values => dispatch(loaded(values)))
+  }
+}
+
+export const refreshCart = (cart) => {
+  if (cart) {
+    return {
+      type: REFRESHED,
+      cart
+    }
+  } else {
+    return dispatch => {
+      dispatch(refresing())
+      return get().then(data => data.result).then(cart => dispatch(refreshed(cart)))
+    }
   }
 }
 
@@ -135,6 +169,14 @@ export const getMercadoCards = () => {
   return dispatch => {
     return mercadocards().then(data => data.result).then(cards => {
       dispatch(setMercadoCards(cards))
+    })
+  }
+}
+
+export const getCreditCards = () => {
+  return dispatch => {
+    return creditcards().then(data => data.result).then(cards => {
+      dispatch(setCreditCards(cards))
     })
   }
 }

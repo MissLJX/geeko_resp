@@ -13,7 +13,7 @@ export default (props) => (
       {props.children}
     </div>
     <div className="x-cell __right">
-      <Turn turnAcitve={props.turnAcitve}/>
+      <Turn onClick={props.open} turnAcitve={props.turnAcitve}/>
     </div>
   </TurnWrapper>
 )

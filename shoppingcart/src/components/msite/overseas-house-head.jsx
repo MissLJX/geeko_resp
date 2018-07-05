@@ -5,6 +5,7 @@ import CheckBox from '../checkbox.jsx'
 import {Red} from '../text.jsx'
 import Money from '../money.jsx'
 import Icon from '../icon.jsx'
+import {__route_root__} from '../../utils/utils.js'
 
 const OverseasHead = styled.div`
   height: 50px;
@@ -37,7 +38,7 @@ export default ({shippingMethod, selected, groupClick}) => <OverseasHead>
 			All
     </div>
     <div className="x-cell">
-      <Link style={{color: '#222', textDecoration: 'none'}} to={`${window.ctx || ''}/shipping-methods`}>
+      <Link style={{color: '#222', textDecoration: 'none'}} to={`${window.ctx || ''}${__route_root__}/shipping-methods`}>
         <Icon style={{fontSize: 18, marginRight: 10}}>&#xe659;</Icon>
         <span>{shippingMethod.title}: </span>
         <Red>{shippingMethod.price.amount > 0 ? <Money money={shippingMethod.price}/> : 'Free Shipping'}</Red>

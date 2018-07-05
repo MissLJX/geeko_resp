@@ -18,5 +18,15 @@ export const product = (id) => axios.get(`${VPATH}/product/anon/${id}/show`)
 
 export const me = () => axios.get(`${VPATH}/customer/get`)
 
-export const mercadocards = () => axios.get(`${VPATH}/mercadopago/get-cards`)
+export const mercadocards = () => axios.get(`${VPATH}/mercadopago/get-cards?_=${new Date().getTime()}`)
 export const mercadopay = (params) => axios.post(`${VPATH}/mercadopago/pay`, params)
+export const useMercadocard = (cardId) => axios.get(`${VPATH}/mercadopago/use-card?cardId=${cardId}&_=${new Date().getTime()}`)
+
+export const usePoint = (isopen) => axios.get(`${VPATH}/shopping-cart/set-point/${isopen}`)
+export const useInsurance = (isuse) => axios.get(`${VPATH}/shopping-cart/anon/${isuse}/update-insurance`)
+
+export const creditcards = () => axios.get(`/quickpay-record/history`)
+export const creditpay = (params) => axios.post(`/quickpay/pay`, params)
+
+export const getpaypal = () => axios.get(`${VPATH}/paypal/client-get-url`)
+export const paypalpay = (method) => axios.get(`${VPATH}/webpaypal/anon/pay`, {method})

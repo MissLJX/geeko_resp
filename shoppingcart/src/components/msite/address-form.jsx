@@ -54,19 +54,17 @@ const AdressForm = class extends React.Component {
       isDefaultAddress
     } = this.state
 
-    if (this.state.isEdit) {
-      this.props.editAddress({
-        name,
-        streetAddress1,
-        unit,
-        city,
-        zipCode,
-        state,
-        country,
-        phoneNumber,
-        isDefaultAddress
-      })
-    }
+    this.props.editAddress({
+      name,
+      streetAddress1,
+      unit,
+      city,
+      zipCode,
+      state,
+      country,
+      phoneNumber,
+      isDefaultAddress
+    })
   }
 
   componentWillMount () {

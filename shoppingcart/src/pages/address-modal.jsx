@@ -43,7 +43,9 @@ const Modal = class extends React.Component {
   			alert(result)
   		})
   	} else {
-  		editAddress({...address, id: this.props.address.id}).then(() => {
+      const addressOpreator = this.props.address ? editAddress : addAddress
+
+  		addressOpreator({...address, id: this.props.address ? this.props.address.id : null}).then(() => {
   			this.props.REFRESH()
   			this.props.history.goBack()
   		}).catch(({result}) => {
