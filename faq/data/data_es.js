@@ -8,8 +8,13 @@ const question1 = {
 				<h1>Donde encontrar mis ordenes?</h1>
 			</header>
 			<section>
+<<<<<<< HEAD
 				<p>Hay dos tipos de cuentas que puede tener aquí en Chic Me, una cuenta registrada y una cuenta de Facebook. Por favor, asegúrese de haber iniciado sesión en la cuenta correcta. Una vez que lo haya hecho, puede acceder a su pedido.</p>
 				<img src="https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/faq/wheretofindmyorders.png">
+=======
+				<p>Hay dos tipos de cuentas que puede tener aquí en Boutiquefeel, una cuenta registrada y una cuenta de Facebook. Por favor, asegúrese de haber iniciado sesión en la cuenta correcta. Una vez que lo haya hecho, puede acceder a su pedido.</p>
+				<img src="https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/faq/Boutiquefeel/1-%E7%99%BB%E9%99%86.png">
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 			</section>
 		</article>
 	`
@@ -30,12 +35,20 @@ const question2 = {
 					<li>
 						<h2>PASO 1:</h2>
 						<p>Inicie sesión en su cuenta y seleccione "pedidos". Luego haga clic en "contactar al vendedor"</p>
+<<<<<<< HEAD
 						<img src="https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/faq/howdoisubmitaticket.png">
+=======
+						<img src="https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/faq/Boutiquefeel/2-%E8%81%94%E7%B3%BB.png">
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 					</li>
 					<li>
 						<h2>PASO 2:</h2>
 						<p>Seleccione el tema más relacionado con su problema y envíe su mensaje. </p>
+<<<<<<< HEAD
 						<img src="https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/faq/step2.png">
+=======
+						<img src="https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/faq/Boutiquefeel/3-%E9%80%89%E6%8B%A9%E9%97%AE%E9%A2%98.png">
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 					</li>
 				</ol>
 			</section>
@@ -45,12 +58,20 @@ const question2 = {
 
 const question3 = {
   id: 'se-3',
+<<<<<<< HEAD
   title: '¿Cómo cambio detalles en mi cuenta de Chic Me?',
+=======
+  title: '¿Cómo cambio detalles en mi cuenta de Boutiquefeel?',
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
   parentId: 'root-1',
   richText: `
 		<article>
 			<header>
+<<<<<<< HEAD
 				<h1>¿Cómo cambio detalles en mi cuenta de Chic Me?</h1>
+=======
+				<h1>¿Cómo cambio detalles en mi cuenta de Boutiquefeel?</h1>
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 			</header>
 			<section>
 				<p>1. Haga clic en "Iniciar sesión" en la esquina superior derecha de nuestra página de inicio.</p>
@@ -58,6 +79,7 @@ const question3 = {
 				<ol>
 					<li>
 						<p>Cambie su contraseña:</p>
+<<<<<<< HEAD
 						<img src="https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/faq/changeyourpwd.png">
 					</li>
 					<li>
@@ -67,6 +89,17 @@ const question3 = {
 					<li>
 						<p> Cambiar su dirección de correo electrónico</p>
 						<img src="https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/faq/changeyouremail.png">
+=======
+						<img src="https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/faq/Boutiquefeel/4-%E6%8D%A2%E5%AF%86%E7%A0%81.png">
+					</li>
+					<li>
+						<p>Editar / Añadir dirección de envío</p>
+						<img src="https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/faq/Boutiquefeel/5-%E6%8D%A2%E5%9C%B0%E5%9D%80.png">
+					</li>
+					<li>
+						<p> Cambiar su dirección de correo electrónico</p>
+						<img src="https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/faq/Boutiquefeel/6-%E6%8D%A2%E9%82%AE%E7%AE%B1.png">
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 					</li>
 					<li>
 						<p>Historia de búsqueda</p>
@@ -115,12 +148,20 @@ const question4 = {
 
 const question5 = {
   id: 'se-5',
+<<<<<<< HEAD
   title: '¿Por qué no puedo iniciar sesión en mi cuenta de Chic Me?',
+=======
+  title: '¿Por qué no puedo iniciar sesión en mi cuenta de Boutiquefeel?',
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
   parentId: 'root-1',
   richText: `
 		<article>
 			<header>
+<<<<<<< HEAD
 				<h1>¿Por qué no puedo iniciar sesión en mi cuenta de Chic Me?</h1>
+=======
+				<h1>¿Por qué no puedo iniciar sesión en mi cuenta de Boutiquefeel?</h1>
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 			</header>
 			<section>
 				<p>
@@ -161,7 +202,11 @@ const question7 = {
 			</header>
 			<section>
 				<p>
+<<<<<<< HEAD
 					Registrarse en Chic Me tiene muchos beneficios y desea que su experiencia de compra sea fácil y eficiente. Antes de realizar un pedido, desea registrarse. Para registrarse, ingrese su dirección de correo electrónico, cree una contraseña y espere el correo electrónico de confirmación de Chic Me. Por favor, asegúrese de que la dirección de correo electrónico que utiliza esté ingresada correctamente
+=======
+					Registrarse en Boutiquefeel tiene muchos beneficios y desea que su experiencia de compra sea fácil y eficiente. Antes de realizar un pedido, desea registrarse. Para registrarse, ingrese su dirección de correo electrónico, cree una contraseña y espere el correo electrónico de confirmación de Boutiquefeel. Por favor, asegúrese de que la dirección de correo electrónico que utiliza esté ingresada correctamente
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 				</p>
 			</section>
 		</article>
@@ -182,7 +227,11 @@ const question8 = {
 					Para cancelar un pedido pago, haga clic en el botón "Mis tickets" y envíe toda la información necesaria.
 				</p>
 				<p>
+<<<<<<< HEAD
 					Aquí en Chic Me, el pedido justo antes del envío. En otras palabras, una vez que reciba nuestro aviso de envío, el pedido no podrá cancelarse. Luego espere a que llegue su paquete y puede devolvernos o ponerse en contacto con nosotros para organizar la "devolución del reembolso".
+=======
+					Aquí en Boutiquefeel, el pedido justo antes del envío. En otras palabras, una vez que reciba nuestro aviso de envío, el pedido no podrá cancelarse. Luego espere a que llegue su paquete y puede devolvernos o ponerse en contacto con nosotros para organizar la "devolución del reembolso".
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 				</p>
 				<p>
 					Si desea cancelar el pedido de inmediato, haga clic en el botón "Ayuda en línea" en la parte superior de la página de inicio.
@@ -209,7 +258,11 @@ const question9 = {
 					Le informaremos con un correo electrónico después del envío o si hay algún retraso. Puede revisar el correo no deseado primero si no lo recibió.
 				</p>
 				<p>
+<<<<<<< HEAD
 					Si no puede encontrar un correo electrónico el día después de haber realizado el pedido, comuníquese con el servicio al cliente de chicme.
+=======
+					Si no puede encontrar un correo electrónico el día después de haber realizado el pedido, comuníquese con el servicio al cliente de Boutiquefeel.
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 				</p>
 			</section>
 		</article>
@@ -275,7 +328,11 @@ const question12 = {
 			</header>
 			<section>
 				<p>
+<<<<<<< HEAD
 					Si no ha recibido un correo electrónico de confirmación de su pedido, es posible que haya registrado su correo electrónico incorrectamente o que el correo electrónico esté en su carpeta de correo no deseado. Puede iniciar sesión en su cuenta de Chic Me y hacer clic en el botón "Mis pedidos" para ver sus pedidos. Por lo tanto, puede enviar un ticket para obtener más información sobre su pedido.
+=======
+					Si no ha recibido un correo electrónico de confirmación de su pedido, es posible que haya registrado su correo electrónico incorrectamente o que el correo electrónico esté en su carpeta de correo no deseado. Puede iniciar sesión en su cuenta de Boutiquefeel y hacer clic en el botón "Mis pedidos" para ver sus pedidos. Por lo tanto, puede enviar un ticket para obtener más información sobre su pedido.
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 				</p>
 			</section>
 		</article>
@@ -293,7 +350,11 @@ const question13 = {
 			</header>
 			<section>
 				<p>
+<<<<<<< HEAD
 					Aquí en Chic Me, nos enorgullecemos y nos esforzamos para asegurarnos de que se entreguen de manera oportuna. Normalmente, recibirá su pedido en 7-25 días hábiles a partir de la fecha en que se realiza.
+=======
+					Aquí en Boutiquefeel, nos enorgullecemos y nos esforzamos para asegurarnos de que se entreguen de manera oportuna. Normalmente, recibirá su pedido en 7-25 días hábiles a partir de la fecha en que se realiza.
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
                 </p>
 
 				<p>
@@ -301,7 +362,11 @@ const question13 = {
 				</p>
 
 				<p>Puede verificar el estado bajo el botón "Mis pedidos".</p>
+<<<<<<< HEAD
 				<p>Para obtener más información, haga clic en este enlace: <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
+=======
+				<p>Para obtener más información, haga clic en este enlace: <a href="https://www.Boutiquefeel.com/fs/shipping-policy-pc">https://www.Boutiquefeel.com/fs/shipping-policy-pc</a></p>
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 			</section>
 		</article>
 	`
@@ -318,7 +383,11 @@ const question14 = {
 			</header>
 			<section>
 				<p>
+<<<<<<< HEAD
 					El seguimiento de su paquete es fácil. Puede iniciar sesión en su cuenta de Chicme y encontrar toda la información de su pedido. Haga clic en "Mis pedidos" y haga clic en "Ver detalles" y podrá averiguar dónde está su paquete. También puede enviar un ticket o correo electrónico (support@chicme.com) para verificar la información de su pedido.
+=======
+					El seguimiento de su paquete es fácil. Puede iniciar sesión en su cuenta de Boutiquefeel y encontrar toda la información de su pedido. Haga clic en "Mis pedidos" y haga clic en "Ver detalles" y podrá averiguar dónde está su paquete. También puede enviar un ticket o correo electrónico (support@Boutiquefeel.com) para verificar la información de su pedido.
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 				</p>
 			</section>
 		</article>
@@ -502,9 +571,15 @@ const question23 = {
 				<h1>¿Por qué mi pago se sigue rechazando?</h1>
 			</header>
 			<section>
+<<<<<<< HEAD
 				<p>Debido a tener en cuenta la seguridad, las razones podrían ser rechazadas different.Chic me puedo aceptar PayPal, Visa y MasterCard.	Due to account safety, the declined reasons might be different.Chic Me can accept PayPal,Visa and MasterCard.
 				</p>
 				<p>Por favor, compruebe los detalles de la tarjeta en su chicme. Preste atención a la dirección de facturación, la dirección de facturación debe ser con la dirección de envío.
+=======
+				<p>Debido a tener en cuenta la seguridad, las razones podrían ser rechazadas different.Boutiquefeel puedo aceptar PayPal, Visa y MasterCard.	Due to account safety, the declined reasons might be different.Boutiquefeel can accept PayPal,Visa and MasterCard.
+				</p>
+				<p>Por favor, compruebe los detalles de la tarjeta en su Boutiquefeel. Preste atención a la dirección de facturación, la dirección de facturación debe ser con la dirección de envío.
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
                 </p>
 				<p>
 				   Es posible que el emisor de su tarjeta haya rechazado su pago. Debido theywill no nos informan de la razón para hacerlo, lo mejor es que consulte con su emisor de la tarjeta para más detalles. Si es posible, le aconsejamos que intente pagar con PayPal.
@@ -533,7 +608,11 @@ const question24 = {
                 <p>
                    Después de revisar el carrito de la compra, debajo del Resumen del pedido, ingrese su código de cupón y luego solicite que el cupón se aplique correctamente:
                 </p>
+<<<<<<< HEAD
                 <img src="https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/faq/amienabletopay.png">
+=======
+                <img src="https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/faq/Boutiquefeel/7-%E9%80%89%E4%BC%98%E6%83%A0%E5%88%B8.png">
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 			</section>
 		</article>
 	`
@@ -586,12 +665,20 @@ const question26 = {
 
 const question27 = {
   id: 'se-27',
+<<<<<<< HEAD
   title: '¿Puedo usar mis puntos de bonificación Chic Me, dinero de billetera y un código de cupón, todo al mismo tiempo?',
+=======
+  title: '¿Puedo usar mis puntos de bonificación Boutiquefeel, dinero de billetera y un código de cupón, todo al mismo tiempo?',
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
   parentId: 'root-3',
   richText: `
 		<article>
 			<header>
+<<<<<<< HEAD
 				<h1>¿Puedo usar mis puntos de bonificación Chic Me, dinero de billetera y un código de cupón, todo al mismo tiempo?</h1>
+=======
+				<h1>¿Puedo usar mis puntos de bonificación Boutiquefeel, dinero de billetera y un código de cupón, todo al mismo tiempo?</h1>
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 			</header>
 			<section>
 				<p>
@@ -616,7 +703,11 @@ const question28 = {
                     Debido a la seguridad de la cuenta, la razón puede ser diferente.
 				</p>
 				<p>
+<<<<<<< HEAD
 					Consulte los detalles de la tarjeta en su chicme. Preste atención a la dirección de facturación, la dirección de facturación debe ser con la dirección de envío.
+=======
+					Consulte los detalles de la tarjeta en su Boutiquefeel. Preste atención a la dirección de facturación, la dirección de facturación debe ser con la dirección de envío.
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 				</p>
 				<p>
 					 Es posible que el emisor de su tarjeta haya rechazado su pago. Debido theywill no nos informan de la razón para hacerlo, lo mejor es que consulte con su emisor de la tarjeta para más detalles. Si es posible, le aconsejamos que intente pagar con PayPal.
@@ -640,7 +731,11 @@ const question29 = {
 					Debido a la seguridad de la cuenta, la razón puede ser diferente. 
 				</p>
 				<p>
+<<<<<<< HEAD
 					Consulte los detalles de la tarjeta en su chicme. Preste atención a la dirección de facturación, la dirección de facturación debe ser con la dirección de envío. 
+=======
+					Consulte los detalles de la tarjeta en su Boutiquefeel. Preste atención a la dirección de facturación, la dirección de facturación debe ser con la dirección de envío. 
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 				</p>
 				<p>
 					 Es posible que el emisor de su tarjeta haya rechazado su pago. Debido theywill no nos informan de la razón para hacerlo, lo mejor es que consulte con su emisor de la tarjeta para más detalles. Si es posible, le aconsejamos que intente pagar con PayPal.
@@ -758,7 +853,11 @@ const question35 = {
 				<p>
 				Además, los artículos están en diferentes estilos y texturas, por lo que hay diferencias inevitables. Por favor danos un entendimiento
 				</p>
+<<<<<<< HEAD
 				<img src="https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/faq/howdoichoosethesize.png">
+=======
+				<img src="https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/faq/Boutiquefeel/8-%E9%80%89%E5%B0%BA%E7%A0%81.png">
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 			</section>
 		</article>
 	`
@@ -810,7 +909,11 @@ const question38 = {
 			</header>
 			<section>
 				<p>
+<<<<<<< HEAD
 					Nos disculpamos por este inconveniente, pero no le reembolsaremos la diferencia. Chicme se reserva el derecho de cambiar en cualquier momento a nuestro exclusivo criterio.
+=======
+					Nos disculpamos por este inconveniente, pero no le reembolsaremos la diferencia. Boutiquefeel se reserva el derecho de cambiar en cualquier momento a nuestro exclusivo criterio.
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 				</p>
 			</section>
 		</article>
@@ -905,9 +1008,15 @@ const question43 = {
 					Continúe enviando un boleto o contacte a la ayuda en línea y podemos ayudarlo a cambiar la dirección de envío antes del envío.
 				</p>
 				<p>
+<<<<<<< HEAD
 					Para un chequeo detallado, si estás buscando reservar tu libro futuro, inicia sesión en tu cuenta de Chic Me.
 				</p>
 				<img src="https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/faq/addshipping.png">
+=======
+					Para un chequeo detallado, si estás buscando reservar tu libro futuro, inicia sesión en tu cuenta de Boutiquefeel.
+				</p>
+				<img src="https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/faq/Boutiquefeel/9-%E5%9C%B0%E5%9D%80%E7%B0%BF.png">
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 			</section>
 		</article>
 	`
@@ -948,7 +1057,11 @@ El envío demora aproximadamente de 7 a 25 días hábiles para llegar a los paí
 				 Tenga en cuenta: Tiempo de entrega total = Tiempo de procesamiento + Tiempo de envío
                 </p>
                 <p>
+<<<<<<< HEAD
                 Para conocer la fecha estimada de llegada, consulte <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">http://www.chicme.com/fs/shipping-policy-pc</a>
+=======
+                Para conocer la fecha estimada de llegada, consulte <a href="http://www.Boutiquefeel.com/fs/shipping-policy-pc">http://www.Boutiquefeel.com/fs/shipping-policy-pc</a>
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
                 </p>
 			</section>
 		</article>
@@ -968,7 +1081,11 @@ const question46 = {
 					Después de que le enviemos el paquete, la información de envío se actualizará en el próximo centro de clasificación, que puede demorar unos días. Luego puede iniciar sesión en el estado y seguimiento de la orden.
 				</p>
 				<p>
+<<<<<<< HEAD
 				  Para conocer la fecha estimada de llegada, consulte  <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">http://www.chicme.com/fs/shipping-policy-pc</a>
+=======
+				  Para conocer la fecha estimada de llegada, consulte  <a href="http://www.Boutiquefeel.com/fs/shipping-policy-pc">http://www.Boutiquefeel.com/fs/shipping-policy-pc</a>
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
                 </p>
 			</section>
 		</article>
@@ -1002,7 +1119,11 @@ const question48 = {
 			</header>
 			<section>
 				<p>
+<<<<<<< HEAD
 					Los paquetes pueden ser entregados a su casilla de correo o firmados por sus vecinos. Le sugerimos que consulte primero su buzón de correo y con sus vecinos y familiares. Si no puede encontrarlo, revise su paquete con la compañía de envío a continuación. ¡Recuerde traer su número de rastreo! Servicio al cliente de Chicme. Si no puede encontrar su paquete, no dude en ponerse en contacto con el Servicio al cliente de Chicme.
+=======
+					Los paquetes pueden ser entregados a su casilla de correo o firmados por sus vecinos. Le sugerimos que consulte primero su buzón de correo y con sus vecinos y familiares. Si no puede encontrarlo, revise su paquete con la compañía de envío a continuación. ¡Recuerde traer su número de rastreo! Servicio al cliente de Boutiquefeel. Si no puede encontrar su paquete, no dude en ponerse en contacto con el Servicio al cliente de Boutiquefeel.
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 				</p>
 			</section>
 		</article>
@@ -1082,7 +1203,11 @@ const question52 = {
 			</header>
 			<section>
 				<p>
+<<<<<<< HEAD
 					Por favor, póngase en contacto con la compañía de envío para obtener más información. Si aún no puede encontrar su paquete, comuníquese con el servicio al cliente de Chic Me lo antes posible mediante el envío de un boleto. Queremos estar más que felices de resolver este problema.
+=======
+					Por favor, póngase en contacto con la compañía de envío para obtener más información. Si aún no puede encontrar su paquete, comuníquese con el servicio al cliente de Boutiquefeel lo antes posible mediante el envío de un boleto. Queremos estar más que felices de resolver este problema.
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 				</p>
 			</section>
 		</article>
@@ -1119,7 +1244,11 @@ const question54 = {
 			</header>
 			<section>
 				<p>
+<<<<<<< HEAD
 					Enviamos generalmente con su oficina de correos local. No debe haber tarifas adicionales cuando se usa el correo regular. Servicio al cliente de Chicme enviando un boleto.
+=======
+					Enviamos generalmente con su oficina de correos local. No debe haber tarifas adicionales cuando se usa el correo regular. Servicio al cliente de Boutiquefeel enviando un boleto.
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 				</p>
 			</section>
 		</article>
@@ -1140,7 +1269,11 @@ const question55 = {
 El envío demora aproximadamente de 3 a 25 días hábiles para llegar a los países de destino.
 				</p>
 				<p>Tenga en cuenta: Tiempo de entrega total = Tiempo de procesamiento + Tiempo de envío</p>
+<<<<<<< HEAD
 				<p>Para conocer la fecha estimada de llegada, consulte  <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">http://www.chicme.com/fs/shipping-policy-pc</a></p>
+=======
+				<p>Para conocer la fecha estimada de llegada, consulte  <a href="http://www.Boutiquefeel.com/fs/shipping-policy-pc">http://www.Boutiquefeel.com/fs/shipping-policy-pc</a></p>
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 			</section>
 		</article>
 	`
@@ -1156,7 +1289,11 @@ const question56 = {
 			</header>
 			<section>
 				<p>
+<<<<<<< HEAD
 					Póngase en contacto con su oficina de correos local o con el servicio de mensajería directamente con su número de seguimiento. Si aún no puede encontrar su paquete, no dude en ponerse en contacto con el Servicio al cliente de Chicme.
+=======
+					Póngase en contacto con su oficina de correos local o con el servicio de mensajería directamente con su número de seguimiento. Si aún no puede encontrar su paquete, no dude en ponerse en contacto con el Servicio al cliente de Boutiquefeel.
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 				</p>
 			</section>
 		</article>
@@ -1194,7 +1331,11 @@ const question58 = {
 El envío demora aproximadamente de 3 a 25 días hábiles para llegar a los países de destino.
 				</p>
 				<p>Tenga en cuenta: Tiempo de entrega total = Tiempo de procesamiento + Tiempo de envío</p>
+<<<<<<< HEAD
 				<p>Para conocer la fecha estimada de llegada, consulte  <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">http://www.chicme.com/fs/shipping-policy-pc</a></p>
+=======
+				<p>Para conocer la fecha estimada de llegada, consulte  <a href="http://www.Boutiquefeel.com/fs/shipping-policy-pc">http://www.Boutiquefeel.com/fs/shipping-policy-pc</a></p>
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 			</section>
 		</article>
 	`
@@ -1214,7 +1355,11 @@ const question59 = {
 El envío demora aproximadamente de 3 a 25 días hábiles para llegar a los países de destino.
 				</p>
 				<p>Tenga en cuenta: Tiempo de entrega total = Tiempo de procesamiento + Tiempo de envío</p>
+<<<<<<< HEAD
 				<p>Para conocer la fecha estimada de llegada, consulte <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">http://www.chicme.com/fs/shipping-policy-pc</a></p>
+=======
+				<p>Para conocer la fecha estimada de llegada, consulte <a href="http://www.Boutiquefeel.com/fs/shipping-policy-pc">http://www.Boutiquefeel.com/fs/shipping-policy-pc</a></p>
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 			</section>
 		</article>
 	`
@@ -1235,7 +1380,11 @@ const question60 = {
 El envío demora aproximadamente de 3 a 25 días hábiles para llegar a los países de destino.
 				</p>
 				<p>Tenga en cuenta: Tiempo de entrega total = Tiempo de procesamiento + Tiempo de envío</p>
+<<<<<<< HEAD
 				<p>Para conocer la fecha estimada de llegada, consulte <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">http://www.chicme.com/fs/shipping-policy-pc</a></p>
+=======
+				<p>Para conocer la fecha estimada de llegada, consulte <a href="http://www.Boutiquefeel.com/fs/shipping-policy-pc">http://www.Boutiquefeel.com/fs/shipping-policy-pc</a></p>
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 			</section>
 		</article>
 	`
@@ -1277,7 +1426,11 @@ const question61 = {
 				<p>
 					La tarifa de envío original y el seguro no son reembolsables.
 				</p>
+<<<<<<< HEAD
 				<p>No ofrecemos Flete por cobrar (FTC). Las devoluciones se realizarán a su propio costo. a menos que Chic Me haga un error.</p>
+=======
+				<p>No ofrecemos Flete por cobrar (FTC). Las devoluciones se realizarán a su propio costo. a menos que Boutiquefeel haga un error.</p>
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 			</section>
 		</article>
 	`
@@ -1296,7 +1449,11 @@ const question62 = {
 					El reembolso vuelve a su forma de pago original:
 				</p>
 				<p>Si pagó con PayPal, el reembolso llegará a su cuenta de PayPal dentro de 1-2 días hábiles; Tenga en cuenta que no puede controlar la velocidad de su banco de tarjeta de crédito.</p>
+<<<<<<< HEAD
 			    <p>Chicme no puede controlar la velocidad de procesamiento de su banco de tarjetas. Solicite información detallada al banco de la tarjeta.</p>
+=======
+			    <p>Boutiquefeel no puede controlar la velocidad de procesamiento de su banco de tarjetas. Solicite información detallada al banco de la tarjeta.</p>
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 			    <p>Nos disculpamos sinceramente por los inconvenientes causados</p>
 			</section>
 		</article>
@@ -1404,7 +1561,11 @@ const question68 = {
 			</header>
 			<section>
 				<p>
+<<<<<<< HEAD
 					Si recibió un artículo defectuoso, inicie sesión en su cuenta de Chic Me y envíelo dentro de los 30 días posteriores a la entrega. Al enviar el ticket, proporcione una descripción del artículo defectuoso y algunas imágenes. Asegúrese de enviar un ticket para que podamos procesar el problema por usted.
+=======
+					Si recibió un artículo defectuoso, inicie sesión en su cuenta de Boutiquefeel y envíelo dentro de los 30 días posteriores a la entrega. Al enviar el ticket, proporcione una descripción del artículo defectuoso y algunas imágenes. Asegúrese de enviar un ticket para que podamos procesar el problema por usted.
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 				</p>
 			</section>
 		</article>
@@ -1479,7 +1640,11 @@ const question72 = {
 					el reembolso se devuelve a su forma de pago original:
 				</p>
 				<p>Si pagó con PayPal, el reembolso llegará a su cuenta de PayPal dentro de 1-2 días hábiles; Tenga en cuenta que no puede controlar la velocidad de su banco de tarjeta de crédito.</p>
+<<<<<<< HEAD
 				<p>Chicme no puede controlar la velocidad de procesamiento de su banco de tarjetas. Solicite información detallada al banco de la tarjeta.</p>
+=======
+				<p>Boutiquefeel no puede controlar la velocidad de procesamiento de su banco de tarjetas. Solicite información detallada al banco de la tarjeta.</p>
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 			    <p>Nos disculpamos sinceramente por los inconvenientes causados</p>
 			</section>
 		</article>
@@ -1517,7 +1682,11 @@ const question74 = {
 				el reembolso se devuelve a su forma de pago original:
 				</p>
 				<p>Si pagó con PayPal, el reembolso llegará a su cuenta de PayPal dentro de 1-2 días hábiles; Tenga en cuenta que no puede controlar la velocidad de su banco de tarjeta de crédito.</p>
+<<<<<<< HEAD
 				<p>Chicme no puede controlar la velocidad de procesamiento de su banco de tarjetas. Solicite información detallada al banco de la tarjeta.</p>
+=======
+				<p>Boutiquefeel no puede controlar la velocidad de procesamiento de su banco de tarjetas. Solicite información detallada al banco de la tarjeta.</p>
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 			    <p>Nos disculpamos sinceramente por los inconvenientes causados</p>
 			</section>
 		</article>
@@ -1534,7 +1703,11 @@ const question75 = {
 			</header>
 			<section>
 				<p>
+<<<<<<< HEAD
 					No ofrecemos Flete por cobrar (FTC). Las devoluciones se realizarán a su propio costo. a menos que Chic Me haga un error.
+=======
+					No ofrecemos Flete por cobrar (FTC). Las devoluciones se realizarán a su propio costo. a menos que Boutiquefeel haga un error.
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 				</p>
 			</section>
 		</article>
@@ -1579,12 +1752,20 @@ const question77 = {
 }
 const question78 = {
   id: 'se-78',
+<<<<<<< HEAD
   title: 'Will Chic Me guardará mi información personal?',
+=======
+  title: 'Will Boutiquefeel guardará mi información personal?',
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
   parentId: 'root-7',
   richText: `
 		<article>
 			<header>
+<<<<<<< HEAD
 				<h1>Will Chic Me guardará mi información personal?</h1>
+=======
+				<h1>Will Boutiquefeel guardará mi información personal?</h1>
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 			</header>
 			<section>
 				<p>
@@ -1607,7 +1788,11 @@ const question79 = {
 			</header>
 			<section>
 				<p>
+<<<<<<< HEAD
 					Chic Me fue fundada por personas con casi 10 años en la industria del comercio electrónico. Tomamos su negocio en serio y, sobre todo, queremos que nuestros clientes sean felices. Aceptamos varios de los métodos de pago en línea más confiables disponibles en la actualidad.
+=======
+					Boutiquefeel fue fundada por personas con casi 10 años en la industria del comercio electrónico. Tomamos su negocio en serio y, sobre todo, queremos que nuestros clientes sean felices. Aceptamos varios de los métodos de pago en línea más confiables disponibles en la actualidad.
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 				</p>
 			</section>
 		</article>
@@ -1615,12 +1800,20 @@ const question79 = {
 }
 const question80 = {
   id: 'se-80',
+<<<<<<< HEAD
   title: '¿Cómo puedo cancelar la suscripción de Chicme?',
+=======
+  title: '¿Cómo puedo cancelar la suscripción de Boutiquefeel?',
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
   parentId: 'root-7',
   richText: `
 		<article>
 			<header>
+<<<<<<< HEAD
 				<h1>¿Cómo puedo cancelar la suscripción de Chicme?</h1>
+=======
+				<h1>¿Cómo puedo cancelar la suscripción de Boutiquefeel?</h1>
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 			</header>
 			<section>
 				<p>
@@ -1641,9 +1834,15 @@ const question81 = {
 			</header>
 			<section>
 				<p>
+<<<<<<< HEAD
 					Chic Me es un sitio web de compras único con un tono distintivo centrado en la moda femenina. Ofrecemos productos de alto rendimiento que incluyen ropa de mujer, joyas, productos de belleza y salud, zapatos, bolsos y más. Nuestra visión es traer felicidad a la vida de toda mujer.
 				</p>
 				<p>Las características de Chic Me incluyen, pero no están limitadas a:</p>
+=======
+					Boutiquefeel es un sitio web de compras único con un tono distintivo centrado en la moda femenina. Ofrecemos productos de alto rendimiento que incluyen ropa de mujer, joyas, productos de belleza y salud, zapatos, bolsos y más. Nuestra visión es traer felicidad a la vida de toda mujer.
+				</p>
+				<p>Las características de Boutiquefeel incluyen, pero no están limitadas a:</p>
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 				<ul>
 				    <li>o100,000 + estilos de productos y más de 500 estilos de actualización diaria, Recopilamos información sobre la moda de las mujeres y obtenemos productos relevantes lo antes posible</li>
                     <li>oPrecios 50-80% más baratos que los locales ,Cooperamos con muchos fabricantes en lugar de recurrir a intermediarios, Compramos en escala, por lo que el precio es más bajo que el precio de mercado</li>
@@ -1659,11 +1858,16 @@ Cupones de inscripción y actividades temáticas</li>
 }
 const question82 = {
   id: 'se-82',
+<<<<<<< HEAD
   title: '¿Dónde encontrar Chic Me?',
+=======
+  title: '¿Dónde encontrar Boutiquefeel?',
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
   parentId: 'root-8',
   richText: `
 		<article>
 			<header>
+<<<<<<< HEAD
 				<h1>¿Dónde encontrar Chic Me?</h1>
 			</header>
 			<section>
@@ -1672,18 +1876,36 @@ const question82 = {
 				</p>
 				<p>Ahora estamos enviando a la mayoría de los países en todo el mundo con sitios web compatibles, los Estados Unidos, España, Francia, Rusia, Alemania, Italia, Australia y el Medio Oriente. </p>
 				<p>Si desea saber qué hay de nuevo en Chic Me, simplemente manténgase conectado con nosotros a través de nuestro Facebook, Instagram, Youtube, Pinterest, Tumblr!</p>
+=======
+				<h1>¿Dónde encontrar Boutiquefeel?</h1>
+			</header>
+			<section>
+				<p>
+					Como tienda en línea, puede encontrar Boutiquefeel donde quiera que tenga acceso a Internet.
+				</p>
+				<p>Ahora estamos enviando a la mayoría de los países en todo el mundo con sitios web compatibles, los Estados Unidos, España, Francia, Rusia, Alemania, Italia, Australia y el Medio Oriente. </p>
+				<p>Si desea saber qué hay de nuevo en Boutiquefeel, simplemente manténgase conectado con nosotros a través de nuestro Facebook, Instagram, Youtube, Pinterest, Tumblr!</p>
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 			</section>
 		</article>
 	`
 }
 const question83 = {
   id: 'se-83',
+<<<<<<< HEAD
   title: '¿Por qué Chic Me?',
+=======
+  title: '¿Por qué Boutiquefeel?',
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
   parentId: 'root-8',
   richText: `
 		<article>
 			<header>
+<<<<<<< HEAD
 				<h1>¿Por qué Chic Me?</h1>
+=======
+				<h1>¿Por qué Boutiquefeel?</h1>
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 			</header>
 			<section>
 				<ul>
@@ -1692,10 +1914,17 @@ const question83 = {
 				    <li>Política de envío y devolución gratuita;</li>
 				    <li>Servicio al cliente excepcional.</li>
                 </ul>
+<<<<<<< HEAD
                 <p>Si te registraste en Chic Me usando tu ID de Facebook, puedes desactivar los privilegios de Facebook de Chic Me usando tu computadora o dispositivo móvil.</p>
 			    <p>En su computadora, visite http://facebook.com/settings/?tab=applications. Luego seleccione la "X" en el icono de Chic Me.</p>
 			    <p>En su aplicación de Facebook, simplemente seleccione "Configuración de la cuenta" en el menú. A continuación, seleccione "Aplicaciones" -> "Chic Me" -> "Eliminar ChicMe".</p>
 			    <p>Lamentablemente, no hay ninguna opción actualmente disponible para usuarios basados ​​en correo electrónico que deseen eliminar su cuenta Chic Me.</p>
+=======
+                <p>Si te registraste en Boutiquefeel usando tu ID de Facebook, puedes desactivar los privilegios de Facebook de Boutiquefeel usando tu computadora o dispositivo móvil.</p>
+			    <p>En su computadora, visite http://facebook.com/settings/?tab=applications. Luego seleccione la "X" en el icono de Boutiquefeel.</p>
+			    <p>En su aplicación de Facebook, simplemente seleccione "Configuración de la cuenta" en el menú. A continuación, seleccione "Aplicaciones" -> "Boutiquefeel" -> "Eliminar Boutiquefeel".</p>
+			    <p>Lamentablemente, no hay ninguna opción actualmente disponible para usuarios basados ​​en correo electrónico que deseen eliminar su cuenta Boutiquefeel.</p>
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 			</section>
 		</article>
 	`
@@ -1711,7 +1940,11 @@ const question84 = {
 			</header>
 			<section>
 				<p>
+<<<<<<< HEAD
 					Sí, es real. Chic Me fue fundada por personas con casi 10 años en la industria del comercio electrónico. Aceptamos varios de los métodos de pago en línea más confiables disponibles en la actualidad.
+=======
+					Sí, es real. Boutiquefeel fue fundada por personas con casi 10 años en la industria del comercio electrónico. Aceptamos varios de los métodos de pago en línea más confiables disponibles en la actualidad.
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 				</p>
 			</section>
 		</article>
@@ -1737,7 +1970,11 @@ const question85 = {
 const question86 = {
   id: 'se-86',
   title: '¿Dónde puedo encontrar el artículo que guardé?',
+<<<<<<< HEAD
   parentId: 'root-8',
+=======
+  parentId: 'root-7',
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
   richText: `
 		<article>
 			<header>
@@ -1783,7 +2020,11 @@ const question88 = {
 				</p>
 				<p>El envío demora aproximadamente de 3 a 25 días hábiles para llegar a los países de destino.</p>
 				<p>Tenga en cuenta: Tiempo de entrega total = Tiempo de procesamiento + Tiempo de envío</p>
+<<<<<<< HEAD
 				<p>Para conocer la fecha estimada de llegada, consulte <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">http://www.chicme.com/fs/shipping-policy-pc</a></p>
+=======
+				<p>Para conocer la fecha estimada de llegada, consulte <a href="http://www.Boutiquefeel.com/fs/shipping-policy-pc">http://www.Boutiquefeel.com/fs/shipping-policy-pc</a></p>
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 			</section>
 		</article>
 	`
@@ -1799,7 +2040,11 @@ const question89 = {
 			</header>
 			<section>
 				<p>
+<<<<<<< HEAD
 					Hola, tenemos la política de venta al por mayor: http://www.chicme.com/fs/wholesale-program-pc you can have a look
+=======
+					Hola, tenemos la política de venta al por mayor: http://www.Boutiquefeel.com/fs/wholesale-program-pc you can have a look
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 				</p>
 			</section>
 		</article>
@@ -1816,7 +2061,11 @@ const question90 = {
 			</header>
 			<section>
 				<p>
+<<<<<<< HEAD
 					Hola, si desea colaborar con nosotros, póngase en contacto con: correo electrónico: affiliates@chicme.com Nuestro colega quiere responder por usted.
+=======
+					Hola, si desea colaborar con nosotros, póngase en contacto con: correo electrónico: affiliates@Boutiquefeel.com Nuestro colega quiere responder por usted.
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
 				</p>
 			</section>
 		</article>
@@ -1992,7 +2241,11 @@ const secondaries = [
 const questions = [
   {
   	id: 'root-1',
+<<<<<<< HEAD
     title: 'cuenta',
+=======
+    title: 'cuenta',   cuenta:órdenes:pago:productos:entrega:Vuelta:Seguridad y privacidad
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
     questions: [
       question1,
       question2,
@@ -2114,7 +2367,11 @@ const questions = [
   },
   {
     id: 'root-8',
+<<<<<<< HEAD
     title: 'Acerca de Chic Me',
+=======
+    title: 'Acerca de Boutiquefeel',
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
     questions: [
       question81,
       question82,

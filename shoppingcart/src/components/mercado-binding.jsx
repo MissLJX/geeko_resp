@@ -95,6 +95,7 @@ const MercadoBinding = class extends React.Component {
       	token: response.id
       })
 
+<<<<<<< HEAD
       if (this.props.exsiting) {
         addMercadoCard(response.id).then(() => {
           this.props.addcardback()
@@ -112,6 +113,19 @@ const MercadoBinding = class extends React.Component {
           }
         })
       }
+=======
+      mercadopay({
+      	email: this.state.email,
+      	paymentMethodId: this.state.paymentMethod,
+      	token: response.id
+      }).then(data => data.result).then(({success, transactionId, details, solutions}) => {
+        if (success) {
+          window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
+        } else {
+          alert(details + '\n' + solutions)
+        }
+      })
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
     }
   }
 
