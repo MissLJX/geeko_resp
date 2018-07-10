@@ -21,7 +21,7 @@ const Support = class extends React.Component {
           <SupportButton onClick={() => { return false }} href="#" color="#599386" label={intl.formatMessage({id: 'onlinehelp'})}>&#xe665;</SupportButton>
         </Link>
       </li>
-  		<li><SupportButton href="https://m.me/804997446264798" color="#4797b3" label={intl.formatMessage({id: 'messageus'})}>&#xe664;</SupportButton></li>
+  		<li><SupportButton href="https://m.me/804997446264798?isouter=1" color="#4797b3" label={intl.formatMessage({id: 'messageus'})}>&#xe664;</SupportButton></li>
   		<li><SupportButton href="/support/ticket" color="#cc5139" label={intl.formatMessage({id: 'tickets'})}>&#xe666;</SupportButton></li>
   	</ul>
 
