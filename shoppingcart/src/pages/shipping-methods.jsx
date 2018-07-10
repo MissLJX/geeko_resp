@@ -5,6 +5,7 @@ import {selectMethod} from '../store/actions.js'
 import FullFixed from '../components/msite/full-fixed.jsx'
 import Money from '../components/money.jsx'
 import {Grey} from '../components/text.jsx'
+import {injectIntl} from 'react-intl'
 
 const mapStateToProps = (state) => {
   return {
@@ -71,8 +72,8 @@ const ShippingMethods = class extends React.Component {
   }
 
   render () {
-  	const {methods, selectedMethod} = this.props
-  	return <FullFixed onClose={this.close} title="Shipping Methods">
+  	const {methods, selectedMethod, intl} = this.props
+  	return <FullFixed onClose={this.close} title={intl.formatMessage({id: 'shipping_method'})}>
   		<Methods>
   			{
   				methods && methods.map(method => (
@@ -89,7 +90,7 @@ const ShippingMethods = class extends React.Component {
   			}
   		</Methods>
 
-  		<p style={{fontSize: 12, padding: '12px 10px', borderTop: '1px dashed #666'}}><Grey>Express Shipping : We will choose the most appropciate carrier for you .</Grey></p>
+  		<p style={{fontSize: 12, padding: '12px 10px', borderTop: '1px dashed #666'}}><Grey>{intl.formatMessage({id: 'shipping_tip'})}</Grey></p>
   		<div style={{padding: '12px 10px'}}>
   			<img style={{width: '100%'}} src="https://dgzfssf1la12s.cloudfront.net/site/ninimour/msite/icon17.png"/>
   		</div>
@@ -97,4 +98,4 @@ const ShippingMethods = class extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ShippingMethods)
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(ShippingMethods))

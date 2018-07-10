@@ -4,6 +4,7 @@ import {required, email, zip} from '../validator.jsx'
 import {StyledControl} from './styled-control.jsx'
 import {FormLayout, MultiControl} from './layout.jsx'
 import {getCountries, getStates} from '../../api'
+import {injectIntl} from 'react-intl'
 
 const AdressForm = class extends React.Component {
   constructor (props) {
@@ -41,7 +42,6 @@ const AdressForm = class extends React.Component {
 
   handleSubmit (event) {
     event.preventDefault()
-
     const {
       name,
       streetAddress1,
@@ -99,9 +99,9 @@ const AdressForm = class extends React.Component {
         isDefaultAddress
       })
 
-      if (isStructotState(state)) {
-        this.getStates(countryValue)
-      }
+      // if (isStructotState(state)) {
+      this.getStates(countryValue)
+      // }
     }
 
     getCountries().then(({result}) => {
@@ -120,11 +120,12 @@ const AdressForm = class extends React.Component {
   }
 
   render () {
+    const {intl} = this.props
   	return <Form style={this.props.style} ref={c => { this.form = c }} onSubmit={this.handleSubmit.bind(this)}>
       <FormLayout>
     		<StyledControl>
     			<label>
-    				Full Name*
+    				{intl.formatMessage({id: 'full_name'})}*
           </label>
           <Input
             name='name'
@@ -135,7 +136,7 @@ const AdressForm = class extends React.Component {
 
         <StyledControl>
           <label>
-            Street Address*
+            {intl.formatMessage({id: 'street_address'})}*
           </label>
           <Input
             name='streetAddress1'
@@ -146,21 +147,21 @@ const AdressForm = class extends React.Component {
 
         <StyledControl>
           <label>
-            Unit
+            {intl.formatMessage({id: 'unit'})}
           </label>
           <Input
             name='unit'
             value={this.state.unit}
-            onChange={this.handleInputChange}
-            validations={[required]}/>
+            onChange={this.handleInputChange}/>
         </StyledControl>
 
         <MultiControl>
           <StyledControl>
             <label>
-              Country
+              {intl.formatMessage({id: 'country'})}*
             </label>
             <Select
+              className="x-select"
               value={this.state.country}
               name='country'
               onChange={(evt) => { this.handleInputChange(evt); this.changeCountry(evt) }}
@@ -177,12 +178,13 @@ const AdressForm = class extends React.Component {
 
           <StyledControl>
             <label>
-              State
+              {intl.formatMessage({id: 'state'})}
             </label>
 
             {
               this.state.states && this.state.states.length ? (
                 <Select
+                  className="x-select"
                   name='state'
                   value={this.state.state}
                   onChange={this.handleInputChange}
@@ -209,19 +211,18 @@ const AdressForm = class extends React.Component {
 
         <StyledControl>
           <label>
-            City
+            {intl.formatMessage({id: 'city'})}
           </label>
           <Input
             name='city'
             value={this.state.city}
-            onChange={this.handleInputChange}
-            validations={[required]}/>
+            onChange={this.handleInputChange}/>
         </StyledControl>
 
         <MultiControl>
           <StyledControl>
             <label>
-              Zip Code*
+              {intl.formatMessage({id: 'zip_code'})}*
             </label>
             <Input
               name='zipCode'
@@ -232,7 +233,7 @@ const AdressForm = class extends React.Component {
 
           <StyledControl>
             <label>
-              Phone Number*
+              {intl.formatMessage({id: 'phone_number'})}*
             </label>
             <Input
               name='phoneNumber'
@@ -243,11 +244,21 @@ const AdressForm = class extends React.Component {
         </MultiControl>
 
     		<div>
-          <Button>Submit</Button>
+          <Button className="__submitbtn" style={{
+            display: 'block',
+            backgroundColor: '#222',
+            color: '#fff',
+            height: 40,
+            lineHeight: '40px',
+            textAlign: 'center',
+            outline: 'none',
+            border: 'none',
+            width: '100%'
+          }}>{intl.formatMessage({id: 'submit'})}</Button>
         </div>
       </FormLayout>
   	</Form>
   }
 }
 
-export default AdressForm
+export default injectIntl(AdressForm)

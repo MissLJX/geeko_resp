@@ -5,6 +5,8 @@ import {refreshCart} from '../store/actions.js'
 import FullFixed from '../components/msite/full-fixed.jsx'
 import AddressForm from '../components/msite/address-form.jsx'
 import {addAddress, editAddress, paypalAddress} from '../api'
+import {injectIntl} from 'react-intl'
+import {__route_root__} from '../utils/utils.js'
 
 export const __address_token__ = window.token
 
@@ -31,14 +33,14 @@ const Modal = class extends React.Component {
 
   close (evt) {
   	evt.stopPropagation()
-    this.props.history.goBack()
+    this.props.history.push(`${window.ctx || ''}${__route_root__}/`)
   }
 
   editAddress (address) {
   	if (__address_token__) {
   		paypalAddress({...address, id: this.props.address.id, token: __address_token__}).then(() => {
   			this.props.REFRESH()
-  			this.props.history.goBack()
+  			this.props.history.push(`${window.ctx || ''}${__route_root__}/`)
   		}).catch(({result}) => {
   			alert(result)
   		})
@@ -47,7 +49,7 @@ const Modal = class extends React.Component {
 
   		addressOpreator({...address, id: this.props.address ? this.props.address.id : null}).then(() => {
   			this.props.REFRESH()
-  			this.props.history.goBack()
+  			this.props.history.push(`${window.ctx || ''}${__route_root__}/`)
   		}).catch(({result}) => {
   			alert(result)
   		})
@@ -55,7 +57,7 @@ const Modal = class extends React.Component {
   }
 
   render () {
-    const { address } = this.props
+    const { address, intl } = this.props
 
     const FormBody = styled.div`
     	max-width: 320px;
@@ -65,10 +67,10 @@ const Modal = class extends React.Component {
 
     `
 
-    return <FullFixed onClose={this.close} title="Address">
+    return <FullFixed onClose={this.close} title={intl.formatMessage({id: 'address'})}>
 
     	<FormBody >
-	    	<p>* Indicates a field is required</p>
+	    	<p>* {intl.formatMessage({id: 'required_tips'})}</p>
 	    	<AddressForm editAddress={this.editAddress} style={{marginTop: 15}} address={address}/>
     	</FormBody>
 
@@ -76,4 +78,4 @@ const Modal = class extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Modal)
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(Modal))

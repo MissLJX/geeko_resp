@@ -78,15 +78,15 @@ export const zip = (value, props, components) => {
   switch (country) {
   	case 'US':
   		reg = __reg_zip_us__
-  		error = <p>{value} is not a valid ZipCode</p>
+  		error = `${value} is not a valid ZipCode`
   		break
   	case 'GB':
   		reg = __reg_zip_uk__
-  		error = <p>Wrong ZIP CODE! Please offer us one or two-letter and one-two figures with a space end with one figure and two letters. (e.g. TN37 7HL,CW8 3AD)</p>
+  		error = `Wrong ZIP CODE! Please offer us one or two-letter and one-two figures with a space end with one figure and two letters. (e.g. TN37 7HL,CW8 3AD)`
   		break
   	case 'BR':
   		reg = __reg_zip_br__
-  		error = <p>O formato do endereço está incorreto, preencha o formulário de [01310-000]</p>
+  		error = `O formato do endereço está incorreto, preencha o formulário de [01310-000]`
   		break
   	default:
   		break

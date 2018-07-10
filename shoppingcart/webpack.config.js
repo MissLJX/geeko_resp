@@ -56,6 +56,9 @@ module.exports = {
     }),
 
     new webpack.NamedModulesPlugin(),
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.DefinePlugin({
+      'siteurl': JSON.stringify('http://localhost:8080/wanna')
+    })
   ]
 }

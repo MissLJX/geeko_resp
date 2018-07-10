@@ -32,21 +32,15 @@ const StyledHead = styled.div`
 	}
 `
 
-const LocalHouseHead = ({icon, title, selected, groupClick}) => <StyledHead >
+const IvalidItemsHead = ({clearall}) => <StyledHead >
   <div className="x-table __vm x-fw x-fh __fixed">
-  	<div className="x-cell">
-      <CheckBox onClick={() => { groupClick(!selected) }} className={selected ? 'selected' : ''}/>
-    </div>
     <div className="x-cell">
-		All
+		Ivalid Items
     </div>
   	<div className="x-cell __right">
-  		<Ellipsis>
-  			<img src={icon}/>
-        	<span>{title}</span>
-  		</Ellipsis>
+  		<span style={{cursor: 'pointer'}} onClick={clearall}>Clear All</span>
     </div>
   </div>
 </StyledHead>
 
-export default LocalHouseHead
+export default IvalidItemsHead

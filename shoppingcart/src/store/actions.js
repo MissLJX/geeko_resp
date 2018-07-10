@@ -7,7 +7,11 @@ import {get,
   editProduct,
   mercadocards,
   creditcards,
-  getpaypal} from '../api'
+  getpaypal,
+  getcoupons,
+  deleteitem,
+  deleteitems,
+  getSessionShipping} from '../api'
 
 export const LOADING = 'LOADING'
 export const LOADED = 'LOADED'
@@ -25,6 +29,7 @@ export const TOGGLE_CREDIT = 'TOGGLE_CREDIT'
 export const SET_SECURITY_CODE = 'SET_SECURITY_CODE'
 export const CREDIT_CARDS = 'CREDIT_CARDS'
 export const SET_INSTALLMENTS = 'SET_INSTALLMENTS'
+export const GET_COUPONS = 'GET_COUPONS'
 
 export const loading = () => {
   return {
@@ -107,27 +112,57 @@ export const setCreditCards = (cards) => {
   }
 }
 
+export const getCoupons = (coupons) => {
+  return {
+    type: GET_COUPONS,
+    coupons
+  }
+}
+
 export const fetchAll = () => {
   const fetchCart = get().then(data => data.result)
   const fetchMe = me().then(data => data.result)
   const paypalUrl = getpaypal().then(data => data.result)
 
+  const excuteArr = window.__is_login__ ? [fetchCart, paypalUrl, fetchMe] : [fetchCart, paypalUrl]
+
   return dispatch => {
     dispatch(loading())
-    return Promise.all([fetchCart, fetchMe, paypalUrl]).then(values => dispatch(loaded(values)))
+    return Promise.all(excuteArr).then(values => {
+      if (values.length === 2) {
+        values.push({})
+      }
+
+      const cart = values[0]
+      if (window.token && !cart.shippingDetail) {
+        getSessionShipping(({result}) => {
+          cart.shippingDetail = result
+          dispatch(loaded([cart, values[1], values[2]]))
+        })
+      } else {
+        dispatch(loaded(values))
+      }
+    })
   }
 }
 
 export const refreshCart = (cart) => {
+  const fetchCart = get().then(data => data.result)
+  const fetchCoupon = getcoupons().then(data => data.result)
+
   if (cart) {
-    return {
-      type: REFRESHED,
-      cart
+    return dispatch => {
+      dispatch(refreshed(cart))
+      return fetchCoupon.then(coupons => dispatch(getCoupons(coupons)))
     }
   } else {
     return dispatch => {
       dispatch(refresing())
-      return get().then(data => data.result).then(cart => dispatch(refreshed(cart)))
+
+      return Promise.all([fetchCart, fetchCoupon]).then(values => {
+        dispatch(refreshed(values[0]))
+        dispatch(getCoupons(values[1]))
+      })
     }
   }
 }
@@ -165,6 +200,24 @@ export const editItem = (oldId, newId, quantity) => {
   }
 }
 
+export const deleteItem = (itemId) => {
+  return dispatch => {
+    dispatch(refresing())
+    return deleteitem(itemId).then(data => data.result).then(cart => {
+      dispatch(refreshed(cart))
+    })
+  }
+}
+
+export const deleteItems = (itemIds) => {
+  return dispatch => {
+    dispatch(refresing())
+    return deleteitems(itemIds).then(data => data.result).then(cart => {
+      dispatch(refreshed(cart))
+    })
+  }
+}
+
 export const getMercadoCards = () => {
   return dispatch => {
     return mercadocards().then(data => data.result).then(cards => {
@@ -177,6 +230,14 @@ export const getCreditCards = () => {
   return dispatch => {
     return creditcards().then(data => data.result).then(cards => {
       dispatch(setCreditCards(cards))
+    })
+  }
+}
+
+export const fetchCoupons = () => {
+  return dispatch => {
+    return getcoupons().then(data => data.result).then(coupons => {
+      dispatch(getCoupons(coupons))
     })
   }
 }

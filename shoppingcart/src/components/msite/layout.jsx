@@ -21,7 +21,7 @@ const StyledBoxHead = styled.div`
 	& > div{
 		width: 100%;
 		height: 100%;
-		border-bottom: 1px solid #e5e5e5;
+		${props => (!props.single ? 'border-bottom: 1px solid #e5e5e5;' : '')}
 	}
 
 	& .__title{
@@ -31,7 +31,7 @@ const StyledBoxHead = styled.div`
 `
 
 export const BoxClickHead = (props) => (
-  <StyledBoxHead>
+  <StyledBoxHead {...props}>
     <div className="x-table __vm">
       <div className="x-cell">
         <span className="__title">{props.title}</span>

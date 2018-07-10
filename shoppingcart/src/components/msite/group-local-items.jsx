@@ -1,14 +1,7 @@
 import React from 'react'
-import OverSeasHouseHead from './overseas-house-head.jsx'
+import LocalHouseHead from './local-house-head.jsx'
 import Items from './items.jsx'
-import styled from 'styled-components'
 
-const Tip = styled.div`
-  background-color: #fdeff5;
-  padding: 10px;
-  line-height: 18px;
-  font-size: 12px;
-`
 export default class extends React.Component {
   constructor (props) {
     super(props)
@@ -25,20 +18,16 @@ export default class extends React.Component {
   }
 
   disabledFunc (item) {
-    return false
+    return !item.isDomesticDeliveryEnabled
   }
 
   render () {
-    const {shippingMethod, items, selected, itemSelect, shippingMsg} = this.props
+    const {icon, title, items} = this.props
     return <div>
-		  <OverSeasHouseHead groupClick={this.groupClick} shippingMethod={shippingMethod} selected={this.selected()}/>
-		  {
-        shippingMsg && <Tip>
-          <span dangerouslySetInnerHTML={{__html: shippingMsg}}/>
-
-        </Tip>
-      }
-      <Items serverTime={this.props.serverTime}
+		  <LocalHouseHead icon={icon} title={title} groupClick={this.groupClick} selected={this.selected()}/>
+		  <Items serverTime={this.props.serverTime}
+        overseasHandle={this.props.overseasHandle}
+        localitem="true"
         disabledFunc={this.disabledFunc}
         quantityChange={this.props.quantityChange}
         itemEdit={this.props.itemEdit}

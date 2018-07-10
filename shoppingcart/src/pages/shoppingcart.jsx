@@ -3,8 +3,12 @@ import styled from 'styled-components'
 import {Switch, Route, Link, Redirect} from 'react-router-dom'
 import Loading from '../components/msite/loading.jsx'
 import Empty from '../components/msite/empty.jsx'
+import Ask from '../components/ask.jsx'
+import FixedMessage from '../components/msite/fixed-message.jsx'
 import {Boxs, Box, BoxClickHead, BoxBody, LineBox, BoxHead} from '../components/msite/layout.jsx'
 import GroupOverseasItems from '../components/msite/group-overseas-items.jsx'
+import GroupLocalItems from '../components/msite/group-local-items.jsx'
+import GroupInvalidItems from '../components/msite/group-ivalid-items.jsx'
 import Address from '../components/msite/address.jsx'
 import {Grey, Red} from '../components/text.jsx'
 import TurnTool from '../components/msite/turn-tool.jsx'
@@ -12,15 +16,17 @@ import Money from '../components/money.jsx'
 import { connect } from 'react-redux'
 import {fetchAll, refreshCart, selectItem, editing,
   edited, editItem, selectPay, CPF, EMAIL, getCreditCards,
-  getMercadoCards, toggleCredit, setSecurityCode, setInstallments} from '../store/actions.js'
+  getMercadoCards, toggleCredit, setSecurityCode, setInstallments, fetchCoupons, deleteItem, deleteItems} from '../store/actions.js'
 import ProductEditor from '../components/msite/product-editor.jsx'
 import Mask from '../components/mask.jsx'
 import _ from 'lodash'
 import PayMethodList from '../components/msite/paymethod-list.jsx'
 import {BigButton} from '../components/msite/buttons.jsx'
 import CreditCard from '../components/msite/credit-card.jsx'
-import { useMercadocard, mercadopay, usePoint, useInsurance, creditpay, paypalpay } from '../api'
-import {__route_root__} from '../utils/utils.js'
+import { useMercadocard, mercadopay, usePoint, useInsurance, creditpay, paypalpay, usecreditcard, movetooverseas, getMessage, placepaypal, givingCoupon } from '../api'
+import {__route_root__, storage} from '../utils/utils.js'
+import {CountDownBlock} from '../components/msite/countdowns.jsx'
+import {injectIntl} from 'react-intl'
 
 const OrderSummary = styled.div`
   padding: 5px 10px;
@@ -52,6 +58,37 @@ const Checkout = styled.div`
   width: 100%;
   bottom: 0;
   background-color: #fff;
+`
+
+const Tip = styled.div`
+  background-color: #fdeff5;
+  padding: 10px;
+  line-height: 18px;
+  font-size: 12px;
+  &.__fixed{
+    position: fixed;
+    width: 100%;
+    z-index: 1;
+    top: ${window.headerHeight || 0}px;
+  }
+`
+
+const DoubleBtn = styled.div`
+  & > div{
+    width: calc(50% - 5px);
+  }
+`
+
+const PaypalBtn = styled.div`
+  cursor: pointer;
+  border-radius: 2px;
+  height: 47px;
+  background-color: rgb(252, 208, 0);
+  text-align: center;
+  img{
+    height: 37px;
+    margin-top: 5px;
+  }
 `
 
 const mapStateToProps = (state) => {
@@ -109,9 +146,30 @@ const mapDispatchToProps = (dispatch) => {
     },
     SETINSTALLMENTS: (installments) => {
       dispatch(setInstallments(installments))
+    },
+    FETCHCOUPONS: () => {
+      dispatch(fetchCoupons())
+    },
+    DELETEITEM: (itemId) => {
+      dispatch(deleteItem(itemId))
+    },
+    DELETEITEMS: (itemIds) => {
+      dispatch(deleteItems(itemIds))
     }
   }
 }
+
+const SendCouponTip = styled.div`
+  width: 100%;
+  & > div{
+    &:first-child{
+
+    }
+    &:last-child{
+
+    }
+  }
+`
 
 const ShoppingCart = class extends React.Component {
   constructor (props) {
@@ -122,11 +180,54 @@ const ShoppingCart = class extends React.Component {
     this.itemConfirmHandle = this.itemConfirmHandle.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
     this.sdkResponseHandler = this.sdkResponseHandler.bind(this)
+    this.scrollhandle = this.scrollhandle.bind(this)
+    this.itemDelete = this.itemDelete.bind(this)
+    this.clearall = this.clearall.bind(this)
+    this.state = {
+      creditstatus: 0,
+      tipFixed: false,
+      showAsk: false,
+      askMessage: '',
+      paypaling: false
+    }
   }
 
   componentDidMount () {
     this.props.INIT()
+    this.props.FETCHCOUPONS()
+
     Mercadopago.setPublishableKey('TEST-aa971175-51cd-4be7-8ae4-f12006ac536d')
+
+    window.addEventListener('scroll', this.scrollhandle)
+  }
+
+  componentWillUnmount () {
+    window.removeEventListener('scroll', this.scrollhandle)
+  }
+
+  scrollhandle (evt) {
+    // let [scrollTop, documentHeight, windowHeight] = [
+    //   document.documentElement.scrollTop || document.body.scrollTop,
+    //   document.body.clientHeight,
+    //   window.screen.height
+    // ]
+
+    const headerHeight = window.headerHeight || 0
+
+    if (this.fixedTip && this.fixedTipWrapper) {
+      const {clientHeight} = this.fixedTip
+      this.fixedTipWrapper.style.height = clientHeight + 'px'
+      const rect = this.fixedTipWrapper.getBoundingClientRect()
+      if (rect.top < headerHeight) {
+        this.setState({
+          tipFixed: true
+        })
+      } else {
+        this.setState({
+          tipFixed: false
+        })
+      }
+    }
   }
 
   mercadoref (c) {
@@ -146,20 +247,23 @@ const ShoppingCart = class extends React.Component {
 
   checkout (event) {
     event.preventDefault()
-    const { payMethod, cart, paypal } = this.props
+    const { payMethod, cart, paypal, payType } = this.props
 
     if (!cart.shippingDetail) {
       this.props.history.push(`${window.ctx || ''}${__route_root__}/address`)
       return
     }
 
-    if (payMethod === '3' || payMethod === '17') {
+    if (payType === '2' || payMethod === '17') {
       this.props.TOGGLECREDIT(true)
       this.props.GETCREDITCARDS()
-    } else if (payMethod === '19') {
+    } else if (payMethod === '7') {
       this.props.TOGGLECREDIT(true)
       this.props.GETMERCADOCARDS()
-    } else if (payMethod === '1') {
+    } else if (payType === '1') {
+      this.setState({
+        paypaling: true
+      })
       paypalpay('normal').then(data => data.result).then(({TOKEN, success, transactionId, ACK, L_LONGMESSAGE0}) => {
         if (success && transactionId && !TOKEN) {
           window.location.href = `${window.ctx || ''}/v7/order/confirm/free?transationId=${transactionId}`
@@ -173,8 +277,78 @@ const ShoppingCart = class extends React.Component {
         if (TOKEN && paypal) {
           window.location.href = paypal + TOKEN
         }
+      }).catch(({result}) => {
+        this.setState({
+          paypaling: false
+        })
+        alert(result)
       })
+    } else if (payType === '5') {
+      const {cpf, email} = this.props
+
+      if (!this.boleto.context._errors || !this.boleto.context._errors.length) {
+        window.location.href = `${window.ctx || ''}/geekopay/pay?cpf=${cpf}&email=${email}&payMethod=${payMethod}`
+      }
+    } else if (payType === '3') {
+      window.location.href = `${window.ctx || ''}/computoppay/pay?payMethod=${payMethod}`
     }
+    if (this.getCountdown(this.props.cart) > 0) {
+      s
+      givingCoupon()
+    }
+  }
+
+  quickPaypal (evt) {
+    evt.preventDefault()
+    const { cart, paypal } = this.props
+    this.setState({
+      paypaling: true
+    })
+
+    paypalpay('quick').then(data => data.result).then(({TOKEN, ACK, L_LONGMESSAGE0}) => {
+      if (ACK === 'Failure') {
+        alert(L_LONGMESSAGE0)
+        return
+      }
+
+      if (TOKEN && paypal) {
+        window.location.href = paypal.replace('&useraction=commit', '') + TOKEN
+      }
+    }).catch(({result}) => {
+      this.setState({
+        paypaling: false
+      })
+      alert(result)
+    })
+
+    if (this.getCountdown(this.props.cart) > 0) {
+      givingCoupon()
+    }
+  }
+
+  quickPlace (evt) {
+    const { cart, paypal } = this.props
+
+    this.setState({
+      paypaling: true
+    })
+
+    if (!cart.shippingDetail) {
+      this.props.history.push(`${window.ctx || ''}${__route_root__}/address`)
+    }
+
+    placepaypal().then(() => {
+      window.location.href = `${window.ctx || ''}/v7/orderConfirm/anon/order-confirm`
+    }).catch(({result}) => {
+      this.setState({
+        paypaling: false
+      })
+      alert(result)
+    })
+
+    // self.webpaypay(function(){
+    //       window.location.href = ctx + "/v7/orderConfirm/anon/order-confirm";
+    //     });
   }
 
   sdkResponseHandler (status, response) {
@@ -189,7 +363,7 @@ const ShoppingCart = class extends React.Component {
         token: response.id
       }).then(data => data.result).then(({success, transactionId, details, solutions}) => {
         if (success) {
-          window.location.href = `${window.ctx || ''}/order/confirm/web/ocean?transactionId=${transactionId}`
+          window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
         } else {
           alert(details + '\n' + solutions)
         }
@@ -218,18 +392,28 @@ const ShoppingCart = class extends React.Component {
     }
   }
 
+  overseasHandle (variantId) {
+    movetooverseas({variantId}).then(({result}) => {
+      this.props.REFRESHCART(result)
+    })
+  }
+
   cardSelect (card) {
     if (card.quickpayRecord.payMethod == '19') {
       useMercadocard(card.quickpayRecord.quickpayId).then(() => {
         this.props.GETMERCADOCARDS()
       })
     } else {
-
+      usecreditcard(card.quickpayRecord.id).then(() => {
+        this.props.GETCREDITCARDS()
+      })
     }
   }
 
   selectPayHandle (paymethod) {
     this.props.SELECTPAY(paymethod)
+    storage.add('payMethod', paymethod.id, 365 * 24 * 60 * 60)
+    storage.add('payType', paymethod.type, 365 * 24 * 60 * 60)
   }
 
   itemConfirmHandle (oldId, newId, quantity) {
@@ -238,6 +422,20 @@ const ShoppingCart = class extends React.Component {
 
   itemEdit (item) {
     this.props.EDITING(item)
+  }
+
+  itemDelete (item) {
+    if (window.confirm('Are you sure delete this item?')) {
+      this.props.DELETEITEM(item.variantId)
+    }
+  }
+
+  clearall () {
+    const {cart} = this.props
+    const ivalidItems = this.getInvalidItems(cart)
+    const itemIds = (ivalidItems || []).map(item => item.variantId)
+
+    this.props.DELETEITEMS(itemIds.join(','))
   }
 
   itemSelect (variantId, selected) {
@@ -266,96 +464,273 @@ const ShoppingCart = class extends React.Component {
     })
   }
 
-  handleCredit (evt) {
-    evt.preventDefault()
-    const {cpf, installments} = this.props
-
-    creditpay({payCpf: cpf, payInstallments: installments}).then(data => data.result).then(({success, transactionId, details, solutions}) => {
-      if (success) {
-        window.location.href = `${window.ctx || ''}/order/confirm/web/ocean?transactionId=${transactionId}`
-      } else {
-        alert(details + '\n' + solutions)
-      }
+  insuranceClickHandle () {
+    const {shippingInsuranceMsg2} = this.props.cart
+    this.setState({
+      showAsk: true,
+      askMessage: shippingInsuranceMsg2
     })
   }
 
+  creditClickHandle () {
+    getMessage('M1136').then(({result}) => {
+      this.setState({
+        showAsk: true,
+        askMessage: result.message
+      })
+    })
+  }
+
+  handleCredit (evt) {
+    evt.preventDefault()
+    const {cpf, installments} = this.props
+    if (!this.brazilref.context._errors || !this.brazilref.context._errors.length) {
+      creditpay({payCpf: cpf, payInstallments: installments}).then(data => data.result).then(({success, transactionId, details, solutions}) => {
+        if (success) {
+          window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
+        } else {
+          alert(details + '\n' + solutions)
+        }
+      })
+    }
+  }
+
+  addMercadoCard (evt) {
+    evt.preventDefault()
+    const path = {
+      pathname: `${window.ctx || ''}${__route_root__}/mercado`,
+      state: {
+        exsiting: true
+      }
+    }
+    this.props.history.push(path)
+  }
+
+  addCreditCard (evt) {
+    evt.preventDefault()
+    const path = {
+      pathname: `${window.ctx || ''}${__route_root__}/credit-card`,
+      state: {
+        exsiting: true
+      }
+    }
+    this.props.history.push(path)
+  }
+
+  getValidItems (items = []) {
+    return items.filter(item => item.status === '1')
+  }
+
+  getInvalidItems ({shoppingCartProductsByOverseas, domesticDeliveryCases}) {
+    const invalidItems = []
+    if (shoppingCartProductsByOverseas) {
+      _.each(shoppingCartProductsByOverseas, (item) => {
+        if (item.status !== '1') invalidItems.push(item)
+      })
+    }
+
+    if (domesticDeliveryCases) {
+      _.each(domesticDeliveryCases, ({shoppingCartProducts}) => {
+        _.each(shoppingCartProducts, (item) => {
+          if (item.status !== '1') invalidItems.push(item)
+        })
+      })
+    }
+    return invalidItems
+  }
+
+  getCountdown (cart) {
+    const {sendCouponMessage} = cart || {sendCouponMessage: null}
+    let couponcountdown = 0
+    if (sendCouponMessage) {
+      // 设置15分钟后的毫秒数
+      let endcounpontime = storage.get('_end_coupon_time')
+      if (!endcounpontime) {
+        endcounpontime = new Date().getTime() + 15 * 60 * 1000
+        storage.add('_end_coupon_time', endcounpontime)
+      }
+      couponcountdown = Number(endcounpontime) - new Date().getTime()
+    }
+    return couponcountdown
+  }
+
   render () {
-    const {cart, loading, empty, editing, isCreditShow, mercadocards, creditcards, noCard} = this.props
+    const {cart, loading, empty, editing, isCreditShow, mercadocards, creditcards, noCard, intl} = this.props
+    const invalidItems = cart ? this.getInvalidItems(cart) : []
+
+    const {sendCouponMessage} = cart || {sendCouponMessage: null}
+    let couponcountdown = this.getCountdown(cart)
 
   	return loading ? <Loading/> : (empty ? <Empty/> : (
-  		cart && <div style={{opacity: this.props.refreshing ? 0.9 : 1}}>
-        <Boxs>
-          {
-            cart.shippingDetail && (
-              <Box>
-                <BoxClickHead title="Address">
-                  <Grey>
-                    <Link style={{color: '#222', textDecoration: 'none'}} to={`${window.ctx || ''}${__route_root__}/address`}>Edit</Link>
-                  </Grey>
-                </BoxClickHead>
-                <BoxBody>
-                  <Address address={cart.shippingDetail}/>
-                </BoxBody>
-              </Box>
-            )
-          }
+  		cart && (
+        <div style={{opacity: this.props.refreshing ? 0.9 : 1}}>
+
+          <div ref={wrapper => { this.fixedTipWrapper = wrapper }}>
+
+            {
+              couponcountdown > 1000 ? (
+                <Tip className={this.state.tipFixed ? '__fixed' : ''} innerRef={tip => { this.fixedTip = tip }}>
+                  <div className="x-table __fixed x-fw __vm">
+                    <div className="x-cell" style={{width: 75}}>
+                      <CountDownBlock offset={couponcountdown}/>
+                    </div>
+                    <div className="x-cell">
+                      <span dangerouslySetInnerHTML={{__html: sendCouponMessage.message}}/>
+                    </div>
+                  </div>
+
+                </Tip>
+              ) : (
+                <React.Fragment>
+                  {cart.messages && cart.messages.orderSummaryMsg && <Tip className={this.state.tipFixed ? '__fixed' : ''} innerRef={tip => { this.fixedTip = tip }}>
+                    <span dangerouslySetInnerHTML={{__html: cart.messages.orderSummaryMsg}}/>
+                  </Tip>}
+                </React.Fragment>
+              )
+            }
+
+          </div>
+
+          <Boxs>
+            {
+              cart.shippingDetail ? (
+
+                window.__is_login__ && <Box>
+                  <BoxClickHead title={intl.formatMessage({id: 'address'})}>
+                    <Grey>
+                      <Link style={{color: '#222', textDecoration: 'none'}} to={`${window.ctx || ''}${__route_root__}/address`}>
+                        {intl.formatMessage({id: 'edit'})}
+                      </Link>
+                    </Grey>
+                  </BoxClickHead>
+                  <BoxBody>
+                    <Address address={cart.shippingDetail}/>
+                  </BoxBody>
+                </Box>
+              ) : (
+                window.__is_login__ && <Box>
+                  <BoxClickHead title={intl.formatMessage({id: 'address'})} single={true}>
+                    <Grey>
+                      <Link style={{color: '#222', textDecoration: 'none'}} to={`${window.ctx || ''}${__route_root__}/address`}>
+                        Add
+                      </Link>
+                    </Grey>
+                  </BoxClickHead>
+
+                </Box>
+
+              )
+            }
+
+            {
+              cart.domesticDeliveryCases && cart.domesticDeliveryCases.length > 0 && cart.domesticDeliveryCases.map(domestic => (
+                <Box key={domestic.countryCode}>
+                  <GroupLocalItems
+                    icon={domestic.icon}
+                    title={domestic.title}
+                    quantityChange={(itemId, quantity) => { this.props.EDITITEM(itemId, itemId, quantity) }}
+                    itemEdit={this.itemEdit}
+                    itemDelete={this.itemDelete}
+                    groupClick={this.groupClick}
+                    itemSelect={this.itemSelect}
+                    overseasHandle={this.overseasHandle.bind(this)}
+                    serverTime={cart.serverTime}
+                    items={this.getValidItems(domestic.shoppingCartProducts)}/>
+                </Box>
+              ))
+            }
 
     			<Box>
-    				 <GroupOverseasItems quantityChange={(itemId, quantity) => { this.props.EDITITEM(itemId, itemId, quantity) }} itemEdit={this.itemEdit} groupClick={this.groupClick} itemSelect={this.itemSelect} items={cart.shoppingCartProductsByOverseas} shippingMethod={cart.shippingMethod}/>
+    				 <GroupOverseasItems
+                quantityChange={(itemId, quantity) => { this.props.EDITITEM(itemId, itemId, quantity) }}
+                itemEdit={this.itemEdit}
+                itemDelete={this.itemDelete}
+                groupClick={this.groupClick}
+                itemSelect={this.itemSelect}
+                items={this.getValidItems(cart.shoppingCartProductsByOverseas)}
+                shippingMethod={cart.shippingMethod}
+                serverTime={cart.serverTime}
+                shippingMsg={cart.messages ? cart.messages.shippingMsg : null}/>
     			</Box>
 
-          <Box>
-            <BoxClickHead title="Coupon">
-              {cart.coupon ? (
-                <span><Red>{cart.coupon.amount} OFF</Red> {cart.coupon.name}</span>
-              ) : (
-                <span>Available <Red>{cart.canUseCouponCount}</Red></span>
-              )}
-            </BoxClickHead>
+            {
+              invalidItems && invalidItems.length > 0 && <Box>
+                <GroupInvalidItems serverTime={cart.serverTime}
+                  items={this.getInvalidItems(cart)}
+                  clearall={this.clearall}
+                  itemDelete={this.itemDelete}/>
+              </Box>
+            }
 
-            <LineBox style={{paddingLeft: 10, paddingRight: 10}}>
+            <Box>
+              <BoxClickHead title={intl.formatMessage({id: 'coupon'})}>
+                <Link style={{textDecoration: 'none', color: '#666'}} to={`${window.ctx || ''}${__route_root__}/coupons`}>
+
+                  {cart.coupon ? (
+                    <span><Red>{cart.coupon.amount} OFF</Red> {cart.coupon.name}</span>
+                  ) : (
+                    <span>Available <Red>{cart.canUseCouponCount}</Red></span>
+                  )}
+                </Link>
+              </BoxClickHead>
+
               {
-                cart.shippingInsurancePrice2 && (
-                  <TurnTool open={this.openInsurance.bind(this)} turnAcitve={cart.insurance}>
-                    <span style={{fontSize: 15}}>Add Shipping Insurance(<Red><Money money={cart.shippingInsurancePrice2}/></Red>)</span>
-                  </TurnTool>
-                )
+                cart.messages && cart.messages.couponMsg && <Tip>
+                  <span dangerouslySetInnerHTML={{__html: cart.messages.couponMsg}}/>
+
+                </Tip>
               }
 
-              {
-                cart.expectedPoints > 0 && (
-                  <TurnTool open={this.openPoints.bind(this)} turnAcitve={cart.openPointUse}>
-                    <span style={{fontSize: 15}}>Apply {cart.expectedPoints} (<Red><Money money={cart.expectedPointDiscount}/></Red>) To This Order?</span>
-                  </TurnTool>
-                )
-              }
-            </LineBox>
-          </Box>
+              <LineBox style={{paddingLeft: 10, paddingRight: 10}}>
+                {
+                  cart.shippingInsurancePrice2 && (
+                    <TurnTool open={this.openInsurance.bind(this)} turnAcitve={cart.insurance}>
+                      <span style={{fontSize: 15}}>Add Shipping Insurance(<Red><Money money={cart.shippingInsurancePrice2}/></Red>)</span>
+                      <Ask onClick={this.insuranceClickHandle.bind(this)}/>
+                    </TurnTool>
+                  )
+                }
 
-          <Box>
-            <BoxHead title="Payment Method"/>
-            <div style={{paddingLeft: 10, paddingRight: 10}}>
-              <PayMethodList cpf={this.props.cpf} email={this.props.email} handleInputChange={this.handleInputChange} selectedPayId={this.props.payMethod} selectPayHandle={this.selectPayHandle.bind(this)} methods={this.props.cart.payMethodList}/>
-            </div>
-          </Box>
+                {
+                  cart.expectedPoints > 0 && (
+                    <TurnTool open={this.openPoints.bind(this)} turnAcitve={cart.openPointUse}>
+                      <span style={{fontSize: 15}}>Apply {cart.expectedPoints} (<Red><Money money={cart.expectedPointDiscount}/></Red>) To This Order</span>
+                      <Ask onClick={this.creditClickHandle.bind(this)}/>
+                    </TurnTool>
+                  )
+                }
+              </LineBox>
+            </Box>
 
-          <Box>
-            <BoxHead title="Order Summary"/>
-            <OrderSummary>
-
-              {
-                cart.orderSummary.display.map(display => (
-                  <div key={display.value} className="x-flex __between __summary">
-                    <span dangerouslySetInnerHTML={{__html: display.label}}/>
-                    <span dangerouslySetInnerHTML={{__html: display.value}}/>
+            {
+              window.__is_login__ && (
+                <Box>
+                  <BoxHead title={intl.formatMessage({id: 'payment_method'})}/>
+                  <div style={{paddingLeft: 10, paddingRight: 10}}>
+                    <PayMethodList boleto={(c) => { this.boleto = c }} cpf={this.props.cpf} email={this.props.email} handleInputChange={this.handleInputChange} selectedPayId={this.props.payMethod} selectPayHandle={this.selectPayHandle.bind(this)} methods={this.props.cart.payMethodList}/>
                   </div>
-                ))
-              }
+                </Box>
 
-            </OrderSummary>
-          </Box>
+              )
+            }
 
-          {/* <Box>
+            <Box>
+              <BoxHead title={intl.formatMessage({id: 'order_summary'})}/>
+              <OrderSummary>
+
+                {
+                  cart.orderSummary.display.map(display => (
+                    <div key={display.label} className="x-flex __between __summary">
+                      <span dangerouslySetInnerHTML={{__html: display.label}}/>
+                      <span dangerouslySetInnerHTML={{__html: display.value}}/>
+                    </div>
+                  ))
+                }
+
+              </OrderSummary>
+            </Box>
+
+            {/* <Box>
             <Link to={`${window.ctx || ''}/mercado`}>Mercado</Link>
 
             <div>
@@ -367,73 +742,166 @@ const ShoppingCart = class extends React.Component {
             </div>
           </Box> */}
 
-          <Box>
-            <div style={{height: 90}}>
-              <Checkout>
-                <div className="__total">
-                  <span>Total: </span>
-                  <Red><Money money={cart.orderSummary.orderTotal}/></Red>
-                </div>
-                <BigButton onClick={this.checkout.bind(this)} className="__btn" height={47} bgColor="#e5004f">Check Out</BigButton>
-              </Checkout>
-            </div>
-          </Box>
+            {
+              window.__is_login__ ? (
+                <Box>
+                  <div style={{height: 90}}>
+                    <Checkout>
+                      <div className="__total">
+                        <span>{intl.formatMessage({id: 'total'})}: </span>
+                        <Red><Money money={cart.orderSummary.orderTotal}/></Red>
+                      </div>
+                      <BigButton onClick={this.checkout.bind(this)} className="__btn" height={47} bgColor="#e5004f">
+                        {intl.formatMessage({id: 'check_out'})}
+                      </BigButton>
+                    </Checkout>
+                  </div>
+                </Box>
+
+              ) : (
+
+                window.token ? (
+                  <Box>
+                    <div style={{height: 90}}>
+                      <Checkout>
+                        <div className="__total">
+                          <span>{intl.formatMessage({id: 'total'})}: </span>
+                          <Red><Money money={cart.orderSummary.orderTotal}/></Red>
+                        </div>
+                        <BigButton onClick={this.quickPlace.bind(this)} className="__btn" height={47} bgColor="#e5004f">
+                          Place Order
+                        </BigButton>
+                      </Checkout>
+                    </div>
+                  </Box>
+                ) : (
+
+                  <Box>
+                    <div style={{height: 90}}>
+                      <Checkout>
+                        <div className="__total">
+                          <span>{intl.formatMessage({id: 'total'})}: </span>
+                          <Red><Money money={cart.orderSummary.orderTotal}/></Red>
+                        </div>
+                        <DoubleBtn className="x-flex __between">
+
+                          <div>
+                            <PaypalBtn onClick={this.quickPaypal.bind(this)}><img src={cart.paypalButtonImage}/></PaypalBtn>
+                          </div>
+
+                          <div>
+                            <BigButton onClick={ () => { window.location.href = `${window.ctx}/w-site/anon/register?redirectUrl=${encodeURIComponent(window.location.href)}` } } className="__btn" height={47} bgColor="#e5004f">
+                              {intl.formatMessage({id: 'check_out'})}
+                            </BigButton>
+                          </div>
+
+                        </DoubleBtn>
+                      </Checkout>
+                    </div>
+                  </Box>
+
+                )
+
+              )
+            }
 
     		</Boxs>
 
-        {
-          editing.isEditing && (
-            <React.Fragment>
+          {
+            editing.isEditing && (
+              <React.Fragment>
+                <Mask/>
+                <ProductEditor onClose={() => { this.props.EDITED() }} itemConfirmHandle={this.itemConfirmHandle} item={editing.item}/>
+              </React.Fragment>
+            )
+          }
+
+          {
+            isCreditShow && this.props.payMethod === '19' && mercadocards && mercadocards.length && (
+              <React.Fragment>
+                <Mask/>
+
+                <CreditCard
+                  payMethod = {this.props.payMethod}
+                  securityCode = {this.props.securityCode}
+                  handleMercado = {this.checkmercado.bind(this)}
+                  mercadoref = {this.mercadoref.bind(this)}
+                  handleInputChange = { this.handleInputChange }
+                  creditClose={() => { this.props.TOGGLECREDIT(false) }}
+                  cardSelect={ this.cardSelect.bind(this)}
+                  cards={mercadocards}
+                  addCard={this.addMercadoCard.bind(this)}
+                  status = {this.state.creditstatus}
+                  orderTotal={cart.orderSummary.orderTotal}
+                  toggleBack= {() => {
+                    this.setState({
+                      creditstatus: this.state.creditstatus === 0 ? 1 : 0
+                    })
+                  }}
+                />
+              </React.Fragment>
+            )
+          }
+
+          {
+            isCreditShow && noCard && this.props.payMethod === '19' && <Redirect push to={`${window.ctx || ''}${__route_root__}/mercado`}/>
+          }
+
+          {
+            isCreditShow && (this.props.payMethod === '3' || this.props.payMethod === '17') && creditcards && creditcards.length && (
+              <React.Fragment>
+                <Mask/>
+
+                <CreditCard
+                  cards={creditcards}
+                  payMethod = {this.props.payMethod}
+                  orderTotal={cart.orderSummary.orderTotal}
+                  cpf={this.props.cpf}
+                  handleCredit = {this.handleCredit.bind(this)}
+                  brazilref = {(c) => { this.brazilref = c }}
+                  handleInputChange = { this.handleInputChange }
+                  creditClose={() => { this.props.TOGGLECREDIT(false) }}
+                  installmentoptions={this.props.cart.payInstalmentsByOceanpaymentBRACreditCard}
+                  installments={this.props.installments}
+                  addCard={this.addCreditCard.bind(this)}
+                  cardSelect={ this.cardSelect.bind(this)}
+                  status = {this.state.creditstatus}
+                  toggleBack= {() => {
+                    this.setState({
+                      creditstatus: this.state.creditstatus === 0 ? 1 : 0
+                    })
+                  }}
+                />
+              </React.Fragment>
+            )
+          }
+
+          {
+            this.state.showAsk && this.state.askMessage && (
+              <React.Fragment>
+                <Mask/>
+                <FixedMessage onClose={() => { this.setState({showAsk: false, askMessage: null}) }}>
+                  <p dangerouslySetInnerHTML={{__html: this.state.askMessage}}/>
+                </FixedMessage>
+              </React.Fragment>
+            )
+          }
+
+          {
+            this.state.paypaling && <React.Fragment>
               <Mask/>
-              <ProductEditor onClose={() => { this.props.EDITED() }} itemConfirmHandle={this.itemConfirmHandle} item={editing.item}/>
+              <div className="paypal-loading-wrap">
+                <div className="paypal-back"></div>
+                <div className="paypal-loading">
+
+                </div>
+              </div>
             </React.Fragment>
-          )
-        }
+          }
 
-        {
-          isCreditShow && this.props.payMethod === '19' && mercadocards && mercadocards.length && (
-            <React.Fragment>
-              <Mask/>
-              <CreditCard
-                payMethod = {this.props.payMethod}
-                securityCode = {this.props.securityCode}
-                handleMercado = {this.checkmercado.bind(this)}
-                mercadoref = {this.mercadoref.bind(this)}
-                handleInputChange = { this.handleInputChange }
-                creditClose={() => { this.props.TOGGLECREDIT(false) }}
-                cardSelect={ this.cardSelect.bind(this)}
-                cards={mercadocards}
-                orderTotal={cart.orderSummary.orderTotal}/>
-            </React.Fragment>
-          )
-        }
-
-        {
-          isCreditShow && noCard && this.props.payMethod === '19' && <Redirect push to={`${window.ctx || ''}${__route_root__}/mercado`}/>
-        }
-
-        {
-          isCreditShow && (this.props.payMethod === '3' || this.props.payMethod === '17') && creditcards && creditcards.length && (
-            <React.Fragment>
-              <Mask/>
-              <CreditCard
-                cards={creditcards}
-                payMethod = {this.props.payMethod}
-                orderTotal={cart.orderSummary.orderTotal}
-                cpf={this.props.cpf}
-                handleCredit = {this.handleCredit.bind(this)}
-                handleInputChange = { this.handleInputChange }
-                creditClose={() => { this.props.TOGGLECREDIT(false) }}
-                installmentoptions={this.props.cart.payInstalmentsByOceanpaymentBRACreditCard}
-                installments={this.props.installments}
-              />
-            </React.Fragment>
-          )
-        }
-
-      </div>
+        </div>)
   	))
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ShoppingCart)
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(ShoppingCart))

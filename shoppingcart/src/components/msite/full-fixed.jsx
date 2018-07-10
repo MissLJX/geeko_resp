@@ -3,20 +3,17 @@ import styled from 'styled-components'
 import Icon from '../icon.jsx'
 
 const Fixed = styled.div`
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background-color: #fff;
-	overflow:auto;
+	position: relative;
 	
 `
 
 const HD = styled.div`
 	height: 50px;
 	line-height: 50px;
-	position: relative;
+	position: absolute;
+	top: 0;
+	width: 100%;
+	background-color: #fff;
 `
 
 const Title = styled.h1`
@@ -33,13 +30,19 @@ const Close = styled.span`
 	cursor: pointer;
 `
 
+const BD = styled.div`
+	height: 100vh;
+	overflow: auto;
+	padding-top: 50px;
+`
+
 export default (props) => <Fixed>
   <HD>
     <Title>{props.title}</Title>
     <Close onClick={props.onClose}><Icon style={{fontSize: 25}}>&#xe69a;</Icon></Close>
   </HD>
 
-  <div>
+  <BD>
   	{props.children}
-  </div>
+  </BD>
 </Fixed>
