@@ -12,8 +12,10 @@ export default (props) => (
     <div className="x-cell">
       {props.children}
     </div>
+
     <div className="x-cell __right">
-      <Turn onClick={props.open} turnAcitve={props.turnAcitve}/>
+      <Turn disabled={props.ignoreButton} onClick={!props.ignoreButton ? props.open : () => {}} turnAcitve={props.turnAcitve}/>
     </div>
+
   </TurnWrapper>
 )

@@ -6,6 +6,11 @@ import {FormLayout, MultiControl} from './layout.jsx'
 import {getCountries, getStates} from '../../api'
 import {injectIntl} from 'react-intl'
 
+const getCountryCode = () => {
+  let strs = window.lang ? window.lang.split('_') : []
+  return strs[1] || 'US'
+}
+
 const AdressForm = class extends React.Component {
   constructor (props) {
     super(props)
@@ -50,29 +55,34 @@ const AdressForm = class extends React.Component {
 
   handleSubmit (event) {
     event.preventDefault()
-    const {
-      name,
-      streetAddress1,
-      unit,
-      city,
-      zipCode,
-      state,
-      country,
-      phoneNumber,
-      isDefaultAddress
-    } = this.state
 
-    this.props.editAddress({
-      name,
-      streetAddress1,
-      unit,
-      city,
-      zipCode,
-      state,
-      country,
-      phoneNumber,
-      isDefaultAddress
-    })
+    this.form.validateAll()
+
+    if (!this.addressButtn.context._errors || this.addressButtn.context._errors.length < 1) {
+      const {
+        name,
+        streetAddress1,
+        unit,
+        city,
+        zipCode,
+        state,
+        country,
+        phoneNumber,
+        isDefaultAddress
+      } = this.state
+
+      this.props.editAddress({
+        name,
+        streetAddress1,
+        unit,
+        city,
+        zipCode,
+        state,
+        country,
+        phoneNumber,
+        isDefaultAddress
+      })
+    }
   }
 
   componentWillMount () {
@@ -110,6 +120,10 @@ const AdressForm = class extends React.Component {
       // if (isStructotState(state)) {
       this.getStates(countryValue)
       // }
+    } else {
+      this.setState({
+        country: getCountryCode()
+      })
     }
 
     getCountries().then(({result}) => {
@@ -252,7 +266,7 @@ const AdressForm = class extends React.Component {
         </MultiControl>
 
     		<div>
-          <Button className="__submitbtn" style={{
+          <Button className="__submitbtn" ref={c => this.addressButtn = c} ingoredisable={true} style={{
             display: 'block',
             backgroundColor: '#222',
             color: '#fff',

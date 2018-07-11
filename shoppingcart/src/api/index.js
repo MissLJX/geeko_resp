@@ -23,6 +23,7 @@ export const mercadocards = () => axios.get(`${VPATH}/mercadopago/get-cards?_=${
 export const mercadopay = (params) => axios.post(`${VPATH}/mercadopago/pay`, params)
 export const useMercadocard = (cardId) => axios.get(`${VPATH}/mercadopago/use-card?cardId=${cardId}&_=${new Date().getTime()}`)
 export const addMercadoCard = (token) => axios.post(`${VPATH}/mercadopago/add-card`, {token})
+export const removeMercadoCard = (token) => axios.post(`${VPATH}/mercadopago/remove-card`, {token})
 
 export const usePoint = (isopen) => axios.get(`${VPATH}/shopping-cart/set-point/${isopen}`)
 export const useInsurance = (isuse) => axios.get(`${VPATH}/shopping-cart/anon/${isuse}/update-insurance`)

@@ -30,6 +30,7 @@ export const SET_SECURITY_CODE = 'SET_SECURITY_CODE'
 export const CREDIT_CARDS = 'CREDIT_CARDS'
 export const SET_INSTALLMENTS = 'SET_INSTALLMENTS'
 export const GET_COUPONS = 'GET_COUPONS'
+export const SET_MERCAODO_INSTALLMENTS = 'SET_MERCAODO_INSTALLMENTS'
 
 export const loading = () => {
   return {
@@ -101,6 +102,13 @@ export const setSecurityCode = (code) => {
 export const setInstallments = (installments) => {
   return {
     type: SET_INSTALLMENTS,
+    installments
+  }
+}
+
+export const setMercadoInstallments = (installments) => {
+  return {
+    type: SET_MERCAODO_INSTALLMENTS,
     installments
   }
 }

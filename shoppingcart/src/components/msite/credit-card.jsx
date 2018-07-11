@@ -35,7 +35,7 @@ const BD = styled.div`
 	padding-left: 10px;
 	padding-right: 10px;
 	position: relative;
-	height: 300px;
+	height: 340px;
 `
 
 const CREDITWRAPPER = styled.div`
@@ -103,29 +103,81 @@ const NewCard = props => <StyledCard {...props}>
   </div>
 </StyledCard>
 
+const getBin = (cardNumber) => cardNumber.replace(/[ .-]/g, '').slice(0, 6)
+
 const MercadoPlugin = class extends React.Component {
   constructor (props) {
     super(props)
+    this.state = {
+      payer_costs: [
+
+      ]
+    }
+  }
+
+  componentDidMount () {
+    this.setMercadoInstallments(this.props.card.quickpayRecord.cardNumber)
+  }
+
+  componentWillReceiveProps (newProps) {
+    // if (newProps.card.quickpayRecord.quickpayId !== this.props.card.quickpayRecord.quickpayId) {
+    //   this.setMercadoInstallments(newProps.card.quickpayRecord.cardNumber)
+    // }
+  }
+
+  setMercadoInstallments (cardNumber) {
+    const {orderTotal} = this.props
+    const bin = getBin(cardNumber)
+
+    Mercadopago.getInstallments({bin, amount: orderTotal.amount}, (status, response) => {
+      if (status != 200 && status != 201) {
+        alert('Get installments failed!')
+        return
+      }
+      this.setState({
+        payer_costs: response[0].payer_costs
+      })
+    })
   }
 
   render () {
     return <div>
       <Form id="mercadoform" ref={this.props.mercadoref} onSubmit={this.props.handleMercado}>
         <input type="hidden" value={this.props.card.quickpayRecord.quickpayId} name="cardId" data-checkout="cardId"/>
-        <div className="x-table">
-          <div className="x-cell">Security Code</div>
-          <div className="x-cell" style={{paddingLeft: 10}}>
-            <StyledControl>
-              <Input style={{width: 120}} name="securityCode"
-							 data-checkout="securityCode"
-							 value={this.props.securityCode}
-							 validations={[required]}
-							 placeholder="123"
-							 onChange={this.props.handleInputChange}/>
-            </StyledControl>
-          </div>
+        <StyledControl style={{marginTop: 10}}>
+          <label>Security Code</label>
+          <Input name="securityCode"
+            data-checkout="securityCode"
+            value={this.props.securityCode}
+            validations={[required]}
+            placeholder="CVC2/CVV2"
+            onChange={this.props.handleInputChange}/>
+        </StyledControl>
 
-        </div>
+        <StyledControl style={{marginTop: 10}}>
+          <label>Installments</label>
+          <Select className="x-select" name="mercado-installments"
+            value={this.props.installments}
+            validations={[required]}
+            onChange={this.props.handleInputChange}>
+            {
+
+              this.state.payer_costs && this.state.payer_costs.length > 0 ? (
+                this.state.payer_costs.map(({installments, recommended_message}) => (
+                  <option key={installments} value={installments}>
+                    {recommended_message}
+                  </option>
+                ))
+
+              ) : (
+
+                <option key={1} value={1}>{`1 mensualidad de ${unitprice(this.props.orderTotal)} (${unitprice(this.props.orderTotal)})`}</option>
+              )
+
+            }
+          </Select>
+        </StyledControl>
+
       </Form>
     </div>
   }
@@ -239,13 +291,12 @@ const CreditCard = class extends React.Component {
   							 <CurrentCard onClick={this.props.toggleBack} card={currentCard}/>
   						</div>
 
-  						<div style={{fontSize: 18, textAlign: 'right', marginTop: 15}}>
-  							 <Red><Money money={orderTotal}/></Red>
-  						</div>
-
   						{getPayPlugin(currentCard.quickpayRecord.payMethod, {card: currentCard, ...this.props})}
 
   						<div style={{position: 'absolute', bottom: 0, left: 0, paddingBottom: 10, paddingLeft: 10, paddingRight: 10}}>
+                <div style={{fontSize: 18, textAlign: 'right', marginTop: 15}}>
+                  <Red><Money money={orderTotal}/></Red>
+                </div>
   							<div className="x-table __vm __fixed x-fw">
   								<div className="x-cell" style={{width: 60}}>
   									<img style={{width: 50}} src="https://dgzfssf1la12s.cloudfront.net/site/pc/icon326.png"/>
@@ -257,7 +308,16 @@ const CreditCard = class extends React.Component {
   								</div>
   							</div>
   							<div style={{marginTop: 10}}>
-  								<BigButton bgColor="#e5004f" onClick={(evt) => { this.checkout(evt, currentCard) }}>Check Out</BigButton>
+
+                  {
+                    this.props.checking ? <BigButton bgColor="#999" onClick={(evt) => { this.checkout(evt, currentCard) }}>
+                    Please wait</BigButton> : (
+                      <BigButton bgColor="#e5004f" onClick={(evt) => { this.checkout(evt, currentCard) }}>
+                    Check Out
+                      </BigButton>
+                    )
+                  }
+
   							</div>
 
   						</div>

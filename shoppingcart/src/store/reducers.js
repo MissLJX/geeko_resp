@@ -14,6 +14,7 @@ import {LOADING,
   SET_SECURITY_CODE,
   CREDIT_CARDS,
   SET_INSTALLMENTS,
+  SET_MERCAODO_INSTALLMENTS,
   GET_COUPONS} from './actions.js'
 
 const initialState = {
@@ -38,7 +39,8 @@ const initialState = {
   noCreditCard: false,
   creditcards: null,
   installments: 1,
-  paypal: null
+  paypal: null,
+  mercadoinstallments: 1
 }
 
 const isEmpty = cart => !cart
@@ -96,6 +98,8 @@ const refresh = (state = initialState, action) => {
       return {...state, securityCode: action.securityCode}
     case SET_INSTALLMENTS:
       return {...state, installments: action.installments}
+    case SET_MERCAODO_INSTALLMENTS:
+      return {...state, mercadoinstallments: action.installments}
     case CREDIT_CARDS:
       return {...state, creditcards: action.cards, noCreditCard: (!action.cards || !action.cards.length)}
     case GET_COUPONS:

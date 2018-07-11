@@ -58,7 +58,8 @@ module.exports = {
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({
-      'siteurl': JSON.stringify('http://localhost:8080/wanna')
+      'siteurl': JSON.stringify('http://localhost:8080/wanna'),
+      'MercadoPublicKey': JSON.stringify('TEST-aa971175-51cd-4be7-8ae4-f12006ac536d')
     })
   ]
 }

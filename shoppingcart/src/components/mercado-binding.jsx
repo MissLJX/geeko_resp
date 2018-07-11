@@ -5,6 +5,7 @@ import {Form, Input, Button, Select} from './msite/control.jsx'
 import {required, email} from './validator.jsx'
 import {StyledControl} from './msite/styled-control.jsx'
 import {FormLayout, MultiControl} from './msite/layout.jsx'
+import _ from 'lodash'
 
 const StyleButton = {
   display: 'block',
@@ -55,19 +56,39 @@ const MercadoBinding = class extends React.Component {
     	email: this.props.email,
     	paymentMethod: null,
     	token: null,
-    	paymentMethodIcon: null
+    	paymentMethodIcon: null,
+      installments: 1,
+      payer_costs: []
     }
     this.guessingPaymentMethod = this.guessingPaymentMethod.bind(this)
     this.setPaymentMethodInfo = this.setPaymentMethodInfo.bind(this)
     this.sdkResponseHandler = this.sdkResponseHandler.bind(this)
+    this.setMercadoInstallments = _.debounce(this.setMercadoInstallments).bind(this)
   }
 
   componentDidMount () {
-  	Mercadopago.setPublishableKey('TEST-aa971175-51cd-4be7-8ae4-f12006ac536d')
+  	Mercadopago.setPublishableKey(MercadoPublicKey)
   }
 
   componentWillReceiveProps (newProps) {
     this.setState({email: newProps.email})
+  }
+
+  setMercadoInstallments (evt) {
+    const {cart} = this.props
+    const {orderTotal} = cart.orderSummary
+    const bin = getBin(evt.target.value)
+    if (bin.length >= 6) {
+      Mercadopago.getInstallments({bin, amount: orderTotal.amount}, (status, response) => {
+        if (status != 200 && status != 201) {
+          alert('Get installments failed!')
+          return
+        }
+        this.setState({
+          payer_costs: response[0].payer_costs
+        })
+      })
+    }
   }
 
   guessingPaymentMethod (event) {
@@ -134,7 +155,8 @@ const MercadoBinding = class extends React.Component {
         mercadopay({
           email: this.state.email,
           paymentMethodId: this.state.paymentMethod,
-          token: response.id
+          token: response.id,
+          installments: this.state.installments
         }).then(data => data.result).then(({success, transactionId, details, solutions}) => {
           if (success) {
             window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
@@ -164,7 +186,6 @@ const MercadoBinding = class extends React.Component {
               Email*
               </label>
               <Input
-
                 name='email'
                 value={this.state.email}
                 onChange={this.handleInputChange}
@@ -176,8 +197,13 @@ const MercadoBinding = class extends React.Component {
   					<label>Credit card number*</label>
   					<Input
   						style={CardStyle}
-  						onChange={this.guessingPaymentMethod}
-  						onKeyUp={this.guessingPaymentMethod}
+  						onChange={
+                (evt) => {
+                  this.guessingPaymentMethod(evt)
+                  this.setMercadoInstallments(evt)
+                }
+              }
+              onKeyUp={this.guessingPaymentMethod}
   						validations={[required]}
   						data-checkout="cardNumber"/>
   				</StyledControl>
@@ -198,7 +224,7 @@ const MercadoBinding = class extends React.Component {
 	  						validations={[required]}
 	  						data-checkout="cardExpirationMonth">
                 <option value=''>Month</option>
-                {monthes.map(month => <option value={month}>{month}</option>)}
+                {monthes.map(month => <option key={month} value={month}>{month}</option>)}
 
               </Select>
 	  				</StyledControl>
@@ -210,7 +236,7 @@ const MercadoBinding = class extends React.Component {
 	  						validations={[required]}
 	  						data-checkout="cardExpirationYear">
                 <option value=''>Year</option>
-                {years.map(year => <option value={year}>{year}</option>)}
+                {years.map(year => <option key={year} value={year}>{year}</option>)}
               </Select>
 	  				</StyledControl>
   				</MultiControl>
@@ -221,6 +247,24 @@ const MercadoBinding = class extends React.Component {
   						validations={[required]}
   						data-checkout="cardholderName"/>
   				</StyledControl>
+
+          {
+            this.state.payer_costs && this.state.payer_costs.length > 0 && <StyledControl>
+              <label>Installments*</label>
+              <Select className="x-select" name="installments" value={this.state.installments}>
+                {
+                  this.state.payer_costs.map(({installments, recommended_message}) => (
+                    <option key={installments} value={installments}>
+                      {recommended_message}
+                    </option>
+                  ))
+                }
+
+              </Select>
+            </StyledControl>
+
+          }
+
   			</FormLayout>
 
   			<div>

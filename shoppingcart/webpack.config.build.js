@@ -39,7 +39,8 @@ module.exports = {
     }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production'),
-      'siteurl': JSON.stringify('https://www.chicme.com')
+      'siteurl': JSON.stringify('https://www.chicme.com'),
+      'MercadoPublicKey': JSON.stringify('APP_USR-feb41ad2-2287-437d-859d-0be51c116e51')
     })
   ]
 }

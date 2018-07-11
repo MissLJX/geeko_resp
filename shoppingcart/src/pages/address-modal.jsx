@@ -64,6 +64,7 @@ const Modal = class extends React.Component {
     	width: 80%;
     	margin-left: auto;
     	margin-right: auto;
+      padding-bottom: 50px;
 
     `
 

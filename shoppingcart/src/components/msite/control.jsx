@@ -14,7 +14,7 @@ const _input = ({ error, isChanged, isUsed, ...props }) => (
 
 const _button = ({ hasErrors, ...props }) => {
   return (
-    <button {...props} disabled={hasErrors}/>
+    <button {...props} disabled={hasErrors && !props.ingoredisable}/>
   )
 }
 
