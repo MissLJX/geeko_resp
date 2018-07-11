@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import CheckBox from '../checkbox.jsx'
 import {Grey} from '../text.jsx'
 
-import {Form, Input} from './control.jsx'
+import {Form, Input, Button} from './control.jsx'
 import {required, email, cpf} from '../validator.jsx'
 import {StyledControl} from './styled-control.jsx'
 
@@ -43,7 +43,7 @@ const Boleto = class extends React.Component {
 
   render () {
     return <METHODBD>
-      <Form ref={c => { this.form = c }} onSubmit={this.handleSubmit.bind(this)}>
+      <Form onSubmit={this.handleSubmit.bind(this)}>
         <MethodInputLine className="x-table x-fw __vm __fixed">
           <div className="x-cell">
             <label>CPF*</label>
@@ -74,7 +74,7 @@ const Boleto = class extends React.Component {
             </StyledControl>
           </div>
         </MethodInputLine>
-
+        <Button style={{display: 'none'}} ref={this.props.boleto}></Button>
       </Form>
     </METHODBD>
   }
@@ -103,7 +103,7 @@ const Method = class extends React.Component {
 
   render () {
     const {payMethod, children, selectPayHandle, selected} = this.props
-    return <StyledMethod onClick={() => { selectPayHandle(payMethod.id) }}>
+    return <StyledMethod onClick={() => { selectPayHandle(payMethod) }}>
       <HD>
         <div className="x-table x-fw x-fh __fixed __vm">
           <div className="x-cell">
@@ -132,10 +132,10 @@ const MethodUL = styled.ul`
   }
 `
 
-const getMethodBody = (id, {cpf, email, handleInputChange}) => {
+const getMethodBody = (id, {cpf, email, handleInputChange, boleto}) => {
   switch (id) {
     case '16':
-      return <Boleto cpf={cpf} email={email} handleInputChange={handleInputChange}/>
+      return <Boleto boleto={boleto} cpf={cpf} email={email} handleInputChange={handleInputChange}/>
     default:
       return null
   }

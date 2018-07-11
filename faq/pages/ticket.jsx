@@ -6,6 +6,7 @@ import {GeekoSelect, ColoredButton, PageHeader, PageContanier} from '../componen
 import _ from 'lodash'
 import {gloabvars} from '../commons/instance.js'
 import {FormattedMessage, injectIntl} from 'react-intl'
+import HtmlImageCompress from 'html-image-compress'
 
 import {
   OrderSelector,
@@ -49,37 +50,38 @@ const Ticket = class extends React.Component {
     }
 
   	const files = evt.currentTarget.files
-    const maxSize = 2097152
 
-    if (files[0].size < maxSize) {
-    	const formData = new FormData(this.refs.imageForm)
-	  	formData.append('operaId', this.state.order.id)
-	    formData.append('subject', this.state.subject)
-	    formData.append('message', this.state.message || '-')
-	    sendImage(formData).then(({result}) => {
-	    	const file = files[0]
-        	const src = window.navigator.userAgent.indexOf('Chrome') >= 1 || window.navigator.userAgent.indexOf('Safari') >= 1 ? window.webkitURL.createObjectURL(file) : window.URL.createObjectURL(file)
-	    	let ticket = this.state.ticket
-	  		let replies = (ticket.ticketReplies || []).concat([])
-	  		replies.push({
-	  			sender: 'buyers',
-	  			message: this.state.message,
-	  			imageUrls: [src],
-	  			date: new Date().getTime()
-	  		})
+    const htmlImageCompress = new HtmlImageCompress(files[0], {quality: 0.7, imageType: files[0].type})
+    htmlImageCompress.then((result) => {
+      const {file, fileSize} = result
 
-	  		ticket.ticketReplies = replies
+      const formData = new FormData()
+      formData.append('operaId', this.state.order.id)
+      formData.append('subject', this.state.subject)
+      formData.append('message', this.state.message || '-')
+      formData.append('imageFiles', file)
+      sendImage(formData).then(({result}) => {
+        const file = files[0]
+        const src = window.navigator.userAgent.indexOf('Chrome') >= 1 || window.navigator.userAgent.indexOf('Safari') >= 1 ? window.webkitURL.createObjectURL(file) : window.URL.createObjectURL(file)
+        let ticket = this.state.ticket
+        let replies = (ticket.ticketReplies || []).concat([])
+        replies.push({
+          sender: 'buyers',
+          message: this.state.message,
+          imageUrls: [src],
+          date: new Date().getTime()
+        })
 
-	  		this.setState({
-	  			ticket,
+        ticket.ticketReplies = replies
+
+        this.setState({
+          ticket,
           message: ''
-	  		})
+        })
 
-	  		this.initScroll()
-	    })
-    } else {
-      	alert('A single image should not exceed 2M')
-    }
+        this.initScroll()
+      })
+    })
   }
 
   validate (ignoreMessage) {

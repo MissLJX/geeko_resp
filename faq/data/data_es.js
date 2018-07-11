@@ -1,25 +1,25 @@
 const question1 = {
-  id: 'se-1',
-  title: 'Donde encontrar mis ordenes?',
-  parentId: 'root-1',
-  richText: `
+    id: 'se-1',
+    title: 'Donde encontrar mis ordenes?',
+    parentId: 'root-1',
+    richText: `
 		<article>
 			<header>
 				<h1>Donde encontrar mis ordenes?</h1>
 			</header>
 			<section>
-				<p>Hay dos tipos de cuentas que puede tener aquí en Boutiquefeel, una cuenta registrada y una cuenta de Facebook. Por favor, asegúrese de haber iniciado sesión en la cuenta correcta. Una vez que lo haya hecho, puede acceder a su pedido.</p>
-				<img src="https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/faq/Boutiquefeel/1-%E7%99%BB%E9%99%86.png">
+				<p>Hay dos tipos de cuentas que puede tener aquí en Chic Me, una cuenta registrada y una cuenta de Facebook. Por favor, asegúrese de haber iniciado sesión en la cuenta correcta. Una vez que lo haya hecho, puede acceder a su pedido.</p>
+				<img src="https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/faq/wheretofindmyorders.png">
 			</section>
 		</article>
 	`
 }
 
 const question2 = {
-  id: 'se-2',
-  title: '¿Cómo presento un ticket?',
-  parentId: 'root-1',
-  richText: `
+    id: 'se-2',
+    title: '¿Cómo presento un ticket?',
+    parentId: 'root-1',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Cómo presento un ticket?</h1>
@@ -30,12 +30,12 @@ const question2 = {
 					<li>
 						<h2>PASO 1:</h2>
 						<p>Inicie sesión en su cuenta y seleccione "pedidos". Luego haga clic en "contactar al vendedor"</p>
-						<img src="https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/faq/Boutiquefeel/2-%E8%81%94%E7%B3%BB.png">
+						<img src="https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/faq/howdoisubmitaticket.png">
 					</li>
 					<li>
 						<h2>PASO 2:</h2>
 						<p>Seleccione el tema más relacionado con su problema y envíe su mensaje. </p>
-						<img src="https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/faq/Boutiquefeel/3-%E9%80%89%E6%8B%A9%E9%97%AE%E9%A2%98.png">
+						<img src="https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/faq/step2.png">
 					</li>
 				</ol>
 			</section>
@@ -44,13 +44,13 @@ const question2 = {
 }
 
 const question3 = {
-  id: 'se-3',
-  title: '¿Cómo cambio detalles en mi cuenta de Boutiquefeel?',
-  parentId: 'root-1',
-  richText: `
+    id: 'se-3',
+    title: '¿Cómo cambio detalles en mi cuenta de Chic Me?',
+    parentId: 'root-1',
+    richText: `
 		<article>
 			<header>
-				<h1>¿Cómo cambio detalles en mi cuenta de Boutiquefeel?</h1>
+				<h1>¿Cómo cambio detalles en mi cuenta de Chic Me?</h1>
 			</header>
 			<section>
 				<p>1. Haga clic en "Iniciar sesión" en la esquina superior derecha de nuestra página de inicio.</p>
@@ -58,15 +58,15 @@ const question3 = {
 				<ol>
 					<li>
 						<p>Cambie su contraseña:</p>
-						<img src="https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/faq/Boutiquefeel/4-%E6%8D%A2%E5%AF%86%E7%A0%81.png">
+						<img src="https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/faq/changeyourpwd.png">
 					</li>
 					<li>
 						<p>Editar / Añadir dirección de envío</p>
-						<img src="https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/faq/Boutiquefeel/5-%E6%8D%A2%E5%9C%B0%E5%9D%80.png">
+						<img src="https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/faq/addshipping.png">
 					</li>
 					<li>
 						<p> Cambiar su dirección de correo electrónico</p>
-						<img src="https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/faq/Boutiquefeel/6-%E6%8D%A2%E9%82%AE%E7%AE%B1.png">
+						<img src="https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/faq/changeyouremail.png">
 					</li>
 					<li>
 						<p>Historia de búsqueda</p>
@@ -81,10 +81,10 @@ const question3 = {
 }
 
 const question4 = {
-  id: 'se-4',
-  title: '¿Cómo restablezco mi contraseña?',
-  parentId: 'root-1',
-  richText: `
+    id: 'se-4',
+    title: '¿Cómo restablezco mi contraseña?',
+    parentId: 'root-1',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Cómo restablezco mi contraseña?</h1>
@@ -114,13 +114,13 @@ const question4 = {
 }
 
 const question5 = {
-  id: 'se-5',
-  title: '¿Por qué no puedo iniciar sesión en mi cuenta de Boutiquefeel?',
-  parentId: 'root-1',
-  richText: `
+    id: 'se-5',
+    title: '¿Por qué no puedo iniciar sesión en mi cuenta de Chic Me?',
+    parentId: 'root-1',
+    richText: `
 		<article>
 			<header>
-				<h1>¿Por qué no puedo iniciar sesión en mi cuenta de Boutiquefeel?</h1>
+				<h1>¿Por qué no puedo iniciar sesión en mi cuenta de Chic Me?</h1>
 			</header>
 			<section>
 				<p>
@@ -133,10 +133,10 @@ Si inicia sesión con la misma dirección de correo electrónico la primera vez,
 }
 
 const question6 = {
-  id: 'se-6',
-  title: '¿Puedo iniciar sesión con mi cuenta de Facebook?',
-  parentId: 'root-1',
-  richText: `
+    id: 'se-6',
+    title: '¿Puedo iniciar sesión con mi cuenta de Facebook?',
+    parentId: 'root-1',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Puedo iniciar sesión con mi cuenta de Facebook?</h1>
@@ -151,17 +151,17 @@ const question6 = {
 }
 
 const question7 = {
-  id: 'se-7',
-  title: '¿Debo registrarme para hacer un pedido?',
-  parentId: 'root-1',
-  richText: `
+    id: 'se-7',
+    title: '¿Debo registrarme para hacer un pedido?',
+    parentId: 'root-1',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Debo registrarme para hacer un pedido?</h1>
 			</header>
 			<section>
 				<p>
-					Registrarse en Boutiquefeel tiene muchos beneficios y desea que su experiencia de compra sea fácil y eficiente. Antes de realizar un pedido, desea registrarse. Para registrarse, ingrese su dirección de correo electrónico, cree una contraseña y espere el correo electrónico de confirmación de Boutiquefeel. Por favor, asegúrese de que la dirección de correo electrónico que utiliza esté ingresada correctamente
+					Registrarse en Chic Me tiene muchos beneficios y desea que su experiencia de compra sea fácil y eficiente. Antes de realizar un pedido, desea registrarse. Para registrarse, ingrese su dirección de correo electrónico, cree una contraseña y espere el correo electrónico de confirmación de Chic Me. Por favor, asegúrese de que la dirección de correo electrónico que utiliza esté ingresada correctamente
 				</p>
 			</section>
 		</article>
@@ -169,10 +169,10 @@ const question7 = {
 }
 
 const question8 = {
-  id: 'se-8',
-  title: '¿Cómo puedo cancelar el pedido pagado?',
-  parentId: 'root-2',
-  richText: `
+    id: 'se-8',
+    title: '¿Cómo puedo cancelar el pedido pagado?',
+    parentId: 'root-2',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Cómo puedo cancelar el pedido pagado?</h1>
@@ -182,7 +182,7 @@ const question8 = {
 					Para cancelar un pedido pago, haga clic en el botón "Mis tickets" y envíe toda la información necesaria.
 				</p>
 				<p>
-					Aquí en Boutiquefeel, el pedido justo antes del envío. En otras palabras, una vez que reciba nuestro aviso de envío, el pedido no podrá cancelarse. Luego espere a que llegue su paquete y puede devolvernos o ponerse en contacto con nosotros para organizar la "devolución del reembolso".
+					Aquí en Chic Me, el pedido justo antes del envío. En otras palabras, una vez que reciba nuestro aviso de envío, el pedido no podrá cancelarse. Luego espere a que llegue su paquete y puede devolvernos o ponerse en contacto con nosotros para organizar la "devolución del reembolso".
 				</p>
 				<p>
 					Si desea cancelar el pedido de inmediato, haga clic en el botón "Ayuda en línea" en la parte superior de la página de inicio.
@@ -193,10 +193,10 @@ const question8 = {
 }
 
 const question9 = {
-  id: 'se-9',
-  title: '¿Por qué no recibí un correo electrónico sobre el envío de mi pedido?',
-  parentId: 'root-2',
-  richText: `
+    id: 'se-9',
+    title: '¿Por qué no recibí un correo electrónico sobre el envío de mi pedido?',
+    parentId: 'root-2',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Por qué no recibí un correo electrónico sobre el envío de mi pedido?</h1>
@@ -209,7 +209,7 @@ const question9 = {
 					Le informaremos con un correo electrónico después del envío o si hay algún retraso. Puede revisar el correo no deseado primero si no lo recibió.
 				</p>
 				<p>
-					Si no puede encontrar un correo electrónico el día después de haber realizado el pedido, comuníquese con el servicio al cliente de Boutiquefeel.
+					Si no puede encontrar un correo electrónico el día después de haber realizado el pedido, comuníquese con el servicio al cliente de chicme.
 				</p>
 			</section>
 		</article>
@@ -217,10 +217,10 @@ const question9 = {
 }
 
 const question10 = {
-  id: 'se-10',
-  title: '¿Cómo cambio mi dirección de envío una vez que se realiza mi pedido?',
-  parentId: 'root-2',
-  richText: `
+    id: 'se-10',
+    title: '¿Cómo cambio mi dirección de envío una vez que se realiza mi pedido?',
+    parentId: 'root-2',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Cómo cambio mi dirección de envío una vez que se realiza mi pedido?</h1>
@@ -241,10 +241,10 @@ const question10 = {
 }
 
 const question11 = {
-  id: 'se-11',
-  title: '¿Cómo puedo cambiar mi orden?',
-  parentId: 'root-2',
-  richText: `
+    id: 'se-11',
+    title: '¿Cómo puedo cambiar mi orden?',
+    parentId: 'root-2',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Cómo puedo cambiar mi orden?</h1>
@@ -265,17 +265,17 @@ const question11 = {
 }
 
 const question12 = {
-  id: 'se-12',
-  title: '¿Qué debo hacer si no recibí un correo electrónico de confirmación?',
-  parentId: 'root-2',
-  richText: `
+    id: 'se-12',
+    title: '¿Qué debo hacer si no recibí un correo electrónico de confirmación?',
+    parentId: 'root-2',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Qué debo hacer si no recibí un correo electrónico de confirmación?</h1>
 			</header>
 			<section>
 				<p>
-					Si no ha recibido un correo electrónico de confirmación de su pedido, es posible que haya registrado su correo electrónico incorrectamente o que el correo electrónico esté en su carpeta de correo no deseado. Puede iniciar sesión en su cuenta de Boutiquefeel y hacer clic en el botón "Mis pedidos" para ver sus pedidos. Por lo tanto, puede enviar un ticket para obtener más información sobre su pedido.
+					Si no ha recibido un correo electrónico de confirmación de su pedido, es posible que haya registrado su correo electrónico incorrectamente o que el correo electrónico esté en su carpeta de correo no deseado. Puede iniciar sesión en su cuenta de Chic Me y hacer clic en el botón "Mis pedidos" para ver sus pedidos. Por lo tanto, puede enviar un ticket para obtener más información sobre su pedido.
 				</p>
 			</section>
 		</article>
@@ -283,42 +283,40 @@ const question12 = {
 }
 
 const question13 = {
-  id: 'se-13',
-  title: '¿Cuánto tiempo demorará mi pedido en llegar?',
-  parentId: 'root-2',
-  richText: `
+    id: 'se-13',
+    title: '¿Cuánto tiempo demorará mi pedido en llegar?',
+    parentId: 'root-2',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Cuánto tiempo demorará mi pedido en llegar?</h1>
 			</header>
 			<section>
 				<p>
-					Aquí en Boutiquefeel, nos enorgullecemos y nos esforzamos para asegurarnos de que se entreguen de manera oportuna. Normalmente, recibirá su pedido en 7-25 días hábiles a partir de la fecha en que se realiza.
+					Aquí en Chic Me, nos enorgullecemos y nos esforzamos para asegurarnos de que se entreguen de manera oportuna. Normalmente, recibirá su pedido en 7-25 días hábiles a partir de la fecha en que se realiza.
                 </p>
-
 				<p>
 					<strong>Los días de entrega = días de procesamiento + días de envío.</strong>
 				</p>
-
 				<p>Puede verificar el estado bajo el botón "Mis pedidos".</p>
-				<p>Para obtener más información, haga clic en este enlace: <a href="https://www.Boutiquefeel.com/fs/shipping-policy-pc">https://www.Boutiquefeel.com/fs/shipping-policy-pc</a></p>
+				<p>Para obtener más información, haga clic en este enlace: <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
 			</section>
 		</article>
 	`
 }
 
 const question14 = {
-  id: 'se-14',
-  title: '¿Cómo realizo un seguimiento de mis pedidos?',
-  parentId: 'root-2',
-  richText: `
+    id: 'se-14',
+    title: '¿Cómo realizo un seguimiento de mis pedidos?',
+    parentId: 'root-2',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Cómo realizo un seguimiento de mis pedidos?</h1>
 			</header>
 			<section>
 				<p>
-					El seguimiento de su paquete es fácil. Puede iniciar sesión en su cuenta de Boutiquefeel y encontrar toda la información de su pedido. Haga clic en "Mis pedidos" y haga clic en "Ver detalles" y podrá averiguar dónde está su paquete. También puede enviar un ticket o correo electrónico (support@Boutiquefeel.com) para verificar la información de su pedido.
+					El seguimiento de su paquete es fácil. Puede iniciar sesión en su cuenta de Chicme y encontrar toda la información de su pedido. Haga clic en "Mis pedidos" y haga clic en "Ver detalles" y podrá averiguar dónde está su paquete. También puede enviar un ticket o correo electrónico (support@chicme.com) para verificar la información de su pedido.
 				</p>
 			</section>
 		</article>
@@ -326,10 +324,10 @@ const question14 = {
 }
 
 const question15 = {
-  id: 'se-15',
-  title: '¿Tengo que pagar por el vestuario?',
-  parentId: 'root-2',
-  richText: `
+    id: 'se-15',
+    title: '¿Tengo que pagar por el vestuario?',
+    parentId: 'root-2',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Tengo que pagar por el vestuario?</h1>
@@ -344,10 +342,10 @@ const question15 = {
 }
 
 const question16 = {
-  id: 'se-16',
-  title: '¿Cómo cambiar la dirección de facturación?',
-  parentId: 'root-2',
-  richText: `
+    id: 'se-16',
+    title: '¿Cómo cambiar la dirección de facturación?',
+    parentId: 'root-2',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Cómo cambiar la dirección de facturación?</h1>
@@ -356,11 +354,9 @@ const question16 = {
 				<p>
 					En nuestro sistema, la dirección de facturación se enviará automáticamente a la misma dirección de envío.
 				</p>
-
 				<p>
 					Solo enviaremos el pedido a la dirección de envío que dejó en nuestro sitio.
 				</p>
-
 				<p>
 					Por lo tanto, la dirección de envío debe incluir la dirección de facturación, si desea cambiar la dirección de facturación.
 				</p>
@@ -370,10 +366,10 @@ const question16 = {
 }
 
 const question17 = {
-  id: 'se-17',
-  title: '¿Dónde pongo el cupón de descuento?',
-  parentId: 'root-2',
-  richText: `
+    id: 'se-17',
+    title: '¿Dónde pongo el cupón de descuento?',
+    parentId: 'root-2',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Dónde pongo el cupón de descuento?</h1>
@@ -382,7 +378,6 @@ const question17 = {
 				<p>
 					Antes de pagar, puede agregar el código de cupón que tiene en el cupón en blanco
 				</p>
-
 				<p>
 					Si desea cambiar el color o el tamaño del artículo que usted pidió, es necesario ponerse en contacto con nuestro servicio al cliente, antes del envío, podemos cambiarlo para usted.
 				</p>
@@ -392,10 +387,10 @@ const question17 = {
 }
 
 const question18 = {
-  id: 'se-18',
-  title: '¿Por qué no recibí una confirmación sobre mi pedido?',
-  parentId: 'root-2',
-  richText: `
+    id: 'se-18',
+    title: '¿Por qué no recibí una confirmación sobre mi pedido?',
+    parentId: 'root-2',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Por qué no recibí una confirmación sobre mi pedido?</h1>
@@ -410,10 +405,10 @@ const question18 = {
 }
 
 const question19 = {
-  id: 'se-19',
-  title: '¿Puedo obtener un cupón de descuento para mi primer pedido?',
-  parentId: 'root-2',
-  richText: `
+    id: 'se-19',
+    title: '¿Puedo obtener un cupón de descuento para mi primer pedido?',
+    parentId: 'root-2',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Puedo obtener un cupón de descuento para mi primer pedido?</h1>
@@ -428,10 +423,10 @@ const question19 = {
 }
 
 const question20 = {
-  id: 'se-20',
-  title: '¿Cómo puedo hacer un pedido? Cómo hacer un pedido?',
-  parentId: 'root-2',
-  richText: `
+    id: 'se-20',
+    title: '¿Cómo puedo hacer un pedido? Cómo hacer un pedido?',
+    parentId: 'root-2',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Cómo puedo hacer un pedido? Cómo hacer un pedido?</h1>
@@ -440,14 +435,11 @@ const question20 = {
 				<p>
 					Este es el paso para hacer un pedido:
 				</p>
-
 				<p>
 					Paso 1: para agregar un artículo a su carrito, simplemente seleccione el botón "Agregar a la bolsa". No olvides elegir el tamaño y el color antes de agregar el artículo a tu bolsa.
 				</p>
-
 				<p>Paso 2: Una vez que complete su selección de elementos, haga clic en "ver la bolsa" para una vista previa de su pedido. Desde aquí, puede revisar su pedido y cambiar la cantidad si es necesario, editar la dirección, elegir la compañía de envío
 				</p>
-
 				<p>
 					Paso 3: Elija PayPal o tarjeta de crédito para pagar por su orden, y por último, completar su información de pago y haga clic en "Pagar" para completar su compra.
 				</p>
@@ -457,10 +449,10 @@ const question20 = {
 }
 
 const question21 = {
-  id: 'se-21',
-  title: '¿Aceptan efectivo contra entrega?',
-  parentId: 'root-3',
-  richText: `
+    id: 'se-21',
+    title: '¿Aceptan efectivo contra entrega?',
+    parentId: 'root-3',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Aceptan efectivo contra entrega?</h1>
@@ -475,10 +467,10 @@ const question21 = {
 }
 
 const question22 = {
-  id: 'se-22',
-  title: '¿Puedo usar una tarjeta de regalo para pagar?',
-  parentId: 'root-3',
-  richText: `
+    id: 'se-22',
+    title: '¿Puedo usar una tarjeta de regalo para pagar?',
+    parentId: 'root-3',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Puedo usar una tarjeta de regalo para pagar?</h1>
@@ -493,18 +485,18 @@ const question22 = {
 }
 
 const question23 = {
-  id: 'se-23',
-  title: '¿Por qué mi pago se sigue rechazando?',
-  parentId: 'root-3',
-  richText: `
+    id: 'se-23',
+    title: '¿Por qué mi pago se sigue rechazando?',
+    parentId: 'root-3',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Por qué mi pago se sigue rechazando?</h1>
 			</header>
 			<section>
-				<p>Debido a tener en cuenta la seguridad, las razones podrían ser rechazadas different.Boutiquefeel puedo aceptar PayPal, Visa y MasterCard.	Due to account safety, the declined reasons might be different.Boutiquefeel can accept PayPal,Visa and MasterCard.
+				<p>Debido a tener en cuenta la seguridad, las razones podrían ser rechazadas different.Chic me puedo aceptar PayPal, Visa y MasterCard.	Due to account safety, the declined reasons might be different.Chic Me can accept PayPal,Visa and MasterCard.
 				</p>
-				<p>Por favor, compruebe los detalles de la tarjeta en su Boutiquefeel. Preste atención a la dirección de facturación, la dirección de facturación debe ser con la dirección de envío.
+				<p>Por favor, compruebe los detalles de la tarjeta en su chicme. Preste atención a la dirección de facturación, la dirección de facturación debe ser con la dirección de envío.
                 </p>
 				<p>
 				   Es posible que el emisor de su tarjeta haya rechazado su pago. Debido theywill no nos informan de la razón para hacerlo, lo mejor es que consulte con su emisor de la tarjeta para más detalles. Si es posible, le aconsejamos que intente pagar con PayPal.
@@ -515,10 +507,10 @@ const question23 = {
 }
 
 const question24 = {
-  id: 'se-24',
-  title: '¿Puedo aplicar varios códigos de descuento?',
-  parentId: 'root-3',
-  richText: `
+    id: 'se-24',
+    title: '¿Puedo aplicar varios códigos de descuento?',
+    parentId: 'root-3',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Puedo aplicar varios códigos de descuento?</h1>
@@ -533,17 +525,17 @@ const question24 = {
                 <p>
                    Después de revisar el carrito de la compra, debajo del Resumen del pedido, ingrese su código de cupón y luego solicite que el cupón se aplique correctamente:
                 </p>
-                <img src="https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/faq/Boutiquefeel/7-%E9%80%89%E4%BC%98%E6%83%A0%E5%88%B8.png">
+                <img src="https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/faq/amienabletopay.png">
 			</section>
 		</article>
 	`
 }
 
 const question25 = {
-  id: 'se-25',
-  title: '¿Por qué mis créditos son inválidos?',
-  parentId: 'root-3',
-  richText: `
+    id: 'se-25',
+    title: '¿Por qué mis créditos son inválidos?',
+    parentId: 'root-3',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Por qué mis créditos son inválidos?</h1>
@@ -567,10 +559,10 @@ Créditos quiere vencerse en 12 meses
 	`
 }
 const question26 = {
-  id: 'se-26',
-  title: '¿Por qué estoy autorizado para autorizar mi pedido?',
-  parentId: 'root-3',
-  richText: `
+    id: 'se-26',
+    title: '¿Por qué estoy autorizado para autorizar mi pedido?',
+    parentId: 'root-3',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Por qué estoy autorizado para autorizar mi pedido?</h1>
@@ -585,13 +577,13 @@ const question26 = {
 }
 
 const question27 = {
-  id: 'se-27',
-  title: '¿Puedo usar mis puntos de bonificación Boutiquefeel, dinero de billetera y un código de cupón, todo al mismo tiempo?',
-  parentId: 'root-3',
-  richText: `
+    id: 'se-27',
+    title: '¿Puedo usar mis puntos de bonificación Chic Me, dinero de billetera y un código de cupón, todo al mismo tiempo?',
+    parentId: 'root-3',
+    richText: `
 		<article>
 			<header>
-				<h1>¿Puedo usar mis puntos de bonificación Boutiquefeel, dinero de billetera y un código de cupón, todo al mismo tiempo?</h1>
+				<h1>¿Puedo usar mis puntos de bonificación Chic Me, dinero de billetera y un código de cupón, todo al mismo tiempo?</h1>
 			</header>
 			<section>
 				<p>
@@ -603,10 +595,10 @@ const question27 = {
 }
 
 const question28 = {
-  id: 'se-28',
-  title: '¿Por qué no puedo pagarlo con mi tarjeta?',
-  parentId: 'root-3',
-  richText: `
+    id: 'se-28',
+    title: '¿Por qué no puedo pagarlo con mi tarjeta?',
+    parentId: 'root-3',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Por qué no puedo pagarlo con mi tarjeta?</h1>
@@ -616,7 +608,7 @@ const question28 = {
                     Debido a la seguridad de la cuenta, la razón puede ser diferente.
 				</p>
 				<p>
-					Consulte los detalles de la tarjeta en su Boutiquefeel. Preste atención a la dirección de facturación, la dirección de facturación debe ser con la dirección de envío.
+					Consulte los detalles de la tarjeta en su chicme. Preste atención a la dirección de facturación, la dirección de facturación debe ser con la dirección de envío.
 				</p>
 				<p>
 					 Es posible que el emisor de su tarjeta haya rechazado su pago. Debido theywill no nos informan de la razón para hacerlo, lo mejor es que consulte con su emisor de la tarjeta para más detalles. Si es posible, le aconsejamos que intente pagar con PayPal.
@@ -627,10 +619,10 @@ const question28 = {
 }
 
 const question29 = {
-  id: 'se-29',
-  title: '¿Por qué mi tarjeta sigue siendo rechazada?',
-  parentId: 'root-3',
-  richText: `
+    id: 'se-29',
+    title: '¿Por qué mi tarjeta sigue siendo rechazada?',
+    parentId: 'root-3',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Por qué mi tarjeta sigue siendo rechazada?</h1>
@@ -640,7 +632,7 @@ const question29 = {
 					Debido a la seguridad de la cuenta, la razón puede ser diferente. 
 				</p>
 				<p>
-					Consulte los detalles de la tarjeta en su Boutiquefeel. Preste atención a la dirección de facturación, la dirección de facturación debe ser con la dirección de envío. 
+					Consulte los detalles de la tarjeta en su chicme. Preste atención a la dirección de facturación, la dirección de facturación debe ser con la dirección de envío. 
 				</p>
 				<p>
 					 Es posible que el emisor de su tarjeta haya rechazado su pago. Debido theywill no nos informan de la razón para hacerlo, lo mejor es que consulte con su emisor de la tarjeta para más detalles. Si es posible, le aconsejamos que intente pagar con PayPal.
@@ -651,10 +643,10 @@ const question29 = {
 }
 
 const question30 = {
-  id: 'se-30',
-  title: '¿Puedo usar PayPal para pagar?',
-  parentId: 'root-3',
-  richText: `
+    id: 'se-30',
+    title: '¿Puedo usar PayPal para pagar?',
+    parentId: 'root-3',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Puedo usar PayPal para pagar?</h1>
@@ -669,10 +661,10 @@ const question30 = {
 }
 
 const question31 = {
-  id: 'se-31',
-  title: '¿Cuál pago puedes aceptar?',
-  parentId: 'root-3',
-  richText: `
+    id: 'se-31',
+    title: '¿Cuál pago puedes aceptar?',
+    parentId: 'root-3',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Cuál pago puedes aceptar?</h1>
@@ -687,10 +679,10 @@ const question31 = {
 }
 
 const question32 = {
-  id: 'se-32',
-  title: '¿Puedo llamarte para hacer un pedido?',
-  parentId: 'root-3',
-  richText: `
+    id: 'se-32',
+    title: '¿Puedo llamarte para hacer un pedido?',
+    parentId: 'root-3',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Puedo llamarte para hacer un pedido?</h1>
@@ -705,10 +697,10 @@ const question32 = {
 }
 
 const question33 = {
-  id: 'se-33',
-  title: '¿Por qué hay tantos productos de un solo tamaño?',
-  parentId: 'root-4',
-  richText: `
+    id: 'se-33',
+    title: '¿Por qué hay tantos productos de un solo tamaño?',
+    parentId: 'root-4',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Por qué hay tantos productos de un solo tamaño?</h1>
@@ -725,10 +717,10 @@ const question33 = {
 	`
 }
 const question34 = {
-  id: 'se-34',
-  title: '¿Qué significa una talla única?',
-  parentId: 'root-4',
-  richText: `
+    id: 'se-34',
+    title: '¿Qué significa una talla única?',
+    parentId: 'root-4',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Qué significa una talla única?</h1>
@@ -743,10 +735,10 @@ const question34 = {
 }
 
 const question35 = {
-  id: 'se-35',
-  title: '¿Cómo elijo el tamaño?',
-  parentId: 'root-4',
-  richText: `
+    id: 'se-35',
+    title: '¿Cómo elijo el tamaño?',
+    parentId: 'root-4',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Cómo elijo el tamaño?</h1>
@@ -758,16 +750,16 @@ const question35 = {
 				<p>
 				Además, los artículos están en diferentes estilos y texturas, por lo que hay diferencias inevitables. Por favor danos un entendimiento
 				</p>
-				<img src="https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/faq/Boutiquefeel/8-%E9%80%89%E5%B0%BA%E7%A0%81.png">
+				<img src="https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/faq/howdoichoosethesize.png">
 			</section>
 		</article>
 	`
 }
 const question36 = {
-  id: 'se-36',
-  title: '¿Dónde se hacen los artículos?',
-  parentId: 'root-4',
-  richText: `
+    id: 'se-36',
+    title: '¿Dónde se hacen los artículos?',
+    parentId: 'root-4',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Dónde se hacen los artículos?</h1>
@@ -782,10 +774,10 @@ const question36 = {
 }
 
 const question37 = {
-  id: 'se-37',
-  title: '¿Dónde estás ubicado?',
-  parentId: 'root-4',
-  richText: `
+    id: 'se-37',
+    title: '¿Dónde estás ubicado?',
+    parentId: 'root-4',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Dónde estás ubicado?</h1>
@@ -800,17 +792,17 @@ const question37 = {
 }
 
 const question38 = {
-  id: 'se-38',
-  title: '¿Puedo obtener un descuento por un artículo de descuento?',
-  parentId: 'root-4',
-  richText: `
+    id: 'se-38',
+    title: '¿Puedo obtener un descuento por un artículo de descuento?',
+    parentId: 'root-4',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Puedo obtener un descuento por un artículo de descuento?</h1>
 			</header>
 			<section>
 				<p>
-					Nos disculpamos por este inconveniente, pero no le reembolsaremos la diferencia. Boutiquefeel se reserva el derecho de cambiar en cualquier momento a nuestro exclusivo criterio.
+					Nos disculpamos por este inconveniente, pero no le reembolsaremos la diferencia. Chicme se reserva el derecho de cambiar en cualquier momento a nuestro exclusivo criterio.
 				</p>
 			</section>
 		</article>
@@ -818,10 +810,10 @@ const question38 = {
 }
 
 const question39 = {
-  id: 'se-39',
-  title: '¿Dónde puedo encontrar sus últimos productos?',
-  parentId: 'root-4',
-  richText: `
+    id: 'se-39',
+    title: '¿Dónde puedo encontrar sus últimos productos?',
+    parentId: 'root-4',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Dónde puedo encontrar sus últimos productos?</h1>
@@ -836,10 +828,10 @@ const question39 = {
 }
 
 const question40 = {
-  id: 'se-40',
-  title: '¿Va a reabastecer los artículos que se han agotado?',
-  parentId: 'root-4',
-  richText: `
+    id: 'se-40',
+    title: '¿Va a reabastecer los artículos que se han agotado?',
+    parentId: 'root-4',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Va a reabastecer los artículos que se han agotado?</h1>
@@ -853,10 +845,10 @@ const question40 = {
 }
 
 const question41 = {
-  id: 'se-41',
-  title: '¿Usas animales para cuero genuino?',
-  parentId: 'root-4',
-  richText: `
+    id: 'se-41',
+    title: '¿Usas animales para cuero genuino?',
+    parentId: 'root-4',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Usas animales para cuero genuino?</h1>
@@ -871,10 +863,10 @@ const question41 = {
 }
 
 const question42 = {
-  id: 'se-42',
-  title: '¿Por qué el precio de este artículo sube más de lo que vi antes?',
-  parentId: 'root-4',
-  richText: `
+    id: 'se-42',
+    title: '¿Por qué el precio de este artículo sube más de lo que vi antes?',
+    parentId: 'root-4',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Por qué el precio de este artículo sube más de lo que vi antes?</h1>
@@ -889,10 +881,10 @@ const question42 = {
 }
 
 const question43 = {
-  id: 'se-43',
-  title: '¿Cómo puedo cambiar mi dirección de envío?',
-  parentId: 'root-5',
-  richText: `
+    id: 'se-43',
+    title: '¿Cómo puedo cambiar mi dirección de envío?',
+    parentId: 'root-5',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Cómo puedo cambiar mi dirección de envío?</h1>
@@ -905,19 +897,19 @@ const question43 = {
 					Continúe enviando un boleto o contacte a la ayuda en línea y podemos ayudarlo a cambiar la dirección de envío antes del envío.
 				</p>
 				<p>
-					Para un chequeo detallado, si estás buscando reservar tu libro futuro, inicia sesión en tu cuenta de Boutiquefeel.
+					Para un chequeo detallado, si estás buscando reservar tu libro futuro, inicia sesión en tu cuenta de Chic Me.
 				</p>
-				<img src="https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/faq/Boutiquefeel/9-%E5%9C%B0%E5%9D%80%E7%B0%BF.png">
+				<img src="https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/faq/addshipping.png">
 			</section>
 		</article>
 	`
 }
 
 const question44 = {
-  id: 'se-44',
-  title: '¿Por qué el número de seguimiento no funciona?',
-  parentId: 'root-5',
-  richText: `
+    id: 'se-44',
+    title: '¿Por qué el número de seguimiento no funciona?',
+    parentId: 'root-5',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Por qué el número de seguimiento no funciona?</h1>
@@ -931,10 +923,10 @@ const question44 = {
 	`
 }
 const question45 = {
-  id: 'se-45',
-  title: '¿Cuándo llegará mi pedido?',
-  parentId: 'root-5',
-  richText: `
+    id: 'se-45',
+    title: '¿Cuándo llegará mi pedido?',
+    parentId: 'root-5',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Cuándo llegará mi pedido?</h1>
@@ -948,17 +940,17 @@ El envío demora aproximadamente de 7 a 25 días hábiles para llegar a los paí
 				 Tenga en cuenta: Tiempo de entrega total = Tiempo de procesamiento + Tiempo de envío
                 </p>
                 <p>
-                Para conocer la fecha estimada de llegada, consulte <a href="http://www.Boutiquefeel.com/fs/shipping-policy-pc">http://www.Boutiquefeel.com/fs/shipping-policy-pc</a>
+                Para conocer la fecha estimada de llegada, consulte <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">http://www.chicme.com/fs/shipping-policy-pc</a>
                 </p>
 			</section>
 		</article>
 	`
 }
 const question46 = {
-  id: 'se-46',
-  title: '¿Por qué no se actualizó mi información de envío?',
-  parentId: 'root-5',
-  richText: `
+    id: 'se-46',
+    title: '¿Por qué no se actualizó mi información de envío?',
+    parentId: 'root-5',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Por qué no se actualizó mi información de envío?</h1>
@@ -968,17 +960,17 @@ const question46 = {
 					Después de que le enviemos el paquete, la información de envío se actualizará en el próximo centro de clasificación, que puede demorar unos días. Luego puede iniciar sesión en el estado y seguimiento de la orden.
 				</p>
 				<p>
-				  Para conocer la fecha estimada de llegada, consulte  <a href="http://www.Boutiquefeel.com/fs/shipping-policy-pc">http://www.Boutiquefeel.com/fs/shipping-policy-pc</a>
+				  Para conocer la fecha estimada de llegada, consulte  <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">http://www.chicme.com/fs/shipping-policy-pc</a>
                 </p>
 			</section>
 		</article>
 	`
 }
 const question47 = {
-  id: 'se-47',
-  title: '¿Por qué tengo que pagar los cargos adicionales?',
-  parentId: 'root-5',
-  richText: `
+    id: 'se-47',
+    title: '¿Por qué tengo que pagar los cargos adicionales?',
+    parentId: 'root-5',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Por qué tengo que pagar los cargos adicionales?</h1>
@@ -992,27 +984,27 @@ const question47 = {
 	`
 }
 const question48 = {
-  id: 'se-48',
-  title: '¿Cómo es que mi paquete se muestra pero no he recibido mi paquete?',
-  parentId: 'root-5',
-  richText: `
+    id: 'se-48',
+    title: '¿Cómo es que mi paquete se muestra pero no he recibido mi paquete?',
+    parentId: 'root-5',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Cómo es que mi paquete se muestra pero no he recibido mi paquete?</h1>
 			</header>
 			<section>
 				<p>
-					Los paquetes pueden ser entregados a su casilla de correo o firmados por sus vecinos. Le sugerimos que consulte primero su buzón de correo y con sus vecinos y familiares. Si no puede encontrarlo, revise su paquete con la compañía de envío a continuación. ¡Recuerde traer su número de rastreo! Servicio al cliente de Boutiquefeel. Si no puede encontrar su paquete, no dude en ponerse en contacto con el Servicio al cliente de Boutiquefeel.
+					Los paquetes pueden ser entregados a su casilla de correo o firmados por sus vecinos. Le sugerimos que consulte primero su buzón de correo y con sus vecinos y familiares. Si no puede encontrarlo, revise su paquete con la compañía de envío a continuación. ¡Recuerde traer su número de rastreo! Servicio al cliente de Chicme. Si no puede encontrar su paquete, no dude en ponerse en contacto con el Servicio al cliente de Chicme.
 				</p>
 			</section>
 		</article>
 	`
 }
 const question49 = {
-  id: 'se-49',
-  title: '¿Por qué mi pedido fue enviado por separado?',
-  parentId: 'root-5',
-  richText: `
+    id: 'se-49',
+    title: '¿Por qué mi pedido fue enviado por separado?',
+    parentId: 'root-5',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Por qué mi pedido fue enviado por separado?</h1>
@@ -1026,10 +1018,10 @@ const question49 = {
 	`
 }
 const question50 = {
-  id: 'se-50',
-  title: '¿Por qué mi paquete fue devuelto?',
-  parentId: 'root-5',
-  richText: `
+    id: 'se-50',
+    title: '¿Por qué mi paquete fue devuelto?',
+    parentId: 'root-5',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Por qué mi paquete fue devuelto?</h1>
@@ -1055,10 +1047,10 @@ const question50 = {
 	`
 }
 const question51 = {
-  id: 'se-51',
-  title: '¿Debo enviarlo a mi dirección de envío cuando se entregue mi paquete?',
-  parentId: 'root-5',
-  richText: `
+    id: 'se-51',
+    title: '¿Debo enviarlo a mi dirección de envío cuando se entregue mi paquete?',
+    parentId: 'root-5',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Debo enviarlo a mi dirección de envío cuando se entregue mi paquete?</h1>
@@ -1072,27 +1064,27 @@ const question51 = {
 	`
 }
 const question52 = {
-  id: 'se-52',
-  title: '¿Qué debo hacer cuando las actualizaciones de seguimiento muestran que mi paquete fue devuelto?',
-  parentId: 'root-5',
-  richText: `
+    id: 'se-52',
+    title: '¿Qué debo hacer cuando las actualizaciones de seguimiento muestran que mi paquete fue devuelto?',
+    parentId: 'root-5',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Qué debo hacer cuando las actualizaciones de seguimiento muestran que mi paquete fue devuelto?</h1>
 			</header>
 			<section>
 				<p>
-					Por favor, póngase en contacto con la compañía de envío para obtener más información. Si aún no puede encontrar su paquete, comuníquese con el servicio al cliente de Boutiquefeel lo antes posible mediante el envío de un boleto. Queremos estar más que felices de resolver este problema.
+					Por favor, póngase en contacto con la compañía de envío para obtener más información. Si aún no puede encontrar su paquete, comuníquese con el servicio al cliente de Chic Me lo antes posible mediante el envío de un boleto. Queremos estar más que felices de resolver este problema.
 				</p>
 			</section>
 		</article>
 	`
 }
 const question53 = {
-  id: 'se-53',
-  title: '¿Qué sucede si no estoy en casa cuando parto?',
-  parentId: 'root-5',
-  richText: `
+    id: 'se-53',
+    title: '¿Qué sucede si no estoy en casa cuando parto?',
+    parentId: 'root-5',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Qué sucede si no estoy en casa cuando parto?</h1>
@@ -1109,27 +1101,27 @@ const question53 = {
 	`
 }
 const question54 = {
-  id: 'se-54',
-  title: '¿Hay alguna tarifa adicional?',
-  parentId: 'root-5',
-  richText: `
+    id: 'se-54',
+    title: '¿Hay alguna tarifa adicional?',
+    parentId: 'root-5',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Hay alguna tarifa adicional?</h1>
 			</header>
 			<section>
 				<p>
-					Enviamos generalmente con su oficina de correos local. No debe haber tarifas adicionales cuando se usa el correo regular. Servicio al cliente de Boutiquefeel enviando un boleto.
+					Enviamos generalmente con su oficina de correos local. No debe haber tarifas adicionales cuando se usa el correo regular. Servicio al cliente de Chicme enviando un boleto.
 				</p>
 			</section>
 		</article>
 	`
 }
 const question55 = {
-  id: 'se-55',
-  title: '¿Por qué no recibí mi pedido?',
-  parentId: 'root-5',
-  richText: `
+    id: 'se-55',
+    title: '¿Por qué no recibí mi pedido?',
+    parentId: 'root-5',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Por qué no recibí mi pedido?</h1>
@@ -1140,33 +1132,33 @@ const question55 = {
 El envío demora aproximadamente de 3 a 25 días hábiles para llegar a los países de destino.
 				</p>
 				<p>Tenga en cuenta: Tiempo de entrega total = Tiempo de procesamiento + Tiempo de envío</p>
-				<p>Para conocer la fecha estimada de llegada, consulte  <a href="http://www.Boutiquefeel.com/fs/shipping-policy-pc">http://www.Boutiquefeel.com/fs/shipping-policy-pc</a></p>
+				<p>Para conocer la fecha estimada de llegada, consulte  <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">http://www.chicme.com/fs/shipping-policy-pc</a></p>
 			</section>
 		</article>
 	`
 }
 const question56 = {
-  id: 'se-56',
-  title: 'Mi no puede ser entregado, ¿qué puedo hacer?',
-  parentId: 'root-5',
-  richText: `
+    id: 'se-56',
+    title: 'Mi no puede ser entregado, ¿qué puedo hacer?',
+    parentId: 'root-5',
+    richText: `
 		<article>
 			<header>
 				<h1>Mi no puede ser entregado, ¿qué puedo hacer?</h1>
 			</header>
 			<section>
 				<p>
-					Póngase en contacto con su oficina de correos local o con el servicio de mensajería directamente con su número de seguimiento. Si aún no puede encontrar su paquete, no dude en ponerse en contacto con el Servicio al cliente de Boutiquefeel.
+					Póngase en contacto con su oficina de correos local o con el servicio de mensajería directamente con su número de seguimiento. Si aún no puede encontrar su paquete, no dude en ponerse en contacto con el Servicio al cliente de Chicme.
 				</p>
 			</section>
 		</article>
 	`
 }
 const question57 = {
-  id: 'se-57',
-  title: 'Tengo que pagar por los disfraces, ¿qué puedo hacer?',
-  parentId: 'root-5',
-  richText: `
+    id: 'se-57',
+    title: 'Tengo que pagar por los disfraces, ¿qué puedo hacer?',
+    parentId: 'root-5',
+    richText: `
 		<article>
 			<header>
 				<h1>Tengo que pagar por los disfraces, ¿qué puedo hacer?</h1>
@@ -1180,10 +1172,10 @@ const question57 = {
 	`
 }
 const question58 = {
-  id: 'se-58',
-  title: '¿Cuánto tiempo llega mi pedido?',
-  parentId: 'root-5',
-  richText: `
+    id: 'se-58',
+    title: '¿Cuánto tiempo llega mi pedido?',
+    parentId: 'root-5',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Cuánto tiempo llega mi pedido?</h1>
@@ -1194,16 +1186,16 @@ const question58 = {
 El envío demora aproximadamente de 3 a 25 días hábiles para llegar a los países de destino.
 				</p>
 				<p>Tenga en cuenta: Tiempo de entrega total = Tiempo de procesamiento + Tiempo de envío</p>
-				<p>Para conocer la fecha estimada de llegada, consulte  <a href="http://www.Boutiquefeel.com/fs/shipping-policy-pc">http://www.Boutiquefeel.com/fs/shipping-policy-pc</a></p>
+				<p>Para conocer la fecha estimada de llegada, consulte  <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">http://www.chicme.com/fs/shipping-policy-pc</a></p>
 			</section>
 		</article>
 	`
 }
 const question59 = {
-  id: 'se-59',
-  title: '¿Cuánto tiempo necesito esperar para que venga mi pedido?',
-  parentId: 'root-5',
-  richText: `
+    id: 'se-59',
+    title: '¿Cuánto tiempo necesito esperar para que venga mi pedido?',
+    parentId: 'root-5',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Cuánto tiempo necesito esperar para que venga mi pedido?</h1>
@@ -1214,16 +1206,16 @@ const question59 = {
 El envío demora aproximadamente de 3 a 25 días hábiles para llegar a los países de destino.
 				</p>
 				<p>Tenga en cuenta: Tiempo de entrega total = Tiempo de procesamiento + Tiempo de envío</p>
-				<p>Para conocer la fecha estimada de llegada, consulte <a href="http://www.Boutiquefeel.com/fs/shipping-policy-pc">http://www.Boutiquefeel.com/fs/shipping-policy-pc</a></p>
+				<p>Para conocer la fecha estimada de llegada, consulte <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">http://www.chicme.com/fs/shipping-policy-pc</a></p>
 			</section>
 		</article>
 	`
 }
 const question60 = {
-  id: 'se-60',
-  title: '¿Tienes 2 días de entrega?',
-  parentId: 'root-5',
-  richText: `
+    id: 'se-60',
+    title: '¿Tienes 2 días de entrega?',
+    parentId: 'root-5',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Tienes 2 días de entrega?</h1>
@@ -1235,16 +1227,16 @@ const question60 = {
 El envío demora aproximadamente de 3 a 25 días hábiles para llegar a los países de destino.
 				</p>
 				<p>Tenga en cuenta: Tiempo de entrega total = Tiempo de procesamiento + Tiempo de envío</p>
-				<p>Para conocer la fecha estimada de llegada, consulte <a href="http://www.Boutiquefeel.com/fs/shipping-policy-pc">http://www.Boutiquefeel.com/fs/shipping-policy-pc</a></p>
+				<p>Para conocer la fecha estimada de llegada, consulte <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">http://www.chicme.com/fs/shipping-policy-pc</a></p>
 			</section>
 		</article>
 	`
 }
 const question61 = {
-  id: 'se-61',
-  title: '¿Cuál es su política de devolución?',
-  parentId: 'root-6',
-  richText: `
+    id: 'se-61',
+    title: '¿Cuál es su política de devolución?',
+    parentId: 'root-6',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Cuál es su política de devolución?</h1>
@@ -1277,16 +1269,16 @@ const question61 = {
 				<p>
 					La tarifa de envío original y el seguro no son reembolsables.
 				</p>
-				<p>No ofrecemos Flete por cobrar (FTC). Las devoluciones se realizarán a su propio costo. a menos que Boutiquefeel haga un error.</p>
+				<p>No ofrecemos Flete por cobrar (FTC). Las devoluciones se realizarán a su propio costo. a menos que Chic Me haga un error.</p>
 			</section>
 		</article>
 	`
 }
 const question62 = {
-  id: 'se-62',
-  title: 'No he recibido el reembolso en la tarjeta. ¿Cuál es el estado de mi reembolso?',
-  parentId: 'root-6',
-  richText: `
+    id: 'se-62',
+    title: 'No he recibido el reembolso en la tarjeta. ¿Cuál es el estado de mi reembolso?',
+    parentId: 'root-6',
+    richText: `
 		<article>
 			<header>
 				<h1>No he recibido el reembolso en la tarjeta. ¿Cuál es el estado de mi reembolso?</h1>
@@ -1296,17 +1288,17 @@ const question62 = {
 					El reembolso vuelve a su forma de pago original:
 				</p>
 				<p>Si pagó con PayPal, el reembolso llegará a su cuenta de PayPal dentro de 1-2 días hábiles; Tenga en cuenta que no puede controlar la velocidad de su banco de tarjeta de crédito.</p>
-			    <p>Boutiquefeel no puede controlar la velocidad de procesamiento de su banco de tarjetas. Solicite información detallada al banco de la tarjeta.</p>
+			    <p>Chicme no puede controlar la velocidad de procesamiento de su banco de tarjetas. Solicite información detallada al banco de la tarjeta.</p>
 			    <p>Nos disculpamos sinceramente por los inconvenientes causados</p>
 			</section>
 		</article>
 	`
 }
 const question63 = {
-  id: 'se-63',
-  title: '¿Cuánto tiempo lleva procesar mi reembolso?',
-  parentId: 'root-6',
-  richText: `
+    id: 'se-63',
+    title: '¿Cuánto tiempo lleva procesar mi reembolso?',
+    parentId: 'root-6',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Cuánto tiempo lleva procesar mi reembolso?</h1>
@@ -1322,10 +1314,10 @@ const question63 = {
 }
 
 const question64 = {
-  id: 'se-64',
-  title: '¿Cómo devuelvo mi pedido?',
-  parentId: 'root-6',
-  richText: `
+    id: 'se-64',
+    title: '¿Cómo devuelvo mi pedido?',
+    parentId: 'root-6',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Cómo devuelvo mi pedido?</h1>
@@ -1340,10 +1332,10 @@ const question64 = {
 	`
 }
 const question65 = {
-  id: 'se-65',
-  title: '¿Recibiré un reembolso completo por mi devolución?',
-  parentId: 'root-6',
-  richText: `
+    id: 'se-65',
+    title: '¿Recibiré un reembolso completo por mi devolución?',
+    parentId: 'root-6',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Recibiré un reembolso completo por mi devolución?</h1>
@@ -1357,10 +1349,10 @@ const question65 = {
 	`
 }
 const question66 = {
-  id: 'se-66',
-  title: '¿Cuál es el estado de mi devolución o cambio?',
-  parentId: 'root-6',
-  richText: `
+    id: 'se-66',
+    title: '¿Cuál es el estado de mi devolución o cambio?',
+    parentId: 'root-6',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Cuál es el estado de mi devolución o cambio?</h1>
@@ -1377,10 +1369,10 @@ const question66 = {
 	`
 }
 const question67 = {
-  id: 'se-67',
-  title: '¿Qué artículos no pueden devolverse o reembolsarse?',
-  parentId: 'root-6',
-  richText: `
+    id: 'se-67',
+    title: '¿Qué artículos no pueden devolverse o reembolsarse?',
+    parentId: 'root-6',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Qué artículos no pueden devolverse o reembolsarse?</h1>
@@ -1394,27 +1386,27 @@ const question67 = {
 	`
 }
 const question68 = {
-  id: 'se-68',
-  title: '¿Qué pasa si recibí un artículo defectuoso?',
-  parentId: 'root-6',
-  richText: `
+    id: 'se-68',
+    title: '¿Qué pasa si recibí un artículo defectuoso?',
+    parentId: 'root-6',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Qué pasa si recibí un artículo defectuoso?</h1>
 			</header>
 			<section>
 				<p>
-					Si recibió un artículo defectuoso, inicie sesión en su cuenta de Boutiquefeel y envíelo dentro de los 30 días posteriores a la entrega. Al enviar el ticket, proporcione una descripción del artículo defectuoso y algunas imágenes. Asegúrese de enviar un ticket para que podamos procesar el problema por usted.
+					Si recibió un artículo defectuoso, inicie sesión en su cuenta de Chic Me y envíelo dentro de los 30 días posteriores a la entrega. Al enviar el ticket, proporcione una descripción del artículo defectuoso y algunas imágenes. Asegúrese de enviar un ticket para que podamos procesar el problema por usted.
 				</p>
 			</section>
 		</article>
 	`
 }
 const question69 = {
-  id: 'se-69',
-  title: '¿Qué pasa si recibí un artículo defectuoso / incorrecto / manchado?',
-  parentId: 'root-6',
-  richText: `
+    id: 'se-69',
+    title: '¿Qué pasa si recibí un artículo defectuoso / incorrecto / manchado?',
+    parentId: 'root-6',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Qué pasa si recibí un artículo defectuoso / incorrecto / manchado?</h1>
@@ -1428,10 +1420,10 @@ const question69 = {
 	`
 }
 const question70 = {
-  id: 'se-70',
-  title: '¿Hay una etiqueta de devolución gratuita para que yo devuelva el pedido?',
-  parentId: 'root-6',
-  richText: `
+    id: 'se-70',
+    title: '¿Hay una etiqueta de devolución gratuita para que yo devuelva el pedido?',
+    parentId: 'root-6',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Hay una etiqueta de devolución gratuita para que yo devuelva el pedido?</h1>
@@ -1447,10 +1439,10 @@ const question70 = {
 	`
 }
 const question71 = {
-  id: 'se-71',
-  title: '¿Cómo regreso al artículo que no se ajusta?',
-  parentId: 'root-6',
-  richText: `
+    id: 'se-71',
+    title: '¿Cómo regreso al artículo que no se ajusta?',
+    parentId: 'root-6',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Cómo regreso al artículo que no se ajusta?</h1>
@@ -1466,10 +1458,10 @@ const question71 = {
 	`
 }
 const question72 = {
-  id: 'se-72',
-  title: 'No he recibido mi reembolso, ¿qué pasa?',
-  parentId: 'root-6',
-  richText: `
+    id: 'se-72',
+    title: 'No he recibido mi reembolso, ¿qué pasa?',
+    parentId: 'root-6',
+    richText: `
 		<article>
 			<header>
 				<h1>No he recibido mi reembolso, ¿qué pasa?</h1>
@@ -1479,17 +1471,17 @@ const question72 = {
 					el reembolso se devuelve a su forma de pago original:
 				</p>
 				<p>Si pagó con PayPal, el reembolso llegará a su cuenta de PayPal dentro de 1-2 días hábiles; Tenga en cuenta que no puede controlar la velocidad de su banco de tarjeta de crédito.</p>
-				<p>Boutiquefeel no puede controlar la velocidad de procesamiento de su banco de tarjetas. Solicite información detallada al banco de la tarjeta.</p>
+				<p>Chicme no puede controlar la velocidad de procesamiento de su banco de tarjetas. Solicite información detallada al banco de la tarjeta.</p>
 			    <p>Nos disculpamos sinceramente por los inconvenientes causados</p>
 			</section>
 		</article>
 	`
 }
 const question73 = {
-  id: 'se-73',
-  title: '¿Cómo puedo volver al artículo para un intercambio?',
-  parentId: 'root-6',
-  richText: `
+    id: 'se-73',
+    title: '¿Cómo puedo volver al artículo para un intercambio?',
+    parentId: 'root-6',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Cómo puedo volver al artículo para un intercambio?</h1>
@@ -1504,10 +1496,10 @@ const question73 = {
 	`
 }
 const question74 = {
-  id: 'se-74',
-  title: '¿Cuál es el estado de mi reembolso?',
-  parentId: 'root-6',
-  richText: `
+    id: 'se-74',
+    title: '¿Cuál es el estado de mi reembolso?',
+    parentId: 'root-6',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Cuál es el estado de mi reembolso?</h1>
@@ -1517,34 +1509,34 @@ const question74 = {
 				el reembolso se devuelve a su forma de pago original:
 				</p>
 				<p>Si pagó con PayPal, el reembolso llegará a su cuenta de PayPal dentro de 1-2 días hábiles; Tenga en cuenta que no puede controlar la velocidad de su banco de tarjeta de crédito.</p>
-				<p>Boutiquefeel no puede controlar la velocidad de procesamiento de su banco de tarjetas. Solicite información detallada al banco de la tarjeta.</p>
+				<p>Chicme no puede controlar la velocidad de procesamiento de su banco de tarjetas. Solicite información detallada al banco de la tarjeta.</p>
 			    <p>Nos disculpamos sinceramente por los inconvenientes causados</p>
 			</section>
 		</article>
 	`
 }
 const question75 = {
-  id: 'se-75',
-  title: '¿Debo pagar la tarifa de envío si devuelvo los artículos?',
-  parentId: 'root-6',
-  richText: `
+    id: 'se-75',
+    title: '¿Debo pagar la tarifa de envío si devuelvo los artículos?',
+    parentId: 'root-6',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Debo pagar la tarifa de envío si devuelvo los artículos?</h1>
 			</header>
 			<section>
 				<p>
-					No ofrecemos Flete por cobrar (FTC). Las devoluciones se realizarán a su propio costo. a menos que Boutiquefeel haga un error.
+					No ofrecemos Flete por cobrar (FTC). Las devoluciones se realizarán a su propio costo. a menos que Chic Me haga un error.
 				</p>
 			</section>
 		</article>
 	`
 }
 const question76 = {
-  id: 'se-76',
-  title: '¿Qué puedo hacer si el artículo no me queda?',
-  parentId: 'root-6',
-  richText: `
+    id: 'se-76',
+    title: '¿Qué puedo hacer si el artículo no me queda?',
+    parentId: 'root-6',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Qué puedo hacer si el artículo no me queda?</h1>
@@ -1558,10 +1550,10 @@ const question76 = {
 	`
 }
 const question77 = {
-  id: 'se-77',
-  title: '¿Qué puedo hacer si el artículo está dañado?',
-  parentId: 'root-6',
-  richText: `
+    id: 'se-77',
+    title: '¿Qué puedo hacer si el artículo está dañado?',
+    parentId: 'root-6',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Qué puedo hacer si el artículo está dañado?</h1>
@@ -1578,13 +1570,13 @@ const question77 = {
 	`
 }
 const question78 = {
-  id: 'se-78',
-  title: 'Will Boutiquefeel guardará mi información personal?',
-  parentId: 'root-7',
-  richText: `
+    id: 'se-78',
+    title: 'Will Chic Me guardará mi información personal?',
+    parentId: 'root-7',
+    richText: `
 		<article>
 			<header>
-				<h1>Will Boutiquefeel guardará mi información personal?</h1>
+				<h1>Will Chic Me guardará mi información personal?</h1>
 			</header>
 			<section>
 				<p>
@@ -1597,30 +1589,30 @@ const question78 = {
 	`
 }
 const question79 = {
-  id: 'se-79',
-  title: '¿Es seguro ordenar desde aquí?',
-  parentId: 'root-7',
-  richText: `
+    id: 'se-79',
+    title: '¿Es seguro ordenar desde aquí?',
+    parentId: 'root-7',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Es seguro ordenar desde aquí?</h1>
 			</header>
 			<section>
 				<p>
-					Boutiquefeel fue fundada por personas con casi 10 años en la industria del comercio electrónico. Tomamos su negocio en serio y, sobre todo, queremos que nuestros clientes sean felices. Aceptamos varios de los métodos de pago en línea más confiables disponibles en la actualidad.
+					Chic Me fue fundada por personas con casi 10 años en la industria del comercio electrónico. Tomamos su negocio en serio y, sobre todo, queremos que nuestros clientes sean felices. Aceptamos varios de los métodos de pago en línea más confiables disponibles en la actualidad.
 				</p>
 			</section>
 		</article>
 	`
 }
 const question80 = {
-  id: 'se-80',
-  title: '¿Cómo puedo cancelar la suscripción de Boutiquefeel?',
-  parentId: 'root-7',
-  richText: `
+    id: 'se-80',
+    title: '¿Cómo puedo cancelar la suscripción de Chicme?',
+    parentId: 'root-7',
+    richText: `
 		<article>
 			<header>
-				<h1>¿Cómo puedo cancelar la suscripción de Boutiquefeel?</h1>
+				<h1>¿Cómo puedo cancelar la suscripción de Chicme?</h1>
 			</header>
 			<section>
 				<p>
@@ -1631,19 +1623,19 @@ const question80 = {
 	`
 }
 const question81 = {
-  id: 'se-81',
-  title: 'Sobre nosotros',
-  parentId: 'root-8',
-  richText: `
+    id: 'se-81',
+    title: 'Sobre nosotros',
+    parentId: 'root-8',
+    richText: `
 		<article>
 			<header>
 				<h1>Sobre nosotros</h1>
 			</header>
 			<section>
 				<p>
-					Boutiquefeel es un sitio web de compras único con un tono distintivo centrado en la moda femenina. Ofrecemos productos de alto rendimiento que incluyen ropa de mujer, joyas, productos de belleza y salud, zapatos, bolsos y más. Nuestra visión es traer felicidad a la vida de toda mujer.
+					Chic Me es un sitio web de compras único con un tono distintivo centrado en la moda femenina. Ofrecemos productos de alto rendimiento que incluyen ropa de mujer, joyas, productos de belleza y salud, zapatos, bolsos y más. Nuestra visión es traer felicidad a la vida de toda mujer.
 				</p>
-				<p>Las características de Boutiquefeel incluyen, pero no están limitadas a:</p>
+				<p>Las características de Chic Me incluyen, pero no están limitadas a:</p>
 				<ul>
 				    <li>o100,000 + estilos de productos y más de 500 estilos de actualización diaria, Recopilamos información sobre la moda de las mujeres y obtenemos productos relevantes lo antes posible</li>
                     <li>oPrecios 50-80% más baratos que los locales ,Cooperamos con muchos fabricantes en lugar de recurrir a intermediarios, Compramos en escala, por lo que el precio es más bajo que el precio de mercado</li>
@@ -1658,32 +1650,32 @@ Cupones de inscripción y actividades temáticas</li>
 	`
 }
 const question82 = {
-  id: 'se-82',
-  title: '¿Dónde encontrar Boutiquefeel?',
-  parentId: 'root-8',
-  richText: `
+    id: 'se-82',
+    title: '¿Dónde encontrar Chic Me?',
+    parentId: 'root-8',
+    richText: `
 		<article>
 			<header>
-				<h1>¿Dónde encontrar Boutiquefeel?</h1>
+				<h1>¿Dónde encontrar Chic Me?</h1>
 			</header>
 			<section>
 				<p>
-					Como tienda en línea, puede encontrar Boutiquefeel donde quiera que tenga acceso a Internet.
+					Como tienda en línea, puede encontrar Chic Me donde quiera que tenga acceso a Internet.
 				</p>
-				<p>Ahora estamos enviando a la mayoría de los países en todo el mundo con sitios web compatibles, los Estados Unidos, España, Francia, Rusia, Alemania, Italia, Australia y el Medio Oriente. </p>
-				<p>Si desea saber qué hay de nuevo en Boutiquefeel, simplemente manténgase conectado con nosotros a través de nuestro Facebook, Instagram, Youtube, Pinterest, Tumblr!</p>
+				<p>Ahora estamos enviando a la mayoría de los países en todo el mundo con sitios web compatibles, los Estados Unidos, España, Francia, Rusia, Alemania, Italia, Australia y el Medio Oriente. </p>
+				<p>Si desea saber qué hay de nuevo en Chic Me, simplemente manténgase conectado con nosotros a través de nuestro Facebook, Instagram, Youtube, Pinterest, Tumblr!</p>
 			</section>
 		</article>
 	`
 }
 const question83 = {
-  id: 'se-83',
-  title: '¿Por qué Boutiquefeel?',
-  parentId: 'root-8',
-  richText: `
+    id: 'se-83',
+    title: '¿Por qué Chic Me?',
+    parentId: 'root-8',
+    richText: `
 		<article>
 			<header>
-				<h1>¿Por qué Boutiquefeel?</h1>
+				<h1>¿Por qué Chic Me?</h1>
 			</header>
 			<section>
 				<ul>
@@ -1692,36 +1684,36 @@ const question83 = {
 				    <li>Política de envío y devolución gratuita;</li>
 				    <li>Servicio al cliente excepcional.</li>
                 </ul>
-                <p>Si te registraste en Boutiquefeel usando tu ID de Facebook, puedes desactivar los privilegios de Facebook de Boutiquefeel usando tu computadora o dispositivo móvil.</p>
-			    <p>En su computadora, visite http://facebook.com/settings/?tab=applications. Luego seleccione la "X" en el icono de Boutiquefeel.</p>
-			    <p>En su aplicación de Facebook, simplemente seleccione "Configuración de la cuenta" en el menú. A continuación, seleccione "Aplicaciones" -> "Boutiquefeel" -> "Eliminar Boutiquefeel".</p>
-			    <p>Lamentablemente, no hay ninguna opción actualmente disponible para usuarios basados ​​en correo electrónico que deseen eliminar su cuenta Boutiquefeel.</p>
+                <p>Si te registraste en Chic Me usando tu ID de Facebook, puedes desactivar los privilegios de Facebook de Chic Me usando tu computadora o dispositivo móvil.</p>
+			    <p>En su computadora, visite http://facebook.com/settings/?tab=applications. Luego seleccione la "X" en el icono de Chic Me.</p>
+			    <p>En su aplicación de Facebook, simplemente seleccione "Configuración de la cuenta" en el menú. A continuación, seleccione "Aplicaciones" -> "Chic Me" -> "Eliminar ChicMe".</p>
+			    <p>Lamentablemente, no hay ninguna opción actualmente disponible para usuarios basados ​​en correo electrónico que deseen eliminar su cuenta Chic Me.</p>
 			</section>
 		</article>
 	`
 }
 const question84 = {
-  id: 'se-84',
-  title: 'Es el sitio web real?',
-  parentId: 'root-8',
-  richText: `
+    id: 'se-84',
+    title: 'Es el sitio web real?',
+    parentId: 'root-8',
+    richText: `
 		<article>
 			<header>
 				<h1>Es el sitio web real?</h1>
 			</header>
 			<section>
 				<p>
-					Sí, es real. Boutiquefeel fue fundada por personas con casi 10 años en la industria del comercio electrónico. Aceptamos varios de los métodos de pago en línea más confiables disponibles en la actualidad.
+					Sí, es real. Chic Me fue fundada por personas con casi 10 años en la industria del comercio electrónico. Aceptamos varios de los métodos de pago en línea más confiables disponibles en la actualidad.
 				</p>
 			</section>
 		</article>
 	`
 }
 const question85 = {
-  id: 'se-85',
-  title: '¿Va a guardar la información de mi tarjeta?',
-  parentId: 'root-8',
-  richText: `
+    id: 'se-85',
+    title: '¿Va a guardar la información de mi tarjeta?',
+    parentId: 'root-8',
+    richText: `
 		<article>
 			<header>
 				<h1>Will it save my card information?</h1>
@@ -1735,10 +1727,10 @@ const question85 = {
 	`
 }
 const question86 = {
-  id: 'se-86',
-  title: '¿Dónde puedo encontrar el artículo que guardé?',
-  parentId: 'root-7',
-  richText: `
+    id: 'se-86',
+    title: '¿Dónde puedo encontrar el artículo que guardé?',
+    parentId: 'root-8',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Dónde puedo encontrar el artículo que guardé?</h1>
@@ -1752,10 +1744,10 @@ const question86 = {
 	`
 }
 const question87 = {
-  id: 'se-87',
-  title: '¿Cuánto tiempo obtendré los 30 créditos una vez que los productos compartieron?',
-  parentId: 'root-8',
-  richText: `
+    id: 'se-87',
+    title: '¿Cuánto tiempo obtendré los 30 créditos una vez que los productos compartieron?',
+    parentId: 'root-8',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Cuánto tiempo obtendré los 30 créditos una vez que los productos compartieron?</h1>
@@ -1769,10 +1761,10 @@ const question87 = {
 	`
 }
 const question88 = {
-  id: 'se-88',
-  title: '¿Cuál es su política de envío?',
-  parentId: 'root-8',
-  richText: `
+    id: 'se-88',
+    title: '¿Cuál es su política de envío?',
+    parentId: 'root-8',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Cuál es su política de envío?</h1>
@@ -1783,50 +1775,50 @@ const question88 = {
 				</p>
 				<p>El envío demora aproximadamente de 3 a 25 días hábiles para llegar a los países de destino.</p>
 				<p>Tenga en cuenta: Tiempo de entrega total = Tiempo de procesamiento + Tiempo de envío</p>
-				<p>Para conocer la fecha estimada de llegada, consulte <a href="http://www.Boutiquefeel.com/fs/shipping-policy-pc">http://www.Boutiquefeel.com/fs/shipping-policy-pc</a></p>
+				<p>Para conocer la fecha estimada de llegada, consulte <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">http://www.chicme.com/fs/shipping-policy-pc</a></p>
 			</section>
 		</article>
 	`
 }
 const question89 = {
-  id: 'se-89',
-  title: '¿Lo haces al por mayor?',
-  parentId: 'root-8',
-  richText: `
+    id: 'se-89',
+    title: '¿Lo haces al por mayor?',
+    parentId: 'root-8',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Lo haces al por mayor?</h1>
 			</header>
 			<section>
 				<p>
-					Hola, tenemos la política de venta al por mayor: http://www.Boutiquefeel.com/fs/wholesale-program-pc you can have a look
+					Hola, tenemos la política de venta al por mayor: http://www.chicme.com/fs/wholesale-program-pc you can have a look
 				</p>
 			</section>
 		</article>
 	`
 }
 const question90 = {
-  id: 'se-90',
-  title: '¿Cómo puedo cooperar contigo?',
-  parentId: 'root-8',
-  richText: `
+    id: 'se-90',
+    title: '¿Cómo puedo cooperar contigo?',
+    parentId: 'root-8',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Cómo puedo cooperar contigo?</h1>
 			</header>
 			<section>
 				<p>
-					Hola, si desea colaborar con nosotros, póngase en contacto con: correo electrónico: affiliates@Boutiquefeel.com Nuestro colega quiere responder por usted.
+					Hola, si desea colaborar con nosotros, póngase en contacto con: correo electrónico: affiliates@chicme.com Nuestro colega quiere responder por usted.
 				</p>
 			</section>
 		</article>
 	`
 }
 const question91 = {
-  id: 'se-91',
-  title: '¿Cómo puedo elegir el método de envío?',
-  parentId: 'root-8',
-  richText: `
+    id: 'se-91',
+    title: '¿Cómo puedo elegir el método de envío?',
+    parentId: 'root-8',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Cómo puedo elegir el método de envío?</h1>
@@ -1840,10 +1832,10 @@ const question91 = {
 	`
 }
 const question92 = {
-  id: 'se-92',
-  title: '¿Tienes tiendas?',
-  parentId: 'root-8',
-  richText: `
+    id: 'se-92',
+    title: '¿Tienes tiendas?',
+    parentId: 'root-8',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Tienes tiendas?</h1>
@@ -1857,10 +1849,10 @@ const question92 = {
 	`
 }
 const question93 = {
-  id: 'se-93',
-  title: '¿Puedes enviar a APO?',
-  parentId: 'root-8',
-  richText: `
+    id: 'se-93',
+    title: '¿Puedes enviar a APO?',
+    parentId: 'root-8',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Puedes enviar a APO?</h1>
@@ -1874,10 +1866,10 @@ const question93 = {
 	`
 }
 const question94 = {
-  id: 'se-94',
-  title: '¿Cómo puedo cambiar la moneda?',
-  parentId: 'root-8',
-  richText: `
+    id: 'se-94',
+    title: '¿Cómo puedo cambiar la moneda?',
+    parentId: 'root-8',
+    richText: `
 		<article>
 			<header>
 				<h1>¿Cómo puedo cambiar la moneda?</h1>
@@ -1892,249 +1884,249 @@ const question94 = {
 }
 
 const secondaries = [
-  question1,
-  question2,
-  question3,
-  question4,
-  question5,
-  question6,
-  question7,
-  question8,
-  question9,
-  question10,
-  question11,
-  question12,
-  question13,
-  question14,
-  question15,
-  question16,
-  question17,
-  question18,
-  question19,
-  question20,
-  question21,
-  question22,
-  question23,
-  question24,
-  question25,
-  question26,
-  question27,
-  question28,
-  question29,
-  question30,
-  question31,
-  question32,
-  question33,
-  question34,
-  question35,
-  question36,
-  question37,
-  question38,
-  question39,
-  question40,
-  question41,
-  question42,
-  question43,
-  question44,
-  question45,
-  question46,
-  question47,
-  question48,
-  question49,
-  question50,
-  question51,
-  question52,
-  question53,
-  question54,
-  question55,
-  question56,
-  question57,
-  question58,
-  question59,
-  question60,
-  question61,
-  question62,
-  question63,
-  question64,
-  question65,
-  question66,
-  question67,
-  question68,
-  question69,
-  question70,
-  question71,
-  question72,
-  question73,
-  question74,
-  question75,
-  question76,
-  question77,
-  question78,
-  question79,
-  question80,
-  question81,
-  question82,
-  question83,
-  question84,
-  question85,
-  question86,
-  question87,
-  question88,
-  question89,
-  question90,
-  question91,
-  question92,
-  question93,
-  question94
+    question1,
+    question2,
+    question3,
+    question4,
+    question5,
+    question6,
+    question7,
+    question8,
+    question9,
+    question10,
+    question11,
+    question12,
+    question13,
+    question14,
+    question15,
+    question16,
+    question17,
+    question18,
+    question19,
+    question20,
+    question21,
+    question22,
+    question23,
+    question24,
+    question25,
+    question26,
+    question27,
+    question28,
+    question29,
+    question30,
+    question31,
+    question32,
+    question33,
+    question34,
+    question35,
+    question36,
+    question37,
+    question38,
+    question39,
+    question40,
+    question41,
+    question42,
+    question43,
+    question44,
+    question45,
+    question46,
+    question47,
+    question48,
+    question49,
+    question50,
+    question51,
+    question52,
+    question53,
+    question54,
+    question55,
+    question56,
+    question57,
+    question58,
+    question59,
+    question60,
+    question61,
+    question62,
+    question63,
+    question64,
+    question65,
+    question66,
+    question67,
+    question68,
+    question69,
+    question70,
+    question71,
+    question72,
+    question73,
+    question74,
+    question75,
+    question76,
+    question77,
+    question78,
+    question79,
+    question80,
+    question81,
+    question82,
+    question83,
+    question84,
+    question85,
+    question86,
+    question87,
+    question88,
+    question89,
+    question90,
+    question91,
+    question92,
+    question93,
+    question94
 
 ]
 
 const questions = [
-  {
-  	id: 'root-1',
-    title: 'cuenta',
-    questions: [
-      question1,
-      question2,
-      question3,
-      question4,
-      question5,
-      question6,
-      question7
-    ]
-  },
-  {
-  	id: 'root-2',
-    title: 'órdenes',
-    questions: [
-    	question8,
-    	question9,
-    	question10,
-    	question11,
-    	question12,
-    	question13,
-    	question14,
-    	question15,
-    	question16,
-    	question17,
-    	question18,
-    	question19,
-    	question20
-    ]
-  },
-  {
-  	id: 'root-3',
-    title: 'pago',
-    questions: [
-      question21,
-      question22,
-      question23,
-      question24,
-      question25,
-      question26,
-      question27,
-      question28,
-      question29,
-      question30,
-      question31,
-      question32
-    ]
-  },
-  {
-    id: 'root-4',
-    title: 'productos',
-    questions: [
-      question33,
-      question34,
-      question35,
-      question36,
-      question37,
-      question38,
-      question39,
-      question40,
-      question41,
-      question42
-    ]
-  },
-  {
-    id: 'root-5',
-    title: 'entrega',
-    questions: [
-      question43,
-      question44,
-      question45,
-      question46,
-      question47,
-      question48,
-      question49,
-      question50,
-      question51,
-      question52,
-      question53,
-      question54,
-      question55,
-      question56,
-      question57,
-      question58,
-      question59,
-      question60
-    ]
-  },
-  {
-    id: 'root-6',
-    title: 'Vuelta',
-    questions: [
-      question61,
-      question62,
-      question63,
-      question64,
-      question65,
-      question66,
-      question67,
-      question68,
-      question69,
-      question70,
-      question71,
-      question72,
-      question73,
-      question74,
-      question75,
-      question76,
-      question77
-    ]
-  },
-  {
-    id: 'root-7',
-    title: 'Seguridad y privacidad',
-    questions: [
-      question78,
-      question79,
-      question80
-    ]
-  },
-  {
-    id: 'root-8',
-    title: 'Acerca de Boutiquefeel',
-    questions: [
-      question81,
-      question82,
-      question83,
-      question84,
-      question85,
-      question86,
-      question87,
-      question88,
-      question89,
-      question90,
-      question91,
-      question92,
-      question93,
-      question94
-    ]
-  }
+    {
+        id: 'root-1',
+        title: 'cuenta',
+        questions: [
+            question1,
+            question2,
+            question3,
+            question4,
+            question5,
+            question6,
+            question7
+        ]
+    },
+    {
+        id: 'root-2',
+        title: 'órdenes',
+        questions: [
+            question8,
+            question9,
+            question10,
+            question11,
+            question12,
+            question13,
+            question14,
+            question15,
+            question16,
+            question17,
+            question18,
+            question19,
+            question20
+        ]
+    },
+    {
+        id: 'root-3',
+        title: 'pago',
+        questions: [
+            question21,
+            question22,
+            question23,
+            question24,
+            question25,
+            question26,
+            question27,
+            question28,
+            question29,
+            question30,
+            question31,
+            question32
+        ]
+    },
+    {
+        id: 'root-4',
+        title: 'productos',
+        questions: [
+            question33,
+            question34,
+            question35,
+            question36,
+            question37,
+            question38,
+            question39,
+            question40,
+            question41,
+            question42
+        ]
+    },
+    {
+        id: 'root-5',
+        title: 'entrega',
+        questions: [
+            question43,
+            question44,
+            question45,
+            question46,
+            question47,
+            question48,
+            question49,
+            question50,
+            question51,
+            question52,
+            question53,
+            question54,
+            question55,
+            question56,
+            question57,
+            question58,
+            question59,
+            question60
+        ]
+    },
+    {
+        id: 'root-6',
+        title: 'Vuelta',
+        questions: [
+            question61,
+            question62,
+            question63,
+            question64,
+            question65,
+            question66,
+            question67,
+            question68,
+            question69,
+            question70,
+            question71,
+            question72,
+            question73,
+            question74,
+            question75,
+            question76,
+            question77
+        ]
+    },
+    {
+        id: 'root-7',
+        title: 'Seguridad y privacidad',
+        questions: [
+            question78,
+            question79,
+            question80
+        ]
+    },
+    {
+        id: 'root-8',
+        title: 'Acerca de Chic Me',
+        questions: [
+            question81,
+            question82,
+            question83,
+            question84,
+            question85,
+            question86,
+            question87,
+            question88,
+            question89,
+            question90,
+            question91,
+            question92,
+            question93,
+            question94
+        ]
+    }
 ]
 
 export default {
-  questions,
-  secondaries
+    questions,
+    secondaries
 }

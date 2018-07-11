@@ -5,8 +5,8 @@ import {Red, Grey} from '../text.jsx'
 import Money from '../money.jsx'
 import {BigButton} from './buttons.jsx'
 
-import {Form, Input, Select} from './control.jsx'
-import {required} from '../validator.jsx'
+import {Form, Input, Select, Button} from './control.jsx'
+import {required, cpf} from '../validator.jsx'
 import {StyledControl} from './styled-control.jsx'
 
 import {unitprice} from '../../utils/utils.js'
@@ -52,6 +52,28 @@ const StyledCard = styled.div`
 	cursor: pointer;
 `
 
+const Cards = styled.ul`
+  & > li{
+    border-top: 1px solid #e5e5e5;
+    &:first-child{
+      border-top: none;
+    }
+  }
+`
+
+const AddIcon = styled.span`
+  width: 22px;
+  height: 22px;
+  background-color: #999;
+  border-radius: 50%;
+  font-size: 14px;
+  display: inline-block;
+  cursor: pointer;
+  color: #fff;
+  text-align: center;
+  line-height: 22px;
+`
+
 const Card = props => <StyledCard>
   <div onClick={() => { props.cardSelect(props.card) }} className="x-table __fixed __vm x-fw x-fh">
     <div className="x-cell"><span>Card No.</span> { props.card.quickpayRecord.cardNumber }</div>
@@ -68,6 +90,15 @@ const CurrentCard = props => <StyledCard {...props}>
     <div className="x-cell"><span>Card No.</span> { props.card.quickpayRecord.cardNumber }</div>
     <div className="x-cell __right">
       <Icon>&#xe694;</Icon>
+    </div>
+  </div>
+</StyledCard>
+
+const NewCard = props => <StyledCard {...props}>
+  <div className="x-table __fixed __vm x-fw x-fh">
+    <div className="x-cell">Add a new card</div>
+    <div className="x-cell __right">
+      <AddIcon className="iconfont">&#xe733;</AddIcon>
     </div>
   </div>
 </StyledCard>
@@ -108,7 +139,7 @@ const BraizlPlugin = class extends React.Component {
     const {installmentoptions} = this.props
 
     return <div style={{marginTop: 10}}>
-      <Form id="brazilform" ref={this.props.brazilref} onSubmit={this.props.handleBrazil}>
+      <Form id="brazilform" onSubmit={this.props.handleBrazil}>
         <div className="x-table x-fw __fixed __vm">
           <div className="x-cell" style={{width: 95}}>CPF</div>
           <div className="x-cell">
@@ -118,7 +149,7 @@ const BraizlPlugin = class extends React.Component {
                 name="cpf"
                 data-checkout="cpf"
                 value={this.props.cpf}
-                validations={[required]}
+                validations={[required, cpf]}
                 placeholder="123"
                 onChange={this.props.handleInputChange}/>
             </StyledControl>
@@ -132,6 +163,7 @@ const BraizlPlugin = class extends React.Component {
               <Select
                 style={{width: '100%'}}
                 name="installments"
+                className="x-select"
                 data-checkout="installments"
                 value={this.props.installments}
                 onChange={this.props.handleInputChange}>
@@ -148,7 +180,7 @@ const BraizlPlugin = class extends React.Component {
             </StyledControl>
           </div>
         </div>
-
+        <Button style={{display: 'none'}} ref={this.props.brazilref}></Button>
       </Form>
     </div>
   }
@@ -169,7 +201,7 @@ const CreditCard = class extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-    	status: 0
+    	status: props.status || 0
     }
     this.checkout = this.checkout.bind(this)
   }
@@ -195,7 +227,7 @@ const CreditCard = class extends React.Component {
   	return <div>
 
   		{
-  			this.state.status === 0 ? (
+  			this.props.status === 0 ? (
   				<CREDITWRAPPER>
   					<HD>
   						<h1>Credit Card</h1>
@@ -204,7 +236,7 @@ const CreditCard = class extends React.Component {
 
   					<BD>
   						<div style={{borderBottom: '1px solid #e5e5e5'}}>
-  							 <CurrentCard onClick={() => { this.setState({status: 1}) }} card={currentCard}/>
+  							 <CurrentCard onClick={this.props.toggleBack} card={currentCard}/>
   						</div>
 
   						<div style={{fontSize: 18, textAlign: 'right', marginTop: 15}}>
@@ -235,11 +267,11 @@ const CreditCard = class extends React.Component {
   				<CREDITWRAPPER>
   					<HD>
   						<h1>Credit Card</h1>
-  						<Icon onClick={() => { this.setState({status: 0}) }}>&#xe693;</Icon>
+  						<Icon onClick={this.props.toggleBack}>&#xe693;</Icon>
   					</HD>
 
   					<BD>
-  						<ul>
+  						<Cards>
   							{
   								cards.map(card => (
   									<li key={card.quickpayRecord.id}>
@@ -247,7 +279,11 @@ const CreditCard = class extends React.Component {
   									</li>
   								))
   							}
-  						</ul>
+
+                <li key="newcard">
+                  <NewCard payMethod={this.props.payMethod} onClick={this.props.addCard}/>
+                </li>
+  						</Cards>
   					</BD>
   				</CREDITWRAPPER>
   			)

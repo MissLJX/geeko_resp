@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import {mercadopay} from '../api'
+import {mercadopay, addMercadoCard} from '../api'
 import {Form, Input, Button} from './msite/control.jsx'
 import {required, email} from './validator.jsx'
 import {StyledControl} from './msite/styled-control.jsx'
@@ -95,6 +95,25 @@ const MercadoBinding = class extends React.Component {
       	token: response.id
       })
 
+<<<<<<< HEAD
+      if (this.props.exsiting) {
+        addMercadoCard(response.id).then(() => {
+          this.props.addcardback()
+        })
+      } else {
+        mercadopay({
+          email: this.state.email,
+          paymentMethodId: this.state.paymentMethod,
+          token: response.id
+        }).then(data => data.result).then(({success, transactionId, details, solutions}) => {
+          if (success) {
+            window.location.href = `${window.ctx || ''}/order/confirm/web/ocean?transactionId=${transactionId}`
+          } else {
+            alert(details + '\n' + solutions)
+          }
+        })
+      }
+=======
       mercadopay({
       	email: this.state.email,
       	paymentMethodId: this.state.paymentMethod,
@@ -106,6 +125,7 @@ const MercadoBinding = class extends React.Component {
           alert(details + '\n' + solutions)
         }
       })
+>>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
     }
   }
 
@@ -120,16 +140,20 @@ const MercadoBinding = class extends React.Component {
   	return <div style={{margin: 'auto', width: '80%', maxWidth: 300}}>
   		<Form id="mercadoform" onSubmit={this.handleSubmit.bind(this)}>
   			<FormLayout>
-  				<StyledControl>
-	    			<label>
-	    				Email*
-		            </label>
-		            <Input
-		              name='email'
-		              value={this.state.email}
-		              onChange={this.handleInputChange}
-		              validations={[required, email]}/>
-	    		</StyledControl>
+
+          {
+            !this.props.exsiting && <StyledControl>
+              <label>
+              Email*
+              </label>
+              <Input
+                name='email'
+                value={this.state.email}
+                onChange={this.handleInputChange}
+                validations={[required, email]}
+                placeholder="test_user_任意几个数字@testuser.com"/>
+            </StyledControl>
+          }
 
   				<StyledControl>
   					<label>Credit card number*</label>
@@ -139,8 +163,7 @@ const MercadoBinding = class extends React.Component {
   						onKeyUp={this.guessingPaymentMethod}
   						validations={[required]}
   						data-checkout="cardNumber"
-  						placeholder="4075 5957 1648 3764"
-
+  						placeholder="4075 5957 1648 3764 / 5474 9254 3267 0366"
   						autoComplete="off" />
   				</StyledControl>
 

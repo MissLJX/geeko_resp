@@ -57,6 +57,9 @@ module.exports = {
       }
     }),
     new webpack.NamedModulesPlugin(),
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.DefinePlugin({
+      'site': JSON.stringify('chicme')
+    })
   ]
 }

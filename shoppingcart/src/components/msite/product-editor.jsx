@@ -9,6 +9,7 @@ import SizeColorBlockers from './size-color-blockers.jsx'
 import _ from 'lodash'
 import Quantity from '../quantity.jsx'
 import {BigButton} from './buttons.jsx'
+import {injectIntl} from 'react-intl'
 
 const Wrapper = styled.div`
 	position: fixed;
@@ -218,6 +219,7 @@ const ProductEditor = class extends React.Component {
   }
 
   render () {
+    const {intl} = this.props
   	const {product} = this.state.productVO || {}
   	const selectedVariant = this.getSelectedVariant(product, this.state.selectedId)
   	const high = selectedVariant ? higher(selectedVariant) : null
@@ -229,10 +231,12 @@ const ProductEditor = class extends React.Component {
   	const isDisabledColor = (color) => enabledColors.indexOf(color) < 0
   	const isDisabledSize = (size) => enabledSizes.indexOf(size) < 0
 
+    const colorStyle = this.state.colors && this.state.colors.length === 1 && !this.state.colors[0] ? {display: 'none'} : {}
+
   	return product ? (
 	  	<Wrapper>
 	  		<HD>
-	  			<h1>Product Options</h1>
+	  			<h1>{intl.formatMessage({id: 'product_options'})}</h1>
 	  			<Icon onClick={this.props.onClose}>&#xe69a;</Icon>
 	  		</HD>
 	  		<BD>
@@ -272,7 +276,7 @@ const ProductEditor = class extends React.Component {
             {this.state.sizes && (
               <SizeColorRow className="x-table">
   						<div className="x-cell">
-  							<span>Size</span>
+  							<span>{intl.formatMessage({id: 'size'})}</span>
   						</div>
   						<div className="x-cell">
   							<SizeColorBlockers isDisabled={isDisabledSize} selectedItem={this.state.selectedSize} items={this.state.sizes} onClick={this.sizeClickHandle}/>
@@ -282,9 +286,9 @@ const ProductEditor = class extends React.Component {
             )}
 
             {this.state.colors && (
-              <SizeColorRow className="x-table">
+              <SizeColorRow className="x-table" style={colorStyle}>
   						<div className="x-cell">
-  							<span>Color</span>
+  							<span>{intl.formatMessage({id: 'color'})}</span>
   						</div>
   						<div className="x-cell">
   							<SizeColorBlockers isDisabled={isDisabledColor} selectedItem={this.state.selectedColor} items={this.state.colors} onClick={this.colorClickHandle}/>
@@ -294,7 +298,7 @@ const ProductEditor = class extends React.Component {
             )}
             <SizeColorRow className="x-table">
               <div className="x-cell">
-                <span>Quantity</span>
+                <span>{intl.formatMessage({id: 'quantity'})}</span>
               </div>
               <div className="x-cell">
                 <Quantity onChange={(quantity) => { this.setState({quantity}) }} quantity={this.state.quantity}/>
@@ -303,7 +307,7 @@ const ProductEditor = class extends React.Component {
 	  			</SizeColor>
 
 	  			<div style={{paddingTop: 20}}>
-	  				<BigButton onClick={this.confirmHandle}>Confirm</BigButton>
+	  				<BigButton onClick={this.confirmHandle}>{intl.formatMessage({id: 'confirm'})}</BigButton>
 	  			</div>
 
 	  		</BD>
@@ -313,4 +317,4 @@ const ProductEditor = class extends React.Component {
   }
 }
 
-export default ProductEditor
+export default injectIntl(ProductEditor)

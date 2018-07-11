@@ -21,7 +21,16 @@ export default class extends React.Component {
   	return <ItemUL>
   		{this.props.items && this.props.items.map((item) => (
   			<li key={item.variantId}>
-  				<Item quantityChange={this.props.quantityChange} itemEdit={this.props.itemEdit} item={item} itemSelect={this.props.itemSelect} />
+  				<Item serverTime={this.props.serverTime}
+            overseasHandle={this.props.overseasHandle}
+            localitem={this.props.localitem}
+            disabledFunc={this.props.disabledFunc}
+            quantityChange={this.props.quantityChange}
+            itemEdit={this.props.itemEdit}
+            itemDelete={this.props.itemDelete}
+            item={item}
+            ivalidItem={this.props.ivalidItem}
+            itemSelect={this.props.itemSelect} />
   			</li>
   			))
   		}
