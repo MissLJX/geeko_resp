@@ -1,49 +1,18 @@
-/**
- * Created by shao_ on 2017/7/14.
- */
-
 export default {
     message: {
-        shoppingCart: 'Warenkorb',
-        loading: 'Läd',
-        addressTip: '* Zeigt an, dass ein Feld erforderlich ist',
+        measurements:'Wir empfehlen dringend, dass Sie Ihre Messungen vornehmen und als Referenz verwenden, wenn Sie eine Artikelgröße auswählen. Messen Sie sich anhand der folgenden Anleitung.',
+        note1:'Bitte nach Ihren eigenen Maßen, um Ihre passende Größe zu wählen.',
+        note2:'Diese Größenangaben basieren auf internationalen Größensystemen. Bitte beachten Sie die Größentabelle, um die richtige Größe zu finden.',
+        disclaimer:'Über Größe: Größe kann 2cm / 1 Zoll Ungenauigkeit wegen der Handmaß sein. Diese Maße dienen als Leitfaden, um Ihnen bei der Auswahl der richtigen Größe zu helfen. Bitte nehmen Sie Ihre eigenen Maße und wählen Sie Ihre Größe entsprechend.',
     },
     label: {
-        save: 'Speichern',
-        add: 'Hinzufügen',
-        order: 'Bestellungen',
-        editAddress: 'Adresse bearbeiten',
-        address: 'Adresse',
-        fullName: 'Voller Name',
-        streetAddress: 'Straße',
-        unit: 'Apt/Suite/Einheit(Optional)',
-        country: 'Land',
-        state: 'Staat',
-        zipCode: 'PLZ',
-        phoneNumber: 'Telefonnummer',
-        city: 'Stadt',
-        submit: 'Absenden',
-        addressBook: 'Adressbuch',
-        coupons: 'Coupons',
-        credits: 'Punkte',
-        processing: 'Verarbeitung',
-        unpaid: 'Unbezahlt',
-        shipped: 'Bestellung versandt',
-        confirmed: 'Bestellung bestätigt',
-        canceled: 'Bestellung storniert',
-        editProfile: 'Profil bearbeiten',
-        changProfilePicture: '',
-        firstName: 'Vorname',
-        lastName: 'Nachname',
-        gender: 'Geschlecht',
-        birthday: 'Geburtstag',
-        changePassword: 'Passwort ändern',
-        changeEmail: 'Email ändern',
-        changeCurrency: 'Währung ändern',
-        wishlist: 'Wunschliste',
-        settings: 'Einstellungen',
-        mayLike:'KÖNNTE DIR AUCH GEFALLEN',
-        logout:'Abmelden',
-        logoff:'Abmelden'
+        itemmeasurements: 'ITEM MESSUNGEN',
+        pleasenote: 'BITTE BEACHTEN SIE',
+        disclaimer: 'HAFTUNGSAUSSCHLUSS',
+        inches:'Zoll',
+        centimeters:'Zentimeter',
+        sizeconversation:'Größenkonvertierung',
+        tagsize:'Etikettengröße',
+        size:'Größe'
     }
 }

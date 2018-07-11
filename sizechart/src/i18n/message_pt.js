@@ -1,49 +1,18 @@
-/**
- * Created by shao_ on 2017/7/14.
- */
-
 export default {
     message: {
-        shoppingCart: 'Carrinho de compras',
-        loading: 'a carregar',
-        addressTip: '* Indica que um campo é obrigatório',
+        measurements:'Nós sugerimos fortemente que você faça suas medições e as use como referência ao selecionar um tamanho de itens. Meça, seguindo o guia abaixo.',
+        note1:'Por favor, de acordo com suas próprias medidas para escolher o tamanho adequado.',
+        note2:'Esses tamanhos listados são baseados no sistema de dimensionamento internacional. Consulte o Guia de tamanhos para encontrar o tamanho correto.',
+        disclaimer:'Sobre o tamanho: O tamanho pode ser de 2cm / 1 polegada de imprecisão devido à medida da mão. Essas medições servem como um guia para ajudá-lo a selecionar o tamanho correto. Por favor, tire suas próprias medidas e escolha seu tamanho de acordo.',
     },
     label: {
-        save: 'Guardar',
-        add: 'Adicionar',
-        order: 'Encomendas',
-        editAddress: 'Editar morada',
-        address: 'Morada',
-        fullName: 'Nome Completo',
-        streetAddress: 'Morada',
-        unit: 'Apt/Suíte/Bloco(Opcional))',
-        country: 'Pais',
-        state: 'Estado',
-        zipCode: 'Código-postal',
-        phoneNumber: 'Número de telefone',
-        city: 'Cidade',
-        submit: 'Submeter',
-        addressBook: 'Livro de endereços',
-        coupons: 'Cupões',
-        credits: 'Creditos',
-        processing: 'Processamento',
-        unpaid: 'Não remunerado',
-        shipped: 'Encomenda enviada',
-        confirmed: 'Encomenda confirmada',
-        canceled: 'Cancelar encomenda',
-        editProfile: 'Editar perfil',
-        changProfilePicture: 'Mudar foto de perfil',
-        firstName: 'Primeiro nome',
-        lastName: 'Ultimo nome',
-        gender: 'Gênero',
-        birthday: 'Data de nascimento',
-        changePassword: 'Mudar palavra-passe',
-        changeEmail: 'Mudar e-mail',
-        changeCurrency: 'Alterar Moeda',
-        wishlist: 'Lista de desejos',
-        settings: 'Definições',
-        mayLike:'TAMBÉM PODE GOSTAR',
-        logout:'Desconectar',
-        logoff:'Sair'
+        itemmeasurements: 'ITEM MEDIDAS',
+        pleasenote: 'OBSERVE',
+        disclaimer: 'AVISO LEGAL',
+        inches:'polegadas',
+        centimeters:'Centímetros',
+        sizeconversation:'Conversão de tamanho',
+        tagsize:'Tamanho de etiqueta',
+        size:'Tamanho'
     }
 }

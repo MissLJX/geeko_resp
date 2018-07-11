@@ -1,49 +1,18 @@
-/**
- * Created by shao_ on 2017/7/14.
- */
-
 export default {
     message: {
-        shoppingCart: 'Bolsa de la Compra',
-        loading: 'cargando',
-        addressTip: '* Indica que se requiere un campo',
+        measurements:'Le sugerimos encarecidamente que tome sus medidas y las utilice como referencia cuando seleccione un tamaño de artículos. Mídete siguiendo la guía a continuación.',
+        note1:'Por favor, según sus propias medidas para elegir su tamaño adecuado.',
+        note2:'Este tamaño de la lista se basa en el sistema de dimensionamiento internacional. Consulte la tabla de tamaños Guía para encontrar el tamaño correcto.',
+        disclaimer:'Sobre el tamaño: El tamaño puede ser de 2 cm / 1 pulgada de imprecisión debido a la medida de la mano. Estas medidas son una guía que lo ayudará a seleccionar el tamaño correcto. Por favor, tome sus propias medidas y elija su tamaño en consecuencia.',
     },
     label: {
-        save: 'Guardar',
-        add: 'Añadir',
-        order: 'Pedidos',
-        editAddress: 'Modificar la dirección',
-        address: 'Dirección',
-        fullName: 'Nombre Completo',
-        streetAddress: 'Dirección',
-        unit: 'Apto./Suite/Unidad(opcional)',
-        country: 'País',
-        state: 'Statut',
-        zipCode: 'Código postal',
-        phoneNumber: 'Número de teléfono',
-        city: 'Ciudad',
-        submit: 'Enviar',
-        addressBook: 'Libreta de Direcciones',
-        coupons: 'Cupones',
-        credits: 'Créditos',
-        processing: 'Procesando',
-        unpaid: 'No pagado',
-        shipped: 'Pedido enviadot',
-        confirmed: 'Commande Confirmée',
-        canceled: 'Commande Annulée',
-        editProfile: 'Modifier le Profil',
-        changProfilePicture: 'Cambiar Avatar',
-        firstName: 'Nombre',
-        lastName: 'Apellido',
-        gender: 'Apellido',
-        birthday: 'Cumpleaños',
-        changePassword: 'Cambiar contraseña',
-        changeEmail: 'Cambiar Email',
-        changeCurrency: 'Cambio de divisa',
-        wishlist: 'Lista de Favoritos',
-        settings: 'Configuración',
-        mayLike:'TAMBIÉN LE PUEDE GUSTAR',
-        logout:'Salir de Sesión',
-        logoff:'Cerrar sesión'
+        itemmeasurements: 'MEDIDAS DE ARTÍCULOS',
+        pleasenote: 'TENGA EN CUENTA',
+        disclaimer: 'RENUNCIA',
+        inches:'Pulgadas',
+        centimeters:'Centímetros',
+        sizeconversation:'Conversión de tamaño',
+        tagsize:'Tamaño de la etiqueta',
+        size:'tamaño'
     }
 }

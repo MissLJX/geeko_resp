@@ -1,49 +1,18 @@
-/**
- * Created by shao_ on 2017/7/14.
- */
-
 export default {
     message: {
-        shoppingCart: 'Panier',
-        loading: 'chargement',
-        addressTip: '* Indique qu\'un champ est requis',
+        measurements:'Nous vous suggérons fortement de prendre vos mesures et de les utiliser comme référence lors de la sélection d\'une taille d\'article. Mesurez-vous en suivant le guide ci-dessous.',
+        note1:'S\'il vous plaît selon vos propres mesures pour choisir votre taille appropriée.',
+        note2:'Cette taille est basée sur le système de dimensionnement international, s\'il vous plaît voir le Guide des tailles pour trouver la bonne taille.',
+        disclaimer:'A propos de la taille: La taille peut être de 2 cm / 1 pouce d\'imprécision en raison de la mesure de la main. Ces mesures sont conçues comme un guide pour vous aider à sélectionner la bonne taille. S\'il vous plaît prenez vos propres mesures et choisissez votre taille en conséquence.',
     },
     label: {
-        save: 'Enregistrer',
-        add: 'Ajouter',
-        order: 'Commandes',
-        editAddress: 'Modifier l\'adresse',
-        address: 'Adresse',
-        fullName: 'Nom Complet',
-        streetAddress: 'Adresse',
-        unit: 'Appt./Suite/unité (optionnel))',
-        country: 'Pays',
-        state: 'Statut',
-        zipCode: 'Code postal',
-        phoneNumber: 'Numéro de téléphone',
-        city: 'Cité',
-        submit: 'Soumettre',
-        addressBook: 'Carnet d\'Adresses',
-        coupons: 'Coupons',
-        credits: 'Crédit',
-        processing: 'En cours',
-        unpaid: 'Non payé',
-        shipped: 'Commande expédiée',
-        confirmed: 'Commande Confirmée',
-        canceled: 'Commande Annulée',
-        editProfile: 'Modifier le Profil',
-        changProfilePicture: 'Changer Avatar',
-        firstName: 'Prénom',
-        lastName: 'Nom',
-        gender: 'Sexe',
-        birthday: 'Anniversaire',
-        changePassword: 'Changer le Mot de Passe',
-        changeEmail: 'Changer l\'adresse e-mail',
-        changeCurrency: 'Changement de devise',
-        wishlist: 'Liste de Favoris',
-        settings: 'Paramètres',
-        mayLike:'VOUS POURRIEZ AUSSI AIMER',
-        logout:'Déconnexion',
-        logoff:'Déconnexion'
+        itemmeasurements: 'MESURES D\'ARTICLES',
+        pleasenote: 'NOTEZ S\'IL VOUS PLAÎT',
+        disclaimer: 'AVERTISSEMENT',
+        inches:'Pouces',
+        centimeters:'Centimètres',
+        sizeconversation:'Conversion de taille',
+        tagsize:'Taille du tag',
+        size:'Taille'
     }
 }

@@ -1,5 +1,5 @@
 <template>
-    <div class="st-table el-credit">
+    <div class="st-table el-credit" >
         <div class="st-cell st-v-m">
             <p>{{credit.eventName}}</p>
             <p>{{createTime}}</p>
@@ -42,7 +42,7 @@
             },
             points(){
                 return this.credit.points > 0 ? '+' + this.credit.points : this.credit.points
-            }
+            },
         }
     }
 </script>

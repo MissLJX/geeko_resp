@@ -152,7 +152,7 @@ const question6 = {
 
 const question7 = {
   id: 'se-7',
-  title: 'Dois-je m'inscrire pour passer une commande?',
+  title: 'Dois-je m\'inscrire pour passer une commande?',
   parentId: 'root-1',
   richText: `
 		<article>
@@ -392,7 +392,7 @@ const question17 = {
 
 const question18 = {
   id: 'se-18',
-  title: 'Pourquoi n'ai-je pas reçu de confirmation concernant ma commande?',
+  title: 'Pourquoi n\'ai-je pas reçu de confirmation concernant ma commande?',
   parentId: 'root-2',
   richText: `
 		<article>
@@ -458,7 +458,7 @@ const question20 = {
 
 const question21 = {
   id: 'se-21',
-  title: 'Acceptez-vous l'argent à la livraison?',
+  title: 'Acceptez-vous l\'argent à la livraison?',
   parentId: 'root-3',
   richText: `
 		<article>
@@ -1468,7 +1468,7 @@ const question71 = {
 }
 const question72 = {
   id: 'se-72',
-  title: 'Je n'ai pas reçu mon remboursement, quel est le problème?',
+  title: 'Je n\'ai pas reçu mon remboursement, quel est le problème?',
   parentId: 'root-6',
   richText: `
 		<article>
@@ -1874,16 +1874,16 @@ const question93 = {
 }
 const question94 = {
   id: 'se-94',
-  title: 'How can I change the currency?',
+  title: 'Comment puis-je changer la devise?',
   parentId: 'root-8',
   richText: `
 		<article>
 			<header>
-				<h1>How can I change the currency?</h1>
+				<h1>Comment puis-je changer la devise?</h1>
 			</header>
 			<section>
 				<p>
-					Hello, you can log in our website first, then you can change it in setting
+					Bonjour, vous pouvez d'abord vous connecter à notre site Web, puis vous pouvez le modifier dans les paramètres
 				</p>
 			</section>
 		</article>

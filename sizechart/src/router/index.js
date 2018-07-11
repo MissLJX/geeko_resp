@@ -2,12 +2,13 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Page404 from '../pages/404.vue'
 import Index from '../pages/index.vue'
+import mIndex from '../pages/m-index.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {path: '*', name: '404', component: Page404, meta: {title:'404'}},
-  {path:'/', name: 'index', component: Index, meta: {title: 'Index'}}
+  {path:'/', name: 'mIndex', component: Index, meta: {title: 'Index'}}
 ]
 
 

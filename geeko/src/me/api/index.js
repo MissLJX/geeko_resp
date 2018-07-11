@@ -16,6 +16,10 @@ export const getFeed = (customerId) => {
     return axios.get(VPATH + '/customer/anon/' + customerId + '/feed-summary', {}, {}).then(data => data.result)
 }
 
+/*export const getAllPoints = () => {
+    return axios.get('/pointsHistory/0/0/getAll?categoryIds=categoryIds').then(data => data.result)
+}*/
+
 
 export const getShippingDetails = () => {
     return axios.get(VPATH + '/customer/get-shipping-details', {}, {}).then((data) => {
@@ -127,6 +131,12 @@ export const getOrderCountReceipt = () => {
 
 export const getOrderCountUnpaid = () => {
   return axios.get(VPATH + '/msite/order/unpayed-order-count').then(data => data.result)
+}
+
+export const getMessage = (code) => {
+    return axios.get('/message/get/'+code).then((data) => {
+        return data.result
+    })
 }
 
 

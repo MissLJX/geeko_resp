@@ -30,6 +30,6 @@ const languages = [
 ]
 
 export default new VueI18n({
-    locale: languages.find(language => language === window.locale) || 'en_US', // set locale
+    locale: languages.find(language => language === window.locale1) || 'en_US', // set locale
     messages, // set locale messages
 })

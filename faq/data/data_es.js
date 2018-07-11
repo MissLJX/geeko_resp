@@ -1992,7 +1992,7 @@ const secondaries = [
 const questions = [
   {
   	id: 'root-1',
-    title: 'cuenta',   cuenta:órdenes:pago:productos:entrega:Vuelta:Seguridad y privacidad
+    title: 'cuenta',
     questions: [
       question1,
       question2,

@@ -11,6 +11,7 @@ const state = {
     addresses: null,
     coupons: null,
     feed: null,
+/*    allPoints:[],*/
     credits: [],
     initialized: false,
     youlikes: null,
@@ -37,7 +38,8 @@ const state = {
     orderCountShipped: 0,
     orderCountReceipt: 0,
     orderCountCanceled: 0,
-    orderCountUnpaid: 0
+    orderCountUnpaid: 0,
+    message:[],
 }
 
 const getters = {
@@ -47,6 +49,7 @@ const getters = {
     coupons: state => state.coupons,
     credits: state => state.credits,
     creditskip: state => state.creditskip,
+/*    allPoints: state => state.allPoints,*/
     initialized: state => state.initialized,
     youlikes: state => state.youlikes,
     wishlist: state => state.wishlist,
@@ -70,7 +73,8 @@ const getters = {
     orderCountShipped: state => state.orderCountShipped,
     orderCountReceipt: state => state.orderCountReceipt,
     orderCountCanceled: state => state.orderCountCanceled,
-    orderCountUnpaid: state => state.orderCountUnpaid
+    orderCountUnpaid: state => state.orderCountUnpaid,
+    message: state => state.message
 }
 
 const mutations = {
@@ -81,6 +85,9 @@ const mutations = {
     [types.ME_GET_FEED](state, _feed){
         state.feed = _feed
     },
+/*    [types.ME_GET_All_Points](state,_AllPoints){
+        state.allPoints = _AllPoints
+    },*/
     [types.ME_GET_ADDRESSES](state, _addresses){
         state.addresses = _addresses
     },
@@ -198,6 +205,9 @@ const mutations = {
     },
     [types.ME_ORDER_COUNT_UNPAID](state, count){
         state.orderCountUnpaid = count
+    },
+    [types.ME_GET_MESSAGE](state, code){
+        state.message = code
     }
 
 
@@ -208,7 +218,8 @@ const actions = {
         if (!state.initialized) {
             return Promise.all([
                 dispatch('getMe'),
-                dispatch('getWishlist')
+                dispatch('getWishlist'),
+                dispatch('getAllPoints')
             ]).then(([me, wishlist]) => {
                 commit(types.ME_GET, me)
                 commit(types.ME_GET_WISH_LIST, wishlist)
@@ -244,6 +255,16 @@ const actions = {
             })
         })
     },
+/*    getAllPoints({commit}){
+        return new Promise((resolve, reject) => {
+            api.getAllPoints().then(AllPoints => {
+                commit(types.ME_GET_All_Points, AllPoints)
+                resolve()
+            }).catch(e => {
+                reject(e)
+            })
+        })
+    },*/
     getAddresses({commit}){
         return new Promise((resolve, reject) => {
             api.getShippingDetails().then(addresses => {
@@ -468,6 +489,12 @@ const actions = {
     getOrderCountUnpaid({commit}){
         return api.getOrderCountUnpaid().then((count) => {
           commit(types.ME_ORDER_COUNT_UNPAID, count)
+        })
+    },
+
+    getMessage({commit},code){
+        return api.getMessage(code).then((code) =>{
+            commit(types.ME_GET_MESSAGE,code)
         })
     }
 }

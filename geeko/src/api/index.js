@@ -39,3 +39,4 @@ export function logout(){
 export function logoff(closedReason) {
     return axios.post(VPATH+'/login-customer/close',closedReason)
 }
+

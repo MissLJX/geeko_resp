@@ -630,7 +630,7 @@ const question28 = {
 
 const question29 = {
   id: 'se-29',
-  title: '',
+  title: 'Why my card keeps declined?',
   parentId: 'root-3',
   richText: `
 		<article>
@@ -1075,7 +1075,7 @@ const question51 = {
 }
 const question52 = {
   id: 'se-52',
-  title: '',
+  title: 'What should I do when tracking updates show my package was returned?',
   parentId: 'root-5',
   richText: `
 		<article>
