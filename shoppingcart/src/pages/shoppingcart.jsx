@@ -780,7 +780,7 @@ const ShoppingCart = class extends React.Component {
                 {
                   cart.expectedPoints > 0 && (
                     <TurnTool open={this.openPoints.bind(this)} turnAcitve={cart.openPointUse}>
-                      <span style={{fontSize: 15}}>Apply {cart.expectedPoints} (<Red><Money money={cart.expectedPointDiscount}/></Red>) To This Order</span>
+                      <span style={{fontSize: 15}}>{intl.formatMessage({id: 'apply'})} {cart.expectedPoints} (<Red><Money money={cart.expectedPointDiscount}/></Red>) {intl.formatMessage({id: 'to_this_order'})}</span>
                       <Ask style={{marginLeft: 4}} onClick={this.creditClickHandle.bind(this)}/>
                     </TurnTool>
                   )

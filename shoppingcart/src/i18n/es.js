@@ -23,8 +23,8 @@ export default{
   check_out: 'FINALIZAR PEDIDO',
   required_tips: 'Indica que se requiere un campo',
   full_name: 'Nombre completo',
-  street_address: 'Dirección',
-  unit: 'Apto./Suite/Unidad(opcional)',
+  street_address: 'Dirección de la calle',
+  unit: 'Unidad',
   country: 'País',
   state: 'Estado',
   city: 'Ciudad',
@@ -33,7 +33,9 @@ export default{
   submit: 'Enviar',
   shipping_method: 'Método de Envío',
   shipping_tip: 'Envío Exprés: Elegiremos el mensajero más adecuado para usted.',
-  select: 'Seleccionar',
+  select: 'Seleccione',
   add_new_card: 'Añadir una nueva tarjeta',
-  add_shipping_insurance:'Añadir seguro de envío'
+  add_shipping_insurance:'Añadir seguro de envío',
+  apply:'Aplicar',
+  to_this_order:'a esta orden'
 }

@@ -35,5 +35,7 @@ export default{
   shipping_tip: 'Express Shipping : We will choose the most appropciate carrier for you .',
   select: 'Select',
   add_new_card: 'Add a new card',
-  add_shipping_insurance:'Add Shipping Insurance'
+  add_shipping_insurance:'Add Shipping Insurance',
+  apply:'Apply',
+  to_this_order:'to this order'
 }

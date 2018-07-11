@@ -24,7 +24,7 @@ export default{
   required_tips: 'Indica que um campo é obrigatório',
   full_name: 'Nome Completo',
   street_address: 'Morada',
-  unit: 'Apt/Suíte/Bloco(Opcional)',
+  unit: 'Unidade',
   country: 'Pais',
   state: 'Estado',
   city: 'Cidade',
@@ -35,5 +35,7 @@ export default{
   shipping_tip: 'Envio expresso: Iremos escolher a companhia mais apropriada para sí',
   select: 'Seleccionar',
   add_new_card: 'Adicionar novo cartão',
-  add_shipping_insurance:'Adicionar seguro de remessa'
+  add_shipping_insurance:'Adicionar seguro de remessa',
+  apply:'Aplicar',
+  to_this_order:'a este pedido'
 }
