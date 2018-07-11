@@ -35,6 +35,7 @@ const initialState = {
   mercadocards: null,
   isCreditShow: false,
   noCard: false,
+  noCreditCard: false,
   creditcards: null,
   installments: 1,
   paypal: null
@@ -42,16 +43,32 @@ const initialState = {
 
 const isEmpty = cart => !cart
 
+const getPaymethod = (cart, selectedId) => {
+  if (cart) {
+    const s = cart.payMethodList.find(p => p.id === selectedId)
+    return s ? s.id : null
+  }
+  return null
+}
+
+const getPaymethodType = (cart, selectedId) => {
+  if (cart) {
+    const s = cart.payMethodList.find(p => p.id === selectedId)
+    return s ? s.type : null
+  }
+  return null
+}
+
 const refresh = (state = initialState, action) => {
   switch (action.type) {
     case LOADING:
       return {...state, loading: true}
     case LOADED:
-      return {...state, loading: false, paypal: action.values[1], empty: isEmpty(action.values[0]), cart: action.values[0], me: action.values[2], cpf: action.values[2].payCpf, email: action.values[2].communicationEmail}
+      return {...state, loading: false, payType: getPaymethodType(action.values[0], state.payMethod), payMethod: getPaymethod(action.values[0], state.payMethod), paypal: action.values[1], empty: isEmpty(action.values[0]), cart: action.values[0], me: action.values[2], cpf: action.values[2].payCpf, email: action.values[2].communicationEmail}
     case REFRESHING:
       return {...state, refreshing: true}
     case REFRESHED:
-      return {...state, refreshing: false, cart: action.cart, empty: isEmpty(action.cart)}
+      return {...state, refreshing: false, cart: action.cart, payType: getPaymethodType(action.cart, state.payMethod), payMethod: getPaymethod(action.cart, state.payMethod), empty: isEmpty(action.cart)}
     case EDITING:
       return {...state,
         editing: {
@@ -80,7 +97,7 @@ const refresh = (state = initialState, action) => {
     case SET_INSTALLMENTS:
       return {...state, installments: action.installments}
     case CREDIT_CARDS:
-      return {...state, creditcards: action.cards, noCard: (!action.cards || !action.cards.length)}
+      return {...state, creditcards: action.cards, noCreditCard: (!action.cards || !action.cards.length)}
     case GET_COUPONS:
       return {...state, coupons: action.coupons}
     default:

@@ -1,7 +1,7 @@
 import axios from './apiconfigs'
 const VPATH = '/v7'
 export const getMessage = (code) => axios.get(`/message/get/${code}`)
-export const get = () => axios.get(`${VPATH}/shopping-cart/show`)
+export const get = () => axios.get(`${VPATH}/shopping-cart/show?_=${new Date().getTime()}`)
 export const selectAll = () => axios.get(`${VPATH}/shopping-cart/select-all?_=${new Date().getTime()}`)
 export const select = (params) => axios.post(`${VPATH}/shopping-cart/select?_=${new Date().getTime()}`, params)
 export const editProduct = (oldId, newId, quantity) => axios.get(`${VPATH}/shopping-cart/${oldId}/${newId}/${quantity}/change-product`)
@@ -27,7 +27,7 @@ export const addMercadoCard = (token) => axios.post(`${VPATH}/mercadopago/add-ca
 export const usePoint = (isopen) => axios.get(`${VPATH}/shopping-cart/set-point/${isopen}`)
 export const useInsurance = (isuse) => axios.get(`${VPATH}/shopping-cart/anon/${isuse}/update-insurance`)
 
-export const creditcards = () => axios.get(`/quickpay-record/history`)
+export const creditcards = (payMethod) => axios.get(`/quickpay-record/${payMethod}/history`)
 export const creditpay = (params) => axios.post(`/quickpay/pay`, params)
 export const usecreditcard = (id) => axios.get(`/quickpay-record/${id}/use`)
 export const deletecreditcard = (id) => axios.get(`/quickpay-record/${id}/remove`)

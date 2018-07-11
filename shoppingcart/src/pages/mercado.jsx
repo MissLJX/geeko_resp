@@ -40,7 +40,7 @@ const Mercado = class extends React.Component {
     const exsiting = state ? state.exsiting : false
 
   	return <FullFixed onClose={this.close} title="Credit Card">
-  		<MercadoBinding addcardback={this.addcardback.bind(this)} exsiting={exsiting}/>
+  		<MercadoBinding email={this.props.me ? this.props.me.email : ''} addcardback={this.addcardback.bind(this)} exsiting={exsiting}/>
   	</FullFixed>
   }
 }

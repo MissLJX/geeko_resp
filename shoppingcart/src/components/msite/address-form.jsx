@@ -1,6 +1,6 @@
 import React from 'react'
 import {Form, Input, Select, Button} from './control.jsx'
-import {required, email, zip} from '../validator.jsx'
+import {required, email, zip, phone} from '../validator.jsx'
 import {StyledControl} from './styled-control.jsx'
 import {FormLayout, MultiControl} from './layout.jsx'
 import {getCountries, getStates} from '../../api'
@@ -28,8 +28,16 @@ const AdressForm = class extends React.Component {
 
   handleInputChange (event) {
     const target = event.target
-    const value = target.type === 'checkbox' ? target.checked : target.value
+    let value = target.type === 'checkbox' ? target.checked : target.value
     const name = target.name
+    if (name === 'zipCode' && this.state.country === 'BR') {
+      if (value && value.length > 5) {
+        var strs = value.replace(/-/ig, '').split('')
+        strs.splice(5, 0, '-')
+        value = strs.join('')
+      }
+    }
+
     this.setState({
       [name]: value
     })
@@ -239,7 +247,7 @@ const AdressForm = class extends React.Component {
               name='phoneNumber'
               value={this.state.phoneNumber}
               onChange={this.handleInputChange}
-              validations={[required]}/>
+              validations={[required, phone]}/>
           </StyledControl>
         </MultiControl>
 

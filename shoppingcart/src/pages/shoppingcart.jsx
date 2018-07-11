@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import {Switch, Route, Link, Redirect} from 'react-router-dom'
 import Loading from '../components/msite/loading.jsx'
 import Empty from '../components/msite/empty.jsx'
+import Refreshing from '../components/msite/refreshing.jsx'
 import Ask from '../components/ask.jsx'
 import FixedMessage from '../components/msite/fixed-message.jsx'
 import {Boxs, Box, BoxClickHead, BoxBody, LineBox, BoxHead} from '../components/msite/layout.jsx'
@@ -133,10 +134,10 @@ const mapDispatchToProps = (dispatch) => {
       })
     },
     GETMERCADOCARDS: () => {
-      dispatch(getMercadoCards())
+      return dispatch(getMercadoCards())
     },
-    GETCREDITCARDS: () => {
-      dispatch(getCreditCards())
+    GETCREDITCARDS: (payMethod) => {
+      return dispatch(getCreditCards(payMethod))
     },
     TOGGLECREDIT: (isShow) => {
       dispatch(toggleCredit(isShow))
@@ -198,11 +199,11 @@ const ShoppingCart = class extends React.Component {
 
     Mercadopago.setPublishableKey('TEST-aa971175-51cd-4be7-8ae4-f12006ac536d')
 
-    window.addEventListener('scroll', this.scrollhandle)
+    window.addEventListener('scroll', this.scrollhandle, false)
   }
 
   componentWillUnmount () {
-    window.removeEventListener('scroll', this.scrollhandle)
+    window.removeEventListener('scroll', this.scrollhandle, false)
   }
 
   scrollhandle (evt) {
@@ -219,13 +220,9 @@ const ShoppingCart = class extends React.Component {
       this.fixedTipWrapper.style.height = clientHeight + 'px'
       const rect = this.fixedTipWrapper.getBoundingClientRect()
       if (rect.top < headerHeight) {
-        this.setState({
-          tipFixed: true
-        })
+        this.fixedTip.classList.add('__fixed')
       } else {
-        this.setState({
-          tipFixed: false
-        })
+        this.fixedTip.classList.remove('__fixed')
       }
     }
   }
@@ -249,6 +246,11 @@ const ShoppingCart = class extends React.Component {
     event.preventDefault()
     const { payMethod, cart, paypal, payType } = this.props
 
+    if (!payType) {
+      window.scrollTop = window.scrollHeight
+      return
+    }
+
     if (!cart.shippingDetail) {
       this.props.history.push(`${window.ctx || ''}${__route_root__}/address`)
       return
@@ -256,10 +258,18 @@ const ShoppingCart = class extends React.Component {
 
     if (payType === '2' || payMethod === '17') {
       this.props.TOGGLECREDIT(true)
-      this.props.GETCREDITCARDS()
-    } else if (payMethod === '7') {
+      this.props.GETCREDITCARDS(payMethod).then((cards) => {
+        if (!cards || cards.length < 1) {
+          this.props.history.push(`${window.ctx || ''}${__route_root__}/credit-card`)
+        }
+      })
+    } else if (payType === '7') {
       this.props.TOGGLECREDIT(true)
-      this.props.GETMERCADOCARDS()
+      this.props.GETMERCADOCARDS().then((cards) => {
+        if (!cards || cards.length < 1) {
+          this.props.history.push(`${window.ctx || ''}${__route_root__}/mercado`)
+        }
+      })
     } else if (payType === '1') {
       this.setState({
         paypaling: true
@@ -293,7 +303,6 @@ const ShoppingCart = class extends React.Component {
       window.location.href = `${window.ctx || ''}/computoppay/pay?payMethod=${payMethod}`
     }
     if (this.getCountdown(this.props.cart) > 0) {
-      s
       givingCoupon()
     }
   }
@@ -405,7 +414,7 @@ const ShoppingCart = class extends React.Component {
       })
     } else {
       usecreditcard(card.quickpayRecord.id).then(() => {
-        this.props.GETCREDITCARDS()
+        this.props.GETCREDITCARDS(card.quickpayRecord.payMethod)
       })
     }
   }
@@ -484,15 +493,25 @@ const ShoppingCart = class extends React.Component {
   handleCredit (evt) {
     evt.preventDefault()
     const {cpf, installments} = this.props
-    if (!this.brazilref.context._errors || !this.brazilref.context._errors.length) {
-      creditpay({payCpf: cpf, payInstallments: installments}).then(data => data.result).then(({success, transactionId, details, solutions}) => {
-        if (success) {
-          window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
-        } else {
-          alert(details + '\n' + solutions)
-        }
-      })
+    if (this.props.payMethod === '17') {
+      if (!this.brazilref.context._errors || !this.brazilref.context._errors.length) {
+        this.payCredit({payCpf: cpf, payInstallments: installments})
+      }
+    } else {
+      this.payCredit({})
     }
+  }
+
+  payCredit (params) {
+    creditpay(params).then(data => data.result).then(({success, transactionId, details, solutions}) => {
+      if (success) {
+        window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
+      } else {
+        alert(details + '\n' + solutions)
+      }
+    }).catch(({result}) => {
+      alert(result)
+    })
   }
 
   addMercadoCard (evt) {
@@ -555,21 +574,22 @@ const ShoppingCart = class extends React.Component {
   }
 
   render () {
-    const {cart, loading, empty, editing, isCreditShow, mercadocards, creditcards, noCard, intl} = this.props
+    const {cart, loading, empty, editing, isCreditShow, mercadocards, creditcards, noCard, intl, noCreditCard} = this.props
     const invalidItems = cart ? this.getInvalidItems(cart) : []
 
     const {sendCouponMessage} = cart || {sendCouponMessage: null}
     let couponcountdown = this.getCountdown(cart)
 
-  	return loading ? <Loading/> : (empty ? <Empty/> : (
-  		cart && (
+    return loading ? <Loading/> : (empty ? <Empty/> : (
+      cart && (
         <div style={{opacity: this.props.refreshing ? 0.9 : 1}}>
+          {this.props.refreshing && <Refreshing/>}
 
           <div ref={wrapper => { this.fixedTipWrapper = wrapper }}>
 
             {
               couponcountdown > 1000 ? (
-                <Tip className={this.state.tipFixed ? '__fixed' : ''} innerRef={tip => { this.fixedTip = tip }}>
+                <Tip innerRef={tip => { this.fixedTip = tip }}>
                   <div className="x-table __fixed x-fw __vm">
                     <div className="x-cell" style={{width: 75}}>
                       <CountDownBlock offset={couponcountdown}/>
@@ -639,19 +659,23 @@ const ShoppingCart = class extends React.Component {
                 </Box>
               ))
             }
+            {
+              cart.shoppingCartProductsByOverseas && cart.shoppingCartProductsByOverseas.length > 0 && (
+                <Box>
+                  <GroupOverseasItems
+                    quantityChange={(itemId, quantity) => { this.props.EDITITEM(itemId, itemId, quantity) }}
+                    itemEdit={this.itemEdit}
+                    itemDelete={this.itemDelete}
+                    groupClick={this.groupClick}
+                    itemSelect={this.itemSelect}
+                    items={this.getValidItems(cart.shoppingCartProductsByOverseas)}
+                    shippingMethod={cart.shippingMethod}
+                    serverTime={cart.serverTime}
+                    shippingMsg={cart.messages ? cart.messages.shippingMsg : null}/>
+                </Box>
 
-    			<Box>
-    				 <GroupOverseasItems
-                quantityChange={(itemId, quantity) => { this.props.EDITITEM(itemId, itemId, quantity) }}
-                itemEdit={this.itemEdit}
-                itemDelete={this.itemDelete}
-                groupClick={this.groupClick}
-                itemSelect={this.itemSelect}
-                items={this.getValidItems(cart.shoppingCartProductsByOverseas)}
-                shippingMethod={cart.shippingMethod}
-                serverTime={cart.serverTime}
-                shippingMsg={cart.messages ? cart.messages.shippingMsg : null}/>
-    			</Box>
+              )
+            }
 
             {
               invalidItems && invalidItems.length > 0 && <Box>
@@ -686,7 +710,7 @@ const ShoppingCart = class extends React.Component {
                   cart.shippingInsurancePrice2 && (
                     <TurnTool open={this.openInsurance.bind(this)} turnAcitve={cart.insurance}>
                       <span style={{fontSize: 15}}>Add Shipping Insurance(<Red><Money money={cart.shippingInsurancePrice2}/></Red>)</span>
-                      <Ask onClick={this.insuranceClickHandle.bind(this)}/>
+                      <Ask style={{marginLeft: 4}} onClick={this.insuranceClickHandle.bind(this)}/>
                     </TurnTool>
                   )
                 }
@@ -695,7 +719,7 @@ const ShoppingCart = class extends React.Component {
                   cart.expectedPoints > 0 && (
                     <TurnTool open={this.openPoints.bind(this)} turnAcitve={cart.openPointUse}>
                       <span style={{fontSize: 15}}>Apply {cart.expectedPoints} (<Red><Money money={cart.expectedPointDiscount}/></Red>) To This Order</span>
-                      <Ask onClick={this.creditClickHandle.bind(this)}/>
+                      <Ask style={{marginLeft: 4}} onClick={this.creditClickHandle.bind(this)}/>
                     </TurnTool>
                   )
                 }
@@ -729,18 +753,6 @@ const ShoppingCart = class extends React.Component {
 
               </OrderSummary>
             </Box>
-
-            {/* <Box>
-            <Link to={`${window.ctx || ''}/mercado`}>Mercado</Link>
-
-            <div>
-              <button onClick={() => {
-                this.props.TOGGLECREDIT(true)
-                this.props.GETMERCADOCARDS()
-              }}>Credit Card</button>
-
-            </div>
-          </Box> */}
 
             {
               window.__is_login__ ? (
@@ -805,7 +817,7 @@ const ShoppingCart = class extends React.Component {
               )
             }
 
-    		</Boxs>
+          </Boxs>
 
           {
             editing.isEditing && (
@@ -844,10 +856,6 @@ const ShoppingCart = class extends React.Component {
           }
 
           {
-            isCreditShow && noCard && this.props.payMethod === '19' && <Redirect push to={`${window.ctx || ''}${__route_root__}/mercado`}/>
-          }
-
-          {
             isCreditShow && (this.props.payMethod === '3' || this.props.payMethod === '17') && creditcards && creditcards.length && (
               <React.Fragment>
                 <Mask/>
@@ -861,7 +869,7 @@ const ShoppingCart = class extends React.Component {
                   brazilref = {(c) => { this.brazilref = c }}
                   handleInputChange = { this.handleInputChange }
                   creditClose={() => { this.props.TOGGLECREDIT(false) }}
-                  installmentoptions={this.props.cart.payInstalmentsByOceanpaymentBRACreditCard}
+                  installmentoptions={this.props.cart.payInstalmentsByOceanpaymentBRACreditCard || []}
                   installments={this.props.installments}
                   addCard={this.addCreditCard.bind(this)}
                   cardSelect={ this.cardSelect.bind(this)}
@@ -900,7 +908,7 @@ const ShoppingCart = class extends React.Component {
           }
 
         </div>)
-  	))
+    ))
   }
 }
 

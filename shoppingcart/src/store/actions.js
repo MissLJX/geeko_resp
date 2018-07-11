@@ -170,14 +170,14 @@ export const refreshCart = (cart) => {
 export const selectItem = (params) => {
   return dispatch => {
     dispatch(refresing())
-    return select(params).then(data => data.result).then(cart => dispatch(refreshed(cart)))
+    return select(params).then(data => data.result).then(cart => dispatch(refreshCart(cart)))
   }
 }
 
 export const selectAllItems = () => {
   return dispatch => {
     dispatch(refresing())
-    return selectAll().then(data => data.result).then(cart => dispatch(refreshed(cart)))
+    return selectAll().then(data => data.result).then(cart => dispatch(refreshCart(cart)))
   }
 }
 
@@ -194,7 +194,7 @@ export const editItem = (oldId, newId, quantity) => {
   return dispatch => {
     dispatch(refresing())
     return editProduct(oldId, newId, quantity).then(data => data.result).then(cart => {
-      dispatch(refreshed(cart))
+      dispatch(refreshCart(cart))
       dispatch(edited())
     })
   }
@@ -204,7 +204,7 @@ export const deleteItem = (itemId) => {
   return dispatch => {
     dispatch(refresing())
     return deleteitem(itemId).then(data => data.result).then(cart => {
-      dispatch(refreshed(cart))
+      dispatch(refreshCart(cart))
     })
   }
 }
@@ -213,7 +213,7 @@ export const deleteItems = (itemIds) => {
   return dispatch => {
     dispatch(refresing())
     return deleteitems(itemIds).then(data => data.result).then(cart => {
-      dispatch(refreshed(cart))
+      dispatch(refreshCart(cart))
     })
   }
 }
@@ -222,14 +222,16 @@ export const getMercadoCards = () => {
   return dispatch => {
     return mercadocards().then(data => data.result).then(cards => {
       dispatch(setMercadoCards(cards))
+      return cards
     })
   }
 }
 
-export const getCreditCards = () => {
+export const getCreditCards = (payMethod) => {
   return dispatch => {
-    return creditcards().then(data => data.result).then(cards => {
+    return creditcards(payMethod).then(data => data.result).then(cards => {
       dispatch(setCreditCards(cards))
+      return cards
     })
   }
 }
