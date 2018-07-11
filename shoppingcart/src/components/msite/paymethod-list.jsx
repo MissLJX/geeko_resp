@@ -110,7 +110,7 @@ const Method = class extends React.Component {
             <img style={{verticalAlign: 'middle'}} src={payMethod.icon}/>
             <Grey style={{verticalAlign: 'middle'}} style={{fontSize: 15}}>{payMethod.name}</Grey>
           </div>
-          <div className="x-cell __right">
+          <div className="x-cell __right" style={{width: 50}}>
             <CheckBox className={selected ? 'selected' : ''}/>
           </div>
         </div>

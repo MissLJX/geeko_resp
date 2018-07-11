@@ -37,8 +37,8 @@ const StyleSelect = styled.span`
   cursor: pointer;
 
   &.disabled{
-    border: 1px solid #666;
-    color: #666;
+    border: 1px solid #ddd;
+    color: #ddd;
     cursor: default;
   }
 

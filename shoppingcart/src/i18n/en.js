@@ -4,7 +4,7 @@ export default{
   all: 'All',
   express_shipping: 'Express Shipping',
   limited_time: 'Limited time',
-  free_shipping: 'FREE SHIPPING',
+  free_shipping: 'Free Shipping',
   worldwide: 'WORLDWIDE',
   product_options: 'Product Options',
   size: 'Size',

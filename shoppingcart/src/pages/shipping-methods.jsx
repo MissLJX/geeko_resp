@@ -69,6 +69,7 @@ const ShippingMethods = class extends React.Component {
   clickHandle (evt, method) {
   	evt.stopPropagation()
   	this.props.SELECT(method)
+    this.props.history.goBack()
   }
 
   render () {

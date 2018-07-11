@@ -5,6 +5,9 @@ export const __reg_zip_us__ = /^[\w-]{5,20}$/
 export const __reg_zip_uk__ = /^\w{2,4}\s?\w{3}$/
 export const __reg_zip_br__ = /^[0-9]{5}-[0-9]{3}$/
 
+export const __reg_phone_normal__ = /\d{1,20}$/
+export const __reg_phone_br__ = /\d{8,15}$/
+
 export const cpfcheck = (value) => {
   var result = true
 
@@ -90,6 +93,25 @@ export const zip = (value, props, components) => {
   		break
   	default:
   		break
+  }
+
+  if (reg && !reg.test(value)) {
+    return error
+  }
+}
+
+export const phone = (value, props, components) => {
+  const country = components['country'][0].value
+  let reg, error
+  switch (country) {
+    case 'BR':
+      reg = __reg_phone_br__
+      error = `Insira pelo menos 8-15 números.`
+      break
+    default:
+      reg = __reg_phone_normal__
+      error = `Incorrect phone number format.`
+      break
   }
 
   if (reg && !reg.test(value)) {

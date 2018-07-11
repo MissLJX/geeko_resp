@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import {mercadopay, addMercadoCard} from '../api'
-import {Form, Input, Button} from './msite/control.jsx'
+import {Form, Input, Button, Select} from './msite/control.jsx'
 import {required, email} from './validator.jsx'
 import {StyledControl} from './msite/styled-control.jsx'
 import {FormLayout, MultiControl} from './msite/layout.jsx'
@@ -22,12 +22,37 @@ const StyleButton = {
 
 const getBin = card => card.replace(/[ .-]/g, '').slice(0, 6)
 
+const monthes = [
+  '01',
+  '02',
+  '03',
+  '04',
+  '05',
+  '06',
+  '07',
+  '08',
+  '09',
+  '10',
+  '11',
+  '12'
+]
+
+const year = new Date().getFullYear()
+
+const years = []
+
+{
+  for (let i = 0; i < 22; i++) {
+    years.push(year + i)
+  }
+}
+
 const MercadoBinding = class extends React.Component {
   constructor (props) {
     super(props)
     this.handleInputChange = this.handleInputChange.bind(this)
     this.state = {
-    	email: null,
+    	email: this.props.email,
     	paymentMethod: null,
     	token: null,
     	paymentMethodIcon: null
@@ -39,6 +64,10 @@ const MercadoBinding = class extends React.Component {
 
   componentDidMount () {
   	Mercadopago.setPublishableKey('TEST-aa971175-51cd-4be7-8ae4-f12006ac536d')
+  }
+
+  componentWillReceiveProps (newProps) {
+    this.setState({email: newProps.email})
   }
 
   guessingPaymentMethod (event) {
@@ -83,7 +112,9 @@ const MercadoBinding = class extends React.Component {
 
   handleSubmit (evt) {
   	evt.preventDefault()
+    this.form.validateAll()
   	const $form = document.getElementById('mercadoform')
+    Mercadopago.clearSession()
   	Mercadopago.createToken($form, this.sdkResponseHandler)
   }
 
@@ -95,7 +126,6 @@ const MercadoBinding = class extends React.Component {
       	token: response.id
       })
 
-<<<<<<< HEAD
       if (this.props.exsiting) {
         addMercadoCard(response.id).then(() => {
           this.props.addcardback()
@@ -107,25 +137,12 @@ const MercadoBinding = class extends React.Component {
           token: response.id
         }).then(data => data.result).then(({success, transactionId, details, solutions}) => {
           if (success) {
-            window.location.href = `${window.ctx || ''}/order/confirm/web/ocean?transactionId=${transactionId}`
+            window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
           } else {
             alert(details + '\n' + solutions)
           }
         })
       }
-=======
-      mercadopay({
-      	email: this.state.email,
-      	paymentMethodId: this.state.paymentMethod,
-      	token: response.id
-      }).then(data => data.result).then(({success, transactionId, details, solutions}) => {
-        if (success) {
-          window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
-        } else {
-          alert(details + '\n' + solutions)
-        }
-      })
->>>>>>> 1ae9f48e7017f1990c5d9e9ea95096c8349f6ab8
     }
   }
 
@@ -138,20 +155,20 @@ const MercadoBinding = class extends React.Component {
   	}
 
   	return <div style={{margin: 'auto', width: '80%', maxWidth: 300}}>
-  		<Form id="mercadoform" onSubmit={this.handleSubmit.bind(this)}>
+  		<Form id="mercadoform" ref={c => { this.form = c }} onSubmit={this.handleSubmit.bind(this)}>
   			<FormLayout>
 
           {
-            !this.props.exsiting && <StyledControl>
+            !this.props.exsiting && <StyledControl style={{display: 'none'}}>
               <label>
               Email*
               </label>
               <Input
+
                 name='email'
                 value={this.state.email}
                 onChange={this.handleInputChange}
-                validations={[required, email]}
-                placeholder="test_user_任意几个数字@testuser.com"/>
+                validations={[required, email]}/>
             </StyledControl>
           }
 
@@ -162,9 +179,7 @@ const MercadoBinding = class extends React.Component {
   						onChange={this.guessingPaymentMethod}
   						onKeyUp={this.guessingPaymentMethod}
   						validations={[required]}
-  						data-checkout="cardNumber"
-  						placeholder="4075 5957 1648 3764 / 5474 9254 3267 0366"
-  						autoComplete="off" />
+  						data-checkout="cardNumber"/>
   				</StyledControl>
 
   				<StyledControl>
@@ -172,27 +187,31 @@ const MercadoBinding = class extends React.Component {
   					<Input
   						validations={[required]}
   						data-checkout="securityCode"
-  						placeholder="123"
-  						autoComplete="off" />
+  						placeholder="CVC2/CVV2"/>
   				</StyledControl>
 
   				<MultiControl>
 	  				<StyledControl>
 	  					<label>Expiration month*</label>
-	  					<Input
+	  					<Select
+                className="x-select"
 	  						validations={[required]}
-	  						data-checkout="cardExpirationMonth"
-	  						placeholder="06"
-	  						autoComplete="off" />
+	  						data-checkout="cardExpirationMonth">
+                <option value=''>Month</option>
+                {monthes.map(month => <option value={month}>{month}</option>)}
+
+              </Select>
 	  				</StyledControl>
 
 	  				<StyledControl>
 	  					<label>Expiration year*</label>
-	  					<Input
+	  					<Select
+                className="x-select"
 	  						validations={[required]}
-	  						data-checkout="cardExpirationYear"
-	  						placeholder="2020"
-	  						autoComplete="off" />
+	  						data-checkout="cardExpirationYear">
+                <option value=''>Year</option>
+                {years.map(year => <option value={year}>{year}</option>)}
+              </Select>
 	  				</StyledControl>
   				</MultiControl>
 
@@ -200,14 +219,12 @@ const MercadoBinding = class extends React.Component {
   					<label>Card holder name*</label>
   					<Input
   						validations={[required]}
-  						data-checkout="cardholderName"
-  						placeholder="APRO"
-  						autoComplete="off" />
+  						data-checkout="cardholderName"/>
   				</StyledControl>
   			</FormLayout>
 
   			<div>
-	          <Button style={StyleButton}>Pay Now</Button>
+	          <Button className="__submitbtn" style={StyleButton}>Pay Now</Button>
 	        </div>
   		</Form>
   	</div>

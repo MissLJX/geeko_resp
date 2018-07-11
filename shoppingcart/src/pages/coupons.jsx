@@ -36,10 +36,12 @@ const Coupon = class extends React.Component {
     if (id) {
       usecoupon(id).then(() => {
         this.props.REFRESHCART()
+        this.props.history.goBack()
       })
     } else {
       unusecoupon().then(() => {
         this.props.REFRESHCART()
+        this.props.history.goBack()
       })
     }
   }

@@ -24,8 +24,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    GETCREDITCARDS: () => {
-      dispatch(getCreditCards())
+    GETCREDITCARDS: (payMethod) => {
+      dispatch(getCreditCards(payMethod))
     }
   }
 }
@@ -75,13 +75,13 @@ const CardBinding = class extends React.Component {
     this.close = this.close.bind(this)
     this.deleteCardHandle = this.deleteCardHandle.bind(this)
     this.state = {
-      frameUrl: `${window.ctx || 'http://localhost:8080/wanna'}/w-site/anon/oceanpay?payMethod=${props.payMethod}`
+      frameUrl: `${window.ctx || ''}/w-site/anon/oceanpay?payMethod=${props.payMethod}`
     }
   }
 
   componentDidMount () {
   	window.bindSuccess = () => {
-  		this.props.GETCREDITCARDS()
+  		this.props.GETCREDITCARDS(this.props.payMethod)
   		this.props.history.push(`${window.ctx || ''}${__route_root__}/`)
   	}
 
@@ -92,7 +92,7 @@ const CardBinding = class extends React.Component {
     }
 
     if (!this.props.creditcards) {
-      this.props.GETCREDITCARDS()
+      this.props.GETCREDITCARDS(this.props.payMethod)
     }
   }
 
@@ -100,7 +100,7 @@ const CardBinding = class extends React.Component {
     evt.stopPropagation()
     if (confirm('Are you sure to delete this card?')) {
       deletecreditcard(cardId).then(() => {
-        this.props.GETCREDITCARDS()
+        this.props.GETCREDITCARDS(this.props.payMethod)
       })
     }
   }
