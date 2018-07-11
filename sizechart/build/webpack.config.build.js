@@ -1,44 +1,70 @@
-const path = require('path')
-const webpack = require('webpack')
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
-const ROOT_PATH = path.resolve(__dirname)
-const BUILD_PATH = path.resolve(ROOT_PATH, 'dist')
 
-module.exports = {
-  entry: {
-    app:path.resolve(ROOT_PATH, 'app.vue')
-  },
-  output: {
-  	path: BUILD_PATH,
-    publicPath: '/',
-  	filename: '[name].bundle.js'
-  },
-  mode: 'production',
-  devtool: 'source-map',
-  resolve: {
-    modules: [__dirname, 'node_modules'],
-    extensions: ['.js', '.jsx']
-  },
-  module: {
-    rules: [
-      {
-        test: /.jsx?$/,
-        use: ['babel-loader'],
-        exclude: [path.join(ROOT_PATH, 'node_modules')]
-      },
-      {
-        test: /.css$/,
-        use: ['style-loader', 'css-loader']
-      }
-    ]
-  },
-  plugins: [
-    new UglifyJSPlugin({
-      sourceMap: true
-    }),
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('production')
-    })
-  ]
-}
+const setPath = function (folderName) {
+    return path.join(__dirname, folderName);
+};
+
+
+
+const extractHTML = new HtmlWebpackPlugin({
+    title: 'Me',
+    filename: 'index.html',
+    inject: true,
+    template: setPath('../index.ejs')
+});
+
+
+
+const config = {
+
+    entry: {
+        build: setPath('../src/App.js')
+    },
+    output: {
+        path: setPath('dist'),
+        publicPath: '/',
+        filename:'[name].js'
+    },
+
+    optimization: {
+        runtimeChunk: false,
+        splitChunks: {
+            chunks: 'all'
+        }
+    },
+    resolveLoader: {
+        modules: [setPath('../node_modules')]
+    },
+    mode: 'production',
+    plugins: [
+        extractHTML,
+        new VueLoaderPlugin()
+    ],
+    module: {
+        rules: [
+            {
+                test: /\.vue$/,
+                loader: 'vue-loader'
+            },
+            {
+                test: /\.js$/,
+                exclude: /(node_modules)/,
+                use: [{
+                    loader: 'babel-loader'
+                }]
+            },
+            {
+                test: /\.css$/,
+                use:['vue-style-loader', 'css-loader','sass-loader']
+            },
+            {
+                test: /\.scss$/,
+                use: ['vue-style-loader','css-loader', 'sass-loader']
+            }
+        ]
+    }
+};
+module.exports = config;

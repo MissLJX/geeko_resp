@@ -47,6 +47,7 @@ const config = {
     contentBase: './dist',
     proxy: {
       '/api': {
+/*        target: 'https://www.chicme.xyz',*/
         target: 'http://localhost:8080/wanna',
         pathRewrite: { '^/api': '' },
         secure: false
