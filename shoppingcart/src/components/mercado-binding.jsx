@@ -7,6 +7,7 @@ import {StyledControl} from './msite/styled-control.jsx'
 import {FormLayout, MultiControl} from './msite/layout.jsx'
 import {BigButton} from './msite/buttons.jsx'
 import _ from 'lodash'
+import {injectIntl} from 'react-intl'
 
 const StyleButton = {
   display: 'block',
@@ -188,6 +189,7 @@ const MercadoBinding = class extends React.Component {
   		backgroundRepeat: 'no-repeat',
   		backgroundSize: '35px'
   	}
+  	const {intl} = this.props
 
   	return <div style={{margin: 'auto', width: '80%', maxWidth: 300}}>
   		<Form id="mercadoform" ref={c => { this.form = c }} onSubmit={this.handleSubmit.bind(this)}>
@@ -207,7 +209,7 @@ const MercadoBinding = class extends React.Component {
           }
 
   				<StyledControl>
-  					<label>Credit card number*</label>
+  					<label>{intl.formatMessage({id: 'credit_card_number'})}*</label>
   					<Input
   						style={CardStyle}
   						onChange={
@@ -222,7 +224,7 @@ const MercadoBinding = class extends React.Component {
   				</StyledControl>
 
   				<StyledControl>
-  					<label>Security code*</label>
+  					<label>{intl.formatMessage({id: 'securit_code'})}*</label>
   					<Input
   						validations={[required]}
   						data-checkout="securityCode"
@@ -231,7 +233,7 @@ const MercadoBinding = class extends React.Component {
 
   				<MultiControl>
 	  				<StyledControl>
-	  					<label>Expiration month*</label>
+	  					<label>{intl.formatMessage({id: 'expiration_month'})}*</label>
 	  					<Select
                 className="x-select"
 	  						validations={[required]}
@@ -243,7 +245,7 @@ const MercadoBinding = class extends React.Component {
 	  				</StyledControl>
 
 	  				<StyledControl>
-	  					<label>Expiration year*</label>
+	  					<label>{intl.formatMessage({id: 'expiration_year'})}*</label>
 	  					<Select
                 className="x-select"
 	  						validations={[required]}
@@ -255,7 +257,7 @@ const MercadoBinding = class extends React.Component {
   				</MultiControl>
 
   				<StyledControl>
-  					<label>Card holder name*</label>
+  					<label>{intl.formatMessage({id: 'ard_holder_name'})}*</label>
   					<Input
   						validations={[required]}
   						data-checkout="cardholderName"/>
@@ -263,7 +265,7 @@ const MercadoBinding = class extends React.Component {
 
           {
             this.state.payer_costs && this.state.payer_costs.length > 0 && <StyledControl>
-              <label>Installments*</label>
+              <label>{intl.formatMessage({id: 'installments'})}*</label>
               <Select className="x-select" name="installments" value={this.state.installments}>
                 {
                   this.state.payer_costs.map(({installments, recommended_message}) => (
@@ -285,7 +287,7 @@ const MercadoBinding = class extends React.Component {
           {this.state.paying ? (
             <BigButton style={{marginTop: 20}} className="__btn" height={40} bgColor="#999">Please Wait</BigButton>
           ) : (
-            <Button className="__submitbtn" style={StyleButton}>Pay Now</Button>
+            <Button className="__submitbtn" style={StyleButton}>{intl.formatMessage({id: 'pay_now'})}</Button>
           )}
 
 	       </div>
@@ -294,4 +296,4 @@ const MercadoBinding = class extends React.Component {
   }
 }
 
-export default MercadoBinding
+export default injectIntl(MercadoBinding)

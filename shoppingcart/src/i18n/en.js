@@ -37,5 +37,14 @@ export default{
   add_new_card: 'Add a new card',
   add_shipping_insurance:'Add Shipping Insurance',
   apply:'Apply',
-  to_this_order:'to this order'
+  to_this_order:'to this order',
+  credit_card_number:'Credit card number',
+  securit_code:'securit code',
+  expiration_month:'Expiration month',
+  expiration_year:'Expiration year',
+  ard_holder_name:'Card holder name',
+  installments:'Installments',
+  pay_now:'pay now'
+
+
 }
