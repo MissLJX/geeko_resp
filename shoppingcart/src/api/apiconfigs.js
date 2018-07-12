@@ -38,8 +38,10 @@ const instance = axios.create({
   timeout: 50000,
   headers: {
     appVersion: '3.5.7',
+    deviceType: 'msite',
     countryCode: getCountry(),
     wid: getWid(),
+    StemFrom: typeof (utm_source) === 'undefined' ? '' : utm_source,
     accessToken: window.accessToken || ''
   }
 })

@@ -109,7 +109,7 @@ const Mercado = class extends React.Component {
     const state = this.props.location.state
     const exsiting = state ? state.exsiting : false
 
-  	return <FullFixed onClose={this.close} title="Credit Card">
+  	return <FullFixed onClose={this.close} title="Tarjeta de crédito o débito">
       <Boxs style={{backgroundColor: '#e5e5e5'}}>
         <Box style={{paddingBottom: 20}}>
           <CardInfos>

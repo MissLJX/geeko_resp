@@ -28,6 +28,7 @@ import { useMercadocard, mercadopay, usePoint, useInsurance, creditpay, paypalpa
 import {__route_root__, storage} from '../utils/utils.js'
 import {CountDownBlock} from '../components/msite/countdowns.jsx'
 import {injectIntl} from 'react-intl'
+import {Confirm} from '../components/msite/modals.jsx'
 
 const OrderSummary = styled.div`
   padding: 5px 10px;
@@ -136,6 +137,10 @@ const mapDispatchToProps = (dispatch) => {
       return dispatch(getCreditCards(payMethod))
     },
     TOGGLECREDIT: (isShow) => {
+      if (!isShow) {
+        // if(confirm())
+      }
+
       dispatch(toggleCredit(isShow))
     },
     SETSECURITYCODE: (securityCode) => {
@@ -190,7 +195,8 @@ const ShoppingCart = class extends React.Component {
       showAsk: false,
       askMessage: '',
       paypaling: false,
-      checking: false
+      checking: false,
+      showPayMsgOcean: false
     }
   }
 
@@ -260,8 +266,8 @@ const ShoppingCart = class extends React.Component {
     const { payMethod, cart, paypal, payType } = this.props
 
     if (!payType) {
-      window.scrollTop = window.scrollHeight
       alert('Please select a pay method!')
+      this.$paylistdom.scrollIntoView()
       return
     }
 
@@ -638,6 +644,16 @@ const ShoppingCart = class extends React.Component {
     return couponcountdown
   }
 
+  creditClose () {
+    if (this.props.cart.cancelOceanpaymentPayMsg) {
+      this.setState({
+        showPayMsgOcean: true
+      })
+    } else {
+      this.props.TOGGLECREDIT(false)
+    }
+  }
+
   render () {
     const {cart, loading, empty, editing, isCreditShow, mercadocards, creditcards, noCard, intl, noCreditCard} = this.props
     const invalidItems = cart ? this.getInvalidItems(cart) : []
@@ -805,7 +821,7 @@ const ShoppingCart = class extends React.Component {
 
             {
               window.__is_login__ && (
-                <Box>
+                <Box innerRef={c => { this.$paylistdom = c }}>
                   <BoxHead title={intl.formatMessage({id: 'payment_method'})}/>
                   <div style={{paddingLeft: 10, paddingRight: 10}}>
                     <PayMethodList cpfClickHandle={this.cpfClickHandle.bind(this)} boleto={(c) => { this.boleto = c }} cpf={this.props.cpf} email={this.props.email} handleInputChange={this.handleInputChange} selectedPayId={this.props.payMethod} selectPayHandle={this.selectPayHandle.bind(this)} methods={this.props.cart.payMethodList}/>
@@ -927,7 +943,7 @@ const ShoppingCart = class extends React.Component {
                   handleMercado = {this.checkmercado.bind(this)}
                   mercadoref = {this.mercadoref.bind(this)}
                   handleInputChange = { this.handleInputChange }
-                  creditClose={() => { this.props.TOGGLECREDIT(false) }}
+                  creditClose={this.creditClose.bind(this)}
                   cardSelect={ this.cardSelect.bind(this)}
                   cards={mercadocards}
                   addCard={this.addMercadoCard.bind(this)}
@@ -956,7 +972,7 @@ const ShoppingCart = class extends React.Component {
                   handleCredit = {this.handleCredit.bind(this)}
                   brazilref = {(c) => { this.brazilref = c }}
                   handleInputChange = { this.handleInputChange }
-                  creditClose={() => { this.props.TOGGLECREDIT(false) }}
+                  creditClose={this.creditClose.bind(this)}
                   installmentoptions={this.props.cart.payInstalmentsByOceanpaymentBRACreditCard || []}
                   installments={this.props.installments}
                   addCard={this.addCreditCard.bind(this)}
@@ -991,6 +1007,20 @@ const ShoppingCart = class extends React.Component {
                 </div>
               </div>
             </React.Fragment>
+          }
+
+          {
+            this.state.showPayMsgOcean && cart.cancelOceanpaymentPayMsg && <Confirm title="Chic Me"
+              no={() => {
+                this.setState({showPayMsgOcean: false})
+                this.props.TOGGLECREDIT(false)
+              }}
+              close={() => { this.setState({showPayMsgOcean: false}) }}
+              yes={() => { this.setState({showPayMsgOcean: false}) }}
+              yesLabel="Continue" noLabel="No, Thanks">
+              <span dangerouslySetInnerHTML={{__html: cart.cancelOceanpaymentPayMsg}}/>
+            </Confirm>
+
           }
 
         </div>)

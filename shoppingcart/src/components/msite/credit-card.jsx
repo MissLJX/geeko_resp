@@ -284,7 +284,7 @@ const CreditCard = class extends React.Component {
   				<CREDITWRAPPER>
   					<HD>
   						<h1>
-                <span>Credit Card</span>
+                {payMethod === '19' ? <span>Tarjeta de crédito o débito</span> : <span>Credit Card</span> }
                 {
                   payMethod === '17' && <img style={{width: 69, marginLeft: 10}} src="https://dgzfssf1la12s.cloudfront.net/upgrade/20180529/003.png"/>
                 }

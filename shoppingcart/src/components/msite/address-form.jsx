@@ -24,7 +24,7 @@ const AdressForm = class extends React.Component {
       state: '',
       country: '',
       phoneNumber: '',
-      isDefaultAddress: false,
+      defaultAddress: false,
       countries: null,
       states: null
     }
@@ -69,7 +69,7 @@ const AdressForm = class extends React.Component {
         state,
         country,
         phoneNumber,
-        isDefaultAddress
+        defaultAddress
       } = this.state
 
       this.props.editAddress({
@@ -81,7 +81,7 @@ const AdressForm = class extends React.Component {
         state,
         country,
         phoneNumber,
-        isDefaultAddress
+        defaultAddress
       })
     }
   }
@@ -115,7 +115,7 @@ const AdressForm = class extends React.Component {
         phoneNumber,
         country: countryValue,
         state: state ? state.value : '',
-        isDefaultAddress
+        defaultAddress: isDefaultAddress
       })
 
       // if (isStructotState(state)) {

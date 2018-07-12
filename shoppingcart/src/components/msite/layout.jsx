@@ -103,3 +103,11 @@ export const MultiControl = styled.div`
 
 
 `
+
+export const FixedCenter = styled.div`
+	position: fixed;
+	transform: translate(-50%, -50%);
+	top: 50%;
+	left: 50%;
+	z-index: ${props => props.zIndex || 10};
+`
