@@ -44,5 +44,6 @@ export default{
   expiration_year:'Expiration year',
   ard_holder_name:'Card holder name',
   installments:'Installments',
-  pay_now:'pay now'
+  pay_now:'pay now',
+  please_wait:'Warten Sie mal',
 }

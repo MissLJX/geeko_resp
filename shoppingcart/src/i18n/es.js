@@ -44,5 +44,6 @@ export default{
   expiration_year:'Due year',
   ard_holder_name:'Nombre yapellido',
   installments:'Pago a plazos',
-  pay_now:'comprar ahora'
+  pay_now:'comprar ahora',
+  please_wait:'Por favor espera',
 }

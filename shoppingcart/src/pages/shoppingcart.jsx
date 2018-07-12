@@ -861,7 +861,7 @@ const ShoppingCart = class extends React.Component {
                           !this.state.checking ? <BigButton onClick={this.checkout.bind(this)} className="__btn" height={47} bgColor="#e5004f">
                             {intl.formatMessage({id: 'check_out'})}
                           </BigButton> : <BigButton className="__btn" height={47} bgColor="#999">
-                            Please Wait
+                              {intl.formatMessage({id: 'please_wait'})}...
                           </BigButton>
                         ) : (
                           <BigButton className="__btn" height={47} bgColor="#999">
