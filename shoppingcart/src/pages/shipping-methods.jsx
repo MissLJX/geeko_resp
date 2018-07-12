@@ -6,6 +6,7 @@ import FullFixed from '../components/msite/full-fixed.jsx'
 import Money from '../components/money.jsx'
 import {Grey} from '../components/text.jsx'
 import {injectIntl} from 'react-intl'
+import {__route_root__} from '../utils/utils.js'
 
 const mapStateToProps = (state) => {
   return {
@@ -62,14 +63,14 @@ const ShippingMethods = class extends React.Component {
   }
 
   close (evt) {
-  	evt.stopPropagation()
-    this.props.history.goBack()
+  	evt.preventDefault()
+    this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
   }
 
   clickHandle (evt, method) {
-  	evt.stopPropagation()
+  	evt.preventDefault()
   	this.props.SELECT(method)
-    this.props.history.goBack()
+    this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
   }
 
   render () {

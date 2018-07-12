@@ -51,6 +51,7 @@ const AdressForm = class extends React.Component {
   changeCountry (event) {
     const {value} = event.target
     this.getStates(value)
+    this.setState({state: ''})
   }
 
   handleSubmit (event) {
@@ -191,7 +192,7 @@ const AdressForm = class extends React.Component {
               <option value=''>Country</option>
               {
                 this.state.countries && this.state.countries.map(country => (
-                  <option value={country.value} >{country.label}</option>
+                  <option key={country.value} value={country.value} >{country.label}</option>
                 ))
               }
 
@@ -214,7 +215,7 @@ const AdressForm = class extends React.Component {
                   <option value=''>State</option>
                   {
                     this.state.states && this.state.states.map(state => (
-                      <option value={state.value} >{state.label}</option>
+                      <option key={state.value} value={state.value} >{state.label}</option>
                     ))
                   }
 
@@ -266,7 +267,7 @@ const AdressForm = class extends React.Component {
         </MultiControl>
 
     		<div>
-          <Button className="__submitbtn" ref={c => this.addressButtn = c} ingoredisable={true} style={{
+          <Button className="__submitbtn" ref={c => this.addressButtn = c} ingoredisable="true" style={{
             display: 'block',
             backgroundColor: '#222',
             color: '#fff',

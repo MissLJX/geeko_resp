@@ -17,7 +17,7 @@ import Money from '../components/money.jsx'
 import { connect } from 'react-redux'
 import {fetchAll, refreshCart, selectItem, editing,
   edited, editItem, selectPay, CPF, EMAIL, getCreditCards,
-  getMercadoCards, toggleCredit, setSecurityCode, setInstallments, fetchCoupons, deleteItem, deleteItems, setMercadoInstallments} from '../store/actions.js'
+  getMercadoCards, toggleCredit, setSecurityCode, setInstallments, fetchCoupons, deleteItem, deleteItems, setMercadoInstallments, toggleCreditStatus} from '../store/actions.js'
 import ProductEditor from '../components/msite/product-editor.jsx'
 import Mask from '../components/mask.jsx'
 import _ from 'lodash'
@@ -155,6 +155,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     DELETEITEMS: (itemIds) => {
       dispatch(deleteItems(itemIds))
+    },
+    TOGGLECREDITSTATUS: (status) => {
+      dispatch(toggleCreditStatus(status))
     }
   }
 }
@@ -258,6 +261,7 @@ const ShoppingCart = class extends React.Component {
 
     if (!payType) {
       window.scrollTop = window.scrollHeight
+      alert('Please select a pay method!')
       return
     }
 
@@ -276,7 +280,7 @@ const ShoppingCart = class extends React.Component {
           this.props.history.push(`${window.ctx || ''}${__route_root__}/credit-card`)
         }
         this.setState({
-          checking: true
+          checking: false
         })
       }).catch(() => {
         this.setState({
@@ -332,9 +336,11 @@ const ShoppingCart = class extends React.Component {
     } else if (payType === '3') {
       window.location.href = `${window.ctx || ''}/computoppay/pay?payMethod=${payMethod}`
     }
+
     if (this.getCountdown(this.props.cart) > 0) {
       givingCoupon()
     }
+    window.eventcheck(cart, payMethod)
   }
 
   quickPaypal (evt) {
@@ -363,6 +369,8 @@ const ShoppingCart = class extends React.Component {
     if (this.getCountdown(this.props.cart) > 0) {
       givingCoupon()
     }
+
+    window.eventcheck(cart, payMethod)
   }
 
   quickPlace (evt) {
@@ -405,7 +413,7 @@ const ShoppingCart = class extends React.Component {
         if (success) {
           window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
         } else {
-          alert(details + '\n' + solutions)
+          alert(details)
         }
         this.setState({
           checking: false
@@ -528,6 +536,13 @@ const ShoppingCart = class extends React.Component {
         showAsk: true,
         askMessage: result.message
       })
+    })
+  }
+
+  cpfClickHandle () {
+    this.setState({
+      showAsk: true,
+      askMessage: 'CPF (Cadastro de Pessoa Física), utilizado para tributação, é necessário para todos os produtos enviados ao Brasil, independentemente de encomendas expressas ou contêineres logísticos.Quando preenchemos o conhecimento de embarque e fatura, por favor, não esqueça de preencher o número de contribuinte do destinatário.Na maioria dos casos, sua forma é o número digital como abaixo, XXX.XXX.XXX-XX'
     })
   }
 
@@ -793,7 +808,7 @@ const ShoppingCart = class extends React.Component {
                 <Box>
                   <BoxHead title={intl.formatMessage({id: 'payment_method'})}/>
                   <div style={{paddingLeft: 10, paddingRight: 10}}>
-                    <PayMethodList boleto={(c) => { this.boleto = c }} cpf={this.props.cpf} email={this.props.email} handleInputChange={this.handleInputChange} selectedPayId={this.props.payMethod} selectPayHandle={this.selectPayHandle.bind(this)} methods={this.props.cart.payMethodList}/>
+                    <PayMethodList cpfClickHandle={this.cpfClickHandle.bind(this)} boleto={(c) => { this.boleto = c }} cpf={this.props.cpf} email={this.props.email} handleInputChange={this.handleInputChange} selectedPayId={this.props.payMethod} selectPayHandle={this.selectPayHandle.bind(this)} methods={this.props.cart.payMethodList}/>
                   </div>
                 </Box>
               )
@@ -829,7 +844,7 @@ const ShoppingCart = class extends React.Component {
                         cancheckout ? (
                           !this.state.checking ? <BigButton onClick={this.checkout.bind(this)} className="__btn" height={47} bgColor="#e5004f">
                             {intl.formatMessage({id: 'check_out'})}
-                          </BigButton> : <BigButton onClick={this.checkout.bind(this)} className="__btn" height={47} bgColor="#999">
+                          </BigButton> : <BigButton className="__btn" height={47} bgColor="#999">
                             Please Wait
                           </BigButton>
                         ) : (
@@ -916,14 +931,12 @@ const ShoppingCart = class extends React.Component {
                   cardSelect={ this.cardSelect.bind(this)}
                   cards={mercadocards}
                   addCard={this.addMercadoCard.bind(this)}
-                  status = {this.state.creditstatus}
+                  status = {this.props.creditstatus}
                   orderTotal={cart.orderSummary.orderTotal}
                   installments={this.props.mercadoinstallments}
                   checking={this.state.checking}
                   toggleBack= {() => {
-                    this.setState({
-                      creditstatus: this.state.creditstatus === 0 ? 1 : 0
-                    })
+                    this.props.TOGGLECREDITSTATUS(this.props.creditstatus === 0 ? 1 : 0)
                   }}
                 />
               </React.Fragment>
@@ -939,6 +952,7 @@ const ShoppingCart = class extends React.Component {
                   payMethod = {this.props.payMethod}
                   orderTotal={cart.orderSummary.orderTotal}
                   cpf={this.props.cpf}
+                  cpfClickHandle={this.cpfClickHandle.bind(this)}
                   handleCredit = {this.handleCredit.bind(this)}
                   brazilref = {(c) => { this.brazilref = c }}
                   handleInputChange = { this.handleInputChange }
@@ -947,12 +961,10 @@ const ShoppingCart = class extends React.Component {
                   installments={this.props.installments}
                   addCard={this.addCreditCard.bind(this)}
                   cardSelect={ this.cardSelect.bind(this)}
-                  status = {this.state.creditstatus}
+                  status = {this.props.creditstatus}
                   checking={this.state.checking}
                   toggleBack= {() => {
-                    this.setState({
-                      creditstatus: this.state.creditstatus === 0 ? 1 : 0
-                    })
+                    this.props.TOGGLECREDITSTATUS(this.props.creditstatus === 0 ? 1 : 0)
                   }}
                 />
               </React.Fragment>

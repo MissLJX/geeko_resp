@@ -9,6 +9,7 @@ import Quantity from '../quantity.jsx'
 import Icon from '../icon.jsx'
 import styled from 'styled-components'
 import {CountDown} from './countdowns.jsx'
+import {producturl} from '../../utils/utils.js'
 
 const styleLimitedTip = {
   width: 90,
@@ -119,7 +120,7 @@ const Item = class extends React.Component {
           </div>
           <div className="x-cell">
             <ImageContainer>
-              <LinkImage href="#" src={props.item.imageUrl}/>
+              <LinkImage href={producturl({id: props.item.productId, name: props.item.productName})} src={props.item.imageUrl}/>
 
               {
                 !props.ivalidItem && props.item.endLimitedTimePurchaseTime && props.item.limitedTimePurchasePromotionPrice && <span className="countdown">

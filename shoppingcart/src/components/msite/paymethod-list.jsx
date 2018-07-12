@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import CheckBox from '../checkbox.jsx'
 import {Grey} from '../text.jsx'
+import Ask from '../ask.jsx'
 
 import {Form, Input, Button} from './control.jsx'
 import {required, email, cpf} from '../validator.jsx'
@@ -46,7 +47,7 @@ const Boleto = class extends React.Component {
       <Form onSubmit={this.handleSubmit.bind(this)}>
         <MethodInputLine className="x-table x-fw __vm __fixed">
           <div className="x-cell">
-            <label>CPF*</label>
+            <label>CPF<Ask style={{marginLeft: 4}} onClick={this.props.cpfClickHandle.bind(this)}/></label>
           </div>
           <div className="x-cell">
             <StyledControl inputColor="#fff">
@@ -132,10 +133,10 @@ const MethodUL = styled.ul`
   }
 `
 
-const getMethodBody = (id, {cpf, email, handleInputChange, boleto}) => {
+const getMethodBody = (id, {cpf, email, handleInputChange, boleto, cpfClickHandle}) => {
   switch (id) {
     case '16':
-      return <Boleto boleto={boleto} cpf={cpf} email={email} handleInputChange={handleInputChange}/>
+      return <Boleto boleto={boleto} cpf={cpf} email={email} cpfClickHandle={cpfClickHandle} handleInputChange={handleInputChange}/>
     default:
       return null
   }

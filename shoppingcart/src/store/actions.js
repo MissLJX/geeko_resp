@@ -31,6 +31,7 @@ export const CREDIT_CARDS = 'CREDIT_CARDS'
 export const SET_INSTALLMENTS = 'SET_INSTALLMENTS'
 export const GET_COUPONS = 'GET_COUPONS'
 export const SET_MERCAODO_INSTALLMENTS = 'SET_MERCAODO_INSTALLMENTS'
+export const CREDIT_STATUS = 'CREDIT_STATUS'
 
 export const loading = () => {
   return {
@@ -82,6 +83,13 @@ export const setMercadoCards = (cards) => {
   return {
     type: 'MERCADO_CARDS',
     cards
+  }
+}
+
+export const toggleCreditStatus = (status) => {
+  return {
+    type: CREDIT_STATUS,
+    status
   }
 }
 

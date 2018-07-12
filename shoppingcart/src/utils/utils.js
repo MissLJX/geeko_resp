@@ -36,3 +36,7 @@ export const storage = {
     return null
   }
 }
+
+const _url_analyst = name => name.replace(new RegExp(/\s/g), '-')
+
+export const producturl = product => `/product/${_url_analyst(product.name)}/${product.id}.html`

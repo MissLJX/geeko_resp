@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Icon from '../icon.jsx'
+import Ask from '../ask.jsx'
 import {Red, Grey} from '../text.jsx'
 import Money from '../money.jsx'
 import {BigButton} from './buttons.jsx'
@@ -78,7 +79,7 @@ const Card = props => <StyledCard>
   <div onClick={() => { props.cardSelect(props.card) }} className="x-table __fixed __vm x-fw x-fh">
     <div className="x-cell"><span>Card No.</span> { props.card.quickpayRecord.cardNumber }</div>
     {
-      props.card.isSelected && <div className="x-cell __right">
+      props.card.isSelected && <div className="x-cell __right" style={{width: 30}}>
         <Icon style={{color: '#e5004f'}}>&#xe638;</Icon>
       </div>
     }
@@ -88,7 +89,7 @@ const Card = props => <StyledCard>
 const CurrentCard = props => <StyledCard {...props}>
   <div className="x-table __fixed __vm x-fw x-fh">
     <div className="x-cell"><span>Card No.</span> { props.card.quickpayRecord.cardNumber }</div>
-    <div className="x-cell __right">
+    <div className="x-cell __right" style={{width: 30}}>
       <Icon>&#xe694;</Icon>
     </div>
   </div>
@@ -97,7 +98,7 @@ const CurrentCard = props => <StyledCard {...props}>
 const NewCard = props => <StyledCard {...props}>
   <div className="x-table __fixed __vm x-fw x-fh">
     <div className="x-cell">Add a new card</div>
-    <div className="x-cell __right">
+    <div className="x-cell __right" style={{width: 30}}>
       <AddIcon className="iconfont">&#xe733;</AddIcon>
     </div>
   </div>
@@ -193,7 +194,10 @@ const BraizlPlugin = class extends React.Component {
     return <div style={{marginTop: 10}}>
       <Form id="brazilform" onSubmit={this.props.handleBrazil}>
         <div className="x-table x-fw __fixed __vm">
-          <div className="x-cell" style={{width: 95}}>CPF</div>
+          <div className="x-cell" style={{width: 95}}>
+            <span>CPF</span>
+            <Ask style={{marginLeft: 4}} onClick={this.props.cpfClickHandle.bind(this)}/>
+          </div>
           <div className="x-cell">
             <StyledControl>
               <Input
@@ -219,12 +223,12 @@ const BraizlPlugin = class extends React.Component {
                 data-checkout="installments"
                 value={this.props.installments}
                 onChange={this.props.handleInputChange}>
-                <option>1*{unitprice(this.props.orderTotal)}  </option>
+                <option>1*{unitprice(this.props.orderTotal)} ({unitprice(this.props.orderTotal)})  </option>
                 {
 
                   installmentoptions.map(i => (
                     <option key={i.number} value={i.number}>
-                      {i.number}*{unitprice(i.stagePrice)}
+                      {i.number}*{unitprice(i.stagePrice)} ({i.stagePrice.unit + i.number * Number(i.stagePrice.amount)})
                     </option>
                   ))
                 }
@@ -252,9 +256,6 @@ const getPayPlugin = (payMethod, props) => {
 const CreditCard = class extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {
-    	status: props.status || 0
-    }
     this.checkout = this.checkout.bind(this)
   }
 
@@ -268,7 +269,7 @@ const CreditCard = class extends React.Component {
   }
 
   render () {
-  	const {cards, orderTotal} = this.props
+  	const {cards, orderTotal, payMethod} = this.props
 
   	let currentCard
 
@@ -282,7 +283,13 @@ const CreditCard = class extends React.Component {
   			this.props.status === 0 ? (
   				<CREDITWRAPPER>
   					<HD>
-  						<h1>Credit Card</h1>
+  						<h1>
+                <span>Credit Card</span>
+                {
+                  payMethod === '17' && <img style={{width: 69, marginLeft: 10}} src="https://dgzfssf1la12s.cloudfront.net/upgrade/20180529/003.png"/>
+                }
+
+              </h1>
   						<Icon onClick={this.props.creditClose}>&#xe69a;</Icon>
   					</HD>
 

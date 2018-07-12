@@ -15,7 +15,8 @@ import {LOADING,
   CREDIT_CARDS,
   SET_INSTALLMENTS,
   SET_MERCAODO_INSTALLMENTS,
-  GET_COUPONS} from './actions.js'
+  GET_COUPONS,
+  CREDIT_STATUS} from './actions.js'
 
 const initialState = {
   loading: false,
@@ -40,7 +41,8 @@ const initialState = {
   creditcards: null,
   installments: 1,
   paypal: null,
-  mercadoinstallments: 1
+  mercadoinstallments: 1,
+  creditstatus: 0
 }
 
 const isEmpty = cart => !cart
@@ -104,6 +106,8 @@ const refresh = (state = initialState, action) => {
       return {...state, creditcards: action.cards, noCreditCard: (!action.cards || !action.cards.length)}
     case GET_COUPONS:
       return {...state, coupons: action.coupons}
+    case CREDIT_STATUS:
+      return {...state, creditstatus: action.status}
     default:
       return state
   }

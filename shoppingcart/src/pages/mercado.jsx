@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import {getMercadoCards} from '../store/actions.js'
 import {Boxs, Box} from '../components/msite/layout.jsx'
 import {removeMercadoCard} from '../api'
+import {__route_root__} from '../utils/utils.js'
 
 const mapStateToProps = (state) => {
   return {
@@ -51,6 +52,7 @@ const CardUL = styled.ul`
 const CardBD = styled.div`
   padding-left: 10px;
   padding-right: 10px;
+  padding-bottom: 100px;
 `
 
 const CardHD = styled.h1`
@@ -84,13 +86,13 @@ const Mercado = class extends React.Component {
   }
 
   close (evt) {
-  	evt.stopPropagation()
-    this.props.history.goBack()
+  	evt.preventDefault()
+    this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
   }
 
   addcardback () {
     this.props.GETMERCADOCARDS()
-    this.props.history.goBack()
+    this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
   }
 
   deletecard (cardId) {

@@ -6,6 +6,7 @@ import {refreshCart} from '../store/actions.js'
 import Coupons from '../components/msite/coupons.jsx'
 import {getcoupons, usecoupon, unusecoupon, usecouponcode} from '../api'
 import {injectIntl} from 'react-intl'
+import {__route_root__} from '../utils/utils.js'
 
 const mapStateToProps = (state) => {
   return {
@@ -28,20 +29,20 @@ const Coupon = class extends React.Component {
   }
 
   close (evt) {
-  	evt.stopPropagation()
-    this.props.history.goBack()
+  	evt.preventDefault()
+    this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
   }
 
   couponSelect (id) {
     if (id) {
       usecoupon(id).then(() => {
         this.props.REFRESHCART()
-        this.props.history.goBack()
+        this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
       })
     } else {
       unusecoupon().then(() => {
         this.props.REFRESHCART()
-        this.props.history.goBack()
+        this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
       })
     }
   }

@@ -34,9 +34,13 @@ export const CountDown = class extends React.Component {
       lefting: offset
     })
     this.timerID = setInterval(() => {
-      this.setState({
-        lefting: this.state.lefting - 1000
-      })
+      if (this.state.lefting - 1000 < 0) {
+        clearInterval(this.timerID)
+      } else {
+        this.setState({
+          lefting: this.state.lefting - 1000
+        })
+      }
     }, 1000)
   }
 

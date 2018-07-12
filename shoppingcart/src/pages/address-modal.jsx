@@ -32,15 +32,15 @@ const Modal = class extends React.Component {
   }
 
   close (evt) {
-  	evt.stopPropagation()
-    this.props.history.push(`${window.ctx || ''}${__route_root__}/`)
+  	evt.preventDefault()
+    this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
   }
 
   editAddress (address) {
   	if (__address_token__) {
   		paypalAddress({...address, id: this.props.address.id, token: __address_token__}).then(() => {
   			this.props.REFRESH()
-  			this.props.history.push(`${window.ctx || ''}${__route_root__}/`)
+  			this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
   		}).catch(({result}) => {
   			alert(result)
   		})
@@ -49,7 +49,7 @@ const Modal = class extends React.Component {
 
   		addressOpreator({...address, id: this.props.address ? this.props.address.id : null}).then(() => {
   			this.props.REFRESH()
-  			this.props.history.push(`${window.ctx || ''}${__route_root__}/`)
+  			this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
   		}).catch(({result}) => {
   			alert(result)
   		})

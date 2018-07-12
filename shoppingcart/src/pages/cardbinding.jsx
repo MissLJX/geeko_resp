@@ -2,13 +2,15 @@ import React from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import FullFixed from '../components/msite/full-fixed.jsx'
-import {getCreditCards} from '../store/actions.js'
+import {getCreditCards, toggleCreditStatus} from '../store/actions.js'
 import {__route_root__} from '../utils/utils.js'
 import {deletecreditcard} from '../api'
 
 const StyledFrame = styled.div`
 	height: calc(100vh - 50px);
-	overflow: auto;
+	overflow: scroll;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 50px;
 	iframe{
 		width: 100%;
 		height: calc(100% - 130px);
@@ -25,7 +27,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     GETCREDITCARDS: (payMethod) => {
-      dispatch(getCreditCards(payMethod))
+      return dispatch(getCreditCards(payMethod))
+    },
+    TOGGLECREDITSTATUS: (status) => {
+      dispatch(toggleCreditStatus(status))
     }
   }
 }
@@ -81,8 +86,10 @@ const CardBinding = class extends React.Component {
 
   componentDidMount () {
   	window.bindSuccess = () => {
-  		this.props.GETCREDITCARDS(this.props.payMethod)
-  		this.props.history.push(`${window.ctx || ''}${__route_root__}/`)
+  		this.props.GETCREDITCARDS(this.props.payMethod).then(() => {
+        this.props.TOGGLECREDITSTATUS(0)
+        this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
+      })
   	}
 
     window.triggerFalse = (errcode) => {
@@ -97,7 +104,7 @@ const CardBinding = class extends React.Component {
   }
 
   deleteCardHandle (evt, cardId) {
-    evt.stopPropagation()
+    evt.preventDefault()
     if (confirm('Are you sure to delete this card?')) {
       deletecreditcard(cardId).then(() => {
         this.props.GETCREDITCARDS(this.props.payMethod)
@@ -107,7 +114,7 @@ const CardBinding = class extends React.Component {
 
   close (evt) {
   	evt.stopPropagation()
-    this.props.history.push(`${window.ctx || ''}${__route_root__}/`)
+    this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
   }
 
   render () {
@@ -115,27 +122,28 @@ const CardBinding = class extends React.Component {
   	return <FullFixed onClose={this.close} title="Credit Card">
   		 <StyledFrame>
   			<iframe seamless src={this.state.frameUrl}></iframe>
-
-        <Cards>
-          <HD>Cards</HD>
-          <CardUL>
-            {
-              creditcards && creditcards.map(card => <li key={card.quickpayRecord.id}>
-                <StyledCard>
-                  <div className="x-table __fixed x-fw x-fh __vm">
-                    <div className="x-cell">
-                      {card.quickpayRecord.cardNumber}
+        {
+          creditcards && <Cards>
+            <HD>Cards</HD>
+            <CardUL>
+              {
+                creditcards.map(card => <li key={card.quickpayRecord.id}>
+                  <StyledCard>
+                    <div className="x-table __fixed x-fw x-fh __vm">
+                      <div className="x-cell">
+                        {card.quickpayRecord.cardNumber}
+                      </div>
+                      <div className="x-cell __right">
+                        <DeleteIcon onClick={(evt) => { this.deleteCardHandle(evt, card.quickpayRecord.id) }} className="iconfont">&#xe731;</DeleteIcon>
+                      </div>
                     </div>
-                    <div className="x-cell __right">
-                      <DeleteIcon onClick={(evt) => { this.deleteCardHandle(evt, card.quickpayRecord.id) }} className="iconfont">&#xe731;</DeleteIcon>
-                    </div>
-                  </div>
-                </StyledCard>
+                  </StyledCard>
 
-              </li>)
-            }
-          </CardUL>
-        </Cards>
+                </li>)
+              }
+            </CardUL>
+          </Cards>
+        }
 
       </StyledFrame>
 

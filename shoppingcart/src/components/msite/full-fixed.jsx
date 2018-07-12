@@ -14,6 +14,7 @@ const HD = styled.div`
 	top: 0;
 	width: 100%;
 	background-color: #fff;
+	z-index: 10;
 `
 
 const Title = styled.h1`
@@ -34,12 +35,13 @@ const BD = styled.div`
 	height: 100vh;
 	overflow: auto;
 	padding-top: 50px;
+	-webkit-overflow-scrolling: touch;
 `
 
 export default (props) => <Fixed>
   <HD>
     <Title>{props.title}</Title>
-    <Close onClick={props.onClose}><Icon style={{fontSize: 25}}>&#xe69a;</Icon></Close>
+    <Close onClick={props.onClose}><Icon style={{fontSize: 25, cursor: 'pointer'}}>&#xe69a;</Icon></Close>
   </HD>
 
   <BD>

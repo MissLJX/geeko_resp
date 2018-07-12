@@ -5,6 +5,7 @@ import {Form, Input, Button, Select} from './msite/control.jsx'
 import {required, email} from './validator.jsx'
 import {StyledControl} from './msite/styled-control.jsx'
 import {FormLayout, MultiControl} from './msite/layout.jsx'
+import {BigButton} from './msite/buttons.jsx'
 import _ from 'lodash'
 
 const StyleButton = {
@@ -58,7 +59,8 @@ const MercadoBinding = class extends React.Component {
     	token: null,
     	paymentMethodIcon: null,
       installments: 1,
-      payer_costs: []
+      payer_costs: [],
+      paying: false
     }
     this.guessingPaymentMethod = this.guessingPaymentMethod.bind(this)
     this.setPaymentMethodInfo = this.setPaymentMethodInfo.bind(this)
@@ -134,6 +136,9 @@ const MercadoBinding = class extends React.Component {
   handleSubmit (evt) {
   	evt.preventDefault()
     this.form.validateAll()
+    this.setState({
+      paying: true
+    })
   	const $form = document.getElementById('mercadoform')
     Mercadopago.clearSession()
   	Mercadopago.createToken($form, this.sdkResponseHandler)
@@ -142,30 +147,38 @@ const MercadoBinding = class extends React.Component {
   sdkResponseHandler (status, response) {
     if (status != 200 && status != 201) {
       alert('verify filled data')
+      this.setState({
+        paying: false
+      })
     } else {
       this.setState({
       	token: response.id
       })
 
-      if (this.props.exsiting) {
-        addMercadoCard(response.id).then(() => {
-          this.props.addcardback()
-        })
-      } else {
-        mercadopay({
-          email: this.state.email,
-          paymentMethodId: this.state.paymentMethod,
-          token: response.id,
-          installments: this.state.installments
-        }).then(data => data.result).then(({success, transactionId, details, solutions}) => {
-          if (success) {
-            window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
-          } else {
-            alert(details + '\n' + solutions)
-          }
-        })
+      const params = {
+        email: this.state.email,
+        paymentMethodId: this.state.paymentMethod,
+        token: response.id,
+        installments: this.state.installments
       }
+
+      this.pay(params)
     }
+  }
+
+  pay (params) {
+    mercadopay(params).then(data => data.result).then(({success, transactionId, details, solutions}) => {
+      if (success) {
+        window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
+      } else {
+        alert(details)
+      }
+      this.setState({
+        paying: false
+      })
+    }).catch(({result}) => {
+      alert(result)
+    })
   }
 
   render () {
@@ -268,8 +281,14 @@ const MercadoBinding = class extends React.Component {
   			</FormLayout>
 
   			<div>
-	          <Button className="__submitbtn" style={StyleButton}>Pay Now</Button>
-	        </div>
+
+          {this.state.paying ? (
+            <BigButton style={{marginTop: 20}} className="__btn" height={40} bgColor="#999">Please Wait</BigButton>
+          ) : (
+            <Button className="__submitbtn" style={StyleButton}>Pay Now</Button>
+          )}
+
+	       </div>
   		</Form>
   	</div>
   }
