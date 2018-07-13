@@ -70,7 +70,6 @@ const MercadoBinding = class extends React.Component {
   }
 
   componentDidMount () {
-  	Mercadopago.setPublishableKey(MercadoPublicKey)
   }
 
   componentWillReceiveProps (newProps) {

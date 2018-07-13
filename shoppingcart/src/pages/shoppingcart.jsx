@@ -203,9 +203,6 @@ const ShoppingCart = class extends React.Component {
   componentDidMount () {
     this.props.INIT()
     this.props.FETCHCOUPONS()
-
-    Mercadopago.setPublishableKey(MercadoPublicKey)
-
     window.addEventListener('scroll', this.scrollhandle, false)
   }
 
@@ -607,22 +604,26 @@ const ShoppingCart = class extends React.Component {
     this.props.history.push(path)
   }
 
+  isOutStock (item) {
+    return item.inventory <= 0 && !item.isAutoInventory || item.status !== '1'
+  }
+
   getValidItems (items = []) {
-    return items.filter(item => item.status === '1')
+    return items.filter(item => !this.isOutStock(item))
   }
 
   getInvalidItems ({shoppingCartProductsByOverseas, domesticDeliveryCases}) {
     const invalidItems = []
     if (shoppingCartProductsByOverseas) {
       _.each(shoppingCartProductsByOverseas, (item) => {
-        if (item.status !== '1') invalidItems.push(item)
+        if (this.isOutStock(item)) invalidItems.push(item)
       })
     }
 
     if (domesticDeliveryCases) {
       _.each(domesticDeliveryCases, ({shoppingCartProducts}) => {
         _.each(shoppingCartProducts, (item) => {
-          if (item.status !== '1') invalidItems.push(item)
+          if (this.isOutStock(item)) invalidItems.push(item)
         })
       })
     }
@@ -684,30 +685,36 @@ const ShoppingCart = class extends React.Component {
         <div style={{opacity: this.props.refreshing ? 0.9 : 1}}>
           {this.props.refreshing && <Refreshing/>}
 
-          <div ref={wrapper => { this.fixedTipWrapper = wrapper }}>
+          {
+            (couponcountdown > 1000 || cart.messages && cart.messages.orderSummaryMsg) && (
 
-            {
-              couponcountdown > 1000 ? (
-                <Tip innerRef={tip => { this.fixedTip = tip }}>
-                  <div className="x-table __fixed x-fw __vm">
-                    <div className="x-cell" style={{width: 75}}>
-                      <CountDownBlock offset={couponcountdown}/>
-                    </div>
-                    <div className="x-cell">
-                      <span dangerouslySetInnerHTML={{__html: sendCouponMessage.message}}/>
-                    </div>
-                  </div>
-                </Tip>
-              ) : (
-                <React.Fragment>
-                  {cart.messages && cart.messages.orderSummaryMsg && <Tip className={this.state.tipFixed ? '__fixed' : ''} innerRef={tip => { this.fixedTip = tip }}>
-                    <span dangerouslySetInnerHTML={{__html: cart.messages.orderSummaryMsg}}/>
-                  </Tip>}
-                </React.Fragment>
-              )
-            }
+              <div ref={wrapper => { this.fixedTipWrapper = wrapper }}>
 
-          </div>
+                {
+                  couponcountdown > 1000 ? (
+                    <Tip innerRef={tip => { this.fixedTip = tip }}>
+                      <div className="x-table __fixed x-fw __vm">
+                        <div className="x-cell" style={{width: 75}}>
+                          <CountDownBlock offset={couponcountdown}/>
+                        </div>
+                        <div className="x-cell">
+                          <span dangerouslySetInnerHTML={{__html: sendCouponMessage.message}}/>
+                        </div>
+                      </div>
+                    </Tip>
+                  ) : (
+                    <React.Fragment>
+                      {cart.messages && cart.messages.orderSummaryMsg && <Tip className={this.state.tipFixed ? '__fixed' : ''} innerRef={tip => { this.fixedTip = tip }}>
+                        <span dangerouslySetInnerHTML={{__html: cart.messages.orderSummaryMsg}}/>
+                      </Tip>}
+                    </React.Fragment>
+                  )
+                }
+
+              </div>
+
+            )
+          }
 
           <Boxs>
             {
@@ -861,7 +868,7 @@ const ShoppingCart = class extends React.Component {
                           !this.state.checking ? <BigButton onClick={this.checkout.bind(this)} className="__btn" height={47} bgColor="#e5004f">
                             {intl.formatMessage({id: 'check_out'})}
                           </BigButton> : <BigButton className="__btn" height={47} bgColor="#999">
-                              {intl.formatMessage({id: 'please_wait'})}...
+                            {intl.formatMessage({id: 'please_wait'})}...
                           </BigButton>
                         ) : (
                           <BigButton className="__btn" height={47} bgColor="#999">
