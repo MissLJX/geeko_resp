@@ -9,6 +9,7 @@ import {BigButton} from './buttons.jsx'
 import {Form, Input, Select, Button} from './control.jsx'
 import {required, cpf} from '../validator.jsx'
 import {StyledControl} from './styled-control.jsx'
+import {injectIntl} from 'react-intl'
 
 import {unitprice} from '../../utils/utils.js'
 
@@ -269,8 +270,7 @@ const CreditCard = class extends React.Component {
   }
 
   render () {
-  	const {cards, orderTotal, payMethod} = this.props
-
+  	const {cards, orderTotal, payMethod,intl} = this.props
   	let currentCard
 
   	if (cards && cards.length) {
@@ -318,9 +318,9 @@ const CreditCard = class extends React.Component {
 
                   {
                     this.props.checking ? <BigButton bgColor="#999" onClick={(evt) => { this.checkout(evt, currentCard) }}>
-                    Please wait...</BigButton> : (
+                            {intl.formatMessage({id: 'please_wait'})}...</BigButton> : (
                       <BigButton bgColor="#e5004f" onClick={(evt) => { this.checkout(evt, currentCard) }}>
-                    Check Out
+                          {intl.formatMessage({id: 'check_out'})}
                       </BigButton>
                     )
                   }
@@ -361,4 +361,4 @@ const CreditCard = class extends React.Component {
   }
 }
 
-export default CreditCard
+export default injectIntl(CreditCard)
