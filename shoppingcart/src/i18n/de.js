@@ -46,4 +46,7 @@ export default{
   installments:'Installments',
   pay_now:'pay now',
   please_wait:'Warten Sie mal',
+  ivalid_tems:'Ungültige Artikel',
+  clear_all:'alles löschen',
+  out_of_stock:'Ausverkauft'
 }

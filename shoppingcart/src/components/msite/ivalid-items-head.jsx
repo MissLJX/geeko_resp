@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import CheckBox from '../checkbox.jsx'
 import Ellipsis from '../ellipsis.jsx'
+import {injectIntl} from 'react-intl'
 
 const StyledHead = styled.div`
 	height: 50px;
@@ -31,16 +32,17 @@ const StyledHead = styled.div`
 	    }
 	}
 `
+const {intl} = this.props
 
 const IvalidItemsHead = ({clearall}) => <StyledHead >
   <div className="x-table __vm x-fw x-fh __fixed">
     <div className="x-cell">
-		Ivalid Items
+        {intl.formatMessage({id: 'ivalid_tems'})}
     </div>
   	<div className="x-cell __right">
-  		<span style={{cursor: 'pointer'}} onClick={clearall}>Clear All</span>
+  		<span style={{cursor: 'pointer'}} onClick={clearall}>{intl.formatMessage({id:'clear_all'})}</span>
     </div>
   </div>
 </StyledHead>
 
-export default IvalidItemsHead
+export default injectIntl(IvalidItemsHead)

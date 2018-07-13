@@ -10,6 +10,7 @@ import Icon from '../icon.jsx'
 import styled from 'styled-components'
 import {CountDown} from './countdowns.jsx'
 import {producturl} from '../../utils/utils.js'
+import {injectIntl} from  'react-intl'
 
 const styleLimitedTip = {
   width: 90,
@@ -111,7 +112,7 @@ const Item = class extends React.Component {
   }
 
   render () {
-    const props = this.props
+    const {props,intl} = this.props
     return (
       <React.Fragment>
         <ItemWrapper className={`x-table __vm __fixed x-fw ${props.disabledFunc(props.item) ? 'disabled' : ''}`}>
@@ -158,7 +159,7 @@ const Item = class extends React.Component {
               </div>
               <div>
 
-                {!props.ivalidItem ? <Quantity quantity={props.item.quantity} onChange={(quantity) => { props.quantityChange(props.item.variantId, quantity) }}/> : <Grey>Out of Stock</Grey>}
+                {!props.ivalidItem ? <Quantity quantity={props.item.quantity} onChange={(quantity) => { props.quantityChange(props.item.variantId, quantity) }}/> : <Grey>{intl.formatMessage({id: 'out_of_stock'})}</Grey>}
 
                 <div style={{float: 'right'}}>
                   {!props.ivalidItem && <Icon style={{fontSize: 18, cursor: 'pointer'}} onClick={(evt) => { this.itemEdit(props.item) }}>&#xe62b;</Icon>}
@@ -178,4 +179,4 @@ const Item = class extends React.Component {
   }
 }
 
-export default Item
+export default injectIntl(Item)

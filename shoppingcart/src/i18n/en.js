@@ -46,4 +46,7 @@ export default{
   installments:'Installments',
   pay_now:'pay now',
   please_wait:'Please Wait',
+  ivalid_tems:'Ivalid Items',
+  clear_all:'Clear All',
+  out_of_stock:'Out of Stock'
 }

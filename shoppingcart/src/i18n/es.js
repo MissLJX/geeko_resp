@@ -46,4 +46,7 @@ export default{
   installments:'Pago a plazos',
   pay_now:'comprar ahora',
   please_wait:'Por favor espera',
+  ivalid_tems:'Artículos inválidos',
+  clear_all:'limpiar todo',
+  out_of_stock:'Agotado'
 }

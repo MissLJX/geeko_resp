@@ -46,4 +46,7 @@ export default{
   installments:'Parcelamentos',
   pay_now:'pay now',
   please_wait:'Por favor espera',
+  ivalid_tems:'Artículos inválidos',
+  clear_all:'limpar tudo',
+  out_of_stock:'Fora de estoque'
 }
