@@ -61,7 +61,7 @@ export const cpfcheck = (value) => {
 
 export const required = (value) => {
   if (!value || !value.toString().trim().length) {
-    return 'require'
+    return 'required'
   }
 }
 
