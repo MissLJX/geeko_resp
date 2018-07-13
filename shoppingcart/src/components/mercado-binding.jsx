@@ -285,7 +285,7 @@ const MercadoBinding = class extends React.Component {
   			<div>
 
           {this.state.paying ? (
-            <BigButton style={{marginTop: 20}} className="__btn" height={40} bgColor="#999">Please Wait</BigButton>
+            <BigButton style={{marginTop: 20}} className="__btn" height={40} bgColor="#999">{intl.formatMessage({id: 'please_wait'})}...</BigButton>
           ) : (
             <Button className="__submitbtn" style={StyleButton}>{intl.formatMessage({id: 'pay_now'})}</Button>
           )}
