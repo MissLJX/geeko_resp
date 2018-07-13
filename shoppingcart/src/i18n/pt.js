@@ -43,7 +43,7 @@ export default{
   expiration_month:'Expiration month',
   expiration_year:'Expiration year',
   ard_holder_name:'Card holder name',
-  installments:'Installments',
+  installments:'Parcelamentos',
   pay_now:'pay now',
   please_wait:'Por favor espera',
 }
