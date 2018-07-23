@@ -306,7 +306,7 @@ const CreditCard = class extends React.Component {
                 </div>
   							<div className="x-table __vm __fixed x-fw">
   								<div className="x-cell" style={{width: 60}}>
-  									<img style={{width: 50}} src="https://dgzfssf1la12s.cloudfront.net/site/pc/icon326.png"/>
+  									<img style={{width: 50}} src={sitelogo}/>
   								</div>
   								<div className="x-cell">
                     				<Grey style={{fontSize: 12}}>
