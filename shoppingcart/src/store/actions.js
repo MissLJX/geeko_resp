@@ -32,6 +32,8 @@ export const SET_INSTALLMENTS = 'SET_INSTALLMENTS'
 export const GET_COUPONS = 'GET_COUPONS'
 export const SET_MERCAODO_INSTALLMENTS = 'SET_MERCAODO_INSTALLMENTS'
 export const CREDIT_STATUS = 'CREDIT_STATUS'
+export const ATM_METHOD = 'ATM_METHOD'
+export const TICKET_METHOD = 'TICKET_METHOD'
 
 export const loading = () => {
   return {
@@ -118,6 +120,20 @@ export const setMercadoInstallments = (installments) => {
   return {
     type: SET_MERCAODO_INSTALLMENTS,
     installments
+  }
+}
+
+export const setAtmMethod = (method) => {
+  return {
+    type: ATM_METHOD,
+    method
+  }
+}
+
+export const setTicketMethod = (method) => {
+  return {
+    type: TICKET_METHOD,
+    method
   }
 }
 

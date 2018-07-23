@@ -28,7 +28,7 @@ export const removeMercadoCard = (token) => axios.post(`${VPATH}/mercadopago/rem
 export const usePoint = (isopen) => axios.get(`${VPATH}/shopping-cart/set-point/${isopen}`)
 export const useInsurance = (isuse) => axios.get(`${VPATH}/shopping-cart/anon/${isuse}/update-insurance`)
 
-export const creditcards = (payMethod) => axios.get(`/quickpay-record/${payMethod}/history`)
+export const creditcards = (payMethod) => axios.get(`/quickpay-record/${payMethod}/history?_=${new Date().getTime()}`)
 export const creditpay = (params) => axios.post(`/quickpay/pay`, params)
 export const usecreditcard = (id) => axios.get(`/quickpay-record/${id}/use`)
 export const deletecreditcard = (id) => axios.get(`/quickpay-record/${id}/remove`)
@@ -36,15 +36,20 @@ export const deletecreditcard = (id) => axios.get(`/quickpay-record/${id}/remove
 export const getpaypal = () => axios.get(`${VPATH}/paypal/anon/client-get-url`)
 export const paypalpay = (method) => axios.get(`${VPATH}/webpaypal/anon/pay`, {method})
 
-export const getcoupons = () => axios.get(`${VPATH}/coupon/anon/get-coupon-selections`)
+export const getcoupons = () => axios.get(`${VPATH}/coupon/anon/get-coupon-selections?_=${new Date().getTime()}`)
 export const usecoupon = (id) => axios.get(`${VPATH}/shopping-cart/anon/use-coupon/${id}`)
-export const unusecoupon = () => axios.get(`${VPATH}/shopping-cart/anon/unuse-coupon`)
+export const unusecoupon = () => axios.get(`${VPATH}/shopping-cart/anon/unuse-coupon?_=${new Date().getTime()}`)
 export const usecouponcode = (code) => axios.post(`${VPATH}/coupon/anon/use-coupon-by-code`, {code})
 
-export const movetooverseas = (params) => axios.post(`${VPATH}/shopping-cart/move-to-overseas`, params)
+export const movetooverseas = (params) => axios.post(`${VPATH}/shopping-cart/move-to-overseas?_=${new Date().getTime()}`, params)
 export const deleteitem = (itemid) => axios.get(`${VPATH}/shopping-cart/${itemid}/remove`)
 export const deleteitems = (variantIds) => axios.post(`${VPATH}/shopping-cart/remove`, {variantIds})
 
-export const getSessionShipping = () => axios.get(`${VPATH}/webpaypal/anon/shipping-detail`)
+export const getSessionShipping = () => axios.get(`${VPATH}/webpaypal/anon/shipping-detail?_=${new Date().getTime()}`)
 export const placepaypal = () => axios.get(`${VPATH}/webpaypal/anon/checkout`)
 export const givingCoupon = () => axios.get(`${VPATH}/order/anon/giving`)
+
+export const atmPay = (paymentMethodId) => axios.post(`${VPATH}/money-transfer/pay`, {paymentMethodId})
+export const ticketPay = (paymentMethodId) => axios.post(`${VPATH}/cash/pay`, {paymentMethodId})
+
+export const getSafeCharge = () => axios.get('/safe-charge/get-pay-params')

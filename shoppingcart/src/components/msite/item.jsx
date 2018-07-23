@@ -10,7 +10,7 @@ import Icon from '../icon.jsx'
 import styled from 'styled-components'
 import {CountDown} from './countdowns.jsx'
 import {producturl} from '../../utils/utils.js'
-import {injectIntl} from  'react-intl'
+import {injectIntl} from 'react-intl'
 
 const styleLimitedTip = {
   width: 90,
@@ -112,7 +112,8 @@ const Item = class extends React.Component {
   }
 
   render () {
-    const {props,intl} = this.props
+    const props = this.props
+    const {intl} = props
     return (
       <React.Fragment>
         <ItemWrapper className={`x-table __vm __fixed x-fw ${props.disabledFunc(props.item) ? 'disabled' : ''}`}>
@@ -151,7 +152,8 @@ const Item = class extends React.Component {
                 {
                   props.item.itemPrice.amount - props.item.realPrice.amount > 0 && (
                     <span>
-                      <del style={{marginLeft: '10px'}}><Grey style={{fontSize: '13px'}}><Money money={props.item.itemPrice} /></Grey></del>
+                      <del style={{marginLeft: '10px'}}><Grey style={{fontSize: '13px'}}><Money money={props.item.itemPrice} /> </Grey></del>
+                      <span>{' '}</span>
                       <span style={{fontSize: '13px', marginLeft: '10px'}} dangerouslySetInnerHTML={{__html: props.item.discountDescription}} />
                     </span>
                   )

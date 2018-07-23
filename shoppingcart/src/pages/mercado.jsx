@@ -98,6 +98,8 @@ const Mercado = class extends React.Component {
   deletecard (cardId) {
     removeMercadoCard(cardId).then(() => {
       this.props.GETMERCADOCARDS()
+    }).catch((e) => {
+      console.log(e)
     })
   }
 
@@ -146,6 +148,7 @@ const Mercado = class extends React.Component {
         }
 
       </Boxs>
+      <div style={{height: 100}}></div>
     </FullFixed>
   }
 }

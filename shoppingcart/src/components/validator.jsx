@@ -110,7 +110,7 @@ export const phone = (value, props, components) => {
       break
     default:
       reg = __reg_phone_normal__
-      error = `Incorrect phone number format.`
+      error = `Incorrect phone number format (numbers only, no formatting)`
       break
   }
   if (reg && !reg.test(value)) {

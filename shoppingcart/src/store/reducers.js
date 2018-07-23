@@ -16,7 +16,9 @@ import {LOADING,
   SET_INSTALLMENTS,
   SET_MERCAODO_INSTALLMENTS,
   GET_COUPONS,
-  CREDIT_STATUS} from './actions.js'
+  CREDIT_STATUS,
+  ATM_METHOD,
+  TICKET_METHOD} from './actions.js'
 
 const initialState = {
   loading: false,
@@ -27,6 +29,8 @@ const initialState = {
   me: null,
   payMethod: storage.get('payMethod'),
   payType: storage.get('payType'),
+  atmMethod: storage.get('atmMethod'),
+  ticketMethod: storage.get('ticketMethod'),
   editing: {
     item: null,
     isEditing: false
@@ -49,7 +53,11 @@ const isEmpty = cart => !cart
 
 const getPaymethod = (cart, selectedId) => {
   if (cart) {
-    const s = cart.payMethodList.find(p => p.id === selectedId)
+    let s = cart.payMethodList.find(p => p.id === selectedId)
+    if (!s) {
+      if (cart.payMethodList.length === 1) { s = cart.payMethodList[0] }
+    }
+
     return s ? s.id : null
   }
   return null
@@ -57,7 +65,10 @@ const getPaymethod = (cart, selectedId) => {
 
 const getPaymethodType = (cart, selectedId) => {
   if (cart) {
-    const s = cart.payMethodList.find(p => p.id === selectedId)
+    let s = cart.payMethodList.find(p => p.id === selectedId)
+    if (!s) {
+      if (cart.payMethodList.length === 1) { s = cart.payMethodList[0] }
+    }
     return s ? s.type : null
   }
   return null
@@ -108,6 +119,10 @@ const refresh = (state = initialState, action) => {
       return {...state, coupons: action.coupons}
     case CREDIT_STATUS:
       return {...state, creditstatus: action.status}
+    case ATM_METHOD:
+      return {...state, atmMethod: action.method}
+    case TICKET_METHOD:
+      return {...state, ticketMethod: action.method}
     default:
       return state
   }

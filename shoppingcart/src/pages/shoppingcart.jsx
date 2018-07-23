@@ -17,18 +17,20 @@ import Money from '../components/money.jsx'
 import { connect } from 'react-redux'
 import {fetchAll, refreshCart, selectItem, editing,
   edited, editItem, selectPay, CPF, EMAIL, getCreditCards,
-  getMercadoCards, toggleCredit, setSecurityCode, setInstallments, fetchCoupons, deleteItem, deleteItems, setMercadoInstallments, toggleCreditStatus} from '../store/actions.js'
+  getMercadoCards, toggleCredit, setSecurityCode, setInstallments, fetchCoupons, deleteItem, deleteItems,
+  setMercadoInstallments, toggleCreditStatus, setAtmMethod, setTicketMethod} from '../store/actions.js'
 import ProductEditor from '../components/msite/product-editor.jsx'
 import Mask from '../components/mask.jsx'
 import _ from 'lodash'
 import PayMethodList from '../components/msite/paymethod-list.jsx'
 import {BigButton} from '../components/msite/buttons.jsx'
 import CreditCard from '../components/msite/credit-card.jsx'
-import { useMercadocard, mercadopay, usePoint, useInsurance, creditpay, paypalpay, usecreditcard, movetooverseas, getMessage, placepaypal, givingCoupon } from '../api'
+import { useMercadocard, mercadopay, usePoint, useInsurance, creditpay, paypalpay, usecreditcard, movetooverseas, getMessage, placepaypal, givingCoupon, atmPay, ticketPay, getSafeCharge } from '../api'
 import {__route_root__, storage} from '../utils/utils.js'
 import {CountDownBlock} from '../components/msite/countdowns.jsx'
 import {injectIntl} from 'react-intl'
 import {Confirm} from '../components/msite/modals.jsx'
+import qs from 'qs'
 
 const OrderSummary = styled.div`
   padding: 5px 10px;
@@ -56,6 +58,7 @@ const Checkout = styled.div`
   width: 100%;
   bottom: 0;
   background-color: #fff;
+  z-index:2;
 `
 
 const Tip = styled.div`
@@ -163,6 +166,12 @@ const mapDispatchToProps = (dispatch) => {
     },
     TOGGLECREDITSTATUS: (status) => {
       dispatch(toggleCreditStatus(status))
+    },
+    SETATMMETHOD: (method) => {
+      dispatch(setAtmMethod(method))
+    },
+    SETTICKETMETHOD: (method) => {
+      dispatch(setTicketMethod(method))
     }
   }
 }
@@ -196,7 +205,10 @@ const ShoppingCart = class extends React.Component {
       askMessage: '',
       paypaling: false,
       checking: false,
-      showPayMsgOcean: false
+      refreshing: false,
+      showPayMsgOcean: false,
+      ticketMethods: [],
+      atmMethods: []
     }
   }
 
@@ -204,6 +216,26 @@ const ShoppingCart = class extends React.Component {
     this.props.INIT()
     this.props.FETCHCOUPONS()
     window.addEventListener('scroll', this.scrollhandle, false)
+
+    Mercadopago.getAllPaymentMethods((status, methods) => {
+      if (status === 200) {
+        const tickets = methods.filter(method => method.payment_type_id === 'ticket')
+        const atms = methods.filter(method => method.payment_type_id === 'atm')
+
+        if (tickets && tickets.length === 1) {
+          this.props.SETTICKETMETHOD(tickets[0].id)
+        }
+
+        if (atms && atms.length === 1) {
+          this.props.SETATMMETHOD(atms[0].id)
+        }
+
+        this.setState({
+          ticketMethods: tickets,
+          atmMethods: atms
+        })
+      }
+    })
   }
 
   componentWillUnmount () {
@@ -273,18 +305,41 @@ const ShoppingCart = class extends React.Component {
       return
     }
 
-    if (payType === '2' || payMethod === '17') {
+    if (payType === '2' || payMethod === '17' || payType === '8') {
       this.props.TOGGLECREDIT(true)
       this.setState({
         checking: true
       })
       this.props.GETCREDITCARDS(payMethod).then((cards) => {
         if (!cards || cards.length < 1) {
-          this.props.history.push(`${window.ctx || ''}${__route_root__}/credit-card`)
+          if (payType === '8') {
+            getSafeCharge().then(({result}) => {
+              const {isFree, payURL, params, transactionId} = result
+              if (isFree) {
+                window.location.href = `${window.ctx || ''}/v7/order/confirm/free?transationId=${transactionId}`
+              } else {
+                window.location.href = `${payURL}?${qs.stringify(params, true)}`
+              }
+              this.setState({
+                checking: false
+              })
+            }).catch(({result}) => {
+              alert(data.result)
+              this.setState({
+                checking: false
+              })
+            })
+          } else {
+            this.props.history.push(`${window.ctx || ''}${__route_root__}/credit-card`)
+            this.setState({
+              checking: false
+            })
+          }
+        } else {
+          this.setState({
+            checking: false
+          })
         }
-        this.setState({
-          checking: false
-        })
       }).catch(() => {
         this.setState({
           checking: false
@@ -332,12 +387,71 @@ const ShoppingCart = class extends React.Component {
       })
     } else if (payType === '5') {
       const {cpf, email} = this.props
-
+      this.boletoForm.validateAll()
       if (!this.boleto.context._errors || !this.boleto.context._errors.length) {
         window.location.href = `${window.ctx || ''}/geekopay/pay?cpf=${cpf}&email=${email}&payMethod=${payMethod}`
       }
     } else if (payType === '3') {
       window.location.href = `${window.ctx || ''}/computoppay/pay?payMethod=${payMethod}`
+    } else if (payType === '9') {
+      if (!this.props.atmMethod) {
+        alert('Please select a pay method!')
+        this.$paylistdom.scrollIntoView()
+        return
+      }
+
+      this.setState({
+        checking: true
+      })
+
+      atmPay(this.props.atmMethod).then(({result}) => {
+        const {transactionId, success, details} = result
+
+        if (success) {
+          window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
+        } else {
+          alert(details)
+        }
+
+        this.setState({
+          checking: false
+        })
+      }).catch(data => {
+        alert(data.result)
+        this.setState({
+          checking: false
+        })
+      })
+    } else if (payType === '10') {
+      // if (!this.props.ticketMethod) {
+      //   alert('Please select a pay method!')
+      //   this.$paylistdom.scrollIntoView()
+      //   return
+      // }
+
+      this.setState({
+        checking: true
+      })
+
+      // ticketPay(this.props.ticketMethod).then(({result}) => {
+      ticketPay('oxxo').then(({result}) => {
+        const {transactionId, success, details} = result
+
+        if (success) {
+          window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
+        } else {
+          alert(details)
+        }
+
+        this.setState({
+          checking: false
+        })
+      }).catch(data => {
+        alert(data.result)
+        this.setState({
+          checking: false
+        })
+      })
     }
 
     if (this.getCountdown(this.props.cart) > 0) {
@@ -477,6 +591,16 @@ const ShoppingCart = class extends React.Component {
     storage.add('payType', paymethod.type, 365 * 24 * 60 * 60)
   }
 
+  atmClickHandle (method) {
+    this.props.SETATMMETHOD(method.id)
+    storage.add('atmMethod', method.id, 365 * 24 * 60 * 60)
+  }
+
+  ticketClickHandle (method) {
+    this.props.SETTICKETMETHOD(method.id)
+    storage.add('ticketMethod', method.id, 365 * 24 * 60 * 60)
+  }
+
   itemConfirmHandle (oldId, newId, quantity) {
     this.props.EDITITEM(oldId, newId, quantity)
   }
@@ -595,17 +719,40 @@ const ShoppingCart = class extends React.Component {
 
   addCreditCard (evt) {
     evt.preventDefault()
-    const path = {
-      pathname: `${window.ctx || ''}${__route_root__}/credit-card`,
-      state: {
-        exsiting: true
+
+    if (this.props.payMethod === '18') {
+      this.setState({
+        refreshing: true
+      })
+      getSafeCharge().then(({result}) => {
+        const {isFree, payURL, params, transactionId} = result
+        if (isFree) {
+          window.location.href = `${window.ctx || ''}/v7/order/confirm/free?transationId=${transactionId}`
+        } else {
+          window.location.href = `${payURL}?${qs.stringify(params, true)}`
+        }
+        this.setState({
+          refreshing: false
+        })
+      }).catch(({result}) => {
+        alert(data.result)
+        this.setState({
+          refreshing: false
+        })
+      })
+    } else {
+      const path = {
+        pathname: `${window.ctx || ''}${__route_root__}/credit-card`,
+        state: {
+          exsiting: true
+        }
       }
+      this.props.history.push(path)
     }
-    this.props.history.push(path)
   }
 
   isOutStock (item) {
-    return item.inventory <= 0 && !item.isAutoInventory || item.status !== '1'
+    return (item.inventory <= 0 && !item.isDomesticDelivery) && !item.isAutoInventory || item.status !== '1'
   }
 
   getValidItems (items = []) {
@@ -663,6 +810,7 @@ const ShoppingCart = class extends React.Component {
     let couponcountdown = this.getCountdown(cart)
 
     let cancheckout = false
+    let hasLocalItems = false
     if (cart) {
       let cancheckout1 = cart.shoppingCartProductsByOverseas && cart.shoppingCartProductsByOverseas.find(item => item.selected)
       let cancheckout2 = false
@@ -671,7 +819,9 @@ const ShoppingCart = class extends React.Component {
           _.each(demestic.shoppingCartProducts, item => {
             if (item.selected) {
               cancheckout2 = true
-              return false
+            }
+            if (!this.isOutStock(item)) {
+              hasLocalItems = true
             }
           })
         })
@@ -680,10 +830,14 @@ const ShoppingCart = class extends React.Component {
       cancheckout = cancheckout1 || cancheckout2
     }
 
+    const shoppingCartProductsByOverseas = cart ? this.getValidItems(cart.shoppingCartProductsByOverseas) : []
+
+    const couponAmount = coupon => coupon.amount.indexOf('%') >= 0 ? `${coupon.amount} OFF` : `$${coupon.amount}`
+
     return loading ? <Loading/> : (empty ? <Empty/> : (
       cart && (
         <div style={{opacity: this.props.refreshing ? 0.9 : 1}}>
-          {this.props.refreshing && <Refreshing/>}
+          {(this.props.refreshing || this.state.refreshing) && <Refreshing/>}
 
           {
             (couponcountdown > 1000 || cart.messages && cart.messages.orderSummaryMsg) && (
@@ -745,7 +899,7 @@ const ShoppingCart = class extends React.Component {
             }
 
             {
-              cart.domesticDeliveryCases && cart.domesticDeliveryCases.length > 0 && cart.domesticDeliveryCases.map(domestic => (
+              hasLocalItems && cart.domesticDeliveryCases && cart.domesticDeliveryCases.length > 0 && cart.domesticDeliveryCases.map(domestic => (
                 <Box key={domestic.countryCode}>
                   <GroupLocalItems
                     icon={domestic.icon}
@@ -762,7 +916,7 @@ const ShoppingCart = class extends React.Component {
               ))
             }
             {
-              cart.shoppingCartProductsByOverseas && cart.shoppingCartProductsByOverseas.length > 0 && (
+              shoppingCartProductsByOverseas && shoppingCartProductsByOverseas.length > 0 && (
                 <Box>
                   <GroupOverseasItems
                     quantityChange={(itemId, quantity) => { this.props.EDITITEM(itemId, itemId, quantity) }}
@@ -770,7 +924,7 @@ const ShoppingCart = class extends React.Component {
                     itemDelete={this.itemDelete}
                     groupClick={this.groupClick}
                     itemSelect={this.itemSelect}
-                    items={this.getValidItems(cart.shoppingCartProductsByOverseas)}
+                    items={shoppingCartProductsByOverseas}
                     shippingMethod={cart.shippingMethod}
                     serverTime={cart.serverTime}
                     shippingMsg={cart.messages ? cart.messages.shippingMsg : null}/>
@@ -788,11 +942,11 @@ const ShoppingCart = class extends React.Component {
             }
 
             <Box>
-              <BoxClickHead title={intl.formatMessage({id: 'coupon'})}>
+              <BoxClickHead className="x-small" title={intl.formatMessage({id: 'coupon'})}>
                 <Link style={{textDecoration: 'none', color: '#666'}} to={`${window.ctx || ''}${__route_root__}/coupons`}>
 
                   {cart.coupon ? (
-                    <span><Red>{cart.coupon.amount} OFF</Red> {cart.coupon.name}</span>
+                    <span><Red>{couponAmount(cart.coupon)}</Red> {cart.coupon.name}</span>
                   ) : (
                     <span>Available <Red>{cart.canUseCouponCount}</Red></span>
                   )}
@@ -831,7 +985,22 @@ const ShoppingCart = class extends React.Component {
                 <Box innerRef={c => { this.$paylistdom = c }}>
                   <BoxHead title={intl.formatMessage({id: 'payment_method'})}/>
                   <div style={{paddingLeft: 10, paddingRight: 10}}>
-                    <PayMethodList cpfClickHandle={this.cpfClickHandle.bind(this)} boleto={(c) => { this.boleto = c }} cpf={this.props.cpf} email={this.props.email} handleInputChange={this.handleInputChange} selectedPayId={this.props.payMethod} selectPayHandle={this.selectPayHandle.bind(this)} methods={this.props.cart.payMethodList}/>
+                    <PayMethodList
+                      cpfClickHandle={this.cpfClickHandle.bind(this)}
+                      boletoForm={(c) => this.boletoForm = c}
+                      boleto={(c) => { this.boleto = c }}
+                      cpf={this.props.cpf}
+                      email={this.props.email}
+                      handleInputChange={this.handleInputChange}
+                      selectedPayId={this.props.payMethod}
+                      selectPayHandle={this.selectPayHandle.bind(this)}
+                      methods={this.props.cart.payMethodList}
+                      ticketMethods={this.state.ticketMethods}
+                      atmClickHandle={this.atmClickHandle.bind(this)}
+                      ticketClickHandle={this.ticketClickHandle.bind(this)}
+                      atmMethod={this.props.atmMethod}
+                      ticketMethod={this.props.ticketMethod}
+                      atmMethods={this.state.atmMethods}/>
                   </div>
                 </Box>
               )
@@ -912,7 +1081,8 @@ const ShoppingCart = class extends React.Component {
                           <span>{intl.formatMessage({id: 'total'})}: </span>
                           <Red><Money money={cart.orderSummary.orderTotal}/></Red>
                         </div>
-                        <DoubleBtn className="x-flex __between">
+
+                        {/* <DoubleBtn className="x-flex __between">
                           <div>
                             <PaypalBtn onClick={this.quickPaypal.bind(this)}><img src={cart.paypalButtonImage}/></PaypalBtn>
                           </div>
@@ -921,7 +1091,12 @@ const ShoppingCart = class extends React.Component {
                               {intl.formatMessage({id: 'check_out'})}
                             </BigButton>
                           </div>
-                        </DoubleBtn>
+                        </DoubleBtn> */}
+
+                        <BigButton onClick={ () => { window.location.href = `${window.ctx}/w-site/anon/register?redirectUrl=${encodeURIComponent(window.location.href)}` } } className="__btn" height={47} bgColor="#e5004f">
+                          {intl.formatMessage({id: 'check_out'})}
+                        </BigButton>
+
                       </Checkout>
                     </div>
                   </Box>
@@ -1017,7 +1192,7 @@ const ShoppingCart = class extends React.Component {
           }
 
           {
-            this.state.showPayMsgOcean && cart.cancelOceanpaymentPayMsg && <Confirm title="Chic Me"
+            this.state.showPayMsgOcean && cart.cancelOceanpaymentPayMsg && <Confirm title={sitename}
               no={() => {
                 this.setState({showPayMsgOcean: false})
                 this.props.TOGGLECREDIT(false)

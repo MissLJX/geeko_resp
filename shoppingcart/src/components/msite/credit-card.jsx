@@ -317,7 +317,7 @@ const CreditCard = class extends React.Component {
   							<div style={{marginTop: 10}}>
 
                   {
-                    this.props.checking ? <BigButton bgColor="#999" onClick={(evt) => { this.checkout(evt, currentCard) }}>
+                    this.props.checking ? <BigButton bgColor="#999">
                       {intl.formatMessage({id: 'please_wait'})}...</BigButton> : (
                       <BigButton bgColor="#e5004f" onClick={(evt) => { this.checkout(evt, currentCard) }}>
                         {intl.formatMessage({id: 'check_out'})}

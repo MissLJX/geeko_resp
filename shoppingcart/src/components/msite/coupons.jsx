@@ -59,12 +59,14 @@ const SelectButton = (props) => {
 
 export const Coupon = (props) => {
   const {coupon, selected, enabled, couponSelect} = props
+
+  const couponAmount = coupon.amount.indexOf('%') >= 0 ? `${coupon.amount} OFF` : `$${coupon.amount}`
+
   return <StyledCoupon className="x-table __vm x-fw __fixed">
     <div className="x-cell">
     	<div>
     		<Red>
-    			<StyledAmount>{coupon.amount}</StyledAmount>
-    			<span> OFF</span>
+    			<StyledAmount>{couponAmount}</StyledAmount>
     		</Red>
     		<strong>    {coupon.code}</strong>
     	</div>

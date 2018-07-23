@@ -5,12 +5,12 @@ import FullFixed from '../components/msite/full-fixed.jsx'
 import {getCreditCards, toggleCreditStatus} from '../store/actions.js'
 import {__route_root__} from '../utils/utils.js'
 import {deletecreditcard} from '../api'
+import Refreshing from '../components/msite/refreshing.jsx'
 
 const StyledFrame = styled.div`
 	height: calc(100vh - 50px);
 	overflow: scroll;
   -webkit-overflow-scrolling: touch;
-  padding-bottom: 50px;
 	iframe{
 		width: 100%;
 		height: calc(100% - 130px);
@@ -80,7 +80,8 @@ const CardBinding = class extends React.Component {
     this.close = this.close.bind(this)
     this.deleteCardHandle = this.deleteCardHandle.bind(this)
     this.state = {
-      frameUrl: `${window.ctx || ''}/w-site/anon/oceanpay?payMethod=${props.payMethod}`
+      frameUrl: `${window.ctx || ''}/w-site/anon/oceanpay?payMethod=${props.payMethod}`,
+      frameLoading: true
     }
   }
 
@@ -101,6 +102,12 @@ const CardBinding = class extends React.Component {
     if (!this.props.creditcards) {
       this.props.GETCREDITCARDS(this.props.payMethod)
     }
+
+    setTimeout(() => {
+      this.setState({
+        frameLoading: false
+      })
+    }, 5000)
   }
 
   deleteCardHandle (evt, cardId) {
@@ -112,6 +119,12 @@ const CardBinding = class extends React.Component {
     }
   }
 
+  frameLoadHandle () {
+    this.setState({
+      frameLoading: false
+    })
+  }
+
   close (evt) {
   	evt.stopPropagation()
     this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
@@ -121,7 +134,8 @@ const CardBinding = class extends React.Component {
     const {creditcards} = this.props
   	return <FullFixed onClose={this.close} title="Credit Card">
   		 <StyledFrame>
-  			<iframe seamless src={this.state.frameUrl}></iframe>
+        {this.state.frameLoading && <Refreshing/>}
+  			<iframe onLoad={this.frameLoadHandle.bind(this)} seamless src={this.state.frameUrl}></iframe>
         {
           creditcards && <Cards>
             <HD>Cards</HD>
@@ -144,7 +158,7 @@ const CardBinding = class extends React.Component {
             </CardUL>
           </Cards>
         }
-
+        <div style={{height: 100}}></div>
       </StyledFrame>
 
   	</FullFixed>

@@ -265,7 +265,7 @@ const MercadoBinding = class extends React.Component {
           {
             this.state.payer_costs && this.state.payer_costs.length > 0 && <StyledControl>
               <label>{intl.formatMessage({id: 'installments'})}*</label>
-              <Select className="x-select" name="installments" value={this.state.installments}>
+              <Select className="x-select" name="installments" onChange={this.handleInputChange} value={this.state.installments}>
                 {
                   this.state.payer_costs.map(({installments, recommended_message}) => (
                     <option key={installments} value={installments}>

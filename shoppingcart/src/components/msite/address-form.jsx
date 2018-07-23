@@ -125,6 +125,7 @@ const AdressForm = class extends React.Component {
       this.setState({
         country: getCountryCode()
       })
+      this.getStates(getCountryCode())
     }
 
     getCountries().then(({result}) => {

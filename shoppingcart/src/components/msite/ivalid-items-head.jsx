@@ -32,15 +32,13 @@ const StyledHead = styled.div`
 	    }
 	}
 `
-const {intl} = this.props
-
-const IvalidItemsHead = ({clearall}) => <StyledHead >
+const IvalidItemsHead = ({clearall, intl}) => <StyledHead >
   <div className="x-table __vm x-fw x-fh __fixed">
     <div className="x-cell">
-        {intl.formatMessage({id: 'ivalid_tems'})}
+      {intl.formatMessage({id: 'ivalid_tems'})}
     </div>
   	<div className="x-cell __right">
-  		<span style={{cursor: 'pointer'}} onClick={clearall}>{intl.formatMessage({id:'clear_all'})}</span>
+  		<span style={{cursor: 'pointer'}} onClick={clearall}>{intl.formatMessage({id: 'clear_all'})}</span>
     </div>
   </div>
 </StyledHead>

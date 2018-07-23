@@ -4,11 +4,11 @@ ul, li{
 
 @font-face {
   font-family: 'iconfont';  /* project id 384296 */
-  src: url('//at.alicdn.com/t/font_384296_3vjfdn9vo81.eot');
-  src: url('//at.alicdn.com/t/font_384296_3vjfdn9vo81.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_384296_3vjfdn9vo81.woff') format('woff'),
-  url('//at.alicdn.com/t/font_384296_3vjfdn9vo81.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_384296_3vjfdn9vo81.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_384296_nc7cyhg1ey.eot');
+  src: url('//at.alicdn.com/t/font_384296_nc7cyhg1ey.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_384296_nc7cyhg1ey.woff') format('woff'),
+  url('//at.alicdn.com/t/font_384296_nc7cyhg1ey.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_384296_nc7cyhg1ey.svg#iconfont') format('svg');
 }
 .iconfont {
   font-family:"iconfont" !important;
@@ -124,6 +124,10 @@ body{
   transition: opacity 300ms ease-in;
 }
 
+.x-red{
+  color: #e5004f;
+}
+
 
 .example-enter {
   opacity: 0.01;
@@ -191,5 +195,12 @@ body{
   }
   to{
     transform: rotate(360deg);
+  }
+}
+
+
+@media screen and (max-width:321px) {
+  .x-small{
+    font-size: 13px;
   }
 }

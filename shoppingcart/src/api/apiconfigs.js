@@ -37,7 +37,7 @@ const instance = axios.create({
   baseURL: typeof window.ctx === 'undefined' ? '/api' : window.ctx,
   timeout: 50000,
   headers: {
-    appVersion: '3.5.7',
+    appVersion: '3.5.8',
     deviceType: 'msite',
     countryCode: getCountry(),
     wid: getWid(),
