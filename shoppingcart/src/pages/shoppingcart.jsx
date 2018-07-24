@@ -680,6 +680,12 @@ const ShoppingCart = class extends React.Component {
     })
     const {cpf, installments} = this.props
     if (this.props.payMethod === '17') {
+        if (!this.props.cpf) {
+            this.setState({
+                checking: false
+            })
+            return
+        }
       if (!this.brazilref.context._errors || !this.brazilref.context._errors.length) {
         this.payCredit({payCpf: cpf, payInstallments: installments})
       }
