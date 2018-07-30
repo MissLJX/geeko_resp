@@ -1082,6 +1082,7 @@ const ShoppingCart = class extends React.Component {
                           <Red><Money money={cart.orderSummary.orderTotal}/></Red>
                         </div>
 
+                        //*****如果要打开paypal 这段打开********//
                         {/* <DoubleBtn className="x-flex __between">
                           <div>
                             <PaypalBtn onClick={this.quickPaypal.bind(this)}><img src={cart.paypalButtonImage}/></PaypalBtn>
@@ -1092,11 +1093,12 @@ const ShoppingCart = class extends React.Component {
                             </BigButton>
                           </div>
                         </DoubleBtn> */}
-
+                        //**************************************//
+                        //***如果要打开paypal把这段注释掉****//
                         <BigButton onClick={ () => { window.location.href = `${window.ctx}/w-site/anon/register?redirectUrl=${encodeURIComponent(window.location.href)}` } } className="__btn" height={47} bgColor="#e5004f">
                           {intl.formatMessage({id: 'check_out'})}
                         </BigButton>
-
+                        //********************************//
                       </Checkout>
                     </div>
                   </Box>
