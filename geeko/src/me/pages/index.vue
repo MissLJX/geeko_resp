@@ -2,43 +2,45 @@
     <div class="el-me-body">
 
         <div class="el-me-wall" :style="{'background':background}">
-            <div class="st-table el-me-header-area">
-                <div class="st-cell st-v-m">
-                    <router-link :to="{name: 'settings'}">
-                        <span class="el-setting-icon"><i class="iconfont el-setting-font">&#xe68a;</i></span>
-                    </router-link>
-                </div>
-                <div class="st-cell st-v-m">
-                    <div class="el-me-headerImage">
-                        <div>
-                            <div :style="{'background-image': 'url('+headerImage+'),url('+baseHeaderUrl+')' }"></div>
+            <div class="el-me-bg" :style="{'background':background_float}">
+                <div class="st-table el-me-header-area">
+                    <div class="st-cell st-v-m">
+                        <router-link :to="{name: 'settings'}">
+                            <span class="el-setting-icon"><i class="iconfont el-setting-font">&#xe68a;</i></span>
+                        </router-link>
+                    </div>
+                    <div class="st-cell st-v-m">
+                        <div class="el-me-headerImage">
+                            <div>
+                                <div :style="{'background-image': 'url('+headerImage+'),url('+baseHeaderUrl+')' }"></div>
+                            </div>
                         </div>
                     </div>
+                    <div class="st-cell st-v-m">
+                        <router-link :to="{name: 'notification-promotion'}"
+                                     :class="{'el-noti-count':notificationCount > 0}">
+                            <span class="el-setting-icon"><i class="iconfont el-setting-font">&#xe60b;</i></span>
+                            <span class="el-noti-num">{{notificationCount}}</span>
+                        </router-link>
+                    </div>
                 </div>
-                <div class="st-cell st-v-m">
-                    <router-link :to="{name: 'notification-promotion'}"
-                                 :class="{'el-noti-count':notificationCount > 0}">
-                        <span class="el-setting-icon"><i class="iconfont el-setting-font">&#xe60b;</i></span>
-                        <span class="el-noti-num">{{notificationCount}}</span>
-                    </router-link>
-                </div>
-            </div>
 
-            <div class="el-me-info">
-                <p class="el-name">{{fullName}}</p>
-                <p class="el-email">{{me.email}}</p>
+                <div class="el-me-info">
+                    <p class="el-name">{{fullName}}</p>
+                    <p class="el-email">{{me.email}}</p>
+                </div>
             </div>
         </div>
 
 
         <div class="el-me-order-area">
-            <!--            邮件确认
-                        <div class="con-email">
-                            <router-link :to="{name: 'confirm-email'}">
-                                <email-confirm class="el-confirm-email"></email-confirm>
-                            </router-link>
-                        </div>
-                        end 邮件确认-->
+            <!--邮件确认
+            <div class="con-email">
+                <router-link :to="{name: 'confirm-email'}">
+                    <email-confirm class="el-confirm-email"></email-confirm>
+                </router-link>
+            </div>
+            end 邮件确认-->
             <div class="hd">
                 <a :href="orderHref">
                     <touch-go class="el-me-order-touch" :label1="$t('label.order')" :label2="orderhreflabel"
@@ -47,7 +49,7 @@
                     </touch-go>
                 </a>
             </div>
-            <div class="bd">
+            <!--<div class="bd">
                 <div class="line">
                     <div>
                         <a :href="getOrderHref('processing')">
@@ -81,17 +83,17 @@
                         </a>
                     </div>
                 </div>
-            </div>
+            </div>-->
         </div>
 
         <ul class="el-me-tool-list">
-            <li>
+            <!--<li>
                 <router-link class="el-me-tool-list-item" :to="{name: 'address-book'}">
                     <touch-go class="el-me-tool-list-touch" :label1="$t('label.addressBook')">
                         <i slot="icon" class="iconfont">&#xe60f;</i>
                     </touch-go>
                 </router-link>
-            </li>
+            </li>-->
 
             <li>
                 <router-link class="el-me-tool-list-item" :to="{name: 'coupons'}">
@@ -117,6 +119,15 @@
                 </router-link>
             </li>
 
+            <!--Wallet-->
+            <li>
+                <router-link class="el-me-tool-list-item" :to="{name: 'creditcards'}">
+                    <touch-go class="el-me-tool-list-touch" :label1="$t('label.creditcard')">
+                        <i slot="icon" class="iconfont">&#xe60f;</i>
+                    </touch-go>
+                </router-link>
+            </li>
+
         </ul>
 
         <you-likes class="el-me-like-area" :products="youlikes"/>
@@ -132,8 +143,15 @@
 
     .el-me-wall {
         height: 150px;
-        background: #e5004f;
-        padding: 10px;
+        background-size: cover !important;
+        position: relative;
+        .el-me-bg{
+            position: absolute;
+            width: 100%;
+            height: 150px;
+            padding: 10px;
+            background-color:rgba(0,0,0,0.66) ;
+        }
     }
 
     .el-me-headerImage {
@@ -259,14 +277,9 @@
 
     .el-me-tool-list {
         background-color: #fff;
-        margin-top: 15px;
         padding-left: 10px;
-
         & > li {
             border-top: 1px solid #dcdcdc;
-            &:first-child {
-                border-top: none;
-            }
         }
 
         .el-me-tool-list-item {
@@ -342,7 +355,16 @@
             },
             background() {
                 if (site == 'chicme') {
-                    return '#e5004f';
+                    return 'url("https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/chicme/msite_bg.jpg")';
+                } else if (site == 'ivrose') {
+                    return '#e9546b';
+                } else {
+                    return '#337ab7';
+                }
+            },
+            background_float() {
+                if (site == 'chicme') {
+                    return '';
                 } else if (site == 'ivrose') {
                     return '#e9546b';
                 } else {

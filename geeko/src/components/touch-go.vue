@@ -1,8 +1,8 @@
 <template>
     <div class="st-table">
-        <div class="st-cell st-v-m el-touch-icon">
+<!--        <div class="st-cell st-v-m el-touch-icon">
             <slot class="icon" name="icon"></slot>
-        </div>
+        </div>-->
         <div class="st-cell st-v-m el-touch-go-label1">{{label1}}</div>
         <div class="st-cell st-v-m st-t-r">
             <span v-if="label2" :style="label2Style" class="el-touch-go-label2">{{label2}}</span>

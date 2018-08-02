@@ -5,6 +5,7 @@ import * as types from './mutation_types'
 import * as api  from '../api'
 import _ from 'lodash'
 import * as utils from '../../utils/geekoutils'
+import {creditcards} from "../../../../shoppingcart/src/api";
 
 const state = {
     me: null,
@@ -40,6 +41,7 @@ const state = {
     orderCountCanceled: 0,
     orderCountUnpaid: 0,
     message:[],
+    creditcards:[],
 }
 
 const getters = {
@@ -74,7 +76,8 @@ const getters = {
     orderCountReceipt: state => state.orderCountReceipt,
     orderCountCanceled: state => state.orderCountCanceled,
     orderCountUnpaid: state => state.orderCountUnpaid,
-    message: state => state.message
+    message: state => state.message,
+    creditcards: state =>state.creditcards
 }
 
 const mutations = {
@@ -208,8 +211,16 @@ const mutations = {
     },
     [types.ME_GET_MESSAGE](state, code){
         state.message = code
+    },
+    [types.Me_GET_CREDITCARDS](state,creditcards){
+        state.creditcards = creditcards
+    },
+    [types.ME_DEL_CREDIT_CARD](state,id){
+        state.id = id
+    },
+    [types.ME_DEL_MERCADO_CARD](state,id){
+        state.id = id
     }
-
 
 }
 
@@ -495,6 +506,24 @@ const actions = {
     getMessage({commit},code){
         return api.getMessage(code).then((code) =>{
             commit(types.ME_GET_MESSAGE,code)
+        })
+    },
+
+    getCreditCards({commit}){
+        return api.getCreditCards().then((creditcards) =>{
+            commit(types.Me_GET_CREDITCARDS,creditcards)
+        })
+    },
+
+    deleteCreditCard({commit},{cardId}){
+        return api.deleteCreditCard(cardId).then(() => {
+            commit(types.ME_DEL_CREDIT_CARD, cardId)
+        })
+    },
+
+    deleteMercadoCard({commit},{cardId}){
+        return api.deleteMercadoCard(cardId).then(() => {
+            commit(types.ME_DEL_MERCADO_CARD, cardId)
         })
     }
 }
