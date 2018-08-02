@@ -50,6 +50,10 @@ export default {
         defaultAddress:'Adresse par défaut',
         notification:'Notificações',
         total:'Total',
-        others:'Autres'
+        others:'Autres',
+        creditcard:'Cartes de crédit',
+        remove_credit_card:'Êtes-vous sûr de vouloir supprimer cette carte de crédit?',
+        yes:'Oui',
+        no:'NON',
     }
 }

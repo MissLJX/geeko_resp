@@ -50,6 +50,10 @@ export default {
         defaultAddress:'Morada predefinida',
         notification:'Notificações',
         total:'Total',
-        others:'Outros'
+        others:'Outros',
+        creditcard:'Cartões de crédito',
+        remove_credit_card:'Tem certeza de que deseja remover este cartão de crédito?',
+        yes:'sim',
+        no:'não',
     }
 }
