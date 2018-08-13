@@ -11,7 +11,7 @@ export default {
     label: {
         save: 'Save',
         add: 'Add',
-        order: 'Order',
+        order: 'Orders',
         editAddress: 'Edit address',
         address: 'Address',
         fullName: 'Full name',
@@ -50,6 +50,10 @@ export default {
         defaultAddress:'Default Address',
         notification:'Notification',
         total:'Total',
-        others:'Others'
+        others:'Others',
+        creditcard:'Credit Cards',
+        remove_credit_card:'Are you sure you want to remove this credit card?',
+        yes:'YES',
+        no:'NO',
     }
 }

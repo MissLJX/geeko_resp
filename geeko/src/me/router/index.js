@@ -11,6 +11,12 @@ const Me = [
         meta: {title: 'me'}
     },
     {
+        path: ROUTER_PATH_ME + '/creditcards',
+        component: () => import('../pages/creditcards.vue'),
+        name: 'creditcards',
+        meta: {title: 'Credit Cards'}
+    },
+    {
         path: ROUTER_PATH_ME + '/address-book',
         component: () => import('../pages/address-book.vue'),
         name: 'address-book',

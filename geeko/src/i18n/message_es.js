@@ -50,6 +50,11 @@ export default {
         defaultAddress:'Dirección predeterminada',
         notification:'Notificaciones',
         total:'Total',
-        others:'Otros'
+        others:'Otros',
+        creditcard:'Tarjetas de crédito',
+        remove_credit_card:'¿Seguro que quieres eliminar esta tarjeta de crédito?',
+        yes:'SÍ',
+        no:'NO',
+
     }
 }
