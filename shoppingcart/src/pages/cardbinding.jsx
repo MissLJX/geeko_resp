@@ -99,7 +99,7 @@ const CardBinding = class extends React.Component {
       })
     }
 
-    if (!this.props.creditcards) {
+    if (!this.props.creditcards && this.props.payMethod) {
       this.props.GETCREDITCARDS(this.props.payMethod)
     }
 

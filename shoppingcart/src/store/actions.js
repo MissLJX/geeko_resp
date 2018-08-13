@@ -7,11 +7,14 @@ import {get,
   editProduct,
   mercadocards,
   creditcards,
+  getMultiMethodCards,
   getpaypal,
   getcoupons,
   deleteitem,
   deleteitems,
-  getSessionShipping} from '../api'
+  getSessionShipping,
+  gettransaction,
+  getMessage} from '../api'
 
 export const LOADING = 'LOADING'
 export const LOADED = 'LOADED'
@@ -34,6 +37,10 @@ export const SET_MERCAODO_INSTALLMENTS = 'SET_MERCAODO_INSTALLMENTS'
 export const CREDIT_STATUS = 'CREDIT_STATUS'
 export const ATM_METHOD = 'ATM_METHOD'
 export const TICKET_METHOD = 'TICKET_METHOD'
+
+// order confirm
+export const GET_TRANSACTION_PAGE = 'GET_TRANSACTION_PAGE'
+export const GET_TRANSACTION = 'GET_TRANSACTION'
 
 export const loading = () => {
   return {
@@ -259,9 +266,11 @@ export const getMercadoCards = () => {
   }
 }
 
-export const getCreditCards = (payMethod) => {
+export const getCreditCards = (payMethod, multi) => {
+  const getcards = multi ? getMultiMethodCards : creditcards
+
   return dispatch => {
-    return creditcards(payMethod).then(data => data.result).then(cards => {
+    return getcards(payMethod).then(data => data.result).then(cards => {
       dispatch(setCreditCards(cards))
       return cards
     })
@@ -272,6 +281,52 @@ export const fetchCoupons = () => {
   return dispatch => {
     return getcoupons().then(data => data.result).then(coupons => {
       dispatch(getCoupons(coupons))
+    })
+  }
+}
+
+export const getTransactionPage = (page) => {
+  return {
+    type: GET_TRANSACTION_PAGE,
+    page
+  }
+}
+
+export const getTransaction = (transaction) => {
+  return {
+    type: GET_TRANSACTION,
+    transaction
+  }
+}
+
+export const fetchTransactionPage = (transactionId) => {
+  const __get_transaction = gettransaction(transactionId)
+  const __get_me = me()
+  const __br_m1132__ = getMessage('M1132')
+  const __br_m1133__ = getMessage('M1133')
+  const __mx_m1147__ = getMessage('M1147')
+  const __normal_m1073 = getMessage('M1073')
+  return dispatch => {
+    return Promise.all([__get_transaction, __get_me, __br_m1132__, __br_m1133__, __mx_m1147__, __normal_m1073]).then(values => {
+      const transactionPage = {
+        transaction: values[0].result,
+        me: values[1].result,
+        m1132: values[2].result,
+        m1133: values[3].result,
+        m1147: values[4].result,
+        m1073: values[5].result
+      }
+      dispatch(getTransactionPage(transactionPage))
+      return transactionPage
+    })
+  }
+}
+
+export const fetchTransaction = (transactionId) => {
+  return dispatch => {
+    return gettransaction(transactionId).then(({result}) => {
+      dispatch(getTransaction(result))
+      return result
     })
   }
 }

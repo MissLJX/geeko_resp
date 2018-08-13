@@ -42,7 +42,7 @@ export default{
   securit_code:'Código de seguridad',
   expiration_month:'Mes de caducidad',
   expiration_year:'Due year',
-  ard_holder_name:'Nombre yapellido',
+  ard_holder_name:'Nombre y apellido',
   installments:'Pago a plazos',
   pay_now:'comprar ahora',
   please_wait:'Por favor espera',

@@ -61,6 +61,10 @@ body{
   vertical-align: middle;
 }
 
+.x-table.__vt .x-cell{
+  vertical-align: top;
+}
+
 .x-flex{
   display: flex;
 }

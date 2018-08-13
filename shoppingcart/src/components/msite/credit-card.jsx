@@ -224,12 +224,12 @@ const BraizlPlugin = class extends React.Component {
                 data-checkout="installments"
                 value={this.props.installments}
                 onChange={this.props.handleInputChange}>
-                <option>1*{unitprice(this.props.orderTotal)} ({unitprice(this.props.orderTotal)})  </option>
+                <option value={1}>1*{unitprice(this.props.orderTotal)} ({unitprice(this.props.orderTotal)})  </option>
                 {
 
                   installmentoptions.map(i => (
                     <option key={i.number} value={i.number}>
-                      {i.number}*{unitprice(i.stagePrice)} ({i.stagePrice.unit + i.number * Number(i.stagePrice.amount)})
+                      {i.number}*{unitprice(i.stagePrice)} ({i.stagePrice.unit + (i.number * Number(i.stagePrice.amount)).toFixed(2)})
                     </option>
                   ))
                 }
@@ -306,7 +306,7 @@ const CreditCard = class extends React.Component {
                 </div>
   							<div className="x-table __vm __fixed x-fw">
   								<div className="x-cell" style={{width: 60}}>
-  									<img style={{width: 50}} src="https://dgzfssf1la12s.cloudfront.net/site/pc/icon326.png"/>
+  									<img style={{width: 50}} src={sitelogo}/>
   								</div>
   								<div className="x-cell">
                     				<Grey style={{fontSize: 12}}>

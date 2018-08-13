@@ -2,14 +2,47 @@ import React from 'react'
 import {Switch, Route} from 'react-router-dom'
 import {IntlProvider} from 'react-intl'
 import {messages, lang} from './i18n'
-import ShoppingCart from './pages/shoppingcart.jsx'
-import AddressModal from './pages/address-modal.jsx'
-import ShippingMethods from './pages/shipping-methods.jsx'
-import Mercado from './pages/mercado.jsx'
-import CardBinding from './pages/cardbinding.jsx'
-import Coupons from './pages/coupons.jsx'
+// import ShoppingCart from './pages/shoppingcart.jsx'
 import {__route_root__} from './utils/utils.js'
 import {AnimatedRoute} from 'react-router-transition'
+import Loadable from 'react-loadable'
+import Loading from './components/msite/refreshing.jsx'
+import Loading1 from './components/msite/loading.jsx'
+
+const AddressModal = Loadable({
+	loader: () => import(/* webpackChunkName: "page--address-modal" */ './pages/address-modal.jsx'),
+    loading: Loading
+})
+
+const ShippingMethods = Loadable({
+	loader: () => import(/* webpackChunkName: "page--shipping-methods" */ './pages/shipping-methods.jsx'),
+    loading: Loading
+})
+
+const Mercado = Loadable({
+	loader: () => import(/* webpackChunkName: "page--mercado" */ './pages/mercado.jsx'),
+    loading: Loading
+})
+
+const CardBinding = Loadable({
+	loader: () => import(/* webpackChunkName: "page--cardbinding" */ './pages/cardbinding.jsx'),
+    loading: Loading
+})
+
+const Coupons = Loadable({
+    loader: () => import(/* webpackChunkName: "page--coupons" */ './pages/coupons.jsx'),
+    loading: Loading
+})
+
+const ShoppingCart = Loadable({
+    loader: () => import(/* webpackChunkName: "page--shoppingcart" */ './pages/shoppingcart.jsx'),
+    loading: Loading1
+})
+
+// const OrderConfirm = Loadable({
+// 	loader: () => import( webpackChunkName: "page--orderconfirm"  './pages/orderconfirm.jsx'),
+// 	loading: Loading
+// })
 
 const defaultStyles = {
   position: 'fixed',
@@ -30,7 +63,15 @@ const defaultAnimations = {
 export default () => (
   <IntlProvider locale={lang} messages={messages}>
   	<div>
-    	<Route path={`${window.ctx || ''}${__route_root__}/`} component={ShoppingCart}/>
+
+  		{/*<Switch>
+			<Route path={`${window.ctx || ''}/order-confirm/:transactionId`} component={OrderConfirm}/>
+			<Route path={`${window.ctx || ''}${__route_root__}/`}  component={ShoppingCart}/>
+		</Switch>*/}
+
+  		
+  		<Route path={`${window.ctx || ''}${__route_root__}/`}  component={ShoppingCart}/>
+    	
 
     	<AnimatedRoute	{...defaultAnimations}
 					    mapStyles={(styles) => ({
@@ -63,6 +104,9 @@ export default () => (
 					    })}
 				      path={`${window.ctx || ''}${__route_root__}/coupons`}
 				      component={Coupons}/>
+
+
+
 
   	</div>
   	</IntlProvider>

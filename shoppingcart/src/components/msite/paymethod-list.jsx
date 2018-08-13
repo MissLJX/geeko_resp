@@ -83,6 +83,34 @@ const Boleto = class extends React.Component {
   }
 }
 
+const Apac = class extends React.Component {
+  constructor (props) {
+    super(props)
+  }
+
+  render () {
+    return <METHODBD>
+      <Form ref={this.props.apac}>
+        <MethodInputLine className="x-table x-fw __vm __fixed">
+          <div className="x-cell">
+            <label>CPF<Ask style={{marginLeft: 4}} onClick={this.props.cpfClickHandle.bind(this)}/></label>
+          </div>
+          <div className="x-cell">
+            <StyledControl inputColor="#fff">
+              <Input
+                name='cpf'
+                value={this.props.cpf}
+                onChange={this.props.handleInputChange}
+                validations={[required, cpf]}/>
+            </StyledControl>
+          </div>
+        </MethodInputLine>
+        <Button style={{display: 'none'}} ref={this.props.apacBB}></Button>
+      </Form>
+    </METHODBD>
+  }
+}
+
 const CashMethods = styled.ul`
   padding: 10px 0 0 10px;
   background-color: #e5e5e5;
@@ -193,13 +221,34 @@ const HD = styled.div`
 	}
 `
 
+const DISCOUNTTIP = styled.span`
+  background-color:#fff9fc;
+  border: 1px solid #f3a6c0;
+  padding: 4px;
+  font-size: 12px;
+  position: relative;
+  margin-left: 12px;
+  &::before{
+    content:'';
+    border-left: 1px solid #f3a6c0;
+    border-top: 1px solid #f3a6c0;
+    background-color:#fff9fc;
+    transform: rotate(-45deg);
+    position:absolute;
+    left: -5px;
+    top: 6px;
+    width: 8px;
+    height: 8px;
+  }
+`
+
 const Method = class extends React.Component {
   constructor (props) {
     super(props)
   }
 
   render () {
-    const {payMethod, children, selectPayHandle, selected} = this.props
+    const {payMethod, children, selectPayHandle, selected, cart} = this.props
 
     const matched = payMethod.name.match(__qoute_reg__)
     let name
@@ -209,14 +258,17 @@ const Method = class extends React.Component {
       name = payMethod.name
     }
 
+    const {paypalDiscountMessage} = cart
     return <StyledMethod onClick={() => { selectPayHandle(payMethod) }}>
       <HD>
         <div className="x-table x-fw x-fh __fixed __vm">
           <div className="x-cell">
             <img style={{verticalAlign: 'middle'}} src={payMethod.icon}/>
             <Grey className="x-small" style={{verticalAlign: 'middle'}}><span dangerouslySetInnerHTML={{__html: name}}/></Grey>
+
+            {paypalDiscountMessage && payMethod.id === '1' && <DISCOUNTTIP dangerouslySetInnerHTML={{__html: paypalDiscountMessage}}/>}
           </div>
-          <div className="x-cell __right" style={{width: 50}}>
+          <div className="x-cell __right" style={{width: 20}}>
             <CheckBox className={selected ? 'selected' : ''}/>
           </div>
         </div>
@@ -243,7 +295,7 @@ const MethodUL = styled.ul`
   }
 `
 
-const getMethodBody = (id, {cpf, email, handleInputChange, boleto, cpfClickHandle, boletoForm, atmClickHandle, atmMethods, atmMethod, ticketClickHandle, ticketMethods, ticketMethod}) => {
+const getMethodBody = (id, {apac, apacBB, cpf, email, handleInputChange, boleto, cpfClickHandle, boletoForm, atmClickHandle, atmMethods, atmMethod, ticketClickHandle, ticketMethods, ticketMethod}) => {
   switch (id) {
     case '16':
       return <Boleto boleto={boleto} boletoForm={boletoForm} cpf={cpf} email={email} cpfClickHandle={cpfClickHandle} handleInputChange={handleInputChange}/>
@@ -251,6 +303,8 @@ const getMethodBody = (id, {cpf, email, handleInputChange, boleto, cpfClickHandl
       return <MoneyTransform atmMethod={atmMethod} atmMethods={atmMethods} atmClickHandle={atmClickHandle}/>
     // case '21':
     //   return <Cash ticketMethod={ticketMethod} ticketMethods={ticketMethods} ticketClickHandle={ticketClickHandle}/>
+    case '23':
+      return <Apac apac={apac} apacBB={apacBB} cpf={cpf} cpfClickHandle={cpfClickHandle} handleInputChange={handleInputChange}/>
     default:
       return null
   }
@@ -261,12 +315,12 @@ const PayMethodList = class extends React.Component {
     super(props)
   }
   render () {
-    const {methods, selectPayHandle, selectedPayId} = this.props
+    const {methods, selectPayHandle, selectedPayId, cart} = this.props
     return <MethodUL>
       {
         methods && methods.map(payMethod => (
           <li key={payMethod.id}>
-            <Method selected={payMethod.id === selectedPayId} selectPayHandle={selectPayHandle} payMethod={payMethod}>
+            <Method cart={cart} selected={payMethod.id === selectedPayId} selectPayHandle={selectPayHandle} payMethod={payMethod}>
               {getMethodBody(payMethod.id, this.props)}
             </Method>
           </li>

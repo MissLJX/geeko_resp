@@ -18,7 +18,9 @@ import {LOADING,
   GET_COUPONS,
   CREDIT_STATUS,
   ATM_METHOD,
-  TICKET_METHOD} from './actions.js'
+  TICKET_METHOD,
+  GET_TRANSACTION_PAGE,
+  GET_TRANSACTION} from './actions.js'
 
 const initialState = {
   loading: false,
@@ -46,7 +48,12 @@ const initialState = {
   installments: 1,
   paypal: null,
   mercadoinstallments: 1,
-  creditstatus: 0
+  creditstatus: 0,
+  transaction: null,
+  m1132: null,
+  m1133: null,
+  m1147: null,
+  m1073: null
 }
 
 const isEmpty = cart => !cart
@@ -123,6 +130,10 @@ const refresh = (state = initialState, action) => {
       return {...state, atmMethod: action.method}
     case TICKET_METHOD:
       return {...state, ticketMethod: action.method}
+    case GET_TRANSACTION_PAGE:
+      return {...state, ...action.page}
+    case GET_TRANSACTION:
+      return {...state, transaction: action.transaction}
     default:
       return state
   }

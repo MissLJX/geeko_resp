@@ -52,3 +52,12 @@ export const StyledWaitingButton = styled.div`
 `
 
 export const WaitingButton = (props) => <StyledWaitingButton><Refreshing/><span style={{marginLeft: 4}}>{props.children}</span></StyledWaitingButton>
+
+export const Btn = styled.span`
+	padding: 4px 8px;
+	background-color: #343138;
+	border-radius: 2px;
+	color: #fff;
+	cursor: pointer;
+	display: inline-block;
+`

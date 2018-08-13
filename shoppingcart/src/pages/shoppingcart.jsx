@@ -19,18 +19,30 @@ import {fetchAll, refreshCart, selectItem, editing,
   edited, editItem, selectPay, CPF, EMAIL, getCreditCards,
   getMercadoCards, toggleCredit, setSecurityCode, setInstallments, fetchCoupons, deleteItem, deleteItems,
   setMercadoInstallments, toggleCreditStatus, setAtmMethod, setTicketMethod} from '../store/actions.js'
-import ProductEditor from '../components/msite/product-editor.jsx'
 import Mask from '../components/mask.jsx'
 import _ from 'lodash'
 import PayMethodList from '../components/msite/paymethod-list.jsx'
 import {BigButton} from '../components/msite/buttons.jsx'
-import CreditCard from '../components/msite/credit-card.jsx'
-import { useMercadocard, mercadopay, usePoint, useInsurance, creditpay, paypalpay, usecreditcard, movetooverseas, getMessage, placepaypal, givingCoupon, atmPay, ticketPay, getSafeCharge } from '../api'
+import { useMercadocard, mercadopay, usePoint, useInsurance, creditpay, paypalpay, usecreditcard, movetooverseas, getMessage, placepaypal, givingCoupon, atmPay, ticketPay, getSafeCharge, getApacPay } from '../api'
 import {__route_root__, storage} from '../utils/utils.js'
+import {submit} from '../utils/common-pay.js'
 import {CountDownBlock} from '../components/msite/countdowns.jsx'
 import {injectIntl} from 'react-intl'
 import {Confirm} from '../components/msite/modals.jsx'
-import qs from 'qs'
+
+
+import Loadable from 'react-loadable'
+
+
+const CreditCard = Loadable({
+  loader: () => import(/* webpackChunkName: "component--credit-card" */ '../components/msite/credit-card.jsx'),
+  loading: Refreshing
+})
+
+const ProductEditor = Loadable({
+  loader: () => import(/* webpackChunkName: "component--product-editor" */ '../components/msite/product-editor.jsx'),
+  loading: Refreshing
+})
 
 const OrderSummary = styled.div`
   padding: 5px 10px;
@@ -47,6 +59,7 @@ const Checkout = styled.div`
   &>div{
     &.__total{
       font-size: 18px;
+      height: 30px;
     }
     &.__btn{
       margin-top: 2px;
@@ -58,7 +71,7 @@ const Checkout = styled.div`
   width: 100%;
   bottom: 0;
   background-color: #fff;
-  z-index:2;
+  z-index:5;
 `
 
 const Tip = styled.div`
@@ -89,6 +102,28 @@ const PaypalBtn = styled.div`
   img{
     height: 37px;
     margin-top: 5px;
+  }
+`
+
+const DISCOUNTTIP = styled.span`
+  background-color:#fff9fc;
+  border: 1px solid #f3a6c0;
+  padding: 4px;
+  font-size: 12px;
+  position: absolute;
+  right: 10px;
+  top: 8px;
+  &::before{
+    content:'';
+    border-left: 1px solid #f3a6c0;
+    border-top: 1px solid #f3a6c0;
+    background-color:#fff9fc;
+    transform: rotate(-135deg);
+    position: absolute;
+    right: 20px;
+    bottom: -5px;
+    width: 8px;
+    height: 8px;
   }
 `
 
@@ -136,8 +171,8 @@ const mapDispatchToProps = (dispatch) => {
     GETMERCADOCARDS: () => {
       return dispatch(getMercadoCards())
     },
-    GETCREDITCARDS: (payMethod) => {
-      return dispatch(getCreditCards(payMethod))
+    GETCREDITCARDS: (payMethod, multi) => {
+      return dispatch(getCreditCards(payMethod, multi))
     },
     TOGGLECREDIT: (isShow) => {
       if (!isShow) {
@@ -310,7 +345,10 @@ const ShoppingCart = class extends React.Component {
       this.setState({
         checking: true
       })
-      this.props.GETCREDITCARDS(payMethod).then((cards) => {
+
+      const multi = this.props.payMethod === '18' || this.props.payMethod === '3'
+
+      this.props.GETCREDITCARDS(multi ? ['18', '3'] : payMethod, multi).then((cards) => {
         if (!cards || cards.length < 1) {
           if (payType === '8') {
             getSafeCharge().then(({result}) => {
@@ -318,13 +356,13 @@ const ShoppingCart = class extends React.Component {
               if (isFree) {
                 window.location.href = `${window.ctx || ''}/v7/order/confirm/free?transationId=${transactionId}`
               } else {
-                window.location.href = `${payURL}?${qs.stringify(params, true)}`
+
+                submit(result)
+
+                // window.location.href = `${payURL}?${qs.stringify(params, true)}`
               }
-              this.setState({
-                checking: false
-              })
             }).catch(({result}) => {
-              alert(data.result)
+              alert(result)
               this.setState({
                 checking: false
               })
@@ -448,6 +486,35 @@ const ShoppingCart = class extends React.Component {
         })
       }).catch(data => {
         alert(data.result)
+        this.setState({
+          checking: false
+        })
+      })
+    } else if(payType === '11'){
+      this.setState({
+        checking: true
+      })
+
+      if(payMethod === '23'){
+        const {cpf} = this.props
+        this.apac.validateAll()
+        if (this.apacBB.context._errors && this.apacBB.context._errors.length) {
+          this.setState({
+            checking: false
+          })
+          return
+        }
+      }
+
+      getApacPay({payMethod, cpfNumber: this.props.cpf}).then(({result}) => {
+        const {isFree, transactionId} = result
+        if (isFree) {
+          window.location.href = `${window.ctx || ''}/v7/order/confirm/free?transationId=${transactionId}`
+        } else {
+          submit(result)
+        }
+      }).catch(({result}) => {
+        alert(result)
         this.setState({
           checking: false
         })
@@ -577,10 +644,14 @@ const ShoppingCart = class extends React.Component {
     if (card.quickpayRecord.payMethod == '19') {
       useMercadocard(card.quickpayRecord.quickpayId).then(() => {
         this.props.GETMERCADOCARDS()
+        this.props.TOGGLECREDITSTATUS(0)
       })
     } else {
       usecreditcard(card.quickpayRecord.id).then(() => {
-        this.props.GETCREDITCARDS(card.quickpayRecord.payMethod)
+        const multi = this.props.payMethod === '18' || this.props.payMethod === '3'
+
+        this.props.GETCREDITCARDS(multi ? ['18', '3'] : card.quickpayRecord.payMethod, multi)
+        this.props.TOGGLECREDITSTATUS(0)
       })
     }
   }
@@ -680,8 +751,18 @@ const ShoppingCart = class extends React.Component {
     })
     const {cpf, installments} = this.props
     if (this.props.payMethod === '17') {
+      if (!this.props.cpf) {
+        this.setState({
+          checking: false
+        })
+        return
+      }
       if (!this.brazilref.context._errors || !this.brazilref.context._errors.length) {
         this.payCredit({payCpf: cpf, payInstallments: installments})
+      } else {
+        this.setState({
+          checking: false
+        })
       }
     } else {
       this.payCredit({})
@@ -692,6 +773,10 @@ const ShoppingCart = class extends React.Component {
     creditpay(params).then(data => data.result).then(({success, transactionId, details, solutions}) => {
       if (success) {
         window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
+
+        // this.props.history.push({
+        //   pathname: `${window.ctx || ''}/order-confirm/${transactionId}`
+        // })
       } else {
         alert(details + '\n' + solutions)
       }
@@ -729,11 +814,9 @@ const ShoppingCart = class extends React.Component {
         if (isFree) {
           window.location.href = `${window.ctx || ''}/v7/order/confirm/free?transationId=${transactionId}`
         } else {
-          window.location.href = `${payURL}?${qs.stringify(params, true)}`
+          // window.location.href = `${payURL}?${qs.stringify(params, true)}`
+          submit(result)
         }
-        this.setState({
-          refreshing: false
-        })
       }).catch(({result}) => {
         alert(data.result)
         this.setState({
@@ -841,9 +924,7 @@ const ShoppingCart = class extends React.Component {
 
           {
             (couponcountdown > 1000 || cart.messages && cart.messages.orderSummaryMsg) && (
-
               <div ref={wrapper => { this.fixedTipWrapper = wrapper }}>
-
                 {
                   couponcountdown > 1000 ? (
                     <Tip innerRef={tip => { this.fixedTip = tip }}>
@@ -864,16 +945,14 @@ const ShoppingCart = class extends React.Component {
                     </React.Fragment>
                   )
                 }
-
               </div>
-
             )
           }
 
           <Boxs>
             {
               cart.shippingDetail ? (
-                window.__is_login__ && <Box>
+                (window.__is_login__ || window.token) && <Box>
                   <BoxClickHead title={intl.formatMessage({id: 'address'})}>
                     <Grey>
                       <Link style={{color: '#222', textDecoration: 'none'}} to={`${window.ctx || ''}${__route_root__}/address`}>
@@ -1000,7 +1079,11 @@ const ShoppingCart = class extends React.Component {
                       ticketClickHandle={this.ticketClickHandle.bind(this)}
                       atmMethod={this.props.atmMethod}
                       ticketMethod={this.props.ticketMethod}
-                      atmMethods={this.state.atmMethods}/>
+                      atmMethods={this.state.atmMethods}
+                      apac={c => this.apac = c}
+                      apacBB={c => this.apacBB = c}
+                      cart={this.props.cart}
+                      />
                   </div>
                 </Box>
               )
@@ -1031,7 +1114,6 @@ const ShoppingCart = class extends React.Component {
                         <span>{intl.formatMessage({id: 'total'})}: </span>
                         <Red><Money money={cart.orderSummary.orderTotal}/></Red>
                       </div>
-
                       {
                         cancheckout ? (
                           !this.state.checking ? <BigButton onClick={this.checkout.bind(this)} className="__btn" height={47} bgColor="#e5004f">
@@ -1045,7 +1127,6 @@ const ShoppingCart = class extends React.Component {
                           </BigButton>
                         )
                       }
-
                     </Checkout>
                   </div>
                 </Box>
@@ -1058,11 +1139,10 @@ const ShoppingCart = class extends React.Component {
                           <span>{intl.formatMessage({id: 'total'})}: </span>
                           <Red><Money money={cart.orderSummary.orderTotal}/></Red>
                         </div>
-
                         {
                           cancheckout ? (
                             <BigButton onClick={this.quickPlace.bind(this)} className="__btn" height={47} bgColor="#e5004f">
-                                Place Order
+                                                            Place Order
                             </BigButton>
                           ) : (
                             <BigButton className="__btn" height={47} bgColor="#ddd">
@@ -1076,31 +1156,32 @@ const ShoppingCart = class extends React.Component {
                 ) : (
                   <Box>
                     <div style={{height: 90}}>
-                      <Checkout>
+                      
+                    </div>
+
+                    <Checkout>
                         <div className="__total">
                           <span>{intl.formatMessage({id: 'total'})}: </span>
                           <Red><Money money={cart.orderSummary.orderTotal}/></Red>
-                        </div>
 
-                        //*****如果要打开paypal 这段打开********//
-                        {/* <DoubleBtn className="x-flex __between">
-                          <div>
-                            <PaypalBtn onClick={this.quickPaypal.bind(this)}><img src={cart.paypalButtonImage}/></PaypalBtn>
-                          </div>
+                         
+                          {cart.paypalDiscountMessage && <DISCOUNTTIP dangerouslySetInnerHTML={{__html: cart.paypalDiscountMessage}}/>}
+
+                        </div>
+                         <DoubleBtn className="x-flex __between">
                           <div>
                             <BigButton onClick={ () => { window.location.href = `${window.ctx}/w-site/anon/register?redirectUrl=${encodeURIComponent(window.location.href)}` } } className="__btn" height={47} bgColor="#e5004f">
                               {intl.formatMessage({id: 'check_out'})}
                             </BigButton>
                           </div>
-                        </DoubleBtn> */}
-                        //**************************************//
-                        //***如果要打开paypal把这段注释掉****//
-                        <BigButton onClick={ () => { window.location.href = `${window.ctx}/w-site/anon/register?redirectUrl=${encodeURIComponent(window.location.href)}` } } className="__btn" height={47} bgColor="#e5004f">
+                          <div>
+                            <PaypalBtn onClick={this.quickPaypal.bind(this)}><img src={cart.paypalButtonImage}/></PaypalBtn>
+                          </div>
+                        </DoubleBtn> 
+                   {/*     <BigButton onClick={ () => { window.location.href = `${window.ctx}/w-site/anon/register?redirectUrl=${encodeURIComponent(window.location.href)}` } } className="__btn" height={47} bgColor="#e5004f">
                           {intl.formatMessage({id: 'check_out'})}
-                        </BigButton>
-                        //********************************//
+                        </BigButton>*/}
                       </Checkout>
-                    </div>
                   </Box>
                 )
               )
@@ -1144,7 +1225,7 @@ const ShoppingCart = class extends React.Component {
           }
 
           {
-            isCreditShow && (this.props.payMethod === '3' || this.props.payMethod === '17') && creditcards && creditcards.length && (
+            isCreditShow && (this.props.payMethod === '3' || this.props.payMethod === '17' || this.props.payMethod === '18') && creditcards && creditcards.length && (
               <React.Fragment>
                 <Mask/>
                 <CreditCard
@@ -1204,7 +1285,6 @@ const ShoppingCart = class extends React.Component {
               yesLabel="Continue" noLabel="No, Thanks">
               <span dangerouslySetInnerHTML={{__html: cart.cancelOceanpaymentPayMsg}}/>
             </Confirm>
-
           }
 
         </div>)

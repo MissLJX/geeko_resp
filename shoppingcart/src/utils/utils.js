@@ -40,3 +40,16 @@ export const storage = {
 const _url_analyst = name => name.replace(new RegExp(/\s/g), '-')
 
 export const producturl = product => `/product/${_url_analyst(product.name)}/${product.id}.html`
+
+export const ispromotion = product => product.promotion && product.promotion.promotionPrice && product.promotion.enabled
+
+export const getlowerprice = product => {
+  if (ispromotion(product)) { return product.promotion.promotionPrice }
+  return product.price
+}
+
+export const gethigherprice = product => {
+  if (product.msrp && product.msrp.amount > 0) { return product.msrp }
+  if (ispromotion(product)) { return product.price }
+  return null
+}

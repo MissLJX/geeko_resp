@@ -1,8 +1,8 @@
 import React from 'react'
 import validator from 'validator'
 
-export const __reg_zip_us__ = /^[\w-]{5,20}$/
-export const __reg_zip_uk__ = /^\w{2,4}\s?\w{3}$/
+export const __reg_zip_us__ = /^(([0-9]{5})|([0-9]{5}-[0-9]{4}))$/
+export const __reg_zip_uk__ = /^([a-z]|[A-Z]){1,2}\w{1,2}\s{0,1}[0-9]{1}([a-z]|[A-Z]){2}$/
 export const __reg_zip_br__ = /^[0-9]{5}-[0-9]{3}$/
 
 export const __reg_phone_normal__ = /^\d{1,20}$/
@@ -81,7 +81,7 @@ export const zip = (value, props, components) => {
   switch (country) {
   	case 'US':
   		reg = __reg_zip_us__
-  		error = `${value} is not a valid ZipCode`
+  		error = `Please enter 5 digits or 5 digits with a 4-digits number (E.g. 20001 or 20001-0000)`
   		break
   	case 'GB':
   		reg = __reg_zip_uk__

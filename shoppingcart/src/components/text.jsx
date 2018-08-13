@@ -7,3 +7,11 @@ export const Grey = styled.span`
 export const Red = styled.span`
 	color: #e5004f;
 `
+
+export const UpperCase = styled.span`
+	text-transform: uppercase;
+`
+
+export const Small = styled.span`
+	font-size: 12px;
+`

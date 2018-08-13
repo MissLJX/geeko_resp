@@ -1,7 +1,7 @@
 import axios from './apiconfigs'
 const VPATH = '/v7'
 export const getMessage = (code) => axios.get(`/message/get/${code}`)
-export const get = () => axios.get(`${VPATH}/shopping-cart/show?_=${new Date().getTime()}`)
+export const get = () => axios.get(`${VPATH}/shopping-cart/show?_=${new Date().getTime()}&payMethod=${window.token ? '1' : ''}`)
 export const selectAll = () => axios.get(`${VPATH}/shopping-cart/select-all?_=${new Date().getTime()}`)
 export const select = (params) => axios.post(`${VPATH}/shopping-cart/select?_=${new Date().getTime()}`, params)
 export const editProduct = (oldId, newId, quantity) => axios.get(`${VPATH}/shopping-cart/${oldId}/${newId}/${quantity}/change-product`)
@@ -53,3 +53,13 @@ export const atmPay = (paymentMethodId) => axios.post(`${VPATH}/money-transfer/p
 export const ticketPay = (paymentMethodId) => axios.post(`${VPATH}/cash/pay`, {paymentMethodId})
 
 export const getSafeCharge = () => axios.get('/safe-charge/get-pay-params')
+
+export const getMultiMethodCards = (payMethods) => axios.get(`/quickpay-record/history-by-pay-methods?payMethods=${payMethods.join(',')}`)
+
+export const getApacPay = (params) => axios.get('/apacpay/get-pay-params', params)
+
+// order
+export const gettransaction = (id) => axios.get(`${VPATH}/order/anon/${id}/show`)
+export const updateorderaddress = (address) => axios.post(`${VPATH}/order/anon/shipping-detail-update`, address)
+export const gettransactionrelatedproducts = (id, skip, limit) => axios.get(`${VPATH}/order/anon/${skip}/${limit}/${id}/get-same-category-products`)
+export const changepassword = (password) => axios.post(`${VPATH}/customer/anon/change-pwd`, {password})
