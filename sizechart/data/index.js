@@ -7,7 +7,7 @@ let imgSrc = [];
 let result = [];
 let pMethod = [];
 /*let productId = 'a89c31fb-a9e9-49bc-813e-651948f1b89c';*/
-/*let productId = '7ed6b655-b312-4f7d-a642-95394319a774';*/
+let productId = '7ed6b655-b312-4f7d-a642-95394319a774';
 /*let productId = '1f5T2w9Q9w8k9E5X3l7V5V2Q3H';*/
 
 axios.get('/productCategory/anon/get-taglia?productId='+productId).then(function (response) {
