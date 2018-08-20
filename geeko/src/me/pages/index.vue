@@ -1,6 +1,5 @@
 <template>
     <div class="el-me-body">
-
         <div class="el-me-wall" :style="{'background':background}">
             <div class="el-me-bg" :style="{'background':background_float}">
                 <div class="st-table el-me-header-area">
@@ -34,13 +33,11 @@
 
 
         <div class="el-me-order-area">
-            <!--邮件确认
-            <div class="con-email">
+            <!--<div class="con-email">
                 <router-link :to="{name: 'confirm-email'}">
                     <email-confirm class="el-confirm-email"></email-confirm>
                 </router-link>
-            </div>
-            end 邮件确认-->
+            </div>-->
             <div class="hd">
                 <a :href="orderHref">
                     <touch-go class="el-me-order-touch" :label1="$t('label.order')" :label2="orderhreflabel"
@@ -119,7 +116,6 @@
                 </router-link>
             </li>
 
-            <!--Wallet-->
             <li>
                 <router-link class="el-me-tool-list-item" :to="{name: 'creditcards'}">
                     <touch-go class="el-me-tool-list-touch" :label1="$t('label.creditcard')">
@@ -354,27 +350,27 @@
                 return this.orderCountUnpaid ? `${this.$t('label.unpaid')}(${this.orderCountUnpaid})` : ''
             },
             background() {
-                if (site == 'chicme') {
+                if (site === 'chicme') {
                     return 'url("https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/chicme/msite_bg.jpg")';
-                } else if (site == 'ivrose') {
+                } else if (site === 'ivrose') {
                     return '#e9546b';
                 } else {
                     return '#337ab7';
                 }
             },
             background_float() {
-                if (site == 'chicme') {
+                if (site === 'chicme') {
                     return '';
-                } else if (site == 'ivrose') {
+                } else if (site === 'ivrose') {
                     return '#e9546b';
                 } else {
                     return '#337ab7';
                 }
             },
             baseHeaderUrl() {
-                if (site == 'chicme') {
+                if (site === 'chicme') {
                     return 'https://dgzfssf1la12s.cloudfront.net/site/pc/icon35.png';
-                } else if (site == 'ivrose') {
+                } else if (site === 'ivrose') {
                     return 'https://dgzfssf1la12s.cloudfront.net/site/ivrose/icon47.png';
                 } else {
                     return 'https://dgzfssf1la12s.cloudfront.net/site/bouti/logo02.png';

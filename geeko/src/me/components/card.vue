@@ -38,7 +38,7 @@
             quickpayRecord: {
                 type: Object
             },
-            style:{
+            cardStyle:{
                 type: Object
             }
         },
@@ -55,16 +55,16 @@
         },
         computed:{
             cardIconUrl(){
-                if(this.style){
-                    return this.style.imageURL;
+                if(this.cardStyle){
+                    return this.cardStyle.imageURL;
                 }else{
                     return 'https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/chicme/Credit+Card.png'
                 }
             },
             cardName(){
-                if(this.style){
-                    if(this.style.name){
-                        return this.style.name;
+                if(this.cardStyle){
+                    if(this.cardStyle.name && this.cardStyle.name !== 'other'){
+                        return this.cardStyle.name;
                     }else{
                         return ''
                     }
@@ -78,15 +78,15 @@
                 }
             },
             fontColor(){
-                if(this.style){
-                    return this.style.fontColor;
+                if(this.cardStyle){
+                    return this.cardStyle.fontColor;
                 }else{
                     return '#000'
                 }
             },
             bgColor(){
-                if(this.style) {
-                    return this.style.color
+                if(this.cardStyle) {
+                    return this.cardStyle.color
                 } else{
                     return '#fff'
                 }

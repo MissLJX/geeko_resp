@@ -3,7 +3,7 @@
         <list :items="creditcards" :scrollable="false">
             <template slot="li" scope="props">
                 <li :key="props">
-                    <card :quickpayRecord="props.item.quickpayRecord" :style="props.item.style" @delete="deleteHandle"/>
+                    <card :quickpayRecord="props.item.quickpayRecord" :cardStyle="props.item.style" @delete="deleteHandle"/>
                 </li>
             </template>
         </list>

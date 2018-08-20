@@ -145,7 +145,7 @@ export const getCreditCards = () => {
 
 export const deleteCreditCard = (cardId) => axios.get('/quickpay-record/'+cardId+'/remove')
 
-export const deleteMercadoCard = (cardId) => axios.get('mercadopago/remove-card?token='+cardId)
+export const deleteMercadoCard = (cardId) => axios.get('/mercadopago/remove-card?token='+cardId)
 
 
 
