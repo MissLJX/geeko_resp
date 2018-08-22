@@ -42,7 +42,7 @@ export const getCredits = (skip) => {
 }
 
 export const getMayLikes = () => {
-    return axios.get('/product/1/0/20/show', {}, {}).then((data) => {
+    return axios.get('/product/1/0/50/show', {}, {}).then((data) => {
         return data.result
     })
 }

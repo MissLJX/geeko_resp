@@ -15,12 +15,11 @@
             height: 50px;
             line-height: 50px;
             text-align: center;
-            border-bottom: 1px solid #dcdcdc;
             font-weight: bold;
             text-transform: uppercase;
         }
         .bd{
-            padding: 5px;
+            padding: 0 5px;
         }
     }
 </style>
