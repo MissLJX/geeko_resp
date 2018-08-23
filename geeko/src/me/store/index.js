@@ -15,13 +15,14 @@ const state = {
 /*    allPoints:[],*/
     credits: [],
     initialized: false,
-    youlikes: null,
     wishlist: null,
     orderNotifications: [],
     promotionNotifications: [],
     otherNotifications: [],
     wishProducts: [],
     wishskip: 0,
+    youlikeProducts:[],
+    youlikeskip:0,
     creditskip: 0,
     headerImage: null,
     promotionNtSkip: 0,
@@ -34,7 +35,6 @@ const state = {
     otherNtLoaded: false,
     otherNtFinished: false,
     notificationCount: 0,
-
     orderCountProcessing: 0,
     orderCountShipped: 0,
     orderCountReceipt: 0,
@@ -53,13 +53,14 @@ const getters = {
     creditskip: state => state.creditskip,
 /*    allPoints: state => state.allPoints,*/
     initialized: state => state.initialized,
-    youlikes: state => state.youlikes,
     wishlist: state => state.wishlist,
     orderNotifications: state => state.orderNotifications,
     promotionNotifications: state => state.promotionNotifications,
     otherNotifications: state => state.otherNotifications,
     wishProducts: state => state.wishProducts,
     wishskip: state => state.wishskip,
+    youlikeProducts: state => state.youlikeProducts,
+    youlikeskip:state => state.youlikeskip,
     headerImage: state => state.headerImage,
     promotionNtSkip: state => state.promotionNtSkip,
     promotionNtLoaded: state => state.promotionNtLoaded,
@@ -150,6 +151,12 @@ const mutations = {
     },
     [types.ME_GET_WISH_SKIP](state){
         state.wishskip += 20
+    },
+    [types.ME_GET_YOU_LIKE_PRODUCTS](state,youlikeProducts){
+        state.youlikeProducts = _.concat(state.youlikeProducts,youlikeProducts)
+    },
+    [types.ME_GET_YOU_LIKE_SKIP](state){
+        state.youlikeskip += 20
     },
     [types.ME_GET_CREDITS_SKIP](state){
         state.creditskip += 20
@@ -333,16 +340,24 @@ const actions = {
         commit(types.ME_GET_CREDITS_SKIP)
     },
 
-    getYoulikes({commit}){
+    /*getYoulikes({commit},{skip}){
         return new Promise((resolve, reject) => {
-            api.getMayLikes().then(products => {
-                commit(types.ME_GET_YOU_LIKES, products)
+            api.getMayLikes(skip).then(products => {
+                if(products && products.length){
+                    commit(types.ME_GET_YOU_LIKES, products)
+                }else{
+                    if (skip === 0) {
+                        return {empty: true, finished: true}
+                    }
+                    return {finished: true}
+                }
+
                 resolve()
             }).catch(e => {
                 reject(e)
             })
         })
-    },
+    },*/
 
     getWishlist({commit}){
         return new Promise((resolve, reject) => {
@@ -414,9 +429,27 @@ const actions = {
             return {}
         })
     },
+    getYouLikeProducts({commit}, {skip}){
+        return api.getYouLikeProducts(skip).then((products) => {
+            if (products && products.length) {
+                commit(types.ME_GET_YOU_LIKE_PRODUCTS, products)
+            } else {
+                if (skip === 0) {
+                    return {empty: true, finished: true}
+                }
+                return {finished: true}
+            }
+
+            return {}
+        })
+    },
 
     getWishskip({commit}){
         commit(types.ME_GET_WISH_SKIP)
+    },
+
+    getYouLikeSkip({commit}){
+        commit(types.ME_GET_YOU_LIKE_SKIP)
     },
 
     postProfile({}, postData){

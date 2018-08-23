@@ -49,7 +49,6 @@
             'product-list': ProductList
         },
         beforeRouteEnter(to, from, next){
-
             var wishproducts = store.getters['me/wishProducts']
 
             if(wishproducts && wishproducts.length){

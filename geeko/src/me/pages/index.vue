@@ -126,7 +126,7 @@
 
         </ul>
 
-        <you-likes class="el-me-like-area" :products="youlikes"/>
+        <you-likes class="el-me-like-area" />
 
     </div>
 </template>
@@ -332,7 +332,7 @@
     export default {
         computed: {
             ...mapGetters('me', [
-                'me', 'youlikes', 'feed', 'headerImage', 'notificationCount', 'orderCountProcessing', 'orderCountShipped', 'orderCountReceipt', 'orderCountCanceled', 'orderCountUnpaid'
+                'me', /*'youlikes'*/, 'feed', 'headerImage', 'notificationCount', 'orderCountProcessing', 'orderCountShipped', 'orderCountReceipt', 'orderCountCanceled', 'orderCountUnpaid'
             ]),
             fullName() {
                 return this.me.name.firstName + ' ' + this.me.name.lastName;
@@ -389,9 +389,9 @@
             'email-confirm': EmailConfirm,
         },
         created() {
-            if (!this.youlikes || !this.youlikes.length) {
+/*            if (!this.youlikes || !this.youlikes.length) {
                 store.dispatch('me/getYoulikes');
-            }
+            }*/
 
             store.dispatch('me/countNotifications');
 

@@ -14,7 +14,7 @@
                             <del class="el-product-del">{{delPrice}}</del>
                         </div>
                         <div class="st-cell st-v-m st-t-r">
-                            <i @click.prevent="likeHandle" class="iconfont el-product-like" :class="{'red':liked}">&#xe601;</i>
+                            <i @click.prevent="likeHandle" class="iconfont el-product-like" :class="{red:liked}">{{liked ? '&#xe677;' : '&#xe631;'}}</i>
                         </div>
                     </div>
                 </figcaption>
@@ -24,6 +24,20 @@
 </template>
 
 <style scoped lang="scss">
+    @font-face {
+        font-family: 'iconfont';  /* project id 384296 */
+        src: url('//at.alicdn.com/t/font_384296_g8zwuseogk7.eot');
+        src: url('//at.alicdn.com/t/font_384296_g8zwuseogk7.eot?#iefix') format('embedded-opentype'),
+        url('//at.alicdn.com/t/font_384296_g8zwuseogk7.woff') format('woff'),
+        url('//at.alicdn.com/t/font_384296_g8zwuseogk7.ttf') format('truetype'),
+        url('//at.alicdn.com/t/font_384296_g8zwuseogk7.svg#iconfont') format('svg');
+    }
+    .iconfont{
+        font-family:"iconfont" !important;
+        font-size:16px;font-style:normal;
+        -webkit-font-smoothing: antialiased;
+        -webkit-text-stroke-width: 0.2px;
+        -moz-osx-font-smoothing: grayscale;}
     .el-list-product {
 
         .el-product-name{
@@ -66,7 +80,7 @@
         .el-product-like {
             font-size: 20px;
             &.red {
-                color: #e5004f;
+                color: #f00;
             }
             cursor: pointer;
         }
@@ -109,7 +123,7 @@
             liked(){
                 var wishlist = this.$store.getters['me/wishlist']
                 if (wishlist && wishlist.length && wishlist[0].productIds && wishlist[0].productIds.length) {
-                    return _.indexOf(wishlist[0].productIds, this.product.id) >= 0
+                        return _.indexOf(wishlist[0].productIds, this.product.id) >= 0
                 }
 
                 return false

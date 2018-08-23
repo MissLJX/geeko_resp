@@ -41,8 +41,8 @@ export const getCredits = (skip) => {
     })
 }
 
-export const getMayLikes = () => {
-    return axios.get('/product/1/0/50/show', {}, {}).then((data) => {
+export const getYouLikeProducts = (skip) => {
+    return axios.get('/product/1/'+skip+'/20/show', {}, {}).then((data) => {
         return data.result
     })
 }
