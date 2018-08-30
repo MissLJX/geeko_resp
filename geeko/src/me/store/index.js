@@ -16,10 +16,12 @@ const state = {
     credits: [],
     initialized: false,
     wishlist: null,
+    save:[],
     orderNotifications: [],
     promotionNotifications: [],
     otherNotifications: [],
     wishProducts: [],
+    refreshProducts:[],
     wishskip: 0,
     youlikeProducts:[],
     youlikeskip:0,
@@ -54,10 +56,12 @@ const getters = {
 /*    allPoints: state => state.allPoints,*/
     initialized: state => state.initialized,
     wishlist: state => state.wishlist,
+    save: state => state.save,
     orderNotifications: state => state.orderNotifications,
     promotionNotifications: state => state.promotionNotifications,
     otherNotifications: state => state.otherNotifications,
     wishProducts: state => state.wishProducts,
+    refreshProducts: state => state.refreshProducts,
     wishskip: state => state.wishskip,
     youlikeProducts: state => state.youlikeProducts,
     youlikeskip:state => state.youlikeskip,
@@ -78,7 +82,7 @@ const getters = {
     orderCountCanceled: state => state.orderCountCanceled,
     orderCountUnpaid: state => state.orderCountUnpaid,
     message: state => state.message,
-    creditcards: state =>state.creditcards
+    creditcards: state =>state.creditcards,
 }
 
 const mutations = {
@@ -227,6 +231,9 @@ const mutations = {
     },
     [types.ME_DEL_MERCADO_CARD](state,id){
         state.id = id
+    },
+    [types.ME_REMOVE_EXPIRED_PRODUCTS](state){
+
     }
 
 }
@@ -326,7 +333,6 @@ const actions = {
         return api.getCredits(skip).then((credits) => {
             if (credits && credits.length) {
                 commit(types.ME_GET_CREDITS, credits)
-                return {}
             } else {
                 if (skip === 0) {
                     return {empty: true, finished: true}
@@ -418,7 +424,13 @@ const actions = {
     getWishproducts({commit, state}, {skip}){
         return api.getWishProducts(state.me.id, skip).then((products) => {
             if (products && products.length) {
-                commit(types.ME_GET_WISH_PRODUCTS, products)
+                if (skip === 0){
+                    state.wishProducts = [];
+                    commit(types.ME_GET_WISH_PRODUCTS, products)
+                }else{
+                    commit(types.ME_GET_WISH_PRODUCTS, products)
+                }
+
             } else {
                 if (skip === 0) {
                     return {empty: true, finished: true}
@@ -426,7 +438,7 @@ const actions = {
                 return {finished: true}
             }
 
-            return {}
+            return {finished:false}
         })
     },
     getYouLikeProducts({commit}, {skip}){
@@ -558,6 +570,16 @@ const actions = {
         return api.deleteMercadoCard(cardId).then(() => {
             commit(types.ME_DEL_MERCADO_CARD, cardId)
         })
+    },
+
+    removeExpiredProducts({commit}){
+        return api.removeExpiredProducts().then(() => {
+            commit(types.ME_REMOVE_EXPIRED_PRODUCTS)
+        })
+    },
+
+    removeWishProducts(context,data){
+        return api.removeWishProducts(data)
     }
 }
 

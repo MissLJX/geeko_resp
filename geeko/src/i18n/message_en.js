@@ -40,7 +40,7 @@ export default {
         changePassword: 'Change password',
         changeEmail: 'Change email',
         changeCurrency: 'Change currency',
-        wishlist: 'Wish list',
+        wishlist: 'Wish List',
         settings: 'settings',
         mayLike:'YOU MAY ALSO LIKE',
         logout:'Log out',
@@ -55,5 +55,6 @@ export default {
         remove_credit_card:'Are you sure you want to remove this credit card?',
         yes:'YES',
         no:'NO',
+        cancel:'Cancel'
     }
 }

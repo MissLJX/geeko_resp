@@ -1,9 +1,13 @@
 <template>
     <div class="el-wishlist-body">
-        <page-header>Wish list</page-header>
-        <div>
-            <product-list :products="products" :loading="loading" :finished="finished" @listing="listingHandle"/>
-        </div>
+        <page-header>
+            <span>{{$t('label.wishlist')}}</span>
+            <span v-if="ifEdit" slot="oplabel" @click="editHandle">{{$t('label.edit')}}</span>
+            <span v-if="!ifEdit" slot="oplabel" @click="cancelHandle">{{$t('label.cancel')}}</span>
+        </page-header>
+        <product-list v-if="ifEdit" :products="products" :loading="loading" :finished="finished" @listing="listingHandle" />
+        <product-wishlist v-if="!ifEdit" :products="products" :loading="loading" :finished="finished" @listing="listingHandle" @refresh="refreshHandle"/>
+        <loding v-if="ifloding"></loding>
     </div>
 </template>
 
@@ -16,13 +20,17 @@
 <script type="text/ecmascript-6">
     import PageHeader from '../components/page-header.vue'
     import ProductList from '../../components/product-list.vue'
+    import ProductWishList from '../../components/product-wishlist.vue'
     import store from '../../store'
+    import Loding from "../../components/loding.vue";
     export default{
         data(){
             return{
                 loading:false,
                 finished: false,
-                empty: false
+                empty: false,
+                ifEdit:true,
+                ifloding:false,
             }
         },
         computed: {
@@ -34,7 +42,10 @@
             }
         },
         methods: {
-            listingHandle(){
+            listingHandle(refresh){
+                if(refresh){
+                    return ''
+                }
                 this.loading = true
                 store.dispatch("me/getWishproducts", {skip: this.skip}).then(({empty, finished}) => {
                     if(finished) this.finished = finished
@@ -42,11 +53,45 @@
                     this.loading = false
                     store.dispatch("me/getWishskip")
                 })
+            },
+            refreshHandle({productIds}){
+                this.ifloding = true
+                if(productIds){
+                    store.dispatch('me/removeWishProducts', {productIds}).then(()=>{
+                        store.dispatch('clearId').then(()=>{
+                            store.dispatch("me/getWishproducts", {skip: this.skip}).then(({empty, finished}) => {
+                                this.finished = finished
+                                if(empty) this.empty = empty
+                                this.ifloding = false
+                                store.dispatch("me/getWishskip")
+                            })
+                        })
+                    })
+                }else{
+                    store.dispatch('me/removeExpiredProducts').then(()=>{
+                        store.dispatch('clearId').then(()=>{
+                            store.dispatch("me/getWishproducts", {skip: this.skip}).then(({empty, finished}) => {
+                                this.finished = finished
+                                if(empty) this.empty = empty
+                                this.ifloding = false
+                                store.dispatch("me/getWishskip")
+                            })
+                        })
+                    })
+                }
+            },
+            editHandle(){
+                this.ifEdit = false;
+            },
+            cancelHandle(){
+                this.ifEdit = true;
             }
         },
         components: {
+            'loding':Loding,
             'page-header': PageHeader,
-            'product-list': ProductList
+            'product-list': ProductList,
+            'product-wishlist':ProductWishList
         },
         beforeRouteEnter(to, from, next){
             var wishproducts = store.getters['me/wishProducts']
@@ -55,11 +100,13 @@
                 next()
                 return
             }
-
-            store.dispatch("me/getWishproducts", {skip: 0}).then(() => {
+            store.dispatch("me/getWishproducts", {skip: 0} ).then(() => {
                 store.dispatch("me/getWishskip")
                 next()
             })
+        },
+        mounted(){
+
         }
     }
 </script>

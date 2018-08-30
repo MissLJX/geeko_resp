@@ -1,5 +1,5 @@
 <template>
-    <div>
+<div>
         <list :items="products" :loading="loading" :finished="finished" class="el-products" @listing="$emit('listing')">
             <template slot="li" scope="props">
                 <li :key="props.item.id">

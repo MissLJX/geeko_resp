@@ -37,6 +37,18 @@ export const mutations = {
     [types.GLOBAL_SCREEN_LOADING](state, loading){
         state.screenLoading = loading
     },
+    [types.GLOBAL_CANCEL_SAVE](state,productId){
+        let idlist = state.me.save, index = _.indexOf(idlist,productId)
+        if(index === -1){
+            state.me.save.push(productId)
+        }else{
+            _.pull(state.me.save,productId)
+        }
+    },
+    [types.GLOBAL_CLEAR_ID](state){
+        state.me.save = [];
+        state.me.wishskip = 0;
+    },
     [types.GLOBAL_LIKE](state, productId){
         api.like(productId).then(() => {
             state.me.wishlist[0].productIds.push(productId)
@@ -75,6 +87,15 @@ export const actions = {
     },
     screenLoading({commit}, {loading}){
         commit(types.GLOBAL_SCREEN_LOADING, loading)
+    },
+    unsave({commit},productId){
+        commit(types.GLOBAL_CANCEL_SAVE,productId)
+    },
+    clearId({commit}){
+        commit(types.GLOBAL_CLEAR_ID)
+    },
+    clearskip({commit}){
+        commit(types.GLOBAL_CLEAR_SKIP)
     },
     like({commit}, productId){
         commit(types.GLOBAL_LIKE, productId)

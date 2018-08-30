@@ -69,7 +69,6 @@ export const countUnreadNotification = () => {
     return axios.get('/notification/no-read-notifications').then(data => data.result)
 }
 
-
 export const getWishProducts = (customerId, skip) => {
     return axios.get(VPATH + '/wanna-list/anon/' + customerId + '/' + skip + '/20/all-products', {}, {}).then((data) => {
         return data.result
@@ -146,6 +145,12 @@ export const getCreditCards = () => {
 export const deleteCreditCard = (cardId) => axios.get('/quickpay-record/'+cardId+'/remove')
 
 export const deleteMercadoCard = (cardId) => axios.get('/mercadopago/remove-card?token='+cardId)
+
+export const removeExpiredProducts = () => axios.get(VPATH + '/wanna-list/clear-products')
+
+export const removeWishProducts = (data) => {
+    return axios.post(VPATH + '/wanna-list/remove-products', qs.stringify(data), {'Content-Type': http_infos.default_post_content_type}).then(data => data.result)
+}
 
 
 
