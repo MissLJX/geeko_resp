@@ -14,7 +14,8 @@ import {get,
   deleteitems,
   getSessionShipping,
   gettransaction,
-  getMessage} from '../api'
+  getMessage,
+  getaddresses} from '../api'
 
 export const LOADING = 'LOADING'
 export const LOADED = 'LOADED'
@@ -41,6 +42,10 @@ export const TICKET_METHOD = 'TICKET_METHOD'
 // order confirm
 export const GET_TRANSACTION_PAGE = 'GET_TRANSACTION_PAGE'
 export const GET_TRANSACTION = 'GET_TRANSACTION'
+
+export const GET_ADDRESSES = 'GET_ADDRESSES'
+
+export const UPDATE_ADDRESS = 'UPDATE_ADDRESS'
 
 export const loading = () => {
   return {
@@ -158,6 +163,20 @@ export const getCoupons = (coupons) => {
   }
 }
 
+export const setAddresses = (addresses) => {
+  return {
+    type: GET_ADDRESSES,
+    addresses
+  }
+}
+
+export const updateAddress = (updating) => {
+  return {
+    type: UPDATE_ADDRESS,
+    updating
+  }
+}
+
 export const fetchAll = () => {
   const fetchCart = get().then(data => data.result)
   const fetchMe = me().then(data => data.result)
@@ -186,18 +205,16 @@ export const fetchAll = () => {
 }
 
 export const refreshCart = (cart) => {
-  const fetchCart = get().then(data => data.result)
   const fetchCoupon = getcoupons().then(data => data.result)
-
   if (cart) {
     return dispatch => {
       dispatch(refreshed(cart))
       return fetchCoupon.then(coupons => dispatch(getCoupons(coupons)))
     }
   } else {
+    const fetchCart = get().then(data => data.result)
     return dispatch => {
       dispatch(refresing())
-
       return Promise.all([fetchCart, fetchCoupon]).then(values => {
         dispatch(refreshed(values[0]))
         dispatch(getCoupons(values[1]))
@@ -326,6 +343,15 @@ export const fetchTransaction = (transactionId) => {
   return dispatch => {
     return gettransaction(transactionId).then(({result}) => {
       dispatch(getTransaction(result))
+      return result
+    })
+  }
+}
+
+export const fetchAddresses = () => {
+  return dispatch => {
+    return getaddresses().then(({result}) => {
+      dispatch(setAddresses(result))
       return result
     })
   }

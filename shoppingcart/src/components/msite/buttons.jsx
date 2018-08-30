@@ -11,6 +11,9 @@ export const BigButton = styled.div`
 	background-color: ${props => props.bgColor || '#000'};
 	cursor: pointer;
 	text-align: center;
+	&:active{
+		opacity: .8;
+	}
 `
 
 const rotate360 = keyframes`
@@ -60,4 +63,7 @@ export const Btn = styled.span`
 	color: #fff;
 	cursor: pointer;
 	display: inline-block;
+	&:active{
+		opacity: .8;
+	}
 `

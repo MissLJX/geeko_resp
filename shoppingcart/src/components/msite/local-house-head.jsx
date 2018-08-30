@@ -2,6 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 import CheckBox from '../checkbox.jsx'
 import Ellipsis from '../ellipsis.jsx'
+import {Small, Red} from '../text.jsx'
+import Money from '../money.jsx'
 
 const StyledHead = styled.div`
 	height: 50px;
@@ -10,7 +12,7 @@ const StyledHead = styled.div`
 		vertical-align: middle;
 	}
 	img{
-		margin-right: 10px;
+		margin-left: 5px;
 		height: 25px;
 	}
 
@@ -23,7 +25,7 @@ const StyledHead = styled.div`
 	    }
 
 	    & > div:nth-child(2){
-	      width: 40px;
+	      width: 80px;
 	    }
 
 	    & > div:last-child{
@@ -32,19 +34,19 @@ const StyledHead = styled.div`
 	}
 `
 
-const LocalHouseHead = ({icon, title, selected, groupClick}) => <StyledHead >
+const LocalHouseHead = ({icon, title, selected, groupClick, shippingPrice}) => <StyledHead >
   <div className="x-table __vm x-fw x-fh __fixed">
   	<div className="x-cell">
       <CheckBox onClick={() => { groupClick(!selected) }} className={selected ? 'selected' : ''}/>
     </div>
     <div className="x-cell">
-		All
+      <span>All</span> <img src={icon}/>
     </div>
   	<div className="x-cell __right">
   		<Ellipsis>
-  			<img src={icon}/>
         	<span>{title}</span>
   		</Ellipsis>
+  		{shippingPrice && shippingPrice.amount > 0 ? <span>Shipping Price:<Money money={shippingPrice}/></span> : <Small><Red>FREE SHIPPING</Red></Small>}
     </div>
   </div>
 </StyledHead>

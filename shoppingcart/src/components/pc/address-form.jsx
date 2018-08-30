@@ -1,17 +1,19 @@
 import React from 'react'
+import styled from 'styled-components'
 import {Form, Input, Select, Button} from './control.jsx'
 import {required, email, zip, phone} from '../validator.jsx'
-import {StyledControl} from './styled-control.jsx'
-import {FormLayout, MultiControl} from './layout.jsx'
-import {getCountries, getStates} from '../../api'
+import {FormElement, MutiElement, ELEMENTS} from './styled-control.jsx'
 import {injectIntl} from 'react-intl'
+import {getCountries, getStates} from '../../api'
+import CheckBox from '../checkbox.jsx'
+import {BigButton} from '../msite/buttons.jsx'
 
 const getCountryCode = () => {
   let strs = window.lang ? window.lang.split('_') : []
   return strs[1] || 'US'
 }
 
-const AdressForm = class extends React.Component {
+const AddressFrom = class extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -88,11 +90,15 @@ const AdressForm = class extends React.Component {
 
   componentWillReceiveProps (newProps) {
     const {address} = newProps
-    this.initAddress(address)
+    const oldAddress = this.props.address
+    if (oldAddress == null || address.id != oldAddress.id) {
+      this.initAddress(address)
+    }
   }
 
   componentWillMount () {
-    const {address} = this.props
+  	const {address} = this.props
+    console.log(address)
     this.initAddress(address)
   }
 
@@ -152,50 +158,51 @@ const AdressForm = class extends React.Component {
   }
 
   render () {
-    const {intl} = this.props
-  	return <Form style={this.props.style} ref={c => { this.form = c }} onSubmit={this.handleSubmit.bind(this)}>
-      <FormLayout>
-    		<StyledControl>
-    			<label>
-    				{intl.formatMessage({id: 'full_name'})}*
-          </label>
+    const { intl, isNew } = this.props
+    return <Form ref={c => { this.form = c }} onSubmit={this.handleSubmit.bind(this)}>
+      <ELEMENTS>
+        <FormElement label={`${intl.formatMessage({id: 'full_name'})}:`} className="__required">
           <Input
             name='name'
+            style= {{width: '100%', height: 40}}
             value={this.state.name}
             onChange={this.handleInputChange}
             validations={[required]}/>
-    		</StyledControl>
+        </FormElement>
 
-        <StyledControl>
-          <label>
-            {intl.formatMessage({id: 'street_address'})}*
-          </label>
+        <FormElement label={`${intl.formatMessage({id: 'street_address'})}:`} className="__required">
           <Input
             name='streetAddress1'
+            style= {{width: '100%', height: 40}}
             value={this.state.streetAddress1}
             onChange={this.handleInputChange}
             validations={[required]}/>
-        </StyledControl>
+        </FormElement>
 
-        <StyledControl>
-          <label>
-            {intl.formatMessage({id: 'unit'})}
-          </label>
+        <FormElement label={`${intl.formatMessage({id: 'unit'})}:`}>
           <Input
             name='unit'
+            style= {{width: '100%', height: 40}}
             value={this.state.unit}
             onChange={this.handleInputChange}/>
-        </StyledControl>
+        </FormElement>
 
-        <MultiControl>
-          <StyledControl>
-            <label>
-              {intl.formatMessage({id: 'country'})}*
-            </label>
+        <FormElement label={`${intl.formatMessage({id: 'city'})}:`} className="__required">
+          <Input
+            name='city'
+            style= {{width: '100%', height: 40}}
+            value={this.state.city}
+            onChange={this.handleInputChange}
+            validations={[required]}/>
+        </FormElement>
+
+        <MutiElement>
+          <FormElement label={`${intl.formatMessage({id: 'country'})}:`} className="__required">
             <Select
               className="x-select"
               value={this.state.country}
               name='country'
+              style= {{width: '100%', height: 40}}
               onChange={(evt) => { this.handleInputChange(evt); this.changeCountry(evt) }}
               validations={[required]}>
               <option value=''>Country</option>
@@ -206,18 +213,15 @@ const AdressForm = class extends React.Component {
               }
 
             </Select>
-          </StyledControl>
+          </FormElement>
 
-          <StyledControl>
-            <label>
-              {intl.formatMessage({id: 'state'})}
-            </label>
-
+          <FormElement label={`${intl.formatMessage({id: 'state'})}:`} className={this.state.states && this.state.states.length ? '__required' : ''}>
             {
               this.state.states && this.state.states.length ? (
                 <Select
                   className="x-select"
                   name='state'
+                  style= {{width: '100%', height: 40}}
                   value={this.state.state}
                   onChange={this.handleInputChange}
                   validations={[required]}>
@@ -233,64 +237,86 @@ const AdressForm = class extends React.Component {
               ) : (
                 <Input
                   name='state'
+                  style= {{width: '100%', height: 40}}
                   value={this.state.state}
                   onChange={this.handleInputChange}/>
               )
             }
+          </FormElement>
+        </MutiElement>
 
-          </StyledControl>
-        </MultiControl>
-
-        <StyledControl>
-          <label>
-            {intl.formatMessage({id: 'city'})}
-          </label>
-          <Input
-            name='city'
-            value={this.state.city}
-            onChange={this.handleInputChange}/>
-        </StyledControl>
-
-        <MultiControl>
-          <StyledControl>
-            <label>
-              {intl.formatMessage({id: 'zip_code'})}*
-            </label>
+        <MutiElement>
+          <FormElement label={`${intl.formatMessage({id: 'zip_code'})}:`} className="__required">
             <Input
               name='zipCode'
+              style= {{width: '100%', height: 40}}
               value={this.state.zipCode}
               onChange={this.handleInputChange}
               validations={[required, zip]}/>
-          </StyledControl>
+          </FormElement>
 
-          <StyledControl>
-            <label>
-              {intl.formatMessage({id: 'phone_number'})}*
-            </label>
+          <FormElement label={`${intl.formatMessage({id: 'phone_number'})}:`} className="__required">
             <Input
               name='phoneNumber'
+              style= {{width: '100%', height: 40}}
               value={this.state.phoneNumber}
               onChange={this.handleInputChange}
               validations={[required, phone]}/>
-          </StyledControl>
-        </MultiControl>
+          </FormElement>
+        </MutiElement>
+        { !isNew && <div>
+          <CheckBox onClick={ (evt) => { this.setState({defaultAddress: !this.state.defaultAddress}) }} className={ this.state.defaultAddress ? 'selected' : ''} style={{verticalAlign: 'middle'}}/> <span style={{verticalAlign: 'middle'}}>{intl.formatMessage({id: 'set_default_address'})}</span>
+        </div>}
 
-    		<div>
-          <Button className="__submitbtn" ref={c => this.addressButtn = c} ingoredisable="true" style={{
-            display: 'block',
-            backgroundColor: '#222',
-            color: '#fff',
-            height: 40,
-            lineHeight: '40px',
-            textAlign: 'center',
-            outline: 'none',
-            border: 'none',
-            width: '100%'
-          }}>{intl.formatMessage({id: 'submit'})}</Button>
-        </div>
-      </FormLayout>
-  	</Form>
+        <MutiElement>
+          <div>
+
+            {
+              this.props.updating ? <BigButton className="__btn" height={40} bgColor="#999">
+                {intl.formatMessage({id: 'please_wait'})}...
+              </BigButton> : <Button className="__submitbtn" ref={c => this.addressButtn = c} ingoredisable="true" style={{
+                display: 'block',
+                backgroundColor: '#e7004d',
+                borderRadius: 2,
+                color: '#fff',
+                height: 40,
+                lineHeight: '40px',
+                textAlign: 'center',
+                outline: 'none',
+                border: 'none',
+                width: '100%',
+                textTransform: 'uppercase',
+                cursor: 'pointer'
+              }}>{intl.formatMessage({id: 'save'})}</Button>
+
+            }
+
+          </div>
+
+          <div>
+            {
+              this.props.showCancel && <div className="__submitbtn" style={{
+                display: 'block',
+                backgroundColor: '#cacaca',
+                borderRadius: 2,
+                color: '#fff',
+                height: 40,
+                lineHeight: '40px',
+                textAlign: 'center',
+                outline: 'none',
+                border: 'none',
+                width: '100%',
+                textTransform: 'uppercase',
+                cursor: 'pointer'
+              }} onClick={ this.props.onCancel }>{intl.formatMessage({id: 'cancel'})}</div>
+            }
+
+          </div>
+        </MutiElement>
+
+      </ELEMENTS>
+    </Form>
   }
 }
 
-export default injectIntl(AdressForm)
+export default injectIntl(AddressFrom)

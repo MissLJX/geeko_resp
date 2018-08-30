@@ -4,11 +4,11 @@ ul, li{
 
 @font-face {
   font-family: 'iconfont';  /* project id 384296 */
-  src: url('//at.alicdn.com/t/font_384296_nc7cyhg1ey.eot');
-  src: url('//at.alicdn.com/t/font_384296_nc7cyhg1ey.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_384296_nc7cyhg1ey.woff') format('woff'),
-  url('//at.alicdn.com/t/font_384296_nc7cyhg1ey.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_384296_nc7cyhg1ey.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_384296_86m5xqv4qi4.eot');
+  src: url('//at.alicdn.com/t/font_384296_86m5xqv4qi4.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_384296_86m5xqv4qi4.woff') format('woff'),
+  url('//at.alicdn.com/t/font_384296_86m5xqv4qi4.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_384296_86m5xqv4qi4.svg#iconfont') format('svg');
 }
 .iconfont {
   font-family:"iconfont" !important;
@@ -55,6 +55,10 @@ body{
 
 .x-cell.__right{
   text-align: right;
+}
+
+.x-cell.__center{
+  text-align: center;
 }
 
 .x-table.__vm .x-cell{
@@ -130,6 +134,10 @@ body{
 
 .x-red{
   color: #e5004f;
+}
+
+.x-uppercase{
+  text-transform: uppercase;
 }
 
 

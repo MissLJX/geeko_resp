@@ -2,7 +2,7 @@ import axios from './apiconfigs'
 const VPATH = '/v7'
 export const getMessage = (code) => axios.get(`/message/get/${code}`)
 export const get = () => axios.get(`${VPATH}/shopping-cart/show?_=${new Date().getTime()}&payMethod=${window.token ? '1' : ''}`)
-export const selectAll = () => axios.get(`${VPATH}/shopping-cart/select-all?_=${new Date().getTime()}`)
+export const selectAll = (select) => axios.get(`${VPATH}/shopping-cart/select-all?_=${new Date().getTime()}`, {select})
 export const select = (params) => axios.post(`${VPATH}/shopping-cart/select?_=${new Date().getTime()}`, params)
 export const editProduct = (oldId, newId, quantity) => axios.get(`${VPATH}/shopping-cart/${oldId}/${newId}/${quantity}/change-product`)
 
@@ -12,10 +12,12 @@ export const paypalAddress = (address) => axios.post(`${VPATH}/paypal2/anon/ship
 export const getDictionary = (type) => axios.get('/dictionary/anon/get', {typeCode: type})
 export const getCountries = () => getDictionary('country')
 export const getStates = (country) => getDictionary(`state-${country}`)
+export const getCurrencies = () => getDictionary('currency')
 
 export const changeShippingMethod = (method) => axios.get(`${VPATH}/shopping-cart/anon/${method}/update-shipping-method`)
 
 export const product = (id) => axios.get(`${VPATH}/product/anon/${id}/show`)
+export const product2 = (id) => axios.get(`${VPATH}/product/anon/${id}/show2`)
 
 export const me = () => axios.get(`${VPATH}/customer/get`)
 
@@ -63,3 +65,6 @@ export const gettransaction = (id) => axios.get(`${VPATH}/order/anon/${id}/show`
 export const updateorderaddress = (address) => axios.post(`${VPATH}/order/anon/shipping-detail-update`, address)
 export const gettransactionrelatedproducts = (id, skip, limit) => axios.get(`${VPATH}/order/anon/${skip}/${limit}/${id}/get-same-category-products`)
 export const changepassword = (password) => axios.post(`${VPATH}/customer/anon/change-pwd`, {password})
+
+export const getaddresses = () => axios.get(`${VPATH}/customer/get-shipping-details`)
+export const setdefaultaddress = (id) => axios.get(`${VPATH}/customer/${id}/set-default-shipping-detail`)

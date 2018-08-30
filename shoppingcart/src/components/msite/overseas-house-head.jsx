@@ -21,7 +21,7 @@ const OverseasHead = styled.div`
     }
 
     & > div:nth-child(2){
-      width: 40px;
+      width: 80px;
     }
 
     & > div:last-child{
@@ -37,10 +37,11 @@ const OverseasouseHead = ({shippingMethod, selected, groupClick, intl}) => <Over
     </div>
     <div className="x-cell">
       {intl.formatMessage({id: 'all'})}
+      <Icon style={{fontSize: 18, marginLeft: 5}}>&#xe659;</Icon>
     </div>
     <div className="x-cell">
       <Link style={{color: '#222', textDecoration: 'none'}} to={`${window.ctx || ''}${__route_root__}/shipping-methods`}>
-        <Icon style={{fontSize: 18, marginRight: 10}}>&#xe659;</Icon>
+
         <span>{shippingMethod.title}: </span>
         <Red>{shippingMethod.price.amount > 0 ? <Money money={shippingMethod.price}/> : `${intl.formatMessage({id: 'free_shipping'})}`}</Red>
         <Icon>&#xe694;</Icon>

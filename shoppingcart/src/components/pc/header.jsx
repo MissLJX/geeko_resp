@@ -1,0 +1,229 @@
+import React from 'react'
+import styled from 'styled-components'
+import Icon from '../icon.jsx'
+
+import {FormattedMessage} from 'react-intl'
+
+import LinkImage from '../link-image.jsx'
+
+import Cookie from 'js-cookie'
+
+const __Language_Map__ = {
+  'en': 'English',
+  'es': 'Español',
+  'de': 'Deutsch',
+  'fr': 'Français',
+  'pt': 'Português'
+}
+
+const __Support_Languages__ = [
+  'en_US',
+  'es_ES',
+  'de_DE',
+  'fr_FR',
+  'pt_BR'
+]
+
+const getLangLabel = lang => __Language_Map__[lang.substring(0, 2)]
+
+const HEADER = styled.div`
+	
+	border-bottom: 1px solid #e5e5e5;
+
+	.__secure{
+		color: #57b936;
+		& > span{
+			vertical-align: middle;
+		}
+	}
+
+	.__logo{
+		img{
+			height: 30px;
+			width: auto;
+		}
+	}
+
+	.__hr{
+		margin-left: 10px;
+    	margin-right: 10px;
+    	font-size: 24px;
+    	vertical-align: middle;
+    	color: #e5e5e5;
+	}
+
+	& > div{
+		width: 1150px;
+		margin: auto;
+		height: 50px;
+
+	}
+`
+
+const SELECT = styled.div`
+	display:inline-block;
+	vertical-align: middle;
+	position: relative;
+	cursor: pointer;
+	&::after{
+		content:'▼';
+		display: inline-block;
+		vertical-align: middle;
+		font-size: 12px;
+		margin-left: 8px;
+	}
+
+	.__title{
+
+	}
+
+	.__displayer{
+		display: none;
+		position: absolute;
+		padding-top: 20px;
+		top: -1;
+		left: 0;
+		transform: translateX(-50%);
+		z-index: 2;
+	}
+
+	&:hover{
+		.__displayer{
+			display: block;
+		}
+	}
+`
+
+const CURRENCY = styled.div`
+	
+	text-align: left;
+	.__icon{
+		display: inline-block;
+		width: 30px;
+	  height: 20px;
+	  background: url(https://dgzfssf1la12s.cloudfront.net/site/ninimour/flags/flag4x8.png) no-repeat;
+	  vertical-align: middle;
+	  margin-right:4px;
+	}
+
+	.__label{
+		font-size: 12px;
+		vertical-align: middle;
+	}
+
+	cursor: pointer;
+
+
+	
+`
+
+const CURRENCIES = styled.ul`
+	&::after{
+		content:'';
+		display:block;
+		clear:both;
+	}
+	& > li{
+		float: left;
+		width: 65px;
+		margin-left: 15px;
+		margin-top: 10px;
+	}
+
+	background-color: #fff;
+  width: 348px;
+  border: 1px solid #e6e6e6;
+  padding-bottom: 10px;
+`
+
+const LANGS = styled.ul`
+  background-color: #fff;
+  border: 1px solid #e6e6e6;
+  padding: 0 10px;
+	& > li{
+		height: 30px;
+		text-align: left;
+		line-height: 30px;
+	}
+`
+
+const getLogo = () => {
+  switch (sitename.toLowerCase()) {
+    case 'ivrose':
+      return 'https://dgzfssf1la12s.cloudfront.net/site/ivrose/icon20.png'
+    case 'chicme':
+      return 'https://dgzfssf1la12s.cloudfront.net/site/pc/logo03.png'
+    case 'boutiquefeel':
+      return 'https://dgzfssf1la12s.cloudfront.net/site/bouti/logo01.png'
+    default:
+      return 'https://dgzfssf1la12s.cloudfront.net/site/pc/logo03.png'
+  }
+}
+
+const getIconPosition = (index) => {
+  return { x: (index % 4) * 30, y: Math.floor(index / 4) * 20 }
+}
+
+const Currency = ({currency, index}) => {
+  const position = getIconPosition(index)
+  return <CURRENCY onClick={ () => { Cookie.set('currency', currency.value, {expires: 365}); window.location.reload(false) }}>
+    <span className="__icon" style={{backgroundPosition: `${-position.x}px ${-position.y}px`}}></span>
+    <span className="__label">{currency.value}</span>
+  </CURRENCY>
+}
+
+const Header = ({intl, lang, currency, currencies}) => (
+  <HEADER>
+  	<div>
+	  	<div className="x-table __vm x-fh x-fw">
+	  		<div className="x-cell" style={{width: 110}}>
+	  			<span className="__logo">
+	  				<LinkImage title="home" src={getLogo()} href={`${window.ctx}/`}/>
+	  			</span>
+	  		</div>
+	  		<div className="x-cell">
+	  			<span className="__hr">|</span>
+		        <span className="x-uppercase __secure">
+		  	  		<Icon style={{fontSize: 26, marginRight: 5}}>&#xe745;</Icon>
+		          	<FormattedMessage
+				    id='secure_check_out'
+				    defaultMessage='secure checkout'/>
+		        </span>
+	  		</div>
+
+	  		<div className="x-cell __right">
+	  			<SELECT>
+	  				<span className="__title">{ currency }</span>
+	  				<div className="__displayer">
+	  					<CURRENCIES>
+	  					{
+	  						currencies && currencies.map((c, index) => <li key={index}>
+	  							<Currency currency={c} index={index}/>
+	  						</li>)
+	  					}
+	  					</CURRENCIES>
+	  				</div>
+	  			</SELECT>
+
+	  			<span style={{marginLeft: 15, marginRight: 15, verticalAlign: 'middle'}}>|</span>
+
+	  			<SELECT>
+	  				<span className="__title">{ __Language_Map__[lang] }</span>
+	  				<div className="__displayer">
+	  					<LANGS>
+	  						{
+	  							__Support_Languages__.map(language => <li key={language} onClick={ () => { Cookie.set('lang', language, {expires: 365}); window.location.reload(false) }}>
+	  								{getLangLabel(language)}
+	  							</li>)
+	  						}
+	  					</LANGS>
+	  				</div>
+	  			</SELECT>
+	  		</div>
+	  	</div>
+  	</div>
+  </HEADER>
+
+)
+
+export default Header

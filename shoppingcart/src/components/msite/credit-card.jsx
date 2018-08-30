@@ -193,7 +193,7 @@ const BraizlPlugin = class extends React.Component {
     const {installmentoptions} = this.props
 
     return <div style={{marginTop: 10}}>
-      <Form id="brazilform" onSubmit={this.props.handleBrazil}>
+      <Form id="brazilform" onSubmit={this.props.handleBrazil} ref={this.props.brazilForm}>
         <div className="x-table x-fw __fixed __vm">
           <div className="x-cell" style={{width: 95}}>
             <span>CPF</span>
@@ -207,7 +207,7 @@ const BraizlPlugin = class extends React.Component {
                 data-checkout="cpf"
                 value={this.props.cpf}
                 validations={[required, cpf]}
-                placeholder="123"
+                placeholder="XXX.XXX.XXX-XX"
                 onChange={this.props.handleInputChange}/>
             </StyledControl>
           </div>

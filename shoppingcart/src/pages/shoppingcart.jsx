@@ -411,6 +411,9 @@ const ShoppingCart = class extends React.Component {
         }
         if (ACK === 'Failure') {
           alert(L_LONGMESSAGE0)
+          this.setState({
+            paypaling: false
+          })
           return
         }
 
@@ -504,27 +507,61 @@ const ShoppingCart = class extends React.Component {
           })
           return
         }
+
+        this.getApacPay(payMethod, this.props.cpf, (result) => {
+          this.setState({
+            checking: false
+          })
+          alert(result)
+        })
+
+
+      }else{
+        this.props.TOGGLECREDIT(true)
+        this.setState({
+          checking: true
+        })
+
+        this.props.GETCREDITCARDS(['17', '22'], true).then((cards) => {
+          if (!cards || cards.length < 1) {
+            this.getApacPay(payMethod, this.props.cpf, (result) => {
+              this.setState({
+                checking: false
+              })
+              alert(result)
+            })
+          } else {
+            this.setState({
+              checking: false
+            })
+          }
+        }).catch(() => {
+          this.setState({
+            checking: false
+          })
+        })
       }
 
-      getApacPay({payMethod, cpfNumber: this.props.cpf}).then(({result}) => {
-        const {isFree, transactionId} = result
-        if (isFree) {
-          window.location.href = `${window.ctx || ''}/v7/order/confirm/free?transationId=${transactionId}`
-        } else {
-          submit(result)
-        }
-      }).catch(({result}) => {
-        alert(result)
-        this.setState({
-          checking: false
-        })
-      })
+     
     }
 
     if (this.getCountdown(this.props.cart) > 0) {
       givingCoupon()
     }
     window.eventcheck(cart, payMethod)
+  }
+
+  getApacPay(payMethod, cpf, fail){
+    getApacPay({payMethod, cpfNumber: cpf}).then(({result}) => {
+      const {isFree, transactionId} = result
+      if (isFree) {
+        window.location.href = `${window.ctx || ''}/v7/order/confirm/free?transationId=${transactionId}`
+      } else {
+        submit(result)
+      }
+    }).catch(({result}) => {
+      fail(result)
+    })
   }
 
   quickPaypal (evt) {
@@ -537,6 +574,9 @@ const ShoppingCart = class extends React.Component {
     paypalpay('quick').then(data => data.result).then(({TOKEN, ACK, L_LONGMESSAGE0}) => {
       if (ACK === 'Failure') {
         alert(L_LONGMESSAGE0)
+        this.setState({
+          paypaling: false
+        })
         return
       }
 
@@ -751,6 +791,9 @@ const ShoppingCart = class extends React.Component {
     })
     const {cpf, installments} = this.props
     if (this.props.payMethod === '17') {
+
+      this.brazilForm.validateAll();
+
       if (!this.props.cpf) {
         this.setState({
           checking: false
@@ -765,7 +808,7 @@ const ShoppingCart = class extends React.Component {
         })
       }
     } else {
-      this.payCredit({})
+      this.payCredit({payCpf: cpf, payInstallments: installments})
     }
   }
 
@@ -821,6 +864,23 @@ const ShoppingCart = class extends React.Component {
         alert(data.result)
         this.setState({
           refreshing: false
+        })
+      })
+    } else if(this.props.payMethod === '22'){
+      this.setState({
+        checking: true
+      })
+      getApacPay({payMethod:this.props.payMethod, cpfNumber: this.props.cpf}).then(({result}) => {
+        const {isFree, transactionId} = result
+        if (isFree) {
+          window.location.href = `${window.ctx || ''}/v7/order/confirm/free?transationId=${transactionId}`
+        } else {
+          submit(result)
+        }
+      }).catch(({result}) => {
+        alert(result)
+        this.setState({
+          checking: false
         })
       })
     } else {
@@ -990,6 +1050,7 @@ const ShoppingCart = class extends React.Component {
                     itemSelect={this.itemSelect}
                     overseasHandle={this.overseasHandle.bind(this)}
                     serverTime={cart.serverTime}
+                    domestic={domestic}
                     items={this.getValidItems(domestic.shoppingCartProducts)}/>
                 </Box>
               ))
@@ -1225,7 +1286,7 @@ const ShoppingCart = class extends React.Component {
           }
 
           {
-            isCreditShow && (this.props.payMethod === '3' || this.props.payMethod === '17' || this.props.payMethod === '18') && creditcards && creditcards.length && (
+            isCreditShow && (this.props.payMethod === '3' || this.props.payMethod === '17' || this.props.payMethod === '18' || this.props.payMethod === '22') && creditcards && creditcards.length && (
               <React.Fragment>
                 <Mask/>
                 <CreditCard
@@ -1236,6 +1297,7 @@ const ShoppingCart = class extends React.Component {
                   cpfClickHandle={this.cpfClickHandle.bind(this)}
                   handleCredit = {this.handleCredit.bind(this)}
                   brazilref = {(c) => { this.brazilref = c }}
+                  brazilForm = { c => this.brazilForm = c}
                   handleInputChange = { this.handleInputChange }
                   creditClose={this.creditClose.bind(this)}
                   installmentoptions={this.props.cart.payInstalmentsByOceanpaymentBRACreditCard || []}

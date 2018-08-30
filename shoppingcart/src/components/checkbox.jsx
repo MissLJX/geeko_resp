@@ -14,7 +14,7 @@ export default styled.span`
 	&.selected{
 		&::after{
 			content: '\\e658';
-			color: #e5004f;
+			color: ${props => props.disabled ? '#999' : '#e5004f'};
 		}
 	}
 `

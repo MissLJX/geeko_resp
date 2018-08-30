@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Icon from './icon.jsx'
+import _ from 'lodash'
 
 const QWrapper = styled.div`
   display: inline-block;
@@ -16,6 +17,11 @@ const QInput = styled.input`
   -webkit-appearance: none;
   width: 40px;
   text-align: center;
+
+  &::-webkit-outer-spin-button, &::-webkit-inner-spin-button{                
+    -webkit-appearance: none !important;
+    -moz-appearance:textfield;
+  } 
 `
 
 export default class extends React.Component {

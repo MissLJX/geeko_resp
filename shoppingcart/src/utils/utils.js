@@ -53,3 +53,5 @@ export const gethigherprice = product => {
   if (ispromotion(product)) { return product.price }
   return null
 }
+
+export const quantityMoney = (money, quantity) => ({...money, amount: (Number(money.amount) * quantity).toFixed(2)})

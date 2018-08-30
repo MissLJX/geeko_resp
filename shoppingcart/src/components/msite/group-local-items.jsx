@@ -22,9 +22,9 @@ export default class extends React.Component {
   }
 
   render () {
-    const {icon, title, items} = this.props
+    const {icon, title, items, domestic} = this.props
     return <div>
-		  <LocalHouseHead icon={icon} title={title} groupClick={this.groupClick} selected={this.selected()}/>
+		  <LocalHouseHead shippingPrice={domestic.domesticDeliveryShippingPrice} icon={icon} title={title} groupClick={this.groupClick} selected={this.selected()}/>
 		  <Items serverTime={this.props.serverTime}
         overseasHandle={this.props.overseasHandle}
         localitem="true"

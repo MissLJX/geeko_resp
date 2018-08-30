@@ -7,11 +7,14 @@
     <script type="text/javascript">
     	
     	window.lang = 'en_US'
-    	window.__is_login__ = false
+    	window.__is_login__ = true
+    	window.paypalEnv= 'sandbox'
+        window.__currency__ = 'USD'
     </script>
 </head>
-<body>
-
+<body style="background-color: #fff;">
+<!-- <body> -->
+<script src="https://www.paypalobjects.com/api/checkout.js"></script>
 <script src="https://secure.mlstatic.com/sdk/javascript/v1/mercadopago.js"></script>
 <script type="text/javascript">
 	Mercadopago.setPublishableKey('TEST-aa971175-51cd-4be7-8ae4-f12006ac536d')

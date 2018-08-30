@@ -20,7 +20,9 @@ import {LOADING,
   ATM_METHOD,
   TICKET_METHOD,
   GET_TRANSACTION_PAGE,
-  GET_TRANSACTION} from './actions.js'
+  GET_TRANSACTION,
+  GET_ADDRESSES,
+  UPDATE_ADDRESS} from './actions.js'
 
 const initialState = {
   loading: false,
@@ -53,7 +55,9 @@ const initialState = {
   m1132: null,
   m1133: null,
   m1147: null,
-  m1073: null
+  m1073: null,
+  addresses: null,
+  addressUpdating: false
 }
 
 const isEmpty = cart => !cart
@@ -134,6 +138,10 @@ const refresh = (state = initialState, action) => {
       return {...state, ...action.page}
     case GET_TRANSACTION:
       return {...state, transaction: action.transaction}
+    case GET_ADDRESSES:
+      return {...state, addresses: action.addresses}
+    case UPDATE_ADDRESS:
+      return {...state, addressUpdating: action.updating}
     default:
       return state
   }
