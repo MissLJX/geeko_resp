@@ -122,7 +122,7 @@ const Item = class extends React.Component {
           </div>
           <div className="x-cell">
             <ImageContainer>
-              <LinkImage href={producturl({id: props.item.productId, name: props.item.productName})} src={props.item.imageUrl}/>
+              <LinkImage href={producturl({id: props.item.productId, name: props.item.productName, parentSku: props.item.parentSku})} src={props.item.imageUrl}/>
 
               {
                 !props.ivalidItem && props.item.endLimitedTimePurchaseTime && props.item.limitedTimePurchasePromotionPrice && <span className="countdown">
@@ -161,7 +161,7 @@ const Item = class extends React.Component {
               </div>
               <div>
 
-                {!props.ivalidItem ? <Quantity quantity={props.item.quantity} onChange={(quantity) => { props.quantityChange(props.item.variantId, quantity) }}/> : <Grey>{intl.formatMessage({id: 'out_of_stock'})}</Grey>}
+                {!props.ivalidItem ? <Quantity quantity={props.item.quantity} onChange={(quantity, isRemove) => { props.quantityChange(props.item.variantId, quantity, isRemove) }}/> : <Grey>{intl.formatMessage({id: 'out_of_stock'})}</Grey>}
 
                 <div style={{float: 'right'}}>
                   {!props.ivalidItem && <Icon style={{fontSize: 18, cursor: 'pointer'}} onClick={(evt) => { this.itemEdit(props.item) }}>&#xe62b;</Icon>}

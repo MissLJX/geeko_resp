@@ -36,7 +36,7 @@ export const usecreditcard = (id) => axios.get(`/quickpay-record/${id}/use`)
 export const deletecreditcard = (id) => axios.get(`/quickpay-record/${id}/remove`)
 
 export const getpaypal = () => axios.get(`${VPATH}/paypal/anon/client-get-url`)
-export const paypalpay = (method) => axios.get(`${VPATH}/webpaypal/anon/pay`, {method})
+export const paypalpay = (method) => siteType === 'new' ? axios.get(`${VPATH}/shoppingcart/pay/paypal/pay`, {method}) : axios.get(`${VPATH}/webpaypal/anon/pay`, {method})
 
 export const getcoupons = () => axios.get(`${VPATH}/coupon/anon/get-coupon-selections?_=${new Date().getTime()}`)
 export const usecoupon = (id) => axios.get(`${VPATH}/shopping-cart/anon/use-coupon/${id}`)
@@ -68,3 +68,5 @@ export const changepassword = (password) => axios.post(`${VPATH}/customer/anon/c
 
 export const getaddresses = () => axios.get(`${VPATH}/customer/get-shipping-details`)
 export const setdefaultaddress = (id) => axios.get(`${VPATH}/customer/${id}/set-default-shipping-detail`)
+
+export const getLeaveImage = () => axios.get(`${VPATH}/coupon/anon/get-shopping-cart-message`)

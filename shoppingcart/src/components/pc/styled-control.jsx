@@ -19,7 +19,7 @@ const FORMELEMENT = styled.div`
 	    position: absolute;
 	    right: -15px;
 	    top: 0;
-	    font-size: 23px;
+	    font-size: 20px;
 		}
 	}
 

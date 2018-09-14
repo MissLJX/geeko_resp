@@ -15,7 +15,7 @@ const COUPONWINDOW = styled.div`
 	top: 50px;
 	right: 0;
 	width: 380px;
-	z-index: 20;
+	z-index: 100;
 	box-shadow: -1px 0px 4px 0px rgba(0, 0, 0, 0.18);
 	height: calc(100% - 50px);
 	& > .__hd{
@@ -49,6 +49,45 @@ const COUPONWINDOW = styled.div`
 
 `
 
+const CouponCode = styled.div`
+  width: 332px;
+  &::after{
+    content: '';
+    clear: both;
+    display: block;
+  }
+  & > .__input{
+    width: 258px;
+    height: 40px;
+    border: solid 1px #cacaca;
+    float: left;
+    input{
+      height: 100%;
+      width: 100%;
+      border: none;
+      box-shadow: none;
+      outline: none;
+      -webkit-appearance: none;
+      padding-left: 10px;
+    }
+  }
+
+  & > .__use{
+    width: 74px;
+    height: 40px;
+    background-color: #222;
+    float: left;
+    text-align: center;
+    color: #fff;
+    line-height: 40px;
+    cursor: pointer;
+    &:active{
+      opacity: .6;
+      line-height: 42px;
+    }
+  }
+`
+
 const mapStateToProps = (state) => {
   return {
     ...state
@@ -67,11 +106,34 @@ const CouponWindow = class extends React.Component {
   constructor (props) {
     super(props)
     this.close = this.close.bind(this)
+    this.state = {
+      code: '',
+      using: false
+    }
   }
 
   close (evt) {
   	evt.preventDefault()
     this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
+  }
+
+  codeUse () {
+    if (!this.state.code) return
+    this.setState({
+      using: true
+    })
+    usecouponcode(this.state.code).then(() => {
+      this.props.REFRESHCART()
+      this.setState({
+        using: false
+      })
+      this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
+    }).catch(({result}) => {
+      alert(result)
+      this.setState({
+        using: false
+      })
+    })
   }
 
   couponSelect (id) {
@@ -96,7 +158,24 @@ const CouponWindow = class extends React.Component {
         <span className="__close" onClick={ this.close }><Icon style={{fontSize: 28}}>&#xe69a;</Icon></span>
       </div>
       <div className="__bd">
-      	{coupons && cart && <Coupons couponSelect={this.couponSelect.bind(this)} couponVOs={coupons} selectedCoupon={cart.coupon}/>}
+
+        <CouponCode>
+          <div className="__input">
+            <input placeholder="Coupon code" value={this.state.code} onChange={ (evt) => { this.setState({code: evt.target.value }) }}/>
+          </div>
+
+          {
+            this.state.using ? <div className="__use" style={{backgroundColor: '#cacaca', cursor: 'default'}}>
+            USE
+            </div> : <div className="__use" onClick={ this.codeUse.bind(this) }>
+            USE
+            </div>
+          }
+
+        </CouponCode>
+        <div style={{marginTop: 20}}>
+          {coupons && cart && <Coupons couponSelect={this.couponSelect.bind(this)} couponVOs={coupons} selectedCoupon={cart.coupon}/>}
+        </div>
 
       </div>
 

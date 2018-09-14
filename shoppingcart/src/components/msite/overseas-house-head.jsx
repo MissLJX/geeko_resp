@@ -30,14 +30,14 @@ const OverseasHead = styled.div`
   }
 `
 
-const OverseasouseHead = ({shippingMethod, selected, groupClick, intl}) => <OverseasHead>
+const OverseasouseHead = ({shippingMethod, selected, groupClick, intl, count}) => <OverseasHead>
   <div className="x-table __vm __fixed x-fw">
     <div className="x-cell">
       <CheckBox onClick={() => { groupClick(!selected) }} className={selected ? 'selected' : ''}/>
     </div>
     <div className="x-cell">
       {intl.formatMessage({id: 'all'})}
-      <Icon style={{fontSize: 18, marginLeft: 5}}>&#xe659;</Icon>
+      <span> ({count})</span>
     </div>
     <div className="x-cell">
       <Link style={{color: '#222', textDecoration: 'none'}} to={`${window.ctx || ''}${__route_root__}/shipping-methods`}>

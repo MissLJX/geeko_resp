@@ -15,6 +15,7 @@ const UseNow = styled.div`
 	left: 50%;
 	transform: translate(-50%, -50%);
 	cursor: pointer;
+	font-size: 12px;
 `
 
 const StyledCoupon = styled.div`
@@ -93,8 +94,13 @@ const StyledCoupon = styled.div`
 			color: #999999;
 		}
 
+		.__description{
+			color: #999;
+		}
+
 		.__usenow{
 			cursor: default;
+			opacity: .8;
 			&:acitve{
 				background-color: #cacaca;
 			}

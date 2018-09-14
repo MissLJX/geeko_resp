@@ -261,6 +261,7 @@ export const deleteItem = (itemId) => {
     dispatch(refresing())
     return deleteitem(itemId).then(data => data.result).then(cart => {
       dispatch(refreshCart(cart))
+      return cart
     })
   }
 }
@@ -270,6 +271,7 @@ export const deleteItems = (itemIds) => {
     dispatch(refresing())
     return deleteitems(itemIds).then(data => data.result).then(cart => {
       dispatch(refreshCart(cart))
+      return cart
     })
   }
 }

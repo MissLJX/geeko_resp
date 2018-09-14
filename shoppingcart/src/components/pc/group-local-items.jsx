@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import Items from './items.jsx'
 import CheckBox from '../checkbox.jsx'
-import {Grey, Red} from '../text.jsx'
+import {Grey, Red, Green} from '../text.jsx'
 import Money from '../money.jsx'
 import {injectIntl} from 'react-intl'
 
@@ -20,8 +20,8 @@ const GropLocalItems = class extends React.Component {
     return !item.isDomesticDeliveryEnabled
   }
 
-  groupClick (selected) {
-    const variantIds = this.props.items.map(item => item.variantId)
+  groupClick (selected, items) {
+    const variantIds = items.map(item => item.variantId)
     this.props.groupClick(variantIds, selected)
   }
 
@@ -44,13 +44,13 @@ const GropLocalItems = class extends React.Component {
       <SelectLine>
         <div className="x-table __vm x-fw">
           <div className="x-cell">
-            <CheckBox onClick={() => { this.groupClick(!groupSelected) }} style={{verticalAlign: 'middle'}} className={groupSelected ? 'selected' : ''}/>
+            <CheckBox onClick={() => { this.groupClick(!groupSelected, items) }} style={{verticalAlign: 'middle'}} className={groupSelected ? 'selected' : ''}/>
             <img style={{verticalAlign: 'middle', height: 40, marginLeft: 10}} src={domestic.icon}/>
-            <Grey style={{marginLeft: 5, verticalAlign: 'middle', fontSize: 16}}>{ domestic.title }</Grey>
+            <span style={{marginLeft: 5, verticalAlign: 'middle', fontSize: 16}}>{ domestic.title }</span>
           </div>
           <div className="x-cell __right">
           	{
-          		domestic.domesticDeliveryShippingPrice && domestic.domesticDeliveryShippingPrice.amount > 0 ? <Money money={domestic.domesticDeliveryShippingPrice}/> : <Red>{ intl.formatMessage({id: 'free_shipping'}) }</Red>
+          		domestic.domesticDeliveryShippingPrice && domestic.domesticDeliveryShippingPrice.amount > 0 ? <span>Standard Shipping: <Money money={domestic.domesticDeliveryShippingPrice}/></span> : <Green>{ intl.formatMessage({id: 'free_shipping'}) }</Green>
           	}
           </div>
         </div>
@@ -63,6 +63,7 @@ const GropLocalItems = class extends React.Component {
         itemDelete={this.props.itemDelete}
         itemSelect={(variantId, selected) => { this.props.itemSelect(variantId, selected) }}
         overseasHandle={this.props.overseasHandle}
+        setQuantity={this.props.setQuantity}
         items={items}/>
     </div>
   }

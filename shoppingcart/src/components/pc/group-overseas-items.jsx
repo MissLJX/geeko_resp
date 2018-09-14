@@ -35,7 +35,7 @@ export default class extends React.Component {
             <div className="x-cell">
               <CheckBox onClick={() => { this.groupClick(!groupSelected) }} style={{verticalAlign: 'middle'}} className={ groupSelected ? 'selected' : ''}/>
               <Icon style={{marginLeft: 10, fontSize: 20, verticalAlign: 'middle'}}>&#xe632;</Icon>
-              <Grey style={{marginLeft: 5, verticalAlign: 'middle', fontSize: 16}}>Ships From Overseas Warehouse</Grey>
+              <span style={{marginLeft: 5, verticalAlign: 'middle', fontSize: 16}}>Ships From Overseas Warehouse</span>
             </div>
             <div className="x-cell"></div>
           </div>

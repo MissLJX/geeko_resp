@@ -59,6 +59,8 @@ const Modal = class extends React.Component {
   render () {
     const { address, intl } = this.props
 
+    console.log(this.props.location.search)
+
     const FormBody = styled.div`
     	max-width: 320px;
     	width: 80%;
@@ -72,7 +74,7 @@ const Modal = class extends React.Component {
 
     	<FormBody >
 	    	<p>* {intl.formatMessage({id: 'required_tips'})}</p>
-	    	<AddressForm editAddress={this.editAddress} style={{marginTop: 15}} address={address}/>
+	    	<AddressForm needInitValidate={ this.props.location.search === '?check=1' } editAddress={this.editAddress} style={{marginTop: 15}} address={address}/>
     	</FormBody>
 
     </FullFixed>

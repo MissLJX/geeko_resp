@@ -277,6 +277,21 @@ const CreditCard = class extends React.Component {
   		currentCard = cards.find(card => card.isSelected) || cards[0]
   	}
 
+    const getIcon = () => {
+      switch (sitename.toLowerCase()) {
+        case 'ivrose':
+          return 'https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/site/pc/icon326_iv.png'
+        case 'chicme':
+          return 'https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/site/pc/icon326.png'
+        case 'boutiquefeel':
+          return 'https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/site/pc/icon326_bq.png'
+        default:
+          return window.primeIcon
+      }
+    }
+
+    const logoIcon = getIcon()
+
   	return <div>
 
   		{
@@ -306,7 +321,7 @@ const CreditCard = class extends React.Component {
                 </div>
   							<div className="x-table __vm __fixed x-fw">
   								<div className="x-cell" style={{width: 60}}>
-  									<img style={{width: 50}} src={sitelogo}/>
+  									<img style={{width: 50}} src={ logoIcon }/>
   								</div>
   								<div className="x-cell">
                     				<Grey style={{fontSize: 12}}>

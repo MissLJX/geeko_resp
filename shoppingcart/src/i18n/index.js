@@ -24,6 +24,16 @@ _messages['fr'] = fr_L
 _messages['es'] = es_L
 _messages['pt'] = pt_L
 
-export const lang = (window.lang || 'en').substring(0, 2)
+const __supports = [
+  'en',
+  'de',
+  'fr',
+  'es',
+  'pt'
+]
 
-export const messages = _messages[lang]
+const __lang = (window.lang || 'en').substring(0, 2)
+
+export const lang = __supports.indexOf(__lang) >= 0 ? __lang : 'en'
+
+export const messages = _messages[lang] || _messages['en']

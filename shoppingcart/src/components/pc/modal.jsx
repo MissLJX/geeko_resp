@@ -28,6 +28,7 @@ const CLOSE = styled.span`
 	font-size: 30px;
 	position: absolute;
 	z-index:2;
+	color: #666;
 `
 
 export const Modal = (props) => <Fragment>

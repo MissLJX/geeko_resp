@@ -40,7 +40,7 @@ const CreditCard = Loadable({
 })
 
 const ProductEditor = Loadable({
-  loader: () => import(/* webpackChunkName: "component--product-editor" */ '../components/msite/product-editor.jsx'),
+  loader: () => import(/* webpackChunkName: "component--product-editor" */ '../components/msite/item-editor.jsx'),
   loading: Refreshing
 })
 
@@ -100,8 +100,8 @@ const PaypalBtn = styled.div`
   background-color: rgb(252, 208, 0);
   text-align: center;
   img{
-    height: 37px;
-    margin-top: 5px;
+    height: 42px;
+    margin-top: 2px;
   }
 `
 
@@ -449,7 +449,11 @@ const ShoppingCart = class extends React.Component {
         const {transactionId, success, details} = result
 
         if (success) {
-          window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
+          if(siteType === 'new'){
+            window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/credit-card?order_number=${transactionId}`
+          }else{
+            window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
+          }
         } else {
           alert(details)
         }
@@ -479,7 +483,11 @@ const ShoppingCart = class extends React.Component {
         const {transactionId, success, details} = result
 
         if (success) {
-          window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
+          if(siteType === 'new'){
+            window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/credit-card?order_number=${transactionId}`
+          }else{
+            window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
+          }
         } else {
           alert(details)
         }
@@ -600,21 +608,29 @@ const ShoppingCart = class extends React.Component {
   quickPlace (evt) {
     const { cart, paypal } = this.props
 
+    
+
+    if (!cart.shippingDetail || !cart.shippingDetail.phoneNumber) {
+      this.props.history.push(`${window.ctx || ''}${__route_root__}/address?check=1`)
+      return
+    }
+
     this.setState({
       paypaling: true
     })
 
-    if (!cart.shippingDetail) {
-      this.props.history.push(`${window.ctx || ''}${__route_root__}/address`)
-    }
-
     placepaypal().then(() => {
-      window.location.href = `${window.ctx || ''}/v7/orderConfirm/anon/order-confirm`
+      if(siteType === 'new'){
+        window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/paypal`
+      }else{
+        window.location.href = `${window.ctx || ''}/v7/orderConfirm/anon/order-confirm`
+      }
     }).catch(({result}) => {
       this.setState({
         paypaling: false
       })
       alert(result)
+      window.location.href = `${window.ctx || ''}${__route_root__}/`
     })
 
     // self.webpaypay(function(){
@@ -635,7 +651,11 @@ const ShoppingCart = class extends React.Component {
         installments: this.props.mercadoinstallments
       }).then(data => data.result).then(({success, transactionId, details, solutions}) => {
         if (success) {
-          window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
+          if(siteType === 'new'){
+            window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/credit-card?order_number=${transactionId}`
+          }else{
+            window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
+          }
         } else {
           alert(details)
         }
@@ -723,6 +743,12 @@ const ShoppingCart = class extends React.Component {
   itemDelete (item) {
     if (window.confirm('Are you sure delete this item?')) {
       this.props.DELETEITEM(item.variantId)
+    }
+  }
+
+  itemIdDelete (itemId) {
+    if (window.confirm('Are you sure delete this item?')) {
+      this.props.DELETEITEM(itemId)
     }
   }
 
@@ -815,7 +841,11 @@ const ShoppingCart = class extends React.Component {
   payCredit (params) {
     creditpay(params).then(data => data.result).then(({success, transactionId, details, solutions}) => {
       if (success) {
-        window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
+        if(siteType === 'new'){
+          window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/credit-card?order_number=${transactionId}`
+        }else{
+          window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
+        }
 
         // this.props.history.push({
         //   pathname: `${window.ctx || ''}/order-confirm/${transactionId}`
@@ -945,6 +975,14 @@ const ShoppingCart = class extends React.Component {
     }
   }
 
+  quantityChange(itemId, quantity, isRemove){
+    if(isRemove){
+      this.itemIdDelete(itemId)
+    }else{
+      this.props.EDITITEM(itemId, itemId, quantity)
+    }
+  }
+
   render () {
     const {cart, loading, empty, editing, isCreditShow, mercadocards, creditcards, noCard, intl, noCreditCard} = this.props
     const invalidItems = cart ? this.getInvalidItems(cart) : []
@@ -1043,7 +1081,7 @@ const ShoppingCart = class extends React.Component {
                   <GroupLocalItems
                     icon={domestic.icon}
                     title={domestic.title}
-                    quantityChange={(itemId, quantity) => { this.props.EDITITEM(itemId, itemId, quantity) }}
+                    quantityChange={ this.quantityChange.bind(this)}
                     itemEdit={this.itemEdit}
                     itemDelete={this.itemDelete}
                     groupClick={this.groupClick}
@@ -1059,7 +1097,7 @@ const ShoppingCart = class extends React.Component {
               shoppingCartProductsByOverseas && shoppingCartProductsByOverseas.length > 0 && (
                 <Box>
                   <GroupOverseasItems
-                    quantityChange={(itemId, quantity) => { this.props.EDITITEM(itemId, itemId, quantity) }}
+                    quantityChange={ this.quantityChange.bind(this)}
                     itemEdit={this.itemEdit}
                     itemDelete={this.itemDelete}
                     groupClick={this.groupClick}
@@ -1231,7 +1269,7 @@ const ShoppingCart = class extends React.Component {
                         </div>
                          <DoubleBtn className="x-flex __between">
                           <div>
-                            <BigButton onClick={ () => { window.location.href = `${window.ctx}/w-site/anon/register?redirectUrl=${encodeURIComponent(window.location.href)}` } } className="__btn" height={47} bgColor="#e5004f">
+                            <BigButton onClick={ () => { window.location.href = `${window.ctx}/${siteType === 'new' ? 'page' : 'i'}/login?redirectUrl=${encodeURIComponent(window.location.href)}` } } className="__btn" height={47} bgColor="#e5004f">
                               {intl.formatMessage({id: 'check_out'})}
                             </BigButton>
                           </div>
@@ -1254,7 +1292,9 @@ const ShoppingCart = class extends React.Component {
             editing.isEditing && (
               <React.Fragment>
                 <Mask/>
-                <ProductEditor onClose={() => { this.props.EDITED() }} itemConfirmHandle={this.itemConfirmHandle} item={editing.item}/>
+                <ProductEditor onClose={() => { this.props.EDITED() }} 
+                itemConfirmHandle={this.itemConfirmHandle} 
+                item={editing.item}/>
               </React.Fragment>
             )
           }

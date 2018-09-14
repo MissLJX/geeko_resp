@@ -34,13 +34,13 @@ const StyledHead = styled.div`
 	}
 `
 
-const LocalHouseHead = ({icon, title, selected, groupClick, shippingPrice}) => <StyledHead >
+const LocalHouseHead = ({icon, title, selected, groupClick, shippingPrice, count}) => <StyledHead >
   <div className="x-table __vm x-fw x-fh __fixed">
   	<div className="x-cell">
       <CheckBox onClick={() => { groupClick(!selected) }} className={selected ? 'selected' : ''}/>
     </div>
     <div className="x-cell">
-      <span>All</span> <img src={icon}/>
+      <span>All</span> <span>({count})</span>
     </div>
   	<div className="x-cell __right">
   		<Ellipsis>

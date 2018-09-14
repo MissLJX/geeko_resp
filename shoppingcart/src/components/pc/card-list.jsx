@@ -174,9 +174,9 @@ const getPlugin = props => {
 }
 
 const Card = (props) => <CARD>
-  <div className="__card x-table __vm x-fw __fixed">
+  <div className="__card x-table __vm x-fw __fixed" >
     <div className="x-cell">
-      <CheckBox className={`${props.card.isSelected ? 'selected' : ''}`}/>
+      <CheckBox onClick={ (evt) => { props.selectCardHandle(evt, props.card) } } className={`${props.card.isSelected ? 'selected' : ''}`}/>
     </div>
     <div className="x-cell">
       <span className="__title">
@@ -185,7 +185,7 @@ const Card = (props) => <CARD>
       </span>
     </div>
     <div className="x-cell __right">
-      <LABELICON className="__deleteicon">
+      <LABELICON className="__deleteicon" onClick={ (evt) => { props.deleteCardHandle(evt, props.card) }}>
 			  <Icon>&#xe629;</Icon>
 			  <span>Delete</span>
       </LABELICON>

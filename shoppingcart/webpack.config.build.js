@@ -4,7 +4,7 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 const ROOT_PATH = path.resolve(__dirname)
-const BUILD_PATH = path.resolve(ROOT_PATH, 'dist2')
+const BUILD_PATH = path.resolve(ROOT_PATH, 'dist')
 
 module.exports = {
   entry: {
@@ -12,8 +12,8 @@ module.exports = {
   },
   output: {
   	path: BUILD_PATH,
-    // publicPath: '/resources/js/react/msite/shoppingcart/',
-    publicPath: '/resources/js/react/pc/shoppingcart/',
+    publicPath: '/resources/js/react/msite/shoppingcart/',
+    // publicPath: '/resources/js/react/pc/shoppingcart/',
   	filename: '[name].bundle.js',
     chunkFilename: '[name].chunk.js'
   },
@@ -51,11 +51,13 @@ module.exports = {
     }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production'),
-      'siteurl': JSON.stringify('https://www.ivrose.com'),
-      'sitename': JSON.stringify('IVrose'),
+      'siteurl': JSON.stringify('https://www.boutiquefeel.com'),
+      'sitename': JSON.stringify('boutiquefeel'),
       // 'MercadoPublicKey': JSON.stringify('APP_USR-feb41ad2-2287-437d-859d-0be51c116e51')
       'MercadoPublicKey': JSON.stringify('TEST-aa971175-51cd-4be7-8ae4-f12006ac536d'),
-      'sitelogo': JSON.stringify('https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/site/pc/icon326_iv.png')
+      'sitelogo': JSON.stringify('https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/site/pc/icon326_bq.png'),
+      'deviceType': JSON.stringify('msite'),
+      'siteType': JSON.stringify('old')
     }),
     new MiniCssExtractPlugin({
       // Options similar to the same options in webpackOptions.output
