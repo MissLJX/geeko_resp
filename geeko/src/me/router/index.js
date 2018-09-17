@@ -100,6 +100,12 @@ const Me = [
         component: () => import('../pages/wishlist.vue'),
         name: 'wishlist',
         meta: {title: 'Wish List'}
+    },
+    {
+        path: ROUTER_PATH_ME + '/confirmSuccess*',
+        component: () => import('../pages/confirm-success.vue'),
+        name: 'Login Protection',
+        meta: {title: 'Login Protection'}
     }
 ]
 

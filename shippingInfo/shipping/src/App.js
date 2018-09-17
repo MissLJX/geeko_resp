@@ -261,10 +261,10 @@ const _shipping_infos = [
         country: 'ARUBA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -272,10 +272,10 @@ const _shipping_infos = [
         country: 'GREENLAND',
         standard: {
             time: '15-30',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -283,10 +283,10 @@ const _shipping_infos = [
         country: 'GEORGIA',
         standard: {
             time: '15-30',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -294,10 +294,10 @@ const _shipping_infos = [
         country: 'COLOMBIA',
         standard: {
             time: '15-30',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -305,10 +305,10 @@ const _shipping_infos = [
         country: 'GUADELOUPE',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -316,10 +316,10 @@ const _shipping_infos = [
         country: 'GUAM',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -327,10 +327,10 @@ const _shipping_infos = [
         country: 'CUBA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -338,10 +338,10 @@ const _shipping_infos = [
         country: 'OMAN',
         standard: {
             time: '15-30',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -349,10 +349,10 @@ const _shipping_infos = [
         country: 'GUYANA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -360,10 +360,10 @@ const _shipping_infos = [
         country: 'HAITI',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -371,10 +371,10 @@ const _shipping_infos = [
         country: 'ANDORRA',
         standard: {
             time: '15-30',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '4-7',
             free: 'Calculated by weight and distance'
         }
     },
@@ -382,10 +382,10 @@ const _shipping_infos = [
         country: 'HONDURAS',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -393,10 +393,10 @@ const _shipping_infos = [
         country: 'ANGOLA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -404,10 +404,10 @@ const _shipping_infos = [
         country: 'GHANA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -415,10 +415,10 @@ const _shipping_infos = [
         country: 'CAMBODIA',
         standard: {
             time: '15-30',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '3-5',
             free: 'Calculated by weight and distance'
         }
     },
@@ -426,10 +426,10 @@ const _shipping_infos = [
         country: 'GABON',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -437,10 +437,10 @@ const _shipping_infos = [
         country: 'DJIBOUTI',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -448,10 +448,10 @@ const _shipping_infos = [
         country: 'ZIMBABWE',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -459,10 +459,10 @@ const _shipping_infos = [
         country: 'GUINEA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -470,10 +470,10 @@ const _shipping_infos = [
         country: 'CAYMAN ISLANDS',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -481,10 +481,10 @@ const _shipping_infos = [
         country: 'CAMEROON',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -492,10 +492,10 @@ const _shipping_infos = [
         country: 'QATAR',
         standard: {
             time: '15-30',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -503,10 +503,10 @@ const _shipping_infos = [
         country: 'COMOROS',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -514,10 +514,10 @@ const _shipping_infos = [
         country: 'KENYA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -525,10 +525,10 @@ const _shipping_infos = [
         country: 'COTE D\'IVOIRE',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -536,10 +536,10 @@ const _shipping_infos = [
         country: 'KUWAIT',
         standard: {
             time: '15-30',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -547,10 +547,10 @@ const _shipping_infos = [
         country: 'COOK ISLANDS',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -558,10 +558,10 @@ const _shipping_infos = [
         country: 'LATVIA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '4-7',
             free: 'Calculated by weight and distance'
         }
     },
@@ -569,10 +569,10 @@ const _shipping_infos = [
         country: 'ANTIGUA AND BARBUDA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -580,10 +580,10 @@ const _shipping_infos = [
         country: 'LEBANON',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -591,10 +591,10 @@ const _shipping_infos = [
         country: 'LIBERIA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -602,10 +602,10 @@ const _shipping_infos = [
         country: 'LIBYA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -613,10 +613,10 @@ const _shipping_infos = [
         country: 'REUNION ISLAND',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -624,10 +624,10 @@ const _shipping_infos = [
         country: 'RWANDA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -635,10 +635,10 @@ const _shipping_infos = [
         country: 'MALDIVES',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -646,10 +646,10 @@ const _shipping_infos = [
         country: 'MALTA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -657,10 +657,10 @@ const _shipping_infos = [
         country: 'MALAWI',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -668,10 +668,10 @@ const _shipping_infos = [
         country: 'MALI',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -679,10 +679,10 @@ const _shipping_infos = [
         country: 'MAURITIUS',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -690,10 +690,10 @@ const _shipping_infos = [
         country: 'MACEDONIA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -701,10 +701,10 @@ const _shipping_infos = [
         country: 'MARTINIQUE',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -712,10 +712,10 @@ const _shipping_infos = [
         country: 'MONGOLIA',
         standard: {
             time: '15-30',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -723,10 +723,10 @@ const _shipping_infos = [
         country: 'BANGLADESH',
         standard: {
             time: '15-30',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -734,10 +734,10 @@ const _shipping_infos = [
         country: 'PERU',
         standard: {
             time: '15-30',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -745,10 +745,10 @@ const _shipping_infos = [
         country: 'DOMINICA',
         standard: {
             time: '15-30',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -756,10 +756,10 @@ const _shipping_infos = [
         country: 'MOLDOVA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -767,10 +767,10 @@ const _shipping_infos = [
         country: 'MOROCCO',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -778,10 +778,10 @@ const _shipping_infos = [
         country: 'MONACO',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -789,10 +789,10 @@ const _shipping_infos = [
         country: 'MOZAMBIQUE',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -800,10 +800,10 @@ const _shipping_infos = [
         country: 'AZERBAIJAN',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -811,10 +811,10 @@ const _shipping_infos = [
         country: 'NAMIBIA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -822,10 +822,10 @@ const _shipping_infos = [
         country: 'SOUTH AFRICA',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -833,10 +833,10 @@ const _shipping_infos = [
         country: 'BARBADOS',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -844,10 +844,10 @@ const _shipping_infos = [
         country: 'NEPAL',
         standard: {
             time: '15-30',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -855,10 +855,10 @@ const _shipping_infos = [
         country: 'NICARAGUA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -866,10 +866,10 @@ const _shipping_infos = [
         country: 'NIGER',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -877,10 +877,10 @@ const _shipping_infos = [
         country: 'NIGERIA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -888,10 +888,10 @@ const _shipping_infos = [
         country: 'PALAU',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -899,10 +899,10 @@ const _shipping_infos = [
         country: 'BAHAMAS',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -910,10 +910,10 @@ const _shipping_infos = [
         country: 'EL SALVADOR',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -921,10 +921,10 @@ const _shipping_infos = [
         country: 'SERBIA',
         standard: {
             time: '15-30',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -932,10 +932,10 @@ const _shipping_infos = [
         country: 'SIERRA LEONE',
         standard: {
             time: '15-30',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -943,10 +943,10 @@ const _shipping_infos = [
         country: 'SENEGAL',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -954,10 +954,10 @@ const _shipping_infos = [
         country: 'CYPRUS',
         standard: {
             time: '15-30',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -965,10 +965,10 @@ const _shipping_infos = [
         country: 'SEYCHELLES',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -976,10 +976,10 @@ const _shipping_infos = [
         country: 'SAMOA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -987,10 +987,10 @@ const _shipping_infos = [
         country: 'BERMUDA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -998,10 +998,10 @@ const _shipping_infos = [
         country: 'SAINT KITTS',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1009,10 +1009,10 @@ const _shipping_infos = [
         country: 'SAN MARINO',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1020,10 +1020,10 @@ const _shipping_infos = [
         country: 'SRI LANKA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1031,10 +1031,10 @@ const _shipping_infos = [
         country: 'PAKISTAN',
         standard: {
             time: '15-30',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1042,10 +1042,10 @@ const _shipping_infos = [
         country: 'SURINAME',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1053,10 +1053,10 @@ const _shipping_infos = [
         country: 'AFGHANISTAN',
         standard: {
             time: '15-30',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1064,10 +1064,10 @@ const _shipping_infos = [
         country: 'PARAGUAY',
         standard: {
             time: '15-30',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1075,10 +1075,10 @@ const _shipping_infos = [
         country: 'TONGA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1086,10 +1086,10 @@ const _shipping_infos = [
         country: 'TANZANIA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1097,10 +1097,10 @@ const _shipping_infos = [
         country: 'TAHITI',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1108,10 +1108,10 @@ const _shipping_infos = [
         country: 'PALESTINE',
         standard: {
             time: '15-30',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '3-5',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1119,10 +1119,10 @@ const _shipping_infos = [
         country: 'VANUATU',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1130,10 +1130,10 @@ const _shipping_infos = [
         country: 'GUATEMALA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1141,10 +1141,10 @@ const _shipping_infos = [
         country: 'VENEZUELA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1152,10 +1152,10 @@ const _shipping_infos = [
         country: 'UGANDA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1163,10 +1163,10 @@ const _shipping_infos = [
         country: 'BAHRAIN',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1174,10 +1174,10 @@ const _shipping_infos = [
         country: 'PANAMA',
         standard: {
             time: '15-30',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1185,10 +1185,10 @@ const _shipping_infos = [
         country: 'SYRIAN ARAB REPUBLIC',
         standard: {
             time: '15-30',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1196,10 +1196,10 @@ const _shipping_infos = [
         country: 'JAMAICA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1207,10 +1207,10 @@ const _shipping_infos = [
         country: 'BULGARIA',
         standard: {
             time: '15-30',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '4-7',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1218,10 +1218,10 @@ const _shipping_infos = [
         country: 'ARMENIA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1229,10 +1229,10 @@ const _shipping_infos = [
         country: 'YEMEN',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1240,10 +1240,10 @@ const _shipping_infos = [
         country: 'IRAQ',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1251,10 +1251,10 @@ const _shipping_infos = [
         country: 'IRAN',
         standard: {
             time: '15-30',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1262,10 +1262,10 @@ const _shipping_infos = [
         country: 'ISRAEL',
         standard: {
             time: '15-30',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1273,10 +1273,10 @@ const _shipping_infos = [
         country: 'JORDAN',
         standard: {
             time: '15-30',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1284,10 +1284,10 @@ const _shipping_infos = [
         country: 'CHAD',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1295,10 +1295,10 @@ const _shipping_infos = [
         country: 'ZAMBIA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1306,10 +1306,10 @@ const _shipping_infos = [
         country: 'GIBRALTAR',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1317,10 +1317,10 @@ const _shipping_infos = [
         country: 'CENTRAL AFRICAN REPUBLIC',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1328,10 +1328,10 @@ const _shipping_infos = [
         country: 'BENIN',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1339,10 +1339,10 @@ const _shipping_infos = [
         country: 'BOTSWANA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1350,10 +1350,10 @@ const _shipping_infos = [
         country: 'BOSNIA AND HERZEGOVINA',
         standard: {
             time: '15-30',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '3-5',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1361,10 +1361,10 @@ const _shipping_infos = [
         country: 'BELIZE',
         standard: {
             time: '15-30',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1372,10 +1372,10 @@ const _shipping_infos = [
         country: 'BHUTAN',
         standard: {
             time: '15-30',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1383,10 +1383,10 @@ const _shipping_infos = [
         country: 'BURUNDI',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1394,10 +1394,10 @@ const _shipping_infos = [
         country: 'EGYPT',
         standard: {
             time: '15-30',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1405,10 +1405,10 @@ const _shipping_infos = [
         country: 'TOGO',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1416,10 +1416,10 @@ const _shipping_infos = [
         country: 'ECUADOR',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1427,10 +1427,10 @@ const _shipping_infos = [
         country: 'FAROE ISLANDS',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1438,10 +1438,10 @@ const _shipping_infos = [
         country: 'FIJI',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1449,10 +1449,10 @@ const _shipping_infos = [
         country: 'GAMBIA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1460,10 +1460,10 @@ const _shipping_infos = [
         country: 'ALBANIA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1471,10 +1471,10 @@ const _shipping_infos = [
         country: 'COSTA RICA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1482,10 +1482,10 @@ const _shipping_infos = [
         country: 'KAZAKHSTAN',
         standard: {
             time: '15-30',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1493,10 +1493,10 @@ const _shipping_infos = [
         country: 'NETHERLANDS ANTILLES',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '4-7',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1504,10 +1504,10 @@ const _shipping_infos = [
         country: 'KYRGYZSTAN',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1515,10 +1515,10 @@ const _shipping_infos = [
         country: 'LIECHTENSTEIN',
         standard: {
             time: '15-30',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1526,10 +1526,10 @@ const _shipping_infos = [
         country: 'MADAGASCAR',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1537,10 +1537,10 @@ const _shipping_infos = [
         country: 'ALGERIA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1548,10 +1548,10 @@ const _shipping_infos = [
         country: 'MAURITANIA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1559,10 +1559,10 @@ const _shipping_infos = [
         country: 'MARSHALL ISLANDS',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1570,10 +1570,10 @@ const _shipping_infos = [
         country: 'AMERICAN SAMOA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1581,10 +1581,10 @@ const _shipping_infos = [
         country: 'UNITED STATES VIRGIN ISLANDS',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1592,10 +1592,10 @@ const _shipping_infos = [
         country: 'MICRONESIA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1603,10 +1603,10 @@ const _shipping_infos = [
         country: 'PAPUA NEW GUINEA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1614,10 +1614,10 @@ const _shipping_infos = [
         country: 'SAINT PIERRE AND MIQUELON',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1625,10 +1625,10 @@ const _shipping_infos = [
         country: 'SLOVENIA',
         standard: {
             time: '15-30',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '4-7',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1636,10 +1636,10 @@ const _shipping_infos = [
         country: 'TRINIDAD AND TOBAGO',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1647,10 +1647,10 @@ const _shipping_infos = [
         country: 'UZBEKISTAN',
         standard: {
             time: '15-30',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1658,10 +1658,10 @@ const _shipping_infos = [
         country: 'NEW CALEDONIA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1669,10 +1669,10 @@ const _shipping_infos = [
         country: 'INDONESIA',
         standard: {
             time: '15-30',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '3-5',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1680,10 +1680,10 @@ const _shipping_infos = [
         country: 'THE BRITISH VRIGIN ISLANDS',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1691,10 +1691,10 @@ const _shipping_infos = [
         country: 'POLYNESIA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1702,10 +1702,10 @@ const _shipping_infos = [
         country: 'BURKINA FASO',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1713,10 +1713,10 @@ const _shipping_infos = [
         country: 'ETHIOPIA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1724,10 +1724,10 @@ const _shipping_infos = [
         country: 'FRENCH POLYNESIA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1735,10 +1735,10 @@ const _shipping_infos = [
         country: 'FRENCH GUIANA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1746,10 +1746,10 @@ const _shipping_infos = [
         country: 'KIRIBATI',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1757,10 +1757,10 @@ const _shipping_infos = [
         country: 'SOMALIA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1768,10 +1768,10 @@ const _shipping_infos = [
         country: 'ERITREA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1779,10 +1779,10 @@ const _shipping_infos = [
         country: 'GRENADA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1790,10 +1790,10 @@ const _shipping_infos = [
         country: 'ANGUILLA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1801,10 +1801,10 @@ const _shipping_infos = [
         country: 'GUINEA-BISSAU',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1812,10 +1812,10 @@ const _shipping_infos = [
         country: 'SAINT LUCIA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1823,10 +1823,10 @@ const _shipping_infos = [
         country: 'JERSEY',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1834,10 +1834,10 @@ const _shipping_infos = [
         country: 'MADEIRA ISLANDS',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '4-7',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1845,10 +1845,10 @@ const _shipping_infos = [
         country: 'AZORES',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1856,10 +1856,10 @@ const _shipping_infos = [
         country: 'BALEARIC ISLANDS',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '4-7',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1867,10 +1867,10 @@ const _shipping_infos = [
         country: 'SAINT MARTIN',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1878,10 +1878,10 @@ const _shipping_infos = [
         country: 'LESOTHO',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1889,10 +1889,10 @@ const _shipping_infos = [
         country: 'WALLIS AND FUTUNA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1900,10 +1900,10 @@ const _shipping_infos = [
         country: 'NORTHERN MARIANA ISLANDS',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1911,10 +1911,10 @@ const _shipping_infos = [
         country: 'MONTENEGRO',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1922,10 +1922,10 @@ const _shipping_infos = [
         country: 'CANARY ISLANDS',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1933,10 +1933,10 @@ const _shipping_infos = [
         country: 'VATICAN CITY STATE',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1944,10 +1944,10 @@ const _shipping_infos = [
         country: 'ISLAS MALVINAS',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1955,10 +1955,10 @@ const _shipping_infos = [
         country: 'TAJIKISTAN',
         standard: {
             time: '15-30',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '3-5',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1966,10 +1966,10 @@ const _shipping_infos = [
         country: 'EQUATORIAL GUINEA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1977,10 +1977,10 @@ const _shipping_infos = [
         country: 'SAINT VINCENT AND THE GRENADINES',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1988,10 +1988,10 @@ const _shipping_infos = [
         country: 'TERRITORIAL COLLECTIVITY OF MAYOTTE',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -1999,10 +1999,10 @@ const _shipping_infos = [
         country: 'TURKS AND CAICOS ISLANDS',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2010,10 +2010,10 @@ const _shipping_infos = [
         country: 'SOLOMON ISLANDS',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2021,10 +2021,10 @@ const _shipping_infos = [
         country: 'THE FEDERATION OF NEVIS',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2032,10 +2032,10 @@ const _shipping_infos = [
         country: 'WESTERN SAHARA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2043,10 +2043,10 @@ const _shipping_infos = [
         country: 'TURKMENISTAN',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2054,10 +2054,10 @@ const _shipping_infos = [
         country: 'CAPE VERDE',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2065,10 +2065,10 @@ const _shipping_infos = [
         country: 'NAURU',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2076,10 +2076,10 @@ const _shipping_infos = [
         country: 'SAIPAN LSLAND',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2087,10 +2087,10 @@ const _shipping_infos = [
         country: 'NORFOLK ISLAND',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2098,10 +2098,10 @@ const _shipping_infos = [
         country: 'KOSOVO',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2109,10 +2109,10 @@ const _shipping_infos = [
         country: 'CURACAO',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2120,10 +2120,10 @@ const _shipping_infos = [
         country: 'GUERNSEY',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2131,10 +2131,10 @@ const _shipping_infos = [
         country: 'SAINT KITTS AND NEVIS',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2142,10 +2142,10 @@ const _shipping_infos = [
         country: 'MONTSERRAT',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2153,10 +2153,10 @@ const _shipping_infos = [
         country: 'THE DEMOCRATIC REPUBLIC OF THE CONGO',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2164,10 +2164,10 @@ const _shipping_infos = [
         country: 'CONGO',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2175,10 +2175,10 @@ const _shipping_infos = [
         country: 'ASCENSION ISLAND',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2186,10 +2186,10 @@ const _shipping_infos = [
         country: 'TIMOR-LESTE',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2197,10 +2197,10 @@ const _shipping_infos = [
         country: 'NIUE',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2208,10 +2208,10 @@ const _shipping_infos = [
         country: 'PITCAIRN ISLANDS',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2219,10 +2219,10 @@ const _shipping_infos = [
         country: 'CHRISTMAS ISLAND',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2230,10 +2230,10 @@ const _shipping_infos = [
         country: 'SAO TOME AND PRINCIPE',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2241,10 +2241,10 @@ const _shipping_infos = [
         country: 'SAINT HELENA',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2252,10 +2252,10 @@ const _shipping_infos = [
         country: 'TUVALU',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2263,10 +2263,10 @@ const _shipping_infos = [
         country: 'TOKELAU',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2274,10 +2274,10 @@ const _shipping_infos = [
         country: 'ISLE OF MAN',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2285,10 +2285,10 @@ const _shipping_infos = [
         country: 'MARIANA LSLANDS',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2296,10 +2296,10 @@ const _shipping_infos = [
         country: 'DOMINICAN REPUBLIC',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2307,10 +2307,10 @@ const _shipping_infos = [
         country: 'SOUTH GEORGIA AND THE SOUTH SANDWICH ISLANDS',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2318,10 +2318,10 @@ const _shipping_infos = [
         country: 'BRITISH INDIAN OCEAN TERRITORY',
         standard: {
             time: '20-60',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '3-7',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2329,21 +2329,21 @@ const _shipping_infos = [
         country: 'MEXICO',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '4-7',
             free: 'Calculated by weight and distance'
         }
     },
     {
         country: 'HONG KONG CHINA',
         standard: {
-            time: '3-7',
-            free: 'FREE for orders over $49USD'
+            time: '5-10',
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2351,10 +2351,10 @@ const _shipping_infos = [
         country: 'REPUBLIC OF KOREA',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '3-5',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2362,10 +2362,10 @@ const _shipping_infos = [
         country: 'NETHERLANDS',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '3-5',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2373,10 +2373,10 @@ const _shipping_infos = [
         country: 'CANADA',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '3-5',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2384,10 +2384,10 @@ const _shipping_infos = [
         country: 'CZECH REPUBLIC',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '4-7',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2395,10 +2395,10 @@ const _shipping_infos = [
         country: 'CROATIA',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '4-7',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2406,10 +2406,10 @@ const _shipping_infos = [
         country: 'LAOS',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2417,10 +2417,10 @@ const _shipping_infos = [
         country: 'AUSTRALIA',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '3-5',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2428,10 +2428,10 @@ const _shipping_infos = [
         country: 'LITHUANIA',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '4-7',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2439,10 +2439,10 @@ const _shipping_infos = [
         country: 'ROMANIA',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '4-7',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2450,10 +2450,10 @@ const _shipping_infos = [
         country: 'LUXEMBOURG',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '4-7',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2461,10 +2461,10 @@ const _shipping_infos = [
         country: 'AUSTRIA',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '3-5',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2472,10 +2472,10 @@ const _shipping_infos = [
         country: 'MALAYSIA',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '3-5',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2483,10 +2483,10 @@ const _shipping_infos = [
         country: 'MACAO CHINA',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2494,10 +2494,10 @@ const _shipping_infos = [
         country: 'UNITED STATES',
         standard: {
             time: '5-10',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '3-5',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2505,10 +2505,10 @@ const _shipping_infos = [
         country: 'MYANMAR',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2516,10 +2516,10 @@ const _shipping_infos = [
         country: 'NORWAY',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2527,10 +2527,10 @@ const _shipping_infos = [
         country: 'PORTUGAL',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '3-5',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2538,10 +2538,10 @@ const _shipping_infos = [
         country: 'JAPAN',
         standard: {
             time: '5-10',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '3-5',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2549,10 +2549,10 @@ const _shipping_infos = [
         country: 'SWEDEN',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '4-7',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2560,10 +2560,10 @@ const _shipping_infos = [
         country: 'SWITZERLAND',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2571,10 +2571,10 @@ const _shipping_infos = [
         country: 'BELARUS',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2582,10 +2582,10 @@ const _shipping_infos = [
         country: 'SLOVAKIA',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '4-7',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2593,10 +2593,10 @@ const _shipping_infos = [
         country: 'SWAZILAND',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2604,21 +2604,21 @@ const _shipping_infos = [
         country: 'THAILAND',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '3-5',
             free: 'Calculated by weight and distance'
         }
     },
     {
         country: 'TAIWAN CHINA',
         standard: {
-            time: '3-7',
-            free: 'FREE for orders over $49USD'
+            time: '5-10',
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2626,10 +2626,10 @@ const _shipping_infos = [
         country: 'TURKEY',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2637,10 +2637,10 @@ const _shipping_infos = [
         country: 'TUNISIA',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2648,10 +2648,10 @@ const _shipping_infos = [
         country: 'BRUNEI DARUSSALAM',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2659,10 +2659,10 @@ const _shipping_infos = [
         country: 'UKRAINE',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2670,10 +2670,10 @@ const _shipping_infos = [
         country: 'URUGUAY',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2681,10 +2681,10 @@ const _shipping_infos = [
         country: 'SPAIN',
         standard: {
             time: '5-10',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '3-5',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2692,10 +2692,10 @@ const _shipping_infos = [
         country: 'GREECE',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '4-7',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2703,10 +2703,10 @@ const _shipping_infos = [
         country: 'SINGAPORE',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '3-5',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2714,10 +2714,10 @@ const _shipping_infos = [
         country: 'NEW ZEALAND',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '3-5',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2725,10 +2725,10 @@ const _shipping_infos = [
         country: 'HUNGARY',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '4-7',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2736,10 +2736,10 @@ const _shipping_infos = [
         country: 'ITALY',
         standard: {
             time: '5-10',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '3-5',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2747,21 +2747,21 @@ const _shipping_infos = [
         country: 'INDIA',
         standard: {
             time: '5-10',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '3-5',
             free: 'Calculated by weight and distance'
         }
     },
     {
         country: 'UNITED KINGDOM',
         standard: {
-            time: '3-7',
-            free: 'FREE for orders over $49USD'
+            time: '5-10',
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '3-5',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2769,10 +2769,10 @@ const _shipping_infos = [
         country: 'BRAZIL',
         standard: {
             time: '15-30',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2780,10 +2780,10 @@ const _shipping_infos = [
         country: 'VIETNAM',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '3-5',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2791,10 +2791,10 @@ const _shipping_infos = [
         country: 'CHILE',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2802,10 +2802,10 @@ const _shipping_infos = [
         country: 'ARGENTINA',
         standard: {
             time: '15-30',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2813,10 +2813,10 @@ const _shipping_infos = [
         country: 'BELGIUM',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '4-7',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2824,10 +2824,10 @@ const _shipping_infos = [
         country: 'ICELAND',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2835,10 +2835,10 @@ const _shipping_infos = [
         country: 'PUERTO RICO',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '3-5',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2846,10 +2846,10 @@ const _shipping_infos = [
         country: 'POLAND',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '4-7',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2857,10 +2857,10 @@ const _shipping_infos = [
         country: 'IRELAND',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '4-7',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2868,10 +2868,10 @@ const _shipping_infos = [
         country: 'BOLIVIA',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2879,21 +2879,21 @@ const _shipping_infos = [
         country: 'DENMARK',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '4-7',
             free: 'Calculated by weight and distance'
         }
     },
     {
         country: 'GERMANY',
         standard: {
-            time: '3-7',
-            free: 'FREE for orders over $49USD'
+            time: '5-10',
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '3-5',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2901,10 +2901,10 @@ const _shipping_infos = [
         country: 'ESTONIA',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '4-7',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2912,21 +2912,21 @@ const _shipping_infos = [
         country: 'RUSSIAN FEDERATION',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '4-7',
             free: 'Calculated by weight and distance'
         }
     },
     {
         country: 'FRANCE',
         standard: {
-            time: '3-7',
-            free: 'FREE for orders over $49USD'
+            time: '5-10',
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '3-5',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2934,10 +2934,10 @@ const _shipping_infos = [
         country: 'PHILIPPINES',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '3-5',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2945,10 +2945,10 @@ const _shipping_infos = [
         country: 'UNITED ARAB EMIRATES',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2956,10 +2956,10 @@ const _shipping_infos = [
         country: 'FINLAND',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '4-7',
             free: 'Calculated by weight and distance'
         }
     },
@@ -2967,10 +2967,10 @@ const _shipping_infos = [
         country: 'SAUDI ARABIA',
         standard: {
             time: '7-15',
-            free: 'FREE for orders over $49USD'
+            free: 'FREE for orders over $59USD'
         },
         express:{
-            time: '1-3',
+            time: '5-10',
             free: 'Calculated by weight and distance'
         }
     }

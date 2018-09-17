@@ -1,12 +1,29 @@
 <template>
     <div>
-        <div class="senEmailBtn">Send Verification Email</div>
+        <div class="senEmailBtn" @click="sendEmail">Send Verification Email</div>
     </div>
 </template>
 
 <script>
+    import store from '../../store';
+    import {mapGetters, mapActions} from 'vuex';
+
     export default {
-        name: "send-btn.vue"
+        name: "send-btn.vue",
+        computed:{
+            ...mapGetters('me', [
+                'me'
+            ])
+        },
+        methods:{
+            sendEmail(){
+                store.dispatch('me/confirmEmail', this.me.email).then((data)=>{
+                      if(data.success){
+
+                      }
+                });
+            }
+        }
     }
 </script>
 
@@ -20,5 +37,6 @@
     color: white;
     text-align: center;
     font-size: 18px;
+    cursor: pointer;
 }
 </style>

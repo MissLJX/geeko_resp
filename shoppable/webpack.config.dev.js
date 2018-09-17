@@ -4,8 +4,8 @@ const HTMLWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
   entry: {
-    // collection: path.resolve(__dirname, './src/list-collection.js')
-    product: path.resolve(__dirname, './src/pc/list-product.js')
+    collection: path.resolve(__dirname, './src/list-collection.js')
+    /*product: path.resolve(__dirname, './src/pc/list-product.js')*/
   },
   mode: 'development',
   output: {
@@ -21,8 +21,8 @@ module.exports = {
     contentBase: './dist',
     proxy: {
       "/api": {
-        /*target: "http://localhost:8080/joyshoetique",*/
-        target: "https://www.joyshoetique.com",
+        target: "http://localhost:8090/chiquedoll",
+        /*target: "https://www.joyshoetique.com",*/
         pathRewrite: {"^/api" : ""},
         secure: false
       }

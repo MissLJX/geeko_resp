@@ -33,11 +33,11 @@
 
 
         <div class="el-me-order-area">
-            <!--<div class="con-email">
+            <div class="con-email" v-show="isConfirmEmail">
                 <router-link :to="{name: 'confirm-email'}">
                     <email-confirm class="el-confirm-email"></email-confirm>
                 </router-link>
-            </div>-->
+            </div>
             <div class="hd">
                 <a :href="orderHref">
                     <touch-go class="el-me-order-touch" :label1="$t('label.order')" :label2="orderhreflabel"
@@ -316,6 +316,8 @@
 
     .el-confirm-email {
         width: 100%;
+        line-height: 18px;
+        height: 50px;
     }
 </style>
 
@@ -375,6 +377,9 @@
                 } else {
                     return 'https://dgzfssf1la12s.cloudfront.net/site/bouti/logo02.png';
                 }
+            },
+            isConfirmEmail(){
+                return !this.me.isConfirmEmail&&this.me.email
             }
         },
 

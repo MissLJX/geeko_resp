@@ -580,7 +580,11 @@ const actions = {
 
     removeWishProducts(context,data){
         return api.removeWishProducts(data)
-    }
+    },
+
+    confirmEmail({commit},email){
+        return api.confirmEmail(email)
+    },
 }
 
 

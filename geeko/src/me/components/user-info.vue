@@ -1,15 +1,24 @@
 <template>
     <div class="userinfo">
-        <p>Your chicme account:</p>
-        <p class="user-email">*****@gmail.com</p>
+        <p>Your {{sitename}} account:</p>
+        <p class="user-email">{{me.email}}</p>
         <p>has not been verified with Email</p>
         <p>Please verify your Email</p>
     </div>
 </template>
 
 <script>
+    import {mapGetters, mapActions} from 'vuex';
+
     export default {
-        name: "user-info.vue"
+        computed:{
+            ...mapGetters('me', [
+                'me'
+            ]),
+            sitename(){
+                return site
+            }
+        }
     }
 </script>
 
