@@ -4,8 +4,11 @@ import {injectIntl, FormattedMessage} from 'react-intl'
 import {__route_root__, storage} from '../utils/utils.js'
 
 import {submit} from '../utils/common-pay.js'
-
+import {CountDownBlock} from '../components/msite/countdowns.jsx'
 import AddressFrom from '../components/pc/address-form.jsx'
+import Mask from '../components/mask.jsx'
+import SUCCESSTIP from '../components/pc/successtip.jsx'
+import Confirm from '../components/pc/confirm.jsx'
 
 import { connect } from 'react-redux'
 import {fetchAll,
@@ -49,8 +52,10 @@ import MessageTip from '../components/pc/message-tip.jsx'
 import ShippingMethods from '../components/pc/shipping-methods.jsx'
 import PayMethods from '../components/pc/pay-methods.jsx'
 import Icon from '../components/icon.jsx'
+import {Modal} from '../components/pc/modal.jsx'
 
 import Loadable from 'react-loadable'
+
 
 import { paypalpay,
   setdefaultaddress,
@@ -68,7 +73,8 @@ import { paypalpay,
   givingCoupon,
   movetooverseas,
   unusecoupon,
-  product2 } from '../api'
+  product2,
+  getLeaveImage } from '../api'
 
 export const __address_token__ = window.token
 
@@ -145,10 +151,10 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(editItem(oldId, newId, quantity))
     },
     DELETEITEM: (itemId) => {
-      dispatch(deleteItem(itemId))
+      return dispatch(deleteItem(itemId))
     },
     DELETEITEMS: (itemIds) => {
-      dispatch(deleteItems(itemIds))
+      return dispatch(deleteItems(itemIds))
     },
     SETATMMETHOD: (method) => {
       dispatch(setAtmMethod(method))
@@ -202,6 +208,7 @@ const ShoppingCart = class extends React.Component {
   constructor (props) {
     super(props)
     this.scrollhandle = this.scrollhandle.bind(this)
+    this.leavehandle = this.leavehandle.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
 
     this.state = {
@@ -212,8 +219,27 @@ const ShoppingCart = class extends React.Component {
       paypalAddressConfirmed: false,
       pointMessage: null,
       cpfMessage: null,
-      editing: null
+      editing: null,
+      paypaling: false,
+      showLeaveImage: false,
+      leaveImage:'',
+      successTip: null,
+      showDeleteConfirm: false,
+      itemDelete: null
     }
+
+
+  }
+
+  showSuccessTip(tip){
+    this.setState({
+      successTip: tip
+    })
+    setTimeout(() => {
+      this.setState({
+        successTip: null
+      })
+    }, 2000)
   }
 
   componentDidMount () {
@@ -221,8 +247,16 @@ const ShoppingCart = class extends React.Component {
       this.props.INIT()
     }
     this.props.FETCHCOUPONS()
+
+    getLeaveImage().then( ({result}) => {
+      this.setState({
+        leaveImage: result
+      })
+    })
+
     window.addEventListener('scroll', this.scrollhandle, false)
     window.addEventListener('resize', this.scrollhandle, false)
+    window.document.addEventListener('mouseleave', this.leavehandle, false)
 
     getMessage('M1136').then(({result}) => {
       this.setState({
@@ -263,14 +297,45 @@ const ShoppingCart = class extends React.Component {
         refreshing: false
       })
       this.props.REFRESHCART(result)
+      this.showSuccessTip('Changed Successed')
     })
   }
 
+  togglePaypalButton(actions){
+     const {cart} = this.props
+     return cart.shippingDetail ? actions.enable() : actions.disable()
+  }
+
+  getProps(){
+    return this.props
+  }
+
   paypalRender (c, method) {
+    const self = this
+
+    const __confirm_address__ = this.props.intl.formatMessage({id:'please_confirm_address'})
+
     if (c && (!c.children || c.children.length < 1)) {
       paypal.Button.render({
         env: window.paypalEnv,
         commit: window.__is_login__,
+        onClick: function(){
+          const {cart, history} = self.getProps()
+          if (!cart.shippingDetail && method !== 'quick') {
+            alert(__confirm_address__)
+            self.$addressdom.scrollIntoView()
+            return false
+          }
+        },
+
+       validate: function(actions) {
+          if( method !== 'quick' ){
+            self.togglePaypalButton(actions)
+            self.actions = actions
+          }
+          
+        },
+
         payment: function () {
           return paypalpay(method).then(data => data.result).then(({TOKEN, success, transactionId, ACK, L_LONGMESSAGE0}) => {
             if (success && transactionId && !TOKEN) {
@@ -314,20 +379,31 @@ const ShoppingCart = class extends React.Component {
   componentWillUnmount () {
     window.removeEventListener('scroll', this.scrollhandle, false)
     window.removeEventListener('resize', this.scrollhandle, false)
+    window.removeEventListener('mouseleave', this.leavehandle, false)
   }
 
   // 支付
   checkout (event) {
     event.preventDefault()
     const { payMethod, cart, paypal, payType } = this.props
-
+    const __confirm_address__ = this.props.intl.formatMessage({id:'please_confirm_address'})
+    const __confirm_paymethod__ = this.props.intl.formatMessage({id:'please_select_paymethod'})
     if (!payType) {
-      alert('Please select a pay method!')
+      alert(__confirm_paymethod__)
+      this.$paylistdom.scrollIntoView()
       return
     }
 
     if (!cart.shippingDetail) {
-      this.props.history.push(`${window.ctx || ''}${__route_root__}/address/add`)
+
+      if(this.$addressdom){
+        this.$addressdom.scrollIntoView()
+        alert(__confirm_address__)
+      }else{
+        this.props.history.push(`${window.ctx || ''}${__route_root__}/address/add`)
+      }
+
+      
       return
     }
 
@@ -381,7 +457,8 @@ const ShoppingCart = class extends React.Component {
       })
     } else if (payType === '9') {
       if (!this.props.atmMethod) {
-        alert('Please select a pay method!')
+        alert(__confirm_paymethod__)
+        this.$paylistdom.scrollIntoView()
         return
       }
 
@@ -393,7 +470,12 @@ const ShoppingCart = class extends React.Component {
         const {transactionId, success, details} = result
 
         if (success) {
-          window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
+          if(siteType === 'new'){
+            window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/credit-card?order_number=${transactionId}`
+          }else{
+            window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
+          }
+          
         } else {
           alert(details)
         }
@@ -423,7 +505,11 @@ const ShoppingCart = class extends React.Component {
         const {transactionId, success, details} = result
 
         if (success) {
-          window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
+          if(siteType === 'new'){
+            window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/credit-card?order_number=${transactionId}`
+          }else{
+            window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
+          }
         } else {
           alert(details)
         }
@@ -469,7 +555,7 @@ const ShoppingCart = class extends React.Component {
             })
           } else {
             this.setState({
-              checking: falsed
+              checking: false
             })
             this.props.history.push(`${window.ctx || ''}${__route_root__}/credit-card`)
           }
@@ -503,22 +589,33 @@ const ShoppingCart = class extends React.Component {
   quickPlace (evt) {
     const { cart, paypal } = this.props
 
+    const __confirm_address__ = this.props.intl.formatMessage({id:'please_confirm_address'})
+
+    if (!cart.shippingDetail || !this.state.paypalAddressConfirmed) {
+      alert(__confirm_address__)
+      return
+    }
+
     this.setState({
       paypaling: true
     })
 
-    if (!cart.shippingDetail || !this.state.paypalAddressConfirmed) {
-      alert('Please confirm your address')
-      return
-    }
-
     placepaypal().then(() => {
-      window.location.href = `${window.ctx || ''}/v7/orderConfirm/anon/order-confirm`
+
+      if(siteType === 'new'){
+        
+        window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/paypal`
+      }else{
+        window.location.href = `${window.ctx || ''}/v7/orderConfirm/anon/order-confirm`
+      }
+
+      
     }).catch(({result}) => {
       this.setState({
         paypaling: false
       })
       alert(result)
+      window.location.href = `${window.ctx || ''}${__route_root__}/`
     })
   }
 
@@ -615,6 +712,16 @@ const ShoppingCart = class extends React.Component {
         this.props.SETMERCADOINTALLMENTS(value)
       default:
         break
+    }
+  }
+
+  leavehandle (evt) {
+    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+    if(evt.pageY - scrollTop <= 0 && !storage.get('leaveImageShowed')){
+      this.setState({
+        showLeaveImage: true
+      })
+      storage.add('leaveImageShowed', 1 ,  24 * 60 * 60)
     }
   }
 
@@ -717,8 +824,17 @@ const ShoppingCart = class extends React.Component {
       })
     } else {
       addAddress(address).then(() => {
-        this.props.UPDATINGADDRESS(false)
-        this.props.REFRESHCART()
+        
+        this.props.REFRESHCART().then( () => {
+          this.props.UPDATINGADDRESS(false)
+          if(this.actions){
+            this.togglePaypalButton(this.actions)
+          }
+        }).catch( () => {
+          this.props.UPDATINGADDRESS(false)
+        })
+        
+        
       }).catch(({result}) => {
         alert(result)
         this.props.UPDATINGADDRESS(false)
@@ -769,7 +885,7 @@ const ShoppingCart = class extends React.Component {
   }
 
   getFullSelected () {
-    return this.getOverseasFullSelected() && this.getOverseasFullSelected()
+    return this.getOverseasFullSelected() && this.getLocalFullSelected()
   }
 
   selectAllHandle (select) {
@@ -799,9 +915,35 @@ const ShoppingCart = class extends React.Component {
   }
 
   itemDelete (item) {
-    if (window.confirm('Are you sure delete this item?')) {
-      this.props.DELETEITEM(item.variantId)
-    }
+
+    this.setState({
+      showDeleteConfirm: true,
+      itemDelete: () => {
+
+        this.setState({
+          showDeleteConfirm: false
+        })
+        this.props.DELETEITEM(item.variantId).then(() => {
+          this.showSuccessTip('Removed Successed')
+        })
+      }
+    })
+    
+  }
+
+  itemIdDelete (itemId) {
+    this.setState({
+      showDeleteConfirm: true,
+      itemDelete: () => {
+
+        this.setState({
+          showDeleteConfirm: false
+        })
+        this.props.DELETEITEM(itemId).then(() => {
+          this.showSuccessTip('Removed Successed')
+        })
+      }
+    })
   }
 
   itemEdit (item){
@@ -838,6 +980,24 @@ const ShoppingCart = class extends React.Component {
     this.itemEditClose()
   }
 
+  clearall () {
+    const {cart} = this.props
+    const ivalidItems = this.getInvalidItems(cart)
+    const itemIds = (ivalidItems || []).map(item => item.variantId)
+
+    this.props.DELETEITEMS(itemIds.join(',')).then( () => {
+      this.showSuccessTip('Changed Successed')
+    } )
+  }
+
+  quantityChange(itemId, quantity, isRemove){
+    if(isRemove){
+      this.itemIdDelete(itemId)
+    }else{
+      this.props.EDITITEM(itemId, itemId, quantity)
+    }
+  }
+
   render () {
     const {cart, loading, empty, intl} = this.props
 
@@ -845,7 +1005,7 @@ const ShoppingCart = class extends React.Component {
 
     let cancheckout = false
     let hasLocalItems = false
-    let cancheckout1, cancheckout2
+    let cancheckout1, cancheckout2, localCount = 0, overseasCount = 0 , totalCount = 0
     if (cart) {
       cancheckout1 = cart.shoppingCartProductsByOverseas && cart.shoppingCartProductsByOverseas.find(item => item.selected)
       cancheckout2 = false
@@ -858,14 +1018,23 @@ const ShoppingCart = class extends React.Component {
             if (!this.isOutStock(item)) {
               hasLocalItems = true
             }
+            localCount+=item.quantity
           })
         })
       }
 
       cancheckout = cancheckout1 || cancheckout2
+
+
+      if(cart.shoppingCartProductsByOverseas && cart.shoppingCartProductsByOverseas.length){
+        cart.shoppingCartProductsByOverseas.forEach( i => overseasCount+=i.quantity )
+      }
     }
 
+    totalCount = overseasCount + localCount
+
     const shoppingCartProductsByOverseas = cart ? this.getValidItems(cart.shoppingCartProductsByOverseas) : []
+   
 
     const fullSelected = cart && this.getFullSelected()
 
@@ -904,7 +1073,7 @@ const ShoppingCart = class extends React.Component {
 
     const Address2 = cart && <Box title={intl.formatMessage({id: 'shipping_address'})}>
       <div style={{paddingTop: 20}}>
-        <AddressFrom updating={this.props.addressUpdating} address={cart.shippingDetail} editAddress={this.editAddress.bind(this)} isNew={true}/>
+        <AddressFrom isConfirm={true} updating={this.props.addressUpdating} address={cart.shippingDetail} editAddress={this.editAddress.bind(this)} isNew={true}/>
       </div>
     </Box>
 
@@ -926,6 +1095,13 @@ const ShoppingCart = class extends React.Component {
       }
     }
 
+    const __addressbook = cart ? AddressBook() : null
+
+
+    let couponcountdown = this.getCountdown(cart)
+
+    const shippingLabel = !hasLocalItems ? intl.formatMessage({id: 'shipping_method'}) : 'Shipping Method For Overseas Warehouse' 
+
     return loading ? <Loading/> : (empty ? <Empty/> : cart && <div>
       {(this.props.refreshing || this.state.refreshing) && <Refreshing/>}
       <SHOPPINGBODY>
@@ -933,80 +1109,98 @@ const ShoppingCart = class extends React.Component {
         <div className="__left">
 
           <Boxs>
-            {AddressBook()}
+            {
+              __addressbook && <div ref={c => { this.$addressdom = c }}>
+                { __addressbook }
+              </div>
+            }
+            
+
+            
 
             {
-              (cancheckout1 || !hasLocalItems) && <Box title={intl.formatMessage({id: 'shipping_method'})}>
-                <ShippingMethods onSelect={this.selectShippingMethodHandle.bind(this)} shippingMethodList={ cart.shippingMethodList } selectedShippingMethod={ cart.shippingMethod }/>
+              window.__is_login__ && <div ref={ c => this.$paylistdom = c}>
+                <Box title={intl.formatMessage({id: 'payment_method'})}>
+                  <div style={{paddingTop: 20}}>
+                    <PayMethods
+                      cpf={this.props.cpf}
+                      email={this.props.email}
+                      payMethodList={ cart.payMethodList }
+                      selectedPayId={this.props.payMethod}
+                      selectPayHandle={this.selectPayHandle.bind(this)}
+                      ticketMethods={this.state.ticketMethods}
+                      atmClickHandle={this.atmClickHandle.bind(this)}
+                      ticketClickHandle={this.ticketClickHandle.bind(this)}
+                      atmMethod={this.props.atmMethod}
+                      ticketMethod={this.props.ticketMethod}
+                      atmMethods={this.state.atmMethods}
+                      handleInputChange={this.handleInputChange}
+                      installmentoptions={this.props.cart.payInstalmentsByOceanpaymentBRACreditCard || []}
+                      installments={this.props.installments}
+                      orderTotal={cart.orderSummary.orderTotal}
+                      cart={cart}
 
-                <div style={{borderTop: 'solid 1px #e6e6e6', paddingTop: 15}}>
+                      boletoForm={(c) => this.boletoForm = c}
+                      boleto={(c) => { this.boleto = c }}
+
+                      apac={c => this.apac = c}
+                      apacBB={c => this.apacBB = c}
+
+                      brazilOceanForm={ c => this.brazilOceanForm = c }
+                      brazilOcean={ c => this.brazilOcean = c }
+                    />
+                  </div>
+                </Box>
+              </div>
+            }
+
+            {
+              (window.__is_login__ && (cancheckout1 || !hasLocalItems) || window.token) && <Box title={shippingLabel}>
+                <ShippingMethods onSelect={this.selectShippingMethodHandle.bind(this)} shippingMethodList={ cart.shippingMethodList } selectedShippingMethod={ cart.shippingMethod }/>
+                {
+                  cart.shippingInsurancePrice2 && <div style={{borderTop:'1px solid #e6e6e6', paddingTop: 10}}>
                   <LabelCheck clickHandle={this.openInsurance.bind(this)} disabled={cart.isShippingInsuranceMust} selected={cart.insurance}>
                     <FormattedMessage id="add_shipping_insurance" values={{price: <Red><Money money={cart.shippingInsurancePrice2}/></Red>}}/>
                   </LabelCheck>
                   <Ask style={{marginLeft: 5}} message={cart.shippingInsuranceMsg2}/>
                 </div>
+                }
+                
+                
               </Box>
             }
 
-            {
-              window.__is_login__ && <Box title={intl.formatMessage({id: 'payment_method'})}>
-                <div style={{paddingTop: 20}}>
-                  <PayMethods
-                    cpf={this.props.cpf}
-                    email={this.props.email}
-                    payMethodList={ cart.payMethodList }
-                    selectedPayId={this.props.payMethod}
-                    selectPayHandle={this.selectPayHandle.bind(this)}
-                    ticketMethods={this.state.ticketMethods}
-                    atmClickHandle={this.atmClickHandle.bind(this)}
-                    ticketClickHandle={this.ticketClickHandle.bind(this)}
-                    atmMethod={this.props.atmMethod}
-                    ticketMethod={this.props.ticketMethod}
-                    atmMethods={this.state.atmMethods}
-                    handleInputChange={this.handleInputChange}
-                    installmentoptions={this.props.cart.payInstalmentsByOceanpaymentBRACreditCard || []}
-                    installments={this.props.installments}
-                    orderTotal={cart.orderSummary.orderTotal}
-                    cart={cart}
-
-                    boletoForm={(c) => this.boletoForm = c}
-                    boleto={(c) => { this.boleto = c }}
-
-                    apac={c => this.apac = c}
-                    apacBB={c => this.apacBB = c}
-
-                    brazilOceanForm={ c => this.brazilOceanForm = c }
-                    brazilOcean={ c => this.brazilOcean = c }
-                  />
-                </div>
-              </Box>
-            }
-
-            <Box title={intl.formatMessage({id: 'shopping_bag'})} ignoreLine={true}>
+            <Box title={`${intl.formatMessage({id: 'shopping_bag'})} (${totalCount})`} ignoreLine={true}>
             	<div ref={c => this.fixedCartWrapper = c}>
             		<FixedTop style={{width: 726}} innerRef={c => this.fixedCart = c}>
   		          	<SelectLine style={{paddingTop: 20}}>
-  		          		<div className="x-table __vm">
+  		          		<div className="x-table __vm x-fw">
   		          			<div className="x-cell">
   		          				<CheckBox className={`${fullSelected ? 'selected' : ''}`} onClick={ (evt) => { this.selectAllHandle(!fullSelected) } } style={{verticalAlign: 'middle'}}/>
-  		          				<Grey style={{marginLeft: 10, verticalAlign: 'middle'}}>Select All</Grey>
+  		          				<span style={{marginLeft: 10, verticalAlign: 'middle'}}>{intl.formatMessage({id:'select_all'})}</span>
   		          			</div>
-  		          			<div className="x-cell"></div>
+  		          			<div className="x-cell __right">
+                        { cart.messages && cart.messages.shippingMsg && <span dangerouslySetInnerHTML={{__html: cart.messages.shippingMsg}}/>}
+                      </div>
   		          		</div>
   		          	</SelectLine>
   		          	<ItemTableHead/>
       		  		</FixedTop>
       	  		</div>
 
-      	  		<GroupOverseasItems style={{marginTop: 25, borderBottom: '1px dashed #e6e6e6'}}
-                hasHead={hasOverseasHead}
-      			  	items={shoppingCartProductsByOverseas}
-      			  	serverTime={cart.serverTime}
-                groupClick={this.groupClick.bind(this)}
-                itemDelete={this.itemDelete.bind(this)}
-                itemSelect={this.itemSelect.bind(this)}
-                itemEdit={this.itemEdit.bind(this)}
-      			  	quantityChange={(itemId, quantity) => { this.props.EDITITEM(itemId, itemId, quantity) }}/>
+              { 
+                shoppingCartProductsByOverseas && shoppingCartProductsByOverseas.length > 0 && <GroupOverseasItems style={{marginTop: 25, borderBottom: '1px dashed #e6e6e6'}}
+                  hasHead={hasOverseasHead}
+                  items={shoppingCartProductsByOverseas}
+                  serverTime={cart.serverTime}
+                  groupClick={this.groupClick.bind(this)}
+                  itemDelete={this.itemDelete.bind(this)}
+                  itemSelect={this.itemSelect.bind(this)}
+                  itemEdit={this.itemEdit.bind(this)}
+                  setQuantity={(itemId, quantity) => { this.props.EDITITEM(itemId, itemId, quantity) }}
+                  quantityChange={ this.quantityChange.bind(this)}/>
+              }
+      	  		
 
               {
                 hasLocalItems && cart.domesticDeliveryCases.map(domestic => <GroupLocalItems
@@ -1018,14 +1212,16 @@ const ShoppingCart = class extends React.Component {
                   itemDelete={this.itemDelete.bind(this)}
                   itemSelect={this.itemSelect.bind(this)}
                   overseasHandle={this.overseasHandle.bind(this)}
+                  itemEdit={this.itemEdit.bind(this)}
                   setQuantity={(itemId, quantity) => { this.props.EDITITEM(itemId, itemId, quantity) }}
-                  quantityChange={(itemId, quantity) => { this.props.EDITITEM(itemId, itemId, quantity) }}
+                  quantityChange={ this.quantityChange.bind(this)}
                 />)
               }
 
               {
                 invalidItems && invalidItems.length > 0 && <GroupIvalidItems style={{marginTop: 25, borderBottom: '1px dashed #e6e6e6'}}
                   items={invalidItems}
+                  clearall={this.clearall.bind(this)}
                   itemDelete={this.itemDelete.bind(this)}
                   serverTime={cart.serverTime}/>
               }
@@ -1065,6 +1261,23 @@ const ShoppingCart = class extends React.Component {
                   </div>
                 </SecondBox>
               }
+              {
+                 (!window.__is_login__ || !cancheckout1 && hasLocalItems) && !window.token && <SecondBox style={{marginTop: 22}}>
+                <div className="__hd">
+                  {intl.formatMessage({id: 'shipping_insurance'})}
+                </div>
+                <div className="__bd">
+                  <LabelCheck clickHandle={this.openInsurance.bind(this)} disabled={cart.isShippingInsuranceMust} selected={cart.insurance}>
+                    <FormattedMessage id="add_shipping_insurance" values={{price: <Red><Money money={cart.shippingInsurancePrice2}/></Red>}}/>
+                  </LabelCheck>
+                  <Ask style={{marginLeft: 5}} message={cart.shippingInsuranceMsg2}/>
+
+                </div>
+              </SecondBox>
+              }
+              
+
+      
 
               <div ref={ c => this.fixedSmallWrapper = c }>
                 <FixedTop style={{paddingTop: 40, width: 314}} innerRef={c => this.fixedSmall = c}>
@@ -1094,8 +1307,8 @@ const ShoppingCart = class extends React.Component {
                               <div style={{color: '#999', textAlign: 'center', height: 30, lineHeight: '30px', textTransform: 'uppercase'}}>
                                 {intl.formatMessage({id: 'or'})}
                               </div>
-                              <BigButton onClick={ () => { window.location.href = `${window.ctx}/w-site/anon/register?redirectUrl=${encodeURIComponent(window.location.href)}` } } bgColor="#e5004f" style={{height: 45, lineHeight: '45px', textTransform: 'uppercase', fontSize: 18}}>
-                                {intl.formatMessage({id: 'check_out'})}
+                              <BigButton onClick={ () => { window.location.href = `${window.ctx}/${siteType === 'new' ? 'page' : 'i'}/login?redirectUrl=${encodeURIComponent(window.location.href)}` } } bgColor="#e5004f" style={{height: 45, lineHeight: '45px', textTransform: 'uppercase', fontSize: 18}}>
+                                {intl.formatMessage({id: 'proceed_checkout'})}
                               </BigButton>
                             </div>
 
@@ -1108,20 +1321,38 @@ const ShoppingCart = class extends React.Component {
                         )
                       }
 
-          	        			{
-          	        				cart.messages && cart.messages.orderSummaryMsg && <MessageTip style={{marginTop: 20}}>
-          	        					<span dangerouslySetInnerHTML={{__html: cart.messages.orderSummaryMsg}}/>
-          	        				</MessageTip>
-          	        			}
+          	        		
 
-          	        			<div style={{marginTop: 40}}>
-          	        				<div>
-          	        					{intl.formatMessage({id: 'we_accept'})}
-          	        				</div>
-          	        				<div style={{marginTop: 10}}>
-          	        					<img style={{width: '100%'}} src="https://s3-us-west-2.amazonaws.com/wanna/pt_BR.png"/>
-          	        				</div>
-          	        			</div>
+
+
+                      {
+
+                        couponcountdown > 1000 ?  <MessageTip style={{marginTop: 20}}>
+                          <div className="x-table __fixed x-fw __vm">
+                            <div className="x-cell" style={{width: 75}}>
+                              <CountDownBlock offset={couponcountdown}/>
+                            </div>
+                            <div className="x-cell">
+                              <span dangerouslySetInnerHTML={{__html: cart.sendCouponMessage.message}}/>
+                            </div>
+                          </div>
+                        </MessageTip> : (
+                          cart.messages && cart.messages.orderSummaryMsg && <MessageTip style={{marginTop: 20}}>
+                          <span dangerouslySetInnerHTML={{__html: cart.messages.orderSummaryMsg}}/>
+                        </MessageTip>
+
+                        )
+                      }
+
+
+      	        			<div style={{marginTop: 40}}>
+      	        				<div>
+      	        					{intl.formatMessage({id: 'we_accept'})}
+      	        				</div>
+      	        				<div style={{marginTop: 10}}>
+      	        					<img style={{width: '100%'}} src={window.__payimage__ || 'https://s3-us-west-2.amazonaws.com/wanna/pc_default.png'}/>
+      	        				</div>
+      	        			</div>
 
       	        		</Box>
       	        	</Boxs>
@@ -1138,6 +1369,38 @@ const ShoppingCart = class extends React.Component {
 
       {
         this.state.editing && <ItemEditor editHandle={this.editHandle.bind(this)} onClose={this.itemEditClose.bind(this)} { ...this.state.editing }/>
+      }
+
+      {
+        this.state.paypaling && <React.Fragment>
+          <Mask/>
+          <div className="paypal-loading-wrap">
+            <div className="paypal-back"></div>
+            <div className="paypal-loading">
+            </div>
+          </div>
+        </React.Fragment>
+      }
+
+      {
+        this.state.showLeaveImage && this.state.leaveImage && <Modal onClose={ () => {this.setState({showLeaveImage: false})} }>
+          <img style={{cursor: 'pointer'}} onClick={ () => {this.setState({showLeaveImage: false})} } src={this.state.leaveImage}/>
+        </Modal>
+      }
+
+
+      {
+        this.state.successTip && <SUCCESSTIP>
+          { this.state.successTip }
+        </SUCCESSTIP>
+      }
+
+      {
+        this.state.showDeleteConfirm && <Modal onClose={ () => {this.setState({showDeleteConfirm: false})} }>
+          <Confirm yes={ this.state.itemDelete } no={ () => {this.setState({showDeleteConfirm: false})} }>
+            <span><FormattedMessage id="sure_delete_item"/></span>
+          </Confirm>
+        </Modal>
       }
 
 

@@ -15,6 +15,7 @@ const StyledAsk = styled.div`
   font-size: 12px;
   position: relative;
   z-index: 1;
+
   .__answer{
   	position: absolute;
   	top: 20px;
@@ -37,6 +38,7 @@ const StyledAsk = styled.div`
   	.__answer{
   		display: block;
   	}
+    border-color: #cacaca;
   }
 `
 

@@ -6,7 +6,7 @@ export const __reg_zip_uk__ = /^([a-z]|[A-Z]){1,2}\w{1,2}\s{0,1}[0-9]{1}([a-z]|[
 export const __reg_zip_br__ = /^[0-9]{5}-[0-9]{3}$/
 
 export const __reg_phone_normal__ = /^\d{1,20}$/
-export const __reg_phone_br__ = /^\d{8,15}$/
+export const __reg_phone_br__ = /^\d{8,9}$/
 
 export const cpfcheck = (value) => {
   var result = true
@@ -65,6 +65,12 @@ export const required = (value) => {
   }
 }
 
+export const number = (value) => {
+  if (value && !validator.isInt(value, {min: 0, max: 99})) {
+    return <p></p>
+  }
+}
+
 export const email = (value) => {
   if (!validator.isEmail(value)) {
     return <p>{value} is not a valid email</p>
@@ -106,7 +112,7 @@ export const phone = (value, props, components) => {
   switch (country) {
     case 'BR':
       reg = __reg_phone_br__
-      error = `Insira pelo menos 8-15 números.`
+      error = `Insira pelo menos 8-9 números.`
       break
     default:
       reg = __reg_phone_normal__

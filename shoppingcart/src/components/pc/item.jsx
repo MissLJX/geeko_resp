@@ -66,8 +66,7 @@ const LIMITTIP = styled.span`
 const ITEM = styled.div`
   &.disabled{
     background-color: #eee;
-    padding: 10px 0;
-    opacity: 0.7;
+    padding: 24px 0;
   }
 
   &.invalid{
@@ -84,7 +83,7 @@ const ITEM = styled.div`
 			width: 106px;
 		}
 		&:nth-child(3){
-			width: 231px;
+			width: 220px;
       & > div{
         margin-top: 40px;
         &:first-child{
@@ -128,6 +127,9 @@ const LABELICON = styled.span`
   &:active{
     opacity: .8;
   }
+  &:hover{
+    color: #cacaca;
+  }
 `
 
 const Item = class extends Component {
@@ -140,6 +142,10 @@ const Item = class extends Component {
 
     const isEabled = !this.props.disabledFunc(item)
     const isOverseas = !item.isDomesticDelivery
+
+    const showLeftBtn = !isEabled && !isOverseas && !item.isDomesticDeliveryEnabled && item.inventory > 0
+    const showShipFromBtn = !isEabled && !isOverseas && !item.isDomesticDeliveryEnabled && item.inventory < 1
+
   	return <ITEMCONTAINER>
   		<div style={{paddingLeft: 28}}>
         {
@@ -156,7 +162,7 @@ const Item = class extends Component {
   			</div>
   			<div className="x-cell">
           <div style={{width: 96}}>
-            <LinkImage href={producturl({id: item.productId, name: item.productName})} src={item.imageUrl}/>
+            <LinkImage href={producturl({id: item.productId, name: item.productName, parentSku: item.parentSku})} src={item.imageUrl}/>
           </div>
   			</div>
   			<div className="x-cell">
@@ -168,20 +174,23 @@ const Item = class extends Component {
         	</div>
 
           <div>
-            <LABELICON onClick={(evt) => { this.props.itemEdit(item) }} className={`${invalidItem ? 'disabled' : ''}`}>
-              <Icon>&#xe62b;</Icon>
-              <span>Edit</span>
-            </LABELICON>
 
-            <LABELICON onClick={(evt) => { this.props.itemDelete(item) }} style={{marginLeft: 20}}>
+            {
+              isEabled && !invalidItem && <LABELICON style={{marginRight: 20}} onClick={(evt) => { this.props.itemEdit(item) }} className={`${invalidItem ? 'disabled' : ''}`}>
+                <Icon>&#xe62b;</Icon>
+                <span><FormattedMessage id="edit"/></span>
+              </LABELICON>
+            }
+
+            <LABELICON onClick={(evt) => { this.props.itemDelete(item) }}>
               <Icon>&#xe629;</Icon>
-              <span>Delete</span>
+              <span><FormattedMessage id="delete"/></span>
             </LABELICON>
           </div>
   			</div>
   			<div className="x-cell __center">
           {
-  				  !isEabled ? <Grey>{item.quantity}</Grey> : <Quantity quantity={item.quantity} onChange={(quantity) => { this.props.quantityChange(item.variantId, quantity) }}/>
+  				  !isEabled ? <Grey>{item.quantity}</Grey> : <Quantity quantity={item.quantity} onChange={(quantity, isRemove) => { this.props.quantityChange(item.variantId, quantity, isRemove) }}/>
           }
   			</div>
   			<div className="x-cell __center">
@@ -205,11 +214,11 @@ const Item = class extends Component {
   		</ITEM>
   		<div style={{marginTop: 10, textAlign: 'right'}}>
         {
-          !isEabled && !isOverseas && !invalidItem && <Btn onClick={ () => { this.props.overseasHandle(this.props.item.variantId) }}> Ships From Overseas WareHouse</Btn>
+          showShipFromBtn && !invalidItem && <Btn style={{padding: '8px 18px'}} onClick={ () => { this.props.overseasHandle(this.props.item.variantId) }}> Ships From Overseas WareHouse</Btn>
         }
 
         {
-          !isEabled && isOverseas && !invalidItem && <Btn onClick={ () => { this.props.setQuantity(item.id, item.inventory) }}>
+          showLeftBtn && !invalidItem && <Btn style={{padding: '8px 18px'}} onClick={ () => { this.props.setQuantity(item.variantId, item.inventory) }}>
             <FormattedMessage
               id="only_left"
               values={{

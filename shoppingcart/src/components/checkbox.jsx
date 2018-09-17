@@ -9,6 +9,7 @@ export default styled.span`
 		cursor: pointer;
 		font-size: ${props => props.fontSize || '20px'} ;
 		font-family: iconfont;
+		color: #cacaca;
 	}
 
 	&.selected{

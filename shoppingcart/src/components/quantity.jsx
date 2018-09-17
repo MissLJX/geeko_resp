@@ -22,6 +22,7 @@ const QInput = styled.input`
     -webkit-appearance: none !important;
     -moz-appearance:textfield;
   } 
+  -moz-appearance: textfield;
 `
 
 export default class extends React.Component {
@@ -56,33 +57,38 @@ export default class extends React.Component {
   }
 
   addQuantity (evt) {
-    let newQ = this.state.quantity + 1
-    this.setState({
-      quantity: this.state.quantity + 1
-    })
-    this.clickHandle(newQ)
-  }
-
-  reduceQuantity (evt) {
-    let newQ = this.state.quantity > 1 ? this.state.quantity - 1 : 1
+    let newQ = Math.floor(this.state.quantity + 1)
     this.setState({
       quantity: newQ
     })
     this.clickHandle(newQ)
   }
 
+  reduceQuantity (evt) {
+    if (this.state.quantity > 1) {
+      let newQ = Math.floor(this.state.quantity - 1) > 1 ? Math.floor(this.state.quantity - 1) : 1
+      this.setState({
+        quantity: newQ
+      })
+      this.clickHandle(newQ)
+    } else {
+      this.clickHandle(0, true)
+    }
+  }
+
   onChange (evt) {
+    const v = evt.target.value > 1 ? Math.floor(evt.target.value) : 1
     this.setState({
-      quantity: evt.target.value
+      quantity: v
     })
-    this.props.onChange(evt.target.value)
+    this.props.onChange(v)
   }
 
   render () {
     return <QWrapper>
-      <Icon onClick={this.reduceQuantity.bind(this)}>&#xe6ba;</Icon>
+      <Icon style={{cursor: 'pointer', fontSize: 14, fontWeight: 'bold', color: this.state.quantity === 1 ? '#cacaca' : '#222'}} onClick={this.reduceQuantity.bind(this)}>&#xe6ba;</Icon>
       <QInput type="number" onChange={this.onChange} value={this.state.quantity}/>
-      <Icon onClick={this.addQuantity.bind(this)}>&#xe6b9;</Icon>
+      <Icon style={{cursor: 'pointer', fontSize: 14, fontWeight: 'bold', color: '#222'}} onClick={this.addQuantity.bind(this)}>&#xe6b9;</Icon>
     </QWrapper>
   }
 }

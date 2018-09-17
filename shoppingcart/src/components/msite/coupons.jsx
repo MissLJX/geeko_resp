@@ -68,7 +68,6 @@ export const Coupon = (props) => {
     		<Red>
     			<StyledAmount>{couponAmount}</StyledAmount>
     		</Red>
-    		<strong>    {coupon.code}</strong>
     	</div>
 
     	<div style={{marginTop: 4}}>

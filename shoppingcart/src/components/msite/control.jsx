@@ -5,9 +5,9 @@ const _form = ({ getValues, validate, validateAll, showError, hideError, childre
   <form {...props}>{children}</form>
 )
 
-const _input = ({ error, isChanged, isUsed, ...props }) => (
-  <div className={isChanged && isUsed && error ? 'error' : ''}>
-    <input {...props} />
+const _input = ({ error, isChanged, isUsed, divStyle, ...props }) => (
+  <div className={isChanged && isUsed && error ? 'error' : ''} style={divStyle}>
+    <input {...props} className="x-default-input"/>
     <p>{isChanged && isUsed && error}</p>
   </div>
 )

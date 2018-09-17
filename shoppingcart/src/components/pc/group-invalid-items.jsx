@@ -25,11 +25,13 @@ const GroupInvalidItems = class extends React.Component {
 
   	return <div style={this.props.style}>
       <SelectLine>
-        <div className="x-table __vm">
+        <div className="x-table __vm x-fw">
           <div className="x-cell">
-            <Grey style={{marginLeft: 5, verticalAlign: 'middle', fontSize: 16}}>{intl.formatMessage({id: 'ivalid_tems'})}</Grey>
+            <span style={{marginLeft: 5, verticalAlign: 'middle', fontSize: 16}}>{intl.formatMessage({id: 'ivalid_tems'})}</span>
           </div>
-          <div className="x-cell"></div>
+          <div className="x-cell __right">
+            <span style={{cursor: 'pointer'}} onClick={this.props.clearall}>{intl.formatMessage({id: 'clear_all'})}</span>
+          </div>
         </div>
       </SelectLine>
 

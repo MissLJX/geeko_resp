@@ -23,8 +23,15 @@ export default class extends React.Component {
 
   render () {
     const {icon, title, items, domestic} = this.props
+
+    let count = 0
+
+    items.forEach(i => {
+      count += i.quantity
+    })
+
     return <div>
-		  <LocalHouseHead shippingPrice={domestic.domesticDeliveryShippingPrice} icon={icon} title={title} groupClick={this.groupClick} selected={this.selected()}/>
+		  <LocalHouseHead count={count} shippingPrice={domestic.domesticDeliveryShippingPrice} icon={icon} title={title} groupClick={this.groupClick} selected={this.selected()}/>
 		  <Items serverTime={this.props.serverTime}
         overseasHandle={this.props.overseasHandle}
         localitem="true"

@@ -12,7 +12,7 @@ import {__route_root__} from '../utils/utils.js'
 export const __address_token__ = window.token
 
 const ADDRESSBODY = styled.div`
-	padding: 40px 80px;
+	padding: 56px 80px;
   background-color: #fff;
   width: 696px;
 `

@@ -5,15 +5,26 @@
     <title>Shopping Cart</title>
     <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
     <script type="text/javascript">
-    	
+    	window.accessToken = 'fb99d8e4-cff5-4cfe-800c-346740fbd473'
     	window.lang = 'en_US'
     	window.__is_login__ = true
     	window.paypalEnv= 'sandbox'
         window.__currency__ = 'USD'
+        // window.token = 1
+
+        window.__payimage__ = 'https://s3-us-west-2.amazonaws.com/wanna/pc_default.png'
+
+        // https://s3-us-west-2.amazonaws.com/wanna/pt_BR.png
     </script>
 </head>
 <body style="background-color: #fff;">
 <!-- <body> -->
+
+<script type="text/javascript">
+    
+     // window.addEventListener('mouseleave', function(){console.log('xxx')}, false)
+</script>
+
 <script src="https://www.paypalobjects.com/api/checkout.js"></script>
 <script src="https://secure.mlstatic.com/sdk/javascript/v1/mercadopago.js"></script>
 <script type="text/javascript">

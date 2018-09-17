@@ -30,8 +30,15 @@ export default class extends React.Component {
 
   render () {
     const {shippingMethod, items, selected, itemSelect, shippingMsg} = this.props
+
+    let count = 0
+
+    items.forEach(i => {
+      count += i.quantity
+    })
+
     return <div>
-		  <OverSeasHouseHead groupClick={this.groupClick} shippingMethod={shippingMethod} selected={this.selected()}/>
+		  <OverSeasHouseHead count={count} groupClick={this.groupClick} shippingMethod={shippingMethod} selected={this.selected()}/>
 		  {
         shippingMsg && <Tip>
           <span dangerouslySetInnerHTML={{__html: shippingMsg}}/>

@@ -28,12 +28,13 @@ const TIP = styled.span`
 	color: #666666;
 	padding: 4px 10px;
 	line-height: 18px;
+  display: inline-block;
 `
 
 const LINE = styled.div`
 	& > div{
 		&:first-child{
-			width: 50px;
+			width: ${window.lang.indexOf('pt_') >= 0 ? 100 : 60}px;
 		}
 	}
 `
@@ -112,11 +113,15 @@ export default class extends React.Component {
     }
   }
 
+  existVariant (product, variantId) {
+    return product.variants && product.variants.find(v => v.id === variantId)
+  }
+
   componentWillMount () {
     // 预处理
     const { products, productId, variantId } = this.props
 
-    let selectedProduct = products.find(p => p.id === productId), selectedVariant
+    let selectedProduct = products.find(p => p.id === productId && this.existVariant(p, variantId)), selectedVariant
     // 如果productId已经下架  不存在products中
     if (!selectedProduct) {
       selectedProduct = products[0]
@@ -174,8 +179,8 @@ export default class extends React.Component {
           <div className="x-cell">
             <BLOCKS>
             	{
-            		products.map(product => <div className="__block">
-                  <IMAGE onClick={ () => { this.setProductHandle(product) }} className={ selectedProduct.id === product.id ? '__selected' : '' } style={{backgroundImage: `url(https://dgzfssf1la12s.cloudfront.net/medium/${product.pcMainImage})`}}/>
+            		products.map((product, index) => <div className="__block" key={index}>
+                  <IMAGE onClick={ () => { this.setProductHandle(product) }} className={ selectedProduct.id === product.id && this.existVariant(product, selectedVariant.id) ? '__selected' : '' } style={{backgroundImage: `url(https://dgzfssf1la12s.cloudfront.net/medium/${product.variants[0].image})`}}/>
                 </div>)
             	}
             </BLOCKS>
@@ -222,9 +227,19 @@ export default class extends React.Component {
         </LINE>
 
         <div style={{marginTop: 30}}>
-        	<BigButton bgColor="#e5004f" style={{width: 240, height: 40}} onClick={ this.editHandle.bind(this) }>
-        		<FormattedMessage id="submit"/>
-        	</BigButton>
+          {
+            selectedVariant && selectedVariant.status === '1' && (selectedVariant.inventory > 0 || selectedProduct.isAutoInventory) ? (
+              <BigButton bgColor="#e5004f" style={{width: 240, height: 40}} onClick={ this.editHandle.bind(this) }>
+                <FormattedMessage id="submit"/>
+              </BigButton>
+
+            ) : (
+              <BigButton bgColor="#999" style={{width: 240, height: 40, cursor: 'not-allowed'}}>
+                <FormattedMessage id="sold_out"/>
+              </BigButton>
+            )
+          }
+
         </div>
 
       </EDITOR>

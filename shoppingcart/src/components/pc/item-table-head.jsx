@@ -15,7 +15,7 @@ const StyledHead = styled.div`
 			width: 106px;
 		}
 		&:nth-child(3){
-			width: 231px;
+			width: 220px;
 		}
 		&:nth-child(4){
 			width: 120px;

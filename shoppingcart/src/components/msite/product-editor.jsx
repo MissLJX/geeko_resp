@@ -262,16 +262,8 @@ const ProductEditor = class extends React.Component {
 		  				</Price>
 		  			</div>
 	  			</INFO>
-	  			{
-	  				selectedVariant.domesticDelivery && (
-              			<OverSeas>
-	  						<img src={selectedVariant.domesticDelivery.icon}/>
-	  						<span dangerouslySetInnerHTML={{__html: selectedVariant.domesticDelivery.message}} />
-	  					</OverSeas>
-	  				)
-	  			}
 
-	  			<SizeColor>
+	  			<SizeColor style={{borderTop: 'none'}}>
 
             {this.state.sizes && (
               <SizeColorRow className="x-table">

@@ -156,7 +156,7 @@ const getLogo = () => {
     case 'boutiquefeel':
       return 'https://dgzfssf1la12s.cloudfront.net/site/bouti/logo01.png'
     default:
-      return 'https://dgzfssf1la12s.cloudfront.net/site/pc/logo03.png'
+      return window.logoIcon
   }
 }
 
@@ -166,7 +166,7 @@ const getIconPosition = (index) => {
 
 const Currency = ({currency, index}) => {
   const position = getIconPosition(index)
-  return <CURRENCY onClick={ () => { Cookie.set('currency', currency.value, {expires: 365}); window.location.reload(false) }}>
+  return <CURRENCY onClick={ () => { Cookie.set('currency', currency.value, {expires: 365}); window.location.href = `${window.ctx || ''}/cart` }}>
     <span className="__icon" style={{backgroundPosition: `${-position.x}px ${-position.y}px`}}></span>
     <span className="__label">{currency.value}</span>
   </CURRENCY>

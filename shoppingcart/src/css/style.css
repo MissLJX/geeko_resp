@@ -211,6 +211,13 @@ body{
 }
 
 
+.x-default-input{
+  &::-webkit-outer-spin-button, &::-webkit-inner-spin-button{                
+    -webkit-appearance: none !important;
+    -moz-appearance:textfield;
+  } 
+}
+
 @media screen and (max-width:321px) {
   .x-small{
     font-size: 13px;

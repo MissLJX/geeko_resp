@@ -21,7 +21,7 @@ export const Box = ({title, children, ignoreLine, style}) => <div>
 
 export const Boxs = styled.div`
 	& > div{
-		margin-top: 40px;
+		margin-top: 48px;
 		&:first-child{
 			margin-top: 0;
 		}

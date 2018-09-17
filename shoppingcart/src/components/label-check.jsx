@@ -7,7 +7,7 @@ const LabelCheck = styled.span`
 	& > *{
 		vertical-align: middle;
 		&:last-child{
-			margin-left:5px;
+			margin-left:10px;
 		}
 	}
 	cursor: pointer;
