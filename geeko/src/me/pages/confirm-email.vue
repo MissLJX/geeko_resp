@@ -6,7 +6,7 @@
         <user-info></user-info>
         <div v-show="ifOwnEmail" class="emailAddress">
             <p>Email Address</p>
-            <input type="text" placeholder="please enter you email" v-model="emailstr">
+            <input type="text" placeholder="please enter you email" v-model="emailstr" :class="{'sss':hasFill}">
         </div>
         <div class="senEmailBtn" @click="sendEmail">Send Verification Email</div>
         <process-bar></process-bar>
@@ -23,7 +23,8 @@
     export default {
         data(){
             return{
-                'emailstr':''
+                'emailstr':'',
+                'hasFill':false
             }
         },
         components: {
@@ -45,6 +46,10 @@
         },
         methods:{
             sendEmail(){
+                if(this.emailstr === '' && this.ifOwnEmail){
+                    this.hasFill = true;
+                    return;
+                }
                 let email = '';
                 if(this.me.email && !this.me.email.endsWith("@chic-fusion.com") && !this.me.email.endsWith("@ivrose.com") && !this.me.email.endsWith("@boutiquefeel.com")){
                     email = this.me.email;
@@ -52,9 +57,9 @@
                     email = this.emailstr;
                 }
                 store.dispatch('me/confirmEmail', email).then((data)=>{
+                    this.hasFill = false;
                     if(data){
                         alert("We've sent you an e-mail,please check your mailbox.");
-                        this.$router.go(-1);
                     }else{
                         alert("This mailbox adress is already existed,please re-enter.");
                     }
@@ -100,5 +105,9 @@
             width: 100%;
             height:40px ;
         }
+    }
+    .sss{
+        border:1px solid;
+        border-color: #e5004f;
     }
 </style>

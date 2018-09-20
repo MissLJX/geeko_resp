@@ -7,7 +7,7 @@
             <i class="iconfont">&#xe73b;</i>
             <p><strong>Congratulations!</strong></p>
             <p>Your account has been successfully verified</p>
-            <p class="greyfont">Your registered email address is:{{}}You have received <span>50 Chicme credits and 3 exclusive coupons for verfifying for the first time</span></p>
+            <p class="greyfont">Your registered email address is:{{me.email}}You have received <span>50 Chicme credits for verfifying for the first time</span></p>
         </div>
         <div class="btnarr">
             <div class="shopnnow" @click="shopnow">Shop Now</div>
