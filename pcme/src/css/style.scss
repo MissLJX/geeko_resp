@@ -69,4 +69,165 @@ input:-webkit-autofill{
 }
 
 
+/** ================icon font==================**/
+@font-face {
+  font-family: 'iconfont';  /* project id 384296 */
+  src: url('//at.alicdn.com/t/font_384296_zy0yzfqbvf4rt3xr.eot');
+  src: url('//at.alicdn.com/t/font_384296_zy0yzfqbvf4rt3xr.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_384296_zy0yzfqbvf4rt3xr.woff') format('woff'),
+  url('//at.alicdn.com/t/font_384296_zy0yzfqbvf4rt3xr.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_384296_zy0yzfqbvf4rt3xr.svg#iconfont') format('svg');
+}
+
+.iconfont{
+  font-family:"iconfont" !important;
+  font-size:16px;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/**=============================================**/
+
+
+
+
+body{
+  font-size: 14px;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  -webkit-text-size-adjust: 100%;
+  color: #222928;
+}
+
+
+a{
+  color: #222928;
+  text-decoration: none;
+}
+
 @import "base";
+
+
+
+.st-table{
+  display: table;
+}
+
+.st-row{
+  display: table-row;
+}
+
+.st-cell{
+  display: table-cell;
+}
+
+.st-flex{
+  display: flex;
+}
+
+.st-justify-b{
+  justify-content: space-between;
+}
+
+.st-flex-item{
+}
+
+.st-v-m{
+  vertical-align: middle;
+}
+
+.st-v-t{
+  vertical-align: top;
+}
+
+.st-v-b{
+  vertical-align: bottom;
+}
+
+.st-t-l{
+  text-align: left;
+}
+
+.st-t-r{
+  text-align: right;
+}
+
+.st-fullwidth{
+  width: 100%;
+}
+
+.st-fc-r{
+  color: $red;
+}
+
+.st-clear{
+  &::after{
+    display: block;
+    content: '';
+    clear: both;
+  }
+}
+
+.st-ellipsis{
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+
+/**==============font-size==============**/
+.st-small-font{
+  font-size: 12px;
+}
+
+.st-default-font{
+  font-size: 14px;
+}
+
+
+/**===========Form===============**/
+.st-control{
+  .st-input , .st-select{
+    display: block;
+    outline: none;
+    border:1px solid #dcdcdc;
+    &:focus{
+      border-color: #000;
+    }
+
+    &.st-input-danger{
+      border-color: #f19ca6;
+    }
+  }
+  .st-is-danger{
+    font-size: 11px;
+    color: #f19ca6;
+  }
+}
+
+/**===============================**/
+
+
+/**================loading===========**/
+.st-screen-loading{
+  position: fixed;
+  z-index: 500;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  animation: st-rotating 2s infinite linear;
+}
+
+
+
+@keyframes st-rotating {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/**==================================**/
