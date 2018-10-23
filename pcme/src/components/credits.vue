@@ -148,10 +148,10 @@
                 return utils.PROJECT + '/cart'
             },
             confirmEmailUrl(){
-                return utils.ROUTER_PATH_ME + '/changeEmail'
+                return utils.ROUTER_PATH_ME + '/m/changeEmail'
             },
             makeSuggestionUrl(){
-                return utils.ROUTER_PATH_ME + '/makeSug'
+                return utils.ROUTER_PATH_ME + '/m/makeSug'
             }
         },
         data(){
@@ -360,6 +360,7 @@
             color: #e5004f;
         }
         .c-points-green{
+            width: 180px;
             color: #59b3b2;
         }
     }

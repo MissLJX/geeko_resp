@@ -1,8 +1,6 @@
 <template>
     <div class="tickets">
         <p class="t-hd">Any questions or concerns? Chat with us now!</p>
-        <!--<div class="online-help" @click="showHelp=!showHelp">Online Help</div>-->
-
         <div class="ticket-table">
             <table>
                 <tr>
@@ -82,7 +80,11 @@
             },
             getlastmsg(replies){
                 if(replies){
-                    return replies[replies.length-1].message
+                    if(replies[replies.length-1].message === '-'){
+                        return '[image]'
+                    }else{
+                        return replies[replies.length-1].message
+                    }
                 }
             },
             selectorder:function(){

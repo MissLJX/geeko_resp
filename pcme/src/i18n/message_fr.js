@@ -124,7 +124,7 @@ export default {
     addressBook: 'Carnet d\'Adresses',
     myorders:'Mes Commandes',
     mytickets:'My Tickets',
-    mycoupons:'My Coupons',
+    mycoupons:'Mon Coupons',
     mycredits:'Mes Crédits',
     mycreditscards:'My Credit Cards',
     mywishlist:'Listes de Favoris',

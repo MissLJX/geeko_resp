@@ -3,7 +3,7 @@
         <div class="hd">
             <div class="el-tbl">
                 <div class="el-tbl-cell" @click="getData(0,'all')" :class="{active:0===index}">
-                    {{$t('all')}}<span>{{orderCountUnpaid+orderCountProcessing+orderCountShipped+orderCountReceipt+orderCountCanceled}}</span>
+                    {{$t('all')}}<span>{{orderCountAll}}</span>
                 </div>
                 <div class="el-tbl-cell" @click="getData(1,'Unpaid')" :class="{active:1===index}">
                     {{$t('unpaid')}}<span>{{orderCountUnpaid}}</span>
@@ -68,6 +68,8 @@
                     </div>
                 </div>
             </div>
+            <div v-show="ifloding && !finished" class="el-list-loading"><i class="iconfont">&#xe69f;</i></div>
+            <div class="el-no-more" v-show="finished">{{$t('nomoredata')}}</div>
         </div>
 
         <select-order v-if="isShowSelect" v-on:closeSelect="closeSelect1" v-on:showTicket="showTicket"></select-order>
@@ -89,7 +91,10 @@
                 index:0,
                 orderMethod:null,
                 isShowTicket:false,
-                isShowSelect:false
+                isShowSelect:false,
+                method:'all',
+                ifloding:true,
+                finished:false
             }
         },
         components: {
@@ -105,6 +110,7 @@
                 'orderCountShipped',
                 'orderCountReceipt',
                 'orderCountCanceled',
+                'orderCountAll',
                 'all',
                 'unpaid',
                 'processing',
@@ -117,9 +123,11 @@
                 'canceledLoading',
                 'shippedLoading',
                 'unpaidLoading',
+                'unpaidDone'
             ]),
         },
         created(){
+            this.$store.dispatch('getOrderCountAll');
             this.$store.dispatch('getOrderCountProcessing');
             this.$store.dispatch('getOrderCountShipped');
             this.$store.dispatch('getOrderCountReceipt');
@@ -127,16 +135,27 @@
             this.$store.dispatch('getOrderCountUnpaid');
             this.loadAll(20).then(()=> {
                 this.orderMethod = this.all
+                /*if(this.orderMethod){
+                    this.ifloding = false
+                }*/
             })
+        },
+        mounted(){
+            window.addEventListener('scroll',this.scrollHandle)
         },
         methods:{
             ...mapActions([
                 'loadAll'
             ]),
             getData(index,method){
+                this.ifloding = true
+                this.finished = false
                 this.index = index
+                this.method = method
                 if(method==='all'){
-                    this.orderMethod = this.all
+                    this.$store.dispatch('loadAll',20).then(()=> {
+                        this.orderMethod = this.all
+                    })
                 }
                 if(method==='Unpaid'){
                     this.$store.dispatch('loadUnpaid',20).then(()=> {
@@ -165,6 +184,7 @@
                 }
             },
             getDate(paymentTime){
+                this.ifloding = false
                 if(paymentTime == null){
                     return ''
                 }
@@ -174,7 +194,7 @@
                 return utils.STATUS_LABEL(orderstatus)
             },
             checkDetail(orderid){
-                this.$router.push({ path: utils.ROUTER_PATH_ME + '/order-detail', query: { orderid: orderid } })
+                this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/order-detail', query: { orderid: orderid } })
             },
             closeSelect1(){
                 this.isShowTicket = false
@@ -190,11 +210,17 @@
                 this.isShowTicket = false;
             },
             checkLogistics(orderid){
-                this.$router.push({ path: utils.ROUTER_PATH_ME + '/logistics-detail', query: { orderid: orderid } })
+                this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/logistics-detail', query: { orderid: orderid } })
             },
             orderoffset(order){
                 return  order.order.orderTime + 5*24*60*60*1000 - order.serverTime;
-            }
+            },
+            scrollHandle(evt){
+                evt.preventDefault();
+                if(document.documentElement.scrollTop + window.innerHeight >= document.body.offsetHeight) {
+                    this.getData(this.index,this.method)
+                }
+            },
         }
     }
 </script>
@@ -403,6 +429,24 @@
             font-weight: bold;
             margin-bottom: 0;
             margin-top: 20px;
+        }
+    }
+    .el-list-loading {
+        text-align: center;
+        padding: 10px 0;
+        i {
+            font-size: 24px;
+            display: inline-block;
+            animation: list-loading 1.5s infinite linear;
+        }
+    }
+
+    @keyframes list-loading {
+        from {
+            transform: rotate(0);
+        }
+        to {
+            transform: rotate(360deg);
         }
     }
 </style>

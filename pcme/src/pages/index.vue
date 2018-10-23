@@ -7,17 +7,17 @@
             <div class="el-me-nav">
                 <h3><router-link to="/me/m">{{$t('me')}}</router-link></h3>
                 <ul>
-                    <li><router-link to="/me/orders">{{$t('myorders')}}</router-link></li>
-                    <li><router-link to="/me/tickets">{{$t('mytickets')}}</router-link></li>
-                    <li><router-link to="/me/coupons">{{$t('mycoupons')}}</router-link></li>
-                    <li><router-link to="/me/credits">{{$t('mycredits')}}</router-link></li>
-                    <li><router-link to="/me/cards">{{$t('mycreditscards')}}</router-link></li>
-                    <li><router-link to="/me/wishlist">{{$t('mywishlist')}}</router-link></li>
-                    <li><router-link to="/me/addressBook">{{$t('addressBook')}}</router-link></li>
-                    <li><router-link to="/me/changeEmail">{{$t('changeEmail')}}</router-link></li>
-                    <li><router-link to="/me/changePwd">{{$t('changepwd')}}</router-link></li>
-                    <li><router-link to="/me/updateProfile">{{$t('updatepro')}}</router-link></li>
-                    <li><router-link to="/me/makeSug">{{$t('makesug')}}</router-link></li>
+                    <li><router-link to="/me/m/orders">{{$t('myorders')}}</router-link></li>
+                    <li><router-link to="/me/m/tickets">{{$t('mytickets')}}</router-link></li>
+                    <li><router-link to="/me/m/coupons">{{$t('mycoupons')}}</router-link></li>
+                    <li><router-link to="/me/m/credits">{{$t('mycredits')}}</router-link></li>
+                    <li><router-link to="/me/m/cards">{{$t('mycreditscards')}}</router-link></li>
+                    <li><router-link to="/me/m/wishlist">{{$t('mywishlist')}}</router-link></li>
+                    <li><router-link to="/me/m/addressBook">{{$t('addressBook')}}</router-link></li>
+                    <li><router-link to="/me/m/changeEmail">{{$t('changeEmail')}}</router-link></li>
+                    <li><router-link to="/me/m/changePwd">{{$t('changepwd')}}</router-link></li>
+                    <li><router-link to="/me/m/updateProfile">{{$t('updatepro')}}</router-link></li>
+                    <li><router-link to="/me/m/makeSug">{{$t('makesug')}}</router-link></li>
                     <li @click="logoutHandle">{{$t('logout')}}</li>
                 </ul>
             </div>

@@ -1,14 +1,12 @@
 <template>
     <div class="el-body">
-
-        <!-- 路由出口 -->
-        <!-- 路由匹配到的组件将渲染在这里 -->
         <router-view></router-view>
     </div>
 </template>
 
 <style scoped lang="scss">
     .el-body {
+        margin-bottom: 100px;
         h1{
             font-size: 15px;
         }

@@ -14,29 +14,23 @@ import Orders from '../components/orders.vue'
 import Tickets from '../components/tickets.vue'
 import UpdateProfile from '../components/update-profile.vue'
 import Wishlist from '../components/wishlist.vue'
-import ConfirmSuccess from '../pages/confirm-success.vue'
+import confirmSuccess from '../pages/confirm-success.vue'
 import OrderDetail from '../pages/order-detail.vue'
 import LogisticsDetail from '../pages/logistics-detail.vue'
 import OrderReview from '../pages/order-review.vue'
+import uploadAvatar from '../components/upload-avatar.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
     {
-        path: '*',
-        name: 'Me',
+        /*path:'/chiquedoll/me/m',*/
+        path:'/me/m',
         component: Index,
         meta: {title:'Me'},
-        redirect: to => '/me/m',
-    },
-    {
-        path:'/me',
-        component: Index,
-        meta: {title:'Me'},
-
         children:[
             {
-                path:'m',
+                path:'/',
                 component:Me,
                 meta: {title:'Me'},
             },
@@ -98,23 +92,28 @@ const routes = [
         ]
         },
     {
-        path:'/me/confirm-email',
-        component: ConfirmSuccess,
+        path:'/me/m/confirm-email',
+        component: confirmSuccess,
         meta: {title:'ConfirmEmail'},
     },
     {
-        path:'/me/order-detail',
+        path:'/me/m/order-detail',
         component: OrderDetail,
         meta: {title:'OrderDetail'},
     },
     {
-        path:'/me/order-review',
+        path:'/me/m/order-review',
         component: OrderReview,
         meta: {title:'OrderReview'},
     },
     {
-        path:'/me/logistics-detail',
+        path:'/me/m/logistics-detail',
         component: LogisticsDetail,
+        meta: {title:'LogisticsDetail'},
+    },
+    {
+        path:'/me/m/load',
+        component: uploadAvatar,
         meta: {title:'LogisticsDetail'},
     }
 ]

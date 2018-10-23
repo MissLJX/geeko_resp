@@ -10,6 +10,7 @@ Vue.use(Vuex)
 const state = {
     me:'',
 
+    orderCountAll: 0,
     orderCountProcessing: 0,
     orderCountShipped: 0,
     orderCountReceipt: 0,
@@ -81,6 +82,7 @@ const state = {
 const getters = {
     me: state => state.me,
 
+    orderCountAll: state => state.orderCountAll,
     orderCountProcessing: state => state.orderCountProcessing,
     orderCountShipped: state => state.orderCountShipped,
     orderCountReceipt: state => state.orderCountReceipt,
@@ -148,6 +150,9 @@ const mutations = {
         state.me = _me
     },
     //order count
+    [types.ME_ORDER_COUNT_ALL](state, count){
+        state.orderCountAll = count
+    },
     [types.ME_ORDER_COUNT_PROCESSING](state, count){
         state.orderCountProcessing = count
     },
@@ -409,6 +414,11 @@ const actions = {
         return api.logout();
     },
     //order count
+    getOrderCountAll({commit}){
+        return api.getOrderCountAll().then((count) => {
+            commit(types.ME_ORDER_COUNT_ALL, count)
+        })
+    },
     getOrderCountProcessing({commit}){
         return api.getOrderCountProcessing().then((count) => {
             commit(types.ME_ORDER_COUNT_PROCESSING, count)
@@ -478,23 +488,18 @@ const actions = {
 
 
     loadUnpaid({ commit, state }, limit) {
-        if (state.unpaidDone) {
-            return;
-        }
         commit(types.HOME_LOADING_UNPAID, true);
-        api.getOrders({
+        return api.getOrders({
             skip: state.unpaidSkip,
             api_suffix: 'get-unpayed-order-list'
         }, (orders) => {
             if (orders && orders.length > 0) {
                 commit(types.HOME_ORDERS_UNPAID, orders);
                 commit(types.HOME_ORDER_UNPAID_SKIP, limit);
+                return {finished: false}
             } else {
-                commit(types.HOME_UNPAID_DONE);
+                return {finished: true}
             }
-
-            commit(types.HOME_LOADING_UNPAID, false);
-
         });
     },
 
@@ -523,7 +528,6 @@ const actions = {
 
     loadShipped({ commit }, limit) {
         if (state.shippedDone) {
-            alert("aaaaa")
             return;
         }
         api.getOrders({
@@ -636,13 +640,14 @@ const actions = {
                     }else{
                         commit(types.ME_GET_WISH_PRODUCTS, products)
                     }
+                    return {finished:false}
                 } else {
                     if (skip === 0) {
                         return {finished: true}
                     }
                     return {finished: true}
                 }
-                return {finished:false}
+
             })
     },
     getWishskip({commit}){

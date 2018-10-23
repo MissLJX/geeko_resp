@@ -6,7 +6,8 @@
                 <div class="address-info">
                     <p><strong>{{address.name}}</strong>({{address.phoneNumber}})</p>
                     <p class="mt-20">{{address.streetAddress1}} , {{address.unit}}</p>
-                    <p>{{address.zipCode}} , {{address.city}} , {{address.state.label ? address.state.label :address.state.value}} , {{address.country.label}}</p>
+                    <!--<p>{{address.zipCode}} , {{address.city}} , {{address.state.label ? address.state.label :address.state.value}} , {{address.country.label}}</p>-->
+                    <p>{{addressStr(address)}}</p>
                 </div>
                 <div class="add-default">
                     <span :class="{'default':address.isDefaultAddress,'no-default':!address.isDefaultAddress}"  @click="makedefault(address.id)"><i v-if="address.isDefaultAddress" class="iconfont">&#xe638;</i></span>
@@ -96,6 +97,14 @@
             close(){
                 this.isEdit = false
             },
+            addressStr(address){
+                let state = address.state.label ? address.state.label :address.state.value;
+                if(state){
+                    return address.zipCode+','+address.city+','+state+','+address.country.label
+                }else{
+                    return address.zipCode+','+address.city+','+address.country.label
+                }
+            }
         },
     }
 </script>

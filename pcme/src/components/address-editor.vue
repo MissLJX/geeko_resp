@@ -50,7 +50,7 @@
                         <option disabled value="-1">{{$t('country')}}</option>
                         <option v-for="c in countries" :value="c.value">{{c.label}}</option>
                     </select>
-                    <span v-show="countrySelected == '-1'"
+                    <span v-show="countrySelected === '-1'"
                           class="st-is-danger">{{$t('selectcountry')}}</span>
                 </div>
             </div>
@@ -99,10 +99,9 @@
 
 <script>
     import _ from 'lodash'
-
     export default{
         data(){
-            var initCountry = this.address && this.address.country ? this.address.country.value : '-1'
+            var initCountry = this.address && this.address.country ? this.address.country.value : 'US'
             var initState = this.address && this.address.state ? this.address.state.value : '-1'
             return {
                 shipping: this.address ? _.cloneDeep(this.address) : {
@@ -166,21 +165,13 @@
                             this.$store.dispatch('updateAddress', this.shipping).then(() => {
                                 this.submiting = false
                                 this.$emit('close')
-                            }).catch((r) => {
-                                alert(r.result)
-                                this.submiting = false
                             })
                         } else {
                             this.$store.dispatch('addAddress', this.shipping).then(() => {
                                 this.submiting = false
                                 this.$emit('close')
-                            }).catch((r) => {
-                                alert(r.result)
-                                this.submiting = false
                             })
                         }
-
-
                         return;
                     }
                 });

@@ -149,7 +149,7 @@
                 return window.ctx + '/i/share/register?key='+this.copylink
             },
             creditstUrl(){
-                return utils.ROUTER_PATH_ME + '/credits'
+                return utils.ROUTER_PATH_ME + '/m/credits'
             }
         },
         methods:{
@@ -159,7 +159,7 @@
             copy(){
                 let clipboard = new Clipboard('.tag-read');
                 clipboard.on('success', e => {
-                    alert('复制成功')
+                    alert('Content copied!')
                 })
             },
             showEmail(){

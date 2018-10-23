@@ -5,13 +5,24 @@
         </div>
         <div class="p-bd">
             <div class="imgarea">
+                <!--<img :src="imgDataUrl">-->
                 <div class="el-me-headerImage" :style="{'background-image': 'url('+headerImage+'),url('+baseHeaderUrl+')' }"></div>
-                <!--<div class="img-upload">
-                    <p>{{$t('uploadphoto')}}</p>
-                    <input type="file" name="image" accept="image/*"
-                           style="font-size: 1.2em; padding: 10px 0;"
-                           @change="setImage" />
-                </div>-->
+                <div class="img-upload">
+                    <p @click="toggleShow">{{$t('uploadphoto')}}</p>
+                    <my-upload field="imageFile"
+                               @crop-success="cropSuccess"
+                               @crop-upload-success="cropUploadSuccess"
+                               @crop-upload-fail="cropUploadFail"
+                               v-model="show"
+                               :width="300"
+                               :height="300"
+                               url="/v7/customer/upload-icon"
+                               :headers="headers"
+                               img-format="png"
+                               langType="en"
+                    ></my-upload>
+                </div>
+
             </div>
             <div class="namearea">
                 <div class="firstname">
@@ -28,33 +39,6 @@
                 <div class="v-btn" @click="infoSaveHandle">{{$t('submit')}}</div>
             </div>
         </div>
-
-        <div class="mask" v-if="isAlert">
-            <div class="img-con">
-                <p class="cancel-btn" @click="uploadImg(0)">X</p>
-                <h3>{{$t('uploadphoto')}}</h3>
-                <div class="l-img" @click="cropImage">
-                    <vue-cropper
-                            ref='cropper'
-                            :guides="true"
-                            :view-mode="1"
-                            drag-mode="crop"
-                            :auto-crop-area="1"
-                            :min-container-width="390"
-                            :min-container-height="390"
-                            :background="true"
-                            :rotatable="true"
-                            :src="imgSrc"
-                            alt="Source Image"
-                            :img-style="{ 'width': '390px', 'height': '390px' }">
-                    </vue-cropper>
-                </div>
-                <div class="s-img">
-                    <img  :src="cropImg ? cropImg : imgSrc" alt="Cropped Image" />
-                    <div class="v-btn" @click="uploadImg(1)">{{$t('okay')}}</div>
-                </div>
-            </div>
-        </div>
         <loding v-if="isloding"></loding>
     </div>
 </template>
@@ -63,70 +47,46 @@
     import {mapGetters} from 'vuex'
     import * as utils from '../utils/geekoutil';
     import loding from './loding.vue';
-    import uploadAvatar from './upload-avatar.vue'
+    import myUpload from 'vue-image-crop-upload';
 
     export default {
         data() {
             return {
                 imgSrc: '',
-                cropImg: '',
                 isAlert:false,
-                imgfile:'',
                 firstname:'',
                 lastname:'',
-                isloding:false
+                isloding:false,
+                show: false,
+                headers: {
+                    smail: '*_~'
+                },
+                headerImage:'',
             };
         },
         components: {
             'loding':loding,
+            'my-upload': myUpload
         },
         computed:{
             ...mapGetters(['me']),
             baseHeaderUrl() {
                 return 'https://dgzfssf1la12s.cloudfront.net/site/pc/icon35.png';
             },
-            headerImage(){
+            /*headerImage(){
                 if(this.me.id){
-                    return utils.imageutil.getHeaderImg(this.me.id)
+                    return
                 }
-            }
+            }*/
         },
         methods:{
-            /*setImage(e) {
-                this.isAlert=true;
-
-                const file = e.target.files[0];
-                if (!file.type.includes('image/')) {
-                    alert('Please select an image file');
-                    return;
-                }
-
-                if (typeof FileReader === 'function') {
-                    const reader = new FileReader();
-
-                    reader.onload = (event) => {
-                        this.imgSrc = event.target.result;
-                        this.$refs.cropper.replace(event.target.result);
-                    };
-
-                    reader.readAsDataURL(file);
-                } else {
-                    alert('Sorry, FileReader API not supported');
-                }
-            },
-            cropImage() {
-                this.cropImg = this.$refs.cropper.getCroppedCanvas().toDataURL();
-            },
-            uploadImg(flag){
-                this.isAlert = false;
-                if(flag === 1){
-                    var formData = new FormData();
-                    this.cropImg ? this.imgfile = this.cropImg : this.imgfile = this.imgSrc
-                    this.imgfile = this.convertImgDataToBlob(this.imgfile)
-                    formData.append('imageFile', this.imgfile);
-                    this.$store.dispatch('setHeaderImage', formData)
-                }
-            },*/
+            /*
+            var formData = new FormData();
+            this.cropImg ? this.imgfile = this.cropImg : this.imgfile = this.imgSrc
+            this.imgfile = this.convertImgDataToBlob(this.imgfile)
+            formData.append('imageFile', this.imgfile);
+            this.$store.dispatch('setHeaderImage', formData)
+            */
             infoSaveHandle(){
                 let postData = {
                     'id': this.me.id,
@@ -178,11 +138,29 @@
                 }                
                 return blob;
             }*/
+            toggleShow() {
+                this.show = !this.show;
+            },
+            cropSuccess(imgDataUrl, field){
+                console.log('-------- crop success --------');
+                this.headerImage = imgDataUrl;
+            },
+            cropUploadSuccess(jsonData, field){
+                console.log('-------- upload success --------');
+                console.log(jsonData);
+                console.log('field: ' + field);
+            },
+            cropUploadFail(status, field){
+                console.log('-------- upload fail --------');
+                console.log(status);
+                console.log('field: ' + field);
+            }
         },
         created(){
             this.$store.dispatch('getMe').then(()=>{
                 this.firstname = this.me.name.firstName
                 this.lastname = this.me.name.lastName
+                this.headerImage = utils.imageutil.getHeaderImg(this.me.id)
             })
         },
     }

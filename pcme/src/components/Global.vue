@@ -1,5 +1,8 @@
 <script>
-    const sitename='ivrose';
+    let sitename = 'chiquedoll'
+    if(window.name){
+        sitename = window.name
+    }
     export default
     {
         sitename

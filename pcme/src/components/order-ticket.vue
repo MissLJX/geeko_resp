@@ -1,5 +1,5 @@
 <template>
-    <div class="orderTicket">
+    <div class="orderTicket" v-if="ticket">
         <div class="s-hd">
             <h3 @click="close"><i class="iconfont">&#xe693;</i>{{$t('ticket')}}</h3>
         </div>
@@ -125,13 +125,13 @@
             },
             sendticket(){
                 let formData = new FormData();
-                if(this.msg){
-                    formData.append("message", this.msg)
+                if(!this.msg) {
+                    return ''
                 }else{
-                    formData.append("message", '-')
+                    formData.append("message",this.msg)
                 }
 
-                if(this.ticket_con.operaId){
+                if(this.ticket_con && this.ticket_con.operaId){
                     formData.append("operaId",this.ticket_con.operaId)
                 }else{
                     formData.append("operaId",this.ticket.id)
@@ -151,9 +151,6 @@
             }
 
         },
-        components: {
-
-        }
     };
 </script>
 <style scoped lang="scss">
@@ -165,6 +162,7 @@
         border: 1px solid #cacaca;
         border-right: none;
         padding-top: 90px;
+        z-index: 999;
         .s-hd{
             width: 100%;
             height: 90px;
@@ -174,9 +172,14 @@
             padding-left: 25px;
             position: absolute;
             top: 0;
+            h3{
+                line-height: 90px;
+            }
             i{
                 margin-right: 20px;
                 cursor: pointer;
+                display: inline-block;
+                transform: rotateY(180deg);
             }
         }
         .s-bd{

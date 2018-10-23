@@ -1,9 +1,9 @@
 <template>
-    <div class="selectOrder">
+    <div class="selectOrder" >
         <div class="s-hd">
             <h3 @click="close"><i class="iconfont">&#xe693;</i>{{$t('selectorder')}}</h3>
         </div>
-        <div class="s-bd">
+        <div class="s-bd" ref="viewBox">
             <geeko-select @change="changeHandle" :items="tabList"/>
             <div v-for="(item,index) in orderMethod" class="item-order">
                 <div class="order-hd">
@@ -22,6 +22,8 @@
                     </span>
                 </div>
             </div>
+            <div v-show="ifloding" class="el-list-loading"><i class="iconfont">&#xe69f;</i></div>
+            <div class="el-no-more" v-show="finished">{{$t('nomoredata')}}</div>
         </div>
         <div class="s-fd">
             <div class="f-btn" @click="submitTicket">{{$t('submit')}}</div>
@@ -39,6 +41,8 @@
             var tab = this.$route.name;
             return {
                 orderMethod:null,
+                ifloding:true,
+                finished:false,
                 tabList: [
                     {
                         label: 'All',
@@ -72,7 +76,8 @@
                     }
                 ],
                 isSelectOrder:'',
-                pickedOrder:''
+                pickedOrder:'',
+                method:'home-all'
             };
         },
 
@@ -92,6 +97,7 @@
                 'canceledLoading',
                 'shippedLoading',
                 'unpaidLoading',
+                'unpaidDone'
             ]),
 
         },
@@ -99,8 +105,9 @@
             this.loadAll(20).then(()=> {
                 this.orderMethod = this.all
             })
-            this.changeList(this.$route.name);
-            this.getM1135();
+        },
+        mounted(){
+            this.$refs.viewBox.addEventListener('scroll',this.scrollHandle)
         },
         methods: {
             ...mapActions([
@@ -113,8 +120,11 @@
             },
 
             changeList(tab) {
+                this.method = tab
                 if(tab==='home-all'){
-                    this.orderMethod = this.all
+                    this.$store.dispatch('loadAll',20).then(()=> {
+                        this.orderMethod = this.all
+                    })
                 }
                 if(tab==='home-unpaid'){
                     this.$store.dispatch('loadUnpaid',20).then(()=> {
@@ -141,8 +151,11 @@
                         this.orderMethod = this.canceled
                     })
                 }
+
+
             },
             getStatus(orderstatus){
+                this.ifloding = false
                 return utils.STATUS_LABEL(orderstatus)
             },
             selectOrder(orderid){
@@ -157,7 +170,13 @@
                 }else{
                     alert("please choose an order");
                 }
-            }
+            },
+            scrollHandle(evt){
+                evt.preventDefault();
+                if(this.$refs.viewBox.scrollTop + this.$refs.viewBox.offsetHeight >= this.$refs.viewBox.scrollHeight) {
+                    this.changeList(this.method)
+                }
+            },
         },
         components: {
             'geeko-select': GeekoSelect
@@ -175,6 +194,7 @@
         top: 0;
         padding-top: 90px;
         padding-bottom: 73px;
+        z-index: 999;
         .s-hd{
             width: 100%;
             height: 90px;
@@ -188,6 +208,9 @@
             i{
                 margin-right: 20px;
                 cursor: pointer;
+            }
+            h3{
+                line-height: 90px;
             }
         }
         .s-bd{
@@ -309,6 +332,25 @@
                     opacity: .8;
                 }
             }
+        }
+    }
+
+    .el-list-loading {
+        text-align: center;
+        padding: 10px 0;
+        i {
+            font-size: 24px;
+            display: inline-block;
+            animation: list-loading 1.5s infinite linear;
+        }
+    }
+
+    @keyframes list-loading {
+        from {
+            transform: rotate(0);
+        }
+        to {
+            transform: rotate(360deg);
         }
     }
 </style>

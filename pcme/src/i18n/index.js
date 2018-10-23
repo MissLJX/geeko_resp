@@ -1,6 +1,3 @@
-/**
- * Created by shao_ on 2017/7/14.
- */
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
 

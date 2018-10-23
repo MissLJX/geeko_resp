@@ -54,7 +54,7 @@
 
         <div class="pricecon">
             <div class="pricecon1">
-                <p class="p-price">{{$t('itemtotal')}}:<span class="price">{{itemtotal}}</span></p>
+                <p class="p-price">{{$t('subtotal')}}:<span class="price">{{subtotal}}</span></p>
                 <p class="p-price">{{$t('coupon')}}:<span class="price r-p">-{{coupon}}</span></p>
                 <p class="p-price">{{$t('credits')}}:<span class="price r-p">-{{pointDiscount}}</span></p>
                 <p class="p-price">{{$t('shipping')}}:<span class="price">{{shippingprice}}</span></p>
@@ -154,9 +154,9 @@
             getStatus(){
                 return utils.STATUS_LABEL(this.order.status)
             },
-            itemtotal(){
-                if(this.order && this.order.itemTotal){
-                    return this.order.itemTotal.unit+this.order.itemTotal.amount
+            subtotal(){
+                if(this.order && this.order.subTotal){
+                    return this.order.subTotal.unit+this.order.subTotal.amount
                 }
             },
             coupon(){
@@ -205,7 +205,7 @@
                 })
             },
             review(){
-                this.$router.push({ path: utils.ROUTER_PATH_ME + '/order-review', query: { orderid: this.order.id } })
+                this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/order-review', query: { orderid: this.order.id } })
             },
             closeSelect1(){
                 this.isShowTicket = false
