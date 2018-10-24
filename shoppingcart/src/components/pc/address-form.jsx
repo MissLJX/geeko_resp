@@ -174,6 +174,9 @@ const AddressFrom = class extends React.Component {
 
   render () {
     const { intl, isNew, isConfirm } = this.props
+
+    const divStyle = (this.state.country === 'AE' || this.state.country === 'SA') ? {width: 'calc(100% - 79px)', marginLeft: 10, display: 'inline-block', verticalAlign: 'middle'} : {}
+
     return <div>
       <Form ref={ c => this.form = c } style={{display: `${this.state.country !== 'BR' ? 'block' : 'none'}`}} onSubmit={this.handleSubmit.bind(this)}>
         <ELEMENTS>
@@ -272,9 +275,19 @@ const AddressFrom = class extends React.Component {
             </FormElement>
 
             <FormElement label={`${intl.formatMessage({id: 'phone_number'})}:`} className="__required">
+
+              {
+                this.state.country === 'AE' && <span style={{width: 69, display: 'inline-block'}}>UAE +971</span>
+              }
+
+              {
+                this.state.country === 'SA' && <span style={{width: 69, display: 'inline-block'}}>KSA +966</span>
+              }
+
               <Input
                 name='phoneNumber'
                 style= {{width: '100%', height: 40}}
+                divStyle={divStyle}
                 value={this.state.phoneNumber}
                 onChange={this.handleInputChange}
                 validations={[required, phone]}/>
@@ -290,7 +303,7 @@ const AddressFrom = class extends React.Component {
                   {intl.formatMessage({id: 'please_wait'})}...
                 </BigButton> : <Button className="__submitbtn" ref={c => this.addressButtn = c} ingoredisable="true" style={{
                   display: 'block',
-                  backgroundColor: '#e7004d',
+                  backgroundColor: '#222',
                   borderRadius: 2,
                   color: '#fff',
                   height: 40,
@@ -459,7 +472,7 @@ const AddressFrom = class extends React.Component {
                   {intl.formatMessage({id: 'please_wait'})}...
                 </BigButton> : <Button className="__submitbtn" ref={c => this.brAddressButtn = c} ingoredisable="true" style={{
                   display: 'block',
-                  backgroundColor: '#e7004d',
+                  backgroundColor: '#222',
                   borderRadius: 2,
                   color: '#fff',
                   height: 40,

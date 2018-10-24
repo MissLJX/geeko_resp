@@ -321,19 +321,17 @@ export const getTransaction = (transaction) => {
 export const fetchTransactionPage = (transactionId) => {
   const __get_transaction = gettransaction(transactionId)
   const __get_me = me()
-  const __br_m1132__ = getMessage('M1132')
-  const __br_m1133__ = getMessage('M1133')
+  const __m1186__ = getMessage('M1186')
   const __mx_m1147__ = getMessage('M1147')
   const __normal_m1073 = getMessage('M1073')
   return dispatch => {
-    return Promise.all([__get_transaction, __get_me, __br_m1132__, __br_m1133__, __mx_m1147__, __normal_m1073]).then(values => {
+    return Promise.all([__get_transaction, __get_me, __m1186__, __mx_m1147__, __normal_m1073]).then(values => {
       const transactionPage = {
         transaction: values[0].result,
         me: values[1].result,
-        m1132: values[2].result,
-        m1133: values[3].result,
-        m1147: values[4].result,
-        m1073: values[5].result
+        m1186: values[2].result,
+        m1147: values[3].result,
+        m1073: values[4].result
       }
       dispatch(getTransactionPage(transactionPage))
       return transactionPage

@@ -169,7 +169,11 @@ const MercadoBinding = class extends React.Component {
   pay (params) {
     mercadopay(params).then(data => data.result).then(({success, transactionId, details, solutions}) => {
       if (success) {
-        window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
+        if (siteType === 'new') {
+          window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/credit-card?order_number=${transactionId}`
+        } else {
+          window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
+        }
       } else {
         alert(details)
       }

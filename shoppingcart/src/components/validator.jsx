@@ -7,6 +7,8 @@ export const __reg_zip_br__ = /^[0-9]{5}-[0-9]{3}$/
 
 export const __reg_phone_normal__ = /^\d{1,20}$/
 export const __reg_phone_br__ = /^\d{8,9}$/
+export const __reg_phone_ae_ = /^(50|52|54|55|56|58|2|3|4|6|7|9){1,2}\d{7}$/
+export const __reg_phone_sa_ = /^(50|53|55|51|58|59|54|56|57|11|12|13|14|16|17|811){1,3}\d{7}$/
 
 export const cpfcheck = (value) => {
   var result = true
@@ -113,6 +115,14 @@ export const phone = (value, props, components) => {
     case 'BR':
       reg = __reg_phone_br__
       error = `Insira pelo menos 8-9 números.`
+      break
+    case 'AE':
+      reg = __reg_phone_ae_
+      error = `Phone numbers should start with 50/52/54/55/56/58/2/3/4/6/7/9, followed by any 7 digits.`
+      break
+    case 'SA':
+      reg = __reg_phone_sa_
+      error = `Phone numbers should start with 50/53/55/51/58/59/54/56/57/11/12/13/14/16/17/811, followed by any 7 digits.`
       break
     default:
       reg = __reg_phone_normal__

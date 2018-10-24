@@ -12,6 +12,7 @@ const getLabel = ({value, label}) => {
 
 const Address = styled.address`
 	line-height: 22px;
+  font-style: normal;
 `
 
 export default ({address}) => <Address>

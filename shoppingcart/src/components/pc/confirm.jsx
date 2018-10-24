@@ -4,33 +4,33 @@ import {FormattedMessage} from 'react-intl'
 
 const CONFIRM = styled.div`
 	background-color: #fff;
-	width: 696px;
-	padding-top: 85px;
-	padding: 77px 82px;
+	width: 484px;
+  padding-top: 83px;
+  padding: 40px 62px;
 
 	.__message{
 		line-height: 20px;
-		font-size: 18px;
+		font-size: 14px;
 	}
 
 	
 
 
 	.__btn{
-		width: 240px;
-		height: 40px;
+		width: 170px;
+		height: 32px;
 		border-radius: 2px;
 		font-family: HelveticaNeue-Medium;
-		font-size: 16px;
+		font-size: 14px;
 		color: #fff;
 		display: inline-block;
 		cursor: pointer;
 		text-align: center;
-		line-height: 40px;
+		line-height: 32px;
 	}
 
 	.__yes{
-		background-color: #e7004d;
+		background-color: #222;
 	}
 
 	.__no{
@@ -38,7 +38,7 @@ const CONFIRM = styled.div`
 	}
 
 	.__btns{
-		margin-top: 45px;
+		margin-top: 25px;
 		& > .__btn{
 			margin-left: 20px;
 			&:first-child{

@@ -13,12 +13,15 @@ import {injectIntl} from 'react-intl'
 
 import {unitprice} from '../../utils/utils.js'
 
+import CheckBox from '../checkbox.jsx'
+
 const HD = styled.div`
 	height: 50px;
 	line-height: 50px;
 	border-bottom: 1px solid #e5e5e5;
 	padding-left: 10px;
 	position: relative;
+  background-color: #fff;
 	h1{
 		font-size: 18px;
 		font-weight: 400;
@@ -34,14 +37,12 @@ const HD = styled.div`
 `
 
 const BD = styled.div`
-	padding-left: 10px;
-	padding-right: 10px;
 	position: relative;
 	height: 340px;
 `
 
 const CREDITWRAPPER = styled.div`
-	background-color: #fff;
+	background-color: #efefef;
 	
 	position: fixed;
 	z-index: 5;
@@ -52,6 +53,9 @@ const CREDITWRAPPER = styled.div`
 const StyledCard = styled.div`
 	height: 50px;
 	cursor: pointer;
+  padding-left:10px;
+  padding-right:10px;
+  background-color:#fff;
 `
 
 const Cards = styled.ul`
@@ -76,14 +80,28 @@ const AddIcon = styled.span`
   line-height: 22px;
 `
 
+const NewCardBtn = styled.div`
+  width: 240px;
+  height: 36px;
+  border-radius: 1px;
+  border: solid 1px #666666;
+  color: #222222;
+  font-size: 15px;
+  line-height: 34px;
+  cursor: pointer;
+  &:active{
+    border-color: #222;
+  }
+  text-align: center;
+  margin: 16px auto;
+`
+
 const Card = props => <StyledCard>
   <div onClick={() => { props.cardSelect(props.card) }} className="x-table __fixed __vm x-fw x-fh">
     <div className="x-cell"><span>Card No.</span> { props.card.quickpayRecord.cardNumber }</div>
-    {
-      props.card.isSelected && <div className="x-cell __right" style={{width: 30}}>
-        <Icon style={{color: '#e5004f'}}>&#xe638;</Icon>
-      </div>
-    }
+    <div className="x-cell __right" style={{width: 30}}>
+      <CheckBox className={`${props.card.isSelected ? 'selected' : ''}`}/>
+    </div>
   </div>
 </StyledCard>
 
@@ -270,7 +288,7 @@ const CreditCard = class extends React.Component {
   }
 
   render () {
-  	const {cards, orderTotal, payMethod, intl} = this.props
+  	const {cards, orderTotal, payMethod, intl, count} = this.props
   	let currentCard
 
   	if (cards && cards.length) {
@@ -315,10 +333,11 @@ const CreditCard = class extends React.Component {
 
   						{getPayPlugin(currentCard.quickpayRecord.payMethod, {card: currentCard, ...this.props})}
 
+              <div style={{textAlign: 'right', marginTop: 10, paddingRight: 12}}>
+                <Grey>{count} items</Grey> <span style={{fontSize: 15}}><span>{intl.formatMessage({id: 'total'})}:</span> <Red><Money money={orderTotal}/></Red></span>
+              </div>
+
   						<div style={{position: 'absolute', bottom: 0, left: 0, paddingBottom: 10, paddingLeft: 10, paddingRight: 10}}>
-                <div style={{fontSize: 18, textAlign: 'right', marginTop: 15}}>
-                  <Red><Money money={orderTotal}/></Red>
-                </div>
   							<div className="x-table __vm __fixed x-fw">
   								<div className="x-cell" style={{width: 60}}>
   									<img style={{width: 50}} src={ logoIcon }/>
@@ -334,7 +353,7 @@ const CreditCard = class extends React.Component {
                   {
                     this.props.checking ? <BigButton bgColor="#999">
                       {intl.formatMessage({id: 'please_wait'})}...</BigButton> : (
-                      <BigButton bgColor="#e5004f" onClick={(evt) => { this.checkout(evt, currentCard) }}>
+                      <BigButton bgColor="#222" onClick={(evt) => { this.checkout(evt, currentCard) }}>
                         {intl.formatMessage({id: 'check_out'})}
                       </BigButton>
                     )
@@ -362,11 +381,13 @@ const CreditCard = class extends React.Component {
   								))
   							}
 
-                <li key="newcard">
+                {/*            <li key="newcard">
                   <NewCard payMethod={this.props.payMethod} onClick={this.props.addCard}/>
-                </li>
+                </li> */}
   						</Cards>
+              <NewCardBtn onClick={this.props.addCard}>Pay With New Card</NewCardBtn>
   					</BD>
+
   				</CREDITWRAPPER>
   			)
   		}

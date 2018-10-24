@@ -8,9 +8,9 @@ import {fetchAll} from './src/store/actions.js'
 
 import { Provider } from 'react-redux'
 
-import Index from './src/index.jsx'
+// import Index from './src/index.jsx'
 
-// import Index from './src/pc-index.jsx'
+import Index from './src/pc-index.jsx'
 
 import './src/css/reset.css'
 import './src/css/style.css'

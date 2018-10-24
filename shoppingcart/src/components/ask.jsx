@@ -5,13 +5,13 @@ const StyledAsk = styled.span`
 	width: ${props => props.width || 16}px;
 	height: ${props => props.width || 16}px;
 	border-radius: 50%;
-	background-color: #999;
+	border: 1px solid #cacaca;
 	cursor: pointer;
 	display: inline-block;
 	font-size: 12px;
-	line-height: ${props => props.width || 16}px;
+	line-height: ${props => (props.width - 2) || 14}px;
 	text-align: center;
-	color: #fff;
+	color: #cacaca;
 
 `
 

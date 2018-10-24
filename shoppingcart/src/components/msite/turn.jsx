@@ -23,7 +23,7 @@ const Turn = styled.span`
 	}
 
 	&.active{
-		background-color: #e5004f;
+		background-color: #222;
 	}
 
 	&.disabled{

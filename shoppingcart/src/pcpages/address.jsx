@@ -8,6 +8,7 @@ import { Modal } from '../components/pc/modal.jsx'
 import {injectIntl} from 'react-intl'
 import AddressFrom from '../components/pc/address-form.jsx'
 import {__route_root__} from '../utils/utils.js'
+import Cookie from 'js-cookie'
 
 export const __address_token__ = window.token
 
@@ -72,6 +73,12 @@ const Address = class extends React.Component {
       const addressOpreator = sAddress && this.props.match.params.id !== 'add' ? editAddress : addAddress
 
       addressOpreator({...address, id: sAddress ? sAddress.id : null}).then(() => {
+        if (address.country === 'BR') {
+          Cookie.set('currency', 'BRL', {expires: 365})
+        } else if (address.country === 'MX') {
+          Cookie.set('currency', 'MXN', {expires: 365})
+        }
+
         this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
         this.props.UPDATINGADDRESS(false)
         this.props.REFRESH()

@@ -55,6 +55,7 @@ import Icon from '../components/icon.jsx'
 import {Modal} from '../components/pc/modal.jsx'
 
 import Loadable from 'react-loadable'
+import Cookie from 'js-cookie'
 
 
 import { paypalpay,
@@ -70,6 +71,7 @@ import { paypalpay,
   getMessage,
   placepaypal,
   getApacPay,
+  apacPay,
   givingCoupon,
   movetooverseas,
   unusecoupon,
@@ -77,6 +79,20 @@ import { paypalpay,
   getLeaveImage } from '../api'
 
 export const __address_token__ = window.token
+
+
+const getPayImage = country => {
+  switch(country){
+    case 'BR':
+      return 'https://s3-us-west-2.amazonaws.com/wanna/pt_BR.png'
+    case 'DE':
+      return 'https://s3-us-west-2.amazonaws.com/wanna/de_DE.png'
+    case 'MX':
+      return 'https://s3-us-west-2.amazonaws.com/wanna/es_ES.png'
+    default:
+      return 'https://s3-us-west-2.amazonaws.com/wanna/pc_default.png'
+  }
+}
 
 const ItemEditor = Loadable({
     loader: () => import(/* webpackChunkName: "component--pc-item_editor" */ '../components/pc/item-editor.jsx'),
@@ -346,8 +362,13 @@ const ShoppingCart = class extends React.Component {
               throw new Error(L_LONGMESSAGE0)
             }
             return TOKEN
-          }).catch(({result}) => {
-            throw new Error(result)
+          }).catch((err) => {
+            if(err.result){
+              throw new Error(err.result)
+            }else{
+              throw new Error(err)
+            }
+            
           })
         },
         onAuthorize: function (data, actions) {
@@ -538,7 +559,7 @@ const ShoppingCart = class extends React.Component {
           return
         }
 
-        this.getApacPay(payMethod, this.props.cpf, (result) => {
+        this.apacPay(payMethod, this.props.cpf, (result) => {
           this.setState({
             checking: false
           })
@@ -575,11 +596,33 @@ const ShoppingCart = class extends React.Component {
 
   getApacPay (payMethod, cpf, fail) {
     getApacPay({payMethod, cpfNumber: cpf}).then(({result}) => {
-      const {isFree, transactionId} = result
+      const {isFree, transactionId, success,details,solutions} = result
       if (isFree) {
         window.location.href = `${window.ctx || ''}/v7/order/confirm/free?transationId=${transactionId}`
       } else {
         submit(result)
+        // console.log(result)
+      }
+    }).catch(({result}) => {
+      fail(result)
+    })
+  }
+
+  apacPay(payMethod, cpf, fail){
+    apacPay({payMethod, cpfNumber: cpf}).then(({result}) => {
+      const {isFree, transactionId, success,details,solutions} = result
+      if (isFree) {
+        window.location.href = `${window.ctx || ''}/v7/order/confirm/free?transationId=${transactionId}`
+      } else {
+        if( success ){
+          if(siteType === 'new'){
+            window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/credit-card?order_number=${transactionId}`
+          }else{
+            window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
+          }
+        }else{
+          fail(details)
+        }
       }
     }).catch(({result}) => {
       fail(result)
@@ -626,7 +669,7 @@ const ShoppingCart = class extends React.Component {
       // 设置15分钟后的毫秒数
       let endcounpontime = storage.get('_end_coupon_time')
       if (!endcounpontime) {
-        endcounpontime = new Date().getTime() + 15 * 60 * 1000
+        endcounpontime = new Date().getTime() + 30 * 60 * 1000
         storage.add('_end_coupon_time', endcounpontime)
       }
       couponcountdown = Number(endcounpontime) - new Date().getTime()
@@ -824,6 +867,12 @@ const ShoppingCart = class extends React.Component {
       })
     } else {
       addAddress(address).then(() => {
+
+        if (address.country === 'BR') {
+          Cookie.set('currency', 'BRL', {expires: 365})
+        } else if (address.country === 'MX') {
+          Cookie.set('currency', 'MXN', {expires: 365})
+        }
         
         this.props.REFRESHCART().then( () => {
           this.props.UPDATINGADDRESS(false)
@@ -1102,6 +1151,9 @@ const ShoppingCart = class extends React.Component {
 
     const shippingLabel = !hasLocalItems ? intl.formatMessage({id: 'shipping_method'}) : 'Shipping Method For Overseas Warehouse' 
 
+
+    const country = cart && cart.shippingDetail && cart.shippingDetail.country ? cart.shippingDetail.country.value : window.__country
+
     return loading ? <Loading/> : (empty ? <Empty/> : cart && <div>
       {(this.props.refreshing || this.state.refreshing) && <Refreshing/>}
       <SHOPPINGBODY>
@@ -1160,7 +1212,7 @@ const ShoppingCart = class extends React.Component {
                 {
                   cart.shippingInsurancePrice2 && <div style={{borderTop:'1px solid #e6e6e6', paddingTop: 10}}>
                   <LabelCheck clickHandle={this.openInsurance.bind(this)} disabled={cart.isShippingInsuranceMust} selected={cart.insurance}>
-                    <FormattedMessage id="add_shipping_insurance" values={{price: <Red><Money money={cart.shippingInsurancePrice2}/></Red>}}/>
+                    <FormattedMessage id="add_shipping_insurance" values={{price: <strong><Money money={cart.shippingInsurancePrice2}/></strong>}}/>
                   </LabelCheck>
                   <Ask style={{marginLeft: 5}} message={cart.shippingInsuranceMsg2}/>
                 </div>
@@ -1255,7 +1307,7 @@ const ShoppingCart = class extends React.Component {
                   </div>
                   <div className="__bd">
                     <LabelCheck clickHandle={this.openPoints.bind(this)} selected={cart.openPointUse}>
-                      <FormattedMessage id="credit_msg" values={{credits: cart.expectedPoints, discount: <Red><Money money={cart.expectedPointDiscount}/></Red>}}/>
+                      <FormattedMessage id="credit_msg" values={{credits: cart.expectedPoints, discount: <strong><Money money={cart.expectedPointDiscount}/></strong>}}/>
                     </LabelCheck>
                     <Ask message={this.state.pointMessage} style={{marginLeft: 5}}/>
                   </div>
@@ -1268,7 +1320,7 @@ const ShoppingCart = class extends React.Component {
                 </div>
                 <div className="__bd">
                   <LabelCheck clickHandle={this.openInsurance.bind(this)} disabled={cart.isShippingInsuranceMust} selected={cart.insurance}>
-                    <FormattedMessage id="add_shipping_insurance" values={{price: <Red><Money money={cart.shippingInsurancePrice2}/></Red>}}/>
+                    <FormattedMessage id="add_shipping_insurance" values={{price: <strong><Money money={cart.shippingInsurancePrice2}/></strong>}}/>
                   </LabelCheck>
                   <Ask style={{marginLeft: 5}} message={cart.shippingInsuranceMsg2}/>
 
@@ -1285,12 +1337,17 @@ const ShoppingCart = class extends React.Component {
       	        		<Box title={intl.formatMessage({id: 'order_summary'})}>
 
                       <OrderSummary style={{marginTop: 20}} orderSummary={cart.orderSummary}/>
+                      {
+                          this.props.payMethod === '22' && <div style={{marginTop:5, textAlign:'right'}}>
+                            <Red style={{fontWeight:'normal', marginLeft:5, fontSize: 14}}>(Em até 3x s/ juros)</Red>
+                          </div>
+                      }
 
                       {
                         cancheckout ? (
                           window.__is_login__ ? <div>
                             {
-                              this.props.payMethod === '1' ? <div id='ip-paypal-pay' style={{marginTop: 30}} ref={ (c) => this.paypalRender(c, 'normal') }/> : (!this.state.checking ? <BigButton onClick={this.checkout.bind(this)} bgColor="#e5004f" style={{marginTop: 30, height: 45, lineHeight: '45px', textTransform: 'uppercase', fontSize: 18}}>
+                              this.props.payMethod === '1' ? <div id='ip-paypal-pay' style={{marginTop: 30}} ref={ (c) => this.paypalRender(c, 'normal') }/> : (!this.state.checking ? <BigButton onClick={this.checkout.bind(this)} bgColor="#222" style={{marginTop: 30, height: 45, lineHeight: '45px', textTransform: 'uppercase', fontSize: 18}}>
                                 {intl.formatMessage({id: 'check_out'})}
                               </BigButton> : <BigButton bgColor="#999" style={{marginTop: 30, height: 45, lineHeight: '45px'}}>
                                 {intl.formatMessage({id: 'please_wait'})}...
@@ -1307,7 +1364,7 @@ const ShoppingCart = class extends React.Component {
                               <div style={{color: '#999', textAlign: 'center', height: 30, lineHeight: '30px', textTransform: 'uppercase'}}>
                                 {intl.formatMessage({id: 'or'})}
                               </div>
-                              <BigButton onClick={ () => { window.location.href = `${window.ctx}/${siteType === 'new' ? 'page' : 'i'}/login?redirectUrl=${encodeURIComponent(window.location.href)}` } } bgColor="#e5004f" style={{height: 45, lineHeight: '45px', textTransform: 'uppercase', fontSize: 18}}>
+                              <BigButton onClick={ () => { window.location.href = `${window.ctx}/${siteType === 'new' ? 'page' : 'i'}/login?redirectUrl=${encodeURIComponent(window.location.href)}` } } bgColor="#222" style={{height: 45, lineHeight: '45px', textTransform: 'uppercase', fontSize: 18}}>
                                 {intl.formatMessage({id: 'proceed_checkout'})}
                               </BigButton>
                             </div>
@@ -1350,7 +1407,7 @@ const ShoppingCart = class extends React.Component {
       	        					{intl.formatMessage({id: 'we_accept'})}
       	        				</div>
       	        				<div style={{marginTop: 10}}>
-      	        					<img style={{width: '100%'}} src={window.__payimage__ || 'https://s3-us-west-2.amazonaws.com/wanna/pc_default.png'}/>
+      	        					<img style={{width: '100%'}} src={getPayImage(country)}/>
       	        				</div>
       	        			</div>
 

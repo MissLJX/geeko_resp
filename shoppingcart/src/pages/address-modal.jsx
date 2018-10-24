@@ -7,6 +7,7 @@ import AddressForm from '../components/msite/address-form.jsx'
 import {addAddress, editAddress, paypalAddress} from '../api'
 import {injectIntl} from 'react-intl'
 import {__route_root__} from '../utils/utils.js'
+import Cookie from 'js-cookie'
 
 export const __address_token__ = window.token
 
@@ -48,6 +49,12 @@ const Modal = class extends React.Component {
       const addressOpreator = this.props.address ? editAddress : addAddress
 
   		addressOpreator({...address, id: this.props.address ? this.props.address.id : null}).then(() => {
+        if (address.country === 'BR') {
+          Cookie.set('currency', 'BRL', {expires: 365})
+        } else if (address.country === 'MX') {
+          Cookie.set('currency', 'MXN', {expires: 365})
+        }
+
   			this.props.REFRESH()
   			this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
   		}).catch(({result}) => {

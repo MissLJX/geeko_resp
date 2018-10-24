@@ -9,6 +9,12 @@ import {injectIntl} from 'react-intl'
 const SelectLine = styled.div`
   border-bottom: 1px solid #e6e6e6;
   padding-bottom: 12px;
+
+  .__clearAll{
+    &:hover{
+      color: #cacaca;
+    }
+  }
 `
 
 const GroupInvalidItems = class extends React.Component {
@@ -30,7 +36,7 @@ const GroupInvalidItems = class extends React.Component {
             <span style={{marginLeft: 5, verticalAlign: 'middle', fontSize: 16}}>{intl.formatMessage({id: 'ivalid_tems'})}</span>
           </div>
           <div className="x-cell __right">
-            <span style={{cursor: 'pointer'}} onClick={this.props.clearall}>{intl.formatMessage({id: 'clear_all'})}</span>
+            <span className="__clearAll" style={{cursor: 'pointer'}} onClick={this.props.clearall}>{intl.formatMessage({id: 'clear_all'})}</span>
           </div>
         </div>
       </SelectLine>

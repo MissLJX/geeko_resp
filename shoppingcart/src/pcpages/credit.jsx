@@ -523,7 +523,7 @@ const Credit = class extends React.Component {
                     {
                       this.state.checking ? <BigButton bgColor="#999" style={{width: 314, height: 45, lineHeight: '45px'}}>
                         {intl.formatMessage({id: 'please_wait'})}...
-                      </BigButton> : <BigButton onClick={this.checkout.bind(this)} bgColor="#e5004f" style={{width: 314, height: 45, lineHeight: '45px', textTransform: 'uppercase', fontSize: 18}}>
+                      </BigButton> : <BigButton onClick={this.checkout.bind(this)} bgColor="#222" style={{width: 314, height: 45, lineHeight: '45px', textTransform: 'uppercase', fontSize: 18}}>
                         {intl.formatMessage({id: 'pay_now'})}
                       </BigButton>
                     }
