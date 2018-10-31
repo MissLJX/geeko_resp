@@ -91,5 +91,8 @@ export default{
   please_confirm_address: 'Por favor confirme su dirección de envío',
   please_select_paymethod: 'Por favor elija el método de pago',
   proceed_checkout: 'Pasar por la caja',
-  thanks_for_shopping: 'Thank you for shopping'
+  thanks_for_shopping: 'Thank you for shopping',
+  check_order: 'Check Order',
+  order_no: 'Order No.',
+  set_password: 'configurar la clave'
 }

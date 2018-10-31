@@ -4,7 +4,7 @@ import Items from './items.jsx'
 import styled from 'styled-components'
 
 const Tip = styled.div`
-  background-color: #fdeff5;
+  background-color: #fef8f8;
   padding: 10px;
   line-height: 18px;
   font-size: 12px;

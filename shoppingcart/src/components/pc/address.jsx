@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import {Grey, Red, Green} from '../text.jsx'
-import {injectIntl} from 'react-intl'
+import {injectIntl, FormattedMessage} from 'react-intl'
 import Icon from '../icon.jsx'
 
 const concatstr = (...strs) => {
@@ -46,6 +46,9 @@ const EditBottom = styled.div`
 const LABELICON = styled.span`
   color: #666;
   cursor: pointer;
+  &:hover{
+    color: #cacaca;
+  }
   & > span{
     vertical-align: middle;
     margin-left: 4px;
@@ -75,10 +78,14 @@ const _address = ({address, intl, onEdit}) => <Address>
 
     <LABELICON style={{float: 'right'}} onClick={ (e) => { e.stopPropagation(); e.nativeEvent.stopImmediatePropagation(); onEdit(address) }}>
       <Icon>&#xe62b;</Icon>
-      <span>Edit</span>
+      <span><FormattedMessage id="edit"/></span>
     </LABELICON>
   </EditBottom>
-  <DashedLine/>
+
+  {
+    address.isDefaultAddress && <DashedLine/>
+  }
+
 </Address>
 
 const ORDERADDRESS = styled.div`
@@ -89,7 +96,7 @@ const ORDERADDRESS = styled.div`
   }
 `
 
-const _order_address = ({address, intl}) => <ORDERADDRESS>
+const _order_address = ({address, intl, onEdit}) => <ORDERADDRESS>
   <div className="__bd">
     <div className="x-table __vt">
       <div className="x-cell">
@@ -105,6 +112,13 @@ const _order_address = ({address, intl}) => <ORDERADDRESS>
         </div>
       </div>
     </div>
+
+    {
+      onEdit && <LABELICON onClick={ (e) => { e.stopPropagation(); e.nativeEvent.stopImmediatePropagation(); onEdit(address) }} style={{position: 'absolute', top: 15, right: 15}}>
+        <Icon>&#xe62b;</Icon>
+        <span><FormattedMessage id="edit"/></span>
+      </LABELICON>
+    }
   </div>
   <DashedLine/>
 </ORDERADDRESS>

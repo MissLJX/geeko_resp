@@ -40,7 +40,7 @@ const CouponSelect = ({intl, coupon, canUseCouponCount, selectCoupon, unSelectCo
   <div className="__title">
     { coupon ? <React.Fragment>
     		<span>
-    			<Red>{`${getAmount(coupon.amount)}`}</Red> <span>{ coupon.name }</span>
+    			<strong>{`${getAmount(coupon.amount)}`}</strong> <span>{ coupon.name }</span>
     		</span>
     		<Icon onClick={unSelectCoupon} style={{position: 'absolute', right: 10, cursor: 'pointer'}}>&#xe69a;</Icon>
     	</React.Fragment> : <FormattedMessage id="can_use_coupon" values={{canUseCouponCount}}/>

@@ -30,7 +30,7 @@ const StyledCoupon = styled.div`
 
 	.__background{
 		width: 104px;
-		background: radial-gradient(transparent 0, transparent 5px, #f04f73 5px);
+		background: radial-gradient(transparent 0, transparent 5px, #e64545 5px);
 		background-size: 15px 15px;
 		background-position: 9px 3px;
 		height: 92px;
@@ -39,7 +39,7 @@ const StyledCoupon = styled.div`
 		&::before {
 	    content: '';
 	    position: absolute;
-	    background-color: #f04f73;
+	    background-color: #e64545;
 	    top: 0;
 	    bottom: 0;
 	    left: 7px;
@@ -60,7 +60,7 @@ const StyledCoupon = styled.div`
 	.__title{
 		font-size: 20px;
 		text-transform: uppercase;
-		color: #e7004d;
+		color: #e64545;
 		font-family: HelveticaNeue-Bold;
 	}
 

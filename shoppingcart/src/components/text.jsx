@@ -5,11 +5,15 @@ export const Grey = styled.span`
 `
 
 export const Red = styled.span`
-	color: #e5004f;
+	color: #e64545;
 `
 
 export const Green = styled.span`
 	color: #57b936;
+`
+
+export const Blue = styled.span`
+	color: #4d93cb;
 `
 
 export const UpperCase = styled.span`

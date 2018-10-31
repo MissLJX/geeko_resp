@@ -60,6 +60,8 @@ export const getMultiMethodCards = (payMethods) => axios.get(`/quickpay-record/h
 
 export const getApacPay = (params) => axios.get('/apacpay/get-pay-params', params)
 
+export const apacPay = (params) => axios.get('/apacpay/pay', params)
+
 // order
 export const gettransaction = (id) => axios.get(`${VPATH}/order/anon/${id}/show`)
 export const updateorderaddress = (address) => axios.post(`${VPATH}/order/anon/shipping-detail-update`, address)
@@ -70,3 +72,4 @@ export const getaddresses = () => axios.get(`${VPATH}/customer/get-shipping-deta
 export const setdefaultaddress = (id) => axios.get(`${VPATH}/customer/${id}/set-default-shipping-detail`)
 
 export const getLeaveImage = () => axios.get(`${VPATH}/coupon/anon/get-shopping-cart-message`)
+export const getRecentlyProducts = () => axios.get(`${VPATH}/product/anon/get-browsing-history`)

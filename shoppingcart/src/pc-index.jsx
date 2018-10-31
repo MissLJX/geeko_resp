@@ -31,6 +31,10 @@ const Credit = Loadable({
     loading: Loading
 })
 
+// const OrderConfirm = Loadable({
+// 	loader: () => import( webpackChunkName: "page--orderconfirm"  './pcpages/order-confirm.jsx'),
+// 	loading: Loading
+// })
 
 
 export default class extends React.Component{
@@ -58,6 +62,7 @@ export default class extends React.Component{
 				<Switch>
 					<Route path={`${window.ctx || ''}${__route_root__}/credit-card`} component={Credit}/>
 					<Route path={`${window.ctx || ''}${__route_root__}/`}  component={ShoppingCart}/>
+					{/*<Route path={`${window.ctx || ''}/order-confirm/:transactionId`} component={OrderConfirm}/>*/}
 				</Switch>
 				<Route path={`${window.ctx || ''}${__route_root__}/coupons`}  component={Coupon}/>
 				<Route path={`${window.ctx || ''}${__route_root__}/address`} exact component={AddressModal}/>

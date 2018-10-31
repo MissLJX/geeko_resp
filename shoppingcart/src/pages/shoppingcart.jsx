@@ -23,12 +23,13 @@ import Mask from '../components/mask.jsx'
 import _ from 'lodash'
 import PayMethodList from '../components/msite/paymethod-list.jsx'
 import {BigButton} from '../components/msite/buttons.jsx'
-import { useMercadocard, mercadopay, usePoint, useInsurance, creditpay, paypalpay, usecreditcard, movetooverseas, getMessage, placepaypal, givingCoupon, atmPay, ticketPay, getSafeCharge, getApacPay } from '../api'
+import { useMercadocard, mercadopay, usePoint, useInsurance, creditpay, paypalpay, usecreditcard, movetooverseas, getMessage, placepaypal, givingCoupon, atmPay, ticketPay, getSafeCharge, getApacPay, apacPay } from '../api'
 import {__route_root__, storage} from '../utils/utils.js'
 import {submit} from '../utils/common-pay.js'
 import {CountDownBlock} from '../components/msite/countdowns.jsx'
-import {injectIntl} from 'react-intl'
+import {injectIntl,FormattedMessage} from 'react-intl'
 import {Confirm} from '../components/msite/modals.jsx'
+import Icon from '../components/icon.jsx'
 
 
 import Loadable from 'react-loadable'
@@ -59,7 +60,7 @@ const Checkout = styled.div`
   &>div{
     &.__total{
       font-size: 18px;
-      height: 30px;
+      height: 25px;
     }
     &.__btn{
       margin-top: 2px;
@@ -75,7 +76,7 @@ const Checkout = styled.div`
 `
 
 const Tip = styled.div`
-  background-color: #fdeff5;
+  background-color: #fef8f8;
   padding: 10px;
   line-height: 18px;
   font-size: 12px;
@@ -106,8 +107,8 @@ const PaypalBtn = styled.div`
 `
 
 const DISCOUNTTIP = styled.span`
-  background-color:#fff9fc;
-  border: 1px solid #f3a6c0;
+  background-color:#fef8f8;
+  border: 1px solid #fd8585;
   padding: 4px;
   font-size: 12px;
   position: absolute;
@@ -115,9 +116,9 @@ const DISCOUNTTIP = styled.span`
   top: 8px;
   &::before{
     content:'';
-    border-left: 1px solid #f3a6c0;
-    border-top: 1px solid #f3a6c0;
-    background-color:#fff9fc;
+    border-left: 1px solid #fd8585;
+    border-top: 1px solid #fd8585;
+    background-color:#fef8f8;
     transform: rotate(-135deg);
     position: absolute;
     right: 20px;
@@ -125,6 +126,17 @@ const DISCOUNTTIP = styled.span`
     width: 8px;
     height: 8px;
   }
+`
+
+const DashedLine = styled.div`
+    background: linear-gradient(to right, #dd747d 35%,transparent 25%,transparent 50%,#626e94 50%,#626e94 85%,transparent 75%);
+    background-size: 35px 1px;
+    height: 1.8px;  
+    transform:skew(20deg,0);
+    position: absolute;
+    width: 100%;
+    bottom:0;
+    left:0;
 `
 
 const mapStateToProps = (state) => {
@@ -516,7 +528,7 @@ const ShoppingCart = class extends React.Component {
           return
         }
 
-        this.getApacPay(payMethod, this.props.cpf, (result) => {
+        this.apacPay(payMethod, this.props.cpf, (result) => {
           this.setState({
             checking: false
           })
@@ -561,11 +573,33 @@ const ShoppingCart = class extends React.Component {
 
   getApacPay(payMethod, cpf, fail){
     getApacPay({payMethod, cpfNumber: cpf}).then(({result}) => {
-      const {isFree, transactionId} = result
+      const {isFree, transactionId, success,details,solutions} = result
       if (isFree) {
         window.location.href = `${window.ctx || ''}/v7/order/confirm/free?transationId=${transactionId}`
       } else {
         submit(result)
+        // console.log(result)
+      }
+    }).catch(({result}) => {
+      fail(result)
+    })
+  }
+
+  apacPay(payMethod, cpf, fail){
+    apacPay({payMethod, cpfNumber: cpf}).then(({result}) => {
+      const {isFree, transactionId, success,details,solutions} = result
+      if (isFree) {
+        window.location.href = `${window.ctx || ''}/v7/order/confirm/free?transationId=${transactionId}`
+      } else {
+        if( success ){
+          if(siteType === 'new'){
+            window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/credit-card?order_number=${transactionId}`
+          }else{
+            window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
+          }
+        }else{
+          fail(details)
+        }
       }
     }).catch(({result}) => {
       fail(result)
@@ -803,6 +837,13 @@ const ShoppingCart = class extends React.Component {
     })
   }
 
+  displayAskClickHandle (evt, {type, target}){
+    this.setState({
+      showAsk: true,
+      askMessage: target
+    })
+  }
+
   cpfClickHandle () {
     this.setState({
       showAsk: true,
@@ -957,7 +998,7 @@ const ShoppingCart = class extends React.Component {
       // 设置15分钟后的毫秒数
       let endcounpontime = storage.get('_end_coupon_time')
       if (!endcounpontime) {
-        endcounpontime = new Date().getTime() + 15 * 60 * 1000
+        endcounpontime = new Date().getTime() + 30 * 60 * 1000
         storage.add('_end_coupon_time', endcounpontime)
       }
       couponcountdown = Number(endcounpontime) - new Date().getTime()
@@ -992,6 +1033,7 @@ const ShoppingCart = class extends React.Component {
 
     let cancheckout = false
     let hasLocalItems = false
+    let totalCount = 0
     if (cart) {
       let cancheckout1 = cart.shoppingCartProductsByOverseas && cart.shoppingCartProductsByOverseas.find(item => item.selected)
       let cancheckout2 = false
@@ -1000,6 +1042,7 @@ const ShoppingCart = class extends React.Component {
           _.each(demestic.shoppingCartProducts, item => {
             if (item.selected) {
               cancheckout2 = true
+              totalCount+=item.quantity
             }
             if (!this.isOutStock(item)) {
               hasLocalItems = true
@@ -1012,6 +1055,14 @@ const ShoppingCart = class extends React.Component {
     }
 
     const shoppingCartProductsByOverseas = cart ? this.getValidItems(cart.shoppingCartProductsByOverseas) : []
+
+    if(shoppingCartProductsByOverseas && shoppingCartProductsByOverseas.length){
+      _.each(shoppingCartProductsByOverseas, item => {
+        if (item.selected){
+          totalCount+=item.quantity
+        }
+      })
+    }
 
     const couponAmount = coupon => coupon.amount.indexOf('%') >= 0 ? `${coupon.amount} OFF` : `$${coupon.amount}`
 
@@ -1050,20 +1101,25 @@ const ShoppingCart = class extends React.Component {
           <Boxs>
             {
               cart.shippingDetail ? (
-                (window.__is_login__ || window.token) && <Box>
-                  <BoxClickHead title={intl.formatMessage({id: 'address'})}>
-                    <Grey>
-                      <Link style={{color: '#222', textDecoration: 'none'}} to={`${window.ctx || ''}${__route_root__}/address`}>
-                        {intl.formatMessage({id: 'edit'})}
-                      </Link>
-                    </Grey>
-                  </BoxClickHead>
+                (window.__is_login__ || window.token) && <Box style={{position:'relative'}}>
                   <BoxBody>
-                    <Address address={cart.shippingDetail}/>
+                    <div className="x-fw x-table __vm">
+                      <div className="x-cell">
+                        <Address address={cart.shippingDetail}/>
+                      </div>
+                      <div className="x-cell __right" style={{width: 30}}>
+                        <Grey>
+                          <Link style={{color: '#222', textDecoration: 'none'}} to={`${window.ctx || ''}${__route_root__}/address`}>
+                            <Icon>&#xe694;</Icon>
+                          </Link>
+                        </Grey>
+                      </div>
+                    </div>
                   </BoxBody>
+                  <DashedLine/>
                 </Box>
               ) : (
-                window.__is_login__ && <Box>
+                window.__is_login__ && <Box style={{position:'relative'}}>
                   <BoxClickHead title={intl.formatMessage({id: 'address'})} single={true}>
                     <Grey>
                       <Link style={{color: '#222', textDecoration: 'none'}} to={`${window.ctx || ''}${__route_root__}/address`}>
@@ -1071,6 +1127,7 @@ const ShoppingCart = class extends React.Component {
                       </Link>
                     </Grey>
                   </BoxClickHead>
+                  <DashedLine/>
                 </Box>
               )
             }
@@ -1124,7 +1181,7 @@ const ShoppingCart = class extends React.Component {
                 <Link style={{textDecoration: 'none', color: '#666'}} to={`${window.ctx || ''}${__route_root__}/coupons`}>
 
                   {cart.coupon ? (
-                    <span><Red>{couponAmount(cart.coupon)}</Red> {cart.coupon.name}</span>
+                    <span><strong>{couponAmount(cart.coupon)}</strong> {cart.coupon.name}</span>
                   ) : (
                     <span>Available <Red>{cart.canUseCouponCount}</Red></span>
                   )}
@@ -1141,7 +1198,7 @@ const ShoppingCart = class extends React.Component {
                 {
                   cart.shippingInsurancePrice2 && (
                     <TurnTool ignoreButton={cart.isShippingInsuranceMust} open={this.openInsurance.bind(this)} turnAcitve={cart.insurance}>
-                      <span style={{fontSize: 15}}>Add Shipping Insurance(<Red><Money money={cart.shippingInsurancePrice2}/></Red>)</span>
+                      <span style={{fontSize: 15}}>Add Shipping Insurance(<strong><Money money={cart.shippingInsurancePrice2}/></strong>)</span>
                       <Ask style={{marginLeft: 4}} onClick={this.insuranceClickHandle.bind(this)}/>
                     </TurnTool>
                   )
@@ -1150,7 +1207,8 @@ const ShoppingCart = class extends React.Component {
                 {
                   cart.expectedPoints > 0 && (
                     <TurnTool open={this.openPoints.bind(this)} turnAcitve={cart.openPointUse}>
-                      <span style={{fontSize: 15}}>{intl.formatMessage({id: 'apply'})} {cart.expectedPoints} (<Red><Money money={cart.expectedPointDiscount}/></Red>) {intl.formatMessage({id: 'to_this_order'})}</span>
+
+                      <FormattedMessage style={{fontSize: 15}} id="credit_msg" values={{credits: cart.expectedPoints, discount: <strong><Money money={cart.expectedPointDiscount}/></strong>}}/>
                       <Ask style={{marginLeft: 4}} onClick={this.creditClickHandle.bind(this)}/>
                     </TurnTool>
                   )
@@ -1195,12 +1253,21 @@ const ShoppingCart = class extends React.Component {
                 {
                   cart.orderSummary.display.map(display => (
                     <div key={display.label} className="x-flex __between __summary">
-                      <span dangerouslySetInnerHTML={{__html: display.label}}/>
+                      <span>
+                        <span dangerouslySetInnerHTML={{__html: display.label}}/>
+                        {
+                          display.asker && <Ask style={{marginLeft: 4}} onClick={ (evt) => { this.displayAskClickHandle(evt, display.asker) }}/>
+                        }
+                      </span>
+                      
                       <span dangerouslySetInnerHTML={{__html: display.value}}/>
                     </div>
                   ))
                 }
 
+
+
+                
               </OrderSummary>
             </Box>
 
@@ -1212,17 +1279,20 @@ const ShoppingCart = class extends React.Component {
                       <div className="__total">
                         <span>{intl.formatMessage({id: 'total'})}: </span>
                         <Red><Money money={cart.orderSummary.orderTotal}/></Red>
+                        {
+                          this.props.payMethod === '22' && <Red style={{fontWeight:'normal', marginLeft:5, fontSize: 14}}>(Em até 3x s/ juros)</Red>
+                        }
                       </div>
                       {
                         cancheckout ? (
-                          !this.state.checking ? <BigButton onClick={this.checkout.bind(this)} className="__btn" height={47} bgColor="#e5004f">
-                            {intl.formatMessage({id: 'check_out'})}
+                          !this.state.checking ? <BigButton onClick={this.checkout.bind(this)} className="__btn" height={47} bgColor="#222">
+                            {intl.formatMessage({id: 'check_out'})} ({totalCount})
                           </BigButton> : <BigButton className="__btn" height={47} bgColor="#999">
                             {intl.formatMessage({id: 'please_wait'})}...
                           </BigButton>
                         ) : (
                           <BigButton className="__btn" height={47} bgColor="#999">
-                            {intl.formatMessage({id: 'check_out'})}
+                            {intl.formatMessage({id: 'check_out'})} ({totalCount})
                           </BigButton>
                         )
                       }
@@ -1240,7 +1310,7 @@ const ShoppingCart = class extends React.Component {
                         </div>
                         {
                           cancheckout ? (
-                            <BigButton onClick={this.quickPlace.bind(this)} className="__btn" height={47} bgColor="#e5004f">
+                            <BigButton onClick={this.quickPlace.bind(this)} className="__btn" height={47} bgColor="#222">
                                                             Place Order
                             </BigButton>
                           ) : (
@@ -1269,8 +1339,8 @@ const ShoppingCart = class extends React.Component {
                         </div>
                          <DoubleBtn className="x-flex __between">
                           <div>
-                            <BigButton onClick={ () => { window.location.href = `${window.ctx}/${siteType === 'new' ? 'page' : 'i'}/login?redirectUrl=${encodeURIComponent(window.location.href)}` } } className="__btn" height={47} bgColor="#e5004f">
-                              {intl.formatMessage({id: 'check_out'})}
+                            <BigButton onClick={ () => { window.location.href = `${window.ctx}/${siteType === 'new' ? 'page' : 'i'}/login?redirectUrl=${encodeURIComponent(window.location.href)}` } } className="__btn" height={47} bgColor="#222">
+                              {intl.formatMessage({id: 'check_out'})} ({totalCount})
                             </BigButton>
                           </div>
                           <div>
@@ -1304,6 +1374,7 @@ const ShoppingCart = class extends React.Component {
               <React.Fragment>
                 <Mask/>
                 <CreditCard
+                  count={totalCount}
                   payMethod = {this.props.payMethod}
                   securityCode = {this.props.securityCode}
                   handleMercado = {this.checkmercado.bind(this)}
@@ -1330,6 +1401,7 @@ const ShoppingCart = class extends React.Component {
               <React.Fragment>
                 <Mask/>
                 <CreditCard
+                  count={totalCount}
                   cards={creditcards}
                   payMethod = {this.props.payMethod}
                   orderTotal={cart.orderSummary.orderTotal}

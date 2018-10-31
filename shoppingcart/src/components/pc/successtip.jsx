@@ -30,7 +30,7 @@ const SUCCESSTIP = styled.div`
 	transform: translate(-50%, -50%);
   text-align: center;
   line-height: 32px;
-	animation: ${showing} 2s linear;
+	animation: ${showing} ${props => props.time || 2}s linear;
 `
 
 export default SUCCESSTIP

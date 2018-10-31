@@ -39,6 +39,7 @@ const StyledAsk = styled.div`
   		display: block;
   	}
     border-color: #cacaca;
+    color: #cacaca;
   }
 `
 

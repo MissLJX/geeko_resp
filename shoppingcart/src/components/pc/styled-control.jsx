@@ -15,7 +15,7 @@ const FORMELEMENT = styled.div`
 	&.__required > .__control{
 		&::after{
 			content: '*';
-	    color: #e7004d;
+	    color: #E64545;
 	    position: absolute;
 	    right: -15px;
 	    top: 0;

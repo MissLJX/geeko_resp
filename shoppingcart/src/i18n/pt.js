@@ -11,9 +11,9 @@ export default{
   color: 'COR',
   quantity: 'QUANTIDADE',
   confirm: 'Confirmar',
-  coupon: 'Cupão',
+  coupon: 'Cupom',
   payment_method: 'Método de pagamento',
-  order_summary: 'Sumário da Encomenda',
+  order_summary: 'Resumo da Compra',
   item_total: 'Total dos itens',
   subtotal: 'Subtotal',
   shipping_price: 'Preço de Envio',
@@ -31,7 +31,7 @@ export default{
   zip_code: 'Código-postal',
   phone_number: 'Número de telefone',
   submit: 'Submeter',
-  shipping_method: 'Metodo de envio',
+  shipping_method: 'Método de envio',
   shipping_tip: 'Envio expresso: Iremos escolher a companhia mais apropriada para sí',
   select: 'Seleccionar',
   add_new_card: 'Adicionar novo cartão',
@@ -53,7 +53,7 @@ export default{
   go_shopping: 'Vá ás compras',
   // 未翻译
   secure_check_out: 'Pagamento seguro',
-  shipping_address: 'Residencia DE ENVIO',
+  shipping_address: 'Endereço de Envio',
   shopping_bag: `Carrinho de compras`,
   default_address: 'Morada predefinida',
   add_new_address: 'Adicionar um novo Endereço',
@@ -91,5 +91,8 @@ export default{
   please_confirm_address: 'Por favor confirme o seu método de envio',
   please_select_paymethod: 'Por favor escolha o método de pagamento',
   proceed_checkout: 'Fazer o check-out',
-  thanks_for_shopping: 'Thank you for shopping'
+  thanks_for_shopping: 'Thank you for shopping',
+  check_order: 'Check Order',
+  order_no: 'Order No.',
+  set_password: 'configurar senha'
 }

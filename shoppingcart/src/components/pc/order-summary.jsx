@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import Ask from './ask.jsx'
 
 const Summaries = styled.ul`
 
@@ -26,6 +27,9 @@ export default ({orderSummary, style}) => {
         {
           d.label && <div className="x-cell">
             <span dangerouslySetInnerHTML={{__html: d.label}}/>
+            {
+              d.asker && <Ask style={{marginLeft: 5}} message={d.asker.target}/>
+            }
           </div>
         }
 

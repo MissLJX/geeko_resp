@@ -14,7 +14,7 @@ import { Btn } from '../msite/buttons.jsx'
 import {CountDown} from '../msite/countdowns.jsx'
 
 const ITEMCONTAINER = styled.div`
-  padding: 25px 0;
+  padding: 25px 0 15px 0;
 `
 
 const LIMITTIP = styled.span`
@@ -194,7 +194,7 @@ const Item = class extends Component {
           }
   			</div>
   			<div className="x-cell __center">
-  				<div><Money money={item.realPrice} /></div>
+  				<div><Red><Money money={item.realPrice} /></Red></div>
 		          {
 		            item.itemPrice.amount - item.realPrice.amount > 0 && (
                   	<Fragment>
