@@ -7,7 +7,7 @@
             <div class="p-l line">|</div>
             <div class="p-l tips">
                 1.Email verification is required to make this change,Please enter your new email address and check your inbox for the confirmation link.<br/><br/>
-                2.Confirm email address and <span>get 100 credits</span>.
+                2.Confirm email address and <span>get 50 credits</span>.
             </div>
         </div>
         <div class="p-bd">
@@ -154,7 +154,7 @@
         .tips{
             width: 738px;
             span{
-                color: #e5004f;
+                color: #E64545;
             }
         }
         &:after{
@@ -172,7 +172,7 @@
             display: block;
             font-size: 16px;
             color: #222;
-            margin-bottom: 16px;
+            margin-bottom: 8px;
         }
         input{
             width: 520px;
@@ -203,7 +203,7 @@
             color: #666;
             margin-bottom: 45px;
             span{
-                color: #e5004f;
+                color: #E64545;
                 display: inline-block;
             }
         }
@@ -216,7 +216,7 @@
             color: #fff;
             font-size: 16px;
             text-align: center;
-            font-family: HelveticaNeue-Medium;
+            font-family: HelveticaNeue;
             margin-top: 30px;
             cursor: pointer;
         }
@@ -234,14 +234,14 @@
         text-align: center;
         .confirm-con{
             width: 642px;
-            height: 214px;
+            height: 175px;
             margin:0 auto;
             position: relative;
             top: calc(50% - 82px);
             background-color: white;
             color: #222;
             font-size: 14px;
-            padding: 55px 65px 55px 65px;
+            padding: 40px 65px 55px 65px;
             text-align: left;
             h3{
                 margin-bottom: 13px;
@@ -264,7 +264,7 @@
                 width: 170px;
                 line-height: 32px;
                 text-align: center;
-                background-color: #e5004f;
+                background-color: #222;
                 color: #fff;
                 margin: 0 auto;
                 cursor: pointer;

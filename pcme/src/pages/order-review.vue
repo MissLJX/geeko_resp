@@ -34,7 +34,7 @@
             <div class="commet-area">
                 <span class="remnant">{{remnant1}}/1000</span>
                 <div class="t-area">
-                    <textarea v-model="comment.content" style="resize:none;" maxlength="1000" @input ="descInput1"></textarea>
+                    <textarea v-model="comment.content" style="resize:none;" maxlength="1000" ></textarea>
                 </div>
             </div>
 
@@ -50,6 +50,7 @@
             <div class="mask"></div>
             <comment-alert :data="commentAler" @hideAlert="backOrderPage"></comment-alert>
         </div>
+        <loding v-if="isloding"></loding>
     </div>
 </template>
 
@@ -59,7 +60,8 @@
     import LinkImage from '../components/link-image.vue';
     import StarList from '../components/star-list.vue';
     import uploadImg from '../components/upload-img.vue';
-    import CommentAlert from '../components/comment-alert.vue'
+    import CommentAlert from '../components/comment-alert.vue';
+    import loding from '../components/loding.vue';
 
     export default {
         data(){
@@ -69,7 +71,8 @@
                 shippingstate:'',
                 shippingcountry:'',
                 orderpro:'',
-                remnant1:0,
+                /*remnant1:0,*/
+                isloding:false,
                 files:null,
                 fits: [
                     {label: 'Too Small', value: '3'},
@@ -86,10 +89,16 @@
             'link-image': LinkImage,
             'star-list': StarList,
             'upload-img':uploadImg,
-            'comment-alert':CommentAlert
+            'comment-alert':CommentAlert,
+            'loding':loding
         },
         computed:{
             ...mapGetters(['orderdetail','comment']),
+            remnant1(){
+                if(this.comment && this.comment.content){
+                    return this.comment.content.length
+                }
+            },
             getDate(){
                 if(this.order.paymentTime){
                     return utils.enTime(new Date(this.order.paymentTime))
@@ -135,10 +144,10 @@
             starClickHandle(data){
                 this.comment.score = Number(data.star);
             },
-            descInput1() {
+            /*descInput1() {
                 let txtVal = this.comment.content.length;
                 this.remnant1 = txtVal;
-            },
+            },*/
             getImgFiles(files){
                 this.files = files;
             },
@@ -148,6 +157,7 @@
                 this.comment.sizingRecommendation = fitNum
             },
             sendComment(evt){
+                this.isloding=true
                 var _this = this;
                 if(_this.comment.content!==''){
                     _this.isempty=false;
@@ -164,8 +174,12 @@
                         _this.comment.productId = this.orderpro.productId
 
                     _this.$store.dispatch('sendComment', {reply:formData, files}).then(() => {
+                        this.isloding = false
                         alert("Success!");
                         this.$router.go(-1);
+                    }).catch((e) => {
+                        alert(e);
+                        this.isloding = false
                     });
                 }else{
                     _this.isempty=true;
@@ -178,13 +192,22 @@
         created(){
             this.$store.dispatch('getOrder',this.$route.query.orderid).then(()=>{
                 this.order = this.orderdetail.order
-                this.orderpro = this.orderdetail.order.orderItems[0]
+                if(this.order && this.orderdetail.order.orderItems){
+                    this.orderdetail.order.orderItems.forEach(item =>{
+                        if(item.productId === this.$route.query.productid){
+                            this.orderpro = item
+                        }
+                    })
+                }
                 this.shipping = this.orderdetail.order.shippingDetail
                 this.shippingstate = this.orderdetail.order.shippingDetail.state
                 this.shippingcountry =this.orderdetail.order.shippingDetail.country
-
-                this.$store.dispatch('loadComment', {productId: this.orderpro.productId});
             })
+            this.$store.dispatch('loadComment', this.$route.query.productid).then(()=>{
+
+
+                /*this.orderpro = data*/
+            });
         }
     }
 </script>
@@ -223,7 +246,7 @@
                 text-align: right;
                 padding-left: 30px;
                 font-size: 20px;
-                color: #e5004f;
+                color: #E64545;
             }
         }
         img{
@@ -242,7 +265,7 @@
     .review-con{
         .star{
             font-size: 20px;
-            color: #e5004f;
+            color: #E64545;
         }
     }
     .rating-con{
@@ -260,7 +283,7 @@
 
         .radio-beauty-container {
             font-size: 0;
-            $bgc: #e5004f;
+            $bgc: #E64545;
             %common {
                 padding: 2px;
                 background-color: $bgc;

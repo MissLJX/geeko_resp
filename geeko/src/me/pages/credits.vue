@@ -77,11 +77,11 @@
 
         },
         beforeRouteEnter(to, from, next){
-            store.dispatch('me/getCredits', {skip: 0}).then((/*{empty, finished}*/) => {
-                /*next(vm => {
+            store.dispatch('me/getCredits', {skip: 0}).then(({empty, finished}) => {
+                next(vm => {
                     if(empty) vm.empty = empty
                     if(finished) vm.finished = finished
-                })*/
+                })
                 next()
             }).catch((e) => {
                 console.log(e)

@@ -17,5 +17,7 @@
     img{
         width: 80px;
         height: 108px;
+        position: relative;
+        top: 5px;
     }
 </style>

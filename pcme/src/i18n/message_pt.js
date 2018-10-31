@@ -102,6 +102,7 @@ export default {
     overseas:'Armazem no estrangeiro',
     contactseller:'Contactar vendedor',
     detail:'Detalhes',
+    orderdetail:'Order Detail',
     view:'Ver todos',
     selectorder:'Select Order',
     ticketid:'Ticket ID',

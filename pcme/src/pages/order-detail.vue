@@ -1,118 +1,128 @@
 <template>
-    <div class="detailCon">
-        <h2>{{$t('detail')}}</h2>
-        <h4>{{$t('shippinginfo')}}</h4>
-        <div class="shippinginfo">
-            <p>{{shipping.name}}</p>
-            <p>{{shipping.streetAddress1}}</p>
-            <p>{{shipping.zipCode}},{{shipping.city}},{{shippingstate.label ? shippingstate.label : shippingstate.value}},{{shippingcountry.label}}</p>
+    <div class="datail">
+        <div class="detailHd">
+            <p style="text-transform:capitalize"><span @click="window.location.href = '/'">{{$t('home')}}</span><router-link to="/me/m"> > {{$t('me')}}</router-link><router-link to="/me/m/orders"> > Orders</router-link> > Detail</p>
         </div>
-        <div class="bgline"></div>
-        <h4>{{$t('orderinfo')}}</h4>
-        <div class="orderinfo">
-            <p v-if="orderdetail.boletoPayCodeURL && order.status == 1 && orderoffset >= 1000 && couponshow">
-                <span class="label" style="color: #e5004f">Presente de cupão expirs</span>
-                <count-down :timeStyle="{color:'#e5004f'}" :timeLeft="orderoffset"></count-down>
-            </p>
-            <p><span>{{$t('timeofpayment')}}: </span>{{getDate}}</p>
-            <p><span>{{$t('orderno')}}: </span>{{order.id}}</p>
-            <p><span>{{$t('shippingfrom')}}: </span>Overseas Warehouse</p>
-            <p><span>{{$t('orderstatus')}}: </span>{{getStatus}}</p>
-        </div>
-
-        <table class="infotabel">
-            <tr>
-                <td>{{$t('item')}}</td>
-                <td></td>
-                <td>{{$t('Qty')}}</td>
-                <td>{{$t('price')}}</td>
-                <td></td>
-                <td><p @click="showTicket(order.id)"><i class="iconfont">&#xe670;</i><a>{{$t('contactseller')}}</a></p></td>
-            </tr>
-            <tr v-for=" item in orderpro">
-                <td>
-                    <link-image href="#" :src="item.productImageUrl" :title="item.productName"/>
-                </td>
-                <td class="w-300">
-                    <p>{{item.productName}}</p>
-                    <p class="grey">{{item.color}} {{item.size}} </p>
-                </td>
-                <td>
-                    <p><span>X{{item.quantity}}</span></p>
-                </td>
-                <td>
-                    <p class="price">{{realprice(item)}}</p>
-                </td>
-                <td>
-
-                </td>
-                <td>
-
-                </td>
-            </tr>
-        </table>
-
-        <div class="pricecon">
-            <div class="pricecon1">
-                <p class="p-price">{{$t('subtotal')}}:<span class="price">{{subtotal}}</span></p>
-                <p class="p-price">{{$t('coupon')}}:<span class="price r-p">-{{coupon}}</span></p>
-                <p class="p-price">{{$t('credits')}}:<span class="price r-p">-{{pointDiscount}}</span></p>
-                <p class="p-price">{{$t('shipping')}}:<span class="price">{{shippingprice}}</span></p>
-                <p class="p-price t-p">{{$t('ordertotal')}}:<span class="price r-p">{{total}}</span></p>
+        <div class="detailCon">
+            <h2>{{$t('orderdetail')}}</h2>
+            <h4>{{$t('shippinginfo')}}</h4>
+            <div class="shippinginfo">
+                <p>{{shipping.name}}</p>
+                <p>{{shipping.streetAddress1}}</p>
+                <p>{{shipping.zipCode}},{{shipping.city}},{{shippingstate.label ? shippingstate.label : shippingstate.value}},{{shippingcountry.label}}</p>
             </div>
-        </div>
+            <div class="bgline"></div>
+            <h4>{{$t('orderinfo')}}</h4>
+            <div class="orderinfo">
+                <p v-if="orderdetail.boletoPayCodeURL && order.status == 1 && orderoffset >= 1000 && couponshow">
+                    <span class="label" style="color: #E64545">Presente de cupão expirs</span>
+                    <count-down :timeStyle="{color:'#E64545'}" :timeLeft="orderoffset"></count-down>
+                </p>
+                <p><span>{{$t('timeofpayment')}}: </span>{{getDate}}</p>
+                <p><span>{{$t('orderno')}}: </span>{{order.id}}</p>
+                <p><span>Transaction No: </span>{{order.transactionId}}</p>
+                <p><span>{{$t('orderstatus')}}: </span>{{getStatus}}</p>
+            </div>
 
-        <div class="r-btn" :class="{'b-btn':confirmedOrder,'black':shippedOrder || processingOrder}">
-            <p v-if="confirmedOrder" @click="review">Review</p>
-            <p v-if="orderdetail.boletoPayCodeURL && order.status === 1">Imprimir Boleto</p>
-            <p v-if="shippedOrder" @click="confirmOrder">{{$t('confirmorder')}}</p>
-            <p v-if="processingOrder" @click="cancelOrder">{{$t('cancelorder2')}}</p>
-        </div>
+            <table class="infotabel">
+                <tr>
+                    <td>{{$t('item')}}</td>
+                    <td></td>
+                    <td>{{$t('Qty')}}</td>
+                    <td>{{$t('price')}}</td>
+                    <td></td>
+                    <td><p @click="showTicket(order.id)"><i class="iconfont">&#xe716;</i><a>{{$t('contactseller')}}</a></p></td>
+                </tr>
+                <tr v-for=" item in orderpro">
+                    <td>
+                        <link-image href="#" :src="item.productImageUrl" :title="item.productName"/>
+                    </td>
+                    <td class="w-300">
+                        <p>{{item.productName}}</p>
+                        <p class="grey">{{item.color}} {{item.size}} </p>
+                    </td>
+                    <td>
+                        <p><span>X{{item.quantity}}</span></p>
+                    </td>
+                    <td>
+                        <p class="price">{{realprice(item)}}</p>
+                    </td>
+                    <td>
 
-        <select-order v-if="isShowSelect" v-on:closeSelect="closeSelect1" v-on:showTicket="showTicket"></select-order>
-        <order-ticket  v-if="isShowTicket" v-on:closeSelect="closeSelect1" v-on:selectOrder="selectorder"></order-ticket>
+                    </td>
+                    <td>
+                        <div v-if="confirmedOrder" class="review-btn" :class="{'b-btn':confirmedOrder,'black':shippedOrder || processingOrder}">
+                            <span p  @click="review(item.productId)">Review</span>
+                        </div>
+                    </td>
+                </tr>
+            </table>
 
-        <div v-if="orderdetail.boletoPayCodeURL && order.status == 1 && orderoffset >= 1000 && couponshow">
-            <div class="mask"></div>
-            <div class="coupon-window">
-                <span class="coupon-close" @click="() => {this.couponshow = false}">X</span>
-                <div>
-                    <div class="white top-line">
-                        <h2>Atenção</h2>
-                        <img src="https://dgzfssf1la12s.cloudfront.net/upgrade/20180529/001.png">
+            <div class="pricecon">
+                <div class="pricecon1">
+                    <p class="p-price">{{$t('subtotal')}}:<span class="price">{{subtotal}}</span></p>
+                    <p class="p-price">{{$t('coupon')}}:<span class="price r-p">-{{coupon}}</span></p>
+                    <p class="p-price">{{$t('credits')}}:<span class="price r-p">-{{pointDiscount}}</span></p>
+                    <p class="p-price">{{$t('shipping')}}:<span class="price">{{shippingprice}}</span></p>
+                    <p class="p-price t-p">{{$t('ordertotal')}}:<span class="price r-p">{{total}}</span></p>
+                </div>
+            </div>
+            <div class="actionbtn">
+                <div class="r-btn" :class="{'b-btn':confirmedOrder,'black':shippedOrder || processingOrder}">
+                    <span v-if="orderdetail.boletoPayCodeURL && order.status === 1">Imprimir Boleto</span>
+                    <a style="color: #fff;"  :href="orderdetail.boletoPayCodeURL" target="_blank" v-if="orderdetail.boletoPayCodeURL && orderdetail.order.status === 1">Imprimir Boleto</a>
+                    <a style="color: #fff;" :href="orderdetail.order.mercadopagoPayURL" target="_blank" v-if="orderdetail.order.mercadopagoPayURL && orderdetail.order.status === 1">Generar Ticket</a>
+                    <span v-if="shippedOrder" @click="confirmOrder">{{$t('confirmorder')}}</span>
+                    <span v-if="processingOrder" @click="cancelOrder">{{$t('cancelorder2')}}</span>
+                </div>
+            </div>
+
+
+            <select-order v-if="isShowSelect" v-on:closeSelect="closeSelect1" v-on:showTicket="showTicket"></select-order>
+            <order-ticket  v-if="isShowTicket" v-on:closeSelect="closeSelect1" v-on:selectOrder="selectorder"></order-ticket>
+
+            <div v-if="orderdetail.boletoPayCodeURL && order.status == 1 && orderoffset >= 1000 && couponshow">
+                <div class="mask"></div>
+                <div class="coupon-window">
+                    <span class="coupon-close" @click="() => {this.couponshow = false}"><i class="iconfont">&#xe69a;</i></span>
+                    <div>
+                        <div class="white top-line">
+                            <h2>Atenção</h2>
+                            <img src="https://dgzfssf1la12s.cloudfront.net/upgrade/20180529/001.png">
+                        </div>
+                        <div class="middle-line">
+                            <img src="https://dgzfssf1la12s.cloudfront.net/upgrade/20180529/002.png">
+                        </div>
+                        <div class="white bottom-line">
+                            <p>O cupom de <span class="fc-r">15%</span> de desconto será enviado para sua conta após o pagamento. Não perca</p>
+                            <a  class="blackbtn" :href="order.boletoPayCodeURL">Pague agora</a>
+                        </div>
                     </div>
-                    <div class="middle-line">
-                        <img src="https://dgzfssf1la12s.cloudfront.net/upgrade/20180529/002.png">
-                    </div>
-                    <div class="white bottom-line">
-                        <p>O cupom de <span class="fc-r">15%</span> de desconto será enviado para sua conta após o pagamento. Não perca</p>
-                        <a  class="blackbtn" :href="order.boletoPayCodeURL">Pague agora</a>
+                </div>
+            </div>
+
+            <div v-if="orderdetail.order.mercadopagoPayURL && order.status == 1 && orderoffset >= 1000 && couponshow">
+                <div class="mask"></div>
+                <div class="coupon-window">
+                    <span class="coupon-close" @click="() => {this.couponshow = false}"><i class="iconfont">&#xe69a;</i></span>
+                    <div>
+                        <div class="white top-line">
+                            <h2>Atención</h2>
+                            <img src="https://dgzfssf1la12s.cloudfront.net/upgrade/20180529/001.png">
+                        </div>
+                        <div class="middle-line">
+                            <img src="https://dgzfssf1la12s.cloudfront.net/upgrade/20180529/002.png">
+                        </div>
+                        <div class="white bottom-line">
+                            <p>Después de realizar el pago, recibirás un cupón de regalo con un <span class="fc-r">15%</span> de descuento para tu siguiente compra.</p>
+                            <a  class="blackbtn" :href="orderdetail.order.mercadopagoPayURL">Pague ahora</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <div v-if="order.mercadopagoPayURL && order.status == 1 && orderoffset >= 1000 && couponshow">
-            <div class="mask"></div>
-            <div class="coupon-window">
-                <span class="coupon-close" @click="() => {this.couponshow = false}">X</span>
-                <div>
-                    <div class="white top-line">
-                        <h2>Atención</h2>
-                        <img src="https://dgzfssf1la12s.cloudfront.net/upgrade/20180529/001.png">
-                    </div>
-                    <div class="middle-line">
-                        <img src="https://dgzfssf1la12s.cloudfront.net/upgrade/20180529/002.png">
-                    </div>
-                    <div class="white bottom-line">
-                        <p>Después de realizar el pago, recibirás un cupón de regalo con un <span class="fc-r">15%</span> de descuento para tu siguiente compra.</p>
-                        <a  class="blackbtn" :href="order.order.mercadopagoPayURL">Pague ahora</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <loding v-if="isloding"></loding>
     </div>
-
 </template>
 
 <script>
@@ -122,6 +132,7 @@
     import selectOrder from '../components/select-order.vue';
     import orderTicket from '../components/order-ticket.vue';
     import CountDown from '../components/countdow.vue';
+    import loding from '../components/loding.vue';
 
     export default {
         data(){
@@ -134,13 +145,15 @@
                 isShowSelect: false,
                 isShowTicket:false,
                 couponshow: true,
+                isloding:false,
             }
         },
         components: {
             'link-image': LinkImage,
             'order-ticket':orderTicket,
             'select-order':selectOrder,
-            'count-down': CountDown
+            'count-down': CountDown,
+            'loding':loding
         },
         computed:{
             ...mapGetters(['orderdetail','shareurl']),
@@ -204,8 +217,8 @@
                     window.open(this.shareurl.shareUrl,"_blank")
                 })
             },
-            review(){
-                this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/order-review', query: { orderid: this.order.id } })
+            review(id){
+                this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/order-review', query: { orderid: this.order.id,productid: id }})
             },
             closeSelect1(){
                 this.isShowTicket = false
@@ -216,13 +229,26 @@
                 })
             },
             confirmOrder(){
+                let _this = this
+                this.isloding = true;
                 this.$store.dispatch('confirmOrder',this.order.id).then(()=>{
+                    _this.order.status = 10
                     alert("success")
+                }).catch((e) => {
+                    alert(e);
+                    this.isloding = false
                 })
             },
             cancelOrder(){
+                let _this = this
+                this.isloding = true;
                 this.$store.dispatch('cancelOrder',this.order.id).then(()=>{
+                    _this.order.status = 7
                     alert("success")
+                    this.isloding = false
+                }).catch((e) => {
+                    alert(e);
+                    this.isloding = false
                 })
             },
             closeSelect1(){
@@ -244,18 +270,47 @@
             },
         },
         created(){
+            this.isloding=true
             this.$store.dispatch('getOrder',this.$route.query.orderid).then(()=>{
                 this.order = this.orderdetail.order
                 this.orderpro = _.cloneDeep(this.orderdetail.order.orderItems)
                 this.shipping = this.orderdetail.order.shippingDetail
                 this.shippingstate = this.orderdetail.order.shippingDetail.state
                 this.shippingcountry =this.orderdetail.order.shippingDetail.country
+                this.isloding = false
             })
         }
     }
 </script>
 
 <style scoped lang="scss">
+    @font-face {
+        font-family: 'iconfont';  /* project id 384296 */
+        src: url('//at.alicdn.com/t/font_384296_m72f720tkb.eot');
+        src: url('//at.alicdn.com/t/font_384296_m72f720tkb.eot?#iefix') format('embedded-opentype'),
+        url('//at.alicdn.com/t/font_384296_m72f720tkb.woff') format('woff'),
+        url('//at.alicdn.com/t/font_384296_m72f720tkb.ttf') format('truetype'),
+        url('//at.alicdn.com/t/font_384296_m72f720tkb.svg#iconfont') format('svg');
+    }
+    .iconfont{
+        font-family:"iconfont" !important;
+        font-size:16px;font-style:normal;
+        -webkit-font-smoothing: antialiased;
+        -webkit-text-stroke-width: 0.2px;
+        -moz-osx-font-smoothing: grayscale;
+    }
+    .review-btn{
+        width: 140px;
+        height: 32px;
+        background-color: #222222;
+        border-radius: 2px;
+        color: #fff;
+        text-align: center;
+        line-height: 32px;
+        position: relative;
+        left: 40px;
+        cursor: pointer;
+    }
     .grey{
         color: #999;
     }
@@ -263,19 +318,36 @@
         background-color: #222 !important;
         color: #fff;
     }
+    .blackbtn{
+         background-color: #000;
+         color: #fff;
+         width: 200px;
+         height: 35px;
+         line-height: 35px;
+         text-align: center;
+         margin: 15px auto 0 auto;
+         display:block;
+         cursor: pointer;
+         text-decoration: none;
+     }
     .w-300{
         max-width: 300px;
     }
     .infotabel{
         border: 1px solid #cacaca;
         width: 100%;
-        margin: 20px 0 30px 0;
+        margin: 20px 0 24px 0;
         td{
-            padding: 14px;
+            padding: 12px;
             vertical-align: middle;
             font-size: 14px;
-            line-height: 25px;
+            line-height: 20px;
             text-align: center;
+            p:last-child{
+                i{
+                    font-size: 20px;
+                }
+            }
             i{
                 font-size: 18px;
                 margin-right: 6px;
@@ -283,6 +355,9 @@
             a{
                 text-decoration: underline;
                 cursor: pointer;
+                &:hover{
+                    color: #666;
+                }
             }
         }
         tr:first-child{
@@ -293,6 +368,8 @@
             }
             td:last-child{
                 font-weight: normal !important;
+                padding-right: 20px;
+                text-align: right;
             }
         }
         tr{
@@ -315,15 +392,29 @@
     .tbl-cell{
         display: table-cell;
     }
+    .datail{
+        width: 1140px;
+        margin: 0 auto;
+        .detailHd{
+            font-size: 14px;
+            color: #666;
+            padding:30px 0 30px 0;
+            p{
+                a{
+                    color:#666;
+                }
+            }
+        }
+    }
     .detailCon {
         width: 915px;
         margin: 0 auto;
         padding-top: 24px;
         h2 {
-            margin-top: 63px;
             margin-bottom: 20px;
         }
         h4 {
+            font-size: 16px;
             margin: 24px 0;
         }
         .shippinginfo{
@@ -334,7 +425,7 @@
         .bgline{
             width: 100%;
             height: 1px;
-            background-color: #cacaca;
+            background-color: #e6e6e6;
             margin: 20px 0;
         }
         .orderinfo{
@@ -358,12 +449,12 @@
             width: 320px;
             float: right;
             .p-price{
-                line-height: 24px;
+                line-height: 30px;
                 .price{
                     float: right;
                 }
                 .r-p{
-                    color: #e5004f;
+                    color: #E64545;
                 }
             }
             .t-p{
@@ -372,7 +463,7 @@
                     font-size: 24px;
                 }
                 .r-p{
-                    color: #e5004f;
+                    color: #E64545;
                 }
             }
         }
@@ -382,20 +473,32 @@
             clear: both;
         }
     }
-    .r-btn{
-        width: 160px;
-        float: right;
-        line-height: 32px;
-        margin-bottom: 20px;
-        text-align: center;
-        background-color: #e5004f;
-        color: #fff;
-        font-size: 14px;
-        font-weight: bold;
-        cursor: pointer;
-    }
-    .b-btn{
-        background-color: #222 !important;
+    .actionbtn{
+        .r-btn{
+            width: 240px;
+            float: right;
+            line-height: 40px;
+            margin-bottom: 20px;
+            text-align: center;
+            background-color: #222;
+            color: #fff;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 2px;
+            &:after{
+                display: block;
+                clear: both;
+                content: '';
+            }
+        }
+        .b-btn{
+            background-color: #222 !important;
+        }
+        &:after{
+            display: block;
+            clear: both;
+            content: '';
+        }
     }
     .mask{
         background: rgba(0,0,0,.4);

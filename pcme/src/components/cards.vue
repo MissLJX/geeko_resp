@@ -1,5 +1,6 @@
 <template>
     <div class="el-cards">
+        <div class="nocard" v-if="!creditcards">No Card.</div>
         <div class="el-card">
             <div class="el-card-info tbl" v-for="card in creditcards" :style="{'background-color': card.style && card.style.color ? card.style.color : '#fff'}">
                 <div class="tbl-cell el-card-img">
@@ -16,7 +17,7 @@
         </div>
         <div class="mask" v-if="isAlert">
             <div class="confirm-con">
-                <p class="cancel-btn" @click="deleteCard(0)">X</p>
+                <p class="cancel-btn" @click="deleteCard(0)"><i class="iconfont">&#xe69a;</i></p>
                 <p>{{$t('removecard')}}</p>
                 <div class="btn-arr">
                     <div class="n-btn" @click="deleteCard(0)">{{$t('no')}}</div>
@@ -78,6 +79,12 @@
         -webkit-text-stroke-width: 0.2px;
         -moz-osx-font-smoothing: grayscale;}
     .el-cards{
+        .nocard{
+            width: 100%;
+            text-align: center;
+            color: #222;
+            font-size: 16px;
+        }
         .el-card{
             .el-card-info{
                 width: 337px;
@@ -99,6 +106,8 @@
                     text-align: center;
                     cursor: pointer;
                     i{
+                        color: #666;
+                        font-size: 18px;
                         &:hover{
                             opacity: .8;
                         }
@@ -127,6 +136,7 @@
         height: 100%;
         background-color: rgba(0,0,0,.4);
         text-align: center;
+        z-index: 999;
         .confirm-con{
             width: 485px;
             height: 175px;
@@ -157,7 +167,7 @@
                     cursor: pointer;
                 }
                 .n-btn{
-                    background-color: #e5004f;
+                    background-color: #222;
                 }
                 .y-btn{
                     background-color: #cacaca;

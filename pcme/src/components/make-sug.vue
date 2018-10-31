@@ -8,7 +8,7 @@
             <p>Please leave your thoughts in the comment box below. We welcome them.In return, we will give you <span>200 credits</span> if your comment is adopted. We will notify you by email:  </p>
             <div class="m_email" @click="isAlert=true"><a>{{communicationEmail}}</a><i class="iconfont">&#xe61f;</i></div>
             <div class="commet-area commet-area1">
-                <h4>{{$t('sugcom')}}</h4>
+                <p>{{$t('sugcom')}}</p>
                 <div class="remnant">{{remnant}}/1000</div>
                 <div class="t-area">
                     <textarea  style="resize:none;" maxlength="1000" @input ="descInput" v-model="info.subject" v-validate="'required'" name="suggestion" :class="{'st-input-danger':errors.has('suggestion')}"></textarea>
@@ -173,7 +173,7 @@
             color: #222;
             margin-top: 10px;
             span{
-                color: #e5004f;
+                color: #E64545;
             }
         }
         .m_email{
@@ -249,6 +249,7 @@
         height: 100%;
         background-color: rgba(0,0,0,.4);
         text-align: center;
+        z-index: 999;
         .confirm-con{
             width: 642px;
             height: 214px;
@@ -287,7 +288,7 @@
                 width: 170px;
                 line-height: 32px;
                 text-align: center;
-                background-color: #e5004f;
+                background-color: #222;
                 color: #fff;
                 margin: 0 auto;
                 cursor: pointer;

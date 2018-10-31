@@ -227,7 +227,7 @@
             .v-btn{
                 width: 100px;
                 line-height: 26px;
-                background-color: #e5004f;
+                background-color: #E64545;
                 color: #fff;
                 text-align: center;
                 margin-top: 15px;
@@ -286,7 +286,6 @@
                     font-size: 16px;
                     color: #222;
                     display: block;
-                    font-weight: bold;
                     margin-bottom: 16px;
                 }
                 input{

@@ -58,11 +58,9 @@
                 }
                 store.dispatch('me/confirmEmail', email).then((data)=>{
                     this.hasFill = false;
-                    if(data){
-                        alert("We've sent you an e-mail,please check your mailbox.");
-                    }else{
-                        alert("This mailbox adress is already existed,please re-enter.");
-                    }
+                    alert("We've sent you an e-mail,please check your mailbox.");
+                }).catch((e) => {
+                    alert("This mailbox adress is already existed,please re-enter.");
                 });
             }
         }

@@ -2,22 +2,22 @@
     <div>
         <div class="hd">
             <div class="el-tbl">
-                <div class="el-tbl-cell" @click="getData(0,'all')" :class="{active:0===index}">
+                <div class="el-tbl-cell" @click="getData(0,'all','click')" :class="{active:0===index}">
                     {{$t('all')}}<span>{{orderCountAll}}</span>
                 </div>
-                <div class="el-tbl-cell" @click="getData(1,'Unpaid')" :class="{active:1===index}">
+                <div class="el-tbl-cell" @click="getData(1,'Unpaid','click')" :class="{active:1===index}">
                     {{$t('unpaid')}}<span>{{orderCountUnpaid}}</span>
                 </div>
-                <div class="el-tbl-cell" @click="getData(2,'Processing')" :class="{active:2===index}">
+                <div class="el-tbl-cell" @click="getData(2,'Processing','click')" :class="{active:2===index}">
                     {{$t('processing')}}<span>{{orderCountProcessing}}</span>
                 </div>
-                <div class="el-tbl-cell" @click="getData(3,'Shipped')" :class="{active:3===index}">
+                <div class="el-tbl-cell" @click="getData(3,'Shipped','click')" :class="{active:3===index}">
                     {{$t('ordershipped')}}<span>{{orderCountShipped}}</span>
                 </div>
-                <div class="el-tbl-cell" @click="getData(4,'Comfirmed')" :class="{active:4===index}">
+                <div class="el-tbl-cell" @click="getData(4,'Comfirmed','click')" :class="{active:4===index}">
                     {{$t('orderconfirm')}}<span>{{orderCountReceipt}}</span>
                 </div>
-                <div class="el-tbl-cell" @click="getData(5,'Canceled')" :class="{active:5===index}">
+                <div class="el-tbl-cell" @click="getData(5,'Canceled','click')" :class="{active:5===index}">
                     {{$t('cancelorder1')}}<span>{{orderCountCanceled}}</span>
                 </div>
             </div>
@@ -38,7 +38,7 @@
                         <div class="tbl-cell tx-c">{{getDate(item.order.paymentTime)}}</div>
                         <div class="tbl-cell tx-c"><span>{{$t('orderno')}}:</span>{{item.order.id}}</div>
                         <div class="tbl-cell tx-c"><span>{{$t('shippingfrom')}}:</span>{{$t('overseas')}}</div>
-                        <div class="tbl-cell tx-c"><i class="iconfont" style="margin-right: 5px">&#xe670;</i><a class="cur-p" @click="showTicket(item.order.id)">{{$t('contactseller')}}</a></div>
+                        <div class="tbl-cell tx-c"><i class="iconfont contactseller" >&#xe716;</i><a class="cur-p" @click="showTicket(item.order.id)">{{$t('contactseller')}}</a></div>
                     </div>
                 </div>
                 <div class="i-bd">
@@ -55,21 +55,28 @@
                         <div class="tbl-cell v-m w-180 tx-c">
                             <p>{{getStatus(item.order.status)}}</p>
                             <p class="detail cur-p" @click="checkDetail(item.order.id)">{{$t('detail')}}</p>
-                            <p class="detail cur-p" v-if="item.order.id && item.order.status === 4" @click="checkLogistics(item.order.id)">{{$t('logistics')}}</p>
+                            <p class="detail cur-p" v-if="item.order.id && item.order.status === 4 && item.tracking"  @click="checkLogistics(item.order.id)">{{$t('logistics')}}</p>
                         </div>
                         <div class="tbl-cell v-m w-190 tx-c">
                             <p style="margin-bottom: 10px" v-if="orderoffset(item) >= 1000 && item.boletoPayCodeURL && item.order.status === 1">
-                                <span class="label" style="color: #e5004f">Presente de cupão expirs</span>
-                                <count-down :timeStyle="{color:'#e5004f'}" :timeLeft="orderoffset(item)"></count-down>
+                                <span class="label" style="color: #E64545">Presente de cupão expirs</span>
+                                <count-down :timeStyle="{color:'#E64545'}" :timeLeft="orderoffset(item)"></count-down>
                             </p>
                             <a class="r-btn" :href="item.boletoPayCodeURL" target="_blank" v-if="item.boletoPayCodeURL && item.order.status === 1">Imprimir Boleto</a>
+
+                            <p style="margin-bottom: 10px" v-if="orderoffset(item) >= 1000 && item.order.mercadopagoPayURL && item.order.status === 1">
+                                <span class="label" style="color: #E64545">Tiempo restante para realizar el pago</span>
+                                <count-down :timeStyle="{color:'#E64545'}" :timeLeft="orderoffset(item)"></count-down>
+                            </p>
+                            <a class="r-btn" :href="item.order.mercadopagoPayURL" target="_blank" v-if="item.order.mercadopagoPayURL && item.order.status === 1">Generar Ticket</a>
+
                             <a class="b-btn" @click="checkDetail(item.order.id)" v-if="item.order.id && item.order.status === 10">{{$t('view')}}</a>
                         </div>
                     </div>
                 </div>
             </div>
-            <div v-show="ifloding && !finished" class="el-list-loading"><i class="iconfont">&#xe69f;</i></div>
-            <div class="el-no-more" v-show="finished">{{$t('nomoredata')}}</div>
+            <div v-show="!isloded" class="el-list-loading"><i class="iconfont">&#xe69f;</i></div>
+            <div class="el-no-more" v-show="ifDone">{{$t('nomoredata')}}</div>
         </div>
 
         <select-order v-if="isShowSelect" v-on:closeSelect="closeSelect1" v-on:showTicket="showTicket"></select-order>
@@ -84,7 +91,6 @@
     import orderTicket from './order-ticket.vue';
     import selectOrder from './select-order.vue';
     import CountDown from './countdow.vue';
-
     export default {
         data (){
             return{
@@ -93,7 +99,7 @@
                 isShowTicket:false,
                 isShowSelect:false,
                 method:'all',
-                ifloding:true,
+                isloded:false,
                 finished:false
             }
         },
@@ -123,8 +129,33 @@
                 'canceledLoading',
                 'shippedLoading',
                 'unpaidLoading',
-                'unpaidDone'
+                'allDone',
+                'unpaidDone',
+                'processingDone',
+                'confirmedDone',
+                'canceledDone',
+                'shippedDone'
             ]),
+            ifDone(){
+                if(this.method==='all'){
+                    return this.allDone
+                }
+                if(this.method==='Unpaid'){
+                    return this.unpaidDone
+                }
+                if(this.method==='Processing'){
+                    return this.processingDone
+                }
+                if(this.method==='Comfirmed'){
+                    return this.confirmedDone
+                }
+                if(this.method==='Canceled'){
+                    return this.canceledDone
+                }
+                if(this.method==='Shipped'){
+                    return this.shippedDone
+                }
+            }
         },
         created(){
             this.$store.dispatch('getOrderCountAll');
@@ -135,56 +166,67 @@
             this.$store.dispatch('getOrderCountUnpaid');
             this.loadAll(20).then(()=> {
                 this.orderMethod = this.all
-                /*if(this.orderMethod){
-                    this.ifloding = false
-                }*/
+                this.isloded = true
             })
         },
         mounted(){
             window.addEventListener('scroll',this.scrollHandle)
         },
+        destroyed(){
+            window.removeEventListener('scroll',this.scrollHandle)
+        },
         methods:{
             ...mapActions([
                 'loadAll'
             ]),
-            getData(index,method){
-                this.ifloding = true
-                this.finished = false
+            getData(index,method,flag){
                 this.index = index
                 this.method = method
-                if(method==='all'){
-                    this.$store.dispatch('loadAll',20).then(()=> {
-                        this.orderMethod = this.all
-                    })
+                if(flag ==='click'){
+                    this.orderMethod = ''
                 }
-                if(method==='Unpaid'){
-                    this.$store.dispatch('loadUnpaid',20).then(()=> {
-                        this.orderMethod = this.unpaid
-                    })
-                }
-                if(method==='Processing'){
-                    this.$store.dispatch('loadProcessing',20).then(()=> {
-                        this.orderMethod = this.processing
-                    })
-                }
-                if(method==='Shipped'){
-                    this.$store.dispatch('loadShipped',20).then(()=> {
-                        this.orderMethod = this.shipped
-                    })
-                }
-                if(method==='Comfirmed'){
-                    this.$store.dispatch('loadConfirmed',20).then(()=> {
-                        this.orderMethod = this.confirmed
-                    })
-                }
-                if(method==='Canceled'){
-                    this.$store.dispatch('loadCanceled',20).then(()=> {
-                        this.orderMethod = this.canceled
-                    })
+
+                if(this.isloded){
+                    this.isloded = false
+                    if(method==='all'){
+                        this.$store.dispatch('loadAll',20).then(()=> {
+                            this.orderMethod = this.all
+                            this.isloded = true
+                        })
+                    }
+                    if(method==='Unpaid'){
+                        this.$store.dispatch('loadUnpaid',20).then(()=> {
+                            this.orderMethod = this.unpaid
+                            this.isloded = true
+                        })
+                    }
+                    if(method==='Processing'){
+                        this.$store.dispatch('loadProcessing',20).then(()=> {
+                            this.orderMethod = this.processing
+                            this.isloded = true
+                        })
+                    }
+                    if(method==='Shipped'){
+                        this.$store.dispatch('loadShipped',20).then(()=> {
+                            this.orderMethod = this.shipped
+                            this.isloded = true
+                        })
+                    }
+                    if(method==='Comfirmed'){
+                        this.$store.dispatch('loadConfirmed',20).then(()=> {
+                            this.orderMethod = this.confirmed
+                            this.isloded = true
+                        })
+                    }
+                    if(method==='Canceled'){
+                        this.$store.dispatch('loadCanceled',20).then(()=> {
+                            this.orderMethod = this.canceled
+                            this.isloded = true
+                        })
+                    }
                 }
             },
             getDate(paymentTime){
-                this.ifloding = false
                 if(paymentTime == null){
                     return ''
                 }
@@ -217,8 +259,8 @@
             },
             scrollHandle(evt){
                 evt.preventDefault();
-                if(document.documentElement.scrollTop + window.innerHeight >= document.body.offsetHeight) {
-                    this.getData(this.index,this.method)
+                if(document.documentElement.scrollTop + window.innerHeight >= document.body.offsetHeight-300) {
+                    this.getData(this.index,this.method,'scroll')
                 }
             },
         }
@@ -241,6 +283,14 @@
         -webkit-text-stroke-width: 0.2px;
         -moz-osx-font-smoothing: grayscale;
     }
+    .contactseller{
+        font-size: 20px;
+        position: relative;
+        top: 3px;
+    }
+    .el-no-more{
+        text-align: center;
+    }
     .w-523{
         width: 523px;
     }
@@ -261,6 +311,9 @@
     }
     .cur-p{
         cursor: pointer;
+        &:hover{
+            color: #999;
+        }
     }
     .ml-20{
         margin-left: 20px;
@@ -276,8 +329,9 @@
                 text-transform:uppercase;
                 font-family: HelveticaNeue;
                 cursor: pointer;
+                font-weight: normal;
                 span{
-                    color: #e5004f;
+                    color: #E64545;
                     padding-left: 3px;
                 }
                 a{
@@ -295,7 +349,7 @@
             border: 1px solid #e6e6e6;
             margin-bottom: 16px;
             .i-hd{
-                background-color: #f5f5f5;
+                background-color: #f7f7f7;
                 font-size: 14px;
                 .tbl{
                     display: table;
@@ -311,7 +365,6 @@
                     a{
                         text-decoration: underline;
                     }
-
                 }
             }
             .i-bd{
@@ -325,6 +378,7 @@
                         .detail{
                             text-decoration: underline;
                             margin-top: 8px;
+
                         }
                         .price{
                             font-size: 16px;
@@ -346,7 +400,7 @@
                             cursor: pointer;
                         }
                         .r-btn{
-                            background-color: #e7004d;
+                            background-color: #222;
                         }
                         .b-btn{
                             background-color: #222222;
@@ -357,7 +411,6 @@
                             margin-right: 16px;
                             float: left;
                         }
-
                         .viewmore{
                             width: 81px;
                             text-align: center;
@@ -440,7 +493,6 @@
             animation: list-loading 1.5s infinite linear;
         }
     }
-
     @keyframes list-loading {
         from {
             transform: rotate(0);

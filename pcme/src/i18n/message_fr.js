@@ -102,6 +102,7 @@ export default {
     overseas:'Entrepôt d\'Outre-mer',
     contactseller:'Contacter le Vendeur',
     detail:'Détails',
+    orderdetail:'Order Detail',
     view:'Découvre',
     selectorder:'Select Order',
     ticketid:'Ticket ID',

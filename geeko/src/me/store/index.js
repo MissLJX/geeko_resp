@@ -339,6 +339,8 @@ const actions = {
                 }
                 return {finished: true}
             }
+
+            return {}
         })
     },
 

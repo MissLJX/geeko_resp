@@ -24,7 +24,7 @@ Vue.use(VueRouter)
 
 const routes = [
     {
-        /*path:'/chiquedoll/me/m',*/
+        /*path:'/wanna/me/m',*/
         path:'/me/m',
         component: Index,
         meta: {title:'Me'},
@@ -92,7 +92,7 @@ const routes = [
         ]
         },
     {
-        path:'/me/m/confirm-email',
+        path:'/me/m/confirmSuccess*',
         component: confirmSuccess,
         meta: {title:'ConfirmEmail'},
     },

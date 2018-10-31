@@ -52,7 +52,7 @@ const state = {
     wishProducts: [],
     wishskip: 0,
     creditcards:[],
-    addresses: null,
+    addresses: [],
 
     countries: null,
     states: null,
@@ -289,7 +289,9 @@ const mutations = {
     },
     //address-book
     [types.ME_GET_ADDRESSES](state, _addresses){
-        state.addresses = _addresses
+        if(_addresses){
+            state.addresses = _addresses
+        }
     },
     [types.ME_DELETE_ADDRESS](state, addressId){
         var _index = 0
@@ -446,14 +448,10 @@ const actions = {
     },
     //order
     loadAll({ commit, state }, limit) {
-
         if (state.allDone) return;
-
         commit(types.HOME_LOADING_ALL, true);
-        api.getOrders({
-            skip: state.allSkip,
-            api_suffix: 'get-order-list'
-        }, (orders) => {
+
+        return api.getOrders(state.allSkip, 'get-order-list').then( orders => {
             if (orders && orders.length > 0) {
                 commit(types.HOME_ORDERS_ALL, orders);
                 commit(types.HOME_ORDER_ALL_SKIP, limit);
@@ -463,17 +461,16 @@ const actions = {
 
             commit(types.HOME_LOADING_ALL, false);
 
-        });
+            return orders
+        } );
     },
     loadProcessing({ commit, state }, limit) {
         if (state.processingDone) {
             return;
         }
         commit(types.HOME_LOADING_PROCESSING, true);
-        api.getOrders({
-            skip: state.processingSkip,
-            api_suffix: 'get-unshipped-order-list'
-        }, (orders) => {
+
+        return api.getOrders(state.processingSkip, 'get-unshipped-order-list2').then( orders => {
             if (orders && orders.length > 0) {
                 commit(types.HOME_ORDERS_PROCESSING, orders);
                 commit(types.HOME_ORDER_PROCESSING_SKIP, limit);
@@ -482,24 +479,22 @@ const actions = {
             }
 
             commit(types.HOME_LOADING_PROCESSING, false);
-
+            return orders
         });
     },
 
 
     loadUnpaid({ commit, state }, limit) {
         commit(types.HOME_LOADING_UNPAID, true);
-        return api.getOrders({
-            skip: state.unpaidSkip,
-            api_suffix: 'get-unpayed-order-list'
-        }, (orders) => {
+        if(state.unpaidDone){return}
+         return api.getOrders(state.unpaidSkip, 'get-unpayed-order-list').then( orders => {
             if (orders && orders.length > 0) {
                 commit(types.HOME_ORDERS_UNPAID, orders);
                 commit(types.HOME_ORDER_UNPAID_SKIP, limit);
-                return {finished: false}
             } else {
-                return {finished: true}
+                commit(types.HOME_UNPAID_DONE);
             }
+             return orders
         });
     },
 
@@ -508,12 +503,8 @@ const actions = {
         if (state.confirmedDone) {
             return;
         }
-
         commit(types.HOME_LOADING_CONFIRMED, true);
-        api.getOrders({
-            skip: state.confirmedSkip,
-            api_suffix: 'get-receipt-order-list'
-        }, (orders) => {
+        return api.getOrders(state.confirmedSkip, 'get-receipt-order-list').then( orders => {
             if (orders && orders.length > 0) {
                 commit(types.HOME_ORDERS_CONFIRMED, orders);
                 commit(types.HOME_ORDER_CONFIRMED_SKIP, limit);
@@ -522,7 +513,7 @@ const actions = {
             }
 
             commit(types.HOME_LOADING_CONFIRMED, false);
-
+            return orders
         });
     },
 
@@ -530,10 +521,7 @@ const actions = {
         if (state.shippedDone) {
             return;
         }
-        api.getOrders({
-            skip: state.shippedSkip,
-            api_suffix: 'get-shipped-order-list'
-        }, (orders) => {
+        return api.getOrders(state.shippedSkip, 'get-shipped-order-list').then( orders => {
             if (orders && orders.length > 0) {
                 commit(types.HOME_ORDERS_SHIPPED, orders);
                 commit(types.HOME_ORDER_SHIPPED_SKIP, limit);
@@ -542,7 +530,7 @@ const actions = {
             }
 
             commit(types.HOME_LOADING_SHIPPED, false);
-
+            return orders
         });
     },
 
@@ -551,10 +539,7 @@ const actions = {
             return;
         }
         commit(types.HOME_LOADING_CANCELED, true);
-        api.getOrders({
-            skip: state.canceledSkip,
-            api_suffix: 'get-canceled-order-list'
-        }, (orders) => {
+        return api.getOrders(state.canceledSkip, 'get-canceled-order-list').then( orders => {
             if (orders && orders.length > 0) {
                 commit(types.HOME_ORDERS_CANCELED, orders);
                 commit(types.HOME_ORDER_CANCELED_SKIP, limit);
@@ -563,7 +548,7 @@ const actions = {
             }
 
             commit(types.HOME_LOADING_CANCELED, false);
-
+            return orders
         });
     },
 
@@ -786,7 +771,7 @@ const actions = {
     },
 
     //comments
-    loadComment({commit}, {productId}){
+    loadComment({commit}, productId){
         return api.getComment(productId).then((comment) => {
             commit(types.REVIEW_LOAD_COMMENT, comment);
         })

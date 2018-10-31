@@ -3,7 +3,7 @@
         <input type="checkbox" :id="product.id" class="myCheck" @click="removeWishHandle()"/>
         <label :for="product.id"></label>
         <div class="img">
-            <img :src="imageUrl"/>
+            <img :src="imageUrl" :class="{'gray':isSoldOut}"/>
         </div>
     </div>
 </template>
@@ -69,6 +69,14 @@
     .myCheck:checked + label:after{
         content:"\2714";
     }
+    .gray{
+        -webkit-filter: grayscale(100%);
+        -moz-filter: grayscale(100%);
+        -ms-filter: grayscale(100%);
+        -o-filter: grayscale(100%);
+        filter: grayscale(100%);
+        filter: gray;
+    }
 </style>
 
 <script type="text/ecmascript-6">
@@ -84,6 +92,13 @@
             imageUrl(){
                 return imageutil.getMedium(this.product.pcMainImage)
             },
+            isSoldOut(){
+                if(this.product.status == 2){
+                    return true
+                }else{
+                    return false
+                }
+            },
             liked(){
                 var wishlist = this.$store.getters['me/wishlist']
                 if (wishlist && wishlist.length && wishlist[0].productIds && wishlist[0].productIds.length) {
@@ -95,7 +110,6 @@
             productUrl(){
                 return window.ctx + '/' + producturl(this.product)
             }
-
         },
         methods: {
             removeWishHandle(){

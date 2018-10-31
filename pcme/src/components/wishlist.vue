@@ -25,7 +25,7 @@
         </div>
         <div class="mask" v-if="isAlert">
             <div class="confirm-con">
-                <p class="cancel-btn" @click="removeAll(0)">X</p>
+                <p class="cancel-btn" @click="removeAll(0)"><i class="iconfont">&#xe69a;</i></p>
                 <p>{{$t('removeproducts')}}</p>
                 <div class="btn-arr">
                     <div class="n-btn" @click="removeAll(0)">{{$t('no')}}</div>
@@ -76,6 +76,9 @@
         },
         mounted(){
             window.addEventListener('scroll',this.scrollHandle)
+        },
+        destroyed(){
+            window.removeEventListener('scroll',this.scrollHandle)
         },
         methods:{
             scrollHandle(evt){
@@ -200,7 +203,7 @@
         text-align: center;
         margin: 20px 0;
         font-size: 14px;
-        color: #666666;
+        color: #999;
         .remove{
             float: right;
             position: relative;
@@ -209,10 +212,13 @@
             color: #222;
             text-decoration: underline;
             cursor: pointer;
+            &:hover{
+                color: #999;
+            }
         }
     }
     .f-red{
-        color: #e5004f;
+        color: #E64545;
         font-size: 16px;
         font-weight: bold;
     }
@@ -238,6 +244,9 @@
                     padding-top: 7px;
                     i{
                         float: right;
+                        font-size: 18px;
+                        color: #666;
+                        cursor: pointer;
                     }
                 }
                 &:after{
@@ -254,6 +263,7 @@
                     line-height: 24px;
                     text-align: center;
                     color: #fff;
+                    margin-top: 4px;
                 }
             }
             &:after{
@@ -271,6 +281,7 @@
         height: 100%;
         background-color: rgba(0,0,0,.4);
         text-align: center;
+        z-index: 999;
         .confirm-con{
             width: 485px;
             height: 175px;
@@ -301,7 +312,7 @@
                     cursor: pointer;
                 }
                 .n-btn{
-                    background-color: #e5004f;
+                    background-color: #222;
                 }
                 .y-btn{
                     background-color: #cacaca;

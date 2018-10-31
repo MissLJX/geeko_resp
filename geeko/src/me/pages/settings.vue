@@ -57,7 +57,7 @@
                         </div>
                     </div>
                     <select class="el-gender-select" v-model="info.gender">
-                        <option value="1">Man</option>
+                        < value="1">Man</option>
                         <option value="2">Woman</option>
                         <option value="3">Other</option>
                     </select>

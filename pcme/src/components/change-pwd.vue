@@ -155,7 +155,7 @@
             color: #666;
             margin-bottom: 45px;
             span{
-                color: #e5004f;
+                color: #E64545;
                 display: inline-block;
             }
         }
@@ -212,7 +212,7 @@
                 width: 170px;
                 line-height: 32px;
                 text-align: center;
-                background-color: #e5004f;
+                background-color: #E64545;
                 color: #fff;
                 margin: 0 auto;
                 cursor: pointer;

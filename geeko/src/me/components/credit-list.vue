@@ -2,7 +2,7 @@
     <div class="el-credits">
         <div class="item-list" v-for="(group, index) in groups" :key="index">
             <div class="li-tit">{{index}} <div id="triangle-down"></div></div>
-            <list :items="group" :loading="loading && group.length-1 === index" :finished="finished && group.length-1 === index" @listing="$emit('listing')" :scrollable="true">
+            <list :items="group">
                 <template slot="li" scope="props">
                         <li :key="props.item.id">
                             <credit class="el-credit" :credit="props.item"/>

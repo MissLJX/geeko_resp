@@ -102,6 +102,7 @@ export default {
     overseas:'Almacén de Ultramar',
     contactseller:'Contactar con el Vendedor',
     detail:'Detalles',
+    orderdetail:'Order Detail',
     view:'Vista',
     selectorder:'Select Order',
     ticketid:'Ticket ID',

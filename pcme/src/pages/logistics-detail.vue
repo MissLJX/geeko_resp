@@ -97,7 +97,6 @@
     .detailCon{
         width: 1150px;
         margin: 0 auto;
-        padding-top: 24px;
         h2 {
             margin-top: 63px;
             margin-bottom: 20px;

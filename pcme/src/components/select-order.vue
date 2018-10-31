@@ -22,8 +22,8 @@
                     </span>
                 </div>
             </div>
-            <div v-show="ifloding" class="el-list-loading"><i class="iconfont">&#xe69f;</i></div>
-            <div class="el-no-more" v-show="finished">{{$t('nomoredata')}}</div>
+            <div v-show="!isloded" class="el-list-loading"><i class="iconfont">&#xe69f;</i></div>
+            <div class="el-no-more" v-show="ifDone">{{$t('nomoredata')}}</div>
         </div>
         <div class="s-fd">
             <div class="f-btn" @click="submitTicket">{{$t('submit')}}</div>
@@ -43,6 +43,7 @@
                 orderMethod:null,
                 ifloding:true,
                 finished:false,
+                isloded:false,
                 tabList: [
                     {
                         label: 'All',
@@ -97,17 +98,45 @@
                 'canceledLoading',
                 'shippedLoading',
                 'unpaidLoading',
-                'unpaidDone'
+                'allDone',
+                'unpaidDone',
+                'processingDone',
+                'confirmedDone',
+                'canceledDone',
+                'shippedDone'
             ]),
-
+            ifDone(){
+                if(this.method==='home-all'){
+                    return this.allDone
+                }
+                if(this.method==='home-unpaid'){
+                    return this.unpaidDone
+                }
+                if(this.method==='home-processing'){
+                    return this.processingDone
+                }
+                if(this.method==='home-confirmed'){
+                    return this.confirmedDone
+                }
+                if(this.method==='home-canceled'){
+                    return this.canceledDone
+                }
+                if(this.method==='home-shipped'){
+                    return this.shippedDone
+                }
+            }
         },
         created() {
             this.loadAll(20).then(()=> {
                 this.orderMethod = this.all
+                this.isloded = true
             })
         },
         mounted(){
             this.$refs.viewBox.addEventListener('scroll',this.scrollHandle)
+        },
+        destroyed(){
+            this.$refs.viewBox.removeEventListener('scroll',this.scrollHandle)
         },
         methods: {
             ...mapActions([
@@ -121,37 +150,45 @@
 
             changeList(tab) {
                 this.method = tab
-                if(tab==='home-all'){
-                    this.$store.dispatch('loadAll',20).then(()=> {
-                        this.orderMethod = this.all
-                    })
+                if(this.isloded) {
+                    this.isloded = false
+                    if (tab === 'home-all') {
+                        this.$store.dispatch('loadAll', 20).then(() => {
+                            this.orderMethod = this.all
+                            this.isloded = true
+                        })
+                    }
+                    if (tab === 'home-unpaid') {
+                        this.$store.dispatch('loadUnpaid', 20).then(() => {
+                            this.orderMethod = this.unpaid
+                            this.isloded = true
+                        })
+                    }
+                    if (tab === 'home-processing') {
+                        this.$store.dispatch('loadProcessing', 20).then(() => {
+                            this.orderMethod = this.processing
+                            this.isloded = true
+                        })
+                    }
+                    if (tab === 'home-shipped') {
+                        this.$store.dispatch('loadShipped', 20).then(() => {
+                            this.orderMethod = this.shipped
+                            this.isloded = true
+                        })
+                    }
+                    if (tab === 'home-confirmed') {
+                        this.$store.dispatch('loadConfirmed', 20).then(() => {
+                            this.orderMethod = this.confirmed
+                            this.isloded = true
+                        })
+                    }
+                    if (tab === 'home-canceled') {
+                        this.$store.dispatch('loadCanceled', 20).then(() => {
+                            this.orderMethod = this.canceled
+                            this.isloded = true
+                        })
+                    }
                 }
-                if(tab==='home-unpaid'){
-                    this.$store.dispatch('loadUnpaid',20).then(()=> {
-                        this.orderMethod = this.unpaid
-                    })
-                }
-                if(tab==='home-processing'){
-                    this.$store.dispatch('loadProcessing',20).then(()=> {
-                        this.orderMethod = this.processing
-                    })
-                }
-                if(tab==='home-shipped'){
-                    this.$store.dispatch('loadShipped',20).then(()=> {
-                        this.orderMethod = this.shipped
-                    })
-                }
-                if(tab==='home-confirmed'){
-                    this.$store.dispatch('loadConfirmed',20).then(()=> {
-                        this.orderMethod = this.confirmed
-                    })
-                }
-                if(tab==='home-canceled'){
-                    this.$store.dispatch('loadCanceled',20).then(()=> {
-                        this.orderMethod = this.canceled
-                    })
-                }
-
 
             },
             getStatus(orderstatus){
@@ -173,7 +210,7 @@
             },
             scrollHandle(evt){
                 evt.preventDefault();
-                if(this.$refs.viewBox.scrollTop + this.$refs.viewBox.offsetHeight >= this.$refs.viewBox.scrollHeight) {
+                if(this.$refs.viewBox.scrollTop + this.$refs.viewBox.offsetHeight >= this.$refs.viewBox.scrollHeight - 200) {
                     this.changeList(this.method)
                 }
             },
@@ -184,7 +221,7 @@
     };
 </script>
 
-<style scoped lang="scss">
+<style  lang="scss" scoped>
     .selectOrder{
         width: 500px;
         border: 1px solid #cacaca;
@@ -192,13 +229,13 @@
         position: fixed;
         right: 0;
         top: 0;
-        padding-top: 90px;
+        padding-top: 50px;
         padding-bottom: 73px;
-        z-index: 999;
+        z-index: 30000000;
         .s-hd{
             width: 100%;
-            height: 90px;
-            line-height: 90px;
+            height: 50px;
+            line-height: 50px;
             background-color: #efefef;
             text-align: left;
             padding-left: 25px;
@@ -210,12 +247,13 @@
                 cursor: pointer;
             }
             h3{
-                line-height: 90px;
+                line-height: 50px;
+                font-size: 18px;
             }
         }
         .s-bd{
             background-color: #fff;
-            max-height:calc(100vh - 163px);
+            max-height:calc(100vh - 125px);
             overflow-y: auto;
             .st-select{
                 width: 452px;
@@ -228,6 +266,9 @@
                 text-align: left;
                 padding: 0 24px;
                 line-height: 50px;
+                p{
+                    line-height: 50px;
+                }
                 p:first-child{
                     float: left;
                 }
@@ -248,7 +289,7 @@
                 padding-left: 26px;
                 padding-top: 16px;
                 text-align: left;
-                border-bottom: 1px solid #cacaca;
+                border-bottom: 1px solid #e6e6e6;
                 padding-bottom: 17px;
                 position: relative;
                 line-height: 30px;
@@ -278,8 +319,8 @@
                     }
                 }
                 input:checked+label {
-                    background-color: #e5004f;
-                    border: 1px solid #e5004f;
+                    background-color: #222;
+                    border: 1px solid #222;
                 }
 
                 input:checked+label::after {

@@ -53,7 +53,7 @@
                 /*return utils.PROJECT + '/shoppingcart/authc'*/
             },
             shoppingCartUrl(){
-                return utils.PROJECT + '/w-site/anon/index'
+                return utils.PROJECT + '/'
                 /*return utils.PROJECT + '/index'*/
             }
         }

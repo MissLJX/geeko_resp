@@ -6,7 +6,8 @@
 
 <style scoped lang="scss">
     .el-body {
-        margin-bottom: 100px;
+        margin-bottom: 50px;
+        min-height: 300px;
         h1{
             font-size: 15px;
         }
@@ -15,4 +16,9 @@
 </style>
 
 <script type="text/ecmascript-6">
+    export default {
+        mounted(){
+            window.closeLoading()
+        }
+    }
 </script>

@@ -38,7 +38,7 @@ const instance = axios.create({
   timeout: 50000,
   headers: {
     appVersion: '3.5.8',
-    deviceType: deviceType,
+   /* deviceType: deviceType,*/
     countryCode: getCountry(),
     wid: getWid(),
     StemFrom: typeof (utm_source) === 'undefined' ? '' : utm_source,

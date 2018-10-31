@@ -1,15 +1,16 @@
 <template>
     <div class="coupons">
+        <div v-show="!coupons" class="el-list-loading"><i class="iconfont">&#xe69f;</i></div>
         <div class="coupon" v-for="item in coupons">
-            <div class="fl-l">
-                <p class="amount">{{item.coupon.amount}} <span>{{$t('off')}}</span></p>
+            <div class="fl-l" :class="{'unabled':!item.isAvailable}">
+                <p class="amount">{{item.coupon.couponName}}</p>
                 <p class="name">{{item.coupon.name}}</p>
-                <p class="time">{{getDate(item.coupon.beginDate)}} - {{getDate(item.coupon.endDate)}}</p>
+                <p class="time">{{getDate(item.coupon.beginDate)}} <span v-if="item.coupon.beginDate">-</span> {{getDate(item.coupon.endDate)}}</p>
                 <i class="iconfont" v-if="!item.isAvailable">&#xe748;</i>
             </div>
-            <div class="fl-r">
+            <div class="fl-r" :class="{'r-unabled':!item.isAvailable}">
                 <div class="bg">
-                    <div class="usenow" :class="{'unabled':!item.isAvailable}" v-if="!item.isAvailable">{{$t('usenow')}}</div>
+                    <div class="usenow"  v-if="!item.isAvailable">{{$t('usenow')}}</div>
                     <div @click="useHandle(item.coupon.id)" class="usenow" v-if="item.isAvailable">{{$t('usenow')}}</div>
                 </div>
             </div>
@@ -61,6 +62,22 @@
         -webkit-font-smoothing: antialiased;
         -webkit-text-stroke-width: 0.2px;
         -moz-osx-font-smoothing: grayscale;}
+    .unabled{
+        p{
+            color: #999 !important;
+        }
+        .bg{
+            background-color: #e6e6e6 !important;
+        }
+    }
+    .r-unabled{
+        background: radial-gradient(transparent 0, transparent 4px, #e6e6e6 4px) !important;
+        background-size:15px 14px !important;
+        background-position:8px 0px !important;
+        .bg{
+            background-color: #e6e6e6 !important;
+        }
+    }
     .coupons{
         .coupon{
             width: 438px;
@@ -75,18 +92,18 @@
                 position: relative;
                 i{
                     position: absolute;
-                    right: 15px;
-                    bottom: 5px;
-                    font-size: 50px;
+                    right: 2px;
+                    bottom: -23px;
+                    font-size: 80px;
                     color: #e6e6e6;
                 }
             }
             .fl-r{
                 float: right;
-                background-color: #f04f73;
+                background-color: #f46e6d;
                 width: 31%;
                 height: 100%;
-                background: radial-gradient(transparent 0, transparent 4px, #f04f73 4px);
+                background: radial-gradient(transparent 0, transparent 4px, #f46e6d 4px);
                 background-size: 15px 14px;
                 background-position: 8px 0px;
                 padding-left: 5px;
@@ -94,7 +111,7 @@
                     width: 100%;
                     height: 100%;
                     padding: 48px 20px;
-                    background-color: #f04f73;
+                    background-color: #f46e6d;
                     .usenow{
                         border: 1px solid #ffffff;
                         border-radius: 20px;
@@ -114,7 +131,7 @@
                 margin-right: 20px;
             }
             .amount{
-                color: #f04f73;
+                color: #E64545;
                 font-size: 34px;
                 font-weight: bold;
                 span{
@@ -137,6 +154,23 @@
             display: block;
             clear: both;
             content: '';
+        }
+    }
+    .el-list-loading {
+        text-align: center;
+        padding: 10px 0;
+        i {
+            font-size: 24px;
+            display: inline-block;
+            animation: list-loading 1.5s infinite linear;
+        }
+    }
+    @keyframes list-loading {
+        from {
+            transform: rotate(0);
+        }
+        to {
+            transform: rotate(360deg);
         }
     }
 </style>

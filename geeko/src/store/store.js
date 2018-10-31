@@ -1,7 +1,3 @@
-/**
- * Created by shao_ on 2017/9/4.
- */
-
 import * as types from './mutation_types'
 import * as api from '../api'
 import _ from 'lodash'

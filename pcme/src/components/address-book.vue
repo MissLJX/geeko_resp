@@ -22,7 +22,7 @@
         </div>
         <div class="mask" v-if="isAlert">
             <div class="confirm-con">
-                <p class="cancel-btn" @click="delAdd(0)">X</p>
+                <p class="cancel-btn" @click="delAdd(0)"><i class="iconfont">&#xe69a;</i></p>
                 <p>{{$t('deleteAddress')}}?</p>
                 <div class="btn-arr">
                     <div class="n-btn" @click="delAdd(0)">{{$t('no')}}</div>
@@ -127,7 +127,7 @@
 
     .mt-20{
         margin-top: 20px;
-        line-height: 20px;
+        line-height: 25px;
     }
     .address-book{
         .add-new{
@@ -135,7 +135,7 @@
             background-color: #222;
             text-align: center;
             line-height: 40px;
-            padding: 0 40px;
+            padding: 0 45px;
             color: #fff;
             border-radius: 2px;
             margin-bottom: 24px;
@@ -162,7 +162,7 @@
                 bottom: 0;
                 left: 0;
                 width: 100%;
-                height: 4px;
+                height: 3px;
                 transform: skew(20deg, 0deg);
                 background: linear-gradient(to right, rgb(221, 116, 125) 35%, transparent 25%, transparent 50%, rgb(98, 110, 148) 50%, rgb(98, 110, 148) 85%, transparent 75%) 0% 0% / 56px 1px;
             }
@@ -177,7 +177,7 @@
                     display: inline-block;
                     width: 18px;
                     height: 18px;
-                    background-color: #e5004f;
+                    background-color: #222;
                     color: #fff;
                     text-align: center;
                     line-height: 18px;
@@ -216,6 +216,9 @@
                     }
                 }
                 .add-del{
+                    i{
+                        font-size: 18px;
+                    }
                     &:hover{
                         opacity: .8;
                     }
@@ -237,6 +240,7 @@
         background-color: rgba(0,0,0,.4);
         text-align: center;
         overflow-y: auto;
+        z-index: 999;
         .confirm-con{
             width: 485px;
             height: 175px;
@@ -267,7 +271,7 @@
                     cursor: pointer;
                 }
                 .n-btn{
-                    background-color: #e5004f;
+                    background-color: #222;
                 }
                 .y-btn{
                     background-color: #cacaca;

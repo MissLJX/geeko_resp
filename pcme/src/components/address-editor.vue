@@ -1,14 +1,13 @@
 <template>
     <div class="edit-con">
         <form @submit.prevent="validateBeforeSubmit">
-            <p class="cancel-btn1" @click="closeHandle">X</p>
+            <p class="cancel-btn1" @click="closeHandle"><i class="iconfont">&#xe69a;</i></p>
             <h4>{{$t('shippingaddress')}}</h4>
             <div class="input-con required">
                 <label>{{$t('fullname')}}:</label>
                 <div class="x-default-input">
                     <input name="name" v-model="shipping.name" v-validate="'required'"
                            :class="{'st-input':true, 'st-input-danger':errors.has('name')}" type="text"
-                           :placeholder="$t('between')"
                     />
                     <span v-show="errors.has('name')" class="st-is-danger">{{errors.first('name')}}</span>
                 </div>
@@ -18,7 +17,7 @@
                 <div class="x-default-input">
                     <input name="streetAddress" v-model="shipping.streetAddress1" v-validate="'required'"
                            :class="{'st-input':true, 'st-input-danger':errors.has('streetAddress')}" type="text"
-                           :placeholder="$t('streetaddress')"
+                           placeholder="Street,Address,Company Name,C/O"
                     />
                     <span v-show="errors.has('streetAddress')"
                           class="st-is-danger">{{errors.first('streetAddress')}}</span>
@@ -29,7 +28,7 @@
                 <div class="x-default-input">
                     <input name="unit" v-model="shipping.unit"
                            :class="{'st-input':true}" type="text"
-                           :placeholder="$t('unit')"/>
+                           placeholder="Apartment,Suite,Unite,Builting,Floor,etc(Optional)"/>
                 </div>
             </div>
             <div class="input-con required">
@@ -37,7 +36,7 @@
                 <div class="x-default-input">
                     <input name="city" v-model="shipping.city" v-validate="'required'"
                            :class="{'st-input':true, 'st-input-danger':errors.has('city')}" type="text"
-                           :placeholder="$t('city')+' *'"/>
+                           />
                     <span v-show="errors.has('city')" class="st-is-danger">{{errors.first('city')}}</span>
                 </div>
             </div>
@@ -62,7 +61,7 @@
                             <option disabled value="-1">{{$t('state')}} *</option>
                             <option v-for="s in states" :value="s.value">{{s.label}}</option>
                         </select>
-                        <span v-show="stateSelected == '-1'" class="st-is-danger">{{$t('selectstate')}}</span>
+                        <span v-show="stateSelected === '-1'" class="st-is-danger">{{$t('selectstate')}}</span>
                     </p>
 
                     <p v-else>
@@ -73,9 +72,9 @@
             <div class="input-con required w-left">
                 <label>Zip Code:</label>
                 <div class="x-default-input">
-                    <input name="zipCode" v-model="shipping.zipCode" v-validate="'required'"
+                    <input name="zipCode" v-model="shipping.zipCode" v-validate="zip_validate"
                            :class="{'st-input':true, 'st-input-danger':errors.has('zipCode')}" type="text"
-                           :placeholder="$t('zipCode')"/>
+                    />
                     <span v-show="errors.has('zipCode')"
                           class="st-is-danger">{{errors.first('zipCode')}}</span>
                 </div>
@@ -83,10 +82,10 @@
             <div class="input-con required w-left">
                 <label>{{$t('phoneNumber')}}:</label>
                 <div class="x-default-input">
-                    <input name="phoneNumber" v-model="shipping.phoneNumber" v-validate="'required'"
+                    <input name="phoneNumber" v-model="shipping.phoneNumber" v-validate="phone_validate"
                            :class="{'st-input':true, 'st-input-danger':errors.has('phoneNumber')}"
                            type="text"
-                           :placeholder="$t('phoneNumber')"/>
+                           />
                     <span v-show="errors.has('phoneNumber')"
                           class="st-is-danger">{{errors.first('phoneNumber')}}</span>
                 </div>
@@ -119,6 +118,8 @@
                 stateInputed: this.address && this.address.state ? this.address.state.value : '',
                 initState,
                 submiting: false,
+                phone_validate:'required|phone',
+                zip_validate:'required|zip_us'
             }
         },
         props: {
@@ -147,7 +148,7 @@
                 }else{
                     return this.$t('pleasewait')
                 }
-            }
+            },
         },
         methods: {
             closeHandle(){
@@ -155,7 +156,6 @@
             },
             validateBeforeSubmit(){
                 this.$validator.validateAll().then((result) => {
-
                     if (result && (this.stateSelected != '-1' || !this.hasStates) && this.countrySelected != '-1') {
                         this.shipping.country = this.$refs.country.value
                         this.shipping.state = this.$refs.state.value
@@ -165,11 +165,17 @@
                             this.$store.dispatch('updateAddress', this.shipping).then(() => {
                                 this.submiting = false
                                 this.$emit('close')
+                            }).catch((r) => {
+                                alert(r.result)
+                                this.submiting = false
                             })
                         } else {
                             this.$store.dispatch('addAddress', this.shipping).then(() => {
                                 this.submiting = false
                                 this.$emit('close')
+                            }).catch((r) => {
+                                alert(r.result)
+                                this.submiting = false
                             })
                         }
                         return;
@@ -177,41 +183,62 @@
                 });
             },
             getStates(isSelect){
-
                 if (isSelect) {
                     this.stateSelected = '-1'
                     this.stateInputed = ''
                 }
-
                 if (this.countrySelected && this.countrySelected != '-1') {
                     this.$store.dispatch('getStates', {country: this.countrySelected})
-                } else {
-
-                }
-
-
+                } else {}
             },
             changeCountry(evt){
                 evt.preventDefault()
+                this.phone_validate = 'required|phone'
+                this.zip_validate = 'required'
+
+                if(this.countrySelected === 'BR'){
+                    this.phone_validate = 'required|phone_br'
+                    this.zip_validate = 'required|zip_br'
+                }
+                if(this.countrySelected === 'GB'){
+                    this.zip_validate = 'required|zip_uk'
+                }
+                if(this.countrySelected === 'US'){
+                    this.zip_validate = 'required|zip_us'
+                }
+
                 this.stateSelected = '-1'
                 this.getStates(true)
             }
         },
         created(){
-            this.getStates(false)
+            this.getStates(false);
         }
-
-
     }
 </script>
 
 <style scoped lang="scss">
+    @font-face {
+        font-family: 'iconfont';  /* project id 384296 */
+        src: url('//at.alicdn.com/t/font_384296_m72f720tkb.eot');
+        src: url('//at.alicdn.com/t/font_384296_m72f720tkb.eot?#iefix') format('embedded-opentype'),
+        url('//at.alicdn.com/t/font_384296_m72f720tkb.woff') format('woff'),
+        url('//at.alicdn.com/t/font_384296_m72f720tkb.ttf') format('truetype'),
+        url('//at.alicdn.com/t/font_384296_m72f720tkb.svg#iconfont') format('svg');
+    }
+    .iconfont{
+        font-family:"iconfont" !important;
+        font-size:16px;font-style:normal;
+        -webkit-font-smoothing: antialiased;
+        -webkit-text-stroke-width: 0.2px;
+        -moz-osx-font-smoothing: grayscale;
+    }
     button{
         border: none;
         outline:none;
     }
     .st-is-danger{
-        color: #e5004f;
+        color: #E64545;
         line-height: 30px;
     }
     .edit-con{
@@ -220,6 +247,7 @@
         left: 50%;
         top: 60px;
         position: absolute;
+        z-index: 99999;
         margin-bottom: 20px;
         /*margin:20px auto;
         position: relative;*/
@@ -255,7 +283,7 @@
                     border: 1px solid #cacaca;
                 }
                 .error-text{
-                    color: #e5004f;
+                    color: #E64545;
                     font-size: 12px;
                 }
                 .x-select {
@@ -284,7 +312,7 @@
             cursor: pointer;
         }
         .s-r-btn{
-            background-color: #e5004f;
+            background-color: #222;
             border: none;
         }
         .grey{
@@ -296,7 +324,7 @@
         .required{
             .x-default-input:after{
                 content: '*';
-                color: #e5004f;
+                color: #E64545;
                 position: absolute;
                 right: -15px;
                 top: 0;

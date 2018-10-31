@@ -17,15 +17,13 @@
             <div class="refer-con">
                 <img src="https://dgzfssf1la12s.cloudfront.net/upgrade/20180920/gift.png">
                 <p>
-                    <span class="refer-info">{{$t('give')}} 20%, {{$t('get')}} $15</span><br/>
-                    <span class="refer-info-1">Give friends $20 off their first order, and you'll get $15 when they make a purchase.</span>
+                    <span class="refer-info">SHARE UP TO 50% OFF , GET $15</span><br/>
+                    <span class="refer-info-1">Share lucky draw with your friends who will get UP TO 50% OFF discount. And you'll get $15 when they make a purchase.</span>
                 </p>
                 <div class="bgline"></div>
                 <div class="refer-method">
-                    <div>
-                        <a :href="facebook_key">
-                            <img src="https://dgzfssf1la12s.cloudfront.net/upgrade/20180920/Facebook.png"><br/><span>Facebook</span>
-                        </a>
+                    <div id="face-share">
+                        <img src="https://dgzfssf1la12s.cloudfront.net/upgrade/20180920/Facebook.png"><br/><span>Facebook</span>
                     </div>
                     <div @click="showEmail">
                         <img src="https://dgzfssf1la12s.cloudfront.net/upgrade/20180920/email.png"><br/><span>{{$t('email')}}</span>
@@ -37,7 +35,6 @@
             </div>
         </div>
         <div class="term" @click="isshowTerm=true"><span style="text-transform: uppercase">{{$t('termandconditions')}}</span><i class="iconfont">&#xe73f;</i></div>
-
         <div class="mask" v-if="isShowCopy">
             <div class="confirm-con confirm-con-l">
                 <h3>{{$t('invitationlink')}}</h3>
@@ -70,7 +67,7 @@
                         <textarea v-model="noteinfo">{{noteinfo}}</textarea>
                     </div>
 
-                    <button class="share-email-button">{{sendemail}}</button>
+                    <button class="share-email-button">{{$t('send')}}</button>
                 </form>
             </div>
         </div>
@@ -120,8 +117,8 @@
                 inviteCount:[{'emailvalue':''},{'emailvalue':''}],
                 count:3,
                 maxCount:false,
-                subinfo:'Sending you 20% off at this site',
-                noteinfo:'This site has so many must-haves. Check out their new arrivals and get 20% off your first order!! You’re welcome'
+                subinfo:'Sending you up to 50% OFF',
+                noteinfo:'This site has so many must-haves. Check out their new arrivals and get up to 50% OFF for your first order!! You’re welcome'
             }
         },
         components: {
@@ -146,11 +143,13 @@
                 return '/i/share/register?key='+this.sharekey
             },
             copy_link(){
-                return window.ctx + '/i/share/register?key='+this.copylink
+                return window.site + '/i/share/register?key='+this.copylink
             },
             creditstUrl(){
                 return utils.ROUTER_PATH_ME + '/m/credits'
             }
+        },
+        mounted(){
         },
         methods:{
             showCopy(){
@@ -183,11 +182,8 @@
                 });
 
                 if(emails!==''){
-                    let formData = new FormData();
-                    formData.append('emails', emails.slice(0,-1));
-                    formData.append('subject',encodeURI(this.subinfo));
-                    formData.append('content',encodeURI(this.noteinfo));
-                    this.$store.dispatch('sendShareEmail', formData).then(() => {
+                    let shareInfo={'emails':emails.slice(0,-1),'subject':this.subinfo,'content':this.noteinfo}
+                    this.$store.dispatch('sendShareEmail', shareInfo).then(() => {
                         alert("success");
                         this.isShowEmail = false;
                     })
@@ -210,6 +206,8 @@
             this.$store.dispatch('getMe')
             this.$store.dispatch('getShareKey','facebook')
             this.$store.dispatch('getShareKey','copy')
+
+
         }
     }
 
@@ -220,7 +218,7 @@
         margin-top: 15px;
     }
     .txr{
-        color: #e5004f;
+        color: #E64545;
     }
     a{
         text-decoration: underline;
@@ -234,28 +232,30 @@
             height: 131px;
             margin-top: 8px;
             background-color: #ffffff;
-            border: solid 1px rgba(235, 94, 93, 0.27);
+            border: solid 1px #fedddd;
             padding: 17px 22px 27px 22px;
             img{
-                width: 102px;
-                height: 87px;
+                width: 81px;
+                height: 81px;
             }
             p{
                 display: inline-block;
                 position: relative;
-                top: -7px;
-                line-height: 30px;
+                line-height: 20px;
                 left: 10px;
                 width: 515px;
                 overflow-wrap: break-word;
                 .refer-info{
-                    color: #e5004f;
-                    font-size: 32px;
+                    color: #e64545;
+                    font-size: 30px;
                     font-weight: bold;
                 }
                 .refer-info-1{
                     font-size: 14px;
                     color: #222222;
+                    line-height: 20px;
+                    display: inline-block;
+                    margin-top: 10px;
                 }
             }
             .bgline{
@@ -269,6 +269,8 @@
             }
             .refer-method{
                 display: inline-block;
+                position: relative;
+                top: -3px;
                 a{
                     text-decoration: none;
                 }
@@ -328,7 +330,7 @@
                     margin-left: 10px;
                 }
                 .verify{
-                    color: #e5004f;
+                    color: #E64545;
                     text-decoration: underline;
                     cursor: pointer;
                 }
@@ -354,6 +356,7 @@
         background-color: rgba(0,0,0,.4);
         text-align: center;
         overflow-y: auto;
+        z-index: 999;
         .confirm-con-s{
             width: 484px !important;
             top: calc(50% - 245px);
@@ -381,7 +384,7 @@
             background-color: white;
             color: #222;
             font-size: 14px;
-            padding: 55px 65px 55px 65px;
+            padding: 35px 50px;
             text-align: left;
             .term-info{
                 color: #666;
@@ -399,7 +402,7 @@
                 cursor: pointer;
             }
             .maxtip{
-                color: #e5004f;
+                color: #E64545;
                 font-size: 12px;
                 margin-top: 10px;
             }
@@ -441,7 +444,7 @@
                 outline: none;
                 width: 240px;
                 height: 40px;
-                background-color: #e7004d;
+                background-color: #222;
                 border-radius: 2px;
                 line-height: 40px;
                 text-align: center;
@@ -464,7 +467,7 @@
                 color: #4b5056;
             }
             h3{
-                margin-bottom: 13px;
+                margin-bottom: 20px;
             }
             .cancel-btn{
                 position: absolute;
@@ -483,7 +486,7 @@
                 width: 170px;
                 line-height: 32px;
                 text-align: center;
-                background-color: #e5004f;
+                background-color: #222;
                 color: #fff;
                 margin: 0 auto;
                 cursor: pointer;

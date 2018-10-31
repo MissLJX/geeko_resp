@@ -161,19 +161,20 @@
         top: 0;
         border: 1px solid #cacaca;
         border-right: none;
-        padding-top: 90px;
-        z-index: 999;
+        padding-top: 50px;
+        z-index: 30000000;
         .s-hd{
             width: 100%;
-            height: 90px;
-            line-height: 90px;
+            height: 50px;
+            line-height: 50px;
             background-color: #efefef;
             text-align: left;
             padding-left: 25px;
             position: absolute;
             top: 0;
             h3{
-                line-height: 90px;
+                line-height: 50px;
+                font-size: 18px;
             }
             i{
                 margin-right: 20px;
@@ -186,11 +187,11 @@
             background-color: #fff;
             text-align: left;
             color: #222;
-            padding:20px 25px;
+            padding:24px 24px;
             position: relative;
             .orderInfo{
                 height: 80px;
-                border-bottom: 1px solid #cacaca;
+                border-bottom: 1px solid #e6e6e6;
                 cursor: pointer;
                 i{
                     position: absolute;
@@ -218,6 +219,7 @@
                     background-color: #ffffff;
                     border-radius: 2px;
                     border: solid 1px #cacaca;
+                    padding-left: 10px;
                 }
                 span{
                     font-size: 14px;
@@ -227,7 +229,7 @@
         }
         .s-cd{
             width: 100%;
-            height:  calc(100vh - 545px);
+            height:  calc(100vh - 512px);
             overflow-y: auto;
             background-color: white;
             text-align: right;

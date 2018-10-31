@@ -3,7 +3,7 @@
         <a :href="productUrl">
             <figure>
                 <div class="img">
-                    <img :src="imageUrl"/>
+                    <img :src="imageUrl" :class="{'gray':isSoldOut}"/>
                 </div>
 
                 <figcaption>
@@ -92,6 +92,14 @@
             height: 50px;
         }
     }
+    .gray{
+        -webkit-filter: grayscale(100%);
+        -moz-filter: grayscale(100%);
+        -ms-filter: grayscale(100%);
+        -o-filter: grayscale(100%);
+        filter: grayscale(100%);
+        filter: gray;
+    }
 </style>
 
 <script type="text/ecmascript-6">
@@ -101,7 +109,8 @@
     export default{
         props: {
             product: Object,
-            required: true
+            required: true,
+            isSoldOut:true
         },
         computed: {
             imageUrl(){
@@ -130,8 +139,14 @@
             },
             productUrl(){
                 return window.ctx + '/' + producturl(this.product)
+            },
+            isSoldOut(){
+                if(this.product.status == 2){
+                    return true
+                }else{
+                    return false
+                }
             }
-
         },
         methods: {
             likeHandle(){

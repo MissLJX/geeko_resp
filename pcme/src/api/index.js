@@ -35,10 +35,8 @@ export const getOrder = (id) => {
     return axios.get(VPATH + '/msite/order/'+ id + '/get').then(data => data.result)
 }
 //orders
-export const getOrders =({skip, api_suffix},callBack) => {
-    axios.get('/v7/msite/order/' + skip + '/20/' + api_suffix).then((orders) => {
-        callBack(orders.result)
-    }).catch((e) => {console.log(e)})
+export const getOrders =(skip, api_suffix) => {
+    return axios.get(`${VPATH}/msite/order/${skip}/20/${api_suffix}`).then(data => data.result)
 }
 export const confirmOrder = (id) =>{
     return axios.get('/v7/msite/order/'+id+'/receipt')
@@ -151,7 +149,7 @@ export const getShareKey = (type) => {
     return axios.post(VPATH + '/customer/get-register-share-key?shareTo='+type).then(data => data.result)
 }
 export const sendShareEmail = (data) => {
-    return axios.post(VPATH + '/customer/send-share-via-emails',data).then(data => data.result)
+    return axios.post(VPATH + '/customer/send-share-via-emails', qs.stringify(data), {'Content-Type': http_infos.default_post_content_type}).then(data => data.result)
 }
 export const shareProduct = (id) => {
     return axios.post(VPATH + '/product/anon/'+id+'/show').then(data => data.result)

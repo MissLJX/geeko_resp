@@ -3,11 +3,11 @@
         <div class="points">
             <div class="tot-credits fl-l">
                 <p><span class="p-red">{{me.points}}</span><span>=${{pointsMoney}}</span></p>
-                <p>{{$t('totalcre')}}</p>
+                <p style="font-size: 16px">{{$t('totalcre')}}</p>
             </div>
             <div class="line fl-l"></div>
             <div class="overdue-credits fl-l">
-                <p class="p-red">{{me.overduePoints}}</p>
+                <p class="p-red smaller">{{me.overduePoints}}</p>
                 <div class="p-rla">
                     <span>{{$t('creditsexpiring')}}<i class="iconfont"  @click="isShow()">&#xe73f;</i></span>
                     <div class="tips" v-if="seen">{{message.message}}.</div>
@@ -76,7 +76,7 @@
                     <span>+30</span>
                 </a>
             </div>
-            <div class="method-con">
+            <div class="method-con special">
                 <a :href="confirmEmailUrl">
                     <i class="iconfont">&#xe73a;</i>
                     <p>{{$t('confirmemail')}}</p>
@@ -217,7 +217,9 @@
         -webkit-font-smoothing: antialiased;
         -webkit-text-stroke-width: 0.2px;
         -moz-osx-font-smoothing: grayscale;}
-
+    .smaller{
+        font-size: 30px !important;
+    }
     .credits-points{
         margin-top: -50px;
     }
@@ -249,11 +251,11 @@
             padding-top: 35px;
         }
         .p-red{
-            color: #e5004f;
-            font-size: 28px;
+            color: #E64545;
+            font-size: 40px;
         }
         .tot-credits{
-            font-size: 16px;
+            font-size: 20px;
             color: #222;
             p{
                 margin-bottom: 14px;
@@ -268,7 +270,11 @@
                 cursor: pointer;
             }
             .p-rla{
+                span{
+                    font-size: 16px;
+                }
                 i{
+                    color: #999;
                     &:hover{
                         opacity: .8;
                     }
@@ -295,6 +301,7 @@
         border-radius: 4px;
         margin: 30px auto;
         border: solid 1px #cacaca;
+        font-size: 16px;
         .rec{
             width: 230px;
             text-align: center;
@@ -324,7 +331,7 @@
         .x-select{
             width: 125px;
             height: 30px;
-            border: 1px solid #cacaca;
+            border: 1px solid #e6e6e6;
             font-size: 14px;
             color: #646464;
             margin-bottom: 10px;
@@ -349,7 +356,7 @@
             width: 350px;
             padding: 5px 0 5px 40px;
             font-size: 14px;
-            color: #666;
+            color: #999;
             text-align: left;
         }
         .c-name{
@@ -357,14 +364,21 @@
         }
         .c-points{
             width: 180px;
-            color: #e5004f;
+            color: #E64545;
         }
         .c-points-green{
             width: 180px;
             color: #59b3b2;
         }
     }
-
+    .special{
+        i{
+            font-size: 30px !important;
+            display: inline-block;
+            margin-bottom: 6px;
+            top: 3px;
+        }
+    }
     .get-method{
         padding-top: 40px;
         .c-hd{
@@ -380,13 +394,13 @@
         .method-con{
             position: relative;
             color: #222;
-            width: 150px;
+            width: 180px;
             text-align: center;
             padding-top: 75px;
             float: left;
             cursor: pointer;
             i{
-                font-size: 30px;
+                font-size: 36px;
                 &:hover{
                     opacity: .8;
                 }
@@ -396,7 +410,7 @@
                 line-height: 30px;
             }
             span{
-                color: #e5004f;
+                color: #E64545;
                 position: absolute;
                 top: 45px;
                 left: 100px;

@@ -102,6 +102,7 @@ export default {
     overseas:'Übersee-Lager',
     contactseller:'Verkäufer kontaktieren',
     detail:'Detail',
+    orderdetail:'Order Detail',
     view:'Ansehen',
     selectorder:'Select Order',
     ticketid:'Ticket ID',

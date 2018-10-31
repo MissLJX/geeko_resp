@@ -127,13 +127,17 @@
         }
         .ticket-table{
             width: 100%;
-            border: 1px solid #cacaca;
+            border: 1px solid #e6e6e6;
             margin-bottom: 30px;
             max-height: 427px;
             overflow-y: auto;
             table{
                 tr{
                     line-height: 30px;
+                    text-align: left;
+                    td:first-child{
+                        padding-left: 37px;
+                    }
                 }
                 td{
                     a{
@@ -143,11 +147,10 @@
                 }
                 width: 100%;
                 tr:first-child{
-                    border-bottom: 1px solid #cacaca;
+                    border-bottom: 1px solid #e6e6e6;
                     line-height: 40px;
                     td{
                         color: #999;
-
                     }
                 }
             }
@@ -162,6 +165,7 @@
             line-height: 34px;
             color: white;
             cursor: pointer;
+            font-weight: normal;
         }
     }
 </style>
