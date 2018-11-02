@@ -82,8 +82,10 @@
             <div class="input-con required w-left">
                 <label>{{$t('phoneNumber')}}:</label>
                 <div class="x-default-input">
+                    <span v-if="countrySelected==='BR'">BR +55</span>
+                    <input v-if="countrySelected==='BR'" name="phoneArea" type="number" v-model="shipping.phoneArea" placeholder="Código" class="x-default-input"  oninput="if(value.length>2) value=value.slice(0,2)" style="width: 55px;margin-right:10px; margin-left: 10px;eight: 40px; padding-left: 0px; text-align: center;">
                     <input name="phoneNumber" v-model="shipping.phoneNumber" v-validate="phone_validate"
-                           :class="{'st-input':true, 'st-input-danger':errors.has('phoneNumber')}"
+                           :class="{'st-input':true, 'st-input-danger':errors.has('phoneNumber'),'phonenum':countrySelected==='BR'}"
                            type="text"
                            />
                     <span v-show="errors.has('phoneNumber')"
@@ -102,6 +104,29 @@
         data(){
             var initCountry = this.address && this.address.country ? this.address.country.value : 'US'
             var initState = this.address && this.address.state ? this.address.state.value : '-1'
+            var initPhoneValidate = 'required|phone';
+            if(this.address && this.address.country){
+                if(this.address.country.value==='BR'){
+                    initPhoneValidate = 'required|phone_br'
+                }
+                if(this.address.country.value==='AE'){
+                    initPhoneValidate = 'required|phone_ae'
+                }
+                if(this.address.country.value==='SA'){
+                    initPhoneValidate = 'required|phone_sa'
+                }
+            }
+            var initZipValidate = 'required|zip_us';
+            if(this.address && this.address.country){
+                if(this.address.country.value==='BR'){
+                    initZipValidate = 'required|zip_br'
+                }
+                if(this.address.country.value==='GB'){
+                    initZipValidate = 'required|zip_uk'
+                }
+            }else{
+                initZipValidate = 'required|zip_us'
+            }
             return {
                 shipping: this.address ? _.cloneDeep(this.address) : {
                     name: null,
@@ -111,15 +136,16 @@
                     state: null,
                     city: null,
                     zipCode: null,
-                    phoneNumber: null
+                    phoneNumber: null,
+                    phoneArea:null
                 },
                 countrySelected: initCountry,
                 stateSelected: initState,
                 stateInputed: this.address && this.address.state ? this.address.state.value : '',
                 initState,
                 submiting: false,
-                phone_validate:'required|phone',
-                zip_validate:'required|zip_us'
+                phone_validate:initPhoneValidate,
+                zip_validate:initZipValidate
             }
         },
         props: {
@@ -159,6 +185,7 @@
                     if (result && (this.stateSelected != '-1' || !this.hasStates) && this.countrySelected != '-1') {
                         this.shipping.country = this.$refs.country.value
                         this.shipping.state = this.$refs.state.value
+                        this.shipping.phoneArea
 
                         this.submiting = true
                         if (this.shipping.id) {
@@ -206,6 +233,12 @@
                 if(this.countrySelected === 'US'){
                     this.zip_validate = 'required|zip_us'
                 }
+                if(this.countrySelected === 'AE'){
+                    this.phone_validate = 'required|phone_ae'
+                }
+                if(this.countrySelected === 'SA'){
+                    this.phone_validate = 'required|phone_sa'
+                }
 
                 this.stateSelected = '-1'
                 this.getStates(true)
@@ -232,6 +265,15 @@
         -webkit-font-smoothing: antialiased;
         -webkit-text-stroke-width: 0.2px;
         -moz-osx-font-smoothing: grayscale;
+    }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        appearance: none;
+        margin: 0;
+    }
+    .phonenum{
+        width: calc(100% - 130px) !important;
     }
     button{
         border: none;

@@ -24,7 +24,7 @@ Vue.use(VueRouter)
 
 const routes = [
     {
-        /*path:'/wanna/me/m',*/
+        /*path:'/ivrose/me/m',*/
         path:'/me/m',
         component: Index,
         meta: {title:'Me'},

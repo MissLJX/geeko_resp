@@ -34,5 +34,8 @@
 </script>
 
 <style scoped>
-
+.el-cards{
+    background-color: #fff;
+    padding-bottom: 15px;
+}
 </style>

@@ -59,21 +59,21 @@
             </table>
 
             <div class="pricecon">
-                <div class="pricecon1">
+                <div class="pricecon1" v-if="order">
                     <p class="p-price">{{$t('subtotal')}}:<span class="price">{{subtotal}}</span></p>
-                    <p class="p-price">{{$t('coupon')}}:<span class="price r-p">-{{coupon}}</span></p>
-                    <p class="p-price">{{$t('credits')}}:<span class="price r-p">-{{pointDiscount}}</span></p>
-                    <p class="p-price">{{$t('shipping')}}:<span class="price">{{shippingprice}}</span></p>
+                    <p class="p-price" v-if="order.couponDiscount.amount!=='0'">{{$t('coupon')}}:<span class="price r-p">-{{coupon}}</span></p>
+                    <p class="p-price" v-if="order.pointDiscount.amount!=='0'">{{$t('credits')}}:<span class="price r-p">-{{pointDiscount}}</span></p>
+                    <p class="p-price" v-if="order.shippingPrice.amount!=='0'">{{$t('shipping')}}:<span class="price">{{shippingprice}}</span></p>
+                    <p class="p-price" v-if="order.shippingInsurancePrice.amount!=='0'">Insurance:<span class="price">{{shippingInsurancePrice}}</span></p>
                     <p class="p-price t-p">{{$t('ordertotal')}}:<span class="price r-p">{{total}}</span></p>
                 </div>
             </div>
             <div class="actionbtn">
                 <div class="r-btn" :class="{'b-btn':confirmedOrder,'black':shippedOrder || processingOrder}">
-                    <span v-if="orderdetail.boletoPayCodeURL && order.status === 1">Imprimir Boleto</span>
                     <a style="color: #fff;"  :href="orderdetail.boletoPayCodeURL" target="_blank" v-if="orderdetail.boletoPayCodeURL && orderdetail.order.status === 1">Imprimir Boleto</a>
                     <a style="color: #fff;" :href="orderdetail.order.mercadopagoPayURL" target="_blank" v-if="orderdetail.order.mercadopagoPayURL && orderdetail.order.status === 1">Generar Ticket</a>
-                    <span v-if="shippedOrder" @click="confirmOrder">{{$t('confirmorder')}}</span>
-                    <span v-if="processingOrder" @click="cancelOrder">{{$t('cancelorder2')}}</span>
+                    <span v-if="shippedOrder" @click="() => {this.isConfirmAlert = true}">{{$t('confirmorder')}}</span>
+                    <span v-if="orderdetail.isCanCanceled" @click="() => {this.isAlert = true}">{{$t('cancelorder2')}}</span>
                 </div>
             </div>
 
@@ -121,6 +121,26 @@
                 </div>
             </div>
         </div>
+        <div class="mask" v-if="isAlert">
+            <div class="confirm-con">
+                <p class="cancel-btn" @click="cancelOrder(0)"><i class="iconfont">&#xe69a;</i></p>
+                <p>Are you sure want to cancel your order?</p>
+                <div class="btn-arr">
+                    <div class="n-btn" @click="cancelOrder(0)">{{$t('no')}}</div>
+                    <div class="y-btn" @click="cancelOrder('1')">{{$t('yes')}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="mask" v-if="isConfirmAlert">
+            <div class="confirm-con">
+                <p class="cancel-btn" @click="confirmOrder(0)"><i class="iconfont">&#xe69a;</i></p>
+                <p>Are you sure want to confirm your order?</p>
+                <div class="btn-arr">
+                    <div class="n-btn" @click="confirmOrder(0)">{{$t('no')}}</div>
+                    <div class="y-btn" @click="confirmOrder('1')">{{$t('yes')}}</div>
+                </div>
+            </div>
+        </div>
         <loding v-if="isloding"></loding>
     </div>
 </template>
@@ -146,6 +166,8 @@
                 isShowTicket:false,
                 couponshow: true,
                 isloding:false,
+                isAlert:false,
+                isConfirmAlert:false
             }
         },
         components: {
@@ -187,6 +209,11 @@
                     return this.order.shippingPrice.unit+this.order.shippingPrice.amount
                 }
             },
+            shippingInsurancePrice(){
+                if(this.order && this.order.shippingInsurancePrice){
+                    return this.order.shippingInsurancePrice.unit+this.order.shippingInsurancePrice.amount
+                }
+            },
             total(){
                 if(this.order && this.order.orderTotal){
                     return this.order.orderTotal.unit+this.order.orderTotal.amount
@@ -203,7 +230,7 @@
                 }
             },
             processingOrder(){
-                if(this.order && this.order.status===3){
+                if(this.order && this.order.status===3 || this.order.status === 2){
                     return true
                 }
             },
@@ -228,28 +255,35 @@
                     this.isShowTicket = true;
                 })
             },
-            confirmOrder(){
+            confirmOrder(flag){
                 let _this = this
-                this.isloding = true;
-                this.$store.dispatch('confirmOrder',this.order.id).then(()=>{
-                    _this.order.status = 10
-                    alert("success")
-                }).catch((e) => {
-                    alert(e);
-                    this.isloding = false
-                })
+                this.isConfirmAlert = false
+                if(flag === '1'){
+                    this.isloding = true;
+                    this.$store.dispatch('confirmOrder',this.order.id).then(()=>{
+                        this.isloding = false
+                        _this.order.status = 10
+                        alert("success")
+                    }).catch((e) => {
+                        alert(e);
+                        this.isloding = false
+                    })
+                }
             },
-            cancelOrder(){
-                let _this = this
-                this.isloding = true;
-                this.$store.dispatch('cancelOrder',this.order.id).then(()=>{
-                    _this.order.status = 7
-                    alert("success")
-                    this.isloding = false
-                }).catch((e) => {
-                    alert(e);
-                    this.isloding = false
-                })
+            cancelOrder(flag){
+                this.isAlert = false;
+                if(flag === '1'){
+                    let _this = this
+                    this.isloding = true;
+                    this.$store.dispatch('cancelOrder',this.order.id).then(()=>{
+                        _this.order.status = 7
+                        alert("success")
+                        this.isloding = false
+                    }).catch((e) => {
+                        alert(e);
+                        this.isloding = false
+                    })
+                }
             },
             closeSelect1(){
                 this.isShowSelect = false
@@ -490,6 +524,14 @@
                 clear: both;
                 content: '';
             }
+            a{
+                display: inline-block;
+                width: 100%;
+            }
+            span{
+                display: inline-block;
+                width: 100%;
+            }
         }
         .b-btn{
             background-color: #222 !important;
@@ -516,7 +558,7 @@
         top:50%;
         left:50%;
         transform:translate(-50%, -50%);
-        z-index:11;
+        z-index:9999;
 
         .white{
             background-color: #fff;
@@ -561,5 +603,60 @@
             background-color: #fff;
             cursor: pointer;
         }
+    }
+    .mask{
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,.4);
+        text-align: center;
+        overflow-y: auto;
+        z-index: 999;
+        .confirm-con{
+            width: 485px;
+            height: 175px;
+            margin:0 auto;
+            position: relative;
+            top: calc(50% - 82px);
+            background-color: white;
+            color: #222;
+            font-size: 14px;
+            padding: 20px;
+            .cancel-btn{
+                font-size: 18px;
+                color: #666666;
+                text-align: right;
+                cursor: pointer;
+                margin-bottom: 15px;
+            }
+            .btn-arr{
+                padding-top: 25px;
+                width: 355px;
+                margin: 0 auto;
+                .n-btn, .y-btn{
+                    width: 170px;
+                    line-height: 32px;
+                    text-align: center;
+                    color: #fff;
+                    float: left;
+                    cursor: pointer;
+                }
+                .n-btn{
+                    background-color: #222;
+                }
+                .y-btn{
+                    background-color: #cacaca;
+                    margin-left: 15px;
+                }
+                &:after{
+                    display: block;
+                    content: '';
+                    clear: both;
+                }
+            }
+        }
+
     }
 </style>

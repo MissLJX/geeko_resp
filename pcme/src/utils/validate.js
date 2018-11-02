@@ -14,6 +14,19 @@ Validator.extend('phone_br', {
         return /^\d{8,9}$/.test(value)
     }
 });
+Validator.extend('phone_ae', {
+    getMessage: function () { return "Phone numbers should start with 50/52/54/55/56/58/2/3/4/6/7/9, followed by any 7 digits." },
+    validate: value => {
+        return /^(50|52|54|55|56|58|2|3|4|6|7|9){1,2}\d{7}$/.test(value)
+    }
+});
+Validator.extend('phone_sa', {
+    getMessage: function () { return " Phone numbers should start with 50/53/55/51/58/59/54/56/57/11/12/13/14/16/17/811, followed by any 7 digits." },
+    validate: value => {
+        return /^(50|53|55|51|58|59|54|56|57|11|12|13|14|16|17|811){1,3}\d{7}$/.test(value)
+    }
+});
+
 Validator.extend('zip_us', {
     getMessage: function () { return "Please enter 5 digits or 5 digits with a 4-digits number (E.g. 20001 or 20001-0000)" },
     validate: value => {

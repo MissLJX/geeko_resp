@@ -48,7 +48,7 @@ const config = {
     proxy: {
       '/api': {
         /*target: 'https://www.chicme.com',*/
-        target: 'http://localhost:8080/wanna',
+        target: 'http://localhost:8080/ivrose',
         pathRewrite: { '^/api': '' },
         secure: false
       }

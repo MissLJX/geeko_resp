@@ -83,7 +83,7 @@ module.exports = {
     }),
     new ExtractTextPlugin({ filename: '[name].css' }),
     new webpack.DefinePlugin({
-      'site':JSON.stringify("joyshoetique")
+      'site':JSON.stringify("ivrose")
     })
   ],
 
@@ -102,7 +102,7 @@ module.exports = {
     contentBase: './dist',
     proxy: {
       '/api': {
-        target: 'http://localhost:8090/joyshoetique',
+        target: 'http://localhost:8080/ivrose',
         pathRewrite: { '^/api': '' },
         secure: false
       }

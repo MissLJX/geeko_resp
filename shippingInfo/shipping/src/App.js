@@ -255,8 +255,6 @@ const __countrycode = {
 
 const __getcountry = c => __countrycode[c]
 
-
-
 const _shipping_infos =
 
     [

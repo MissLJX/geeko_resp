@@ -1,8 +1,8 @@
 <template>
     <div class="el-coupon st-table">
         <div class="el-coupon-info st-cell st-v-m">
-            <div><span class="el-coupon-amount st-fc-r">{{coupontAmount}}</span> <span
-                    class="st-fc-r el-coupon-off">Off</span> <span class="el-coupon-code">{{coupon.coupon.code}}</span>
+            <div><span class="el-coupon-amount st-fc-r">{{coupontAmount}}</span><!-- <span
+                    class="st-fc-r el-coupon-off">Off</span> <span class="el-coupon-code">{{coupon.coupon.code}}</span>-->
             </div>
             <div class="el-coupon-name">{{coupon.coupon.name}}</div>
             <div class="el-coupon-date">{{expireDate}}</div>
@@ -67,11 +67,14 @@
         },
         computed: {
             coupontAmount(){
-                var amount = this.coupon.coupon.amount
+                /*var amount = this.coupon.coupon.amount
                 if (amount && amount.indexOf('%') >= 0) {
                     return amount
                 } else {
                     return '$' + amount
+                }*/
+                if(this.coupon && this.coupon.coupon){
+                    return this.coupon.coupon.couponName2
                 }
             },
             expireDate(){

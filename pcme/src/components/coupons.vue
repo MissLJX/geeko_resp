@@ -3,7 +3,7 @@
         <div v-show="!coupons" class="el-list-loading"><i class="iconfont">&#xe69f;</i></div>
         <div class="coupon" v-for="item in coupons">
             <div class="fl-l" :class="{'unabled':!item.isAvailable}">
-                <p class="amount">{{item.coupon.couponName}}</p>
+                <p class="amount">{{item.coupon.couponName2}}</p>
                 <p class="name">{{item.coupon.name}}</p>
                 <p class="time">{{getDate(item.coupon.beginDate)}} <span v-if="item.coupon.beginDate">-</span> {{getDate(item.coupon.endDate)}}</p>
                 <i class="iconfont" v-if="!item.isAvailable">&#xe748;</i>
@@ -85,15 +85,15 @@
             border: solid 1px #e6e6e6;
             float: left;
             margin-bottom: 20px;
+            position: relative;
             .fl-l{
                 width: 69%;
                 float: left;
                 padding: 10px;
-                position: relative;
                 i{
                     position: absolute;
-                    right: 2px;
-                    bottom: -23px;
+                    right: 140px;
+                    bottom: 0px;
                     font-size: 80px;
                     color: #e6e6e6;
                 }
@@ -132,7 +132,8 @@
             }
             .amount{
                 color: #E64545;
-                font-size: 34px;
+                font-size: 28px;
+                line-height: 30px;
                 font-weight: bold;
                 span{
                     font-size: 18px;

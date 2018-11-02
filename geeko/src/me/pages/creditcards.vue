@@ -2,6 +2,7 @@
     <div class="el-wallet-body">
         <page-header>{{$t('label.creditcard')}}</page-header>
         <card-list :creditcards="creditcards" @delete="deleteHandle"></card-list>
+        <div style="text-align: center;line-height: 50px" v-if="!creditcards">No Card.</div>
     </div>
 </template>
 
@@ -9,8 +10,6 @@
     .el-wallet-body{
         position:fixed;
         width: 100%;
-        height: 100%;
-        top: 0;
         right:0;
         background: #fff;
     }
