@@ -95,7 +95,7 @@
                         </div>
                         <div class="white bottom-line">
                             <p>O cupom de <span class="fc-r">15%</span> de desconto será enviado para sua conta após o pagamento. Não perca</p>
-                            <a  class="blackbtn" :href="order.boletoPayCodeURL">Pague agora</a>
+                            <a  class="blackbtn" :href="orderdetail.boletoPayCodeURL">Pague agora</a>
                         </div>
                     </div>
                 </div>

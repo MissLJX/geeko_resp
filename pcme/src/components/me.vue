@@ -12,7 +12,7 @@
             </div>
         </div>
         <p class="mt-15">You have <span class="txr">{{me.points}}</span> credits {{this.GLOBAL.sitename}} Credits now, learn more about {{this.GLOBAL.sitename}} Bonus Credits program, <a :href="creditstUrl">Click Here.</a></p>
-        <!--<div class="referfriend">
+        <div class="referfriend">
             <h3>{{$t('refer')}}</h3>
             <div class="refer-con">
                 <img src="https://dgzfssf1la12s.cloudfront.net/upgrade/20180920/gift.png">
@@ -35,7 +35,7 @@
             </div>
         </div>
         <div class="term" @click="isshowTerm=true"><span style="text-transform: uppercase">{{$t('termandconditions')}}</span><i class="iconfont">&#xe73f;</i></div>
-        --><div class="mask" v-if="isShowCopy">
+        <div class="mask" v-if="isShowCopy">
             <div class="confirm-con confirm-con-l">
                 <h3>{{$t('invitationlink')}}</h3>
                 <p class="cancel-btn" @click="isShowCopy=false"><i class="iconfont">&#xe69a;</i></p>

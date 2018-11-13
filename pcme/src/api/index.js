@@ -15,7 +15,7 @@ export const getOrderCountAll = () => {
     return axios.get(VPATH + '/msite/order/all-order-count').then(data => data.result)
 }
 export const getOrderCountProcessing = () => {
-    return axios.get(VPATH + '/msite/order/unshipped-order-count').then(data => data.result)
+    return axios.get(VPATH + '/msite/order/unshipped-order-count2').then(data => data.result)
 }
 
 export const getOrderCountShipped = () => {
