@@ -26,7 +26,7 @@ const Address = styled.address`
 const DashedLine = styled.div`
     background: linear-gradient(to right, #dd747d 35%,transparent 25%,transparent 50%,#626e94 50%,#626e94 85%,transparent 75%);
     background-size: 56px 1px;
-    height: 4px;  
+    height: 2.5px;  
     transform:skew(20deg,0);
     position: absolute;
     width: 100%;
@@ -44,10 +44,10 @@ const EditBottom = styled.div`
 `
 
 const LABELICON = styled.span`
-  color: #666;
+  color: #999;
   cursor: pointer;
   &:hover{
-    color: #cacaca;
+    color: #666;
   }
   & > span{
     vertical-align: middle;
@@ -77,7 +77,7 @@ const _address = ({address, intl, onEdit}) => <Address>
     }
 
     <LABELICON style={{float: 'right'}} onClick={ (e) => { e.stopPropagation(); e.nativeEvent.stopImmediatePropagation(); onEdit(address) }}>
-      <Icon>&#xe62b;</Icon>
+      <Icon>&#xe61f;</Icon>
       <span><FormattedMessage id="edit"/></span>
     </LABELICON>
   </EditBottom>
@@ -115,7 +115,7 @@ const _order_address = ({address, intl, onEdit}) => <ORDERADDRESS>
 
     {
       onEdit && <LABELICON onClick={ (e) => { e.stopPropagation(); e.nativeEvent.stopImmediatePropagation(); onEdit(address) }} style={{position: 'absolute', top: 15, right: 15}}>
-        <Icon>&#xe62b;</Icon>
+        <Icon>&#xe61f;</Icon>
         <span><FormattedMessage id="edit"/></span>
       </LABELICON>
     }

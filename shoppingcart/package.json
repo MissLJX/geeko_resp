@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --port 3000 --inline --hot",
-    "build": "webpack --config webpack.config.build.js"
+    "build": "webpack --config webpack.config.build.js",
+    "build_confirm": "webpack --config webpack.config.confirm.build.js"
   },
   "author": "s_lei",
   "license": "ISC",

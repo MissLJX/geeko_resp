@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Address from './address.jsx'
+import Cookie from 'js-cookie'
 
 const SHIPPINGS = styled.ul`
 	&::after{
@@ -30,6 +31,13 @@ const SHIPPINGS = styled.ul`
 
 export default ({shippings, onEdit, onSelect}) => <SHIPPINGS>
   {
-    shippings && shippings.length > 0 && shippings.map(shipping => <li onClick={ () => onSelect(shipping) } key={ shipping.id }><Address onEdit={ onEdit } address={shipping}/></li>)
+    shippings && shippings.length > 0 && shippings.map(shipping => <li onClick={ () => {
+    	if (shipping.country && shipping.country.value === 'BR') {
+        Cookie.set('currency', 'BRL', {expires: 365})
+      } else if (shipping.country && shipping.country.value === 'MX') {
+        Cookie.set('currency', 'MXN', {expires: 365})
+      }
+    	onSelect(shipping)
+    } } key={ shipping.id }><Address onEdit={ onEdit } address={shipping}/></li>)
   }
 </SHIPPINGS>

@@ -195,6 +195,7 @@ const AddressFrom = class extends React.Component {
               style= {{width: '100%', height: 40}}
               value={this.state.streetAddress1}
               onChange={this.handleInputChange}
+              placeholder={intl.formatMessage({id: 'placeholder_street_address'})}
               validations={[required]}/>
           </FormElement>
 
@@ -203,6 +204,7 @@ const AddressFrom = class extends React.Component {
               name='unit'
               style= {{width: '100%', height: 40}}
               value={this.state.unit}
+              placeholder={intl.formatMessage({id: 'placeholder_unit'})}
               onChange={this.handleInputChange}/>
           </FormElement>
 
@@ -363,6 +365,7 @@ const AddressFrom = class extends React.Component {
               style= {{width: '100%', height: 40}}
               value={this.state.streetAddress1}
               onChange={this.handleInputChange}
+              placeholder={intl.formatMessage({id: 'placeholder_street_address'})}
               validations={[required]}/>
           </FormElement>
 
@@ -371,6 +374,7 @@ const AddressFrom = class extends React.Component {
               name='unit'
               style= {{width: '100%', height: 40}}
               value={this.state.unit}
+              placeholder={intl.formatMessage({id: 'placeholder_unit'})}
               onChange={this.handleInputChange}/>
           </FormElement>
 

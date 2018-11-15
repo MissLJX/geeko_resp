@@ -43,15 +43,15 @@ const StyleSelect = styled.span`
   }
 
   &.selected{
-    border: 1px solid #e5004f;
-    color: #e5004f;
+    border: 1px solid #e64545;
+    color: #e64545;
   }
 `
 
 const SelectButton = (props) => {
   const {selected, enabled} = props
   return <React.Fragment>{
-    selected ? <StyleSelect {...props} className="selected"><FormattedMessage id='select' /></StyleSelect> : (
+    selected ? <StyleSelect {...props} className="selected"><FormattedMessage id='selected' /></StyleSelect> : (
       !enabled ? <StyleSelect className="disabled"><FormattedMessage id='select' /></StyleSelect> : <StyleSelect {...props}><FormattedMessage id='select' /></StyleSelect>
     )}
   </React.Fragment>
@@ -60,13 +60,11 @@ const SelectButton = (props) => {
 export const Coupon = (props) => {
   const {coupon, selected, enabled, couponSelect} = props
 
-  const couponAmount = coupon.amount.indexOf('%') >= 0 ? `${coupon.amount} OFF` : `$${coupon.amount}`
-
   return <StyledCoupon className="x-table __vm x-fw __fixed">
     <div className="x-cell">
     	<div>
     		<Red>
-    			<StyledAmount>{couponAmount}</StyledAmount>
+    			<StyledAmount>{coupon.couponName2}</StyledAmount>
     		</Red>
     	</div>
 
@@ -99,7 +97,7 @@ const CouponUL = styled.ul`
 export default (props) => <CouponUL>
   {
     props.coupons.map(({coupon, isAvailable}) => <li key={coupon.id}>
-      <Coupon couponSelect={props.couponSelect} coupon={coupon} selected={props.selectedId === coupon.id} enabled={isAvailable}/>
+      <Coupon couponSelect={props.couponSelect} coupon={coupon} selected={props.selectedId === coupon.id || props.selectedId2 === coupon.id} enabled={isAvailable}/>
     </li>)
   }
 </CouponUL>

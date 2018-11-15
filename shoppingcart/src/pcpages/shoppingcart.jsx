@@ -27,7 +27,9 @@ import {fetchAll,
   getCreditCards,
   deleteItem,
   deleteItems,
-  updateAddress} from '../store/actions.js'
+  updateAddress,
+  setCouponCode,
+  changeLang} from '../store/actions.js'
 
 import Loading from '../components/msite/loading.jsx'
 import Refreshing from '../components/msite/refreshing.jsx'
@@ -76,7 +78,8 @@ import { paypalpay,
   movetooverseas,
   unusecoupon,
   product2,
-  getLeaveImage } from '../api'
+  getLeaveImage,
+  useMercadoCoupon } from '../api'
 
 export const __address_token__ = window.token
 
@@ -146,6 +149,26 @@ const FixedTop = styled.div`
 	}
 `
 
+const DISCOUNTTIP = styled.span`
+  background-color:#fff9fc;
+  border: 1px solid #f3a6c0;
+  padding: 4px;
+  font-size: 12px;
+  position: relative;
+  &::before{
+    content:'';
+    border-left: 1px solid #f3a6c0;
+    border-top: 1px solid #f3a6c0;
+    background-color:#fff9fc;
+    transform: rotate(-135deg);
+    position:absolute;
+    left: 50%;
+    bottom: -5px;
+    width: 8px;
+    height: 8px;
+  }
+`
+
 const mapStateToProps = (state) => {
   return {
     ...state
@@ -179,7 +202,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(setTicketMethod(method))
     },
     SELECTPAY: (paymethod) => {
-      dispatch(selectPay(paymethod))
+      return dispatch(selectPay(paymethod))
     },
     SETINSTALLMENTS: (installments) => {
       dispatch(setInstallments(installments))
@@ -202,6 +225,9 @@ const mapDispatchToProps = (dispatch) => {
         email
       })
     },
+    SETCOUPONCODE: (couponCode) => {
+      dispatch(setCouponCode(couponCode))
+    },
     GETADDRESSES: () => {
       return dispatch(fetchAddresses())
     },
@@ -216,6 +242,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     UPDATINGADDRESS: (updating) => {
       dispatch(updateAddress(updating))
+    },
+    CHANGELANG: (lang) => {
+      return dispatch(changeLang(lang))
     }
   }
 }
@@ -719,7 +748,22 @@ const ShoppingCart = class extends React.Component {
           refreshing: false
         })
       })
-      this.props.REFRESHCART().then(() => {
+
+
+      let __refreshCart
+      if (shipping.country.value === 'BR') {
+        Cookie.set('currency', 'BRL', {expires: 365})
+        __refreshCart = this.props.CHANGELANG('pt')
+      } else if (shipping.country.value === 'MX') {
+        Cookie.set('currency', 'MXN', {expires: 365})
+        __refreshCart = this.props.CHANGELANG('es')
+      }else{
+        __refreshCart = this.props.REFRESHCART()
+      }
+
+
+
+      __refreshCart.then(() => {
         this.setState({
           showAddresses: false
         })
@@ -836,9 +880,14 @@ const ShoppingCart = class extends React.Component {
 
   // PayMethods
   selectPayHandle (paymethod) {
-    this.props.SELECTPAY(paymethod)
-    storage.add('payMethod', paymethod.id, 365 * 24 * 60 * 60)
-    storage.add('payType', paymethod.type, 365 * 24 * 60 * 60)
+    this.props.SELECTPAY(paymethod).then((cart) => {
+      if(cart && cart.changeCurrencyMsg){
+        alert(cart.changeCurrencyMsg)
+      }
+    })
+
+    // storage.add('payMethod', paymethod.id, 365 * 24 * 60 * 60)
+    // storage.add('payType', paymethod.type, 365 * 24 * 60 * 60)
   }
 
   atmClickHandle (method) {
@@ -868,13 +917,18 @@ const ShoppingCart = class extends React.Component {
     } else {
       addAddress(address).then(() => {
 
+        let __refreshCart
         if (address.country === 'BR') {
           Cookie.set('currency', 'BRL', {expires: 365})
+          __refreshCart = this.props.CHANGELANG('pt')
         } else if (address.country === 'MX') {
           Cookie.set('currency', 'MXN', {expires: 365})
+          __refreshCart = this.props.CHANGELANG('es')
+        }else{
+          __refreshCart = this.props.REFRESHCART()
         }
         
-        this.props.REFRESHCART().then( () => {
+        __refreshCart.then( () => {
           this.props.UPDATINGADDRESS(false)
           if(this.actions){
             this.togglePaypalButton(this.actions)
@@ -1047,6 +1101,25 @@ const ShoppingCart = class extends React.Component {
     }
   }
 
+  useMercadoCoupon(couponCode){
+    this.setState({
+      refreshing: true
+    })
+    useMercadoCoupon(couponCode).then( ({result}) => {
+      this.setState({
+        refreshing: false
+      })
+      this.props.REFRESHCART(result)
+      this.showSuccessTip('Used Successed')
+
+    } ).catch(({result}) => {
+      this.setState({
+        refreshing: false
+      })
+      alert(result)
+    })
+  }
+
   render () {
     const {cart, loading, empty, intl} = this.props
 
@@ -1175,6 +1248,7 @@ const ShoppingCart = class extends React.Component {
                 <Box title={intl.formatMessage({id: 'payment_method'})}>
                   <div style={{paddingTop: 20}}>
                     <PayMethods
+                      couponCode={this.props.couponCode}
                       cpf={this.props.cpf}
                       email={this.props.email}
                       payMethodList={ cart.payMethodList }
@@ -1200,6 +1274,9 @@ const ShoppingCart = class extends React.Component {
 
                       brazilOceanForm={ c => this.brazilOceanForm = c }
                       brazilOcean={ c => this.brazilOcean = c }
+
+                      setCouponHandle={ this.useMercadoCoupon.bind(this) }
+                      couponCode={this.props.couponCode}
                     />
                   </div>
                 </Box>
@@ -1212,7 +1289,7 @@ const ShoppingCart = class extends React.Component {
                 {
                   cart.shippingInsurancePrice2 && <div style={{borderTop:'1px solid #e6e6e6', paddingTop: 10}}>
                   <LabelCheck clickHandle={this.openInsurance.bind(this)} disabled={cart.isShippingInsuranceMust} selected={cart.insurance}>
-                    <FormattedMessage id="add_shipping_insurance" values={{price: <strong><Money money={cart.shippingInsurancePrice2}/></strong>}}/>
+                    <FormattedMessage id="add_shipping_insurance" values={{price: <Red><Money money={cart.shippingInsurancePrice2}/></Red>}}/>
                   </LabelCheck>
                   <Ask style={{marginLeft: 5}} message={cart.shippingInsuranceMsg2}/>
                 </div>
@@ -1307,9 +1384,10 @@ const ShoppingCart = class extends React.Component {
                   </div>
                   <div className="__bd">
                     <LabelCheck clickHandle={this.openPoints.bind(this)} selected={cart.openPointUse}>
-                      <FormattedMessage id="credit_msg" values={{credits: cart.expectedPoints, discount: <strong><Money money={cart.expectedPointDiscount}/></strong>}}/>
+                      <FormattedMessage  id="credit_msg" values={{credits: cart.expectedPoints, discount: <Red><Money money={cart.expectedPointDiscount}/></Red>}}/>
                     </LabelCheck>
-                    <Ask message={this.state.pointMessage} style={{marginLeft: 5}}/>
+                    <span> </span>
+                    <Ask message={this.state.pointMessage} />
                   </div>
                 </SecondBox>
               }
@@ -1320,7 +1398,7 @@ const ShoppingCart = class extends React.Component {
                 </div>
                 <div className="__bd">
                   <LabelCheck clickHandle={this.openInsurance.bind(this)} disabled={cart.isShippingInsuranceMust} selected={cart.insurance}>
-                    <FormattedMessage id="add_shipping_insurance" values={{price: <strong><Money money={cart.shippingInsurancePrice2}/></strong>}}/>
+                    <FormattedMessage id="add_shipping_insurance" values={{price: <Red><Money money={cart.shippingInsurancePrice2}/></Red>}}/>
                   </LabelCheck>
                   <Ask style={{marginLeft: 5}} message={cart.shippingInsuranceMsg2}/>
 
@@ -1360,6 +1438,13 @@ const ShoppingCart = class extends React.Component {
                                 {intl.formatMessage({id: 'place_order'})}
                               </BigButton>
                             </div> : <div>
+
+                              { 
+                                cart.paypalDiscountMessage && <DISCOUNTTIP style={{position:'relative', top:15}}>
+                                  <span dangerouslySetInnerHTML={{__html: cart.paypalDiscountMessage}}/>
+                                </DISCOUNTTIP> 
+                              }
+
                               <div id='ip-paypal-pay' style={{marginTop: 30}} ref={ (c) => this.paypalRender(c, 'quick') }/>
                               <div style={{color: '#999', textAlign: 'center', height: 30, lineHeight: '30px', textTransform: 'uppercase'}}>
                                 {intl.formatMessage({id: 'or'})}

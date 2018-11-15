@@ -7,7 +7,7 @@ import Money from '../money.jsx'
 import {FormattedMessage} from 'react-intl'
 
 const StyledHead = styled.div`
-	height: 50px;
+	height: 60px;
 	padding: 0 10px;
 	img,span{
 		vertical-align: middle;

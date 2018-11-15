@@ -41,6 +41,11 @@ const ChangePhone = Loadable({
   loading: Loading
 })
 
+const ChangeEmail = Loadable({
+	loader: () => import(/* webpackChunkName: "component--change-email" */ './change-email.jsx'),
+  loading: Loading
+})
+
 const PAGECONFIRM = styled.div`
 	width: 1150px;
 	margin-left: auto;
@@ -61,7 +66,7 @@ const LI = styled.li`
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background-color: #e5004f;
+    background-color: #e64545;
     color: #fff;
     line-height: 16px;
     text-align: center;
@@ -163,7 +168,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     GETTRANSACTIONPAGE: (transactionId) => {
-      dispatch(fetchTransactionPage(transactionId))
+      return dispatch(fetchTransactionPage(transactionId))
     }
   }
 }
@@ -181,7 +186,11 @@ const OrderConfirm = class extends React.Component {
 
   componentWillMount () {
     const {transactionId} = this.props.match.params
-  	this.props.GETTRANSACTIONPAGE(transactionId)
+  	this.props.GETTRANSACTIONPAGE(transactionId).then( (data) => {
+  		if(window.sendEvent){
+  			window.sendEvent(data)
+  		}
+  	})
     gettransactionrelatedproducts(transactionId, 0, 11).then(({result}) => {
       this.setState({
         products: [...this.state.products, ...result]
@@ -242,7 +251,7 @@ const OrderConfirm = class extends React.Component {
     const getTitle = () => {
       if (orderVo.order.payBarCode) { return <div>Seu pedido de compra foi realizado! Pague agora seu Boleto Bancário paraagilizar a confirmação do seu pedido.</div> }
       if (orderVo.order.mercadopagoPayURL) { return <div dangerouslySetInnerHTML={{__html: m1147.message}}/> }
-      return <div>{message} <a style={{color: 'skyblue'}} href="#">{me.communicationEmail}</a><Icon style={{marginLeft: 10, color: 'skyblue', cursor: 'pointer'}}>&#xe61f;</Icon></div>
+      return <div>{message} <Link style={{color: 'skyblue'}} to={`${this.props.match.url}/change-email`}>{me.communicationEmail}<Icon style={{marginLeft: 10, color: 'skyblue', cursor: 'pointer'}}>&#xe61f;</Icon></Link></div>
     }
 
     return <PAGECONFIRM>
@@ -284,7 +293,7 @@ const OrderConfirm = class extends React.Component {
 	            </div>
 
 	            <div style={{textAlign: 'center', marginTop: 20}}>
-	            	 <Btn style={{backgroundColor: '#e5004f', padding: '12px 26px'}}>Generar Ticket</Btn>
+	            	 <Btn style={{backgroundColor: '#e64545', padding: '12px 26px'}}>Generar Ticket</Btn>
 	            </div>
     				</div>
     			}
@@ -316,14 +325,14 @@ const OrderConfirm = class extends React.Component {
 
 
 	           <div style={{textAlign: 'center', marginTop: 20}}>
-	            	 <Btn style={{backgroundColor: '#e5004f', padding: '12px 26px'}}>Imprimir boleto</Btn>
+	            	 <Btn style={{backgroundColor: '#e64545', padding: '12px 26px'}}>Imprimir boleto</Btn>
 	            </div>
 	            <div style={{marginTop: 25}}>
 	            	<Barcode value={orderVo.order.digitableLine} width={2.21} displayValue={false}/>
 	            	<BARCODECOPY>
 		            	<span>{orderVo.order.digitableLine}</span>
 
-		            	<Clipboard onSuccess={this.copied.bind(this)} style={{backgroundColor: '#e5004f', color: '#fff', border: 'none', outline: 'none', boxShadow: 'none'}} data-clipboard-text={orderVo.order.digitableLine}>
+		            	<Clipboard onSuccess={this.copied.bind(this)} style={{backgroundColor: '#e64545', color: '#fff', border: 'none', outline: 'none', boxShadow: 'none'}} data-clipboard-text={orderVo.order.digitableLine}>
 					        	Copiar código
 					      	</Clipboard>
 	            	</BARCODECOPY>
@@ -491,6 +500,8 @@ const OrderConfirm = class extends React.Component {
       <Route path={`${this.props.match.path}/address`}  component={RouteAddress}/>
       <Route path={`${this.props.match.path}/set-password`}  component={SetPassword}/>
       <Route path={`${this.props.match.path}/change-phone`}  component={ChangePhone}/>
+      <Route path={`${this.props.match.path}/change-email`}  component={ChangeEmail}/>
+      
 
     </PAGECONFIRM>
   }

@@ -24,11 +24,11 @@ export const StyledControl = styled.div`
 		p{
 			font-size: 12px;
 			margin-top: 5px;
-			color: #e5004f;
+			color: #E64545;
 		}
 		input, select{
-			border: 1px solid #e5004f;
-    		box-shadow: inset 0 0 1px #e5004f;
+			border: 1px solid #E64545;
+    		box-shadow: inset 0 0 1px #E64545;
 		}
 	}
 `

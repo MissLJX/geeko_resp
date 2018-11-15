@@ -5,7 +5,7 @@ import Ellipsis from '../ellipsis.jsx'
 import {injectIntl} from 'react-intl'
 
 const StyledHead = styled.div`
-	height: 50px;
+	height: 60px;
 	padding: 0 10px;
 	img,span{
 		vertical-align: middle;

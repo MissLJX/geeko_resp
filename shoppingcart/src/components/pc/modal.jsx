@@ -25,7 +25,7 @@ const CLOSE = styled.span`
 	cursor: pointer;
 	top: 15px;
 	right: 15px;
-	font-size: 30px;
+	font-size: 25px;
 	position: absolute;
 	z-index:2;
 	color: #666;

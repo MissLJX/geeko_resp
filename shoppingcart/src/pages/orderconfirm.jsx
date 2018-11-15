@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import {injectIntl} from 'react-intl'
 import styled from 'styled-components'
 import {Boxs, Box, BoxBody, BoxHead} from '../components/msite/layout.jsx'
-import {Grey, Red, UpperCase} from '../components/text.jsx'
+import {Grey, Red, UpperCase, Blue} from '../components/text.jsx'
 import Address from '../components/msite/address.jsx'
 import {Btn, BigButton} from '../components/msite/buttons.jsx'
 import {gettransactionrelatedproducts} from '../api'
@@ -24,6 +24,16 @@ const OrderAddress = Loadable({
 
 const SetPassword = Loadable({
   loader: () => import(/* webpackChunkName: "component--set-password" */ './set-password.jsx'),
+  loading: Loading
+})
+
+const ChangePhone = Loadable({
+  loader: () => import(/* webpackChunkName: "component--change-phone" */ './change-phone.jsx'),
+  loading: Loading
+})
+
+const ChangeEmail = Loadable({
+  loader: () => import(/* webpackChunkName: "component--change-email" */ './change-email.jsx'),
   loading: Loading
 })
 
@@ -85,12 +95,20 @@ const LI = styled.li`
   line-height: 20px;
 `
 
+const OL = styled.ol`
+  & > li{
+    margin-top: 10px;
+    &:first-child{
+      margin-top:0;
+    }
+  }
+`
+
 const mapStateToProps = (state) => {
   return {
     transaction: state.transaction,
     me: state.me,
-    m1132: state.m1132,
-    m1133: state.m1133,
+    m1186: state.m1186,
     m1147: state.m1147,
     m1073: state.m1073
   }
@@ -132,14 +150,21 @@ const OrderConfirm = class extends React.Component {
   }
 
   render () {
-    const {transaction, me, m1132, m1133, m1147, m1073} = this.props
+    const {transaction, me, m1186, m1147, m1073} = this.props
   	const {message, orderVos} = transaction || {}
   	const orderVo = orderVos ? orderVos[0] : null
+
+    let __BB__,__Tips__
+
+    if(transaction && m1186){
+      __BB__ = m1186 ? JSON.parse(m1186.message) : null;
+      __Tips__ = orderVo.order.mercadopagoPayURL ? __BB__.spain : __BB__.portugal
+    }
 
     const getTitle = () => {
       if (orderVo.order.payBarCode) { return <div>Seu pedido de compra foi realizado! Pague agora seu Boleto Bancário paraagilizar a confirmação do seu pedido.</div> }
       if (orderVo.order.mercadopagoPayURL) { return <div dangerouslySetInnerHTML={{__html: m1147.message}}/> }
-      return <div>{message} <a style={{color: 'skyblue'}} href="#">{me.communicationEmail}</a><Icon style={{marginLeft: 10, color: 'skyblue', cursor: 'pointer'}}>&#xe61f;</Icon></div>
+      return <div>{message} <Link style={{color: 'skyblue'}} to={`${this.props.match.url}/change-email`}>{me.communicationEmail}<Icon style={{marginLeft: 10, color: 'skyblue', cursor: 'pointer'}}>&#xe61f;</Icon></Link></div>
     }
 
   	return <div>{transaction && (
@@ -147,8 +172,8 @@ const OrderConfirm = class extends React.Component {
     		<Boxs>
     			<Box>
             <div style={{padding: 10}}>
-              <div style={{fontSize: 18}}>
-                <div dangerouslySetInnerHTML={{__html: m1073.message}} />
+              <div>
+                <Icon style={{color: '#57b936', fontSize: 25, marginRight:10}}>&#xe73c;</Icon><span style={{fontSize:20}} dangerouslySetInnerHTML={{__html: m1073.message}} />
               </div>
 
               <div style={{marginTop: 10, lineHeight: '20px'}}>{getTitle()}</div>
@@ -157,13 +182,39 @@ const OrderConfirm = class extends React.Component {
     			</Box>
 
           {
+            orderVo.order.mercadopagoPayURL && <Box>
+              <div style={{paddingBottom: 10}}>
+                <OL style={{padding: 10}}>
+                  {
+                    __Tips__ && __Tips__.map( (tip, index) =>  <LI key={index} data-index={index+1} dangerouslySetInnerHTML={{__html: tip.message}}/> )
+                  }
+                </OL>
+
+                <div style={{textAlign: 'center'}}>
+                  {
+                    orderVo.order.shippingDetail.phoneNumber && <Link style={{textDecoration:'none'}} to={`${this.props.match.url}/change-phone`}>
+                      <Blue style={{cursor:'pointer'}}>
+                        <span>{orderVo.order.shippingDetail.phoneNumber}</span>
+                        <Icon style={{marginLeft:5}}>&#xe62b;</Icon>
+                      </Blue>
+                    </Link>
+                  }
+                </div>
+
+                <div style={{marginTop: 10, marginLeft: 10, textAlign:'center'}}><Btn style={{backgroundColor: '#e5004f', padding: '6px 8px'}}>Generar Ticket</Btn></div>
+              </div>
+            </Box>
+          }
+
+          {
             orderVo.order.payBarCode && <Box>
               <div style={{paddingBottom: 10}}>
-                <ol style={{padding: 10}}>
-                  <LI data-index={1} dangerouslySetInnerHTML={{__html: m1132.message}}/>
-                  <LI style={{marginTop: 10}} data-index={2} dangerouslySetInnerHTML={{__html: m1133.message}}/>
-                </ol>
-                <div style={{marginTop: 10, marginLeft: 10}}><Btn style={{backgroundColor: '#e5004f', padding: '6px 8px'}}>Imprimir boleto</Btn></div>
+                <OL style={{padding: 10}}>
+                  {
+                    __Tips__ && __Tips__.map( (tip, index) =>  <LI key={index} data-index={index+1} dangerouslySetInnerHTML={{__html: tip.message}}/> )
+                  }
+                </OL>
+                <div style={{marginTop: 10, marginLeft: 10, textAlign:'center'}}><Btn style={{backgroundColor: '#e5004f', padding: '6px 8px'}}>Imprimir boleto</Btn></div>
               </div>
             </Box>
           }
@@ -243,6 +294,21 @@ const OrderConfirm = class extends React.Component {
         ...defaultStyles
       })}
       path={`${this.props.match.path}/set-password`} component={SetPassword}/>
+
+      <AnimatedRoute {...defaultAnimations}
+      mapStyles={(styles) => ({
+        transform: `translateY(${styles.offset}%)`,
+        ...defaultStyles
+      })}
+      path={`${this.props.match.path}/change-phone`} component={ChangePhone}/>
+
+      <AnimatedRoute {...defaultAnimations}
+      mapStyles={(styles) => ({
+        transform: `translateY(${styles.offset}%)`,
+        ...defaultStyles
+      })}
+      path={`${this.props.match.path}/change-email`} component={ChangeEmail}/>
+      
 
     </div>
   }

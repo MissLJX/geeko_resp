@@ -34,7 +34,7 @@ const TIP = styled.span`
 const LINE = styled.div`
 	& > div{
 		&:first-child{
-			width: ${window.lang.indexOf('pt_') >= 0 ? 100 : 60}px;
+			width: ${(window.lang.indexOf('pt_') >= 0 || window.lang.indexOf('fr_') >= 0) ? 100 : 60}px;
 		}
 	}
 `
@@ -229,7 +229,7 @@ export default class extends React.Component {
         <div style={{marginTop: 30}}>
           {
             selectedVariant && selectedVariant.status === '1' && (selectedVariant.inventory > 0 || selectedProduct.isAutoInventory) ? (
-              <BigButton bgColor="#e5004f" style={{width: 240, height: 40}} onClick={ this.editHandle.bind(this) }>
+              <BigButton bgColor="#222" style={{width: 240, height: 40}} onClick={ this.editHandle.bind(this) }>
                 <FormattedMessage id="submit"/>
               </BigButton>
 

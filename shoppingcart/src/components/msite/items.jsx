@@ -6,8 +6,21 @@ const ItemUL = styled.div`
 	& > li{
 		border-top: 1px solid #e5e5e5;
 		padding: 15px 10px;
+    position: relative;
+    &::before{
+      position: absolute;
+      height: 1px;
+      width: 40px;
+      background-color: #fff;
+      left:0;
+      top:-1px;
+      content: '';
+    }
 		&:first-child{
 			border-top: none;
+      &::before{
+        background-color: transparent;
+      }
 		}
 	}
 `
@@ -29,6 +42,7 @@ export default class extends React.Component {
             itemEdit={this.props.itemEdit}
             itemDelete={this.props.itemDelete}
             item={item}
+            combinatorialPromotionTitle={this.props.combinatorialPromotionTitle}
             ivalidItem={this.props.ivalidItem}
             itemSelect={this.props.itemSelect} />
   			</li>

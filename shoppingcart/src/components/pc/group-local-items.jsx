@@ -45,8 +45,8 @@ const GropLocalItems = class extends React.Component {
         <div className="x-table __vm x-fw">
           <div className="x-cell">
             <CheckBox onClick={() => { this.groupClick(!groupSelected, items) }} style={{verticalAlign: 'middle'}} className={groupSelected ? 'selected' : ''}/>
-            <img style={{verticalAlign: 'middle', height: 40, marginLeft: 10}} src={domestic.icon}/>
-            <span style={{marginLeft: 5, verticalAlign: 'middle', fontSize: 16}}>{ domestic.title }</span>
+            {/* <img style={{verticalAlign: 'middle', height: 40, marginLeft: 10}} src={domestic.icon}/> */}
+            <span style={{marginLeft: 10, verticalAlign: 'middle', fontSize: 16}}>{ domestic.title }</span>
           </div>
           <div className="x-cell __right">
           	{

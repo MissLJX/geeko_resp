@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux'
 import {storage} from '../utils/utils.js'
-import {LOADING,
+import {
+  SET_LANG,
+  LOADING,
   LOADED,
   REFRESHING,
   REFRESHED,
@@ -22,17 +24,18 @@ import {LOADING,
   GET_TRANSACTION_PAGE,
   GET_TRANSACTION,
   GET_ADDRESSES,
-  UPDATE_ADDRESS} from './actions.js'
+  UPDATE_ADDRESS, SET_ME, SET_COUPON_CODE} from './actions.js'
 
 const initialState = {
+  lang: window.lang || 'en',
   loading: false,
   empty: false,
   refreshing: false,
   cart: null,
   coupons: null,
   me: null,
-  payMethod: storage.get('payMethod'),
-  payType: storage.get('payType'),
+  payMethod: null,
+  payType: null,
   atmMethod: storage.get('atmMethod'),
   ticketMethod: storage.get('ticketMethod'),
   editing: {
@@ -56,44 +59,38 @@ const initialState = {
   m1147: null,
   m1073: null,
   addresses: null,
-  addressUpdating: false
+  addressUpdating: false,
+  couponCode: null
 }
 
 const isEmpty = cart => !cart
 
-const getPaymethod = (cart, selectedId) => {
-  if (cart) {
-    let s = cart.payMethodList.find(p => p.id === selectedId)
-    if (!s) {
-      if (cart.payMethodList.length === 1) { s = cart.payMethodList[0] }
-    }
-
-    return s ? s.id : null
+const getPaymethod = (cart) => {
+  if (cart && cart.selectedPayMethod) {
+    return cart.selectedPayMethod.id
   }
   return null
 }
 
-const getPaymethodType = (cart, selectedId) => {
-  if (cart) {
-    let s = cart.payMethodList.find(p => p.id === selectedId)
-    if (!s) {
-      if (cart.payMethodList.length === 1) { s = cart.payMethodList[0] }
-    }
-    return s ? s.type : null
+const getPaymethodType = (cart) => {
+  if (cart && cart.selectedPayMethod) {
+    return cart.selectedPayMethod.type
   }
   return null
 }
 
 const refresh = (state = initialState, action) => {
   switch (action.type) {
+    case SET_LANG:
+      return {...state, lang: action.lang}
     case LOADING:
       return {...state, loading: true}
     case LOADED:
-      return {...state, loading: false, payType: getPaymethodType(action.values[0], state.payMethod), payMethod: getPaymethod(action.values[0], state.payMethod), paypal: action.values[1], empty: isEmpty(action.values[0]), cart: action.values[0], me: action.values[2], cpf: action.values[2].payCpf, email: action.values[2].communicationEmail}
+      return {...state, loading: false, payType: getPaymethodType(action.values[0]), payMethod: getPaymethod(action.values[0]), paypal: action.values[1], empty: isEmpty(action.values[0]), cart: action.values[0], me: action.values[2], cpf: action.values[2].payCpf, email: action.values[2].communicationEmail}
     case REFRESHING:
       return {...state, refreshing: true}
     case REFRESHED:
-      return {...state, refreshing: false, cart: action.cart, payType: getPaymethodType(action.cart, state.payMethod), payMethod: getPaymethod(action.cart, state.payMethod), empty: isEmpty(action.cart)}
+      return {...state, refreshing: false, cart: action.cart, payType: getPaymethodType(action.cart), payMethod: getPaymethod(action.cart), empty: isEmpty(action.cart)}
     case EDITING:
       return {...state,
         editing: {
@@ -141,6 +138,10 @@ const refresh = (state = initialState, action) => {
       return {...state, addresses: action.addresses}
     case UPDATE_ADDRESS:
       return {...state, addressUpdating: action.updating}
+    case SET_ME:
+      return {...state, me: action.me}
+    case SET_COUPON_CODE:
+      return {...state, couponCode: action.couponCode}
     default:
       return state
   }

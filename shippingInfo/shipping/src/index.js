@@ -3,5 +3,8 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 
-ReactDOM.render(<App.ShippingFilter  infos= {App._shipping_infos} />, document.getElementById('root'));
+
+
+
+ReactDOM.render(<App.ShippingFilter/>, document.getElementById('root'));
 registerServiceWorker();

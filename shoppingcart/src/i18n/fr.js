@@ -17,7 +17,7 @@ export default{
   item_total: 'Total d\'Articles',
   subtotal: 'sous-total',
   shipping_price: 'Frais d\'expédition',
-  shipping_insurance: 'Shipping Insurance',
+  shipping_insurance: 'L\'assurance d\'expédition',
   order_total: 'total de la Commande',
   total: 'Total',
   check_out: 'compléter la commande',
@@ -94,5 +94,8 @@ export default{
   thanks_for_shopping: 'Thank you for shopping',
   check_order: 'Check Order',
   order_no: 'Order No.',
-  set_password: 'définir le mot de passe'
+  set_password: 'définir le mot de passe',
+  placeholder_street_address: 'Rue,Adresse,Nom de l\'entreprise,C/O',
+  placeholder_unit: 'Appartement,Immeuble,Unité,Bâtiment,Étage,etc',
+  selected: 'Sélectionné'
 }

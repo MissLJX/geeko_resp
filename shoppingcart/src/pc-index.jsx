@@ -1,14 +1,20 @@
 import React from 'react'
-import {Switch, Route} from 'react-router-dom'
+import {Switch, Route,withRouter} from 'react-router-dom'
+			
+
 import {AnimatedRoute} from 'react-router-transition'
 import {IntlProvider} from 'react-intl'
-import {messages, lang} from './i18n'
+import {messages, lang, getMessages, getLang} from './i18n'
 import {__route_root__} from './utils/utils.js'
 import Loadable from 'react-loadable'
 import Loading from './components/msite/refreshing.jsx'
 import Loading1 from './components/msite/loading.jsx'
 import Header from './components/pc/header.jsx'
 import { getCurrencies } from './api'
+
+import { connect } from 'react-redux'
+import { changeLang } from './store/actions.js'
+
 
 
 const ShoppingCart = Loadable({
@@ -31,13 +37,28 @@ const Credit = Loadable({
     loading: Loading
 })
 
-// const OrderConfirm = Loadable({
-// 	loader: () => import( webpackChunkName: "page--orderconfirm"  './pcpages/order-confirm.jsx'),
-// 	loading: Loading
-// })
+const OrderConfirm = Loadable({
+	loader: () => import(/* webpackChunkName: "page--orderconfirm" */ './pcpages/order-confirm.jsx'),
+	loading: Loading
+})
 
 
-export default class extends React.Component{
+const mapStateToProps = (state) => {
+  return {
+    lang: state.lang
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+   	SETLANG: (lang) => {
+   		dispatch(changeLang(lang))
+   	}
+  }
+}
+
+
+const Index = class extends React.Component{
 	constructor(props){
 		super(props)
 		this.state = {
@@ -55,14 +76,18 @@ export default class extends React.Component{
 	}
 
 	render(){
-		return <IntlProvider locale={lang} messages={messages}>
+		let _lang = getLang(this.props.lang)
+
+		let _messages = getMessages(_lang)
+
+		return <IntlProvider locale={_lang} messages={_messages}>
 		<div>
-			<Header currencies={this.state.currencies} currency={this.state.currency} lang={lang}/>
+			<Header currencies={this.state.currencies} currency={this.state.currency} lang={_lang} changeLang={ ( lang ) => { this.props.SETLANG(lang) } }/>
 			<div>
 				<Switch>
 					<Route path={`${window.ctx || ''}${__route_root__}/credit-card`} component={Credit}/>
 					<Route path={`${window.ctx || ''}${__route_root__}/`}  component={ShoppingCart}/>
-					{/*<Route path={`${window.ctx || ''}/order-confirm/:transactionId`} component={OrderConfirm}/>*/}
+					<Route path={`${window.ctx || ''}/order-confirm/:transactionId`} component={OrderConfirm}/>
 				</Switch>
 				<Route path={`${window.ctx || ''}${__route_root__}/coupons`}  component={Coupon}/>
 				<Route path={`${window.ctx || ''}${__route_root__}/address`} exact component={AddressModal}/>
@@ -85,4 +110,6 @@ export default class extends React.Component{
 	</IntlProvider>
 	}
 }
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Index))
 

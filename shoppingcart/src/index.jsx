@@ -1,13 +1,15 @@
 import React from 'react'
-import {Switch, Route} from 'react-router-dom'
+import {Switch, Route, withRouter} from 'react-router-dom'
 import {IntlProvider} from 'react-intl'
-import {messages, lang} from './i18n'
+import {getMessages, getLang} from './i18n'
 // import ShoppingCart from './pages/shoppingcart.jsx'
 import {__route_root__} from './utils/utils.js'
 import {AnimatedRoute} from 'react-router-transition'
 import Loadable from 'react-loadable'
 import Loading from './components/msite/refreshing.jsx'
 import Loading1 from './components/msite/loading.jsx'
+
+import { connect } from 'react-redux'
 
 const AddressModal = Loadable({
 	loader: () => import(/* webpackChunkName: "page--address-modal" */ './pages/address-modal.jsx'),
@@ -39,10 +41,10 @@ const ShoppingCart = Loadable({
     loading: Loading1
 })
 
-// const OrderConfirm = Loadable({
-// 	loader: () => import( webpackChunkName: "page--orderconfirm"  './pages/orderconfirm.jsx'),
-// 	loading: Loading
-// })
+const OrderConfirm = Loadable({
+	loader: () => import(/* webpackChunkName: "page--orderconfirm" */ './pages/orderconfirm.jsx'),
+	loading: Loading
+})
 
 const defaultStyles = {
   position: 'fixed',
@@ -60,17 +62,37 @@ const defaultAnimations = {
   atActive: { offset: 0, height: 100}
 }
 
-export default () => (
-  <IntlProvider locale={lang} messages={messages}>
+const mapStateToProps = (state) => {
+  return {
+    lang: state.lang
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+   	SETLANG: (lang) => {
+   		dispatch(changeLang(lang))
+   	}
+  }
+}
+
+const Index = (props) => {
+
+	let _lang = getLang(props.lang)
+
+	let _messages = getMessages(_lang)
+
+
+  return <IntlProvider locale={_lang} messages={_messages}>
   	<div>
 
-  		{/*<Switch>
+  		<Switch>
 			<Route path={`${window.ctx || ''}/order-confirm/:transactionId`} component={OrderConfirm}/>
 			<Route path={`${window.ctx || ''}${__route_root__}/`}  component={ShoppingCart}/>
-		</Switch>*/}
+		</Switch>
 
   		
-  		<Route path={`${window.ctx || ''}${__route_root__}/`}  component={ShoppingCart}/>
+  		{/*<Route path={`${window.ctx || ''}${__route_root__}/`}  component={ShoppingCart}/>*/}
     	
 
     	<AnimatedRoute	{...defaultAnimations}
@@ -111,4 +133,7 @@ export default () => (
   	</div>
   	</IntlProvider>
 
-)
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Index))
+

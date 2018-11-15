@@ -85,9 +85,17 @@ const ITEM = styled.div`
 		&:nth-child(3){
 			width: 220px;
       & > div{
-        margin-top: 40px;
+       
         &:first-child{
-          margin-top: 0;
+          margin-top: 10px;
+        }
+
+        &:nth-child(2){
+          margin-top: 5px;
+        }
+
+        &:last-child{
+          margin-top:63px;
         }
       }
 		}
@@ -110,7 +118,7 @@ const ITEM = styled.div`
 `
 
 const LABELICON = styled.span`
-  color: #666;
+  color: #999;
   cursor: pointer;
   & > span{
     vertical-align: middle;
@@ -125,10 +133,10 @@ const LABELICON = styled.span`
   }
 
   &:active{
-    opacity: .8;
+    color: #666;
   }
   &:hover{
-    color: #cacaca;
+    color: #666;
   }
 `
 
@@ -177,7 +185,7 @@ const Item = class extends Component {
 
             {
               isEabled && !invalidItem && <LABELICON style={{marginRight: 20}} onClick={(evt) => { this.props.itemEdit(item) }} className={`${invalidItem ? 'disabled' : ''}`}>
-                <Icon>&#xe62b;</Icon>
+                <Icon>&#xe61f;</Icon>
                 <span><FormattedMessage id="edit"/></span>
               </LABELICON>
             }

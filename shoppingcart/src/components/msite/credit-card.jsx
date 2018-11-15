@@ -354,7 +354,7 @@ const CreditCard = class extends React.Component {
                     this.props.checking ? <BigButton bgColor="#999">
                       {intl.formatMessage({id: 'please_wait'})}...</BigButton> : (
                       <BigButton bgColor="#222" onClick={(evt) => { this.checkout(evt, currentCard) }}>
-                        {intl.formatMessage({id: 'check_out'})}
+                        {intl.formatMessage({id: 'check_out'})} ({count})
                       </BigButton>
                     )
                   }

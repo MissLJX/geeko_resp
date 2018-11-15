@@ -218,6 +218,7 @@ const AdressForm = class extends React.Component {
               name='streetAddress1'
               value={this.state.streetAddress1}
               onChange={this.handleInputChange}
+              placeholder={intl.formatMessage({id: 'placeholder_street_address'})}
               validations={[required]}/>
           </StyledControl>
 
@@ -228,6 +229,7 @@ const AdressForm = class extends React.Component {
             <Input
               name='unit'
               value={this.state.unit}
+              placeholder={intl.formatMessage({id: 'placeholder_unit'})}
               onChange={this.handleInputChange}/>
           </StyledControl>
 
@@ -356,6 +358,7 @@ const AdressForm = class extends React.Component {
               name='streetAddress1'
               value={this.state.streetAddress1}
               onChange={this.handleInputChange}
+              placeholder={intl.formatMessage({id: 'placeholder_street_address'})}
               validations={[required]}/>
           </StyledControl>
 
@@ -366,6 +369,7 @@ const AdressForm = class extends React.Component {
             <Input
               name='unit'
               value={this.state.unit}
+              placeholder={intl.formatMessage({id: 'placeholder_unit'})}
               onChange={this.handleInputChange}/>
           </StyledControl>
 
@@ -510,6 +514,7 @@ const AdressForm = class extends React.Component {
               name='streetAddress1'
               value={this.state.streetAddress1}
               onChange={this.handleInputChange}
+              placeholder={intl.formatMessage({id: 'placeholder_street_address'})}
               validations={[required]}/>
           </StyledControl>
 
@@ -520,6 +525,7 @@ const AdressForm = class extends React.Component {
             <Input
               name='unit'
               value={this.state.unit}
+              placeholder={intl.formatMessage({id: 'placeholder_unit'})}
               onChange={this.handleInputChange}/>
           </StyledControl>
 

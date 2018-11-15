@@ -10,7 +10,7 @@ import {injectIntl} from 'react-intl'
 import {__route_root__} from '../utils/utils.js'
 
 const ADDRESSBODY = styled.div`
-  padding: 56px 80px;
+  padding: 56px;
   background-color: #fff;
   width: 696px;
 `

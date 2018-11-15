@@ -1,4 +1,4 @@
-
+import Cookie from 'js-cookie'
 import {get,
   select,
   selectAll,
@@ -15,8 +15,10 @@ import {get,
   getSessionShipping,
   gettransaction,
   getMessage,
-  getaddresses} from '../api'
+  getaddresses,
+  selectPayMethod} from '../api'
 
+export const SET_LANG = 'SET_LANG'
 export const LOADING = 'LOADING'
 export const LOADED = 'LOADED'
 export const REFRESHING = 'REFRESHING'
@@ -38,6 +40,7 @@ export const SET_MERCAODO_INSTALLMENTS = 'SET_MERCAODO_INSTALLMENTS'
 export const CREDIT_STATUS = 'CREDIT_STATUS'
 export const ATM_METHOD = 'ATM_METHOD'
 export const TICKET_METHOD = 'TICKET_METHOD'
+export const SET_COUPON_CODE = 'SET_COUPON_CODE'
 
 // order confirm
 export const GET_TRANSACTION_PAGE = 'GET_TRANSACTION_PAGE'
@@ -46,6 +49,14 @@ export const GET_TRANSACTION = 'GET_TRANSACTION'
 export const GET_ADDRESSES = 'GET_ADDRESSES'
 
 export const UPDATE_ADDRESS = 'UPDATE_ADDRESS'
+export const SET_ME = 'SET_ME'
+
+export const setLang = (lang) => {
+  return {
+    type: SET_LANG,
+    lang
+  }
+}
 
 export const loading = () => {
   return {
@@ -83,13 +94,6 @@ export const editing = (item) => {
 export const edited = () => {
   return {
     type: EDITED
-  }
-}
-
-export const selectPay = (payMethod) => {
-  return {
-    type: SELECT_PAY,
-    payMethod
   }
 }
 
@@ -177,6 +181,20 @@ export const updateAddress = (updating) => {
   }
 }
 
+export const setMe = (me) => {
+  return {
+    type: SET_ME,
+    me
+  }
+}
+
+export const setCouponCode = (couponCode) => {
+  return {
+    type: SET_COUPON_CODE,
+    couponCode
+  }
+}
+
 export const fetchAll = () => {
   const fetchCart = get().then(data => data.result)
   const fetchMe = me().then(data => data.result)
@@ -220,6 +238,29 @@ export const refreshCart = (cart) => {
         dispatch(getCoupons(values[1]))
       })
     }
+  }
+}
+
+export const changeLang = (lang) => {
+  return dispatch => {
+    Cookie.set('lang', lang, {expires: 365})
+    return dispatch(refreshCart()).then(() => {
+      dispatch(setLang(lang))
+    })
+  }
+}
+
+export const selectPay = (payMethod) => {
+  return dispatch => {
+    dispatch(refresing())
+    dispatch({
+      type: SELECT_PAY,
+      payMethod
+    })
+    return selectPayMethod(payMethod.id).then(data => data.result).then(cart => {
+      dispatch(refreshCart(cart))
+      return cart
+    })
   }
 }
 
@@ -352,6 +393,15 @@ export const fetchAddresses = () => {
   return dispatch => {
     return getaddresses().then(({result}) => {
       dispatch(setAddresses(result))
+      return result
+    })
+  }
+}
+
+export const fetchMe = () => {
+  return dispatch => {
+    return me().then(({result}) => {
+      dispatch(setMe(result))
       return result
     })
   }

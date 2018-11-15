@@ -7,6 +7,7 @@ import {FormattedMessage} from 'react-intl'
 import LinkImage from '../link-image.jsx'
 
 import Cookie from 'js-cookie'
+import {updateCurrency} from '../../api'
 
 const __Language_Map__ = {
   'en': 'English',
@@ -164,15 +165,37 @@ const getIconPosition = (index) => {
   return { x: (index % 4) * 30, y: Math.floor(index / 4) * 20 }
 }
 
-const Currency = ({currency, index}) => {
-  const position = getIconPosition(index)
-  return <CURRENCY onClick={ () => { Cookie.set('currency', currency.value, {expires: 365}); window.location.href = `${window.ctx || ''}/cart` }}>
-    <span className="__icon" style={{backgroundPosition: `${-position.x}px ${-position.y}px`}}></span>
-    <span className="__label">{currency.value}</span>
-  </CURRENCY>
+// const Currency = ({currency, index}) => {
+//   const position = getIconPosition(index)
+//   return <CURRENCY onClick={ () => { Cookie.set('currency', currency.value, {expires: 365}); window.location.href = `${window.ctx || ''}/cart` }}>
+//     <span className="__icon" style={{backgroundPosition: `${-position.x}px ${-position.y}px`}}></span>
+//     <span className="__label">{currency.value}</span>
+//   </CURRENCY>
+// }
+
+const Currency = class extends React.Component {
+  constructor (props) {
+    super(props)
+  }
+
+  changeCurrency (currency) {
+  	Cookie.set('currency', currency, {expires: 365})
+  	updateCurrency(currency).then(() => {
+  		window.location.href = `${window.ctx || ''}/cart`
+  	})
+  }
+
+  render () {
+  	const {currency, index} = this.props
+  	const position = getIconPosition(index)
+	  return <CURRENCY onClick={ () => { this.changeCurrency(currency.value) }}>
+	    <span className="__icon" style={{backgroundPosition: `${-position.x}px ${-position.y}px`}}></span>
+	    <span className="__label">{currency.value}</span>
+	  </CURRENCY>
+  }
 }
 
-const Header = ({intl, lang, currency, currencies}) => (
+const Header = ({intl, lang, currency, currencies, changeLang}) => (
   <HEADER>
   	<div>
 	  	<div className="x-table __vm x-fh x-fw">
@@ -212,7 +235,7 @@ const Header = ({intl, lang, currency, currencies}) => (
 	  				<div className="__displayer">
 	  					<LANGS>
 	  						{
-	  							__Support_Languages__.map(language => <li key={language} onClick={ () => { Cookie.set('lang', language, {expires: 365}); window.location.reload(false) }}>
+	  							__Support_Languages__.map(language => <li key={language} onClick={ () => { changeLang(language) }}>
 	  								{getLangLabel(language)}
 	  							</li>)
 	  						}

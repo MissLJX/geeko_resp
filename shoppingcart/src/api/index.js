@@ -5,6 +5,8 @@ export const get = () => axios.get(`${VPATH}/shopping-cart/show?_=${new Date().g
 export const selectAll = (select) => axios.get(`${VPATH}/shopping-cart/select-all?_=${new Date().getTime()}`, {select})
 export const select = (params) => axios.post(`${VPATH}/shopping-cart/select?_=${new Date().getTime()}`, params)
 export const editProduct = (oldId, newId, quantity) => axios.get(`${VPATH}/shopping-cart/${oldId}/${newId}/${quantity}/change-product`)
+export const selectPayMethod = (payMethod) => axios.get(`${VPATH}/shopping-cart/anon/use-pay-method`, {payMethod})
+export const useMercadoCoupon = (couponCode) => axios.get(`${VPATH}/shopping-cart/use-mercadopago-coupon`, {couponCode})
 
 export const addAddress = (address) => axios.post('/customer/add/address2', address)
 export const editAddress = (address) => axios.post('/customer/update-address', address)
@@ -13,6 +15,7 @@ export const getDictionary = (type) => axios.get('/dictionary/anon/get', {typeCo
 export const getCountries = () => getDictionary('country')
 export const getStates = (country) => getDictionary(`state-${country}`)
 export const getCurrencies = () => getDictionary('currency')
+export const updateCurrency = (currency) => axios.post(`/context/anon/update-currency`, {currency})
 
 export const changeShippingMethod = (method) => axios.get(`${VPATH}/shopping-cart/anon/${method}/update-shipping-method`)
 
@@ -20,6 +23,7 @@ export const product = (id) => axios.get(`${VPATH}/product/anon/${id}/show`)
 export const product2 = (id) => axios.get(`${VPATH}/product/anon/${id}/show2`)
 
 export const me = () => axios.get(`${VPATH}/customer/get`)
+export const changeCommunicationEmail = (customerId, email) => axios.post(`${VPATH}/customer/anon/change-email`, {customerId, email})
 
 export const mercadocards = () => axios.get(`${VPATH}/mercadopago/get-cards?_=${new Date().getTime()}`)
 export const mercadopay = (params) => axios.post(`${VPATH}/mercadopago/pay`, params)

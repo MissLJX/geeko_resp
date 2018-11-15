@@ -93,5 +93,8 @@ export default{
   thanks_for_shopping: 'Thank you for shopping',
   check_order: 'Check Order',
   order_no: 'Order No.',
-  set_password: 'Set Password'
+  set_password: 'Set Password',
+  placeholder_street_address: 'Street name and street number, company name.',
+  placeholder_unit: 'Apartment, Suite, Building, and floor number.',
+  selected: 'Selected'
 }

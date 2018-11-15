@@ -7,8 +7,11 @@ import Ask from '../ask.jsx'
 import {Form, Input, Button} from './control.jsx'
 import {required, email, cpf} from '../validator.jsx'
 import {StyledControl} from './styled-control.jsx'
+import InputBtn from './input-btn.jsx'
 
 const __qoute_reg__ = /\([^\}]+\)/
+
+const __Coupon_Code_Tip_Message__ = '就不告诉你，就不告诉你，就不告诉你~~~~~~~~~~~~~~~~~~~~~~~~'
 
 const METHODBD = styled.div`
   background-color: #e5e5e5;
@@ -111,16 +114,16 @@ const Apac = class extends React.Component {
   }
 }
 
-const CashMethods = styled.ul`
-  padding: 10px 0 0 10px;
+const CashMethods = styled.div`
+  padding: 10px 10px 0 10px;
   background-color: #e5e5e5;
   position: relative;
-  &::after{
+  & > ul::after{
     content: '';
     clear: both;
     display: block;
   }
-  & > li{
+  & > ul > li{
     float: left;
     margin-bottom: 10px;
     margin-right: 10px;
@@ -138,6 +141,23 @@ const CashMethods = styled.ul`
     position: absolute;
   }
 
+`
+
+const Plugin = styled.div`
+  padding: 10px;
+  background-color: #e5e5e5;
+  position: relative;
+  &::before{
+    content: '';
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    transform: rotate(-45deg);
+    background-color: #e5e5e5;
+    top: -7px;
+    left: 12px;
+    position: absolute;
+  }
 `
 
 const CashMethod = styled.span`
@@ -174,15 +194,28 @@ const MoneyTransform = class extends React.Component {
     super(props)
   }
   render () {
-    const {atmMethods} = this.props
+    const {atmMethods, cart, couponCode, setCouponHandle} = this.props
     return <CashMethods>
+      <ul>
+        {
+          atmMethods && atmMethods.map(method => <li key={method.id}>
+            <CashMethod className={this.props.atmMethod === method.id ? 'selected' : ''} onClick={(evt) => { this.props.atmClickHandle(method) }}>
+              <img src={method.secure_thumbnail}/>
+            </CashMethod>
+          </li>)
+        }
+      </ul>
+
       {
-        atmMethods && atmMethods.map(method => <li key={method.id}>
-          <CashMethod className={this.props.atmMethod === method.id ? 'selected' : ''} onClick={(evt) => { this.props.atmClickHandle(method) }}>
-            <img src={method.secure_thumbnail}/>
-          </CashMethod>
-        </li>)
+        cart.showMercadopagoCouponField && <div style={{paddingBottom: 10}}>
+          <div>MercadoPago Cupón <Ask onClick={this.props.mercadoCouponClickHandle.bind(this)}/></div>
+          <div style={{marginTop: 5}}>
+            <InputBtn initValue={couponCode} buttonText={'Utilizar Ahora'} buttonHandle={ setCouponHandle }/>
+          </div>
+
+        </div>
       }
+
     </CashMethods>
   }
 }
@@ -194,13 +227,15 @@ const Cash = class extends React.Component {
   render () {
     const {ticketMethods} = this.props
     return <CashMethods>
-      {
-        ticketMethods && ticketMethods.map(method => <li key={method.id}>
-          <CashMethod className={this.props.ticketMethod === method.id ? 'selected' : ''} onClick={(evt) => { this.props.ticketClickHandle(method) }}>
-            <img src={method.secure_thumbnail}/>
-          </CashMethod>
-        </li>)
-      }
+      <ul>
+        {
+          ticketMethods && ticketMethods.map(method => <li key={method.id}>
+            <CashMethod className={this.props.ticketMethod === method.id ? 'selected' : ''} onClick={(evt) => { this.props.ticketClickHandle(method) }}>
+              <img src={method.secure_thumbnail}/>
+            </CashMethod>
+          </li>)
+        }
+      </ul>
     </CashMethods>
   }
 }
@@ -213,7 +248,7 @@ const BD = styled.div`
 
 const HD = styled.div`
 	height: 50px;
-
+  cursor: pointer;
 	img{
 		height: 22px;
 		display: inline-block;
@@ -228,6 +263,9 @@ const DISCOUNTTIP = styled.span`
   font-size: 12px;
   position: relative;
   margin-left: 12px;
+  vertical-align: middle;
+  display: inline-block;
+  max-width: 170px;
   &::before{
     content:'';
     border-left: 1px solid #f3a6c0;
@@ -235,10 +273,12 @@ const DISCOUNTTIP = styled.span`
     background-color:#fff9fc;
     transform: rotate(-45deg);
     position:absolute;
-    left: -5px;
-    top: 6px;
+    left: -6px;
+    top:  calc(50% - 5px);
     width: 8px;
     height: 8px;
+    max-width:200px;
+    display: block;
   }
 `
 
@@ -259,12 +299,12 @@ const Method = class extends React.Component {
     }
 
     const {paypalDiscountMessage} = cart
-    return <StyledMethod onClick={() => { selectPayHandle(payMethod) }}>
-      <HD>
+    return <StyledMethod >
+      <HD onClick={() => { selectPayHandle(payMethod) }}>
         <div className="x-table x-fw x-fh __fixed __vm">
           <div className="x-cell">
             <img style={{verticalAlign: 'middle'}} src={payMethod.icon}/>
-            <Grey className="x-small" style={{verticalAlign: 'middle'}}><span dangerouslySetInnerHTML={{__html: name}}/></Grey>
+            <span className="x-small" style={{verticalAlign: 'middle'}}><span dangerouslySetInnerHTML={{__html: name}}/></span>
 
             {paypalDiscountMessage && payMethod.id === '1' && <DISCOUNTTIP dangerouslySetInnerHTML={{__html: paypalDiscountMessage}}/>}
           </div>
@@ -295,16 +335,31 @@ const MethodUL = styled.ul`
   }
 `
 
-const getMethodBody = (id, {apac, apacBB, cpf, email, handleInputChange, boleto, cpfClickHandle, boletoForm, atmClickHandle, atmMethods, atmMethod, ticketClickHandle, ticketMethods, ticketMethod}) => {
-  switch (id) {
+const Mercado = (props) => {
+  const { cart, setCouponHandle, couponCode } = props
+  return <Plugin>
+    <div>MP Coupon  <Ask onClick={props.mercadoCouponClickHandle.bind(this)}/></div>
+    <div style={{marginTop: 5}}>
+      <InputBtn initValue={couponCode} buttonText={'Utilizar Ahora'} buttonHandle={ setCouponHandle }/>
+    </div>
+
+  </Plugin>
+}
+
+const getMethodBody = (props) => {
+  const { method, cart } = props
+  switch (method.id) {
     case '16':
-      return <Boleto boleto={boleto} boletoForm={boletoForm} cpf={cpf} email={email} cpfClickHandle={cpfClickHandle} handleInputChange={handleInputChange}/>
+      return <Boleto {...props}/>
     case '20':
-      return <MoneyTransform atmMethod={atmMethod} atmMethods={atmMethods} atmClickHandle={atmClickHandle}/>
+      return <MoneyTransform {...props}/>
     // case '21':
     //   return <Cash ticketMethod={ticketMethod} ticketMethods={ticketMethods} ticketClickHandle={ticketClickHandle}/>
     case '23':
-      return <Apac apac={apac} apacBB={apacBB} cpf={cpf} cpfClickHandle={cpfClickHandle} handleInputChange={handleInputChange}/>
+      return <Apac {...props}/>
+    case '19':
+    case '21':
+      return cart.showMercadopagoCouponField && <Mercado {...props}/>
     default:
       return null
   }
@@ -321,7 +376,7 @@ const PayMethodList = class extends React.Component {
         methods && methods.map(payMethod => (
           <li key={payMethod.id}>
             <Method cart={cart} selected={payMethod.id === selectedPayId} selectPayHandle={selectPayHandle} payMethod={payMethod}>
-              {getMethodBody(payMethod.id, this.props)}
+              {getMethodBody({method: payMethod, ...this.props})}
             </Method>
           </li>
         ))

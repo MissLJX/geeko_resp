@@ -7,7 +7,10 @@ import Refreshing from '../components/msite/refreshing.jsx'
 import Ask from '../components/ask.jsx'
 import FixedMessage from '../components/msite/fixed-message.jsx'
 import {Boxs, Box, BoxClickHead, BoxBody, LineBox, BoxHead} from '../components/msite/layout.jsx'
-import GroupOverseasItems from '../components/msite/group-overseas-items.jsx'
+// import GroupOverseasItems from '../components/msite/group-overseas-items.jsx'
+
+import PromotionGroup from '../components/msite/promotion-group.jsx'
+
 import GroupLocalItems from '../components/msite/group-local-items.jsx'
 import GroupInvalidItems from '../components/msite/group-ivalid-items.jsx'
 import Address from '../components/msite/address.jsx'
@@ -23,14 +26,14 @@ import Mask from '../components/mask.jsx'
 import _ from 'lodash'
 import PayMethodList from '../components/msite/paymethod-list.jsx'
 import {BigButton} from '../components/msite/buttons.jsx'
-import { useMercadocard, mercadopay, usePoint, useInsurance, creditpay, paypalpay, usecreditcard, movetooverseas, getMessage, placepaypal, givingCoupon, atmPay, ticketPay, getSafeCharge, getApacPay, apacPay } from '../api'
+import { useMercadocard, mercadopay, usePoint, useInsurance, creditpay, paypalpay, usecreditcard, movetooverseas, getMessage, placepaypal, givingCoupon, atmPay, ticketPay, getSafeCharge, getApacPay, apacPay, useMercadoCoupon } from '../api'
 import {__route_root__, storage} from '../utils/utils.js'
 import {submit} from '../utils/common-pay.js'
 import {CountDownBlock} from '../components/msite/countdowns.jsx'
 import {injectIntl,FormattedMessage} from 'react-intl'
 import {Confirm} from '../components/msite/modals.jsx'
 import Icon from '../components/icon.jsx'
-
+import SUCCESSTIP from '../components/pc/successtip.jsx'
 
 import Loadable from 'react-loadable'
 
@@ -166,7 +169,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(editItem(oldId, newId, quantity))
     },
     SELECTPAY: (paymethod) => {
-      dispatch(selectPay(paymethod))
+      return dispatch(selectPay(paymethod))
     },
     SETCPF: (cpf) => {
       dispatch({
@@ -255,8 +258,20 @@ const ShoppingCart = class extends React.Component {
       refreshing: false,
       showPayMsgOcean: false,
       ticketMethods: [],
-      atmMethods: []
+      atmMethods: [],
+      successTip: null
     }
+  }
+
+  showSuccessTip(tip){
+    this.setState({
+      successTip: tip
+    })
+    setTimeout(() => {
+      this.setState({
+        successTip: null
+      })
+    }, 2000)
   }
 
   componentDidMount () {
@@ -751,9 +766,13 @@ const ShoppingCart = class extends React.Component {
   }
 
   selectPayHandle (paymethod) {
-    this.props.SELECTPAY(paymethod)
-    storage.add('payMethod', paymethod.id, 365 * 24 * 60 * 60)
-    storage.add('payType', paymethod.type, 365 * 24 * 60 * 60)
+    this.props.SELECTPAY(paymethod).then((cart) => {
+      if(cart && cart.changeCurrencyMsg){
+        alert(cart.changeCurrencyMsg)
+      }
+    })
+    // storage.add('payMethod', paymethod.id, 365 * 24 * 60 * 60)
+    // storage.add('payType', paymethod.type, 365 * 24 * 60 * 60)
   }
 
   atmClickHandle (method) {
@@ -848,6 +867,13 @@ const ShoppingCart = class extends React.Component {
     this.setState({
       showAsk: true,
       askMessage: 'CPF (Cadastro de Pessoa Física), utilizado para tributação, é necessário para todos os produtos enviados ao Brasil, independentemente de encomendas expressas ou contêineres logísticos.Quando preenchemos o conhecimento de embarque e fatura, por favor, não esqueça de preencher o número de contribuinte do destinatário.Na maioria dos casos, sua forma é o número digital como abaixo, XXX.XXX.XXX-XX'
+    })
+  }
+
+  mercadoCouponClickHandle(){
+    this.setState({
+      showAsk: true,
+      askMessage: 'Utiliza el código MERCADOPAGO para obtener un 10% de descuento adicional.'
     })
   }
 
@@ -1024,47 +1050,172 @@ const ShoppingCart = class extends React.Component {
     }
   }
 
-  render () {
-    const {cart, loading, empty, editing, isCreditShow, mercadocards, creditcards, noCard, intl, noCreditCard} = this.props
-    const invalidItems = cart ? this.getInvalidItems(cart) : []
+  useMercadoCoupon(couponCode){
+    this.setState({
+      refreshing: true
+    })
+    useMercadoCoupon(couponCode).then( ({result}) => {
+      this.setState({
+        refreshing: false
+      })
+      this.props.REFRESHCART(result)
+      this.showSuccessTip('Used Successed')
 
-    const {sendCouponMessage} = cart || {sendCouponMessage: null}
-    let couponcountdown = this.getCountdown(cart)
+    } ).catch(({result}) => {
+      this.setState({
+        refreshing: false
+      })
+      alert(result)
+    })
+  }
 
-    let cancheckout = false
-    let hasLocalItems = false
-    let totalCount = 0
-    if (cart) {
-      let cancheckout1 = cart.shoppingCartProductsByOverseas && cart.shoppingCartProductsByOverseas.find(item => item.selected)
-      let cancheckout2 = false
-      if (cart.domesticDeliveryCases) {
-        _.each(cart.domesticDeliveryCases, demestic => {
-          _.each(demestic.shoppingCartProducts, item => {
-            if (item.selected) {
-              cancheckout2 = true
-              totalCount+=item.quantity
-            }
-            if (!this.isOutStock(item)) {
-              hasLocalItems = true
-            }
-          })
-        })
-      }
+  hasSelectedItem(items){
+    return items && !!items.find(item => item.selected)
+  }
 
-      cancheckout = cancheckout1 || cancheckout2
+  formatOverseasDelivery(overseasDelivery){
+    const deliveryItems = overseasDelivery.deliveryItems
+    let hasSelectedItem = false
+
+    if(deliveryItems && deliveryItems.length){
+      deliveryItems.forEach(deliveryItem => {
+        let items = this.getValidItems(deliveryItem.shoppingCartProducts)
+        deliveryItem.shoppingCartProducts = items || []
+
+        if(!hasSelectedItem) hasSelectedItem = this.hasSelectedItem(items)
+
+      })
     }
 
-    const shoppingCartProductsByOverseas = cart ? this.getValidItems(cart.shoppingCartProductsByOverseas) : []
+    return {
+      overseasDelivery,
+      hasSelectedItem
+    }
+  }
 
-    if(shoppingCartProductsByOverseas && shoppingCartProductsByOverseas.length){
-      _.each(shoppingCartProductsByOverseas, item => {
-        if (item.selected){
-          totalCount+=item.quantity
+  formatDomesticDeliveryCases(domesticDeliveryCases){
+    let hasSelectedItem = false
+    if(domesticDeliveryCases && domesticDeliveryCases.length){
+      domesticDeliveryCases.forEach( domestic => {
+        let items = this.getValidItems(domestic.shoppingCartProducts)
+        domestic.shoppingCartProducts = items || []
+        if(!hasSelectedItem) hasSelectedItem = this.hasSelectedItem(items)
+      } )
+    }
+    return {
+      domesticDeliveryCases,
+      hasSelectedItem
+    }
+  }
+
+
+  formatData(cart){
+    const invalidItems = this.getInvalidItems(cart)
+    let data1 = this.formatOverseasDelivery(cart.overseasDelivery)
+    let data2 = this.formatDomesticDeliveryCases(cart.domesticDeliveryCases)
+
+    return {
+      invalidItems,
+      overseasDelivery: data1.overseasDelivery,
+      domesticDeliveryCases: data2.domesticDeliveryCases,
+      hasSelectedItem: data1.hasSelectedItem || data2.hasSelectedItem
+    }
+  }
+
+  countCart(overseasDelivery, domesticDeliveryCases){
+    let count = 0
+
+    const deliveryItems = overseasDelivery.deliveryItems
+
+    if(deliveryItems && deliveryItems.length){
+      deliveryItems.forEach(deliveryItem => {
+        let items = deliveryItem.shoppingCartProducts
+        if(items && items.length){
+          items.forEach( item => {
+            if(item.selected) count += item.quantity
+          } )
         }
       })
     }
 
-    const couponAmount = coupon => coupon.amount.indexOf('%') >= 0 ? `${coupon.amount} OFF` : `$${coupon.amount}`
+
+    if(domesticDeliveryCases && domesticDeliveryCases.length){
+      domesticDeliveryCases.forEach( domestic => {
+        let items = domestic.shoppingCartProducts
+        if(items && items.length){
+          items.forEach( item => {
+            if(item.selected) count += item.quantity
+          } )
+        }
+      })
+    }
+
+    return count
+
+  }
+
+
+  render () {
+    const {cart, loading, empty, editing, isCreditShow, mercadocards, creditcards, noCard, intl, noCreditCard} = this.props
+    
+
+
+    let formatedData, invalidItems,cancheckout,hasLocalItems, sendCouponMessage, couponcountdown, totalCount=0, hasOverseas
+
+    if(cart){
+      formatedData = this.formatData(cart)
+      invalidItems = formatedData.invalidItems
+      sendCouponMessage = cart.sendCouponMessage
+      couponcountdown = this.getCountdown(cart)
+      cancheckout = formatedData.hasSelectedItem
+      hasLocalItems = formatedData.domesticDeliveryCases && !!formatedData.domesticDeliveryCases.find( domestic => domestic.shoppingCartProducts && domestic.shoppingCartProducts.length )
+      totalCount = this.countCart(formatedData.overseasDelivery, formatedData.domesticDeliveryCases)
+
+      let validateOverseasItems = this.getValidItems(cart.shoppingCartProductsByOverseas) 
+      hasOverseas = validateOverseasItems && validateOverseasItems.length > 0
+    }
+
+
+    // const formatedData = cart ? this.formatData(cart) : null
+
+    // const invalidItems = formatedData.invalidItems
+
+    // const {sendCouponMessage} = cart || {sendCouponMessage: null}
+    // let couponcountdown = this.getCountdown(cart)
+
+    // let cancheckout = formatedData.hasSelectedItem
+    // let hasLocalItems = false
+    // let totalCount = 0
+    // if (cart) {
+    //   let cancheckout1 = cart.shoppingCartProductsByOverseas && cart.shoppingCartProductsByOverseas.find(item => item.selected)
+    //   let cancheckout2 = false
+    //   if (cart.domesticDeliveryCases) {
+    //     _.each(cart.domesticDeliveryCases, demestic => {
+    //       _.each(demestic.shoppingCartProducts, item => {
+    //         if (item.selected) {
+    //           cancheckout2 = true
+    //           totalCount+=item.quantity
+    //         }
+    //         if (!this.isOutStock(item)) {
+    //           hasLocalItems = true
+    //         }
+    //       })
+    //     })
+    //   }
+
+    //   cancheckout = cancheckout1 || cancheckout2
+    // }
+
+    // const shoppingCartProductsByOverseas = cart ? this.getValidItems(cart.shoppingCartProductsByOverseas) : []
+
+    // if(shoppingCartProductsByOverseas && shoppingCartProductsByOverseas.length){
+    //   _.each(shoppingCartProductsByOverseas, item => {
+    //     if (item.selected){
+    //       totalCount+=item.quantity
+    //     }
+    //   })
+    // }
+
 
     return loading ? <Loading/> : (empty ? <Empty/> : (
       cart && (
@@ -1133,7 +1284,7 @@ const ShoppingCart = class extends React.Component {
             }
 
             {
-              hasLocalItems && cart.domesticDeliveryCases && cart.domesticDeliveryCases.length > 0 && cart.domesticDeliveryCases.map(domestic => (
+              hasLocalItems && formatedData.domesticDeliveryCases.map(domestic => (
                 <Box key={domestic.countryCode}>
                   <GroupLocalItems
                     icon={domestic.icon}
@@ -1146,14 +1297,15 @@ const ShoppingCart = class extends React.Component {
                     overseasHandle={this.overseasHandle.bind(this)}
                     serverTime={cart.serverTime}
                     domestic={domestic}
-                    items={this.getValidItems(domestic.shoppingCartProducts)}/>
+                    items={domestic.shoppingCartProducts}/>
                 </Box>
               ))
             }
-            {
+            {/*{
               shoppingCartProductsByOverseas && shoppingCartProductsByOverseas.length > 0 && (
                 <Box>
                   <GroupOverseasItems
+                    group= {cart.}
                     quantityChange={ this.quantityChange.bind(this)}
                     itemEdit={this.itemEdit}
                     itemDelete={this.itemDelete}
@@ -1165,6 +1317,21 @@ const ShoppingCart = class extends React.Component {
                     shippingMsg={cart.messages ? cart.messages.shippingMsg : null}/>
                 </Box>
               )
+            }*/}
+
+            {
+              hasOverseas && formatedData.overseasDelivery && <Box>
+                  <PromotionGroup
+                    group={formatedData.overseasDelivery}
+                    quantityChange={ this.quantityChange.bind(this)}
+                    itemEdit={this.itemEdit}
+                    itemDelete={this.itemDelete}
+                    groupClick={this.groupClick}
+                    itemSelect={this.itemSelect}
+                    shippingMethod={cart.shippingMethod}
+                    serverTime={cart.serverTime}
+                    shippingMsg={cart.messages ? cart.messages.shippingMsg : null}/>
+                </Box>
             }
 
             {
@@ -1178,10 +1345,10 @@ const ShoppingCart = class extends React.Component {
 
             <Box>
               <BoxClickHead className="x-small" title={intl.formatMessage({id: 'coupon'})}>
-                <Link style={{textDecoration: 'none', color: '#666'}} to={`${window.ctx || ''}${__route_root__}/coupons`}>
+                <Link style={{textDecoration: 'none', color: '#222'}} to={`${window.ctx || ''}${__route_root__}/coupons`}>
 
                   {cart.coupon ? (
-                    <span><strong>{couponAmount(cart.coupon)}</strong> {cart.coupon.name}</span>
+                    <span><strong>{cart.coupon.couponName}</strong> {cart.coupon.name}</span>
                   ) : (
                     <span>Available <Red>{cart.canUseCouponCount}</Red></span>
                   )}
@@ -1198,7 +1365,9 @@ const ShoppingCart = class extends React.Component {
                 {
                   cart.shippingInsurancePrice2 && (
                     <TurnTool ignoreButton={cart.isShippingInsuranceMust} open={this.openInsurance.bind(this)} turnAcitve={cart.insurance}>
-                      <span style={{fontSize: 15}}>Add Shipping Insurance(<strong><Money money={cart.shippingInsurancePrice2}/></strong>)</span>
+                      <span style={{fontSize: 15}}>
+                        <FormattedMessage id="add_shipping_insurance" values={{price: <Red><Money money={cart.shippingInsurancePrice2}/></Red>}}/>
+                      </span>
                       <Ask style={{marginLeft: 4}} onClick={this.insuranceClickHandle.bind(this)}/>
                     </TurnTool>
                   )
@@ -1208,7 +1377,7 @@ const ShoppingCart = class extends React.Component {
                   cart.expectedPoints > 0 && (
                     <TurnTool open={this.openPoints.bind(this)} turnAcitve={cart.openPointUse}>
 
-                      <FormattedMessage style={{fontSize: 15}} id="credit_msg" values={{credits: cart.expectedPoints, discount: <strong><Money money={cart.expectedPointDiscount}/></strong>}}/>
+                      <FormattedMessage style={{fontSize: 15}} id="credit_msg" values={{credits: cart.expectedPoints, discount: <Red><Money money={cart.expectedPointDiscount}/></Red>}}/>
                       <Ask style={{marginLeft: 4}} onClick={this.creditClickHandle.bind(this)}/>
                     </TurnTool>
                   )
@@ -1240,6 +1409,11 @@ const ShoppingCart = class extends React.Component {
                       apac={c => this.apac = c}
                       apacBB={c => this.apacBB = c}
                       cart={this.props.cart}
+
+
+                      setCouponHandle={ this.useMercadoCoupon.bind(this) }
+                      couponCode={this.props.couponCode}
+                      mercadoCouponClickHandle={this.mercadoCouponClickHandle.bind(this)}
                       />
                   </div>
                 </Box>
@@ -1459,6 +1633,12 @@ const ShoppingCart = class extends React.Component {
               yesLabel="Continue" noLabel="No, Thanks">
               <span dangerouslySetInnerHTML={{__html: cart.cancelOceanpaymentPayMsg}}/>
             </Confirm>
+          }
+
+          {
+            this.state.successTip && <SUCCESSTIP>
+              { this.state.successTip }
+            </SUCCESSTIP>
           }
 
         </div>)

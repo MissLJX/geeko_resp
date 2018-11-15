@@ -128,7 +128,7 @@ const Coupon = class extends React.Component {
         </CouponCode>
       </div>
 
-      {coupons && cart && <Coupons couponSelect={this.couponSelect.bind(this)} selectedId={cart.coupon ? cart.coupon.id : null} coupons={this.props.coupons}/>}
+      {coupons && cart && <Coupons couponSelect={this.couponSelect.bind(this)} selectedId2={cart.coupon2 ? cart.coupon2.id : null} selectedId={cart.coupon ? cart.coupon.id : null} coupons={this.props.coupons}/>}
     </FullFixed>
   }
 }

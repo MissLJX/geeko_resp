@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import {refreshCart, fetchAddresses, updateAddress} from '../store/actions.js'
+import {refreshCart, fetchAddresses, updateAddress, changeLang} from '../store/actions.js'
 import { connect } from 'react-redux'
 import {addAddress, editAddress, paypalAddress} from '../api'
 import { FormElement, MutiElement} from '../components/pc/styled-control.jsx'
@@ -13,7 +13,7 @@ import Cookie from 'js-cookie'
 export const __address_token__ = window.token
 
 const ADDRESSBODY = styled.div`
-	padding: 56px 80px;
+	padding: 56px;
   background-color: #fff;
   width: 696px;
 `
@@ -42,6 +42,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     UPDATINGADDRESS: (updating) => {
       dispatch(updateAddress(updating))
+    },
+    CHANGELANG: (lang) => {
+      dispatch(changeLang(lang))
     }
   }
 }
@@ -60,7 +63,7 @@ const Address = class extends React.Component {
   editAddress (address) {
     this.props.UPDATINGADDRESS(true)
     if (__address_token__) {
-      paypalAddress({...address, id: this.props.cart.shippingDetail.id, token: __address_token__}).then(() => {
+      paypalAddress({...address, defaultAddress: true, id: this.props.cart.shippingDetail.id, token: __address_token__}).then(() => {
         this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
         this.props.UPDATINGADDRESS(false)
         this.props.REFRESH()
@@ -72,16 +75,20 @@ const Address = class extends React.Component {
       const sAddress = this.getAddress()
       const addressOpreator = sAddress && this.props.match.params.id !== 'add' ? editAddress : addAddress
 
-      addressOpreator({...address, id: sAddress ? sAddress.id : null}).then(() => {
+      addressOpreator({...address, defaultAddress: true, id: sAddress ? sAddress.id : null}).then(() => {
+        this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
         if (address.country === 'BR') {
           Cookie.set('currency', 'BRL', {expires: 365})
+          this.props.CHANGELANG('pt')
         } else if (address.country === 'MX') {
           Cookie.set('currency', 'MXN', {expires: 365})
+          this.props.CHANGELANG('es')
+        } else {
+          this.props.REFRESH()
         }
 
-        this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
         this.props.UPDATINGADDRESS(false)
-        this.props.REFRESH()
+
         this.props.GETADDRESSES()
       }).catch(({result}) => {
         this.props.UPDATINGADDRESS(false)

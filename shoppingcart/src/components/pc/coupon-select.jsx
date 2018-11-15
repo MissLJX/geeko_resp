@@ -19,6 +19,10 @@ const StyledSelect = styled.div`
 		line-height: 40px;
 		padding-left: 10px;
 		position: relative;
+		overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding-right: 34px;
 	}
 
 	& > .__select{
@@ -40,7 +44,7 @@ const CouponSelect = ({intl, coupon, canUseCouponCount, selectCoupon, unSelectCo
   <div className="__title">
     { coupon ? <React.Fragment>
     		<span>
-    			<strong>{`${getAmount(coupon.amount)}`}</strong> <span>{ coupon.name }</span>
+    			<strong>{`${coupon.couponName}`}</strong> <span>{ coupon.name }</span>
     		</span>
     		<Icon onClick={unSelectCoupon} style={{position: 'absolute', right: 10, cursor: 'pointer'}}>&#xe69a;</Icon>
     	</React.Fragment> : <FormattedMessage id="can_use_coupon" values={{canUseCouponCount}}/>

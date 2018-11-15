@@ -27,10 +27,10 @@ const FORMELEMENT = styled.div`
 		.__errortext{
 			font-size: 12px;
 			margin-top: 5px;
-			color: #e5004f;
+			color: #E64545;
 		}
 		input, select{
-			border: solid 1px #eb5788;
+			border: solid 1px #E64545;
 		}
 	}
 

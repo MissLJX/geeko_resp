@@ -9,7 +9,7 @@ import {__route_root__} from '../../utils/utils.js'
 import {injectIntl} from 'react-intl'
 
 const OverseasHead = styled.div`
-  height: 50px;
+  height: 60px;
   padding: 0 10px;
   & > div{
     height: 100%;

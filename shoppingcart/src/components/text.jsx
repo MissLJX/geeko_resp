@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 export const Grey = styled.span`
-	color: #666;
+	color: #999;
 `
 
 export const Red = styled.span`

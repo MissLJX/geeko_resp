@@ -1,0 +1,233 @@
+/*
+html5doctor.com Reset Stylesheet
+v1.4.1
+2010-03-01
+Author: Richard Clark - http://richclarkdesign.com
+*/
+html, body, div, span, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+abbr, address, cite, code,
+del, dfn, em, img, ins, kbd, q, samp,
+small, strong, sub, sup, var,
+b, i,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  vertical-align: baseline;
+  background: transparent; }
+
+article, aside, canvas, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section, summary {
+  display: block; }
+
+nav ul {
+  list-style: none; }
+
+ul, ol {
+  list-style-type: none; }
+
+blockquote, q {
+  quotes: none; }
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none; }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0; }
+
+input, select, textarea {
+  border-radius: 0;
+  outline: none;
+  box-shadow: none;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; }
+
+*, *::after, *::before {
+  box-sizing: border-box; }
+
+input:-webkit-autofill {
+  background-color: transparent; }
+
+ul, li {
+  list-style-type: none; }
+
+@font-face {
+  font-family: 'iconfont';
+  /* project id 384296 */
+  src: url("//at.alicdn.com/t/font_384296_86m5xqv4qi4.eot");
+  src: url("//at.alicdn.com/t/font_384296_86m5xqv4qi4.eot?#iefix") format("embedded-opentype"), url("//at.alicdn.com/t/font_384296_86m5xqv4qi4.woff") format("woff"), url("//at.alicdn.com/t/font_384296_86m5xqv4qi4.ttf") format("truetype"), url("//at.alicdn.com/t/font_384296_86m5xqv4qi4.svg#iconfont") format("svg"); }
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; }
+
+body {
+  font-size: 14px;
+  color: #222;
+  background-color: #f6f6f6;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+
+.x-fw {
+  width: 100%; }
+
+.x-fh {
+  height: 100%; }
+
+.x-table {
+  display: table; }
+
+.x-table.__fixed {
+  table-layout: fixed; }
+
+.x-row {
+  display: table-row; }
+
+.x-cell {
+  display: table-cell; }
+
+.x-cell.__right {
+  text-align: right; }
+
+.x-cell.__center {
+  text-align: center; }
+
+.x-table.__vm .x-cell {
+  vertical-align: middle; }
+
+.x-table.__vt .x-cell {
+  vertical-align: top; }
+
+.x-flex {
+  display: flex; }
+
+.x-flex.__column {
+  flex-direction: column; }
+
+.x-flex.__around {
+  justify-content: space-around; }
+
+.x-flex.__between {
+  justify-content: space-between; }
+
+.x-flex.__nowrap {
+  flex-wrap: nowrap; }
+
+.__submitbtn[disabled] {
+  background-color: #999 !important;
+  color: #fff;
+  cursor: default; }
+
+.x-select {
+  border: none;
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  background: url(https://dgzfssf1la12s.cloudfront.net/site/pc/icon137.png) no-repeat scroll calc(100% - 10px) center transparent;
+  padding-right: 14px;
+  padding-left: 5px;
+  box-shadow: none;
+  color: #666;
+  cursor: pointer;
+  height: 100%;
+  width: 100%; }
+
+.__component_horiz {
+  position: fixed; }
+
+.__component_horiz-enter {
+  bottom: -200px; }
+
+.__component_horiz-enter.__component_horiz-enter-active {
+  bottom: 0;
+  transition: bottom 500ms ease-in; }
+
+.__component_horiz-leave {
+  bottom: 0; }
+
+.__component_horiz-leave.__component_horiz-leave-active {
+  bottom: -200;
+  transition: opacity 300ms ease-in; }
+
+.x-red {
+  color: #e5004f; }
+
+.x-uppercase {
+  text-transform: uppercase; }
+
+.example-enter {
+  opacity: 0.01; }
+
+.example-enter.example-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in; }
+
+.example-leave {
+  opacity: 1; }
+
+.example-leave.example-leave-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in; }
+
+.paypal-loading-wrap {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 200px;
+  height: 200px;
+  margin-left: -50px;
+  margin-top: -50px;
+  z-index: 20; }
+
+.paypal-loading {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border-left: 5px solid #cbcbca;
+  border-right: 5px solid #cbcbca;
+  border-bottom: 5px solid #cbcbca;
+  border-top: 5px solid #2380be;
+  animation: rotation .7s infinite linear;
+  -webkit-animation: rotation .7s infinite linear; }
+
+.paypal-back {
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  top: 25px;
+  left: 25px;
+  background-image: url(https://dgzfssf1la12s.cloudfront.net/site/pc/icon322.png); }
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg); }
+  to {
+    transform: rotate(360deg); } }
+
+@-webkit-keyframes rotation {
+  from {
+    transform: rotate(0deg); }
+  to {
+    transform: rotate(360deg); } }
+
+.x-default-input::-webkit-outer-spin-button, .x-default-input::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  -moz-appearance: textfield; }
+
+@media screen and (max-width: 321px) {
+  .x-small {
+    font-size: 13px; } }
+
+
+/*# sourceMappingURL=orderconfirm.css.map*/

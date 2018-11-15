@@ -7,10 +7,12 @@ import {required, email, cpf} from '../validator.jsx'
 import {MutiElement, FormElement} from './styled-control.jsx'
 import Ask from './ask.jsx'
 import {unitprice} from '../../utils/utils.js'
+import InputBtn from './input-btn.jsx'
 
 const __qoute_reg__ = /\([^\}]+\)/
 
 const __Cpf_Tip_Message__ = 'CPF (Cadastro de Pessoa Física), utilizado para tributação, é necessário para todos os produtos enviados ao Brasil, independentemente de encomendas expressas ou contêineres logísticos.Quando preenchemos o conhecimento de embarque e fatura, por favor, não esqueça de preencher o número de contribuinte do destinatário.Na maioria dos casos, sua forma é o número digital como abaixo, XXX.XXX.XXX-XX'
+const __Coupon_Code_Tip_Message__ = 'Utiliza el código MERCADOPAGO para obtener un 10% de descuento adicional.'
 
 const METHOD = styled.div`
 	cursor: pointer;
@@ -140,16 +142,29 @@ const CashMethod = styled.span`
 `
 
 const MoneyTransform = (props) => {
-  const {atmMethods, atmMethod} = props
-  return <CashMethods>
+  const {atmMethods, atmMethod, setCouponHandle, couponCode, cart} = props
+  return <div>
+    <CashMethods>
+      {
+        atmMethods && atmMethods.map(method => <li key={method.id}>
+          <CashMethod className={atmMethod === method.id ? 'selected' : ''} onClick={(evt) => { props.atmClickHandle(method) }}>
+            <img src={method.secure_thumbnail}/>
+          </CashMethod>
+        </li>)
+      }
+    </CashMethods>
+
     {
-      atmMethods && atmMethods.map(method => <li key={method.id}>
-        <CashMethod className={atmMethod === method.id ? 'selected' : ''} onClick={(evt) => { props.atmClickHandle(method) }}>
-          <img src={method.secure_thumbnail}/>
-        </CashMethod>
-      </li>)
+      cart.showMercadopagoCouponField && <div style={{width: 320, marginTop: 10}}>
+        <div>MercadoPago Cupón  <Ask style={{marginLeft: 5}} message={__Coupon_Code_Tip_Message__}/></div>
+        <div style={{marginTop: 5}}>
+          <InputBtn initValue={couponCode} buttonText={'Utilizar Ahora'} buttonHandle={ setCouponHandle }/>
+        </div>
+
+      </div>
     }
-  </CashMethods>
+
+  </div>
 }
 
 const BrazilOcean = (props) => <Form ref={props.brazilOceanForm}>
@@ -186,8 +201,19 @@ const BrazilOcean = (props) => <Form ref={props.brazilOceanForm}>
   <Button style={{display: 'none'}} ref={props.brazilOcean}></Button>
 </Form>
 
+const Mercado = (props) => {
+  const { cart, setCouponHandle, couponCode } = props
+  return <div style={{width: 320}}>
+    <div>MP Coupon  <Ask style={{marginLeft: 5}} message={__Coupon_Code_Tip_Message__}/></div>
+    <div style={{marginTop: 5}}>
+      <InputBtn initValue={couponCode} buttonText={'Utilizar Ahora'} buttonHandle={ setCouponHandle }/>
+    </div>
+
+  </div>
+}
+
 const getPlugin = (props) => {
-  const { method } = props
+  const { method, cart } = props
   switch (method.id) {
     case '16':
       return <Boleto {...props}/>
@@ -197,6 +223,9 @@ const getPlugin = (props) => {
       return <MoneyTransform {...props}/>
     case '17':
       return <BrazilOcean {...props}/>
+    case '19':
+    case '21':
+      return cart.showMercadopagoCouponField && <Mercado {...props}/>
     default:
 		  return null
   }

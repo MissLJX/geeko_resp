@@ -30,16 +30,16 @@ const StyledCoupon = styled.div`
 
 	.__background{
 		width: 104px;
-		background: radial-gradient(transparent 0, transparent 5px, #e64545 5px);
+		background: radial-gradient(transparent 0, transparent 5px, #F46E6D 5px);
 		background-size: 15px 15px;
-		background-position: 9px 3px;
+		background-position: 7px 3px;
 		height: 92px;
 		position: relative;
 
 		&::before {
 	    content: '';
 	    position: absolute;
-	    background-color: #e64545;
+	    background-color: #F46E6D;
 	    top: 0;
 	    bottom: 0;
 	    left: 7px;
@@ -78,13 +78,15 @@ const StyledCoupon = styled.div`
 
 	.__usenow{
 		&:acitve{
-			background-color: #e5004f;
+			background-color: #F46E6D;
 		}
 	}
 
 	&.__disabled{
 		.__background{
 			background: radial-gradient(transparent 0, transparent 5px, #cacaca 5px);
+			background-size: 15px 15px;
+    	background-position: 7px 3px;
 			&::before{
 				background-color: #cacaca;
 			}
@@ -106,6 +108,17 @@ const StyledCoupon = styled.div`
 			}
 		}
 	}
+
+	&.__selected{
+		border: solid 1px #F46E6D;
+		.__background{
+			background: radial-gradient(transparent 0, transparent 5px, #F46E6D 5px);
+			&::before {
+		    background-color: #F46E6D;
+			}
+		}
+		
+	}
 `
 
 const getAmount = amount => amount ? (amount.indexOf('%') > 0 ? `${amount} off` : `$${amount}`) : ''
@@ -119,13 +132,16 @@ const TimeRange = (props) => {
   </span>
 }
 
-const _coupon = ({intl, couponVO, couponSelect}) => {
+const _coupon = ({intl, couponVO, couponSelect, selectedCoupon, selectedCoupon2}) => {
   const {coupon, isAvailable} = couponVO
+  const selected = (selectedCoupon && coupon.id === selectedCoupon.id) || (selectedCoupon2 && coupon.id === selectedCoupon2.id)
 
-  return <StyledCoupon className={`x-table __vm __fixed ${!isAvailable ? '__disabled' : ''}`}>
+  const selectedText = selected ? intl.formatMessage({id: 'selected'}) : intl.formatMessage({id: 'use_now'})
+
+  return <StyledCoupon className={`x-table __vm __fixed ${!isAvailable ? '__disabled' : ''} ${selected ? '__selected' : ''}`}>
   	<div className="x-cell __content">
   		<div className="__title">
-  			{getAmount(coupon.amount)}
+  			{coupon.couponName2}
   		</div>
 
   		<div className="__description">
@@ -138,7 +154,7 @@ const _coupon = ({intl, couponVO, couponSelect}) => {
 
   	</div>
   	<div className={`x-cell __background`}>
-  		<UseNow onClick={ () => { isAvailable && couponSelect(coupon.id) } } className="__usenow">{intl.formatMessage({id: 'use_now'})}</UseNow>
+  		<UseNow onClick={ () => { isAvailable && couponSelect(coupon.id) } } className="__usenow">{ selectedText }</UseNow>
   	</div>
   </StyledCoupon>
 }
@@ -151,16 +167,14 @@ const StyledCoupons = styled.ul`
 		&:first-child{
 			margin-top: 0;
 		}
-		&.selected{
-			& > div{
-				border: solid 1px #e5004f;
-			}
-		}
+		
 	}
 `
 
-const _coupons = ({couponVOs, selectedCoupon, couponSelect}) => <StyledCoupons>
-  {couponVOs && couponVOs.map((vo, index) => <li key={ index } className={ selectedCoupon && vo.coupon.id === selectedCoupon.id ? 'selected' : '' }><Coupon couponSelect={couponSelect} couponVO={vo}/></li>)}
-</StyledCoupons>
+const _coupons = ({couponVOs, selectedCoupon, couponSelect, selectedCoupon2}) => {
+  return <StyledCoupons>
+	  {couponVOs && couponVOs.map((vo, index) => <li key={ index }><Coupon selectedCoupon={selectedCoupon} selectedCoupon2={selectedCoupon2} couponSelect={couponSelect} couponVO={vo}/></li>)}
+  </StyledCoupons>
+}
 
 export default _coupons

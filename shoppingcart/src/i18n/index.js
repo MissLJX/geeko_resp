@@ -37,3 +37,9 @@ const __lang = (window.lang || 'en').substring(0, 2)
 export const lang = __supports.indexOf(__lang) >= 0 ? __lang : 'en'
 
 export const messages = _messages[lang] || _messages['en']
+
+export const getMessages = (lang) => _messages[lang] || _messages['en']
+export const getLang = (lang) => {
+  let _lang = (lang || 'en').substring(0, 2)
+  return __supports.indexOf(_lang) >= 0 ? _lang : 'en'
+}

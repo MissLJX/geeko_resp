@@ -83,12 +83,12 @@ const ImageContainer = styled.div`
 const LIMITTIP = styled.span`
   height: 24px;
   line-height: 22px;
-  background-color: #fff9fc;
-  border: solid 1px #f4a6c0;
+  background-color: #fef8f8;
+  border: solid 1px #e64545;
   position: relative;
   padding-left: 29px;
   display: inline-block;
-  color: #e5004f;
+  color: #e64545;
   padding-right: 20px;
   margin-bottom: 15px;
 
@@ -142,7 +142,7 @@ const Item = class extends React.Component {
 
   render () {
     const props = this.props
-    const {intl} = props
+    const {intl, serverTime} = props
     return (
       <React.Fragment>
 
@@ -151,7 +151,7 @@ const Item = class extends React.Component {
             <LIMITTIP>
               <span className="__label">{intl.formatMessage({id: 'limited_time'})}</span>
               <Icon style={{fontSize: 14, marginLeft: 20, verticalAlign: 'middle'}}>&#xe655;</Icon>
-              <CountDown className="__time" offset={item.endLimitedTimePurchaseTime - serverTime}/>
+              <CountDown className="__time" offset={props.item.endLimitedTimePurchaseTime - serverTime}/>
             </LIMITTIP>
           </div>
         }
@@ -166,28 +166,35 @@ const Item = class extends React.Component {
             </ImageContainer>
 
           </div>
-          <div className="x-cell" >
-
+          <div className="x-cell" style={{position: 'relative'}}>
+            {
+              props.item.isUsedCombinatorialPromotion && props.combinatorialPromotionTitle && <div style={{
+                position: 'absolute',
+                top: 36,
+                left: 10,
+                fontSize: 12,
+                textTransform: 'uppercase'
+              }}>
+                <Red>{ props.combinatorialPromotionTitle }</Red>
+              </div>
+            }
             <div style={{height: '140px'}} className="x-flex __column __between">
 
-              <div style={{height: '50px', paddingTop: 10}}>
+              <div style={{height: '30px', paddingTop: 10}}>
                 <Red style={{fontSize: '17px'}}><Money money={props.item.realPrice} /></Red>
                 {
                   props.item.itemPrice.amount - props.item.realPrice.amount > 0 && (
                     <span>
-                      <del style={{marginLeft: '10px'}}><Grey style={{fontSize: '13px'}}><Money money={props.item.itemPrice} /> </Grey></del>
+                      <Grey><del style={{marginLeft: '10px', fontSize: 13}}><Money money={props.item.itemPrice} /></del></Grey>
                       {/* <span>{' '}</span>
                       <span style={{fontSize: '13px', marginLeft: '10px'}} dangerouslySetInnerHTML={{__html: props.item.discountDescription}} /> */}
                     </span>
                   )
                 }
               </div>
-
               <div>
                 <Ellipsis style={{maxWidth: 198}}><Grey>{props.item.productName}</Grey></Ellipsis>
-              </div>
-              <div>
-                <span>{strconcat(props.item.color, props.item.size)}</span>
+                <div style={{marginTop: 4}}><span>{strconcat(props.item.color, props.item.size)}</span></div>
               </div>
 
               <div>
@@ -195,8 +202,8 @@ const Item = class extends React.Component {
                 {!props.ivalidItem ? <Quantity quantity={props.item.quantity} onChange={(quantity, isRemove) => { props.quantityChange(props.item.variantId, quantity, isRemove) }}/> : <Grey>{intl.formatMessage({id: 'out_of_stock'})}</Grey>}
 
                 <div style={{float: 'right'}}>
-                  {!props.ivalidItem && <Icon style={{fontSize: 18, cursor: 'pointer'}} onClick={(evt) => { this.itemEdit(props.item) }}>&#xe62b;</Icon>}
-                  <Icon style={{marginLeft: '15px', fontSize: 18, cursor: 'pointer'}} onClick={(evt) => { this.itemDelete(props.item) }}>&#xe629;</Icon>
+                  {!props.ivalidItem && <Icon style={{fontSize: 18, cursor: 'pointer', color: '#999'}} onClick={(evt) => { this.itemEdit(props.item) }}>&#xe61f;</Icon>}
+                  <Icon style={{marginLeft: '15px', fontSize: 20, cursor: 'pointer', color: '#999'}} onClick={(evt) => { this.itemDelete(props.item) }}>&#xe629;</Icon>
                 </div>
               </div>
             </div>

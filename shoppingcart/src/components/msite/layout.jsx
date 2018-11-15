@@ -4,7 +4,7 @@ import Icon from '../icon.jsx'
 
 export const Boxs = styled.div`
 	& > div{
-		margin-top: 10px;
+		margin-top: 8px;
 		&:first-child{
 			margin-top: 0;
 		}

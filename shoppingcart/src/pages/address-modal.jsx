@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-import {refreshCart} from '../store/actions.js'
+import {refreshCart, changeLang} from '../store/actions.js'
 import FullFixed from '../components/msite/full-fixed.jsx'
 import AddressForm from '../components/msite/address-form.jsx'
 import {addAddress, editAddress, paypalAddress} from '../api'
@@ -21,6 +21,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     REFRESH: () => {
       dispatch(refreshCart())
+    },
+    CHANGELANG: (lang) => {
+      dispatch(changeLang(lang))
     }
   }
 }
@@ -51,11 +54,13 @@ const Modal = class extends React.Component {
   		addressOpreator({...address, id: this.props.address ? this.props.address.id : null}).then(() => {
         if (address.country === 'BR') {
           Cookie.set('currency', 'BRL', {expires: 365})
+          this.props.CHANGELANG('pt')
         } else if (address.country === 'MX') {
           Cookie.set('currency', 'MXN', {expires: 365})
+          this.props.CHANGELANG('es')
+        } else {
+          this.props.REFRESH()
         }
-
-  			this.props.REFRESH()
   			this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
   		}).catch(({result}) => {
   			alert(result)
@@ -73,8 +78,8 @@ const Modal = class extends React.Component {
     	width: 80%;
     	margin-left: auto;
     	margin-right: auto;
-      padding-bottom: 50px;
-
+      padding-bottom: 100px;
+      -webkit-overflow-scrolling : touch;
     `
 
     return <FullFixed onClose={this.close} title={intl.formatMessage({id: 'address'})}>

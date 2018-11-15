@@ -19,14 +19,14 @@ const COUPONWINDOW = styled.div`
 	box-shadow: -1px 0px 4px 0px rgba(0, 0, 0, 0.18);
 	height: calc(100% - 50px);
 	& > .__hd{
-		height: 90px;
+		height: 50px;
 		background-color: #efefef;
 		position: relative;
-		line-height: 90px;
+		line-height: 50px;
 		padding-left: 15px;
 		
 		.__title{
-			font-size: 24px;
+			font-size: 18px;
 			color: #222;
 		}
 		.__close{
@@ -40,7 +40,7 @@ const COUPONWINDOW = styled.div`
 	}
 
 	& > .__bd{
-		height: calc(100% - 90px);
+		height: calc(100% - 50px);
 		overflow: auto;
 		background-color: #fff;
 		padding-left: 15px;
@@ -57,7 +57,7 @@ const CouponCode = styled.div`
     display: block;
   }
   & > .__input{
-    width: 258px;
+    width: 227px;
     height: 40px;
     border: solid 1px #cacaca;
     float: left;
@@ -73,7 +73,7 @@ const CouponCode = styled.div`
   }
 
   & > .__use{
-    width: 74px;
+    width: 105px;
     height: 40px;
     background-color: #222;
     float: left;
@@ -174,7 +174,7 @@ const CouponWindow = class extends React.Component {
 
         </CouponCode>
         <div style={{marginTop: 20}}>
-          {coupons && cart && <Coupons couponSelect={this.couponSelect.bind(this)} couponVOs={coupons} selectedCoupon={cart.coupon}/>}
+          {coupons && cart && <Coupons couponSelect={this.couponSelect.bind(this)} couponVOs={coupons} selectedCoupon={cart.coupon} selectedCoupon2={cart.coupon2} />}
         </div>
 
       </div>

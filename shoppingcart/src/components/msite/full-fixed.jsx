@@ -38,13 +38,40 @@ const BD = styled.div`
 	-webkit-overflow-scrolling: touch;
 `
 
-export default (props) => <Fixed>
-  <HD>
-    <Title>{props.title}</Title>
-    <Close onClick={props.onClose}><Icon style={{fontSize: 25, cursor: 'pointer'}}>&#xe69a;</Icon></Close>
-  </HD>
+// export default (props) => <Fixed>
+//   <HD>
+//     <Title>{props.title}</Title>
+//     <Close onClick={props.onClose}><Icon style={{fontSize: 25, cursor: 'pointer'}}>&#xe69a;</Icon></Close>
+//   </HD>
 
-  <BD>
-  	{props.children}
-  </BD>
-</Fixed>
+//   <BD>
+//   	{props.children}
+//   </BD>
+// </Fixed>
+
+export default class extends React.Component {
+  constructor (props) {
+    super(props)
+  }
+
+  componentWillMount () {
+    document.body.style.overflow = 'hidden'
+  }
+  componentWillUnmount () {
+    document.body.style.overflow = 'auto'
+  }
+
+  render () {
+    const props = this.props
+    return <Fixed>
+		  <HD>
+		    <Title>{props.title}</Title>
+		    <Close onClick={props.onClose}><Icon style={{fontSize: 25, cursor: 'pointer'}}>&#xe69a;</Icon></Close>
+		  </HD>
+
+		  <BD>
+		  	{props.children}
+		  </BD>
+    </Fixed>
+  }
+}
