@@ -1051,6 +1051,7 @@ const ShoppingCart = class extends React.Component {
   }
 
   useMercadoCoupon(couponCode){
+    if(!couponCode) return
     this.setState({
       refreshing: true
     })

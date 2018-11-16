@@ -6,6 +6,7 @@ import { GiftIcon } from '../promotion-icons.jsx'
 import { FormattedMessage } from 'react-intl'
 import Icon from '../icon.jsx'
 import OverSeasHouseHead from './overseas-house-head.jsx'
+import { getLink } from '../../utils/utils.js'
 
 const Tip = styled.div`
   background-color: #fef8f8;
@@ -43,7 +44,7 @@ const PromotionHead = ({promotion, selected, selectHandle}) => <PROMOTIONHEAD>
       <GiftIcon label={promotion.title}/>
     </div>
     <div className="x-cell __right">
-      <a className="__href" href={``}>
+      <a className="__href" href={getLink(promotion.deepLink)}>
         <FormattedMessage id="add"/>
         <Icon style={{fontSize: 16, marginLeft: 5}}>&#xe694;</Icon>
       </a>

@@ -170,10 +170,15 @@ const Item = class extends React.Component {
             {
               props.item.isUsedCombinatorialPromotion && props.combinatorialPromotionTitle && <div style={{
                 position: 'absolute',
-                top: 36,
+                top: 34,
                 left: 10,
                 fontSize: 12,
-                textTransform: 'uppercase'
+                textTransform: 'uppercase',
+                border: '1px solid #e64545',
+                height: 20,
+                paddingLeft: 10,
+                paddingRight: 10,
+                lineHeight: '18px'
               }}>
                 <Red>{ props.combinatorialPromotionTitle }</Red>
               </div>

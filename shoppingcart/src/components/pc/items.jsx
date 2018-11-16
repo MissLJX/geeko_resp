@@ -30,7 +30,8 @@ export default class extends React.Component {
 			            itemDelete={this.props.itemDelete}
 			            item={item}
 			            invalidItem={this.props.invalidItem}
-			            itemSelect={this.props.itemSelect} />
+			            itemSelect={this.props.itemSelect}
+            combinatorialPromotionTitle={this.props.combinatorialPromotionTitle} />
   			</li>
   			))
   		}

@@ -35,6 +35,9 @@ import Loading from '../components/msite/loading.jsx'
 import Refreshing from '../components/msite/refreshing.jsx'
 
 import GroupOverseasItems from '../components/pc/group-overseas-items.jsx'
+
+import PromotionGroup from '../components/pc/promotion-group.jsx'
+
 import GroupLocalItems from '../components/pc/group-local-items.jsx'
 import GroupIvalidItems from '../components/pc/group-invalid-items.jsx'
 import Empty from '../components/pc/empty.jsx'
@@ -1102,6 +1105,9 @@ const ShoppingCart = class extends React.Component {
   }
 
   useMercadoCoupon(couponCode){
+
+    if(!couponCode) return
+
     this.setState({
       refreshing: true
     })
@@ -1120,47 +1126,122 @@ const ShoppingCart = class extends React.Component {
     })
   }
 
+
+  hasSelectedItem(items){
+    return items && !!items.find(item => item.selected)
+  }
+
+  formatOverseasDelivery(overseasDelivery){
+    const deliveryItems = overseasDelivery.deliveryItems
+    let hasSelectedItem = false
+
+    if(deliveryItems && deliveryItems.length){
+      deliveryItems.forEach(deliveryItem => {
+        let items = this.getValidItems(deliveryItem.shoppingCartProducts)
+        deliveryItem.shoppingCartProducts = items || []
+
+        if(!hasSelectedItem) hasSelectedItem = this.hasSelectedItem(items)
+
+      })
+    }
+
+    return {
+      overseasDelivery,
+      hasSelectedItem
+    }
+  }
+
+  formatDomesticDeliveryCases(domesticDeliveryCases){
+    let hasSelectedItem = false
+    if(domesticDeliveryCases && domesticDeliveryCases.length){
+      domesticDeliveryCases.forEach( domestic => {
+        let items = this.getValidItems(domestic.shoppingCartProducts)
+        domestic.shoppingCartProducts = items || []
+        if(!hasSelectedItem) hasSelectedItem = this.hasSelectedItem(items)
+      } )
+    }
+    return {
+      domesticDeliveryCases,
+      hasSelectedItem
+    }
+  }
+
+
+  formatData(cart){
+    const invalidItems = this.getInvalidItems(cart)
+    let data1 = this.formatOverseasDelivery(cart.overseasDelivery)
+    let data2 = this.formatDomesticDeliveryCases(cart.domesticDeliveryCases)
+
+    return {
+      invalidItems,
+      overseasDelivery: data1.overseasDelivery,
+      domesticDeliveryCases: data2.domesticDeliveryCases,
+      hasSelectedItem: data1.hasSelectedItem || data2.hasSelectedItem,
+      hasSelectedItem1: data1.hasSelectedItem,
+      hasSelectedItem2: data2.hasSelectedItem
+    }
+  }
+
+  countCart(overseasDelivery, domesticDeliveryCases){
+    let count = 0
+
+    const deliveryItems = overseasDelivery.deliveryItems
+
+    if(deliveryItems && deliveryItems.length){
+      deliveryItems.forEach(deliveryItem => {
+        let items = deliveryItem.shoppingCartProducts
+        if(items && items.length){
+          items.forEach( item => {
+            if(item.selected) count += item.quantity
+          } )
+        }
+      })
+    }
+
+
+    if(domesticDeliveryCases && domesticDeliveryCases.length){
+      domesticDeliveryCases.forEach( domestic => {
+        let items = domestic.shoppingCartProducts
+        if(items && items.length){
+          items.forEach( item => {
+            if(item.selected) count += item.quantity
+          } )
+        }
+      })
+    }
+
+    return count
+
+  }
+
   render () {
     const {cart, loading, empty, intl} = this.props
 
-    const invalidItems = cart ? this.getInvalidItems(cart) : []
-
-    let cancheckout = false
-    let hasLocalItems = false
-    let cancheckout1, cancheckout2, localCount = 0, overseasCount = 0 , totalCount = 0
-    if (cart) {
-      cancheckout1 = cart.shoppingCartProductsByOverseas && cart.shoppingCartProductsByOverseas.find(item => item.selected)
-      cancheckout2 = false
-      if (cart.domesticDeliveryCases) {
-        _.each(cart.domesticDeliveryCases, demestic => {
-          _.each(demestic.shoppingCartProducts, item => {
-            if (item.selected) {
-              cancheckout2 = true
-            }
-            if (!this.isOutStock(item)) {
-              hasLocalItems = true
-            }
-            localCount+=item.quantity
-          })
-        })
-      }
-
-      cancheckout = cancheckout1 || cancheckout2
 
 
-      if(cart.shoppingCartProductsByOverseas && cart.shoppingCartProductsByOverseas.length){
-        cart.shoppingCartProductsByOverseas.forEach( i => overseasCount+=i.quantity )
-      }
+
+
+    let formatedData, invalidItems,cancheckout,hasLocalItems, sendCouponMessage, couponcountdown, totalCount=0, hasOverseas
+    let hasOverseasHead, fullSelected, cancheckout1
+
+    if(cart){
+      formatedData = this.formatData(cart)
+      invalidItems = formatedData.invalidItems
+      sendCouponMessage = cart.sendCouponMessage
+      couponcountdown = this.getCountdown(cart)
+      cancheckout = formatedData.hasSelectedItem
+      cancheckout1 = formatedData.hasSelectedItem1
+      hasLocalItems = formatedData.domesticDeliveryCases && !!formatedData.domesticDeliveryCases.find( domestic => domestic.shoppingCartProducts && domestic.shoppingCartProducts.length )
+      totalCount = this.countCart(formatedData.overseasDelivery, formatedData.domesticDeliveryCases)
+
+      let validateOverseasItems = this.getValidItems(cart.shoppingCartProductsByOverseas) 
+      hasOverseas = validateOverseasItems && validateOverseasItems.length > 0
+      hasOverseasHead = hasOverseas && hasLocalItems
+      fullSelected = this.getFullSelected()
     }
 
-    totalCount = overseasCount + localCount
 
-    const shoppingCartProductsByOverseas = cart ? this.getValidItems(cart.shoppingCartProductsByOverseas) : []
-   
 
-    const fullSelected = cart && this.getFullSelected()
-
-    const hasOverseasHead = shoppingCartProductsByOverseas && shoppingCartProductsByOverseas.length && hasLocalItems
 
     const Address1 = cart && <Box title={intl.formatMessage({id: 'shipping_address'})}>
       <div style={{position: 'relative'}}>
@@ -1218,9 +1299,7 @@ const ShoppingCart = class extends React.Component {
     }
 
     const __addressbook = cart ? AddressBook() : null
-
-
-    let couponcountdown = this.getCountdown(cart)
+   
 
     const shippingLabel = !hasLocalItems ? intl.formatMessage({id: 'shipping_method'}) : 'Shipping Method For Overseas Warehouse' 
 
@@ -1317,10 +1396,24 @@ const ShoppingCart = class extends React.Component {
       		  		</FixedTop>
       	  		</div>
 
-              { 
+{/*              { 
                 shoppingCartProductsByOverseas && shoppingCartProductsByOverseas.length > 0 && <GroupOverseasItems style={{marginTop: 25, borderBottom: '1px dashed #e6e6e6'}}
                   hasHead={hasOverseasHead}
                   items={shoppingCartProductsByOverseas}
+                  serverTime={cart.serverTime}
+                  groupClick={this.groupClick.bind(this)}
+                  itemDelete={this.itemDelete.bind(this)}
+                  itemSelect={this.itemSelect.bind(this)}
+                  itemEdit={this.itemEdit.bind(this)}
+                  setQuantity={(itemId, quantity) => { this.props.EDITITEM(itemId, itemId, quantity) }}
+                  quantityChange={ this.quantityChange.bind(this)}/>
+              }*/}
+
+
+              { 
+                hasOverseas && formatedData.overseasDelivery && <PromotionGroup style={{marginTop: 25, borderBottom: '1px dashed #e6e6e6'}}
+                  hasHead={hasOverseasHead}
+                  group={formatedData.overseasDelivery}
                   serverTime={cart.serverTime}
                   groupClick={this.groupClick.bind(this)}
                   itemDelete={this.itemDelete.bind(this)}
@@ -1332,7 +1425,7 @@ const ShoppingCart = class extends React.Component {
       	  		
 
               {
-                hasLocalItems && cart.domesticDeliveryCases.map(domestic => <GroupLocalItems
+                hasLocalItems && formatedData.domesticDeliveryCases.map(domestic => <GroupLocalItems
                 	style={{marginTop: 25, borderBottom: '1px dashed #e6e6e6'}}
                   key={ domestic.countryCode }
                   domestic= {domestic}

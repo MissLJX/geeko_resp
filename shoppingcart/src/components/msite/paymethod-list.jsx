@@ -338,7 +338,7 @@ const MethodUL = styled.ul`
 const Mercado = (props) => {
   const { cart, setCouponHandle, couponCode } = props
   return <Plugin>
-    <div>MP Coupon  <Ask onClick={props.mercadoCouponClickHandle.bind(this)}/></div>
+    <div>MercadoPago Cupón  <Ask onClick={props.mercadoCouponClickHandle.bind(this)}/></div>
     <div style={{marginTop: 5}}>
       <InputBtn initValue={couponCode} buttonText={'Utilizar Ahora'} buttonHandle={ setCouponHandle }/>
     </div>

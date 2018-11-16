@@ -4,11 +4,31 @@ import Items from './items.jsx'
 import CheckBox from '../checkbox.jsx'
 import {Grey} from '../text.jsx'
 import Icon from '../icon.jsx'
+import {GiftIcon} from '../promotion-icons.jsx'
+import { FormattedMessage } from 'react-intl'
+import { getLink } from '../../utils/utils.js'
 
 const SelectLine = styled.div`
   border-bottom: 1px solid #e6e6e6;
   padding-bottom: 12px;
 `
+
+const PromotionHead = ({promotion, selected, selectHandle}) => <SelectLine style={{paddingTop: 25, borderTop: '1px dashed #e5e5e5'}}>
+  <div className="x-table __hd __vm x-fw">
+    <div className="x-cell" style={{width: 30}}>
+      <CheckBox onClick={ () => { selectHandle(!selected) } } className={selected ? 'selected' : ''}/>
+    </div>
+    <div className="x-cell">
+      <GiftIcon label={promotion.title}/>
+    </div>
+    <div className="x-cell __right">
+      <a className="__href" href={getLink(promotion.deepLink)} style={{textDecoration: 'none', color: '#222'}}>
+        <FormattedMessage id="add"/>
+        <Icon style={{fontSize: 16, marginLeft: 5}}>&#xe694;</Icon>
+      </a>
+    </div>
+  </div>
+</SelectLine>
 
 const Promotion = class extends React.Component {
   constructor (props) {
@@ -45,7 +65,7 @@ const Promotion = class extends React.Component {
     const {delivery} = this.props
 
     return <div>
-      <div>Bilibili</div>
+      { delivery.combinatorialPromotion && <PromotionHead selectHandle={ this.groupClick.bind(this) } selected={this.selected()} promotion={delivery.combinatorialPromotion}/> }
       <Items serverTime={this.props.serverTime}
         disabledFunc={this.disabledFunc}
         quantityChange={this.props.quantityChange}
@@ -107,6 +127,9 @@ export default class extends React.Component {
   }
 
   render () {
+    const {group} = this.props
+    const { deliveryItems, shippingPrice } = group
+
     const groupSelected = this.selected()
 
   	return <div style={this.props.style}>
@@ -133,6 +156,7 @@ export default class extends React.Component {
             itemDelete={this.props.itemDelete}
             itemSelect={(variantId, selected) => { this.props.itemSelect(variantId, selected) }}
             setQuantity={this.props.setQuantity}
+            groupClick={this.props.groupClick}
             delivery={delivery}/>
         </div>)
       }

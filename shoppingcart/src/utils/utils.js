@@ -55,3 +55,43 @@ export const gethigherprice = product => {
 }
 
 export const quantityMoney = (money, quantity) => ({...money, amount: (Number(money.amount) * quantity).toFixed(2)})
+
+export const __Collection_Url__ = siteType === 'old' ? '/i/collection/products?collectionId=' : '/page/collection/products?collectionId='
+export const __Category_Url__ = siteType === 'old' ? '/i/category/products?categoryId=' : '/page/category/products?id='
+export const __Flash_Url__ = siteType === 'old' ? '/i/flash/products' : '/page/flash-sale'
+export const __Preorder_Url__ = siteType === 'old' ? '/i/early-bird' : '/page/pre-bird'
+export const __New_In_Url__ = siteType === 'old' ? '/i/new-arrivals' : '/page/new-in'
+export const __Trending_Url__ = siteType === 'old' ? '/i/trending-now' : '/page/trending-now'
+
+export const getLink = (deepLink) => {
+  if (!deepLink) return '#'
+
+  let { type, params } = deepLink, __url
+  switch (type) {
+    case 1:
+      __url = __Collection_Url__ + params[0]
+      break
+    case 11:
+      __url = __Preorder_Url__
+      break
+    case 12:
+      __url = __Flash_Url__
+      break
+    case 13:
+      __url = __New_In_Url__
+      break
+    case 14:
+      __url = __Trending_Url__
+      break
+    case 15:
+      __url = __Category_Url__ + params[0]
+      break
+    case 16:
+      __url = params[0]
+      break
+    default:
+      __url = '#'
+  }
+
+  return __url
+}

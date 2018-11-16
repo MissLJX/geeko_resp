@@ -204,7 +204,7 @@ const BrazilOcean = (props) => <Form ref={props.brazilOceanForm}>
 const Mercado = (props) => {
   const { cart, setCouponHandle, couponCode } = props
   return <div style={{width: 320}}>
-    <div>MP Coupon  <Ask style={{marginLeft: 5}} message={__Coupon_Code_Tip_Message__}/></div>
+    <div>MercadoPago Cupón  <Ask style={{marginLeft: 5}} message={__Coupon_Code_Tip_Message__}/></div>
     <div style={{marginTop: 5}}>
       <InputBtn initValue={couponCode} buttonText={'Utilizar Ahora'} buttonHandle={ setCouponHandle }/>
     </div>
