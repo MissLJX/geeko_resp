@@ -381,7 +381,7 @@ const ShoppingCart = class extends React.Component {
             getSafeCharge().then(({result}) => {
               const {isFree, payURL, params, transactionId} = result
               if (isFree) {
-                window.location.href = `${window.ctx || ''}/v7/order/confirm/free?transationId=${transactionId}`
+                window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
               } else {
 
                 submit(result)
@@ -433,7 +433,7 @@ const ShoppingCart = class extends React.Component {
       })
       paypalpay('normal').then(data => data.result).then(({TOKEN, success, transactionId, ACK, L_LONGMESSAGE0}) => {
         if (success && transactionId && !TOKEN) {
-          window.location.href = `${window.ctx || ''}/v7/order/confirm/free?transationId=${transactionId}`
+          window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
           return
         }
         if (ACK === 'Failure') {
@@ -479,7 +479,7 @@ const ShoppingCart = class extends React.Component {
           if(siteType === 'new'){
             window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/credit-card?order_number=${transactionId}`
           }else{
-            window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
+            window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
           }
         } else {
           alert(details)
@@ -513,7 +513,7 @@ const ShoppingCart = class extends React.Component {
           if(siteType === 'new'){
             window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/credit-card?order_number=${transactionId}`
           }else{
-            window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
+            window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
           }
         } else {
           alert(details)
@@ -590,7 +590,7 @@ const ShoppingCart = class extends React.Component {
     getApacPay({payMethod, cpfNumber: cpf}).then(({result}) => {
       const {isFree, transactionId, success,details,solutions} = result
       if (isFree) {
-        window.location.href = `${window.ctx || ''}/v7/order/confirm/free?transationId=${transactionId}`
+        window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
       } else {
         submit(result)
         // console.log(result)
@@ -604,13 +604,13 @@ const ShoppingCart = class extends React.Component {
     apacPay({payMethod, cpfNumber: cpf}).then(({result}) => {
       const {isFree, transactionId, success,details,solutions} = result
       if (isFree) {
-        window.location.href = `${window.ctx || ''}/v7/order/confirm/free?transationId=${transactionId}`
+        window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
       } else {
         if( success ){
           if(siteType === 'new'){
             window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/credit-card?order_number=${transactionId}`
           }else{
-            window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
+            window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
           }
         }else{
           fail(details)
@@ -703,7 +703,7 @@ const ShoppingCart = class extends React.Component {
           if(siteType === 'new'){
             window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/credit-card?order_number=${transactionId}`
           }else{
-            window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
+            window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
           }
         } else {
           alert(details)
@@ -911,7 +911,7 @@ const ShoppingCart = class extends React.Component {
         if(siteType === 'new'){
           window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/credit-card?order_number=${transactionId}`
         }else{
-          window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
+          window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
         }
 
         // this.props.history.push({
@@ -952,7 +952,7 @@ const ShoppingCart = class extends React.Component {
       getSafeCharge().then(({result}) => {
         const {isFree, payURL, params, transactionId} = result
         if (isFree) {
-          window.location.href = `${window.ctx || ''}/v7/order/confirm/free?transationId=${transactionId}`
+          window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
         } else {
           // window.location.href = `${payURL}?${qs.stringify(params, true)}`
           submit(result)
@@ -970,7 +970,7 @@ const ShoppingCart = class extends React.Component {
       getApacPay({payMethod:this.props.payMethod, cpfNumber: this.props.cpf}).then(({result}) => {
         const {isFree, transactionId} = result
         if (isFree) {
-          window.location.href = `${window.ctx || ''}/v7/order/confirm/free?transationId=${transactionId}`
+          window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
         } else {
           submit(result)
         }

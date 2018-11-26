@@ -97,5 +97,6 @@ export default{
   set_password: 'définir le mot de passe',
   placeholder_street_address: 'Rue,Adresse,Nom de l\'entreprise,C/O',
   placeholder_unit: 'Appartement,Immeuble,Unité,Bâtiment,Étage,etc',
-  selected: 'Sélectionné'
+  selected: 'Sélectionné',
+  add: 'ajouter'
 }

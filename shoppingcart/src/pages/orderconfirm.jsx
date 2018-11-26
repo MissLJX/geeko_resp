@@ -17,6 +17,9 @@ import Loading from '../components/msite/loading.jsx'
 
 import Loadable from 'react-loadable'
 
+import Barcode from 'react-barcode'
+import Clipboard from 'react-clipboard.js'
+
 const OrderAddress = Loadable({
   loader: () => import(/* webpackChunkName: "component--order-address" */ './order-address.jsx'),
   loading: Loading
@@ -55,8 +58,8 @@ const defaultAnimations = {
 
 const DashedLine = styled.div`
 	background: linear-gradient(to right, #dd747d 35%,transparent 25%,transparent 50%,#626e94 50%,#626e94 85%,transparent 75%);
-    background-size: 59px 1px;
-    height: 4px;  
+    background-size: 40px 1px;
+    height: 2px;  
     transform:skew(20deg,0);
 `
 
@@ -83,7 +86,7 @@ const LI = styled.li`
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background-color: #e5004f;
+    background-color: #e64545;
     color: #fff;
     line-height: 16px;
     text-align: center;
@@ -101,6 +104,38 @@ const OL = styled.ol`
     &:first-child{
       margin-top:0;
     }
+  }
+`
+
+const BARCODECOPY = styled.div`
+  border:1px solid #e6e6e6;
+  border-radius: 2px;
+  height: 35px;
+  padding-left: 10px;
+  line-height: 35px;
+  & > span{
+    width: calc(100% - 95px);
+    overflow: hidden;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  & > button{
+    float: right;
+    height: 33px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    cursor: pointer;
+    width: 95px;
+  }
+`
+
+const BARCODE = styled.div`
+  & > svg{
+    width:100% !important;
+    height: auto;
   }
 `
 
@@ -149,10 +184,19 @@ const OrderConfirm = class extends React.Component {
     
   }
 
+  copied () {
+    this.showSuccessTip('Copiado com sucesso')
+  }
+
+  showSuccessTip (tip) {
+    alert(tip)
+  }
+
   render () {
     const {transaction, me, m1186, m1147, m1073} = this.props
   	const {message, orderVos} = transaction || {}
   	const orderVo = orderVos ? orderVos[0] : null
+    const communicationEmail = me ? me.communicationEmail : null
 
     let __BB__,__Tips__
 
@@ -164,7 +208,7 @@ const OrderConfirm = class extends React.Component {
     const getTitle = () => {
       if (orderVo.order.payBarCode) { return <div>Seu pedido de compra foi realizado! Pague agora seu Boleto Bancário paraagilizar a confirmação do seu pedido.</div> }
       if (orderVo.order.mercadopagoPayURL) { return <div dangerouslySetInnerHTML={{__html: m1147.message}}/> }
-      return <div>{message} <Link style={{color: 'skyblue'}} to={`${this.props.match.url}/change-email`}>{me.communicationEmail}<Icon style={{marginLeft: 10, color: 'skyblue', cursor: 'pointer'}}>&#xe61f;</Icon></Link></div>
+      return <div><span dangerouslySetInnerHTML={{__html: message}}/> <Link style={{color: 'skyblue'}} to={`${this.props.match.url}/change-email`}>{communicationEmail}<Icon style={{marginLeft: 10, color: 'skyblue', cursor: 'pointer'}}>&#xe61f;</Icon></Link></div>
     }
 
   	return <div>{transaction && (
@@ -201,7 +245,7 @@ const OrderConfirm = class extends React.Component {
                   }
                 </div>
 
-                <div style={{marginTop: 10, marginLeft: 10, textAlign:'center'}}><Btn style={{backgroundColor: '#e5004f', padding: '6px 8px'}}>Generar Ticket</Btn></div>
+                <div onClick={() => { window.location.href = orderVo.order.mercadopagoPayURL}} style={{marginTop: 10, marginLeft: 10, textAlign:'center'}}><Btn style={{backgroundColor: '#e64545', padding: '10px 12px'}}>Generar Ticket</Btn></div>
               </div>
             </Box>
           }
@@ -214,7 +258,41 @@ const OrderConfirm = class extends React.Component {
                     __Tips__ && __Tips__.map( (tip, index) =>  <LI key={index} data-index={index+1} dangerouslySetInnerHTML={{__html: tip.message}}/> )
                   }
                 </OL>
-                <div style={{marginTop: 10, marginLeft: 10, textAlign:'center'}}><Btn style={{backgroundColor: '#e5004f', padding: '6px 8px'}}>Imprimir boleto</Btn></div>
+
+
+                <div style={{textAlign: 'center'}}>
+                  {
+                    orderVo.order.shippingDetail.phoneNumber && <Link style={{textDecoration:'none'}} to={`${this.props.match.url}/change-phone`}>
+                      <Blue style={{cursor:'pointer'}}>
+                        <span>{orderVo.order.shippingDetail.phoneNumber}</span>
+                        <Icon style={{marginLeft:5}}>&#xe62b;</Icon>
+                      </Blue>
+                    </Link>
+                  }
+                </div>
+
+
+                <div style={{marginTop: 10, marginLeft: 10, textAlign:'center'}}><Btn onClick={() => { window.location.href = orderVo.order.payBarCode}} style={{backgroundColor: '#e64545', padding: '10px 12px'}}>Imprimir boleto</Btn></div>
+              
+
+                {
+                  orderVo.order.barcodeNumber && <div style={{marginTop: 25}}>
+                    <BARCODE>
+                      <Barcode value={orderVo.order.barcodeNumber} width={2.21} displayValue={false}/>
+                    </BARCODE>
+                    <div style={{paddingLeft:10, paddingRight:10}}>
+                      <BARCODECOPY>
+                        <span>{orderVo.order.digitableLine}</span>
+
+                        <Clipboard onSuccess={this.copied.bind(this)} style={{backgroundColor: '#e64545', color: '#fff', border: 'none', outline: 'none', boxShadow: 'none'}} data-clipboard-text={orderVo.order.digitableLine}>
+                          Copiar código
+                        </Clipboard>
+                      </BARCODECOPY>
+                    </div>
+                    
+                  </div>
+                }
+
               </div>
             </Box>
           }

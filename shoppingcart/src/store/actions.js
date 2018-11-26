@@ -365,14 +365,17 @@ export const fetchTransactionPage = (transactionId) => {
   const __m1186__ = getMessage('M1186')
   const __mx_m1147__ = getMessage('M1147')
   const __normal_m1073 = getMessage('M1073')
+
+  const excuteArr = window.__is_login__ ? [__get_transaction, __m1186__, __mx_m1147__, __normal_m1073, __get_me] : [__get_transaction, __m1186__, __mx_m1147__, __normal_m1073]
+
   return dispatch => {
-    return Promise.all([__get_transaction, __get_me, __m1186__, __mx_m1147__, __normal_m1073]).then(values => {
+    return Promise.all(excuteArr).then(values => {
       const transactionPage = {
         transaction: values[0].result,
-        me: values[1].result,
-        m1186: values[2].result,
-        m1147: values[3].result,
-        m1073: values[4].result
+        m1186: values[1].result,
+        m1147: values[2].result,
+        m1073: values[3].result,
+        me: values[4] ? values[4].result : null
       }
       dispatch(getTransactionPage(transactionPage))
       return transactionPage

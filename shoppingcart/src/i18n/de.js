@@ -97,5 +97,6 @@ export default{
   set_password: 'Passwort festlegen',
   placeholder_street_address: 'Straße,Adresse,Name des Unternehmens,C/O',
   placeholder_unit: 'Wohnung,Villa,Unit,Gebäude,Stock,u.s.w.',
-  selected: 'Ausgewählt'
+  selected: 'Ausgewählt',
+  add: 'hinzufügen'
 }

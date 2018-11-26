@@ -255,25 +255,22 @@ const MercadoBinding = class extends React.Component {
               data-checkout="cardholderName"/>
           </FormElement>
 
-          {
-            this.state.payer_costs && this.state.payer_costs.length > 0 && <FormElement label={`${intl.formatMessage({id: 'installments'})}:`} className="__required">
-              <Select style= {{width: '100%', height: 40}}
-                className="x-select"
-                name="installments"
-                onChange={this.handleInputChange}
-                value={this.state.installments}>
-                {
-                  this.state.payer_costs.map(({installments, recommended_message}) => (
-                    <option key={installments} value={installments}>
-                      {recommended_message}
-                    </option>
-                  ))
-                }
+          <FormElement label={`${intl.formatMessage({id: 'installments'})}:`} className="__required">
+            <Select style= {{width: '100%', height: 40}}
+              className="x-select"
+              name="installments"
+              onChange={this.handleInputChange}
+              value={this.state.installments}>
+              {
+                this.state.payer_costs && this.state.payer_costs.length > 0 && this.state.payer_costs.map(({installments, recommended_message}) => (
+                  <option key={installments} value={installments}>
+                    {recommended_message}
+                  </option>
+                ))
+              }
 
-              </Select>
-            </FormElement>
-
-          }
+            </Select>
+          </FormElement>
 
         </ELEMENTS>
 

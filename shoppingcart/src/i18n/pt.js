@@ -97,5 +97,6 @@ export default{
   set_password: 'configurar senha',
   placeholder_street_address: 'Nome da rua e número da rua, nome da empresa.',
   placeholder_unit: 'Apartamento, Suíte, Edifício e número do andar',
-  selected: 'Selecionado'
+  selected: 'Selecionado',
+  add: 'adicionar'
 }

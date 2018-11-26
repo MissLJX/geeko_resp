@@ -97,5 +97,6 @@ export default{
   set_password: 'configurar la clave',
   placeholder_street_address: 'Calle, Dirección, Nombre de la Empresa, C/O',
   placeholder_unit: 'Apartamento, Suite, Unidad,Edificio, Piso, etc',
-  selected: 'Seleccionado'
+  selected: 'Seleccionado',
+  add: 'añadir'
 }

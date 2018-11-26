@@ -172,7 +172,7 @@ const MercadoBinding = class extends React.Component {
         if (siteType === 'new') {
           window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/credit-card?order_number=${transactionId}`
         } else {
-          window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
+          window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
         }
       } else {
         alert(details)
@@ -266,22 +266,19 @@ const MercadoBinding = class extends React.Component {
   						data-checkout="cardholderName"/>
   				</StyledControl>
 
-          {
-            this.state.payer_costs && this.state.payer_costs.length > 0 && <StyledControl>
-              <label>{intl.formatMessage({id: 'installments'})}*</label>
-              <Select className="x-select" name="installments" onChange={this.handleInputChange} value={this.state.installments}>
-                {
-                  this.state.payer_costs.map(({installments, recommended_message}) => (
-                    <option key={installments} value={installments}>
-                      {recommended_message}
-                    </option>
-                  ))
-                }
+          <StyledControl>
+            <label>{intl.formatMessage({id: 'installments'})}*</label>
+            <Select className="x-select" name="installments" onChange={this.handleInputChange} value={this.state.installments}>
+              {
+                this.state.payer_costs && this.state.payer_costs.length > 0 && this.state.payer_costs.map(({installments, recommended_message}) => (
+                  <option key={installments} value={installments}>
+                    {recommended_message}
+                  </option>
+                ))
+              }
 
-              </Select>
-            </StyledControl>
-
-          }
+            </Select>
+          </StyledControl>
 
   			</FormLayout>
 

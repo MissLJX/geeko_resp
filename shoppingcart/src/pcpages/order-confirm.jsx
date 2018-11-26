@@ -211,7 +211,7 @@ const OrderConfirm = class extends React.Component {
     if (!window.__is_login__ && this.props.transaction.orderVos[0].order.payMethod === '1') {
       this.props.history.push(`${this.props.match.url}/set-password`)
     } else {
-      window.location.href = `${window.ctx || ''}/me/m/order`
+      window.location.href = `${window.ctx || ''}/me/m/orders`
     }
   }
 
@@ -240,6 +240,7 @@ const OrderConfirm = class extends React.Component {
   	const {transaction, me, m1186, m1147, m1073} = this.props
   	const {message, orderVos} = transaction || {}
   	const orderVo = orderVos ? orderVos[0] : null
+  	const communicationEmail = me ? me.communicationEmail : null
 
   	let __BB__,__Tips__
 
@@ -251,7 +252,7 @@ const OrderConfirm = class extends React.Component {
     const getTitle = () => {
       if (orderVo.order.payBarCode) { return <div>Seu pedido de compra foi realizado! Pague agora seu Boleto Bancário paraagilizar a confirmação do seu pedido.</div> }
       if (orderVo.order.mercadopagoPayURL) { return <div dangerouslySetInnerHTML={{__html: m1147.message}}/> }
-      return <div>{message} <Link style={{color: 'skyblue'}} to={`${this.props.match.url}/change-email`}>{me.communicationEmail}<Icon style={{marginLeft: 10, color: 'skyblue', cursor: 'pointer'}}>&#xe61f;</Icon></Link></div>
+      return <div><span dangerouslySetInnerHTML={{__html: message}}/> <Link style={{color: 'skyblue'}} to={`${this.props.match.url}/change-email`}>{communicationEmail}<Icon style={{marginLeft: 10, color: 'skyblue', cursor: 'pointer'}}>&#xe61f;</Icon></Link></div>
     }
 
     return <PAGECONFIRM>
@@ -293,7 +294,7 @@ const OrderConfirm = class extends React.Component {
 	            </div>
 
 	            <div style={{textAlign: 'center', marginTop: 20}}>
-	            	 <Btn style={{backgroundColor: '#e64545', padding: '12px 26px'}}>Generar Ticket</Btn>
+	            	 <Btn onClick={() => { window.location.href = orderVo.order.mercadopagoPayURL}} style={{backgroundColor: '#e64545', padding: '12px 26px'}}>Generar Ticket</Btn>
 	            </div>
     				</div>
     			}
@@ -305,7 +306,7 @@ const OrderConfirm = class extends React.Component {
 		                <OL style={{padding: 10}}>
 
 		                	{
-		                		__Tips__ && __Tips__.map( (message, index) =>  <LI key={index} data-index={index+1} dangerouslySetInnerHTML={{__html: message}}/> )
+		                		__Tips__ && __Tips__.map( (tip, index) =>  <LI key={index} data-index={index+1} dangerouslySetInnerHTML={{__html: tip.message}}/> )
 		                	}
 
 		                </OL>
@@ -325,18 +326,24 @@ const OrderConfirm = class extends React.Component {
 
 
 	           <div style={{textAlign: 'center', marginTop: 20}}>
-	            	 <Btn style={{backgroundColor: '#e64545', padding: '12px 26px'}}>Imprimir boleto</Btn>
+	            	 <Btn onClick={() => { window.location.href = orderVo.order.payBarCode}} style={{backgroundColor: '#e64545', padding: '12px 26px'}}>Imprimir boleto</Btn>
 	            </div>
-	            <div style={{marginTop: 25}}>
-	            	<Barcode value={orderVo.order.digitableLine} width={2.21} displayValue={false}/>
-	            	<BARCODECOPY>
-		            	<span>{orderVo.order.digitableLine}</span>
 
-		            	<Clipboard onSuccess={this.copied.bind(this)} style={{backgroundColor: '#e64545', color: '#fff', border: 'none', outline: 'none', boxShadow: 'none'}} data-clipboard-text={orderVo.order.digitableLine}>
-					        	Copiar código
-					      	</Clipboard>
-	            	</BARCODECOPY>
-	            </div>
+	            {
+	            	orderVo.order.barcodeNumber && <div style={{marginTop: 25}}>
+		            	<Barcode value={orderVo.order.barcodeNumber} width={2.21} displayValue={false}/>
+		            	<BARCODECOPY>
+			            	<span>{orderVo.order.digitableLine}</span>
+
+			            	<Clipboard onSuccess={this.copied.bind(this)} style={{backgroundColor: '#e64545', color: '#fff', border: 'none', outline: 'none', boxShadow: 'none'}} data-clipboard-text={orderVo.order.digitableLine}>
+						        	Copiar código
+						      	</Clipboard>
+		            	</BARCODECOPY>
+		            </div>
+	            }
+
+
+	            
             </div>
           }
           <div style={{marginTop: 40}}>
