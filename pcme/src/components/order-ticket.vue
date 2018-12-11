@@ -25,22 +25,33 @@
                     <div class="buyer" v-if="item.sender === 'buyers'">
                         <div class="el-me-headerImage" :style="{'background-image': 'url('+headerImage+'),url('+baseHeaderUrl+')' }"></div>
                         <div class="cet" v-if="item.message!=='-'">
-                            <div class="sanjiao"></div>
+                            <div class="sanjiao-right"></div>
                             <div class="txtcontent">{{item.message}}</div>
                         </div>
                         <div class="cet" v-if="item.imageUrls">
-                            <div class="sanjiao"></div>
+                            <div class="sanjiao-right"></div>
                             <div class="imgarea">
                                 <img v-for="img in item.imageUrls" :src="imgUrl(img)">
                             </div>
                         </div>
                     </div>
                     <div class="buyer" v-if="item.sender === 'seller'">
-                        <div class="el-me-headerImage fl" :style="{'background-image': 'url('+sellerheaderImage+'' }"></div>
+                        <div class="el-me-headerImage fl" :style="{'background-image': 'url('+sellerheaderImage+'' }" style="margin-right: 10px"></div>
                         <div class="cet fl">
-                            <div class="sanjiao"></div>
-                            <div class="txtcontent">{{item.message}}</div>
+                            <div class="sanjiao-left"></div>
+                            <div class="txtcontent">
+                                <p>{{item.message}}</p>
+                                <div v-if="item.imageUrls">
+                                    <img v-for="img in item.imageUrls" :src="imgUrl(img)">
+                                </div>
+                            </div>
                         </div>
+                        <!--<div class="cet" v-if="item.imageUrls">
+                            <div class="sanjiao-left"></div>
+                            <div class="imgarea">
+                                <img v-for="img in item.imageUrls" :src="imgUrl(img)">
+                            </div>
+                        </div>-->
                     </div>
                 </div>
             </div>
@@ -52,6 +63,22 @@
                     <input @change="imghandle" name="imageFiles" multiple="" type="file" accept="image/jpg,image/jpeg,image/png,image/gif">
                 </form>
             </div>
+            <div class="rate-con">
+                <div v-if="canBeRated" class="rate-tbl">
+                    <i class="iconfont rate-cell">&#xe60d;</i>
+                    <span class="rate-cell rate-click" @click="() => {this.showRater = true}">{{$t("rateMyService")}}</span>
+                </div>
+                <div class="rate-star" v-if="showRater">
+                    <div class="rate-positive" >
+                        <div class="rate-tit">{{$t("pleaserateMyService")}}</div>
+                        <star-list id="stars" :score="rateData.rate" @star="starClickHandle"/>
+                        <textarea v-model="rateData.message" style="resize:none;padding: 10px;height: 84px;" maxlength="500" :placeholder="$t('ratecontent')"></textarea>
+                        <div class="rate-btn" @click="sendRateData">{{$t("confirm")}}</div>
+                        <div class="rate-absolute"></div>
+                    </div>
+
+                </div>
+            </div>
             <div class="sendbtn" @click="sendticket">{{$t('send')}}</div>
         </div>
     </div>
@@ -61,6 +88,7 @@
     import GeekoSelect from './geeko-select';
     import {mapGetters,mapActions } from 'vuex';
     import * as utils from '../utils/geekoutil';
+    import StarList from '../components/star-list.vue';
 
     export default {
         data (){
@@ -77,8 +105,18 @@
                     { text: this.$t('others'), value: '7' },
                 ],
                 msg:'',
-                addticket:''
+                addticket:'',
+                showRater:false,
+                rateData: {
+                    rate: 5,
+                    message: '',
+                    id: '',
+                    reviewMsg:[]
+                },
             }
+        },
+        components: {
+            'star-list': StarList,
         },
         computed: {
             ...mapGetters(['ticket','ticket_con','ticketid']),
@@ -92,6 +130,14 @@
             },
             sellerheaderImage(){
                 return 'https://dgzfssf1la12s.cloudfront.net/icon/support.jpg'
+            },
+            canBeRated(){
+                if(this.ticket_con && this.ticket_con.canBeRated){
+                    this.rateData.rate = this.ticket_con && this.ticket_con.ticketRateService ? this.ticket_con.ticketRateService.rate : 5;
+                    this.rateData.message = this.ticket_con && this.ticket_con.ticketRateService ? this.ticket_con.ticketRateService.message : ''
+                    this.rateData.id = this.ticket_con ? this.ticket_con.id: null
+                }
+                return this.ticket_con && this.ticket_con.canBeRated
             },
         },
         created() {
@@ -148,8 +194,21 @@
             },
             imgUrl(url){
                 return 'https://dgzfssf1la12s.cloudfront.net/ticket/'+url
+            },
+            starClickHandle(data){
+                this.rateData.rate = Number(data.star);
+            },
+            sendRateData(){
+                var formData = new FormData();
+                formData.append("rate", this.rateData.rate)
+                formData.append("message",this.rateData.message)
+                formData.append("id",this.rateData.id)
+                formData.append("reviewMsg",this.rateData.reviewMsg)
+                this.$store.dispatch('rate', formData).then(() => {
+                    this.ticket_con.ticketRateService = this.rateData
+                    this.showRater = false
+                })
             }
-
         },
     };
 </script>
@@ -245,11 +304,20 @@
                     color: #fff;
                     margin-right: 15px;
                     max-width: 300px;
-                    .sanjiao {
+                    .sanjiao-right {
                         position: absolute;
                         top: 15px;
                         transform: rotate(-45deg);
                         right: -6px;
+                        width: 12px;
+                        height: 12px;
+                        background-color: rgb(26, 149, 211);
+                    }
+                    .sanjiao-left {
+                        position: absolute;
+                        top: 15px;
+                        transform: rotate(-45deg);
+                        left: -6px;
                         width: 12px;
                         height: 12px;
                         background-color: rgb(26, 149, 211);
@@ -314,6 +382,86 @@
                     outline: none;
                 }
             }
+            .rate-con{
+                position: relative;
+                .rate-tbl{
+                    float: left;
+                    line-height: 40px;
+                    margin-left: 14px;
+                    display: table;
+                    color: #22aeec;
+                    .rate-cell{
+                        display: table-cell;
+                    }
+                    i{
+                        font-size: 32px;
+                    }
+                    .rate-click{
+                        position: relative;
+                        top: -5px;
+                        left: 5px;
+                        cursor: pointer;
+                        text-decoration: underline;
+                    }
+                }
+                .rate-star{
+                    position: absolute;
+                    width: 304px;
+                    height: 203px;
+                    border: 1px solid #999;
+                    bottom: 10px;
+                    background-color: #fff;
+                    z-index: 999;
+                    padding: 10px 15px;
+                    text-align: left;
+                    .rate-tit{
+                        font-size: 14px;
+                        color: #222;
+                    }
+                    .rate-positive{
+                        position: relative;
+                    }
+                    .rate-positive:after{
+                        display: block;
+                        clear: both;
+                        content: '';
+                    }
+                    .rate-absolute{
+                        width: 10px;
+                        height: 10px;
+                        position: absolute;
+                        content: '';
+                        border-right: 0;
+                        border-top: 0;
+                        border-bottom: 1px solid #999;
+                        border-left: 1px solid #999;
+                        transform:rotate(-45deg);
+                        top: 187px;
+                        left: 58px;
+                        background-color: #fff;
+                    }
+                }
+                .star-list{
+                    margin-top: 5px;
+                }
+                .rate-btn{
+                    height: 26px;
+                    line-height: 26px;
+                    background-color: #222222;
+                    border-radius: 2px;
+                    text-align: center;
+                    color: #fff;
+                    float: right;
+                    padding: 0 25px;
+                    cursor: pointer;
+                }
+/*                &:after{
+                    display: block;
+                    content: '';
+                    clear: both;
+                }*/
+            }
+
             .sendbtn{
                 float: right;
                 width: 120px;

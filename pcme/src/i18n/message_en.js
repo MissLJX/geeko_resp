@@ -145,5 +145,9 @@ export default {
     itemtotal:'Item Total',
     coupon:'Coupon',
     credits:'Credits',
-    ordertotal:'OrderTotal'
+    ordertotal:'OrderTotal',
+    rateMyService:'Rate My Service',
+    pleaserateMyService:'Please rate my service.',
+    ratecontent:'You can comment customer service here.',
+    confirm:'Confirm'
 }

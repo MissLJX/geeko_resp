@@ -9,14 +9,18 @@
                     <td>{{$t('created')}}</td>
                     <td>{{$t('status')}}</td>
                 </tr>
-                <tr v-if="!tickets">{{$t('nomoredata')}}</tr>
-                <tr v-for="ticket in tickets">
-                    <td @click="showTicket(ticket.operaId)"><a>{{ticket.id}}</a></td>
-                    <td>{{getlastmsg(ticket.ticketReplies)}}</td>
-                    <td>{{getDate(ticket.openDate)}}</td>
-                    <td :class="{'noreply':ticket.type===1,'replay':ticket.type===2}">{{getStatus(ticket.type)}}</td>
-                </tr>
             </table>
+            <div class="ticket-data">
+                <table>
+                    <tr v-if="!tickets">{{$t('nomoredata')}}</tr>
+                    <tr v-for="ticket in tickets">
+                        <td @click="showTicket(ticket.operaId)"><a>{{ticket.id}}</a></td>
+                        <td>{{getlastmsg(ticket.ticketReplies)}}</td>
+                        <td>{{getDate(ticket.openDate)}}</td>
+                        <td :class="{'noreply':ticket.type===1,'replay':ticket.type===2}">{{getStatus(ticket.type)}}</td>
+                    </tr>
+                </table>
+            </div>
         </div>
 
         <div class="v-btn" @click="subTicket">{{$t('submitticket')}}</div>
@@ -100,10 +104,10 @@
 
 <style scoped lang="scss">
     .noreply{
-        color: #ff7700;
+        color: #ff7700 !important;
     }
     .reply{
-        color: #208d00;
+        color: #208d00 !important;
     }
     .tickets{
         width: 100%;
@@ -129,14 +133,42 @@
             width: 100%;
             border: 1px solid #e6e6e6;
             margin-bottom: 30px;
-            max-height: 427px;
-            overflow-y: auto;
+            .ticket-data{
+                max-height: 390px;
+                overflow-y: auto;
+                table{
+                    tr{
+                        border-bottom: none;
+                    }
+                }
+            }
             table{
+                tr{
+                    border-bottom: 1px solid #e6e6e6;
+                    line-height: 40px;
+                    td{
+                        color: #999;
+                    }
+                }
                 tr{
                     line-height: 30px;
                     text-align: left;
+                    td{
+                        text-overflow:ellipsis;
+                        overflow:hidden;
+                    }
                     td:first-child{
                         padding-left: 37px;
+                        width: 320px;
+                    }
+                    td:nth-of-type(2){
+                        width: 300px;
+                    }
+                    td:nth-of-type(3){
+                        width: 155px;
+                    }
+                    td:last-child{
+                        text-align: center;
                     }
                 }
                 td{
@@ -146,13 +178,6 @@
                     }
                 }
                 width: 100%;
-                tr:first-child{
-                    border-bottom: 1px solid #e6e6e6;
-                    line-height: 40px;
-                    td{
-                        color: #999;
-                    }
-                }
             }
         }
         .v-btn{

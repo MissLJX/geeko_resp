@@ -35,7 +35,7 @@ const routes = [
                 meta: {title:'Me'},
             },
             {
-                path:'orders',
+                path:'order',
                 component:Orders,
                 meta: {title:'My Orders'},
             },

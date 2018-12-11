@@ -1,7 +1,7 @@
 <template>
     <div class="datail">
         <div class="detailHd">
-            <p style="text-transform:capitalize"><span @click="window.location.href = '/'">{{$t('home')}}</span><router-link to="/me/m"> > {{$t('me')}}</router-link><router-link to="/me/m/orders"> > Orders</router-link> > Detail</p>
+            <p style="text-transform:capitalize"><span @click="window.location.href = '/'">{{$t('home')}}</span><router-link to="/me/m"> > {{$t('me')}}</router-link><router-link to="/me/m/order"> > Orders</router-link> > Detail</p>
         </div>
         <div class="detailCon">
             <h2>{{$t('orderdetail')}}</h2>
@@ -52,7 +52,7 @@
                     </td>
                     <td>
                         <div v-if="confirmedOrder" class="review-btn" :class="{'b-btn':confirmedOrder,'black':shippedOrder || processingOrder}">
-                            <span p  @click="review(item.productId)">Review</span>
+                            <span  @click="review(item.productId)">Review</span>
                         </div>
                     </td>
                 </tr>

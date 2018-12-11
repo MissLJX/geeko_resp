@@ -47,7 +47,7 @@
             return{
                 isAlert:false,
                 isloding:false,
-                ifloding:true,
+                ifloding:false,
                 finished: false,
             }
         },
@@ -63,8 +63,7 @@
         },
         created(){
             this.$store.dispatch('getMe').then(()=>{
-                console.log(this.$store.getters.me.id)
-                if(!this.finished){
+                if(!this.finished && !this.ifloding ){
                     this.ifloding=true;
                     this.$store.dispatch("getWishproducts",0).then(({finished})=>{
                         this.ifloding=false;
@@ -84,8 +83,8 @@
             scrollHandle(evt){
                 evt.preventDefault();
                 if(document.documentElement.scrollTop + window.innerHeight >= document.body.offsetHeight) {
-                    if(!this.finished){
-                        this.ifloding= true
+                    if(!this.finished && !this.ifloding){
+                        this.ifloding = true
                         this.$store.dispatch("getWishproducts",this.wishskip).then(({finished})=>{
                             this.ifloding=false;
                             this.finished= finished;

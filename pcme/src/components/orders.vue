@@ -55,7 +55,7 @@
                         <div class="tbl-cell v-m w-180 tx-c">
                             <p>{{getStatus(item.order.status)}}</p>
                             <p class="detail cur-p" @click="checkDetail(item.order.id)">{{$t('detail')}}</p>
-                            <p class="detail cur-p" v-if="item.order.id && item.order.status === 4 && item.tracking"  @click="checkLogistics(item.order.id)">{{$t('logistics')}}</p>
+                            <p class="detail cur-p" v-if="item.order.id && (item.order.status === 4 || item.order.status === 3)&& item.tracking"  @click="checkLogistics(item.order.id)">{{$t('logistics')}}</p>
                         </div>
                         <div class="tbl-cell v-m w-190 tx-c">
                             <p style="margin-bottom: 10px" v-if="orderoffset(item) >= 1000 && item.boletoPayCodeURL && item.order.status === 1">

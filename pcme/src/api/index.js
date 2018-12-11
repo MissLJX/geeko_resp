@@ -181,4 +181,8 @@ export const getM1135 = () =>{
 export const getLogistics = (id) =>{
     return axios.get('/tracking/get/'+id).then(data => data.result)
 }
+//
+export const rate = (rate) =>{
+    return axios.post('/ticket/rate-service', rate)
+}
 

@@ -138,5 +138,9 @@ export default {
     confirmorder:'Confirmar Pedido',
     cancelorder2:'Cancelar Pedido',
     howtheitem:'¿Cómo es el artículo?',
-    howthispro:'¿Cómo le sienta este artículo?'
+    howthispro:'¿Cómo le sienta este artículo?',
+    pleaserateMyService:'Por favor califica mi servicio',
+    ratecontent:'Puedes comentar servicio al cliente aquí.',
+    confirm:'Confirmar',
+    rateMyService: 'Evaluez notre service',
 }

@@ -139,5 +139,9 @@ export default {
     cancelorder2:'Cancelar encomenda',
     howtheitem:'Como é este item?',
     howthispro:'Como veste este artigo?',
-    logistics:'Logística'
+    logistics:'Logística',
+    pleaserateMyService:'Por favor classifique meu serviço.',
+    ratecontent:'Você pode comentar o atendimento ao cliente aqui.',
+    confirm:'confirme',
+    rateMyService: 'Avalie o meu serviço',
 }

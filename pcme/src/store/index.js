@@ -776,7 +776,7 @@ const actions = {
             commit(types.REVIEW_LOAD_COMMENT, comment);
         })
     },
-    sendComment({commit},  {reply, files }){
+    sendComment({commit},  {reply }){
         commit(types.REVIEW_SENDING, true)
         return new Promise((resolve) => {
             let send = api.sendComment
@@ -785,16 +785,7 @@ const actions = {
             }
             send(reply).then((comment) => {
                 commit(types.REVIEW_SENDING, false)
-                if(files){
-                    var file = files[0]
-                }
-                if(file){
-                    var src = window.navigator.userAgent.indexOf("Chrome") >= 1 || window.navigator.userAgent.indexOf("Safari") >= 1 ? window.webkitURL.createObjectURL(file) : window.URL.createObjectURL(file);
-                }else{
-                    var src =''
-                }
-                reply.imageUrls = [src]
-                resolve(reply)
+                resolve(comment)
             }).catch((e) => {
                 console.error(e)
                 commit(types.REVIEW_SENDING, false)
@@ -822,7 +813,10 @@ const actions = {
         return api.getLogistics(id).then((logistics) => {
             commit(types.GLOBAL_GET_LOGISTICS,logistics)
         })
-    }
+    },
+    rate({commit},formData){
+        return axios.post('/ticket/rate-service', formData)
+    },
 }
 export default new Vuex.Store({
     state,

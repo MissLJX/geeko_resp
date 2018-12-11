@@ -7,7 +7,7 @@
             <div class="el-me-nav">
                 <h3  @click="changeClass('me')"><router-link to="/me/m">{{$t('me')}}</router-link></h3>
                 <ul>
-                    <li :class="{'active':isActive==='orders'}" @click="changeClass('orders')"><router-link to="/me/m/orders">{{$t('myorders')}}</router-link></li>
+                    <li :class="{'active':isActive==='orders'}" @click="changeClass('orders')"><router-link to="/me/m/order">{{$t('myorders')}}</router-link></li>
                     <li :class="{'active':isActive==='tickets'}" @click="changeClass('tickets')"><router-link to="/me/m/tickets">{{$t('mytickets')}}</router-link></li>
                     <li :class="{'active':isActive==='coupons'}" @click="changeClass('coupons')"><router-link to="/me/m/coupons">{{$t('mycoupons')}}</router-link></li>
                     <li :class="{'active':isActive==='credits'}" @click="changeClass('credits')"><router-link to="/me/m/credits">{{$t('mycredits')}}</router-link></li>
