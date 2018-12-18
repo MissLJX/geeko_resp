@@ -318,7 +318,7 @@ const question14 = {
 			</header>
 			<section>
 				<p>
-					Acompanhar o seu pacote é fácil. Você pode entrar em sua conta Ivrose e encontrar todas as informações do seu pedido. Clique em "Meus Pedidos" e clique em "Visualizar Detalhes" para descobrir onde está seu pacote. Você também pode enviar um ticket ou e-mail (support@Ivrose.com) para verificar as informações do seu pedido.
+					Acompanhar o seu pacote é fácil. Você pode entrar em sua conta Ivrose e encontrar todas as informações do seu pedido. Clique em "Meus Pedidos" e clique em "Visualizar Detalhes" para descobrir onde está seu pacote. Você também pode enviar um ticket para verificar as informações do seu pedido.
 				</p>
 			</section>
 		</article>
@@ -1373,7 +1373,7 @@ const question66 = {
 					Certifique-se de que nossa equipe tenha trabalhado com você antes de devolver o pacote. 
 				</p>
 				<p>
-				Você pode começar o seu retorno enviando um ticket de suporte ou e-mail para o nosso satff após a venda com o seu retorno, uma vez que o seu retorno / troca tenha sido processado, vamos respondê-lo.
+				Você pode iniciar o seu retorno enviando um ticket de suporte com o seu retorno. Uma vez que seu retorno / troca tenha sido processado, nós responderemos a você.
                 </p>
 			</section>
 		</article>
@@ -1444,7 +1444,7 @@ const question70 = {
 					Não temos uma etiqueta de devolução gratuita para devolver o pedido
 				</p>
 				<p>Certifique-se de que nossa equipe tenha trabalhado com você antes de devolver o pacote. O endereço na encomenda não é o nosso endereço de armazém e a nossa equipa enviará o endereço de retorno em conformidade.</p>
-				<p>Você pode começar o seu retorno, enviando um ticket de suporte ou e-mail para o nosso satff pós-venda com o seu motivo de retorno, nossa equipe irá enviar-lhe o endereço de retorno</p>
+				<p>Você pode começar o seu retorno, enviando um ticket de suporte com o seu motivo de retorno, nossa equipe irá enviar-lhe o endereço de retorno</p>
 			</section>
 		</article>
 	`

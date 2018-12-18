@@ -317,7 +317,7 @@ const question14 = {
 			</header>
 			<section>
 				<p>
-					Le suivi de votre colis est facile. Vous pouvez vous connecter à votre compte Ivrose et trouver toutes les informations de votre commande. Cliquez sur "Mes commandes" et cliquez sur "Voir les détails" et vous pouvez savoir où votre paquet est. Vous pouvez également envoyer un ticket ou un email (support@Ivrose.com) pour vérifier vos informations de commande.
+					Le suivi de votre colis est facile. Vous pouvez vous connecter à votre compte Ivrose et trouver toutes les informations relatives à votre commande. Cliquez sur "Mes commandes", puis sur "Afficher les détails" pour savoir où se trouve votre colis. Vous pouvez également envoyer un ticket pour vérifier les informations de votre commande.
 				</p>
 			</section>
 		</article>
@@ -1371,7 +1371,7 @@ const question66 = {
 					Assurez-vous que notre équipe a travaillé avec vous sur le problème avant de renvoyer le colis.
 				</p>
 				<p>
-				Satff avec votre retour, Une fois votre retour / échange a été traitée, nous vous répondrons.
+				Vous pouvez commencer votre retour en soumettant un ticket d'assistance avec votre retour. Une fois votre retour / échange traité, nous vous répondrons.
                 </p>
 			</section>
 		</article>
@@ -1442,7 +1442,7 @@ const question70 = {
 					Nous n'avons pas de retour gratuit à la commande
 				</p>
 				<p>Assurez-vous que notre équipe a travaillé avec vous sur le problème avant de renvoyer le colis. L'adresse sur le colis n'est pas notre adresse d'entrepôt et notre équipe veut envoyer l'adresse de retour en conséquence.</p>
-				<p>Satff avec votre raison de retour, notre personnel veut vous envoyer l'adresse de retour</p>
+				<p>Vous pouvez commencer votre retour en soumettant un ticket d'assistance avec votre motif de retour, notre personnel vous enverra l'adresse de retour.</p>
 			</section>
 		</article>
 	`

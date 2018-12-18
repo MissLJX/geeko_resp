@@ -318,7 +318,7 @@ const question14 = {
 			</header>
 			<section>
 				<p>
-					Tracking your package is easy .You can log into your Boutiquefeel account and find all your order information. Click on "My Orders" and click on "View Details" and you can find out where your package is. You can also send a ticket or email (support@Boutiquefeel.com)to check your order information.
+					Tracking your package is easy .You can log into your Boutiquefeel account and find all your order information. Click on "My Orders" and click on "View Details" and you can find out where your package is. You can also send a ticket or email to check your order information.
 				</p>
 			</section>
 		</article>
@@ -1368,7 +1368,7 @@ const question66 = {
 					Make sure our team has worked with you on the issue before you return the package. 
 				</p>
 				<p>
-				You can start your return by submitting a support ticket or email to our after-sale satff with your return ,Once your return/exchange has been processed we will reply you.
+				You can start your return by submitting a support ticket with your return ,Once your return/exchange has been processed we will reply you.
                 </p>
 			</section>
 		</article>
@@ -1439,7 +1439,7 @@ const question70 = {
 					We don’t have a free return lable to return the order
 				</p>
 				<p>Make sure our team has worked with you on the issue before you return the package. The address on the parcel is not our warehouse address and our team will send return address accordingly.</p>
-				<p>You can start your return by submitting a support ticket or email to our after-sale satff with your return reason, our staff will send you the return address</p>
+				<p>You can start your return by submitting a support ticket with your return reason, our staff will send you the return address</p>
 			</section>
 		</article>
 	`
