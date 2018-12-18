@@ -250,6 +250,13 @@ export const changeLang = (lang) => {
   }
 }
 
+export const changeLang1 = (lang) => {
+  return dispatch => {
+    Cookie.set('lang', lang, {expires: 365})
+    return dispatch(setLang(lang))
+  }
+}
+
 export const selectPay = (payMethod) => {
   return dispatch => {
     dispatch(refresing())
@@ -375,7 +382,7 @@ export const fetchTransactionPage = (transactionId) => {
         m1186: values[1].result,
         m1147: values[2].result,
         m1073: values[3].result,
-        me: values[4] ? values[4].result : null
+        me: values[4] ? values[4].result : window.__session_customer__
       }
       dispatch(getTransactionPage(transactionPage))
       return transactionPage
@@ -401,11 +408,16 @@ export const fetchAddresses = () => {
   }
 }
 
-export const fetchMe = () => {
+export const fetchMe = (_me) => {
   return dispatch => {
-    return me().then(({result}) => {
-      dispatch(setMe(result))
-      return result
-    })
+    if (_me) {
+      dispatch(setMe(_me))
+      return _me
+    } else {
+      return me().then(({result}) => {
+        dispatch(setMe(result))
+        return result
+      })
+    }
   }
 }

@@ -668,11 +668,12 @@ const ShoppingCart = class extends React.Component {
       paypaling: true
     })
 
-    placepaypal().then(() => {
+    placepaypal().then(({result}) => {
       if(siteType === 'new'){
         window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/paypal`
       }else{
-        window.location.href = `${window.ctx || ''}/v7/orderConfirm/anon/order-confirm`
+        // window.location.href = `${window.ctx || ''}/v7/orderConfirm/anon/order-confirm`
+         window.location.href = `${window.ctx || ''}/order-confirm/${result}`
       }
     }).catch(({result}) => {
       this.setState({
@@ -1161,7 +1162,7 @@ const ShoppingCart = class extends React.Component {
     
 
 
-    let formatedData, invalidItems,cancheckout,hasLocalItems, sendCouponMessage, couponcountdown, totalCount=0, hasOverseas
+    let formatedData, invalidItems,cancheckout,hasLocalItems, sendCouponMessage, couponcountdown, totalCount=0, hasOverseas, hasQuickPay
 
     if(cart){
       formatedData = this.formatData(cart)
@@ -1174,6 +1175,7 @@ const ShoppingCart = class extends React.Component {
 
       let validateOverseasItems = this.getValidItems(cart.shoppingCartProductsByOverseas) 
       hasOverseas = validateOverseasItems && validateOverseasItems.length > 0
+      hasQuickPay = cart.payMethodList && cart.payMethodList.length && cart.payMethodList.find( m => m.id === "1")
     }
 
 
@@ -1512,19 +1514,29 @@ const ShoppingCart = class extends React.Component {
                           {cart.paypalDiscountMessage && <DISCOUNTTIP dangerouslySetInnerHTML={{__html: cart.paypalDiscountMessage}}/>}
 
                         </div>
-                         <DoubleBtn className="x-flex __between">
-                          <div>
-                            <BigButton onClick={ () => { window.location.href = `${window.ctx}/${siteType === 'new' ? 'page' : 'i'}/login?redirectUrl=${encodeURIComponent(window.location.href)}` } } className="__btn" height={47} bgColor="#222">
-                              {intl.formatMessage({id: 'check_out'})} ({totalCount})
-                            </BigButton>
+
+
+
+                        {
+                          hasQuickPay ? <DoubleBtn className="x-flex __between">
+                            <div>
+                              <BigButton onClick={ () => { window.location.href = `${window.ctx}/${siteType === 'new' ? 'page' : 'i'}/login?redirectUrl=${encodeURIComponent(window.location.href)}` } } className="__btn" height={47} bgColor="#222">
+                                {intl.formatMessage({id: 'check_out'})} ({totalCount})
+                              </BigButton>
+                            </div>
+                            <div>
+                              <PaypalBtn onClick={this.quickPaypal.bind(this)}><img src={cart.paypalButtonImage}/></PaypalBtn>
+                            </div>
+                          </DoubleBtn>:<div>
+                              <BigButton onClick={ () => { window.location.href = `${window.ctx}/${siteType === 'new' ? 'page' : 'i'}/login?redirectUrl=${encodeURIComponent(window.location.href)}` } } className="__btn" height={47} bgColor="#222">
+                                {intl.formatMessage({id: 'check_out'})} ({totalCount})
+                              </BigButton>
                           </div>
-                          <div>
-                            <PaypalBtn onClick={this.quickPaypal.bind(this)}><img src={cart.paypalButtonImage}/></PaypalBtn>
-                          </div>
-                        </DoubleBtn> 
-                   {/*     <BigButton onClick={ () => { window.location.href = `${window.ctx}/w-site/anon/register?redirectUrl=${encodeURIComponent(window.location.href)}` } } className="__btn" height={47} bgColor="#e5004f">
-                          {intl.formatMessage({id: 'check_out'})}
-                        </BigButton>*/}
+                        }
+
+
+                          
+                  
                       </Checkout>
                   </Box>
                 )

@@ -50,7 +50,7 @@ const OrderItem = class extends React.Component {
   			</div>
   			<div className="x-cell">
   				<div><Ellipsis>{item.productName}</Ellipsis></div>
-  				<div><Red><strong><Money money={item.realPrice}/></strong></Red></div>
+  				<div><Red><strong><Money money={item.price}/></strong></Red></div>
   				<div>{strconcat(item.color, item.size)}</div>
   			</div>
   			<div className="x-cell">

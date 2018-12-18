@@ -19,8 +19,7 @@ const Modal = class extends React.Component {
     }
   }
 
-  close (evt) {
-  	evt.preventDefault()
+  close () {
     this.props.history.goBack()
   }
 
@@ -43,7 +42,7 @@ const Modal = class extends React.Component {
   render () {
     const { intl } = this.props
 
-    return <FullFixed onClose={this.close} title={`Set Password`}>
+    return <FullFixed onClose={this.close} title={intl.formatMessage({id: 'set_password'})}>
       <Form style={{padding: 10}} ref={c => { this.form = c }} onSubmit={this.handleSubmit.bind(this)}>
         <div>
           <StyledControl>

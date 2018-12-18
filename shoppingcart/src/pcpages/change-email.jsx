@@ -28,14 +28,15 @@ const PHONEBODY = styled.div`
 
 const mapStateToProps = (state) => {
   return {
-    me: state.me
+    me: state.me,
+    transaction: state.transaction
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    REFRESHME: () => {
-      dispatch(fetchMe())
+    REFRESHME: (me) => {
+      dispatch(fetchMe(me))
     }
   }
 }
@@ -76,18 +77,22 @@ const ChagePhone = class extends React.Component {
 
   handleSubmit (evt) {
     evt.preventDefault()
-    const { me } = this.props
+    const { me, transaction } = this.props
     this.form.validateAll()
     if (!this.btn.context._errors || !this.btn.context._errors.length) {
     	this.setState({
     		updating: true
     	})
-      changeCommunicationEmail(me.id, this.state.email).then(() => {
+      changeCommunicationEmail(transaction.transactionId, this.state.email).then(() => {
       	this.setState({
       		updating: false
       	})
       	this.props.history.goBack()
-      	this.props.REFRESHME()
+        if (window.__is_login__) {
+          this.props.REFRESHME()
+        } else {
+          this.props.REFRESHME({...me, communicationEmail: this.state.email})
+        }
       }).catch(({result}) => {
       	alert(result)
       	this.setState({
@@ -103,7 +108,7 @@ const ChagePhone = class extends React.Component {
     return <Modal onClose={this.close.bind(this)}>
       {
         me && <PHONEBODY>
-          <div className="__title">Change Phone Number</div>
+          <div className="__title">{intl.formatMessage({id: 'change_email'})}</div>
           <Form style={{marginTop: 15}} ref={ c => this.form = c } onSubmit={ this.handleSubmit.bind(this) }>
 
             <ELEMENTS>

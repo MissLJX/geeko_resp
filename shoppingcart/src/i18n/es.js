@@ -91,12 +91,16 @@ export default{
   please_confirm_address: 'Por favor confirme su dirección de envío',
   please_select_paymethod: 'Por favor elija el método de pago',
   proceed_checkout: 'Pasar por la caja',
-  thanks_for_shopping: 'Thank you for shopping',
-  check_order: 'Check Order',
-  order_no: 'Order No.',
+  thanks_for_shopping: 'Gracias por comprar',
+  check_order: 'Revisar orden',
+  order_no: 'N º de pedido',
   set_password: 'configurar la clave',
   placeholder_street_address: 'Calle, Dirección, Nombre de la Empresa, C/O',
   placeholder_unit: 'Apartamento, Suite, Unidad,Edificio, Piso, etc',
   selected: 'Seleccionado',
-  add: 'añadir'
+  add: 'añadir',
+  you_may_also_like: 'También te puede interesar',
+  recently_viewed: 'visto recientemente',
+  account: 'Cuenta',
+  change_email: 'Cambiar e-mail'
 }

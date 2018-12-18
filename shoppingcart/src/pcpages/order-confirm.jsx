@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import {injectIntl, FormattedMessage} from 'react-intl'
 import Icon from '../components/icon.jsx'
 import {fetchTransactionPage} from '../store/actions.js'
-import {gettransactionrelatedproducts, getRecentlyProducts} from '../api'
+import {gettransactionrelatedproducts, getRecentlyProducts, clientcall} from '../api'
 import {Btn, BigButton} from '../components/msite/buttons.jsx'
 import Barcode from 'react-barcode'
 import Clipboard from 'react-clipboard.js'
@@ -187,20 +187,34 @@ const OrderConfirm = class extends React.Component {
   componentWillMount () {
     const {transactionId} = this.props.match.params
   	this.props.GETTRANSACTIONPAGE(transactionId).then( (data) => {
-  		if(window.sendEvent){
-  			window.sendEvent(data)
+
+  		const transaction = data.transaction
+
+  		if(transaction){
+  			gettransactionrelatedproducts(transaction.id, 0, 11).then(({result}) => {
+		      this.setState({
+		        products: [...this.state.products, ...(result || [])]
+		      })
+		    })
+		    getRecentlyProducts().then( ({result}) => {
+		    	this.setState({
+		    		histories: [...this.state.histories, ...(result || [])]
+		    	})
+		    } )
+
+
+	  		if(window.sendEvent){
+	  			window.sendEvent(data)
+	  		}
   		}
+
+	  	
   	})
-    gettransactionrelatedproducts(transactionId, 0, 11).then(({result}) => {
-      this.setState({
-        products: [...this.state.products, ...result]
-      })
+   
+
+    clientcall(transactionId).then( () => {} ).catch( e => {
+    	console.log(e)
     })
-    getRecentlyProducts().then( ({result}) => {
-    	this.setState({
-    		histories: [...this.state.histories, ...result]
-    	})
-    } )
   }
 
   addressEditHandle (){
@@ -208,11 +222,15 @@ const OrderConfirm = class extends React.Component {
   }
 
   handleViewOrder () {
-    if (!window.__is_login__ && this.props.transaction.orderVos[0].order.payMethod === '1') {
-      this.props.history.push(`${this.props.match.url}/set-password`)
-    } else {
-      window.location.href = `${window.ctx || ''}/me/m/orders`
-    }
+    // if (!window.__is_login__ && this.props.transaction.orderVos[0].order.payMethod === '1') {
+    //   this.props.history.push(`${this.props.match.url}/set-password`)
+    // } else {
+      window.location.href = `${window.ctx || ''}/me/m/order`
+    // }
+  }
+
+  handleSetPassword(){
+    this.props.history.push(`${this.props.match.url}/set-password`)
   }
 
   copied () {
@@ -237,22 +255,28 @@ const OrderConfirm = class extends React.Component {
   }
 
   render () {
-  	const {transaction, me, m1186, m1147, m1073} = this.props
-  	const {message, orderVos} = transaction || {}
-  	const orderVo = orderVos ? orderVos[0] : null
-  	const communicationEmail = me ? me.communicationEmail : null
+  	const {transaction, me, m1186, m1147, m1073, intl} = this.props
+  	const {message} = transaction || {}
+
+  	const __me = me ? me : window.__session_customer__
+
+  	const communicationEmail = __me ? __me.communicationEmail : ''
 
   	let __BB__,__Tips__
 
   	if(transaction && m1186){
   		__BB__ = m1186 ? JSON.parse(m1186.message) : null;
-  		__Tips__ = orderVo.order.mercadopagoPayURL ? __BB__.spain : __BB__.portugal
+  		__Tips__ = transaction.mercadopagoPayURL ? __BB__.spain : __BB__.portugal
   	}
 
     const getTitle = () => {
-      if (orderVo.order.payBarCode) { return <div>Seu pedido de compra foi realizado! Pague agora seu Boleto Bancário paraagilizar a confirmação do seu pedido.</div> }
-      if (orderVo.order.mercadopagoPayURL) { return <div dangerouslySetInnerHTML={{__html: m1147.message}}/> }
-      return <div><span dangerouslySetInnerHTML={{__html: message}}/> <Link style={{color: 'skyblue'}} to={`${this.props.match.url}/change-email`}>{communicationEmail}<Icon style={{marginLeft: 10, color: 'skyblue', cursor: 'pointer'}}>&#xe61f;</Icon></Link></div>
+      if (transaction.boletoPayCodeURL) { return <div>Seu pedido de compra foi realizado! Pague agora seu Boleto Bancário paraagilizar a confirmação do seu pedido.</div> }
+      if (transaction.mercadopagoPayURL) { return null }
+      return <div>
+    		<span dangerouslySetInnerHTML={{__html: message}}/> 
+    		<Link style={{color: 'skyblue'}} to={`${this.props.match.url}/change-email`}>{communicationEmail}<Icon style={{marginLeft: 10, color: 'skyblue', cursor: 'pointer'}}>&#xe61f;</Icon></Link>
+    		{window.__isnew && <div style={{marginTop: 15}}><Btn onClick={this.handleSetPassword.bind(this)}><FormattedMessage id="set_password"/></Btn></div>}
+    	</div>
     }
 
     return <PAGECONFIRM>
@@ -269,7 +293,7 @@ const OrderConfirm = class extends React.Component {
     			</div>
 
     			{
-    				orderVo.order.mercadopagoPayURL && <div style={{paddingLeft: 30}}>
+    				transaction.mercadopagoPayURL && <div style={{paddingLeft: 30}}>
     					<div className="x-table __vm __fixed x-fw" style={{marginTop: 20, paddingTop: 20, borderTop: '1px solid #e6e6e6'}}>
 	            	<div className="x-cell">
 		                <OL style={{padding: 10}}>
@@ -284,9 +308,9 @@ const OrderConfirm = class extends React.Component {
 
 	            <div style={{textAlign: 'center'}}>
 	            	{
-	            		orderVo.order.shippingDetail.phoneNumber && <Link to={`${this.props.match.url}/change-phone`}>
+	            		transaction.shippingDetail.phoneNumber && <Link to={`${this.props.match.url}/change-phone`}>
 		            		<Blue style={{cursor:'pointer'}}>
-		            			<span>{orderVo.order.shippingDetail.phoneNumber}</span>
+		            			<span>{transaction.shippingDetail.phoneNumber}</span>
 		            			<Icon style={{marginLeft:5}}>&#xe62b;</Icon>
 		            		</Blue>
 	            		</Link>
@@ -294,13 +318,13 @@ const OrderConfirm = class extends React.Component {
 	            </div>
 
 	            <div style={{textAlign: 'center', marginTop: 20}}>
-	            	 <Btn onClick={() => { window.location.href = orderVo.order.mercadopagoPayURL}} style={{backgroundColor: '#e64545', padding: '12px 26px'}}>Generar Ticket</Btn>
+	            	 <Btn onClick={() => { window.location.href = transaction.mercadopagoPayURL}} style={{backgroundColor: '#e64545', padding: '12px 26px'}}>Generar Ticket</Btn>
 	            </div>
     				</div>
     			}
 
     			{
-            orderVo.order.payBarCode && <div style={{paddingLeft: 30}}>
+            transaction.boletoPayCodeURL && <div style={{paddingLeft: 30}}>
 	            <div className="x-table __vm __fixed x-fw" style={{marginTop: 20, paddingTop: 20, borderTop: '1px solid #e6e6e6'}}>
 	            	<div className="x-cell">
 		                <OL style={{padding: 10}}>
@@ -315,9 +339,9 @@ const OrderConfirm = class extends React.Component {
 
 	            <div style={{textAlign: 'center'}}>
 	            	{
-	            		orderVo.order.shippingDetail.phoneNumber && <Link to={`${this.props.match.path}/change-phone`}>
+	            		transaction.shippingDetail.phoneNumber && <Link to={`${this.props.match.path}/change-phone`}>
 		            		<Blue style={{cursor:'pointer'}}>
-		            			<span>{orderVo.order.shippingDetail.phoneNumber}</span>
+		            			<span>{transaction.shippingDetail.phoneNumber}</span>
 		            			<Icon style={{marginLeft:5}}>&#xe62b;</Icon>
 		            		</Blue>
 	            		</Link>
@@ -326,16 +350,16 @@ const OrderConfirm = class extends React.Component {
 
 
 	           <div style={{textAlign: 'center', marginTop: 20}}>
-	            	 <Btn onClick={() => { window.location.href = orderVo.order.payBarCode}} style={{backgroundColor: '#e64545', padding: '12px 26px'}}>Imprimir boleto</Btn>
+	            	 <Btn onClick={() => { window.location.href = transaction.boletoPayCodeURL}} style={{backgroundColor: '#e64545', padding: '12px 26px'}}>Imprimir boleto</Btn>
 	            </div>
 
 	            {
-	            	orderVo.order.barcodeNumber && <div style={{marginTop: 25}}>
-		            	<Barcode value={orderVo.order.barcodeNumber} width={2.21} displayValue={false}/>
+	            	transaction.barcodeNumber && <div style={{marginTop: 25}}>
+		            	<Barcode value={transaction.barcodeNumber} width={2.21} displayValue={false}/>
 		            	<BARCODECOPY>
-			            	<span>{orderVo.order.digitableLine}</span>
+			            	<span>{transaction.digitableLine}</span>
 
-			            	<Clipboard onSuccess={this.copied.bind(this)} style={{backgroundColor: '#e64545', color: '#fff', border: 'none', outline: 'none', boxShadow: 'none'}} data-clipboard-text={orderVo.order.digitableLine}>
+			            	<Clipboard onSuccess={this.copied.bind(this)} style={{backgroundColor: '#e64545', color: '#fff', border: 'none', outline: 'none', boxShadow: 'none'}} data-clipboard-text={transaction.digitableLine}>
 						        	Copiar código
 						      	</Clipboard>
 		            	</BARCODECOPY>
@@ -347,7 +371,7 @@ const OrderConfirm = class extends React.Component {
             </div>
           }
           <div style={{marginTop: 40}}>
-          	<OrderAddress address={orderVo.order.shippingDetail} showEdit={true} onEdit={ this.addressEditHandle.bind(this)}/>
+          	<OrderAddress address={transaction.shippingDetail} showEdit={true} onEdit={ this.addressEditHandle.bind(this)}/>
           </div>
 
           <PAYMETHOD style={{marginTop: 15}}>
@@ -357,40 +381,31 @@ const OrderConfirm = class extends React.Component {
               </div>
 	          	<div className="x-cell">
 	          		<div>
-	          			<span>{orderVo.order.payMethodInfo.label}</span>
+	          			<span>{transaction.payMethodName}</span>
 	          			{
-	          				orderVo.order.accountNo && <span style={{marginLeft: 10}}>{orderVo.order.accountNo}</span>
+	          				transaction.accountNo && <span style={{marginLeft: 10}}>{transaction.accountNo}</span>
 		            	}
 	          		</div>
 
 	          		<div style={{marginTop: 2}}>
 	          			<FormattedMessage id="zip_code"/>:
-	          			<span style={{marginLeft: 10}}>{orderVo.order.shippingDetail.zipCode}</span>
+	          			<span style={{marginLeft: 10}}>{transaction.shippingDetail.zipCode}</span>
 	          		</div>
 	          	</div>
           	</div>
           </PAYMETHOD>
 
           <ORDERS>
-          	{
-          		orderVos.map(vo => (
-		            <li key={vo.id}>
+		            <li key={transaction.id}>
 		              <ORDER>
 		              	<div className="__hd">
 		              		<div className="x-table x-fw __vm x-fh">
 		              			<div className="x-cell" style={{width: 210}}>
-		              				<span>{new Date(vo.order.orderTime).toLocaleString()}</span>
+		              				<span>{new Date(transaction.orderTime).toLocaleString()}</span>
 		              			</div>
-		              			<div className="x-cell" style={{width: 200}}>
-		              				{
-		              					vo.order.orderItems[0].shippedCountryCode && <span>
-		              						Ships From {vo.order.orderItems[0].shippedCountryCode}
-		              					</span>
-		              				}
-
-		              			</div>
+		              			
 		              			<div className="x-cell __right">
-		              				<Grey>Order No:</Grey> <span>{vo.order.id}</span>
+		              				<Grey><FormattedMessage id="order_no"/>:</Grey> <span>{transaction.id}</span>
 		              			</div>
 		              		</div>
 
@@ -399,7 +414,7 @@ const OrderConfirm = class extends React.Component {
 		              	<div className="__bd">
 		              		<ITEMS>
 			              		{
-			              			vo.order.orderItems.map(item => <li key={ item.variantId }>
+			              			transaction.orderItems.map(item => <li key={ item.variantId }>
 			              				<ITEM>
 			              					<div className="x-table __fixed __vm" style={{width: 670}}>
 												  			<div className="x-cell" style={{width: 110}}>
@@ -409,12 +424,12 @@ const OrderConfirm = class extends React.Component {
 												  				<Ellipsis>{item.productName}</Ellipsis>
 												  				<div style={{marginTop: 4}}><Grey>{strconcat(item.color, item.size)}</Grey></div>
 												  			</div>
-												  			<div className="x-cell">
+												  			<div className="x-cell" style={{textAlign:'center'}}>
 												  				<span>{item.quantity}</span>
 												  			</div>
 
 												  			<div className="x-cell __right">
-												  				<Red><Money money={item.realPrice}/></Red>
+												  				<Red><Money money={item.price}/></Red>
 												  			</div>
 												  		</div>
 			              				</ITEM>
@@ -426,31 +441,29 @@ const OrderConfirm = class extends React.Component {
 		              <ORDERFD>
 	              		<span>
 	              			<FormattedMessage style={{fontFamily: 'HelveticaNeue-Medium'}} id="shipping_price"/>:
-	              			<Money money={vo.order.shippingPrice}/>
+	              			<Money money={transaction.shippingPrice}/>
 	              		</span>
 
 	              		{
-	              			vo.order.shippingInsurancePrice && vo.order.shippingInsurancePrice.amount > 0 && <span style={{marginLeft: 15}}>
+	              			transaction.shippingInsurancePrice && transaction.shippingInsurancePrice.amount > 0 && <span style={{marginLeft: 15}}>
 	              				<FormattedMessage style={{fontFamily: 'HelveticaNeue-Medium'}} id="shipping_insurance"/>:
-	              				<Money money={vo.order.shippingInsurancePrice}/>
+	              				<Money money={transaction.shippingInsurancePrice}/>
 	              			</span>
 	              		}
 	              		{
-	              			vo.order.points > 0 && <span style={{marginLeft: 15}}>
+	              			transaction.points > 0 && <span style={{marginLeft: 15}}>
 		              			<FormattedMessage style={{fontFamily: 'HelveticaNeue-Medium'}} id="credits"/>:
-		              			<Red>+{vo.order.points}</Red>
+		              			<Red>+{transaction.points}</Red>
 		              		</span>
 	              		}
 
 	              		<span style={{marginLeft: 15}}>
 	              			<FormattedMessage style={{fontFamily: 'HelveticaNeue-Medium'}} id="total"/>:
-	              			<Red style={{fontSize: 20, fontFamily: 'HelveticaNeue-Medium'}}><Money money={vo.order.orderTotal}/></Red>
+	              			<Red style={{fontSize: 20, fontFamily: 'HelveticaNeue-Medium'}}><Money money={transaction.orderTotal}/></Red>
 	              		</span>
 
 	              	</ORDERFD>
 		            </li>
-		          ))
-          	}
           </ORDERS>
 
           <BigButton onClick={this.handleViewOrder.bind(this)} style={{width: 313, marginLeft: 'auto', marginRight: 'auto', marginTop: 40}}><FormattedMessage id="check_order"/></BigButton>
@@ -459,12 +472,12 @@ const OrderConfirm = class extends React.Component {
     	}
 
     		{
-    			this.state.products && transaction && <div style={{marginTop: 55}}>
+    			transaction && this.state.products && <div style={{marginTop: 55}}>
 
     				
     				<Tabs tabIndex={ this.state.tabIndex } tabClick={ this.tabClickHandle.bind(this) } tabs={ [
-    						{title: 'You May Also Like'},
-    						{title: 'Recently View'}
+    						{title: intl.formatMessage({id:'you_may_also_like'})},
+    						{title: intl.formatMessage({id:'recently_viewed'})}
     					] }/>
 
     				{

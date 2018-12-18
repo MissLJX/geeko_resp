@@ -15,7 +15,7 @@ import {StyledControl} from '../components/msite/styled-control.jsx'
 const mapStateToProps = (state) => {
   return {
     transaction: state.transaction,
-    address: state.transaction ? state.transaction.orderVos[0].order.shippingDetail : null
+    address: state.transaction ? state.transaction.shippingDetail : null
   }
 }
 
@@ -50,13 +50,12 @@ const Modal = class extends React.Component {
     }
   }
 
-  close (evt) {
-  	evt.preventDefault()
-    this.props.history.goBack()
+  close () {
+    this.props.history.replace(`${window.ctx || ''}/order-confirm/${this.props.transaction.transactionId}`)
   }
 
   editAddress () {
-    const transactionId = this.props.transaction.orderVos[0].order.transactionId
+    const transactionId = this.props.transaction.transactionId
     const {address} = this.props
     this.setState({
       updating: true
@@ -65,14 +64,14 @@ const Modal = class extends React.Component {
       ...address,
       phoneNumber: this.state.phoneNumber,
       phoneArea: this.state.phoneArea,
-      orderNo: transactionId,
+      transactionId: transactionId,
       country: address.country.value,
       state: address.state ? address.state.value : ''
     }).then(() => {
       this.setState({
         updating: false
       })
-      this.props.history.goBack()
+      this.close()
       this.props.REFRESHORDERCONFIRM(transactionId)
     }).catch(({result}) => {
       alert(result)

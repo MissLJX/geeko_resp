@@ -4,12 +4,13 @@ import { changepassword } from '../api'
 import {injectIntl} from 'react-intl'
 import {__route_root__} from '../utils/utils.js'
 import { Modal } from '../components/pc/modal.jsx'
-
+import { connect } from 'react-redux'
 import {Form, Input, Button} from '../components/pc/control.jsx'
 import {required} from '../components/validator.jsx'
 import {FormElement, ELEMENTS} from '../components/pc/styled-control.jsx'
 import {BigButton} from '../components/msite/buttons.jsx'
 import { Red } from '../components/text.jsx'
+import { fetchMe } from '../store/actions.js'
 
 const PASSWORD_BODY = styled.div`
     padding: 40px;
@@ -23,10 +24,25 @@ const PASSWORD_BODY = styled.div`
   }
 `
 
+const mapStateToProps = (state) => {
+  return {
+    me: state.me
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    REFRESHME: () => {
+      dispatch(fetchMe())
+    }
+  }
+}
+
 const SetPassword = class extends React.Component {
   constructor (props) {
     super(props)
     this.close = this.close.bind(this)
+    this.handleInputChange = this.handleInputChange.bind(this)
     this.state = {
       password: null,
       confirm: null,
@@ -59,13 +75,14 @@ const SetPassword = class extends React.Component {
   }
 
   render () {
-    const { intl } = this.props
+    const { intl, me } = this.props
+
     return <Modal onClose={this.close.bind(this)}>
       <PASSWORD_BODY>
         <div style={{paddingTop: 10}}>
           <div>
-            <span>Your Account: </span>
-            <Red>shaolei@163.com</Red>
+            <span>{intl.formatMessage({id: 'account'})}: </span>
+            <Red>{me ? me.communicationEmail : ''}</Red>
           </div>
           <Form style={{marginTop: 10}} ref={ c => this.form = c } onSubmit={ this.handleSubmit.bind(this) }>
             <ELEMENTS>
@@ -109,4 +126,4 @@ const SetPassword = class extends React.Component {
   }
 }
 
-export default injectIntl(SetPassword)
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(SetPassword))

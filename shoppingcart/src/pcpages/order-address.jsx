@@ -24,7 +24,7 @@ const ADDRESSTITLE = styled.div`
 const mapStateToProps = (state) => {
   return {
     transaction: state.transaction,
-    address: state.transaction ? state.transaction.orderVos[0].order.shippingDetail : null,
+    address: state.transaction ? state.transaction.shippingDetail : null,
     addressUpdating: state.addressUpdating
   }
 }
@@ -53,9 +53,9 @@ const Address = class extends React.Component {
   }
 
   editAddress (address) {
-    const transactionId = this.props.transaction.orderVos[0].order.transactionId
+    const transactionId = this.props.transaction.transactionId
     this.props.UPDATINGADDRESS(true)
-  		updateorderaddress({...address, id: this.props.address.id, orderNo: transactionId }).then(() => {
+  		updateorderaddress({...address, id: this.props.address.id, transactionId: transactionId }).then(() => {
       this.props.UPDATINGADDRESS(false)
   			this.props.history.goBack()
       this.props.REFRESHORDERCONFIRM(transactionId)

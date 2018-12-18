@@ -11,7 +11,7 @@ import {__route_root__} from '../utils/utils.js'
 const mapStateToProps = (state) => {
   return {
     transaction: state.transaction,
-    address: state.transaction ? state.transaction.orderVos[0].order.shippingDetail : null
+    address: state.transaction ? state.transaction.shippingDetail : null
   }
 }
 
@@ -30,15 +30,14 @@ const Modal = class extends React.Component {
     this.editAddress = this.editAddress.bind(this)
   }
 
-  close (evt) {
-  	evt.preventDefault()
-    this.props.history.goBack()
+  close () {
+    this.props.history.replace(`${window.ctx || ''}/order-confirm/${this.props.transaction.transactionId}`)
   }
 
   editAddress (address) {
-    const transactionId = this.props.transaction.orderVos[0].order.transactionId
-  		updateorderaddress({...address, id: this.props.address.id, orderNo: transactionId }).then(() => {
-  			this.props.history.goBack()
+    const transactionId = this.props.transaction.transactionId
+  		updateorderaddress({...address, id: this.props.address.id, transactionId: transactionId }).then(() => {
+  			this.close()
       this.props.REFRESHORDERCONFIRM(transactionId)
   		}).catch(({result}) => {
   			alert(result)

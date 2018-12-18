@@ -13,7 +13,7 @@ module.exports = {
   output: {
   	path: BUILD_PATH,
     // publicPath: '/resources/js/react/msite/shoppingcart/',
-    publicPath: '/wanna/resources/js/react/pc/shoppingcart/',
+    publicPath: '/resources/js/react/pc/shoppingcart/',
   	filename: '[name].bundle.js',
     chunkFilename: '[name].chunk.js'
   },

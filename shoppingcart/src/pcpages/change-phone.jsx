@@ -28,7 +28,7 @@ const PHONEBODY = styled.div`
 const mapStateToProps = (state) => {
   return {
     transaction: state.transaction,
-    address: state.transaction ? state.transaction.orderVos[0].order.shippingDetail : null
+    address: state.transaction ? state.transaction.shippingDetail : null
   }
 }
 
@@ -69,7 +69,7 @@ const ChagePhone = class extends React.Component {
   }
 
   editAddress () {
-    const transactionId = this.props.transaction.orderVos[0].order.transactionId
+    const transactionId = this.props.transaction.transactionId
     const {address} = this.props
     this.setState({
       updating: true
@@ -78,7 +78,7 @@ const ChagePhone = class extends React.Component {
       ...address,
       phoneNumber: this.state.phoneNumber,
       phoneArea: this.state.phoneArea,
-      orderNo: transactionId,
+      transactionId: transactionId,
       country: address.country.value,
       state: address.state ? address.state.value : ''
     }).then(() => {

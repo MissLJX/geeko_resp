@@ -28,24 +28,34 @@ const ORDER = styled.div`
 	}
 `
 
+const ORDERHEAD = styled.div`
+  height: 40px;
+  line-height: 40px;
+  border-bottom: 1px solid #ededed;
+  padding-left: 10px;
+`
+
 const Order = class extends React.Component {
   constructor (props) {
     super(props)
   }
   render () {
-  	const {intl, orderVo} = this.props
-  	const {order} = orderVo
+  	const {intl, transaction} = this.props
 
   	return <ORDER>
+      <ORDERHEAD>
+        <span>{intl.formatMessage({id: 'order_no'})}: </span>
+        <Grey>{transaction.id}</Grey>
+      </ORDERHEAD>
   		<ul>
-  			{order.orderItems.map(item => (
+  			{transaction.orderItems.map(item => (
   				<li key={item.variantId}>
   					<OrderItem item={item}/>
   				</li>
   			))}
   		</ul>
   		<div className="__fd">
-  			<span>Total: </span><Red><Money money={order.orderTotal}/> </Red><span>(<Money money={order.shippingPrice}/> shipping cost)</span>
+  			<span>{intl.formatMessage({id: 'total'})}: </span><Red><Money money={transaction.orderTotal}/> </Red><span>(<Money money={transaction.shippingPrice}/> shipping cost)</span>
   		</div>
   	</ORDER>
   }

@@ -101,10 +101,11 @@ const CURRENCY = styled.div`
 	.__icon{
 		display: inline-block;
 		width: 30px;
-	  height: 20px;
-	  background: url(https://dgzfssf1la12s.cloudfront.net/site/ninimour/flags/flag4x8.png) no-repeat;
+	  height: 16px;
+	  background: center/100% no-repeat;
 	  vertical-align: middle;
 	  margin-right:4px;
+	  border: 1px solid #e6e6e6;
 	}
 
 	.__label{
@@ -132,7 +133,7 @@ const CURRENCIES = styled.ul`
 	}
 
 	background-color: #fff;
-  width: 348px;
+  width: 420px;
   border: 1px solid #e6e6e6;
   padding-bottom: 10px;
 `
@@ -181,7 +182,7 @@ const Currency = class extends React.Component {
   changeCurrency (currency) {
   	Cookie.set('currency', currency, {expires: 365})
   	updateCurrency(currency).then(() => {
-  		window.location.href = `${window.ctx || ''}/cart`
+  		window.location.reload()
   	})
   }
 
@@ -189,7 +190,7 @@ const Currency = class extends React.Component {
   	const {currency, index} = this.props
   	const position = getIconPosition(index)
 	  return <CURRENCY onClick={ () => { this.changeCurrency(currency.value) }}>
-	    <span className="__icon" style={{backgroundPosition: `${-position.x}px ${-position.y}px`}}></span>
+	    <span className="__icon" style={{backgroundImage: `url(https://dgzfssf1la12s.cloudfront.net/site/ninimour/flags/flag-${currency.value}.png)`}}></span>
 	    <span className="__label">{currency.value}</span>
 	  </CURRENCY>
   }

@@ -675,13 +675,14 @@ const ShoppingCart = class extends React.Component {
       paypaling: true
     })
 
-    placepaypal().then(() => {
+    placepaypal().then(({result}) => {
 
       if(siteType === 'new'){
         
         window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/paypal`
       }else{
-        window.location.href = `${window.ctx || ''}/v7/orderConfirm/anon/order-confirm`
+        // window.location.href = `${window.ctx || ''}/v7/orderConfirm/anon/order-confirm`
+        window.location.href = `${window.ctx || ''}/order-confirm/${result}`
       }
 
       
@@ -1222,7 +1223,7 @@ const ShoppingCart = class extends React.Component {
 
 
     let formatedData, invalidItems,cancheckout,hasLocalItems, sendCouponMessage, couponcountdown, totalCount=0, hasOverseas
-    let hasOverseasHead, fullSelected, cancheckout1
+    let hasOverseasHead, fullSelected, cancheckout1, hasQuickPay
 
     if(cart){
       formatedData = this.formatData(cart)
@@ -1238,6 +1239,8 @@ const ShoppingCart = class extends React.Component {
       hasOverseas = validateOverseasItems && validateOverseasItems.length > 0
       hasOverseasHead = hasOverseas && hasLocalItems
       fullSelected = this.getFullSelected()
+
+      hasQuickPay = cart.payMethodList && cart.payMethodList.length && cart.payMethodList.find( m => m.id === "1")
     }
 
 
@@ -1538,11 +1541,20 @@ const ShoppingCart = class extends React.Component {
                                 </DISCOUNTTIP> 
                               }
 
-                              <div id='ip-paypal-pay' style={{marginTop: 30}} ref={ (c) => this.paypalRender(c, 'quick') }/>
-                              <div style={{color: '#999', textAlign: 'center', height: 30, lineHeight: '30px', textTransform: 'uppercase'}}>
-                                {intl.formatMessage({id: 'or'})}
-                              </div>
-                              <BigButton onClick={ () => { window.location.href = `${window.ctx}/${siteType === 'new' ? 'page' : 'i'}/login?redirectUrl=${encodeURIComponent(window.location.href)}` } } bgColor="#222" style={{height: 45, lineHeight: '45px', textTransform: 'uppercase', fontSize: 18}}>
+                              {
+                                hasQuickPay && <React.Fragment>
+                                  <div id='ip-paypal-pay' style={{marginTop: 30}} ref={ (c) => this.paypalRender(c, 'quick') }/>
+                                  <div style={{color: '#999', textAlign: 'center', height: 30, lineHeight: '30px', textTransform: 'uppercase'}}>
+                                    {intl.formatMessage({id: 'or'})}
+                                  </div>
+                                </React.Fragment>
+                              }
+
+                              
+
+
+
+                              <BigButton onClick={ () => { window.location.href = `${window.ctx}/${siteType === 'new' ? 'page' : 'i'}/login?redirectUrl=${encodeURIComponent(window.location.href)}` } } bgColor="#222" style={{marginTop: hasQuickPay ? 0 : 30, height: 45, lineHeight: '45px', textTransform: 'uppercase', fontSize: 18}}>
                                 {intl.formatMessage({id: 'proceed_checkout'})}
                               </BigButton>
                             </div>

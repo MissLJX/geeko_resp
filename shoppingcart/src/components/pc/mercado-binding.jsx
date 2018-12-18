@@ -173,7 +173,8 @@ const MercadoBinding = class extends React.Component {
         if (siteType === 'new') {
           window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/credit-card?order_number=${transactionId}`
         } else {
-          window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
+          // window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
+          window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
         }
       } else {
         alert(details)

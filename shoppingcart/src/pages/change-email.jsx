@@ -13,14 +13,15 @@ import { fetchMe } from '../store/actions.js'
 
 const mapStateToProps = (state) => {
   return {
-    me: state.me
+    me: state.me,
+    transaction: state.transaction
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    REFRESHME: () => {
-      dispatch(fetchMe())
+    REFRESHME: (me) => {
+      dispatch(fetchMe(me))
     }
   }
 }
@@ -45,9 +46,8 @@ const Modal = class extends React.Component {
     }
   }
 
-  close (evt) {
-  	evt.preventDefault()
-    this.props.history.goBack()
+  close () {
+    this.props.history.replace(`${window.ctx || ''}/order-confirm/${this.props.transaction.transactionId}`)
   }
 
   handleInputChange (event) {
@@ -61,20 +61,29 @@ const Modal = class extends React.Component {
 
   handleSubmit (evt) {
     evt.preventDefault()
-    const { me } = this.props
+    const { me, transaction } = this.props
     this.form.validateAll()
     if (!this.btn.context._errors || !this.btn.context._errors.length) {
     	this.setState({
     		updating: true
     	})
-      changeCommunicationEmail(me.id, this.state.email).then(() => {
+      changeCommunicationEmail(transaction.transactionId, this.state.email).then(() => {
       	this.setState({
       		updating: false
       	})
-      	this.props.history.goBack()
-      	this.props.REFRESHME()
-      }).catch(({result}) => {
-      	alert(result)
+      	this.close()
+      	if (window.__is_login__) {
+          this.props.REFRESHME()
+        } else {
+          this.props.REFRESHME({...me, communicationEmail: this.state.email})
+        }
+      }).catch((err) => {
+        if (err.result) {
+          alert(err.result)
+        } else {
+          alert(err)
+        }
+
       	this.setState({
       		updating: false
       	})
@@ -85,7 +94,7 @@ const Modal = class extends React.Component {
   render () {
     const { me, intl } = this.props
 
-    return <FullFixed onClose={this.close} title={`Change Email`}>
+    return <FullFixed onClose={this.close} title={intl.formatMessage({id: 'change_email'})}>
 
     	{
     		me && <Form style={{padding: 20}} ref={c => { this.form = c }} onSubmit={this.handleSubmit.bind(this)}>
