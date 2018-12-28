@@ -55,13 +55,17 @@
                 <div class="n-btn" @click="isAlert=false">{{$t('okay')}}</div>
             </div>
         </div>
+
+        <loding v-if="isLoading"></loding>
     </div>
 </template>
 
 <script>
     import {mapGetters, mapActions} from 'vuex';
+    import Loding from "./loding.vue";
 
     export default{
+        components: {Loding},
         data(){
             return {
                 account: {
@@ -70,7 +74,8 @@
                 subEmail: {
                     email: null
                 },
-                isAlert:false
+                isAlert:false,
+                isLoading:false
             }
         },
         computed:{
@@ -84,19 +89,25 @@
                     email: this.account.email,
                 }).then((result) => {
                     if (result) {
+                        this.isLoading = true;
                         this.$store.dispatch('confirmEmail', this.account.email).then(() => {
                             this.isAlert = true;
+                            this.isLoading = false;
                         }).catch((data) => {
-                            alert(data.result)
+                            alert(data.result);
+                            this.isLoading = false;
                         })
                     }
                 });
             },
             changeEmailHandle(){
+                this.isLoading = true;
                 this.$validator.validate('communicationEmail', this.subEmail.email).then((result) => {
                     alert(this.$t('success'))
+                    this.isLoading = false;
                     this.$store.dispatch('changeEmail', this.subEmail)
                 }).catch((data) => {
+                    this.isLoading = false;
                     alert(data.result)
                 })
             }
@@ -166,13 +177,13 @@
     .p-bd{
         text-align: left;
         margin-left: 180px;
-        padding-top: 62px;
+        padding-top: 40px;
         margin-bottom: 12px;
         strong{
             display: block;
             font-size: 16px;
             color: #222;
-            margin-bottom: 8px;
+            padding: 20px 0 15px 0;
         }
         input{
             width: 520px;

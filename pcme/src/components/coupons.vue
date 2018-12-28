@@ -89,7 +89,8 @@
             .fl-l{
                 width: 69%;
                 float: left;
-                padding: 10px;
+                padding-top: 20px;
+                padding-left: 20px;
                 i{
                     position: absolute;
                     right: 140px;

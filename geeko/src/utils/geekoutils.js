@@ -14,7 +14,7 @@ const _url_analyst = function (name) {
 
 
 //app params
-export const VERSION = 'v7'
+export const VERSION = 'v8'
 export const APP_VERSION = '3.2.0'
 export const VPATH = '/' + VERSION
 // export const PROJECT = '/boutiquefeel'

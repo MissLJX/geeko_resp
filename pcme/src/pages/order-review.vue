@@ -37,11 +37,21 @@
                     <textarea v-model="comment.content" style="resize:none;" maxlength="1000" ></textarea>
                 </div>
             </div>
-
-            <!--<div class="uploadimg">
-                <p>Upload Photo:</p>
-                <upload-img @getImgFiles="getImgFiles"></upload-img>
-            </div>-->
+            <div class="upload-container" id="imgboxid">
+                <ul v-if="uploadedImages && uploadedImages.length">
+                    <li v-for="(image,index) in uploadedImages" class="uploadImage" >
+                        <img :src="image"/>
+                        <span class="removeImg" @click="removeImg(index)">&times;</span>
+                    </li>
+                </ul>
+                <div class="upload-img" id="uploadimg" v-show="uploadedImages.length<5">
+                    <form ref="imageLoader">
+                        <input type="file" name="imageFiles" multiple="multiple" @change="loadImg" accept="image/jpg,image/jpeg,image/png,image/gif">
+                    </form>
+                    <div class="addbtn">+</div>
+                    <div class="addnum">{{addnum}} / 5</div>
+                </div>
+            </div>
 
             <div class="v-btn" @click="sendComment">{{$t('submit')}}</div>
         </div>
@@ -62,6 +72,7 @@
     import uploadImg from '../components/upload-img.vue';
     import CommentAlert from '../components/comment-alert.vue';
     import loding from '../components/loding.vue';
+    import HtmlImageCompress from 'html-image-compress';
 
     export default {
         data(){
@@ -73,7 +84,6 @@
                 orderpro:'',
                 /*remnant1:0,*/
                 isloding:false,
-                files:null,
                 fits: [
                     {label: 'Too Small', value: '3'},
                     {label: 'Good Fit', value: '2'},
@@ -83,6 +93,10 @@
                 isissatisfy:true,
                 alertMess:'',
                 isempty:false,
+                uploadedImages: [],
+                files:[],
+                addnum:0,
+                newfiles:[],
             }
         },
         components: {
@@ -90,13 +104,16 @@
             'star-list': StarList,
             'upload-img':uploadImg,
             'comment-alert':CommentAlert,
-            'loding':loding
+            'loding':loding,
+            HtmlImageCompress
         },
         computed:{
             ...mapGetters(['orderdetail','comment']),
             remnant1(){
                 if(this.comment && this.comment.content){
                     return this.comment.content.length
+                }else{
+                    return '0'
                 }
             },
             getDate(){
@@ -159,28 +176,37 @@
             sendComment(evt){
                 this.isloding=true
                 var _this = this;
+
                 if(_this.comment.content!==''){
                     _this.isempty=false;
                     let files = this.files;
-                    let formData = new FormData();
-                    formData.append('content', this.comment.content);
-                    formData.append('id', this.comment.id);
-                    formData.append('productId', this.orderpro.productId);
-                    formData.append('score', this.comment.score);
-                    formData.append('sizingRecommendation', this.comment.sizingRecommendation);
+                    let promises = this.files.map(file => new HtmlImageCompress(file, {quality:.7, imageType:file.type}))
 
 
-                    if(!!!_this.comment.productId)
-                        _this.comment.productId = this.orderpro.productId
+                    Promise.all(promises).then(results => {
+                        let _files = results.map(result => result.file);
+                        var formData = new FormData();
+                        formData.append('content', this.comment.content);
+                        formData.append('id', this.comment.id);
+                        formData.append('productId', this.$route.query.productid);
+                        formData.append('score', this.comment.score);
+                        formData.append('sizingRecommendation', this.comment.sizingRecommendation);
 
-                    _this.$store.dispatch('sendComment', {reply:formData, files}).then(() => {
-                        this.isloding = false
-                        alert("Success!");
-                        this.$router.go(-1);
-                    }).catch((e) => {
-                        alert(e);
-                        this.isloding = false
-                    });
+                        _files.forEach((file,index) => {
+                            formData.append("imageFiles",  new File([file], files[index].name));
+                        });
+
+                        if(!!!_this.comment.productId)
+                            _this.comment.productId = this.orderpro.productId
+                        _this.$store.dispatch('sendComment', {reply:formData}).then(() => {
+                            this.isloding = false
+                            alert("Success!");
+                            this.$router.go(-1);
+                        }).catch((e) => {
+                            alert(e);
+                            this.isloding = false
+                        });
+                    })
                 }else{
                     _this.isempty=true;
                 }
@@ -188,20 +214,39 @@
             backOrderPage(){
                 this.$router.go(-1);
             },
+            loadImg(event) {
+                this.newfiles = [...event.target.files];
+                this.files = this.files.concat(this.newfiles);
+                var files = this.newfiles;
+                _.each(files, (file) => {
+                    this.addnum = this.addnum + 1;
+                    var src = window.navigator.userAgent.indexOf("Chrome") >= 1 || window.navigator.userAgent.indexOf("Safari") >= 1 ? window.webkitURL.createObjectURL(file) : window.URL.createObjectURL(file);
+                    this.uploadedImages.push(src)
+                })
+                if (this.uploadedImages.length > 5) {
+                    this.uploadedImages.splice(5, this.uploadedImages.length - 5);
+                    this.files.splice(5, this.files.length - 5)
+                }
+            },
+            removeImg(index) {
+                this.uploadedImages.splice(index, 1)
+                this.files.splice(index, 1);
+                this.addnum = this.addnum - 1;
+            }
         },
         created(){
             this.$store.dispatch('getOrder',this.$route.query.orderid).then(()=>{
-                this.order = this.orderdetail.order
-                if(this.order && this.orderdetail.order.orderItems){
-                    this.orderdetail.order.orderItems.forEach(item =>{
+                this.order = this.orderdetail
+                if(this.order && this.orderdetail.orderItems){
+                    this.orderdetail.orderItems.forEach(item =>{
                         if(item.productId === this.$route.query.productid){
                             this.orderpro = item
                         }
                     })
                 }
-                this.shipping = this.orderdetail.order.shippingDetail
-                this.shippingstate = this.orderdetail.order.shippingDetail.state
-                this.shippingcountry =this.orderdetail.order.shippingDetail.country
+                this.shipping = this.orderdetail.shippingDetail
+                this.shippingstate = this.orderdetail.shippingDetail.state
+                this.shippingcountry =this.orderdetail.shippingDetail.country
             })
             this.$store.dispatch('loadComment', this.$route.query.productid).then(()=>{
 
@@ -217,7 +262,7 @@
         color: #999;
     }
     .infotabel{
-        border: 1px solid #cacaca;
+        border: 1px solid #e6e6e6;
         width: 100%;
         margin: 20px 0 30px 0;
         td{
@@ -357,5 +402,66 @@
         color: #fff;
         margin-bottom: 20px;
         cursor: pointer;
+    }
+
+    .upload-container{
+        overflow:hidden;
+        padding-top: 20px;
+        .upload-img{
+            float:left;
+            width: fit-content;
+            /*background-image: url("https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/promotion/1129/chicme-23.png");*/
+            background-size:100%;
+            position: relative;
+            border: 1px dashed #999;
+            input{
+                display:inline-block;
+                height:144px;
+                width:144px;
+                opacity: 0;
+                position: relative;
+                z-index: 99;
+            }
+            .addbtn{
+                position: absolute;
+                top: calc(50% - 25px);
+                left: calc(50% - 8px);
+                font-size: 34px;
+                z-index: 0;
+                color: #999;
+            }
+            .addnum{
+                position: absolute;
+                top: 70%;
+                left: calc(50% - 10px);
+                font-size: 12px;
+                z-index: 0;
+                color: #999;
+            }
+        }
+        .uploadImage{
+            position:relative;
+            height:107.5px;
+            width:88px;
+            float:left;
+            margin:5px;
+            overflow: hidden;
+            img{
+                width:100%;
+            }
+            .removeImg{
+                width:20px;
+                line-height:20px;
+                font-size: 21px;
+                text-align: center;
+                display: block;
+                border-radius: 50%;
+                background-color: #cccccc;
+                color:#ffffff;
+                position:absolute;
+                top:6px;
+                right:4px;
+            }
+        }
     }
 </style>

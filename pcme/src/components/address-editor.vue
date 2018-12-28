@@ -40,60 +40,75 @@
                     <span v-show="errors.has('city')" class="st-is-danger">{{errors.first('city')}}</span>
                 </div>
             </div>
-
-            <div class="input-con required w-left">
-                <label>{{$t('country')}}:</label>
-                <div class="x-default-input">
-                    <select ref="country" class="x-select" v-model="countrySelected"
-                            @change="changeCountry">
-                        <option disabled value="-1">{{$t('country')}}</option>
-                        <option v-for="c in countries" :value="c.value">{{c.label}}</option>
-                    </select>
-                    <span v-show="countrySelected === '-1'"
-                          class="st-is-danger">{{$t('selectcountry')}}</span>
-                </div>
-            </div>
-            <div class="input-con w-left" :class="{'required':hasStates}">
-                <label>{{$t('stateand')}}:</label>
-                <div class="x-default-input">
-                    <p v-if="hasStates">
-                        <select ref="state" class="x-select" v-model="stateSelected">
-                            <option disabled value="-1">{{$t('state')}} *</option>
-                            <option v-for="s in states" :value="s.value">{{s.label}}</option>
+            <div class="clearBoth">
+                <div class="input-con required w-left">
+                    <label>{{$t('country')}}:</label>
+                    <div class="x-default-input">
+                        <select ref="country" class="x-select" v-model="countrySelected"
+                                @change="changeCountry">
+                            <option disabled value="-1">{{$t('country')}}</option>
+                            <option v-for="c in countries" :value="c.value">{{c.label}}</option>
                         </select>
-                        <span v-show="stateSelected === '-1'" class="st-is-danger">{{$t('selectstate')}}</span>
-                    </p>
+                        <span v-show="countrySelected === '-1'"
+                              class="st-is-danger">{{$t('selectcountry')}}</span>
+                    </div>
+                </div>
+                <div class="input-con w-left" :class="{'required':hasStates}">
+                    <label>{{$t('stateand')}}:</label>
+                    <div class="x-default-input">
+                        <p v-if="hasStates">
+                            <select ref="state" class="x-select" v-model="stateSelected">
+                                <option disabled value="-1">{{$t('state')}} *</option>
+                                <option v-for="s in states" :value="s.value">{{s.label}}</option>
+                            </select>
+                            <span v-show="stateSelected === '-1'" class="st-is-danger">{{$t('selectstate')}}</span>
+                        </p>
 
-                    <p v-else>
-                        <input ref="state" placeholder="State" name="state" v-model="stateInputed"/>
-                    </p>
+                        <p v-else>
+                            <input ref="state" placeholder="State" name="state" v-model="stateInputed"/>
+                        </p>
+                    </div>
                 </div>
             </div>
-            <div class="input-con required w-left">
-                <label>Zip Code:</label>
+            <div class="clearBoth">
+                <div class="input-con required w-left">
+                    <label>Zip Code:</label>
+                    <div class="x-default-input">
+                        <input name="zipCode" v-model="shipping.zipCode" v-validate="zip_validate"
+                               :class="{'st-input':true, 'st-input-danger':errors.has('zipCode')}" type="text"
+                        />
+                        <span v-show="errors.has('zipCode')"
+                              class="st-is-danger">{{errors.first('zipCode')}}</span>
+                    </div>
+                </div>
+                <div class="input-con required w-left">
+                    <label>{{$t('phoneNumber')}}:</label>
+                    <div class="x-default-input">
+                        <span v-if="countrySelected==='BR'">BR +55</span>
+                        <input v-if="countrySelected==='BR'" name="phoneArea" type="number" v-model="shipping.phoneArea" placeholder="Código" class="x-default-input"  oninput="if(value.length>2) value=value.slice(0,2)" style="width: 55px;margin-right:10px; margin-left: 10px;eight: 40px; padding-left: 0px; text-align: center;">
+                        <input name="phoneNumber" v-model="shipping.phoneNumber" v-validate="phone_validate"
+                               :class="{'st-input':true, 'st-input-danger':errors.has('phoneNumber'),'phonenum':countrySelected==='BR'}"
+                               type="text"
+                               />
+                        <span v-show="errors.has('phoneNumber')"
+                              class="st-is-danger">{{errors.first('phoneNumber')}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="input-con required p-relative" v-if="countrySelected==='BR'">
+                <div v-if="ifshowCPFtip" class="cpf-tip">CPF (Cadastro de Pessoa Física), utilizado para tributação, é necessário para todos os produtos enviados ao Brasil, independentemente de encomendas expressas ou contêineres logísticos.Quando preenchemos o conhecimento de embarque e fatura, por favor, não esqueça de preencher o número de contribuinte do destinatário.Na maioria dos casos, sua forma é o número digital como abaixo, XXX.XXX.XXX-XX</div>
+                <label>CPF: <i class="iconfont cpficon" @mouseover="() => {this.ifshowCPFtip = true}" @mouseout="() => {this.ifshowCPFtip = false}">&#xe73f;</i></label>
                 <div class="x-default-input">
-                    <input name="zipCode" v-model="shipping.zipCode" v-validate="zip_validate"
-                           :class="{'st-input':true, 'st-input-danger':errors.has('zipCode')}" type="text"
+                    <input name="CPF" v-model="shipping.cpf" v-validate="cpfValidate"
+                           :class="{'st-input':true, 'st-input-dang() => {this.ifshowCPFtip = true}er':errors.has('CPF')}" type="text"
                     />
-                    <span v-show="errors.has('zipCode')"
-                          class="st-is-danger">{{errors.first('zipCode')}}</span>
+                    <span v-show="errors.has('CPF')" class="st-is-danger">{{errors.first('CPF')}}</span>
                 </div>
             </div>
-            <div class="input-con required w-left">
-                <label>{{$t('phoneNumber')}}:</label>
-                <div class="x-default-input">
-                    <span v-if="countrySelected==='BR'">BR +55</span>
-                    <input v-if="countrySelected==='BR'" name="phoneArea" type="number" v-model="shipping.phoneArea" placeholder="Código" class="x-default-input"  oninput="if(value.length>2) value=value.slice(0,2)" style="width: 55px;margin-right:10px; margin-left: 10px;eight: 40px; padding-left: 0px; text-align: center;">
-                    <input name="phoneNumber" v-model="shipping.phoneNumber" v-validate="phone_validate"
-                           :class="{'st-input':true, 'st-input-danger':errors.has('phoneNumber'),'phonenum':countrySelected==='BR'}"
-                           type="text"
-                           />
-                    <span v-show="errors.has('phoneNumber')"
-                          class="st-is-danger">{{errors.first('phoneNumber')}}</span>
-                </div>
+            <div class="clearBoth">
+                <button  class="input-con required w-left s-r-btn" :class="{'grey': submiting}" type="submit">{{tipmsg}}</button>
+                <div class="input-con required w-left cancel-btn" @click="closeHandle">{{$t('cancel')}}</div>
             </div>
-            <button  class="input-con required w-left s-r-btn" :class="{'grey': submiting}" type="submit">{{tipmsg}}</button>
-            <div class="input-con required w-left cancel-btn" @click="closeHandle">{{$t('cancel')}}</div>
         </form>
     </div>
 </template>
@@ -137,7 +152,8 @@
                     city: null,
                     zipCode: null,
                     phoneNumber: null,
-                    phoneArea:null
+                    phoneArea:null,
+                    CPF:null
                 },
                 countrySelected: initCountry,
                 stateSelected: initState,
@@ -145,7 +161,9 @@
                 initState,
                 submiting: false,
                 phone_validate:initPhoneValidate,
-                zip_validate:initZipValidate
+                zip_validate:initZipValidate,
+                cpfValidate:'required|cpf',
+                ifshowCPFtip:false,
             }
         },
         props: {
@@ -385,5 +403,28 @@
             content: '';
             clear: both;
         }
+    }
+    .clearBoth{
+        &:after{
+            display: block;
+            content: '';
+            clear: both;
+        }
+    }
+    .p-relative{
+        position: relative;
+    }
+    .cpf-tip{
+        width: 70%;
+        position: absolute;
+        background-color: #fff;
+        z-index: 99;
+        border: 1px solid #efefef;
+        padding: 14px;
+        top: 28px;
+        left:-200px;
+    }
+    .cpficon{
+        cursor: pointer;
     }
 </style>

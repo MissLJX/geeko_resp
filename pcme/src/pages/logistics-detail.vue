@@ -1,82 +1,83 @@
 <template>
-    <div class="detailCon">
-        <h2>{{$t('detail')}}</h2>
-        <h4>Logistics Information</h4>
-        <div class="info" v-if="logistics">
-            <p><span>Logistics Company: </span>{{logistics.slug}}</p>
-            <p><span>Tracking Number: </span>{{logistics.trackingNumber}}</p>
+    <div class="datail">
+        <div class="detailHd" v-if="method==='orderlist'">
+            <p style="text-transform:capitalize"><span @click="window.location.href = '/'">{{$t('home')}}</span><router-link to="/me/m"> > {{$t('me')}}</router-link><router-link to="/me/m/order"> > {{$t('myorders')}}</router-link> > {{$t('trackinfo')}}</p>
         </div>
-        <div class="logisticsinfo" v-if="logistics">
-            <h4>Current Stataus: {{getStatus}}</h4>
-            <ul class="logisticslist" v-for="(item,index) in logisticslist">
-                <li :class="{'btxt':index === 0}">
-                    <span :class="{'activebgball':index===0,'bgball':index!==0}"></span>
-                    <span class="time">{{getDate(item.checkpointTime)}}</span>
-                    <span v-if="item.location">【{{item.location}}】</span>
-                    <span v-if="item.message">{{item.message}}</span>
-                </li>
-                <li v-if="index !== logisticslist.length - 1">
-                    <span class="bgline"></span>
+        <div class="detailHd" v-if="method==='ordertracking'">
+            <p style="text-transform:capitalize"><span @click="window.location.href = '/'">{{$t('home')}}</span><a href = "/fs/shipping-guid">> Order Tracking</a> > {{$t('trackinfo')}}</p>
+        </div>
+        <div class="detailCon">
+            <h2>{{$t('trackinfo')}}</h2>
+            <ul v-if="logistics && logistics.packages" class="packageTab">
+                <li class="tab" @click="changeTab(key)" :class="{'active': key===isActive}" v-for="(item,key) in logistics.packages" :key="key">
+                    {{item.name}}{{trackName}}
                 </li>
             </ul>
+            <ul class="package-imgs" v-if="changePackage && changePackage.products">
+                <li v-for="product in changePackage.products">
+                    <img :src="product.imageURL">
+                </li>
+            </ul>
+            <div v-if="changePackage.trackingId">
+                <h4>{{$t('logisticsInfo')}}</h4>
+                <div class="info" >
+                    <p v-if="changePackage.slug"><span>{{$t('logisticsCompany')}}: </span>{{changePackage.slug}}</p>
+                    <p v-if="changePackage.trackingNumber"><span>{{$t('tracknum')}}: </span>{{changePackage.trackingNumber}}</p>
+                </div>
+            </div>
+            <div class="logisticsinfo" v-if="changePackage.trackingId">
+                <h4 v-if="changePackage.trackingStatusView">{{$t('currentStatus')}}: {{changePackage.trackingStatusView}}</h4>
+                <ul class="logisticslist" v-for="(item,key) in logisticslist">
+                    <li :class="{'btxt':key === 0}">
+                        <span :class="{'activebgball':key===0,'bgball':key!==0}"></span>
+                        <span class="time">{{getDate(item.checkpointTime)}}</span>
+                        <span v-if="item.location">【{{item.location}}】</span>
+                        <span v-if="item.message">{{item.message}}</span>
+                    </li>
+                    <li v-if="key !== logisticslist.length - 1">
+                        <span class="bgline"></span>
+                    </li>
+                </ul>
+            </div>
         </div>
+        <loding v-if="isloding"></loding>
     </div>
-
 </template>
 
 <script>
     import {mapGetters} from 'vuex';
     import * as utils from '../utils/geekoutil';
+    import _ from 'lodash';
+    import loding from '../components/loding.vue';
 
     export default {
         data(){
             return {
-
+                isActive:0,
+                changePackage:[],
+                isloding:true,
+                method:''
             }
+        },
+        components: {
+            'loding':loding
         },
         computed:{
             ...mapGetters(['logistics']),
-            getStatus(){
-                if(this.logistics && this.logistics.status){
-                    let label = '';
-                    switch (this.logistics.status) {
-                        case '0':
-                            label = 'Not Found'
-                            break
-                        case '10':
-                            label = 'In transit'
-                            break
-                        case '20':
-                            label = 'Transport overtime'
-                            break
-                        case '30':
-                            label = 'Waiting for delivery'
-                            break
-                        case '35':
-                            label = 'Undelivered'
-                            break
-                        case '39':
-                            label = 'Tracking Finished'
-                            break
-                        case '40':
-                            label = 'Delivered'
-                            break
-                        case '50':
-                            label = 'Tracking Exception'
-                            break
-                        default:
-                            label = ''
-                            break
-                    }
-                    return label
-                }
+            trackName(){
+                this.isActive = 0;
+                this.changePackage=_.cloneDeep(this.logistics.packages[0])
             },
-
-
             logisticslist(){
-                if(this.logistics && this.logistics.originPoints){
-                    return this.logistics.originPoints.reverse()
+                let logList = [];
+
+                if(this.changePackage && this.changePackage.destinPoints){
+                    logList =_.cloneDeep(this.changePackage.destinPoints)
                 }
+                if(this.changePackage && this.changePackage.originPoints){
+                    logList = logList.concat(this.changePackage.originPoints)
+                }
+                return logList.reverse()
             }
         },
         methods:{
@@ -86,23 +87,78 @@
                 }
                 return utils.enTime(new Date(paymentTime))
             },
+            changeTab(index){
+                this.isActive = index;
+                this.changePackage = _.cloneDeep(this.logistics.packages[index])
+            }
         },
         created(){
-            this.$store.dispatch('getLogistics',this.$route.query.orderid)
+            this.$store.dispatch('getLogistics',this.$route.query.orderid).then(()=>{
+                this.method = this.$route.query.method
+                this.isloding = false
+            }).catch((result) => {
+                console.log(result);
+                this.isloding = false;
+            })
         }
     }
 </script>
 
 <style scoped lang="scss">
+    .datail{
+        width: 1140px;
+        margin: 0 auto;
+        .detailHd{
+            font-size: 14px;
+            color: #666;
+            padding:30px 0 0 0;
+            p{
+                span{
+                    cursor: pointer;
+                }
+                a{
+                    color:#666;
+                }
+            }
+        }
+    }
+    .package-imgs{
+        display: flex;
+        padding-top: 28px;
+        img{
+            display: inline-block;
+            width:81px;
+            height: 108px;
+            margin-right: 11px;
+        }
+    }
+    .packageTab{
+        height: 45px;
+        line-height: 45px;
+        display: flex;
+        margin-left: -10px;
+        border-bottom: 1px solid #f5f5f5;
+        .tab{
+            cursor: pointer;
+        }
+        li{
+            margin: 0 20px;
+            color: #666;
+        }
+        .active{
+            border-bottom: 2px solid #222;
+            color: #222;
+        }
+    }
     .detailCon{
-        width: 1150px;
+        width: 1000px;
         margin: 0 auto;
         h2 {
             margin-top: 63px;
             margin-bottom: 20px;
         }
         h4 {
-            margin: 24px 0;
+            margin: 15px 0;
         }
         .info{
             border-bottom: 1px solid #cacaca;
@@ -118,7 +174,7 @@
         }
 
         .logisticsinfo{
-            padding-top: 50px;
+            padding-top: 18px;
             ul{
                 li{
                     line-height: 20px;

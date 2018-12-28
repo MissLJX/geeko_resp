@@ -42,10 +42,12 @@
         methods: {
             listingHandle(){
                 this.loading = true
-                store.dispatch("me/getPromotionNotifications", {skip: this.skip}).then(() => {
-                    this.loading = false
-                    store.dispatch("me/getPromotionNtSkip")
-                })
+                if(!this.finished){
+                    store.dispatch("me/getPromotionNotifications", {skip: this.skip}).then(() => {
+                        this.loading = false
+                        store.dispatch("me/getPromotionNtSkip")
+                    })
+                }
             }
         },
         components: {

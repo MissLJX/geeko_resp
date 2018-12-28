@@ -8,16 +8,19 @@
                 <div class="el-tbl-cell" @click="getData(1,'Unpaid','click')" :class="{active:1===index}">
                     {{$t('unpaid')}}<span>{{orderCountUnpaid}}</span>
                 </div>
-                <div class="el-tbl-cell" @click="getData(2,'Processing','click')" :class="{active:2===index}">
+                <div class="el-tbl-cell" @click="getData(2,'Paid','click')" :class="{active:2===index}">
+                    {{$t('paid')}}<span>{{orderCountPaid}}</span>
+                </div>
+                <div class="el-tbl-cell" @click="getData(3,'Processing','click')" :class="{active:3===index}">
                     {{$t('processing')}}<span>{{orderCountProcessing}}</span>
                 </div>
-                <div class="el-tbl-cell" @click="getData(3,'Shipped','click')" :class="{active:3===index}">
+                <div class="el-tbl-cell" @click="getData(4,'Shipped','click')" :class="{active:4===index}">
                     {{$t('ordershipped')}}<span>{{orderCountShipped}}</span>
                 </div>
-                <div class="el-tbl-cell" @click="getData(4,'Comfirmed','click')" :class="{active:4===index}">
+                <div class="el-tbl-cell" @click="getData(5,'Comfirmed','click')" :class="{active:5===index}">
                     {{$t('orderconfirm')}}<span>{{orderCountReceipt}}</span>
                 </div>
-                <div class="el-tbl-cell" @click="getData(5,'Canceled','click')" :class="{active:5===index}">
+                <div class="el-tbl-cell" @click="getData(6,'Canceled','click')" :class="{active:6===index}">
                     {{$t('cancelorder1')}}<span>{{orderCountCanceled}}</span>
                 </div>
             </div>
@@ -35,42 +38,62 @@
             <div v-for="item in orderMethod" class="item-order">
                 <div class="i-hd">
                     <div class="tbl">
-                        <div class="tbl-cell tx-c">{{getDate(item.order.paymentTime)}}</div>
-                        <div class="tbl-cell tx-c"><span>{{$t('orderno')}}:</span>{{item.order.id}}</div>
+                        <div class="tbl-cell tx-c">{{getDate(item.paymentTime)}}</div>
+                        <div class="tbl-cell tx-c"><span>{{$t('orderno')}}:</span>{{item.id}}</div>
                         <div class="tbl-cell tx-c"><span>{{$t('shippingfrom')}}:</span>{{$t('overseas')}}</div>
-                        <div class="tbl-cell tx-c"><i class="iconfont contactseller" >&#xe716;</i><a class="cur-p" @click="showTicket(item.order.id)">{{$t('contactseller')}}</a></div>
+                        <div class="tbl-cell tx-c"><i class="iconfont contactseller" >&#xe716;</i><a class="cur-p" @click="showTicket(item.id)">{{$t('contactseller')}}</a></div>
                     </div>
                 </div>
                 <div class="i-bd">
                     <div class="tbl">
                         <div class="tbl-cell w-523">
-                            <div class="proimg" v-if="item.order && item.order.orderItems && index < 4" v-for="(img,index) in item.order.orderItems">
-                                <link-image   href="#" :src="img.productImageUrl" :title="img.productName"/>
+                            <div class="proimg" v-if="item.orderItems && index < 4" v-for="(img,index) in item.orderItems">
+                                <link-image   :href="productUrl(img.productId)" :src="img.productImageUrl" :title="img.productName"/>
                             </div>
-                            <div v-if="item.order && item.order.orderItems && item.order.orderItems.length > 4" class="viewmore" @click="checkDetail(item.order.id)">
+                            <div v-if="item.orderItems && item.orderItems.length > 4" class="viewmore" @click="checkDetail(item.id)">
                                 <div class="bg"></div>
                                 <p>View Detail</p>
                             </div>
                         </div>
                         <div class="tbl-cell v-m w-180 tx-c">
-                            <p>{{getStatus(item.order.status)}}</p>
-                            <p class="detail cur-p" @click="checkDetail(item.order.id)">{{$t('detail')}}</p>
-                            <p class="detail cur-p" v-if="item.order.id && item.order.status === 4 && item.tracking"  @click="checkLogistics(item.order.id)">{{$t('logistics')}}</p>
+                            <p>{{item.statusView}}</p>
+                            <p class="detail cur-p" @click="checkDetail(item.id)">{{$t('detail')}}</p>
+                            <p class="detail cur-p" v-if="item.id && item.status === 2 || item.status === 3"  @click="checkLogistics(item.id)">{{$t('track')}}</p>
                         </div>
                         <div class="tbl-cell v-m w-190 tx-c">
-                            <p style="margin-bottom: 10px" v-if="orderoffset(item) >= 1000 && item.boletoPayCodeURL && item.order.status === 1">
-                                <span class="label" style="color: #E64545">Presente de cupão expirs</span>
-                                <count-down :timeStyle="{color:'#E64545'}" :timeLeft="orderoffset(item)"></count-down>
-                            </p>
-                            <a class="r-btn" :href="item.boletoPayCodeURL" target="_blank" v-if="item.boletoPayCodeURL && item.order.status === 1">Imprimir Boleto</a>
+                            <!--巴西支付按钮+倒计时-->
+                            <div class="pos-rel">
+                                <a class="r-btn" :href="item.boletoPayCodeURL" target="_blank" v-if="item.boletoPayCodeURL && item.status === 0">Imprimir Boleto</a>
+                                <div class="offTip" v-if="orderoffset(item) >= 0 && item.boletoPayCodeURL && item.status === 0">
+                                    <div class="triangle"></div>
+                                    <span class="label">Presente de cupão expirs</span>
+                                    <count-down :timeStyle="{color:'#fff'}" :timeLeft="orderoffset(item)"></count-down>
+                                </div>
+                            </div>
 
-                            <p style="margin-bottom: 10px" v-if="orderoffset(item) >= 1000 && item.order.mercadopagoPayURL && item.order.status === 1">
-                                <span class="label" style="color: #E64545">Tiempo restante para realizar el pago</span>
-                                <count-down :timeStyle="{color:'#E64545'}" :timeLeft="orderoffset(item)"></count-down>
-                            </p>
-                            <a class="r-btn" :href="item.order.mercadopagoPayURL" target="_blank" v-if="item.order.mercadopagoPayURL && item.order.status === 1">Generar Ticket</a>
 
-                            <a class="b-btn" @click="checkDetail(item.order.id)" v-if="item.order.id && item.order.status === 10">{{$t('view')}}</a>
+                            <!--墨西哥支付按钮+倒计时-->
+                            <div class="pos-rel">
+                                <a class="r-btn" :href="item.mercadopagoPayURL" target="_blank" v-if="item.mercadopagoPayURL && item.status === 0">Generar Ticket</a>
+                                <div class="offTip" v-if="orderoffset(item) >= 0 && item.mercadopagoPayURL && item.status === 0">
+                                    <div class="triangle"></div>
+                                    <span class="label" >Tiempo restante para realizar el pago</span>
+                                    <count-down :timeStyle="{color:'#fff'}" :timeLeft="orderoffset(item)"></count-down>
+                                </div>
+                            </div>
+
+                            <!--线上其他支付按钮+倒计时-->
+                            <div class="pos-rel">
+                                <a class="b-btn" :href="checkoutUrl(item.id)"  v-if="item.id && item.status===0 && !item.mercadopagoPayURL && !item.boletoPayCodeURL && orderoffset(item) >= 0">{{$t("paynow")}}</a>
+                                <div class="offTip" v-if="item.id && item.status===0 && !item.mercadopagoPayURL && !item.boletoPayCodeURL && orderoffset(item) >= 0">
+                                    <div class="triangle"></div>
+                                    <span class="label">{{$t("remaining")}}:</span>
+                                    <count-down :timeStyle="{color:'#fff'}" :timeLeft="orderoffset(item)"></count-down>
+                                </div>
+                            </div>
+
+                            <!--重新加入购物车-->
+                            <div class="b-btn" @click="addProducts(item.orderItems)" v-if="item.id && item.status===4">{{$t("repurchase")}}</div>
                         </div>
                     </div>
                 </div>
@@ -81,6 +104,10 @@
 
         <select-order v-if="isShowSelect" v-on:closeSelect="closeSelect1" v-on:showTicket="showTicket"></select-order>
         <order-ticket  v-if="isShowTicket" v-on:closeSelect="closeSelect1" v-on:selectOrder="selectorder"></order-ticket>
+
+        <transition name="fade">
+            <div v-if="isAddProducts" class="addProductsMask">{{isAddProductstTip}}</div>
+        </transition>
     </div>
 </template>
 
@@ -100,7 +127,9 @@
                 isShowSelect:false,
                 method:'all',
                 isloded:false,
-                finished:false
+                finished:false,
+                isAddProducts:false,
+                isAddProductstTip:''
             }
         },
         components: {
@@ -112,6 +141,7 @@
         computed: {
             ...mapGetters([
                 'orderCountUnpaid',
+                'orderCountPaid',
                 'orderCountProcessing',
                 'orderCountShipped',
                 'orderCountReceipt',
@@ -119,6 +149,7 @@
                 'orderCountAll',
                 'all',
                 'unpaid',
+                'paid',
                 'processing',
                 'shipped',
                 'confirmed',
@@ -129,8 +160,10 @@
                 'canceledLoading',
                 'shippedLoading',
                 'unpaidLoading',
+                'paidLoading',
                 'allDone',
                 'unpaidDone',
+                'paidDone',
                 'processingDone',
                 'confirmedDone',
                 'canceledDone',
@@ -142,6 +175,9 @@
                 }
                 if(this.method==='Unpaid'){
                     return this.unpaidDone
+                }
+                if(this.method==='Paid'){
+                    return this.paidDone
                 }
                 if(this.method==='Processing'){
                     return this.processingDone
@@ -155,7 +191,8 @@
                 if(this.method==='Shipped'){
                     return this.shippedDone
                 }
-            }
+            },
+
         },
         created(){
             this.$store.dispatch('getOrderCountAll');
@@ -164,6 +201,7 @@
             this.$store.dispatch('getOrderCountReceipt');
             this.$store.dispatch('getOrderCountCanceled');
             this.$store.dispatch('getOrderCountUnpaid');
+            this.$store.dispatch('getOrderCountPaid');
             this.loadAll(20).then(()=> {
                 this.orderMethod = this.all
                 this.isloded = true
@@ -200,6 +238,12 @@
                             this.isloded = true
                         })
                     }
+                    if(method==='Paid'){
+                        this.$store.dispatch('loadPaid',20).then(()=> {
+                            this.orderMethod = this.paid
+                            this.isloded = true
+                        })
+                    }
                     if(method==='Processing'){
                         this.$store.dispatch('loadProcessing',20).then(()=> {
                             this.orderMethod = this.processing
@@ -232,9 +276,6 @@
                 }
                 return utils.enTime(new Date(paymentTime))
             },
-            getStatus(orderstatus){
-                return utils.STATUS_LABEL(orderstatus)
-            },
             checkDetail(orderid){
                 this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/order-detail', query: { orderid: orderid } })
             },
@@ -252,10 +293,12 @@
                 this.isShowTicket = false;
             },
             checkLogistics(orderid){
-                this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/logistics-detail', query: { orderid: orderid } })
+                this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/logistics-detail', query: { orderid: orderid , method: 'orderlist' } })
             },
             orderoffset(order){
-                return  order.order.orderTime + 5*24*60*60*1000 - order.serverTime;
+                if(order && order.expiredPaymentTime){
+                    return  order.expiredPaymentTime - order.serverTime;
+                }
             },
             scrollHandle(evt){
                 evt.preventDefault();
@@ -263,6 +306,35 @@
                     this.getData(this.index,this.method,'scroll')
                 }
             },
+            productUrl(productId){
+                return window.ctx + '/w-product/anon/detail?productId=' + productId
+            },
+            checkoutUrl(id){
+                if(id){
+                    return window.ctx + '/checkout/' +id
+                }
+            },
+            addProducts(orderItems){
+                let formData = [];
+                if(orderItems){
+                    orderItems.forEach(product => {
+                        formData.push({"variantId":product.variantId,"quantity":'1'})
+                    })
+                    this.$store.dispatch('addProducts',formData).then(()=>{
+                        this.isAddProductstTip = 'Add Success'
+                        this.isAddProducts = true;
+                        setTimeout(() => {
+                            this.isAddProducts = false;
+                        }, 2000);
+                    }).catch((e) => {
+                        this.isAddProductstTip = 'Add Failed'
+                        this.isAddProducts = true;
+                        setTimeout(() => {
+                            this.isAddProducts = false;
+                        }, 2000);
+                    })
+                }
+            }
         }
     }
 </script>
@@ -283,6 +355,25 @@
         -webkit-text-stroke-width: 0.2px;
         -moz-osx-font-smoothing: grayscale;
     }
+    .addProductsMask{
+        position: fixed;
+        top: calc(50% - 20px);
+        background-color: rgba(0,0,0,.4);
+        text-align: center;
+        overflow-y: auto;
+        z-index: 999;
+        color:#fff;
+        width: 210px;
+        height: 40px;
+        line-height: 40px;
+        left: calc(50% - 110px);
+    }
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity .2s;
+    }
+    .fade-enter, .fade-leave-to {
+        opacity: 0;
+    }
     .contactseller{
         font-size: 20px;
         position: relative;
@@ -301,7 +392,7 @@
         width: 180px;
     }
     .w-190{
-        width: 190px;
+        width: 210px;
     }
     .tx-l{
         text-align: left;
@@ -348,6 +439,15 @@
         .item-order{
             border: 1px solid #e6e6e6;
             margin-bottom: 16px;
+            &:first-child{
+                .i-bd{
+                    .tbl-cell{
+                        &:nth-child(2){
+                            border: none !important;
+                        }
+                    }
+                }
+            }
             .i-hd{
                 background-color: #f7f7f7;
                 font-size: 14px;
@@ -359,6 +459,7 @@
                     display: table-cell;
                     color: #000;
                     padding: 10px 0;
+                    vertical-align: middle;
                     span{
                         color: #666;
                     }
@@ -444,13 +545,7 @@
                             border-left: 1px solid #eee;
                         }
                     }
-                    &:first-child{
-                        .tbl-cell{
-                            &:nth-child(2){
-                                border: none;
-                            }
-                        }
-                    }
+
                     .p-info{
                         font-size: 14px;
                         p{
@@ -475,6 +570,7 @@
                     }
                 }
             }
+
         }
         .orders-hd{
             color: #222;
@@ -501,4 +597,30 @@
             transform: rotate(360deg);
         }
     }
+
+    .pos-rel{
+        position: relative;
+        .offTip{
+            width: 100%;
+            padding: 6px;
+            background-color: #f46e6d;
+            text-align: center;
+            position: absolute;
+            top:34px;
+            .label{
+                color: #fff;
+                line-height: 18px;
+            }
+            .triangle{
+                position: absolute;
+                right: 50%;
+                top: -11px;
+                width: 0;
+                height: 0;
+                border: 6px solid;
+                border-color: transparent transparent  #f46e6d transparent ;
+            }
+        }
+    }
+
 </style>

@@ -23,7 +23,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, './dist'),
      /*publicPath: '/joyshoetique/resources/vue/me/js/',*/
-    publicPath: '/resources/vue/me/js/',
+      publicPath: '/resources/vue/me/js/',
     filename: '[name].js',
     chunkFilename: '[name].js'
   },
@@ -83,7 +83,7 @@ module.exports = {
     }),
     new ExtractTextPlugin({ filename: '[name].css' }),
     new webpack.DefinePlugin({
-      'site':JSON.stringify("ivrose")
+      'site':JSON.stringify("boutiquefeel")
     })
   ],
 
@@ -102,7 +102,8 @@ module.exports = {
     contentBase: './dist',
     proxy: {
       '/api': {
-        target: 'http://localhost:8080/ivrose',
+        target: 'http://localhost:8080/wanna',
+        /*target: 'http://192.168.1.128:8080/wanna',*/
         pathRewrite: { '^/api': '' },
         secure: false
       }

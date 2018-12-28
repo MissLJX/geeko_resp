@@ -1,7 +1,8 @@
 import axios from './apiconfigs'
 import qs from 'qs'
-import * as http_infos from "../../../geeko/src/api/http_infos";
-const VPATH = '/v7'
+const VPATH = '/v8'
+const NVPATH = '/v8'
+import * as http_infos from "./http_infos";
 
 export const get = () => {
     return axios.get(VPATH + '/customer/get', {}, {}).then(data => data.result)
@@ -12,37 +13,40 @@ export function logout(){
 }
 //读取count
 export const getOrderCountAll = () => {
-    return axios.get(VPATH + '/msite/order/all-order-count').then(data => data.result)
+    return axios.get(NVPATH + '/order/orders-count').then(data => data.result)
 }
 export const getOrderCountProcessing = () => {
-    return axios.get(VPATH + '/msite/order/unshipped-order-count2').then(data => data.result)
+    return axios.get(NVPATH + '/order/proccessing-orders-count').then(data => data.result)
 }
 
 export const getOrderCountShipped = () => {
-    return axios.get(VPATH + '/msite/order/shipped-order-count').then(data => data.result)
+    return axios.get(NVPATH + '/order/shipped-orders-count').then(data => data.result)
 }
 
 export const getOrderCountCanceled = () => {
-    return axios.get(VPATH + '/msite/order/canceled-count').then(data => data.result)
+    return axios.get(NVPATH + '/order/canceled-orders-count').then(data => data.result)
 }
 export const getOrderCountReceipt = () => {
-    return axios.get(VPATH + '/msite/order/receipt-count').then(data => data.result)
+    return axios.get(NVPATH + '/order/receipt-orders-count').then(data => data.result)
 }
 export const getOrderCountUnpaid = () => {
-    return axios.get(VPATH + '/msite/order/unpayed-order-count').then(data => data.result)
+    return axios.get(NVPATH + '/order/unpaid-orders-count2').then(data => data.result)
 }
-export const getOrder = (id) => {
-    return axios.get(VPATH + '/msite/order/'+ id + '/get').then(data => data.result)
+export const getOrderCountPaid = () => {
+    return axios.get(NVPATH + '/order/paid-orders-count').then(data => data.result)
 }
 //orders
+export const getOrder = (id) => {
+    return axios.get(NVPATH + '/order/anon/get-order-details',{orderId:id}).then(data => data.result)
+}
 export const getOrders =(skip, api_suffix) => {
-    return axios.get(`${VPATH}/msite/order/${skip}/20/${api_suffix}`).then(data => data.result)
+    return axios.get(`${NVPATH}/order/${skip}/20/${api_suffix}`).then(data => data.result)
 }
 export const confirmOrder = (id) =>{
-    return axios.get('/v7/msite/order/'+id+'/receipt')
+    return axios.get('/v8/order/'+id+'/receipt')
 }
 export const cancelOrder = (id) =>{
-    return axios.get('/v7/msite/order/'+id+'/cancel')
+    return axios.get('/v8/msite/order/'+id+'/cancel')
 }
 //coupons
 export const getCoupons = () => {
@@ -179,6 +183,17 @@ export const getM1135 = () =>{
 }
 //getLogistics
 export const getLogistics = (id) =>{
-    return axios.get('/tracking/get/'+id).then(data => data.result)
+    return axios.get(NVPATH +'/tracking/anon/get-by-order-id',{orderId:id}).then(data => data.result)
+}
+export const getPackageLogistics = (type,id) =>{
+    return axios.get(NVPATH +'/tracking/get-by-id',{type:type, id:id}).then(data => data.result)
+}
+//rate
+export const rate = (rate) =>{
+    return axios.post('/ticket/rate-service', rate)
+}
+//addProducts
+export const addProducts = (products) =>{
+    return axios.post('/v8/shopping-cart/add-products',products)
 }
 

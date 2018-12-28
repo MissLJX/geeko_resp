@@ -59,8 +59,8 @@
         display: inline-block;
 
         .time::before{
-            content: '\e661';
-            font-size: 12px;
+            content: '\e655';
+            font-size: 18px;
             margin-right: 5px;
             font-family: iconfont;
         }

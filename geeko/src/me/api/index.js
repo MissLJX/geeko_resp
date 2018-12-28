@@ -41,6 +41,8 @@ export const getCredits = (skip) => {
     })
 }
 
+export const creditcards = getCredits
+
 export const getYouLikeProducts = (skip) => {
     return axios.get('/product/1/'+skip+'/20/show', {}, {}).then((data) => {
         return data.result
@@ -113,23 +115,23 @@ export const changeCurrency = (currency) => {
 
 
 export const getOrderCountProcessing = () => {
-    return axios.get(VPATH + '/msite/order/unshipped-order-count').then(data => data.result)
+    return axios.get(VPATH + '/order/proccessing-orders-count').then(data => data.result)
 }
 
 export const getOrderCountShipped = () => {
-    return axios.get(VPATH + '/msite/order/shipped-order-count').then(data => data.result)
+    return axios.get(VPATH + '/order/shipped-orders-count').then(data => data.result)
 }
 
 export const getOrderCountCanceled = () => {
-    return axios.get(VPATH + '/msite/order/canceled-count').then(data => data.result)
+    return axios.get(VPATH + '/order/canceled-orders-count').then(data => data.result)
 }
 
 export const getOrderCountReceipt = () => {
-    return axios.get(VPATH + '/msite/order/receipt-count').then(data => data.result)
+    return axios.get(VPATH + '/order/receipt-orders-count').then(data => data.result)
 }
 
 export const getOrderCountUnpaid = () => {
-  return axios.get(VPATH + '/msite/order/unpayed-order-count').then(data => data.result)
+  return axios.get(VPATH + '/order/unpaid-orders-count2').then(data => data.result)
 }
 
 export const getMessage = (code) => {

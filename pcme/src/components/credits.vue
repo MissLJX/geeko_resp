@@ -337,6 +337,7 @@
             margin-bottom: 10px;
             margin-right: 7px;
             cursor: pointer;
+            background-color: #ffffff !important;
         }
     }
     .credits{

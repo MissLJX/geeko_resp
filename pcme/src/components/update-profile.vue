@@ -259,10 +259,12 @@
                 border-radius: 50%;
                 border: 1px solid #cdcdcd;
                 background-size: cover;
+                margin-left: 14px;
             }
             .img-upload{
                 margin-top: 34px;
-                width: 150px;
+                width: 168px;
+                height: 40px;
                 line-height: 40px;
                 border-radius: 2px;
                 border: solid 1px #222222;

@@ -8,17 +8,22 @@
             <div v-for="(item,index) in orderMethod" class="item-order">
                 <div class="order-hd">
                     <p><span>{{$t('orderno')}} </span>{{item.id}}</p>
-                    <p><span>{{getStatus(item.order.status)}}</span></p>
+                    <p><span class="statusColor" :style="{backgroundColor : status_color(item.status)}"></span><span>{{item.statusView}}</span></p>
                 </div>
                 <div class="img-con">
                     <input :id="index" type="radio" :value="item.id" v-model="pickedOrder" />
                     <label :for="index"></label>
-                    <img :src="item.order.orderItems[0].productImageUrl"/>
+                    <ul class="img-flex">
+                        <li v-for="img in item.orderItems">
+                            <img :src="img.productImageUrl"/>
+                        </li>
+                    </ul>
+
                 </div>
                 <div class="order-info">
-                    <span>{{item.order.orderItems.length}} items</span>
+                    <span>{{item.orderItems.length}} items</span>
                     <span>
-                        {{$t('total')}} <span class="i-price">{{item.order.orderItems[0].realPrice.unit}}{{item.order.orderItems[0].realPrice.amount}}</span>
+                        {{$t('total')}} <span class="i-price">{{item.orderItems[0].price.unit}}{{item.orderItems[0].price.amount}}</span>
                     </span>
                 </div>
             </div>
@@ -54,6 +59,11 @@
                         label: 'UNPAID',
                         value: 'home-unpaid',
                         selected: 'home-unpaid' === tab
+                    },
+                    {
+                        label: 'PAID',
+                        value: 'home-paid',
+                        selected: 'home-paid' === tab
                     },
                     {
                         label: 'PROCESSING',
@@ -124,7 +134,8 @@
                 if(this.method==='home-shipped'){
                     return this.shippedDone
                 }
-            }
+            },
+
         },
         created() {
             this.loadAll(20).then(()=> {
@@ -142,7 +153,9 @@
             ...mapActions([
                 'changeTab','getM1135','loadAll'
             ]),
-
+            status_color(status) {
+                return utils.STATUS_COLOR(status)
+            },
             changeHandle(evt) {
                 var tab = evt.target.value;
                 this.changeList(tab);
@@ -260,9 +273,10 @@
                 height: 40px;
                 margin: 25px 14px;
                 padding-left: 10px;
+                background-color: #fff;
             }
             .order-hd{
-                border-bottom: 1px solid #cacaca;
+                border-bottom: 1px solid #eee;
                 text-align: left;
                 padding: 0 24px;
                 line-height: 50px;
@@ -293,12 +307,16 @@
                 padding-bottom: 17px;
                 position: relative;
                 line-height: 30px;
-
-                img{
-                    width: 120px;
-                    height: 160px;
+                .img-flex{
+                    display: flex;
+                    overflow-x: auto;
+                    margin-left: 10px;
+                    img{
+                        width: 120px;
+                        height: 160px;
+                        margin-left: 10px;
+                    }
                 }
-
                 input[type="radio"] {
                     width: 20px;
                     height: 20px;
@@ -353,7 +371,7 @@
             width: 100%;
             height: 73px;
             background-color: #fff;
-            border-top: 1px solid #cacaca;
+            border-top: 1px solid #eee;
             position: absolute;
             bottom: 0;
             .f-btn{
@@ -393,5 +411,12 @@
         to {
             transform: rotate(360deg);
         }
+    }
+    .statusColor{
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        margin: 7px 4px 0 0;
     }
 </style>

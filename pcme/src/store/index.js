@@ -16,6 +16,7 @@ const state = {
     orderCountReceipt: 0,
     orderCountCanceled: 0,
     orderCountUnpaid: 0,
+    orderCountPaid: 0,
 
     all: [],
     orderdetail:{},
@@ -24,12 +25,16 @@ const state = {
     confirmed: [],
     canceled: [],
     unpaid: [],
+    paid:[],
+
     allLoading: false,
     processingLoading: false,
     shippedLoading: false,
     confirmedLoading: false,
     canceledLoading: false,
     unpaidLoading: false,
+    paidLoading: false,
+
     tab: 'all',
     allSkip: 0,
     processingSkip: 0,
@@ -37,12 +42,16 @@ const state = {
     canceledSkip: 0,
     shippedSkip: 0,
     unpaidSkip: 0,
+    paidSkip:0,
+
     allDone: false,
     processingDone: false,
     confirmedDone: false,
     canceledDone: false,
     shippedDone: false,
     unpaidDone: false,
+    paidDone: false,
+
     bbmessage: null,
     orderid:'',
 
@@ -77,7 +86,8 @@ const state = {
     ticket_con:[],
     ticketid:'',
     shareurl:'',
-    logistics:[]
+    logistics:[],
+    packagelogistics:[]
 }
 const getters = {
     me: state => state.me,
@@ -88,6 +98,7 @@ const getters = {
     orderCountReceipt: state => state.orderCountReceipt,
     orderCountCanceled: state => state.orderCountCanceled,
     orderCountUnpaid: state => state.orderCountUnpaid,
+    orderCountPaid: state => state.orderCountPaid,
 
     all: state => state.all,
     orderdetail:state => state.orderdetail,
@@ -96,12 +107,16 @@ const getters = {
     confirmed: state => state.confirmed,
     canceled: state => state.canceled,
     unpaid: state => state.unpaid,
+    paid: state => state.paid,
+
     allLoading: state => state.allLoading,
     processingLoading: state => state.processingLoading,
     confirmedLoading: state => state.confirmedLoading,
     canceledLoading: state => state.canceledLoading,
     shippedLoading: state => state.shippedLoading,
     unpaidLoading: state => state.unpaidLoading,
+    paidLoading: state => state.paidLoading,
+
     tab: state => state.tab,
     allSkip: state => state.allSkip,
     processingSkip: state => state.processingSkip,
@@ -109,12 +124,16 @@ const getters = {
     canceledSkip: state => state.canceledSkip,
     shippedSkip: state => state.shippedSkip,
     unpaidSkip: state => state.unpaidSkip,
+    paidSkip: state => state.paidSkip,
+
     allDone: state => state.allDone,
     processingDone: state => state.processingDone,
     confirmedDone: state => state.confirmedDone,
     canceledDone: state => state.canceledDone,
     shippedDone: state => state.shippedDone,
     unpaidDone: state => state.unpaidDone,
+    paidDone: state => state.paidDone,
+
     bbmessage: state => state.bbmessage,
     orderid: state => state.orderid,
 
@@ -140,7 +159,8 @@ const getters = {
     ticket_con: state => state.ticket_con,
     ticketid:state => state.ticketid,
     shareurl:state => state.shareurl,
-    logistics: state => state.logistics
+    logistics: state => state.logistics,
+    packagelogistics: state => state.packagelogistics,
 }
 const mutations = {
     [types.INIT_ME](state, me){
@@ -167,6 +187,9 @@ const mutations = {
     },
     [types.ME_ORDER_COUNT_UNPAID](state, count){
         state.orderCountUnpaid = count
+    },
+    [types.ME_ORDER_COUNT_PAID](state, count){
+        state.orderCountPaid = count
     },
     //orders
     [types.HOME_ORDERS_ALL](state, orders) {
@@ -208,6 +231,19 @@ const mutations = {
     },
     [types.HOME_UNPAID_DONE](state) {
         state.unpaidDone = true;
+    },
+
+    [types.HOME_ORDERS_PAID](state, orders) {
+        state.paid.push(...orders);
+    },
+    [types.HOME_LOADING_PAID](state, loading) {
+        state.paidLoading = loading;
+    },
+    [types.HOME_ORDER_PAID_SKIP](state, limit) {
+        state.paidSkip += limit;
+    },
+    [types.HOME_PAID_DONE](state) {
+        state.paidDone = true;
     },
 
 
@@ -391,7 +427,10 @@ const mutations = {
     },
     [types.GLOBAL_GET_LOGISTICS](state,logistics){
         state.logistics = _.cloneDeep(logistics)
-    }
+    },
+    [types.GLOBAL_GET_PACKAGE_LOGISTICS](state,logistics){
+        state.packagelogistics = _.cloneDeep(logistics)
+    },
 }
 const actions = {
     init({commit}){
@@ -446,12 +485,17 @@ const actions = {
             commit(types.ME_ORDER_COUNT_UNPAID, count)
         })
     },
+    getOrderCountPaid({commit}){
+        return api.getOrderCountPaid().then((count) => {
+            commit(types.ME_ORDER_COUNT_PAID, count)
+        })
+    },
     //order
     loadAll({ commit, state }, limit) {
         if (state.allDone) return;
         commit(types.HOME_LOADING_ALL, true);
 
-        return api.getOrders(state.allSkip, 'get-order-list').then( orders => {
+        return api.getOrders(state.allSkip, 'get-orders').then( orders => {
             if (orders && orders.length > 0) {
                 commit(types.HOME_ORDERS_ALL, orders);
                 commit(types.HOME_ORDER_ALL_SKIP, limit);
@@ -470,7 +514,7 @@ const actions = {
         }
         commit(types.HOME_LOADING_PROCESSING, true);
 
-        return api.getOrders(state.processingSkip, 'get-unshipped-order-list2').then( orders => {
+        return api.getOrders(state.processingSkip, 'get-proccessing-orders').then( orders => {
             if (orders && orders.length > 0) {
                 commit(types.HOME_ORDERS_PROCESSING, orders);
                 commit(types.HOME_ORDER_PROCESSING_SKIP, limit);
@@ -487,7 +531,7 @@ const actions = {
     loadUnpaid({ commit, state }, limit) {
         commit(types.HOME_LOADING_UNPAID, true);
         if(state.unpaidDone){return}
-         return api.getOrders(state.unpaidSkip, 'get-unpayed-order-list').then( orders => {
+         return api.getOrders(state.unpaidSkip, 'get-unpaid-orders2').then( orders => {
             if (orders && orders.length > 0) {
                 commit(types.HOME_ORDERS_UNPAID, orders);
                 commit(types.HOME_ORDER_UNPAID_SKIP, limit);
@@ -498,13 +542,27 @@ const actions = {
         });
     },
 
+    loadPaid({ commit, state }, limit) {
+        commit(types.HOME_LOADING_PAID, true);
+        if(state.paidDone){return}
+        return api.getOrders(state.paidSkip, 'get-paid-orders').then( orders => {
+            if (orders && orders.length > 0) {
+                commit(types.HOME_ORDERS_PAID, orders);
+                commit(types.HOME_ORDER_PAID_SKIP, limit);
+            } else {
+                commit(types.HOME_PAID_DONE);
+            }
+            return orders
+        });
+    },
+
 
     loadConfirmed({ commit }, limit) {
         if (state.confirmedDone) {
             return;
         }
         commit(types.HOME_LOADING_CONFIRMED, true);
-        return api.getOrders(state.confirmedSkip, 'get-receipt-order-list').then( orders => {
+        return api.getOrders(state.confirmedSkip, 'get-receipt-orders').then( orders => {
             if (orders && orders.length > 0) {
                 commit(types.HOME_ORDERS_CONFIRMED, orders);
                 commit(types.HOME_ORDER_CONFIRMED_SKIP, limit);
@@ -521,7 +579,7 @@ const actions = {
         if (state.shippedDone) {
             return;
         }
-        return api.getOrders(state.shippedSkip, 'get-shipped-order-list').then( orders => {
+        return api.getOrders(state.shippedSkip, 'get-shipped-orders').then( orders => {
             if (orders && orders.length > 0) {
                 commit(types.HOME_ORDERS_SHIPPED, orders);
                 commit(types.HOME_ORDER_SHIPPED_SKIP, limit);
@@ -539,7 +597,7 @@ const actions = {
             return;
         }
         commit(types.HOME_LOADING_CANCELED, true);
-        return api.getOrders(state.canceledSkip, 'get-canceled-order-list').then( orders => {
+        return api.getOrders(state.canceledSkip, 'get-canceled-orders').then( orders => {
             if (orders && orders.length > 0) {
                 commit(types.HOME_ORDERS_CANCELED, orders);
                 commit(types.HOME_ORDER_CANCELED_SKIP, limit);
@@ -776,7 +834,7 @@ const actions = {
             commit(types.REVIEW_LOAD_COMMENT, comment);
         })
     },
-    sendComment({commit},  {reply, files }){
+    sendComment({commit},  {reply }){
         commit(types.REVIEW_SENDING, true)
         return new Promise((resolve) => {
             let send = api.sendComment
@@ -785,16 +843,7 @@ const actions = {
             }
             send(reply).then((comment) => {
                 commit(types.REVIEW_SENDING, false)
-                if(files){
-                    var file = files[0]
-                }
-                if(file){
-                    var src = window.navigator.userAgent.indexOf("Chrome") >= 1 || window.navigator.userAgent.indexOf("Safari") >= 1 ? window.webkitURL.createObjectURL(file) : window.URL.createObjectURL(file);
-                }else{
-                    var src =''
-                }
-                reply.imageUrls = [src]
-                resolve(reply)
+                resolve(comment)
             }).catch((e) => {
                 console.error(e)
                 commit(types.REVIEW_SENDING, false)
@@ -822,6 +871,18 @@ const actions = {
         return api.getLogistics(id).then((logistics) => {
             commit(types.GLOBAL_GET_LOGISTICS,logistics)
         })
+    },
+    getPackageLogistics({commit},{type,packageId}){
+        return api.getPackageLogistics(type,packageId).then((logistics) => {
+            commit(types.GLOBAL_GET_PACKAGE_LOGISTICS,logistics)
+        })
+    },
+    rate({commit},formData){
+        return axios.post('/ticket/rate-service', formData)
+    },
+    //Add To Cart
+    addProducts({commit},formData){
+        return  api.addProducts(formData)
     }
 }
 export default new Vuex.Store({

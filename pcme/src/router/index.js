@@ -17,6 +17,7 @@ import Wishlist from '../components/wishlist.vue'
 import confirmSuccess from '../pages/confirm-success.vue'
 import OrderDetail from '../pages/order-detail.vue'
 import LogisticsDetail from '../pages/logistics-detail.vue'
+import PackageLogisticsDetail from '../pages/package-logistics-detail.vue'
 import OrderReview from '../pages/order-review.vue'
 import uploadAvatar from '../components/upload-avatar.vue'
 
@@ -35,9 +36,10 @@ const routes = [
                 meta: {title:'Me'},
             },
             {
-                path:'orders',
+                path:'order',
                 component:Orders,
-                meta: {title:'My Orders'},
+                name:'My Orders',
+                meta: { keepAlive: true }
             },
             {
                 path:'tickets',
@@ -112,12 +114,17 @@ const routes = [
         meta: {title:'LogisticsDetail'},
     },
     {
+        path:'/me/m/packeage-logistics-detail',
+        component: PackageLogisticsDetail,
+        meta: {title:'PackageLogisticsDetail'},
+    },
+    {
         path:'/me/m/load',
         component: uploadAvatar,
         meta: {title:'LogisticsDetail'},
     }
 ]
-
+/*
 
 const router = new VueRouter({
   mode: 'history',
@@ -136,4 +143,31 @@ router.afterEach(route => {
 
 })
 
-export default router
+export default router*//*
+
+const router = new VueRouter({
+  mode: 'history',
+  routes,
+  scrollBehavior (to, from, savedPosition) {
+    return { x: 0, y: 0 }
+  }
+})
+
+router.beforeEach((to, from, next) => {
+  document.title = to.meta.title
+  next();
+})
+
+router.afterEach(route => {
+
+})
+
+export default router*/
+
+export default new VueRouter({
+    mode: 'history',
+    routes,
+    scrollBehavior (to, from, savedPosition) {
+        return { x: 0, y: 0 }
+    }
+});

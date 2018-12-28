@@ -5,7 +5,7 @@ import * as types from './mutation_types'
 import * as api  from '../api'
 import _ from 'lodash'
 import * as utils from '../../utils/geekoutils'
-import {creditcards} from "../../../../shoppingcart/src/api";
+import {creditcards} from '../api/index';
 
 const state = {
     me: null,
