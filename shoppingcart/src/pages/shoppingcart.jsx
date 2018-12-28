@@ -21,12 +21,12 @@ import { connect } from 'react-redux'
 import {fetchAll, refreshCart, selectItem, editing,
   edited, editItem, selectPay, CPF, EMAIL, getCreditCards,
   getMercadoCards, toggleCredit, setSecurityCode, setInstallments, fetchCoupons, deleteItem, deleteItems,
-  setMercadoInstallments, toggleCreditStatus, setAtmMethod, setTicketMethod} from '../store/actions.js'
+  setMercadoInstallments, toggleCreditStatus, setAtmMethod, setTicketMethod, getDLocalCards} from '../store/actions.js'
 import Mask from '../components/mask.jsx'
 import _ from 'lodash'
 import PayMethodList from '../components/msite/paymethod-list.jsx'
 import {BigButton} from '../components/msite/buttons.jsx'
-import { useMercadocard, mercadopay, usePoint, useInsurance, creditpay, paypalpay, usecreditcard, movetooverseas, getMessage, placepaypal, givingCoupon, atmPay, ticketPay, getSafeCharge, getApacPay, apacPay, useMercadoCoupon } from '../api'
+import { useMercadocard, mercadopay, usePoint, useInsurance, creditpay, paypalpay, usecreditcard, movetooverseas, getMessage, placepaypal, givingCoupon, atmPay, ticketPay, getSafeCharge, getApacPay, apacPay, useMercadoCoupon, getDLocalPayLink } from '../api'
 import {__route_root__, storage} from '../utils/utils.js'
 import {submit} from '../utils/common-pay.js'
 import {CountDownBlock} from '../components/msite/countdowns.jsx'
@@ -47,6 +47,7 @@ const ProductEditor = Loadable({
   loader: () => import(/* webpackChunkName: "component--product-editor" */ '../components/msite/item-editor.jsx'),
   loading: Refreshing
 })
+
 
 const OrderSummary = styled.div`
   padding: 5px 10px;
@@ -222,6 +223,15 @@ const mapDispatchToProps = (dispatch) => {
     },
     SETTICKETMETHOD: (method) => {
       dispatch(setTicketMethod(method))
+    },
+    SETDLINK: (dlocal) => {
+      dispatch({
+        type:'DLOCAL',
+        dlocal
+      })
+    },
+    GETDLOCALCARDS: (payMethod) => {
+      return dispatch(getDLocalCards(payMethod))
     }
   }
 }
@@ -355,6 +365,7 @@ const ShoppingCart = class extends React.Component {
   checkout (event) {
     event.preventDefault()
     const { payMethod, cart, paypal, payType } = this.props
+    const { shippingDetail } = cart
 
     if (!payType) {
       alert('Please select a pay method!')
@@ -366,6 +377,17 @@ const ShoppingCart = class extends React.Component {
       this.props.history.push(`${window.ctx || ''}${__route_root__}/address`)
       return
     }
+
+    if(shippingDetail.country && shippingDetail.country.value === 'BR' && !shippingDetail.cpf){
+        const path = {
+          pathname: `${window.ctx || ''}${__route_root__}/address`,
+          state: {
+            validate: true
+          }
+        }
+        this.props.history.push(path)
+        return
+      }
 
     if (payType === '2' || payMethod === '17' || payType === '8') {
       this.props.TOGGLECREDIT(true)
@@ -379,11 +401,11 @@ const ShoppingCart = class extends React.Component {
         if (!cards || cards.length < 1) {
           if (payType === '8') {
             getSafeCharge().then(({result}) => {
-              const {isFree, payURL, params, transactionId} = result
+              const {isFree, payURL, params, transactionId, orderId} = result
               if (isFree) {
                 window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
               } else {
-
+                storage.add('temp-order', orderId,  1 * 60 * 60)
                 submit(result)
 
                 // window.location.href = `${payURL}?${qs.stringify(params, true)}`
@@ -431,7 +453,7 @@ const ShoppingCart = class extends React.Component {
       this.setState({
         paypaling: true
       })
-      paypalpay('normal').then(data => data.result).then(({TOKEN, success, transactionId, ACK, L_LONGMESSAGE0}) => {
+      paypalpay('normal').then(data => data.result).then(({TOKEN, success, transactionId, orderId, ACK, L_LONGMESSAGE0}) => {
         if (success && transactionId && !TOKEN) {
           window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
           return
@@ -445,6 +467,7 @@ const ShoppingCart = class extends React.Component {
         }
 
         if (TOKEN && paypal) {
+          storage.add('temp-order', orderId,  1 * 60 * 60)
           window.location.href = paypal + TOKEN
         }
       }).catch(({result}) => {
@@ -578,7 +601,26 @@ const ShoppingCart = class extends React.Component {
       }
 
      
+    }else if(payType === '12'){
+      this.setState({
+        checking: true
+      })
+      this.props.GETDLOCALCARDS(payMethod).then( cards => {
+        if(!cards || cards.length < 1){
+           this.props.history.push(`${window.ctx || ''}${__route_root__}/dlocal`)
+        }
+        this.setState({
+          checking: false
+        })
+      } ).catch(({result}) => {
+        alert(result)
+        this.setState({
+          checking: false
+        })
+      })
+      
     }
+
 
     if (this.getCountdown(this.props.cart) > 0) {
       givingCoupon()
@@ -588,10 +630,11 @@ const ShoppingCart = class extends React.Component {
 
   getApacPay(payMethod, cpf, fail){
     getApacPay({payMethod, cpfNumber: cpf}).then(({result}) => {
-      const {isFree, transactionId, success,details,solutions} = result
+      const {isFree, transactionId, success,details,solutions, orderId} = result
       if (isFree) {
         window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
       } else {
+        storage.add('temp-order', orderId,  1 * 60 * 60)
         submit(result)
         // console.log(result)
       }
@@ -1411,9 +1454,8 @@ const ShoppingCart = class extends React.Component {
                       atmMethods={this.state.atmMethods}
                       apac={c => this.apac = c}
                       apacBB={c => this.apacBB = c}
-                      cart={this.props.cart}
-
-
+                      paypalDiscountMessage = {cart.paypalDiscountMessage}
+                      showMercadopagoCouponField = {cart.showMercadopagoCouponField}
                       setCouponHandle={ this.useMercadoCoupon.bind(this) }
                       couponCode={this.props.couponCode}
                       mercadoCouponClickHandle={this.mercadoCouponClickHandle.bind(this)}

@@ -66,6 +66,21 @@ export const getApacPay = (params) => axios.get('/apacpay/get-pay-params', param
 
 export const apacPay = (params) => axios.get('/apacpay/pay', params)
 
+export const getDLocalPayLink = (params) => axios.get('/dlocal/get-pay-link', params)
+
+export const bindDLocal = (params) => axios.post(`${VPATH}/dlocal/bind-card`, params)
+export const payDLocal = (params) => axios.post(`${VPATH}/dlocal/pay`, params)
+export const getDCards = (params) => axios.get(`${VPATH}/dlocal/get-cards`, {...params, _: new Date().getTime()})
+
+// checkout
+export const checkout = (orderId) => axios.get(`${VPATH}/order/checkout?_=${new Date().getTime()}`, {orderId})
+export const checkout_updatepaymethod = (orderId, payMethod) => axios.post(`${VPATH}/order/update-pay-method`, {orderId, payMethod})
+export const checkout_getparams = (params) => axios.get(`${VPATH}/pay/get-pay-params-by-order`, params)
+export const checkout_pay = (params) => axios.get(`${VPATH}/pay/pay-by-order`, params)
+export const checkout_credit = (params) => axios.get(`/quickpay/pay-by-order`, params)
+export const checkout_paypal = (params) => axios.post(`${VPATH}/paypal2/pay-by-order`, params)
+export const checkout_computop = (params) => axios.post(`${VPATH}/computop/get-pay-params-by-order`)
+
 // order
 export const gettransaction = (id) => axios.get(`${VPATH}/order/anon/order-confim`, {transactionId: id})
 export const updateorderaddress = (address) => axios.post(`${VPATH}/order/anon/shipping-detail-update`, address)

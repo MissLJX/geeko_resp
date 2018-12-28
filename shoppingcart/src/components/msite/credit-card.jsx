@@ -161,7 +161,7 @@ const MercadoPlugin = class extends React.Component {
   }
 
   render () {
-    return <div>
+    return <div style={{paddingLeft: 10, paddingRight: 10}}>
       <Form id="mercadoform" ref={this.props.mercadoref} onSubmit={this.props.handleMercado}>
         <input type="hidden" value={this.props.card.quickpayRecord.quickpayId} name="cardId" data-checkout="cardId"/>
         <StyledControl style={{marginTop: 10}}>

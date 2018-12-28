@@ -16,9 +16,7 @@ const Summary = styled.li`
   }
 `
 
-export default ({orderSummary, style}) => {
-  const {display} = orderSummary
-
+export default ({display, style}) => {
   return <Summaries style={style}>
 
     {

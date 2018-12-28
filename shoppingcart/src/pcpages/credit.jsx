@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import {injectIntl, FormattedMessage} from 'react-intl'
 import { connect } from 'react-redux'
 import {Link} from 'react-router-dom'
-import {__route_root__} from '../utils/utils.js'
+import {__route_root__, storage} from '../utils/utils.js'
 import Empty from '../components/pc/empty.jsx'
 
 import OrderSummary from '../components/pc/order-summary.jsx'
@@ -24,7 +24,7 @@ import { BigButton } from '../components/msite/buttons.jsx'
 
 import MercadoBinding from '../components/pc/mercado-binding.jsx'
 
-import { getSafeCharge, creditpay, getApacPay, deletecreditcard, usecreditcard, removeMercadoCard, useMercadocard, mercadopay } from '../api'
+import { payDLocal, getSafeCharge, creditpay, getApacPay, deletecreditcard, usecreditcard, removeMercadoCard, useMercadocard, mercadopay } from '../api'
 
 import {submit} from '../utils/common-pay.js'
 
@@ -36,6 +36,10 @@ const __Frame__ = {
   '3': {
   	url: `${window.ctx || ''}/w-site/anon/oceanpay?payMethod=3`,
   	height: 480
+  },
+  '24': {
+    url: `${window.ctx || ''}/i/dlocal`,
+    height: 480
   }
 }
 
@@ -236,10 +240,11 @@ const Credit = class extends React.Component {
 
   getApacPay (payMethod, cpf, fail) {
     getApacPay({payMethod, cpfNumber: cpf}).then(({result}) => {
-      const {isFree, transactionId} = result
+      const {isFree, transactionId, orderId} = result
       if (isFree) {
         window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
       } else {
+        storage.add('temp-order', orderId, 1 * 60 * 60)
         submit(result)
       }
     }).catch(({result}) => {
@@ -253,10 +258,11 @@ const Credit = class extends React.Component {
         checking: true
       })
       getSafeCharge().then(({result}) => {
-        const {isFree, payURL, params, transactionId} = result
+        const {isFree, payURL, params, transactionId, orderId} = result
         if (isFree) {
           window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
         } else {
+          storage.add('temp-order', orderId, 1 * 60 * 60)
           submit(result)
 
           // window.location.href = `${payURL}?${qs.stringify(params, true)}`
@@ -313,6 +319,26 @@ const Credit = class extends React.Component {
     }
   }
 
+  payDLocal (token) {
+    this.setState({
+      checking: true
+    })
+    return payDLocal({payMethod: this.props.payMethod, token}).then(({success, transactionId, details, solutions}) => {
+      if (success) {
+        if (siteType === 'new') {
+          window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/credit-card?order_number=${transactionId}`
+        } else {
+          window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
+        }
+      } else {
+        alert(details + '\n' + solutions)
+      }
+      this.setState({
+        checking: false
+      })
+    })
+  }
+
   payCredit (params) {
     this.setState({
       checking: true
@@ -357,6 +383,10 @@ const Credit = class extends React.Component {
   	}
 
   	this.handleCreditCards()
+
+    window.dLocalPay = (token, errBack) => {
+      this.payDLocal(token).catch(({result}) => errBack(result))
+    }
 
   	window.triggerPlace = () => {
   		this.payCredit({payCpf: cpf, payInstallments: installments})
@@ -461,6 +491,22 @@ const Credit = class extends React.Component {
     })
   }
 
+  payMercado (params) {
+    return mercadopay(params).then(data => data.result).then(({success, transactionId, details, solutions}) => {
+      if (success) {
+        if (siteType === 'new') {
+          window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/credit-card?order_number=${transactionId}`
+        } else {
+          // window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
+          window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
+        }
+      } else {
+        alert(details)
+      }
+      return transactionId
+    })
+  }
+
   render () {
   	const {cart, loading, empty, intl, payType, creditcards, mercadocards} = this.props
 
@@ -493,7 +539,7 @@ const Credit = class extends React.Component {
                   {
                     payType === '7' ? <div style={{width: 500, paddingTop: 10}}>
                       <img style={{display: 'block', marginBottom: 10}} src="https://dgzfssf1la12s.cloudfront.net/shoppingcart/maxicocard.png"/>
-                      <MercadoBinding cart={cart} email={this.props.me ? this.props.me.email : ''}/>
+                      <MercadoBinding orderTotal={cart.orderSummary.orderTotal} pay={this.payMercado.bind(this)} email={this.props.me ? this.props.me.email : ''}/>
                     </div> : <div style={{position: 'relative'}}>
                       {
                         this.state.frameLoading && <div style={{textAlign: 'center', paddingTop: 40}} className="__loading">
@@ -539,7 +585,7 @@ const Credit = class extends React.Component {
 
 	  			<Boxs>
       	  	<Box title={intl.formatMessage({id: 'order_summary'})} style={{paddingTop: 40}}>
-      	  		<OrderSummary style={{marginTop: 20}} orderSummary={cart.orderSummary}/>
+      	  		<OrderSummary style={{marginTop: 20}} display={cart.orderSummary.display}/>
 
               <div style={{borderTop: 'solid 1px #e6e6e6', marginTop: 25, paddingTop: 25}}>
                 <div>{intl.formatMessage({id: 'additional_payment'})}</div>
@@ -576,7 +622,7 @@ const Credit = class extends React.Component {
 	  					<img src="https://dgzfssf1la12s.cloudfront.net/shoppingcart/maxicocard.png"/>
 	  				</div>
 	  				<div>
-	  					<MercadoBinding cart={cart} email={this.props.me ? this.props.me.email : ''}/>
+	  					<MercadoBinding orderTotal={cart.orderSummary.orderTotal} pay={this.payMercado.bind(this)} email={this.props.me ? this.props.me.email : ''}/>
 	  				</div>
 	  			</MERCADOMODAL>
 	  		</Modal>

@@ -16,3 +16,16 @@ export const submit = (result) => {
   form.submit()
   document.body.removeChild(form)
 }
+
+export const goOrder = ({success, transactionId, orderId, details, solutions}) => {
+  if (success) {
+    if (siteType === 'new') {
+      window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/credit-card?order_number=${transactionId}`
+    } else {
+      window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
+    }
+  } else {
+    alert(details + '\n' + solutions)
+    window.location.href = `${window.ctx || ''}/me/m/order/${orderId}`
+  }
+}

@@ -50,7 +50,7 @@ const Boleto = class extends React.Component {
   render () {
     return <METHODBD>
       <Form ref={this.props.boletoForm} onSubmit={this.handleSubmit.bind(this)}>
-        <MethodInputLine className="x-table x-fw __vm __fixed">
+        {/* <MethodInputLine className="x-table x-fw __vm __fixed">
           <div className="x-cell">
             <label>CPF<Ask style={{marginLeft: 4}} onClick={this.props.cpfClickHandle.bind(this)}/></label>
           </div>
@@ -63,7 +63,7 @@ const Boleto = class extends React.Component {
                 validations={[required, cpf]}/>
             </StyledControl>
           </div>
-        </MethodInputLine>
+        </MethodInputLine> */}
 
         <MethodInputLine style={{marginTop: 10}} className="x-table x-fw __vm __fixed">
           <div className="x-cell">
@@ -194,7 +194,7 @@ const MoneyTransform = class extends React.Component {
     super(props)
   }
   render () {
-    const {atmMethods, cart, couponCode, setCouponHandle} = this.props
+    const {atmMethods, showMercadopagoCouponField, couponCode, setCouponHandle} = this.props
     return <CashMethods>
       <ul>
         {
@@ -207,7 +207,7 @@ const MoneyTransform = class extends React.Component {
       </ul>
 
       {
-        cart.showMercadopagoCouponField && <div style={{paddingBottom: 10}}>
+        showMercadopagoCouponField && <div style={{paddingBottom: 10}}>
           <div>MercadoPago Cupón <Ask onClick={this.props.mercadoCouponClickHandle.bind(this)}/></div>
           <div style={{marginTop: 5}}>
             <InputBtn initValue={couponCode} buttonText={'Utilizar Ahora'} buttonHandle={ setCouponHandle }/>
@@ -288,7 +288,7 @@ const Method = class extends React.Component {
   }
 
   render () {
-    const {payMethod, children, selectPayHandle, selected, cart} = this.props
+    const {payMethod, children, selectPayHandle, selected, paypalDiscountMessage} = this.props
 
     const matched = payMethod.name.match(__qoute_reg__)
     let name
@@ -298,7 +298,6 @@ const Method = class extends React.Component {
       name = payMethod.name
     }
 
-    const {paypalDiscountMessage} = cart
     return <StyledMethod >
       <HD onClick={() => { selectPayHandle(payMethod) }}>
         <div className="x-table x-fw x-fh __fixed __vm">
@@ -336,7 +335,7 @@ const MethodUL = styled.ul`
 `
 
 const Mercado = (props) => {
-  const { cart, setCouponHandle, couponCode } = props
+  const { setCouponHandle, couponCode } = props
   return <Plugin>
     <div>MercadoPago Cupón  <Ask onClick={props.mercadoCouponClickHandle.bind(this)}/></div>
     <div style={{marginTop: 5}}>
@@ -347,7 +346,7 @@ const Mercado = (props) => {
 }
 
 const getMethodBody = (props) => {
-  const { method, cart } = props
+  const { method, showMercadopagoCouponField } = props
   switch (method.id) {
     case '16':
       return <Boleto {...props}/>
@@ -355,11 +354,11 @@ const getMethodBody = (props) => {
       return <MoneyTransform {...props}/>
     // case '21':
     //   return <Cash ticketMethod={ticketMethod} ticketMethods={ticketMethods} ticketClickHandle={ticketClickHandle}/>
-    case '23':
-      return <Apac {...props}/>
+    // case '23':
+    //   return <Apac {...props}/>
     case '19':
     case '21':
-      return cart.showMercadopagoCouponField && <Mercado {...props}/>
+      return showMercadopagoCouponField && <Mercado {...props}/>
     default:
       return null
   }
@@ -370,12 +369,12 @@ const PayMethodList = class extends React.Component {
     super(props)
   }
   render () {
-    const {methods, selectPayHandle, selectedPayId, cart} = this.props
+    const {methods, selectPayHandle, selectedPayId} = this.props
     return <MethodUL>
       {
         methods && methods.map(payMethod => (
           <li key={payMethod.id}>
-            <Method cart={cart} selected={payMethod.id === selectedPayId} selectPayHandle={selectPayHandle} payMethod={payMethod}>
+            <Method selected={payMethod.id === selectedPayId} selectPayHandle={selectPayHandle} payMethod={payMethod}>
               {getMethodBody({method: payMethod, ...this.props})}
             </Method>
           </li>
@@ -386,3 +385,5 @@ const PayMethodList = class extends React.Component {
 }
 
 export default PayMethodList
+
+// 去除  showMercadopagoCouponField  paypalDiscountMessage

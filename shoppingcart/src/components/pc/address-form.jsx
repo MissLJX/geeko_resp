@@ -1,12 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
 import {Form, Input, Select, Button} from './control.jsx'
-import {required, email, zip, phone, number} from '../validator.jsx'
+import {required, email, zip, phone, number, cpf} from '../validator.jsx'
 import {FormElement, MutiElement, ELEMENTS} from './styled-control.jsx'
 import {injectIntl} from 'react-intl'
 import {getCountries, getStates} from '../../api'
 import CheckBox from '../checkbox.jsx'
 import {BigButton} from '../msite/buttons.jsx'
+
+const __Cpf_Tip_Message__ = 'CPF (Cadastro de Pessoa Física), utilizado para tributação, é necessário para todos os produtos enviados ao Brasil, independentemente de encomendas expressas ou contêineres logísticos.Quando preenchemos o conhecimento de embarque e fatura, por favor, não esqueça de preencher o número de contribuinte do destinatário.Na maioria dos casos, sua forma é o número digital como abaixo, XXX.XXX.XXX-XX'
 
 const getCountryCode = () => {
   let strs = window.lang ? window.lang.split('_') : []
@@ -29,7 +31,9 @@ const AddressFrom = class extends React.Component {
       defaultAddress: false,
       countries: null,
       states: null,
-      phoneArea: ''
+      phoneArea: '',
+      cpf: '',
+      hasValidated: false
     }
     this.handleInputChange = this.handleInputChange.bind(this)
   }
@@ -82,7 +86,8 @@ const AddressFrom = class extends React.Component {
         country,
         phoneNumber,
         defaultAddress,
-        phoneArea
+        phoneArea,
+        cpf
       } = this.state
 
       this.props.editAddress({
@@ -95,7 +100,8 @@ const AddressFrom = class extends React.Component {
         country,
         phoneNumber,
         defaultAddress,
-        phoneArea
+        phoneArea,
+        cpf
       })
     }
   }
@@ -125,7 +131,8 @@ const AddressFrom = class extends React.Component {
         isDefaultAddress,
         country,
         state,
-        phoneArea
+        phoneArea,
+        cpf
       } = address
 
       const isStructotState = s => s && s.value && s.label
@@ -142,7 +149,8 @@ const AddressFrom = class extends React.Component {
         country: countryValue,
         state: state ? state.value : '',
         defaultAddress: isDefaultAddress,
-        phoneArea: phoneArea || ''
+        phoneArea: phoneArea || '',
+        cpf: cpf || ''
       })
 
       // if (isStructotState(state)) {
@@ -172,13 +180,28 @@ const AddressFrom = class extends React.Component {
     })
   }
 
+  formRef (c, former) {
+    if (former === 'BR') {
+      this.brForm = c
+    } else {
+      this.form = c
+    }
+
+    if (this.props.needInitValidate && !this.state.hasValidated) {
+      c.validateAll()
+      this.setState({
+        hasValidated: true
+      })
+    }
+  }
+
   render () {
     const { intl, isNew, isConfirm } = this.props
 
     const divStyle = (this.state.country === 'AE' || this.state.country === 'SA') ? {width: 'calc(100% - 79px)', marginLeft: 10, display: 'inline-block', verticalAlign: 'middle'} : {}
 
     return <div>
-      <Form ref={ c => this.form = c } style={{display: `${this.state.country !== 'BR' ? 'block' : 'none'}`}} onSubmit={this.handleSubmit.bind(this)}>
+      <Form ref={ c => { this.formRef(c) } } style={{display: `${this.state.country !== 'BR' ? 'block' : 'none'}`}} onSubmit={this.handleSubmit.bind(this)}>
         <ELEMENTS>
           <FormElement label={`${intl.formatMessage({id: 'full_name'})}:`} className="__required">
             <Input
@@ -348,7 +371,7 @@ const AddressFrom = class extends React.Component {
         </ELEMENTS>
       </Form>
 
-      <Form style={{display: `${this.state.country === 'BR' ? 'block' : 'none'}`}} ref={ c => this.brForm = c } onSubmit={this.handleSubmit.bind(this)}>
+      <Form style={{display: `${this.state.country === 'BR' ? 'block' : 'none'}`}} ref={ c => { this.formRef(c, 'BR') } } onSubmit={this.handleSubmit.bind(this)}>
         <ELEMENTS>
           <FormElement label={`${intl.formatMessage({id: 'full_name'})}:`} className="__required">
             <Input
@@ -467,6 +490,15 @@ const AddressFrom = class extends React.Component {
             </FormElement>
 
           </MutiElement>
+
+          <FormElement label={`CPF`} className="__required" tipMessage={__Cpf_Tip_Message__}>
+            <Input
+              name="cpf"
+              value={this.state.cpf}
+              onChange={this.handleInputChange}
+              style= {{width: '100%', height: 40}}
+              validations={[required, cpf]}/>
+          </FormElement>
 
           <MutiElement style={{marginTop: 24}}>
             <div>

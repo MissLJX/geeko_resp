@@ -70,6 +70,7 @@ const Modal = class extends React.Component {
 
   render () {
     const { address, intl } = this.props
+    const { validate } = this.props.location.state || {}
 
     console.log(this.props.location.search)
 
@@ -86,7 +87,7 @@ const Modal = class extends React.Component {
 
     	<FormBody >
 	    	<p>* {intl.formatMessage({id: 'required_tips'})}</p>
-	    	<AddressForm needInitValidate={ this.props.location.search === '?check=1' } editAddress={this.editAddress} style={{marginTop: 15}} address={address}/>
+	    	<AddressForm needInitValidate={ this.props.location.search === '?check=1' || validate } editAddress={this.editAddress} style={{marginTop: 15}} address={address}/>
     	</FormBody>
 
     </FullFixed>

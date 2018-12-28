@@ -87,12 +87,12 @@ const Mercado = class extends React.Component {
 
   close (evt) {
   	evt.preventDefault()
-    this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
+    this.props.history.replace(`${window.ctx || ''}/checkout/${this.props.checkout.orderId}`)
   }
 
   addcardback () {
     this.props.GETMERCADOCARDS()
-    this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
+    this.props.history.replace(`${window.ctx || ''}/checkout/${this.props.checkout.orderId}`)
   }
 
   deletecard (cardId) {
@@ -112,42 +112,45 @@ const Mercado = class extends React.Component {
     const exsiting = state ? state.exsiting : false
 
   	return <FullFixed onClose={this.close} title="Tarjeta de crédito o débito">
-      <Boxs style={{backgroundColor: '#e5e5e5'}}>
-        <Box style={{paddingBottom: 20}}>
-          <CardInfos>
-            <img src="https://dgzfssf1la12s.cloudfront.net/shoppingcart/maxicocard.png"/>
-          </CardInfos>
-          <MercadoBinding orderTotal={this.props.cart.orderSummary.orderTotal} email={this.props.me ? this.props.me.email : ''} addcardback={this.addcardback.bind(this)} exsiting={exsiting}/>
-        </Box>
+      {
+        this.props.checkout && <Boxs style={{backgroundColor: '#e5e5e5'}}>
+          <Box style={{paddingBottom: 20}}>
+            <CardInfos>
+              <img src="https://dgzfssf1la12s.cloudfront.net/shoppingcart/maxicocard.png"/>
+            </CardInfos>
+            <MercadoBinding orderTotal={this.props.checkout.orderTotal} email={this.props.me ? this.props.me.email : ''} addcardback={this.addcardback.bind(this)} exsiting={exsiting}/>
+          </Box>
 
-        {
-          this.props.mercadocards && this.props.mercadocards.length > 0 && (
-            <Box>
-              <CardHD>Cards</CardHD>
+          {
+            this.props.mercadocards && this.props.mercadocards.length > 0 && (
+              <Box>
+                <CardHD>Cards</CardHD>
 
-              <CardBD>
-                <CardUL>
-                  {
-                    this.props.mercadocards.map(({isSelected, quickpayRecord}) => <Card key={quickpayRecord.id}>
-                      <div className="x-table __fixed __vm x-fw">
-                        <div className="x-cell">
-                          {quickpayRecord.cardNumber}
+                <CardBD>
+                  <CardUL>
+                    {
+                      this.props.mercadocards.map(({isSelected, quickpayRecord}) => <Card key={quickpayRecord.id}>
+                        <div className="x-table __fixed __vm x-fw">
+                          <div className="x-cell">
+                            {quickpayRecord.cardNumber}
+                          </div>
+                          <div className="x-cell __right" style={{width: 50}}>
+                            <DeleteIcon onClick={(evt) => { this.deletecard(quickpayRecord.quickpayId) }} className="iconfont">&#xe731;</DeleteIcon>
+                          </div>
                         </div>
-                        <div className="x-cell __right" style={{width: 50}}>
-                          <DeleteIcon onClick={(evt) => { this.deletecard(quickpayRecord.quickpayId) }} className="iconfont">&#xe731;</DeleteIcon>
-                        </div>
-                      </div>
-                    </Card>)
-                  }
+                      </Card>)
+                    }
 
-                </CardUL>
-              </CardBD>
-            </Box>
+                  </CardUL>
+                </CardBD>
+              </Box>
 
-          )
-        }
+            )
+          }
 
-      </Boxs>
+        </Boxs>
+      }
+
       <div style={{height: 100}}></div>
     </FullFixed>
   }

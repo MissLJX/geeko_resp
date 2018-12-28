@@ -51,11 +51,11 @@ module.exports = {
     }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production'),
-      'siteurl': JSON.stringify('https://www.ivrose.com'),
-      'sitename': JSON.stringify('IVRose'),
+      'siteurl': JSON.stringify('https://www.boutiquefeel.com'),
+      'sitename': JSON.stringify('Boutqiuefeel'),
       // 'MercadoPublicKey': JSON.stringify('APP_USR-feb41ad2-2287-437d-859d-0be51c116e51')
       'MercadoPublicKey': JSON.stringify('TEST-aa971175-51cd-4be7-8ae4-f12006ac536d'),
-      'sitelogo': JSON.stringify('https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/site/pc/icon326_iv.png'),
+      'sitelogo': JSON.stringify('https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/site/pc/icon326_bq.png'),
       'deviceType': JSON.stringify('pc'),
       'siteType': JSON.stringify('old')
     }),

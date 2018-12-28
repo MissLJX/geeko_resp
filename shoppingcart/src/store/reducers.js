@@ -24,7 +24,8 @@ import {
   GET_TRANSACTION_PAGE,
   GET_TRANSACTION,
   GET_ADDRESSES,
-  UPDATE_ADDRESS, SET_ME, SET_COUPON_CODE} from './actions.js'
+  UPDATE_ADDRESS, SET_ME, SET_COUPON_CODE,
+  SET_CHECKOUT, DLOCAL_CARDS} from './actions.js'
 
 const initialState = {
   lang: window.lang || 'en',
@@ -50,6 +51,7 @@ const initialState = {
   noCard: false,
   noCreditCard: false,
   creditcards: null,
+  dlocalcards: null,
   installments: 1,
   paypal: null,
   mercadoinstallments: 1,
@@ -60,7 +62,9 @@ const initialState = {
   m1073: null,
   addresses: null,
   addressUpdating: false,
-  couponCode: null
+  couponCode: null,
+  dlocal: null,
+  checkout: null
 }
 
 const isEmpty = cart => !cart
@@ -142,6 +146,14 @@ const refresh = (state = initialState, action) => {
       return {...state, me: action.me}
     case SET_COUPON_CODE:
       return {...state, couponCode: action.couponCode}
+    case 'DLOCAL':
+      return {...state, dlocal: action.dlocal}
+    case SET_CHECKOUT:
+      return {...state, checkout: action.checkout}
+    case 'SET_PAYPAL':
+      return {...state, paypal: action.paypal}
+    case DLOCAL_CARDS:
+      return {...state, dlocalcards: action.cards}
     default:
       return state
   }

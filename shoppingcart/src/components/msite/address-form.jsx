@@ -1,10 +1,14 @@
 import React from 'react'
 import {Form, Input, Select, Button} from './control.jsx'
-import {required, email, zip, phone, number} from '../validator.jsx'
+import {required, email, zip, phone, number, cpf} from '../validator.jsx'
 import {StyledControl} from './styled-control.jsx'
 import {FormLayout, MultiControl} from './layout.jsx'
 import {getCountries, getStates} from '../../api'
 import {injectIntl} from 'react-intl'
+import Ask from '../ask.jsx'
+
+import FixedMessage from './fixed-message.jsx'
+import Mask from '../mask.jsx'
 
 const getCountryCode = () => {
   let strs = window.lang ? window.lang.split('_') : []
@@ -28,7 +32,10 @@ const AdressForm = class extends React.Component {
       countries: null,
       states: null,
       phoneArea: '',
-      hasValidated: false
+      cpf: '',
+      hasValidated: false,
+      askMessage: '',
+      showAsk: false
     }
     this.handleInputChange = this.handleInputChange.bind(this)
   }
@@ -96,7 +103,8 @@ const AdressForm = class extends React.Component {
         country,
         phoneNumber,
         defaultAddress,
-        phoneArea
+        phoneArea,
+        cpf
       } = this.state
 
       this.props.editAddress({
@@ -109,7 +117,8 @@ const AdressForm = class extends React.Component {
         country,
         phoneNumber,
         defaultAddress,
-        phoneArea
+        phoneArea,
+        cpf
       })
     }
   }
@@ -136,7 +145,8 @@ const AdressForm = class extends React.Component {
         isDefaultAddress,
         country,
         state,
-        phoneArea
+        phoneArea,
+        cpf
       } = address
 
       const isStructotState = s => s && s.value && s.label
@@ -153,7 +163,8 @@ const AdressForm = class extends React.Component {
         country: countryValue,
         state: state ? state.value : '',
         defaultAddress: isDefaultAddress,
-        phoneArea: phoneArea || ''
+        phoneArea: phoneArea || '',
+        cpf: cpf || ''
       })
 
       // if (isStructotState(state)) {
@@ -181,14 +192,26 @@ const AdressForm = class extends React.Component {
     })
   }
 
-  formRef (c) {
-    this.form = c
+  formRef (c, former) {
+    if (former === 'BR') {
+      this.brForm = c
+    } else {
+      this.form = c
+    }
+
     if (this.props.needInitValidate && !this.state.hasValidated) {
-      this.form.validateAll()
+      c.validateAll()
       this.setState({
         hasValidated: true
       })
     }
+  }
+
+  cpfClickHandle () {
+    this.setState({
+      showAsk: true,
+      askMessage: 'CPF (Cadastro de Pessoa Física), utilizado para tributação, é necessário para todos os produtos enviados ao Brasil, independentemente de encomendas expressas ou contêineres logísticos.Quando preenchemos o conhecimento de embarque e fatura, por favor, não esqueça de preencher o número de contribuinte do destinatário.Na maioria dos casos, sua forma é o número digital como abaixo, XXX.XXX.XXX-XX'
+    })
   }
 
   render () {
@@ -197,7 +220,7 @@ const AdressForm = class extends React.Component {
     const isNormalAddress = ['BR', 'AE', 'SA'].indexOf(this.state.country) < 0
 
     return <div>
-      <Form style={{...this.props.style, display: `${isNormalAddress ? 'block' : 'none'}`}} ref={this.formRef.bind(this)} onSubmit={this.handleSubmit.bind(this)}>
+      <Form style={{...this.props.style, display: `${isNormalAddress ? 'block' : 'none'}`}} ref={ c => { this.formRef(c) } } onSubmit={this.handleSubmit.bind(this)}>
         <FormLayout>
           <StyledControl>
             <label>
@@ -242,6 +265,7 @@ const AdressForm = class extends React.Component {
                 className="x-select"
                 value={this.state.country}
                 name='country'
+                disabled={this.props.disablecountry}
                 onChange={(evt) => { this.handleInputChange(evt); this.changeCountry(evt) }}
                 validations={[required]}>
                 <option value=''>Country</option>
@@ -337,7 +361,7 @@ const AdressForm = class extends React.Component {
         </FormLayout>
       </Form>
 
-      <Form style={{...this.props.style, display: `${this.state.country === 'BR' ? 'block' : 'none'}`}} ref={c => { this.brForm = c }} onSubmit={this.handleSubmit.bind(this)}>
+      <Form style={{...this.props.style, display: `${this.state.country === 'BR' ? 'block' : 'none'}`}} ref={ c => { this.formRef(c, 'BR') } } onSubmit={this.handleSubmit.bind(this)}>
         <FormLayout>
           <StyledControl>
             <label>
@@ -382,6 +406,7 @@ const AdressForm = class extends React.Component {
                 className="x-select"
                 value={this.state.country}
                 name='country'
+                disabled={this.props.disablecountry}
                 onChange={(evt) => { this.handleInputChange(evt); this.changeCountry(evt) }}
                 validations={[required]}>
                 <option value=''>Country</option>
@@ -477,6 +502,17 @@ const AdressForm = class extends React.Component {
 
           </StyledControl>
 
+          <StyledControl>
+            <label>
+              CPF* <Ask style={{marginLeft: 4}} onClick={this.cpfClickHandle.bind(this)}/>
+            </label>
+            <Input
+              name='cpf'
+              value={this.state.cpf}
+              onChange={this.handleInputChange}
+              validations={[required, cpf]}/>
+          </StyledControl>
+
           <div>
             <Button className="__submitbtn" ref={c => this.brAddressButtn = c} ingoredisable="true" style={{
               display: 'block',
@@ -537,6 +573,7 @@ const AdressForm = class extends React.Component {
               <Select
                 className="x-select"
                 value={this.state.country}
+                disabled={this.props.disablecountry}
                 name='country'
                 onChange={(evt) => { this.handleInputChange(evt); this.changeCountry(evt) }}
                 validations={[required]}>
@@ -644,6 +681,17 @@ const AdressForm = class extends React.Component {
           </div>
         </FormLayout>
       </Form>
+
+      {
+        this.state.showAsk && this.state.askMessage && (
+          <React.Fragment>
+            <Mask/>
+            <FixedMessage onClose={() => { this.setState({showAsk: false, askMessage: null}) }}>
+              <p dangerouslySetInnerHTML={{__html: this.state.askMessage}}/>
+            </FixedMessage>
+          </React.Fragment>
+        )
+      }
 
     </div>
   }

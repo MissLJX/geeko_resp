@@ -62,15 +62,6 @@ const METHODCONTAINER = styled.div`
 
 const Boleto = (props) => <Form ref={props.boletoForm}>
   <MutiElement>
-    <FormElement label={`CPF:`} tipMessage={__Cpf_Tip_Message__} className="__required">
-  		 <Input
-        name='cpf'
-        value={props.cpf}
-        style={{width: '100%', height: 35}}
-        onChange={props.handleInputChange}
-        validations={[required, cpf]}/>
-    </FormElement>
-
     <FormElement label={`EMAIL:`} className="__required">
       <Input
         name='email'
@@ -79,6 +70,7 @@ const Boleto = (props) => <Form ref={props.boletoForm}>
         onChange={props.handleInputChange}
         validations={[required, email]}/>
     </FormElement>
+    <FormElement/>
   </MutiElement>
 
   <Button style={{display: 'none'}} ref={props.boleto}></Button>
@@ -142,7 +134,7 @@ const CashMethod = styled.span`
 `
 
 const MoneyTransform = (props) => {
-  const {atmMethods, atmMethod, setCouponHandle, couponCode, cart} = props
+  const {atmMethods, atmMethod, setCouponHandle, couponCode, showMercadopagoCouponField} = props
   return <div>
     <CashMethods>
       {
@@ -155,7 +147,7 @@ const MoneyTransform = (props) => {
     </CashMethods>
 
     {
-      cart.showMercadopagoCouponField && <div style={{width: 320, marginTop: 10}}>
+      showMercadopagoCouponField && <div style={{width: 320, marginTop: 10}}>
         <div>MercadoPago Cupón  <Ask style={{marginLeft: 5}} message={__Coupon_Code_Tip_Message__}/></div>
         <div style={{marginTop: 5}}>
           <InputBtn initValue={couponCode} buttonText={'Utilizar Ahora'} buttonHandle={ setCouponHandle }/>
@@ -170,14 +162,6 @@ const MoneyTransform = (props) => {
 const BrazilOcean = (props) => <Form ref={props.brazilOceanForm}>
 
   <MutiElement>
-    <FormElement label={`CPF:`} tipMessage={__Cpf_Tip_Message__} className="__required">
-      <Input
-        name='cpf'
-        value={props.cpf}
-        style={{width: '100%', height: 35}}
-        onChange={props.handleInputChange}
-        validations={[required, cpf]}/>
-    </FormElement>
 
     <FormElement label={`Installments:`} className="__required">
       <Select
@@ -197,12 +181,13 @@ const BrazilOcean = (props) => <Form ref={props.brazilOceanForm}>
         }
       </Select>
     </FormElement>
+    <FormElement/>
   </MutiElement>
   <Button style={{display: 'none'}} ref={props.brazilOcean}></Button>
 </Form>
 
 const Mercado = (props) => {
-  const { cart, setCouponHandle, couponCode } = props
+  const { setCouponHandle, couponCode } = props
   return <div style={{width: 320}}>
     <div>MercadoPago Cupón  <Ask style={{marginLeft: 5}} message={__Coupon_Code_Tip_Message__}/></div>
     <div style={{marginTop: 5}}>
@@ -213,19 +198,19 @@ const Mercado = (props) => {
 }
 
 const getPlugin = (props) => {
-  const { method, cart } = props
+  const { method, showMercadopagoCouponField } = props
   switch (method.id) {
     case '16':
       return <Boleto {...props}/>
-    case '23':
-      return <Apac {...props}/>
+    // case '23':
+    //   return <Apac {...props}/>
     case '20':
       return <MoneyTransform {...props}/>
     case '17':
       return <BrazilOcean {...props}/>
     case '19':
     case '21':
-      return cart.showMercadopagoCouponField && <Mercado {...props}/>
+      return showMercadopagoCouponField && <Mercado {...props}/>
     default:
 		  return null
   }
@@ -253,7 +238,7 @@ const DISCOUNTTIP = styled.span`
 `
 
 const PayMethod = (props) => {
-  const {method, selectedPayId, cart, children} = props
+  const {method, selectedPayId, paypalDiscountMessage, children} = props
 
   const selected = method.id === selectedPayId
 
@@ -277,7 +262,7 @@ const PayMethod = (props) => {
 		        <span dangerouslySetInnerHTML={{__html: name}}/>
 
         {
-          method.id === '1' && cart.paypalDiscountMessage && <DISCOUNTTIP><span dangerouslySetInnerHTML={{__html: cart.paypalDiscountMessage}}/></DISCOUNTTIP>
+          method.id === '1' && paypalDiscountMessage && <DISCOUNTTIP><span dangerouslySetInnerHTML={{__html: paypalDiscountMessage}}/></DISCOUNTTIP>
         }
 		      </div>
 

@@ -7,6 +7,7 @@ import {get,
   editProduct,
   mercadocards,
   creditcards,
+  getDCards,
   getMultiMethodCards,
   getpaypal,
   getcoupons,
@@ -16,7 +17,8 @@ import {get,
   gettransaction,
   getMessage,
   getaddresses,
-  selectPayMethod} from '../api'
+  selectPayMethod,
+  checkout} from '../api'
 
 export const SET_LANG = 'SET_LANG'
 export const LOADING = 'LOADING'
@@ -41,6 +43,7 @@ export const CREDIT_STATUS = 'CREDIT_STATUS'
 export const ATM_METHOD = 'ATM_METHOD'
 export const TICKET_METHOD = 'TICKET_METHOD'
 export const SET_COUPON_CODE = 'SET_COUPON_CODE'
+export const DLOCAL_CARDS = 'DLOCAL_CARDS'
 
 // order confirm
 export const GET_TRANSACTION_PAGE = 'GET_TRANSACTION_PAGE'
@@ -50,6 +53,7 @@ export const GET_ADDRESSES = 'GET_ADDRESSES'
 
 export const UPDATE_ADDRESS = 'UPDATE_ADDRESS'
 export const SET_ME = 'SET_ME'
+export const SET_CHECKOUT = 'SET_CHECKOUT'
 
 export const setLang = (lang) => {
   return {
@@ -156,6 +160,13 @@ export const setTicketMethod = (method) => {
 export const setCreditCards = (cards) => {
   return {
     type: 'CREDIT_CARDS',
+    cards
+  }
+}
+
+export const setDLocalCards = (cards) => {
+  return {
+    type: DLOCAL_CARDS,
     cards
   }
 }
@@ -344,6 +355,14 @@ export const getCreditCards = (payMethod, multi) => {
   }
 }
 
+export const getDLocalCards = (payMethod) => {
+  return dispatch => {
+    return getDCards({payMethod}).then(data => data.result).then(cards => {
+      dispatch(setDLocalCards(cards))
+    })
+  }
+}
+
 export const fetchCoupons = () => {
   return dispatch => {
     return getcoupons().then(data => data.result).then(coupons => {
@@ -419,5 +438,33 @@ export const fetchMe = (_me) => {
         return result
       })
     }
+  }
+}
+
+export const setCheckout = (c) => {
+  return {
+    type: SET_CHECKOUT,
+    checkout: c
+  }
+}
+
+export const fetchCheckout = (orderId) => {
+  return dispatch => {
+    return checkout(orderId).then(({result}) => {
+      dispatch(setCheckout(result))
+      return result
+    })
+  }
+}
+
+export const fetchPaypalUrl = () => {
+  return dispatch => {
+    return getpaypal().then(data => data.result).then(paypal => {
+      dispatch({
+        type: 'SET_PAYPAL',
+        paypal
+      })
+      return paypal
+    })
   }
 }

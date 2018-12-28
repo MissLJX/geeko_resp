@@ -5,9 +5,9 @@
     <title>Shopping Cart</title>
     <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
     <script type="text/javascript">
-    	// window.accessToken = 'c5a6c120-8d30-4746-988f-c00bd79ba704'
+    	// window.accessToken = '3bc38479-9d3e-46c6-95f3-201a3bcea5e8'
     	window.lang = 'en_US'
-    	window.__is_login__ = false
+    	window.__is_login__ = true
         window.__isnew = true
     	window.paypalEnv= 'sandbox'
         window.__currency__ = 'USD'
@@ -23,21 +23,38 @@
             id: '123',
             communicationEmail: 'shaolei@163.com'
         }
+
+        if(window.localStorage){
+            var dataStr = localStorage.getItem('temp-order')
+            localStorage.removeItem('temp-order');
+            if(dataStr != null){
+                var data = JSON.parse(dataStr)
+                window.location.href = 'https://www.chicme.xyz/me/m/order/detail/' + data.data
+            }
+        }
+
+
+        
+
+
     </script>
 </head>
-<!-- <body style="background-color: #fff;"> -->
-<body>
+<body style="background-color: #fff;">
+<!-- <body> -->
 
 <script type="text/javascript">
     
      // window.addEventListener('mouseleave', function(){console.log('xxx')}, false)
 </script>
 
+
 <script src="https://www.paypalobjects.com/api/checkout.js"></script>
 <script src="https://secure.mlstatic.com/sdk/javascript/v1/mercadopago.js"></script>
+
 <script type="text/javascript">
 	Mercadopago.setPublishableKey('TEST-aa971175-51cd-4be7-8ae4-f12006ac536d')
 </script>
+
 
 
 <script type="text/javascript">
@@ -46,6 +63,7 @@
         console.log(data)
     }
 </script>
+
 
 
 </body>

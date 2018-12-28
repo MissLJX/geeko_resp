@@ -46,6 +46,16 @@ const OrderConfirm = Loadable({
 	loading: Loading
 })
 
+const DLocal = Loadable({
+  loader: () => import(/* webpackChunkName: "component--dlocal"  */ './pages/dlocal.jsx'),
+  loading: Loading
+})
+
+const Checkout = Loadable({
+  loader: () => import(/* webpackChunkName: "component--checkout"  */ './pages/checkout.jsx'),
+  loading: Loading
+})
+
 const defaultStyles = {
   position: 'fixed',
   top: 0,
@@ -87,9 +97,10 @@ const Index = (props) => {
   	<div>
 
   		<Switch>
-			<Route path={`${window.ctx || ''}/order-confirm/:transactionId`} component={OrderConfirm}/>
-			<Route path={`${window.ctx || ''}${__route_root__}/`}  component={ShoppingCart}/>
-		</Switch>
+       <Route path={`${window.ctx || ''}/checkout/:orderId`}  component={Checkout}/>
+			 <Route path={`${window.ctx || ''}/order-confirm/:transactionId`} component={OrderConfirm}/>
+			 <Route path={`${window.ctx || ''}${__route_root__}/`}  component={ShoppingCart}/>
+		  </Switch>
 
   		
   		{/*<Route path={`${window.ctx || ''}${__route_root__}/`}  component={ShoppingCart}/>*/}
@@ -127,7 +138,13 @@ const Index = (props) => {
 				      path={`${window.ctx || ''}${__route_root__}/coupons`}
 				      component={Coupons}/>
 
-
+      <AnimatedRoute  {...defaultAnimations}
+              mapStyles={(styles) => ({
+                  transform: `translateY(${styles.offset}%)`,
+                  ...defaultStyles
+              })}
+              path={`${window.ctx || ''}${__route_root__}/dlocal`}
+              component={DLocal}/>
 
 
   	</div>

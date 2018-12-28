@@ -303,7 +303,7 @@ const OrderConfirm = class extends React.Component {
               
 
                 {
-                  transaction.boletoPayCodeURL && <div style={{marginTop: 25}}>
+                  transaction.barcodeNumber && <div style={{marginTop: 25}}>
                     <BARCODE>
                       <Barcode value={transaction.barcodeNumber} width={2.21} displayValue={false}/>
                     </BARCODE>

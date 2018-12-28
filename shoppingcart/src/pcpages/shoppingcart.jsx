@@ -29,7 +29,8 @@ import {fetchAll,
   deleteItems,
   updateAddress,
   setCouponCode,
-  changeLang} from '../store/actions.js'
+  changeLang,
+  getDLocalCards} from '../store/actions.js'
 
 import Loading from '../components/msite/loading.jsx'
 import Refreshing from '../components/msite/refreshing.jsx'
@@ -82,7 +83,8 @@ import { paypalpay,
   unusecoupon,
   product2,
   getLeaveImage,
-  useMercadoCoupon } from '../api'
+  useMercadoCoupon,
+  getDLocalPay } from '../api'
 
 export const __address_token__ = window.token
 
@@ -248,6 +250,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     CHANGELANG: (lang) => {
       return dispatch(changeLang(lang))
+    },
+    GETDLOCALCARDS: (payMethod) => {
+      return dispatch(getDLocalCards(payMethod))
     }
   }
 }
@@ -385,7 +390,7 @@ const ShoppingCart = class extends React.Component {
         },
 
         payment: function () {
-          return paypalpay(method).then(data => data.result).then(({TOKEN, success, transactionId, ACK, L_LONGMESSAGE0}) => {
+          return paypalpay(method).then(data => data.result).then(({TOKEN, success, transactionId, orderId, ACK, L_LONGMESSAGE0}) => {
             if (success && transactionId && !TOKEN) {
               window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
               throw new Error('free')
@@ -393,6 +398,7 @@ const ShoppingCart = class extends React.Component {
             if (ACK === 'Failure') {
               throw new Error(L_LONGMESSAGE0)
             }
+            storage.add('temp-order', orderId,  1 * 60 * 60)
             return TOKEN
           }).catch((err) => {
             if(err.result){
@@ -487,10 +493,11 @@ const ShoppingCart = class extends React.Component {
       this.props.GETCREDITCARDS(['3', '18'], true).then(cards => {
         if (!cards || !cards.length) {
           getSafeCharge().then(({result}) => {
-            const {isFree, payURL, params, transactionId} = result
+            const {isFree, payURL, params, transactionId, orderId} = result
             if (isFree) {
               window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
             } else {
+              storage.add('temp-order', orderId,  1 * 60 * 60)
               submit(result)
 
               // window.location.href = `${payURL}?${qs.stringify(params, true)}`
@@ -583,13 +590,13 @@ const ShoppingCart = class extends React.Component {
 
       if (payMethod === '23') {
         const {cpf} = this.props
-        this.apac.validateAll()
-        if (this.apacBB.context._errors && this.apacBB.context._errors.length) {
-          this.setState({
-            checking: false
-          })
-          return
-        }
+        // this.apac.validateAll()
+        // if (this.apacBB.context._errors && this.apacBB.context._errors.length) {
+        //   this.setState({
+        //     checking: false
+        //   })
+        //   return
+        // }
 
         this.apacPay(payMethod, this.props.cpf, (result) => {
           this.setState({
@@ -618,6 +625,19 @@ const ShoppingCart = class extends React.Component {
           })
         })
       }
+    }else if(payType === '12'){
+      if(payMethod === '24'){
+
+        this.props.GETDLOCALCARDS(payMethod).then( cards => {
+          this.props.history.push(`${window.ctx || ''}${__route_root__}/credit-card`)
+        } )
+
+
+        
+      }else if(payMethod === '25'){
+
+      }
+      
     }
 
     if (this.getCountdown(this.props.cart) > 0) {
@@ -628,10 +648,11 @@ const ShoppingCart = class extends React.Component {
 
   getApacPay (payMethod, cpf, fail) {
     getApacPay({payMethod, cpfNumber: cpf}).then(({result}) => {
-      const {isFree, transactionId, success,details,solutions} = result
+      const {isFree, transactionId, orderId, success,details,solutions} = result
       if (isFree) {
         window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
       } else {
+        storage.add('temp-order', orderId,  1 * 60 * 60)
         submit(result)
         // console.log(result)
       }
@@ -1510,7 +1531,7 @@ const ShoppingCart = class extends React.Component {
       	        	<Boxs>
       	        		<Box title={intl.formatMessage({id: 'order_summary'})}>
 
-                      <OrderSummary style={{marginTop: 20}} orderSummary={cart.orderSummary}/>
+                      <OrderSummary style={{marginTop: 20}} display={cart.orderSummary.display}/>
                       {
                           this.props.payMethod === '22' && <div style={{marginTop:5, textAlign:'right'}}>
                             <Red style={{fontWeight:'normal', marginLeft:5, fontSize: 14}}>(Em até 3x s/ juros)</Red>

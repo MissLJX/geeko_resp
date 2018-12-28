@@ -17,6 +17,9 @@ import { changeLang } from './store/actions.js'
 
 
 
+
+
+
 const ShoppingCart = Loadable({
     loader: () => import(/* webpackChunkName: "page--pc-shoppingcart" */ './pcpages/shoppingcart.jsx'),
     loading: Loading1
@@ -41,6 +44,17 @@ const OrderConfirm = Loadable({
 	loader: () => import(/* webpackChunkName: "page--orderconfirm" */ './pcpages/order-confirm.jsx'),
 	loading: Loading
 })
+
+const Checkout = Loadable({
+	loader: () => import(/* webpackChunkName: "page--checkout" */ './pcpages/checkout.jsx'),
+	loading: Loading
+})
+
+const CheckoutCredit = Loadable({
+	loader: () => import(/* webpackChunkName: "page--checkout-credit" */ './pcpages/checkout-credit.jsx'),
+	loading: Loading
+})
+
 
 
 const mapStateToProps = (state) => {
@@ -85,6 +99,8 @@ const Index = class extends React.Component{
 			<Header currencies={this.state.currencies} currency={this.state.currency} lang={_lang} changeLang={ ( lang ) => { this.props.SETLANG(lang) } }/>
 			<div>
 				<Switch>
+					<Route path={`${window.ctx || ''}/checkout/:orderId/credit`} component={CheckoutCredit}/>
+					<Route path={`${window.ctx || ''}/checkout/:orderId`} component={Checkout}/>
 					<Route path={`${window.ctx || ''}${__route_root__}/credit-card`} component={Credit}/>
 					<Route path={`${window.ctx || ''}${__route_root__}/`}  component={ShoppingCart}/>
 					<Route path={`${window.ctx || ''}/order-confirm/:transactionId`} component={OrderConfirm}/>

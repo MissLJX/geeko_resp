@@ -77,8 +77,7 @@ const MercadoBinding = class extends React.Component {
   }
 
   setMercadoInstallments (evt) {
-    const {cart} = this.props
-    const {orderTotal} = cart.orderSummary
+    const {orderTotal} = this.props
     const bin = getBin(evt.target.value)
     if (bin.length >= 6) {
       Mercadopago.getInstallments({bin, amount: orderTotal.amount}, (status, response) => {

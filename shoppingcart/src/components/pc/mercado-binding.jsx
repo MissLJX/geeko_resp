@@ -79,8 +79,7 @@ const MercadoBinding = class extends React.Component {
   }
 
   setMercadoInstallments (evt) {
-    const {cart} = this.props
-    const {orderTotal} = cart.orderSummary
+    const {orderTotal} = this.props
     const bin = getBin(evt.target.value)
     if (bin.length >= 6) {
       Mercadopago.getInstallments({bin, amount: orderTotal.amount}, (status, response) => {
@@ -163,28 +162,17 @@ const MercadoBinding = class extends React.Component {
         installments: this.state.installments
       }
 
-      this.pay(params)
-    }
-  }
-
-  pay (params) {
-    mercadopay(params).then(data => data.result).then(({success, transactionId, details, solutions}) => {
-      if (success) {
-        if (siteType === 'new') {
-          window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/credit-card?order_number=${transactionId}`
-        } else {
-          // window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
-          window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-        }
-      } else {
-        alert(details)
-      }
-      this.setState({
-        paying: false
+      this.props.pay(params).then(() => {
+        this.setState({
+          paying: false
+        })
+      }).catch((result) => {
+        alert(result)
+        this.setState({
+          paying: false
+        })
       })
-    }).catch(({result}) => {
-      alert(result)
-    })
+    }
   }
 
   render () {
