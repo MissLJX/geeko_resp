@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import Items from './items.jsx'
 import CheckBox from '../checkbox.jsx'
-import {Grey} from '../text.jsx'
+import {Grey, Red} from '../text.jsx'
 import Icon from '../icon.jsx'
 import {GiftIcon} from '../promotion-icons.jsx'
 import { FormattedMessage } from 'react-intl'
@@ -11,6 +11,17 @@ import { getLink } from '../../utils/utils.js'
 const SelectLine = styled.div`
   border-bottom: 1px solid #e6e6e6;
   padding-bottom: 12px;
+`
+
+const ADDICON = styled.span`
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px dashed #e64545;
+  text-align: center;
+  line-height: 18px;
+  color: #e64545;
+  display: inline-block;
 `
 
 const PromotionHead = ({promotion, selected, selectHandle}) => <SelectLine style={{paddingTop: 25, borderTop: '1px dashed #e5e5e5'}}>
@@ -23,8 +34,9 @@ const PromotionHead = ({promotion, selected, selectHandle}) => <SelectLine style
     </div>
     <div className="x-cell __right">
       <a className="__href" href={getLink(promotion.deepLink)} style={{textDecoration: 'none', color: '#222'}}>
-        <FormattedMessage id="add"/>
-        <Icon style={{fontSize: 16, marginLeft: 5}}>&#xe694;</Icon>
+        <ADDICON>+</ADDICON>
+        <Red style={{marginLeft: 5}}><FormattedMessage id="add"/></Red>
+        {/* <Icon style={{fontSize: 16, marginLeft: 5}}>&#xe694;</Icon> */}
       </a>
     </div>
   </div>

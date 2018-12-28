@@ -318,7 +318,7 @@ const question14 = {
 			</header>
 			<section>
 				<p>
-					El seguimiento de su paquete es fácil. Puede iniciar sesión en su cuenta de Boutiquefeel y encontrar toda la información de su pedido. Haga clic en "Mis pedidos" y haga clic en "Ver detalles" y podrá averiguar dónde está su paquete. También puede enviar un ticket o correo electrónico (support@Boutiquefeel.com) para verificar la información de su pedido.
+					El seguimiento de su paquete es fácil. Puede iniciar sesión en su cuenta de Boutiquefeel y encontrar toda la información de su pedido. Haga clic en "Mis pedidos" y haga clic en "Ver detalles" y puede averiguar dónde está su paquete. También puede enviar un boleto o correo electrónico para verificar la información de su pedido.
 				</p>
 			</section>
 		</article>
@@ -1370,7 +1370,7 @@ const question66 = {
 					Asegúrese de que nuestro equipo trabajó con usted en el tema antes de devolver el paquete.
 				</p>
 				<p>
-				Siéntete con tu devolución. Una vez procesada tu devolución / intercambio, te responderemos.
+				Puede comenzar su devolución enviando un ticket de soporte con su devolución. Una vez que se haya procesado su devolución / cambio, le responderemos.
                 </p>
 			</section>
 		</article>
@@ -1441,7 +1441,7 @@ const question70 = {
 					No tenemos un retorno gratuito a la orden
 				</p>
 				<p>No tenemos un retorno gratuito a la orden</p>
-				<p>Muy a gusto con su razón de devolución, nuestro personal quiere enviarle la dirección del remitente</p>
+				<p>Puede comenzar su devolución enviando un ticket de soporte con el motivo de su devolución. Nuestro personal le enviará la dirección de devolución.</p>
 			</section>
 		</article>
 	`
@@ -1992,7 +1992,7 @@ const secondaries = [
 const questions = [
   {
   	id: 'root-1',
-    title: 'cuenta',   cuenta:órdenes:pago:productos:entrega:Vuelta:Seguridad y privacidad
+    title: 'cuenta',
     questions: [
       question1,
       question2,

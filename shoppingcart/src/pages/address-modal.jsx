@@ -54,10 +54,10 @@ const Modal = class extends React.Component {
   		addressOpreator({...address, id: this.props.address ? this.props.address.id : null}).then(() => {
         if (address.country === 'BR') {
           Cookie.set('currency', 'BRL', {expires: 365})
-          this.props.CHANGELANG('pt')
+          this.props.CHANGELANG('pt_BR')
         } else if (address.country === 'MX') {
           Cookie.set('currency', 'MXN', {expires: 365})
-          this.props.CHANGELANG('es')
+          this.props.CHANGELANG('es_MX')
         } else {
           this.props.REFRESH()
         }

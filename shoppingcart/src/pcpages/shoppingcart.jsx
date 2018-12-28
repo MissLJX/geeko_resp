@@ -387,7 +387,7 @@ const ShoppingCart = class extends React.Component {
         payment: function () {
           return paypalpay(method).then(data => data.result).then(({TOKEN, success, transactionId, ACK, L_LONGMESSAGE0}) => {
             if (success && transactionId && !TOKEN) {
-              window.location.href = `${window.ctx || ''}/v7/order/confirm/free?transationId=${transactionId}`
+              window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
               throw new Error('free')
             }
             if (ACK === 'Failure') {
@@ -489,7 +489,7 @@ const ShoppingCart = class extends React.Component {
           getSafeCharge().then(({result}) => {
             const {isFree, payURL, params, transactionId} = result
             if (isFree) {
-              window.location.href = `${window.ctx || ''}/v7/order/confirm/free?transationId=${transactionId}`
+              window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
             } else {
               submit(result)
 
@@ -526,7 +526,7 @@ const ShoppingCart = class extends React.Component {
           if(siteType === 'new'){
             window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/credit-card?order_number=${transactionId}`
           }else{
-            window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
+            window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
           }
           
         } else {
@@ -561,7 +561,7 @@ const ShoppingCart = class extends React.Component {
           if(siteType === 'new'){
             window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/credit-card?order_number=${transactionId}`
           }else{
-            window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
+            window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
           }
         } else {
           alert(details)
@@ -630,7 +630,7 @@ const ShoppingCart = class extends React.Component {
     getApacPay({payMethod, cpfNumber: cpf}).then(({result}) => {
       const {isFree, transactionId, success,details,solutions} = result
       if (isFree) {
-        window.location.href = `${window.ctx || ''}/v7/order/confirm/free?transationId=${transactionId}`
+        window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
       } else {
         submit(result)
         // console.log(result)
@@ -644,13 +644,13 @@ const ShoppingCart = class extends React.Component {
     apacPay({payMethod, cpfNumber: cpf}).then(({result}) => {
       const {isFree, transactionId, success,details,solutions} = result
       if (isFree) {
-        window.location.href = `${window.ctx || ''}/v7/order/confirm/free?transationId=${transactionId}`
+        window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
       } else {
         if( success ){
           if(siteType === 'new'){
             window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/credit-card?order_number=${transactionId}`
           }else{
-            window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
+            window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
           }
         }else{
           fail(details)
@@ -675,13 +675,14 @@ const ShoppingCart = class extends React.Component {
       paypaling: true
     })
 
-    placepaypal().then(() => {
+    placepaypal().then(({result}) => {
 
       if(siteType === 'new'){
         
         window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/paypal`
       }else{
-        window.location.href = `${window.ctx || ''}/v7/orderConfirm/anon/order-confirm`
+        // window.location.href = `${window.ctx || ''}/v7/orderConfirm/anon/order-confirm`
+        window.location.href = `${window.ctx || ''}/order-confirm/${result}`
       }
 
       
@@ -756,10 +757,10 @@ const ShoppingCart = class extends React.Component {
       let __refreshCart
       if (shipping.country.value === 'BR') {
         Cookie.set('currency', 'BRL', {expires: 365})
-        __refreshCart = this.props.CHANGELANG('pt')
+        __refreshCart = this.props.CHANGELANG('pt_BR')
       } else if (shipping.country.value === 'MX') {
         Cookie.set('currency', 'MXN', {expires: 365})
-        __refreshCart = this.props.CHANGELANG('es')
+        __refreshCart = this.props.CHANGELANG('es_MX')
       }else{
         __refreshCart = this.props.REFRESHCART()
       }
@@ -923,10 +924,10 @@ const ShoppingCart = class extends React.Component {
         let __refreshCart
         if (address.country === 'BR') {
           Cookie.set('currency', 'BRL', {expires: 365})
-          __refreshCart = this.props.CHANGELANG('pt')
+          __refreshCart = this.props.CHANGELANG('pt_BR')
         } else if (address.country === 'MX') {
           Cookie.set('currency', 'MXN', {expires: 365})
-          __refreshCart = this.props.CHANGELANG('es')
+          __refreshCart = this.props.CHANGELANG('es_MX')
         }else{
           __refreshCart = this.props.REFRESHCART()
         }
@@ -1222,7 +1223,7 @@ const ShoppingCart = class extends React.Component {
 
 
     let formatedData, invalidItems,cancheckout,hasLocalItems, sendCouponMessage, couponcountdown, totalCount=0, hasOverseas
-    let hasOverseasHead, fullSelected, cancheckout1
+    let hasOverseasHead, fullSelected, cancheckout1, hasQuickPay
 
     if(cart){
       formatedData = this.formatData(cart)
@@ -1238,6 +1239,8 @@ const ShoppingCart = class extends React.Component {
       hasOverseas = validateOverseasItems && validateOverseasItems.length > 0
       hasOverseasHead = hasOverseas && hasLocalItems
       fullSelected = this.getFullSelected()
+
+      hasQuickPay = cart.payMethodList && cart.payMethodList.length && cart.payMethodList.find( m => m.id === "1")
     }
 
 
@@ -1363,7 +1366,7 @@ const ShoppingCart = class extends React.Component {
             }
 
             {
-              (window.__is_login__ && (cancheckout1 || !hasLocalItems) || window.token) && <Box title={shippingLabel}>
+              (window.__is_login__ && (cancheckout1 || !hasLocalItems) || ( window.token && cancheckout1 )) && <Box title={shippingLabel}>
                 <ShippingMethods onSelect={this.selectShippingMethodHandle.bind(this)} shippingMethodList={ cart.shippingMethodList } selectedShippingMethod={ cart.shippingMethod }/>
                 {
                   cart.shippingInsurancePrice2 && <div style={{borderTop:'1px solid #e6e6e6', paddingTop: 10}}>
@@ -1538,11 +1541,20 @@ const ShoppingCart = class extends React.Component {
                                 </DISCOUNTTIP> 
                               }
 
-                              <div id='ip-paypal-pay' style={{marginTop: 30}} ref={ (c) => this.paypalRender(c, 'quick') }/>
-                              <div style={{color: '#999', textAlign: 'center', height: 30, lineHeight: '30px', textTransform: 'uppercase'}}>
-                                {intl.formatMessage({id: 'or'})}
-                              </div>
-                              <BigButton onClick={ () => { window.location.href = `${window.ctx}/${siteType === 'new' ? 'page' : 'i'}/login?redirectUrl=${encodeURIComponent(window.location.href)}` } } bgColor="#222" style={{height: 45, lineHeight: '45px', textTransform: 'uppercase', fontSize: 18}}>
+                              {
+                                hasQuickPay && <React.Fragment>
+                                  <div id='ip-paypal-pay' style={{marginTop: 30}} ref={ (c) => this.paypalRender(c, 'quick') }/>
+                                  <div style={{color: '#999', textAlign: 'center', height: 30, lineHeight: '30px', textTransform: 'uppercase'}}>
+                                    {intl.formatMessage({id: 'or'})}
+                                  </div>
+                                </React.Fragment>
+                              }
+
+                              
+
+
+
+                              <BigButton onClick={ () => { window.location.href = `${window.ctx}/${siteType === 'new' ? 'page' : 'i'}/login?redirectUrl=${encodeURIComponent(window.location.href)}` } } bgColor="#222" style={{marginTop: hasQuickPay ? 0 : 30, height: 45, lineHeight: '45px', textTransform: 'uppercase', fontSize: 18}}>
                                 {intl.formatMessage({id: 'proceed_checkout'})}
                               </BigButton>
                             </div>

@@ -40,7 +40,7 @@ export default {
                     _url = '/i/trending-now'
                     break
                 case 15:
-                    _url = '/i/category/products'
+                    _url = '/i/category/products?categoryId=' + deepLink.params[0]
                     break
                 case 16:
                     _url = deepLink.params[0]

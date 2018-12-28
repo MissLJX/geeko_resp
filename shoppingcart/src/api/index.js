@@ -1,5 +1,5 @@
 import axios from './apiconfigs'
-const VPATH = '/v7'
+const VPATH = '/v8'
 export const getMessage = (code) => axios.get(`/message/get/${code}`)
 export const get = () => axios.get(`${VPATH}/shopping-cart/show?_=${new Date().getTime()}&payMethod=${window.token ? '1' : ''}`)
 export const selectAll = (select) => axios.get(`${VPATH}/shopping-cart/select-all?_=${new Date().getTime()}`, {select})
@@ -23,7 +23,7 @@ export const product = (id) => axios.get(`${VPATH}/product/anon/${id}/show`)
 export const product2 = (id) => axios.get(`${VPATH}/product/anon/${id}/show2`)
 
 export const me = () => axios.get(`${VPATH}/customer/get`)
-export const changeCommunicationEmail = (customerId, email) => axios.post(`${VPATH}/customer/anon/change-email`, {customerId, email})
+export const changeCommunicationEmail = (transactionId, email) => axios.post(`/order/anon/change-communication-email`, {transactionId, email})
 
 export const mercadocards = () => axios.get(`${VPATH}/mercadopago/get-cards?_=${new Date().getTime()}`)
 export const mercadopay = (params) => axios.post(`${VPATH}/mercadopago/pay`, params)
@@ -67,9 +67,10 @@ export const getApacPay = (params) => axios.get('/apacpay/get-pay-params', param
 export const apacPay = (params) => axios.get('/apacpay/pay', params)
 
 // order
-export const gettransaction = (id) => axios.get(`${VPATH}/order/anon/${id}/show`)
+export const gettransaction = (id) => axios.get(`${VPATH}/order/anon/order-confim`, {transactionId: id})
 export const updateorderaddress = (address) => axios.post(`${VPATH}/order/anon/shipping-detail-update`, address)
-export const gettransactionrelatedproducts = (id, skip, limit) => axios.get(`${VPATH}/order/anon/${skip}/${limit}/${id}/get-same-category-products`)
+export const gettransactionrelatedproducts = (id, skip, limit) => axios.get(`${VPATH}/order/anon/${skip}/${limit}/get-same-category-products
+`, {orderId: id})
 export const changepassword = (password) => axios.post(`${VPATH}/customer/anon/change-pwd`, {password})
 
 export const getaddresses = () => axios.get(`${VPATH}/customer/get-shipping-details`)
@@ -77,3 +78,4 @@ export const setdefaultaddress = (id) => axios.get(`${VPATH}/customer/${id}/set-
 
 export const getLeaveImage = () => axios.get(`${VPATH}/coupon/anon/get-shopping-cart-message`)
 export const getRecentlyProducts = () => axios.get(`${VPATH}/product/anon/get-browsing-history`)
+export const clientcall = (transationId) => axios.get(`${VPATH}/pay/client-call/${transationId}/true`)

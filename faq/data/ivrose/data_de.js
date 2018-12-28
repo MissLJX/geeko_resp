@@ -317,7 +317,7 @@ const question14 = {
 			</header>
 			<section>
 				<p>
-				    Verfolgen Sie Ihr Paket einfach. Sie können sich bei Ihrem Ivrose-Konto anmelden und alle Ihre Bestellinformationen finden. Klicken Sie auf "Meine Bestellungen" und klicken Sie auf "Details anzeigen" und Sie können herausfinden, wo sich Ihr Paket befindet. Sie können auch ein Ticket oder eine E-Mail senden (support@Ivrose.com), um Ihre Bestellinformationen zu überprüfen.
+				    Die Nachverfolgung Ihres Pakets ist einfach. Sie können sich bei Ihrem Ivrose-Konto anmelden und alle Ihre Bestellinformationen finden. Klicken Sie auf "Meine Bestellungen" und dann auf "Details anzeigen". Dort können Sie herausfinden, wo sich Ihr Paket befindet. Sie können auch ein Ticket senden, um Ihre Bestelldaten zu überprüfen.
 			    </p>
 			</section>
 		</article>
@@ -1377,7 +1377,7 @@ const question66 = {
 					Stellen Sie sicher, dass unser Team mit Ihnen an dem Problem gearbeitet hat, bevor Sie das Paket zurücksenden.
 				</p>
 				<p>
-				Sie können Ihre Rückkehr beginnen, indem Sie ein Support-Ticket oder eine E-Mail an unseren After-Sales-Kunden mit Ihrer Rückkehr senden. Sobald Ihre Rückkehr / Austausch bearbeitet worden ist, werden wir Ihnen antworten.
+				Sie können Ihre Retoure beginnen, indem Sie mit Ihrer Retoure ein Support-Ticket einreichen. Sobald Ihre Rücksendung / Rückgabe bearbeitet wurde, werden wir Ihnen antworten.
 			    </p>
 			</section>
 		</article>
@@ -1448,7 +1448,7 @@ const question70 = {
 					Wir haben keine kostenlose Rücksendung, um die Bestellung zurückzusenden
 				</p>
 				<p>Stellen Sie sicher, dass unser Team mit Ihnen an dem Problem gearbeitet hat, bevor Sie das Paket zurücksenden. Die Adresse auf dem Paket ist nicht unsere Lageradresse und unser Team wird die Rücksendeadresse entsprechend senden.</p>
-				<p>Sie können Ihre Rücksendung beginnen, indem Sie ein Support-Ticket oder eine E-Mail an unseren Kundendienst mit Ihrem Rücksendegrund senden, unsere Mitarbeiter werden Ihnen die Rücksendeadresse senden</p>
+				<p>Sie können Ihre Retoure beginnen, indem Sie ein Support-Ticket mit Ihrem Rücksendegrund übermitteln</p>
 			</section>
 		</article>
 	`

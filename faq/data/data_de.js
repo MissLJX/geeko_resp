@@ -1,8 +1,8 @@
 const question1 = {
-    id: 'se-1',
-    title: 'Wo finde ich meine Bestellungen?',
-    parentId: 'root-1',
-    richText: `
+  id: 'se-1',
+  title: 'Wo finde ich meine Bestellungen?',
+  parentId: 'root-1',
+  richText: `
 		<article>
 			<header>
 				<h1>Wo finde ich meine Bestellungen?</h1>
@@ -16,10 +16,10 @@ const question1 = {
 }
 
 const question2 = {
-    id: 'se-2',
-    title: 'Wie reiche ich ein Ticket ein?',
-    parentId: 'root-1',
-    richText: `
+  id: 'se-2',
+  title: 'Wie reiche ich ein Ticket ein?',
+  parentId: 'root-1',
+  richText: `
 		<article>
 			<header>
 				<h1>Wie reiche ich ein Ticket ein?</h1>
@@ -44,10 +44,10 @@ const question2 = {
 }
 
 const question3 = {
-    id: 'se-3',
-    title: 'Wie ändere ich Details auf meinem Chic Me-Konto?',
-    parentId: 'root-1',
-    richText: `
+  id: 'se-3',
+  title: 'Wie ändere ich Details auf meinem Chic Me-Konto?',
+  parentId: 'root-1',
+  richText: `
 		<article>
 			<header>
 				<h1>Wie ändere ich Details auf meinem Chic Me-Konto?</h1>
@@ -81,10 +81,10 @@ const question3 = {
 }
 
 const question4 = {
-    id: 'se-4',
-    title: 'Wie setze ich mein Passwort zurück?',
-    parentId: 'root-1',
-    richText: `
+  id: 'se-4',
+  title: 'Wie setze ich mein Passwort zurück?',
+  parentId: 'root-1',
+  richText: `
 		<article>
 			<header>
 				<h1>Wie setze ich mein Passwort zurück?</h1>
@@ -114,10 +114,10 @@ const question4 = {
 }
 
 const question5 = {
-    id: 'se-5',
-    title: 'Warum kann ich mich nicht bei meinem Chic Me-Konto anmelden?',
-    parentId: 'root-1',
-    richText: `
+  id: 'se-5',
+  title: 'Warum kann ich mich nicht bei meinem Chic Me-Konto anmelden?',
+  parentId: 'root-1',
+  richText: `
 		<article>
 			<header>
 				<h1>Warum kann ich mich nicht bei meinem Chic Me-Konto anmelden?</h1>
@@ -133,10 +133,10 @@ const question5 = {
 }
 
 const question6 = {
-    id: 'se-6',
-    title: 'Kann ich mich mit meinem Facebook-Account einloggen?',
-    parentId: 'root-1',
-    richText: `
+  id: 'se-6',
+  title: 'Kann ich mich mit meinem Facebook-Account einloggen?',
+  parentId: 'root-1',
+  richText: `
 		<article>
 			<header>
 				<h1>Kann ich mich mit meinem Facebook-Account einloggen?</h1>
@@ -151,10 +151,10 @@ const question6 = {
 }
 
 const question7 = {
-    id: 'se-7',
-    title: 'Muss ich mich registrieren, um eine Bestellung aufzugeben?',
-    parentId: 'root-1',
-    richText: `
+  id: 'se-7',
+  title: 'Muss ich mich registrieren, um eine Bestellung aufzugeben?',
+  parentId: 'root-1',
+  richText: `
 		<article>
 			<header>
 				<h1>Muss ich mich registrieren, um eine Bestellung aufzugeben?</h1>
@@ -169,10 +169,10 @@ const question7 = {
 }
 
 const question8 = {
-    id: 'se-8',
-    title: 'How can I cancel the Paid order?',
-    parentId: 'root-2',
-    richText: `
+  id: 'se-8',
+  title: 'How can I cancel the Paid order?',
+  parentId: 'root-2',
+  richText: `
 		<article>
 			<header>
 				<h1>How can I cancel the Paid order?</h1>
@@ -193,10 +193,10 @@ const question8 = {
 }
 
 const question9 = {
-    id: 'se-9',
-    title: 'Warum habe ich keine E-Mail über den Versand meiner Bestellung erhalten?',
-    parentId: 'root-2',
-    richText: `
+  id: 'se-9',
+  title: 'Warum habe ich keine E-Mail über den Versand meiner Bestellung erhalten?',
+  parentId: 'root-2',
+  richText: `
 		<article>
 			<header>
 				<h1>Warum habe ich keine E-Mail über den Versand meiner Bestellung erhalten?</h1>
@@ -217,10 +217,10 @@ const question9 = {
 }
 
 const question10 = {
-    id: 'se-10',
-    title: 'Wie ändere ich meine Lieferadresse, nachdem meine Bestellung aufgegeben wurde?',
-    parentId: 'root-2',
-    richText: `
+  id: 'se-10',
+  title: 'Wie ändere ich meine Lieferadresse, nachdem meine Bestellung aufgegeben wurde?',
+  parentId: 'root-2',
+  richText: `
 		<article>
 			<header>
 				<h1>Wie ändere ich meine Lieferadresse, nachdem meine Bestellung aufgegeben wurde?</h1>
@@ -241,10 +241,10 @@ const question10 = {
 }
 
 const question11 = {
-    id: 'se-11',
-    title: 'Wie kann ich meine Bestellung ändern?',
-    parentId: 'root-2',
-    richText: `
+  id: 'se-11',
+  title: 'Wie kann ich meine Bestellung ändern?',
+  parentId: 'root-2',
+  richText: `
 		<article>
 			<header>
 				<h1>Wie kann ich meine Bestellung ändern?</h1>
@@ -265,10 +265,10 @@ const question11 = {
 }
 
 const question12 = {
-    id: 'se-12',
-    title: 'Was soll ich tun, wenn ich keine Bestätigungs-E-Mail erhalten habe?',
-    parentId: 'root-2',
-    richText: `
+  id: 'se-12',
+  title: 'Was soll ich tun, wenn ich keine Bestätigungs-E-Mail erhalten habe?',
+  parentId: 'root-2',
+  richText: `
 		<article>
 			<header>
 				<h1>Was soll ich tun, wenn ich keine Bestätigungs-E-Mail erhalten habe?</h1>
@@ -282,10 +282,10 @@ const question12 = {
 }
 
 const question13 = {
-    id: 'se-13',
-    title: 'Wie lange dauert es, bis meine Bestellung eintrifft?',
-    parentId: 'root-2',
-    richText: `
+  id: 'se-13',
+  title: 'Wie lange dauert es, bis meine Bestellung eintrifft?',
+  parentId: 'root-2',
+  richText: `
 		<article>
 			<header>
 				<h1>Wie lange dauert es, bis meine Bestellung eintrifft?</h1>
@@ -305,28 +305,28 @@ const question13 = {
 }
 
 const question14 = {
-    id: 'se-14',
-    title: 'Wie kann ich meine Bestellungen verfolgen?',
-    parentId: 'root-2',
-    richText: `
+  id: 'se-14',
+  title: 'Wie kann ich meine Bestellungen verfolgen?',
+  parentId: 'root-2',
+  richText: `
 		<article>
 			<header>
 				<h1>Wie kann ich meine Bestellungen verfolgen?</h1>
 			</header>
 			<section>
 				<p>
-				    Verfolgen Sie Ihr Paket einfach. Sie können sich bei Ihrem Chicme-Konto anmelden und alle Ihre Bestellinformationen finden. Klicken Sie auf "Meine Bestellungen" und klicken Sie auf "Details anzeigen" und Sie können herausfinden, wo sich Ihr Paket befindet. Sie können auch ein Ticket oder eine E-Mail senden (support@chicme.com), um Ihre Bestellinformationen zu überprüfen.
-			    </p>
+				    Die Nachverfolgung Ihres Pakets ist einfach. Sie können sich bei Ihrem Chicme-Konto anmelden und alle Ihre Bestellinformationen finden. Klicken Sie auf "Meine Bestellungen" und dann auf "Details anzeigen". Dort können Sie herausfinden, wo sich Ihr Paket befindet. Sie können auch ein Ticket senden, um Ihre Bestelldaten zu überprüfen.
+			  </p>
 			</section>
 		</article>
 	`
 }
 
 const question15 = {
-    id: 'se-15',
-    title: 'Muss ich für die Kostüme bezahlen?',
-    parentId: 'root-2',
-    richText: `
+  id: 'se-15',
+  title: 'Muss ich für die Kostüme bezahlen?',
+  parentId: 'root-2',
+  richText: `
 		<article>
 			<header>
 				<h1>Muss ich für die Kostüme bezahlen?</h1>
@@ -341,10 +341,10 @@ const question15 = {
 }
 
 const question16 = {
-    id: 'se-16',
-    title: 'Wie ändere ich die Rechnungsadresse?',
-    parentId: 'root-2',
-    richText: `
+  id: 'se-16',
+  title: 'Wie ändere ich die Rechnungsadresse?',
+  parentId: 'root-2',
+  richText: `
 		<article>
 			<header>
 				<h1>Wie ändere ich die Rechnungsadresse?</h1>
@@ -365,10 +365,10 @@ const question16 = {
 }
 
 const question17 = {
-    id: 'se-17',
-    title: 'Wo stelle ich den Rabattcoupon ein?',
-    parentId: 'root-2',
-    richText: `
+  id: 'se-17',
+  title: 'Wo stelle ich den Rabattcoupon ein?',
+  parentId: 'root-2',
+  richText: `
 		<article>
 			<header>
 				<h1>Wo stelle ich den Rabattcoupon ein?</h1>
@@ -386,10 +386,10 @@ const question17 = {
 }
 
 const question18 = {
-    id: 'se-18',
-    title: 'Warum habe ich keine Bestätigung über meine Bestellung erhalten?',
-    parentId: 'root-2',
-    richText: `
+  id: 'se-18',
+  title: 'Warum habe ich keine Bestätigung über meine Bestellung erhalten?',
+  parentId: 'root-2',
+  richText: `
 		<article>
 			<header>
 				<h1>Warum habe ich keine Bestätigung über meine Bestellung erhalten?</h1>
@@ -404,10 +404,10 @@ const question18 = {
 }
 
 const question19 = {
-    id: 'se-19',
-    title: 'Kann ich einen Rabattgutschein für meine erste Bestellung erhalten?',
-    parentId: 'root-2',
-    richText: `
+  id: 'se-19',
+  title: 'Kann ich einen Rabattgutschein für meine erste Bestellung erhalten?',
+  parentId: 'root-2',
+  richText: `
 		<article>
 			<header>
 				<h1>Kann ich einen Rabattgutschein für meine erste Bestellung erhalten?</h1>
@@ -422,10 +422,10 @@ const question19 = {
 }
 
 const question20 = {
-    id: 'se-20',
-    title: 'Wie kann ich eine Bestellung aufgeben? Wie kann ich eine Bestellung aufgeben?',
-    parentId: 'root-2',
-    richText: `
+  id: 'se-20',
+  title: 'Wie kann ich eine Bestellung aufgeben? Wie kann ich eine Bestellung aufgeben?',
+  parentId: 'root-2',
+  richText: `
 		<article>
 			<header>
 				<h1>Wie kann ich eine Bestellung aufgeben? Wie kann ich eine Bestellung aufgeben?</h1>
@@ -449,10 +449,10 @@ const question20 = {
 }
 
 const question21 = {
-    id: 'se-21',
-    title: 'Akzeptieren Sie Nachnahme?',
-    parentId: 'root-3',
-    richText: `
+  id: 'se-21',
+  title: 'Akzeptieren Sie Nachnahme?',
+  parentId: 'root-3',
+  richText: `
 		<article>
 			<header>
 				<h1>Akzeptieren Sie Nachnahme?</h1>
@@ -467,10 +467,10 @@ const question21 = {
 }
 
 const question22 = {
-    id: 'se-22',
-    title: 'Kann ich eine Geschenkkarte zum Bezahlen verwenden?',
-    parentId: 'root-3',
-    richText: `
+  id: 'se-22',
+  title: 'Kann ich eine Geschenkkarte zum Bezahlen verwenden?',
+  parentId: 'root-3',
+  richText: `
 		<article>
 			<header>
 				<h1>Kann ich eine Geschenkkarte zum Bezahlen verwenden?</h1>
@@ -485,10 +485,10 @@ const question22 = {
 }
 
 const question23 = {
-    id: 'se-23',
-    title: 'Warum wird meine Zahlung abgelehnt?',
-    parentId: 'root-3',
-    richText: `
+  id: 'se-23',
+  title: 'Warum wird meine Zahlung abgelehnt?',
+  parentId: 'root-3',
+  richText: `
 		<article>
 			<header>
 				<h1>Warum wird meine Zahlung abgelehnt?</h1>
@@ -509,10 +509,10 @@ const question23 = {
 }
 
 const question24 = {
-    id: 'se-24',
-    title: 'Kann ich mehrere Rabattcodes anwenden?',
-    parentId: 'root-3',
-    richText: `
+  id: 'se-24',
+  title: 'Kann ich mehrere Rabattcodes anwenden?',
+  parentId: 'root-3',
+  richText: `
 		<article>
 			<header>
 				<h1>Kann ich mehrere Rabattcodes anwenden?</h1>
@@ -534,10 +534,10 @@ const question24 = {
 }
 
 const question25 = {
-    id: 'se-25',
-    title: 'Warum sind meine Credits ungültig?',
-    parentId: 'root-3',
-    richText: `
+  id: 'se-25',
+  title: 'Warum sind meine Credits ungültig?',
+  parentId: 'root-3',
+  richText: `
 		<article>
 			<header>
 				<h1>Warum sind meine Credits ungültig?</h1>
@@ -561,10 +561,10 @@ Credits werden in 12 Monaten ablaufen
 	`
 }
 const question26 = {
-    id: 'se-26',
-    title: 'Warum werde ich gebeten, meine Bestellung zu autorisieren?',
-    parentId: 'root-3',
-    richText: `
+  id: 'se-26',
+  title: 'Warum werde ich gebeten, meine Bestellung zu autorisieren?',
+  parentId: 'root-3',
+  richText: `
 		<article>
 			<header>
 				<h1>Warum werde ich gebeten, meine Bestellung zu autorisieren?</h1>
@@ -579,10 +579,10 @@ const question26 = {
 }
 
 const question27 = {
-    id: 'se-27',
-    title: 'Kann ich meine Chic Me-Bonuspunkte, mein Wallet-Geld und einen Gutscheincode gleichzeitig nutzen?',
-    parentId: 'root-3',
-    richText: `
+  id: 'se-27',
+  title: 'Kann ich meine Chic Me-Bonuspunkte, mein Wallet-Geld und einen Gutscheincode gleichzeitig nutzen?',
+  parentId: 'root-3',
+  richText: `
 		<article>
 			<header>
 				<h1>Kann ich meine Chic Me-Bonuspunkte, mein Wallet-Geld und einen Gutscheincode gleichzeitig nutzen?</h1>
@@ -597,10 +597,10 @@ const question27 = {
 }
 
 const question28 = {
-    id: 'se-28',
-    title: 'Warum kann ich mit meiner Karte nicht bezahlen?',
-    parentId: 'root-3',
-    richText: `
+  id: 'se-28',
+  title: 'Warum kann ich mit meiner Karte nicht bezahlen?',
+  parentId: 'root-3',
+  richText: `
 		<article>
 			<header>
 				<h1>Warum kann ich mit meiner Karte nicht bezahlen?</h1>
@@ -621,10 +621,10 @@ const question28 = {
 }
 
 const question29 = {
-    id: 'se-29',
-    title: 'Warum wird meine Karte abgelehnt?',
-    parentId: 'root-3',
-    richText: `
+  id: 'se-29',
+  title: 'Warum wird meine Karte abgelehnt?',
+  parentId: 'root-3',
+  richText: `
 		<article>
 			<header>
 				<h1>Warum wird meine Karte abgelehnt?</h1>
@@ -645,10 +645,10 @@ const question29 = {
 }
 
 const question30 = {
-    id: 'se-30',
-    title: 'Kann ich mit Paypal zahlen?',
-    parentId: 'root-3',
-    richText: `
+  id: 'se-30',
+  title: 'Kann ich mit Paypal zahlen?',
+  parentId: 'root-3',
+  richText: `
 		<article>
 			<header>
 				<h1>Kann ich mit Paypal zahlen?</h1>
@@ -663,10 +663,10 @@ const question30 = {
 }
 
 const question31 = {
-    id: 'se-31',
-    title: 'Welche Zahlung kannst du akzeptieren?',
-    parentId: 'root-3',
-    richText: `
+  id: 'se-31',
+  title: 'Welche Zahlung kannst du akzeptieren?',
+  parentId: 'root-3',
+  richText: `
 		<article>
 			<header>
 				<h1>Welche Zahlung kannst du akzeptieren?</h1>
@@ -681,10 +681,10 @@ const question31 = {
 }
 
 const question32 = {
-    id: 'se-32',
-    title: 'Kann ich Sie anrufen, um eine Bestellung aufzugeben?',
-    parentId: 'root-3',
-    richText: `
+  id: 'se-32',
+  title: 'Kann ich Sie anrufen, um eine Bestellung aufzugeben?',
+  parentId: 'root-3',
+  richText: `
 		<article>
 			<header>
 				<h1>Kann ich Sie anrufen, um eine Bestellung aufzugeben?h1>
@@ -700,10 +700,10 @@ Der Kunde muss online dafür bezahlen. Wir akzeptieren PayPal, Visa und MasterCa
 }
 
 const question33 = {
-    id: 'se-33',
-    title: 'Warum gibt es so viele Ein-Größen-Produkte?',
-    parentId: 'root-4',
-    richText: `
+  id: 'se-33',
+  title: 'Warum gibt es so viele Ein-Größen-Produkte?',
+  parentId: 'root-4',
+  richText: `
 		<article>
 			<header>
 				<h1>Warum gibt es so viele Ein-Größen-Produkte?</h1>
@@ -720,10 +720,10 @@ const question33 = {
 	`
 }
 const question34 = {
-    id: 'se-34',
-    title: 'Was bedeutet eine Größe?',
-    parentId: 'root-4',
-    richText: `
+  id: 'se-34',
+  title: 'Was bedeutet eine Größe?',
+  parentId: 'root-4',
+  richText: `
 		<article>
 			<header>
 				<h1>Was bedeutet eine Größe?</h1>
@@ -738,10 +738,10 @@ const question34 = {
 }
 
 const question35 = {
-    id: 'se-35',
-    title: 'Wie wähle ich die Größe?',
-    parentId: 'root-4',
-    richText: `
+  id: 'se-35',
+  title: 'Wie wähle ich die Größe?',
+  parentId: 'root-4',
+  richText: `
 		<article>
 			<header>
 				<h1>Wie wähle ich die Größe?</h1>
@@ -759,10 +759,10 @@ const question35 = {
 	`
 }
 const question36 = {
-    id: 'se-36',
-    title: 'Wo werden die Gegenstände hergestellt?',
-    parentId: 'root-4',
-    richText: `
+  id: 'se-36',
+  title: 'Wo werden die Gegenstände hergestellt?',
+  parentId: 'root-4',
+  richText: `
 		<article>
 			<header>
 				<h1>Wo werden die Gegenstände hergestellt?</h1>
@@ -777,10 +777,10 @@ const question36 = {
 }
 
 const question37 = {
-    id: 'se-37',
-    title: 'Wo befinden Sie sich?',
-    parentId: 'root-4',
-    richText: `
+  id: 'se-37',
+  title: 'Wo befinden Sie sich?',
+  parentId: 'root-4',
+  richText: `
 		<article>
 			<header>
 				<h1>Wo befinden Sie sich?</h1>
@@ -795,10 +795,10 @@ const question37 = {
 }
 
 const question38 = {
-    id: 'se-38',
-    title: 'Kann ich einen Unterschied für einen Rabatt Artikel bekommen?',
-    parentId: 'root-4',
-    richText: `
+  id: 'se-38',
+  title: 'Kann ich einen Unterschied für einen Rabatt Artikel bekommen?',
+  parentId: 'root-4',
+  richText: `
 		<article>
 			<header>
 				<h1>Kann ich einen Unterschied für einen Rabatt Artikel bekommen?</h1>
@@ -813,10 +813,10 @@ const question38 = {
 }
 
 const question39 = {
-    id: 'se-39',
-    title: 'Wo finde ich deine neuesten Produkte?',
-    parentId: 'root-4',
-    richText: `
+  id: 'se-39',
+  title: 'Wo finde ich deine neuesten Produkte?',
+  parentId: 'root-4',
+  richText: `
 		<article>
 			<header>
 				<h1>Wo finde ich deine neuesten Produkte?</h1>
@@ -831,10 +831,10 @@ const question39 = {
 }
 
 const question40 = {
-    id: 'se-40',
-    title: 'Werden Sie Gegenstände, die ausverkauft sind, auffüllen?',
-    parentId: 'root-4',
-    richText: `
+  id: 'se-40',
+  title: 'Werden Sie Gegenstände, die ausverkauft sind, auffüllen?',
+  parentId: 'root-4',
+  richText: `
 		<article>
 			<header>
 				<h1>Werden Sie Gegenstände, die ausverkauft sind, auffüllen?</h1>
@@ -849,10 +849,10 @@ const question40 = {
 }
 
 const question41 = {
-    id: 'se-41',
-    title: 'Verwenden Sie Tierpelz oder echtes Leder?',
-    parentId: 'root-4',
-    richText: `
+  id: 'se-41',
+  title: 'Verwenden Sie Tierpelz oder echtes Leder?',
+  parentId: 'root-4',
+  richText: `
 		<article>
 			<header>
 				<h1>Verwenden Sie Tierpelz oder echtes Leder?</h1>
@@ -867,10 +867,10 @@ const question41 = {
 }
 
 const question42 = {
-    id: 'se-42',
-    title: 'Warum steigt der Preis für diesen Artikel höher als ich vorher gesehen habe?',
-    parentId: 'root-4',
-    richText: `
+  id: 'se-42',
+  title: 'Warum steigt der Preis für diesen Artikel höher als ich vorher gesehen habe?',
+  parentId: 'root-4',
+  richText: `
 		<article>
 			<header>
 				<h1>Warum steigt der Preis für diesen Artikel höher als ich vorher gesehen habe?</h1>
@@ -885,10 +885,10 @@ const question42 = {
 }
 
 const question43 = {
-    id: 'se-43',
-    title: 'Wie ändere ich meine Lieferadresse?',
-    parentId: 'root-5',
-    richText: `
+  id: 'se-43',
+  title: 'Wie ändere ich meine Lieferadresse?',
+  parentId: 'root-5',
+  richText: `
 		<article>
 			<header>
 				<h1>Wie ändere ich meine Lieferadresse?</h1>
@@ -910,10 +910,10 @@ const question43 = {
 }
 
 const question44 = {
-    id: 'se-44',
-    title: 'Warum funktioniert die Tracking-Nummer nicht?',
-    parentId: 'root-5',
-    richText: `
+  id: 'se-44',
+  title: 'Warum funktioniert die Tracking-Nummer nicht?',
+  parentId: 'root-5',
+  richText: `
 		<article>
 			<header>
 				<h1>Warum funktioniert die Tracking-Nummer nicht?</h1>
@@ -927,10 +927,10 @@ const question44 = {
 	`
 }
 const question45 = {
-    id: 'se-45',
-    title: 'Wann kommt meine Bestellung an?',
-    parentId: 'root-5',
-    richText: `
+  id: 'se-45',
+  title: 'Wann kommt meine Bestellung an?',
+  parentId: 'root-5',
+  richText: `
 		<article>
 			<header>
 				<h1>Wann kommt meine Bestellung an?</h1>
@@ -951,10 +951,10 @@ Die Lieferung dauert ungefähr 7 bis 25 Werktage, um die Zielländer zu erreiche
 	`
 }
 const question46 = {
-    id: 'se-46',
-    title: 'Warum wurden meine Versandinformationen nicht aktualisiert?',
-    parentId: 'root-5',
-    richText: `
+  id: 'se-46',
+  title: 'Warum wurden meine Versandinformationen nicht aktualisiert?',
+  parentId: 'root-5',
+  richText: `
 		<article>
 			<header>
 				<h1>Warum wurden meine Versandinformationen nicht aktualisiert?</h1>
@@ -971,10 +971,10 @@ const question46 = {
 	`
 }
 const question47 = {
-    id: 'se-47',
-    title: 'Warum muss ich die zusätzlichen Kosten bezahlen?',
-    parentId: 'root-5',
-    richText: `
+  id: 'se-47',
+  title: 'Warum muss ich die zusätzlichen Kosten bezahlen?',
+  parentId: 'root-5',
+  richText: `
 		<article>
 			<header>
 				<h1>Warum muss ich die zusätzlichen Kosten bezahlen?</h1>
@@ -988,10 +988,10 @@ const question47 = {
 	`
 }
 const question48 = {
-    id: 'se-48',
-    title: 'Wie kommt es, dass meine Paketshows geliefert werden, aber ich mein Paket nicht erhalten habe?',
-    parentId: 'root-5',
-    richText: `
+  id: 'se-48',
+  title: 'Wie kommt es, dass meine Paketshows geliefert werden, aber ich mein Paket nicht erhalten habe?',
+  parentId: 'root-5',
+  richText: `
 		<article>
 			<header>
 				<h1>Wie kommt es, dass meine Paketshows geliefert werden, aber ich mein Paket nicht erhalten habe?</h1>
@@ -1005,10 +1005,10 @@ const question48 = {
 	`
 }
 const question49 = {
-    id: 'se-49',
-    title: 'Warum wurde meine Bestellung separat versendet?',
-    parentId: 'root-5',
-    richText: `
+  id: 'se-49',
+  title: 'Warum wurde meine Bestellung separat versendet?',
+  parentId: 'root-5',
+  richText: `
 		<article>
 			<header>
 				<h1>Warum wurde meine Bestellung separat versendet?</h1>
@@ -1022,10 +1022,10 @@ const question49 = {
 	`
 }
 const question50 = {
-    id: 'se-50',
-    title: 'Warum wurde mein Paket zurückgegeben?',
-    parentId: 'root-5',
-    richText: `
+  id: 'se-50',
+  title: 'Warum wurde mein Paket zurückgegeben?',
+  parentId: 'root-5',
+  richText: `
 		<article>
 			<header>
 				<h1>Warum wurde mein Paket zurückgegeben?</h1>
@@ -1051,10 +1051,10 @@ const question50 = {
 	`
 }
 const question51 = {
-    id: 'se-51',
-    title: 'Muss ich an meiner Lieferadresse sein, wenn mein Paket geliefert wird?',
-    parentId: 'root-5',
-    richText: `
+  id: 'se-51',
+  title: 'Muss ich an meiner Lieferadresse sein, wenn mein Paket geliefert wird?',
+  parentId: 'root-5',
+  richText: `
 		<article>
 			<header>
 				<h1>Muss ich an meiner Lieferadresse sein, wenn mein Paket geliefert wird?</h1>
@@ -1068,10 +1068,10 @@ const question51 = {
 	`
 }
 const question52 = {
-    id: 'se-52',
-    title: 'Was muss ich tun, wenn das Tracking von Updates anzeigt, dass mein Paket zurückgegeben wurde?',
-    parentId: 'root-5',
-    richText: `
+  id: 'se-52',
+  title: 'Was muss ich tun, wenn das Tracking von Updates anzeigt, dass mein Paket zurückgegeben wurde?',
+  parentId: 'root-5',
+  richText: `
 		<article>
 			<header>
 				<h1>Was muss ich tun, wenn das Tracking von Updates anzeigt, dass mein Paket zurückgegeben wurde?</h1>
@@ -1085,10 +1085,10 @@ const question52 = {
 	`
 }
 const question53 = {
-    id: 'se-53',
-    title: 'Was passiert, wenn ich bei der Zustellung nicht zu Hause bin?',
-    parentId: 'root-5',
-    richText: `
+  id: 'se-53',
+  title: 'Was passiert, wenn ich bei der Zustellung nicht zu Hause bin?',
+  parentId: 'root-5',
+  richText: `
 		<article>
 			<header>
 				<h1>Was passiert, wenn ich bei der Zustellung nicht zu Hause bin?</h1>
@@ -1105,10 +1105,10 @@ const question53 = {
 	`
 }
 const question54 = {
-    id: 'se-54',
-    title: 'Gibt es zusätzliche Gebühren?',
-    parentId: 'root-5',
-    richText: `
+  id: 'se-54',
+  title: 'Gibt es zusätzliche Gebühren?',
+  parentId: 'root-5',
+  richText: `
 		<article>
 			<header>
 				<h1>Gibt es zusätzliche Gebühren?</h1>
@@ -1122,10 +1122,10 @@ const question54 = {
 	`
 }
 const question55 = {
-    id: 'se-55',
-    title: 'Warum habe ich meine Bestellung nicht erhalten?',
-    parentId: 'root-5',
-    richText: `
+  id: 'se-55',
+  title: 'Warum habe ich meine Bestellung nicht erhalten?',
+  parentId: 'root-5',
+  richText: `
 		<article>
 			<header>
 				<h1>Warum habe ich meine Bestellung nicht erhalten?</h1>
@@ -1142,10 +1142,10 @@ Die Lieferung dauert ungefähr 3 bis 25 Werktage, um die Zielländer zu erreiche
 	`
 }
 const question56 = {
-    id: 'se-56',
-    title: 'Meine Bestellung kann nicht zugestellt werden, was kann ich tun?',
-    parentId: 'root-5',
-    richText: `
+  id: 'se-56',
+  title: 'Meine Bestellung kann nicht zugestellt werden, was kann ich tun?',
+  parentId: 'root-5',
+  richText: `
 		<article>
 			<header>
 				<h1>Meine Bestellung kann nicht zugestellt werden, was kann ich tun?</h1>
@@ -1159,10 +1159,10 @@ const question56 = {
 	`
 }
 const question57 = {
-    id: 'se-57',
-    title: 'Ich muss die Kostüme bezahlen, was kann ich tun?',
-    parentId: 'root-5',
-    richText: `
+  id: 'se-57',
+  title: 'Ich muss die Kostüme bezahlen, was kann ich tun?',
+  parentId: 'root-5',
+  richText: `
 		<article>
 			<header>
 				<h1>Ich muss die Kostüme bezahlen, was kann ich tun?</h1>
@@ -1176,10 +1176,10 @@ const question57 = {
 	`
 }
 const question58 = {
-    id: 'se-58',
-    title: 'Wie lange kommt meine Bestellung an?',
-    parentId: 'root-5',
-    richText: `
+  id: 'se-58',
+  title: 'Wie lange kommt meine Bestellung an?',
+  parentId: 'root-5',
+  richText: `
 		<article>
 			<header>
 				<h1>Wie lange kommt meine Bestellung an?</h1>
@@ -1196,10 +1196,10 @@ Die Lieferung dauert ungefähr 3 bis 25 Werktage, um die Zielländer zu erreiche
 	`
 }
 const question59 = {
-    id: 'se-59',
-    title: 'Wie viel Zeit muss ich auf meine Bestellung warten?',
-    parentId: 'root-5',
-    richText: `
+  id: 'se-59',
+  title: 'Wie viel Zeit muss ich auf meine Bestellung warten?',
+  parentId: 'root-5',
+  richText: `
 		<article>
 			<header>
 				<h1>Wie viel Zeit muss ich auf meine Bestellung warten?</h1>
@@ -1216,10 +1216,10 @@ Die Lieferung dauert ungefähr 3 bis 25 Werktage, um die Zielländer zu erreiche
 	`
 }
 const question60 = {
-    id: 'se-60',
-    title: 'Haben Sie 2 Tage Lieferzeit?',
-    parentId: 'root-5',
-    richText: `
+  id: 'se-60',
+  title: 'Haben Sie 2 Tage Lieferzeit?',
+  parentId: 'root-5',
+  richText: `
 		<article>
 			<header>
 				<h1>Haben Sie 2 Tage Lieferzeit?</h1>
@@ -1237,10 +1237,10 @@ Die Lieferung dauert ungefähr 3 bis 25 Werktage, um die Zielländer zu erreiche
 	`
 }
 const question61 = {
-    id: 'se-61',
-    title: 'Was ist Ihre Rückgaberecht?',
-    parentId: 'root-6',
-    richText: `
+  id: 'se-61',
+  title: 'Was ist Ihre Rückgaberecht?',
+  parentId: 'root-6',
+  richText: `
 		<article>
 			<header>
 				<h1>Was ist Ihre Rückgaberecht?</h1>
@@ -1279,10 +1279,10 @@ const question61 = {
 	`
 }
 const question62 = {
-    id: 'se-62',
-    title: 'Ich habe immer noch nicht die Rückerstattung in der Karte bekommen. Was ist der Status meiner Rückerstattung?',
-    parentId: 'root-6',
-    richText: `
+  id: 'se-62',
+  title: 'Ich habe immer noch nicht die Rückerstattung in der Karte bekommen. Was ist der Status meiner Rückerstattung?',
+  parentId: 'root-6',
+  richText: `
 		<article>
 			<header>
 				<h1>Ich habe immer noch nicht die Rückerstattung in der Karte bekommen. Was ist der Status meiner Rückerstattung?</h1>
@@ -1299,10 +1299,10 @@ const question62 = {
 	`
 }
 const question63 = {
-    id: 'se-63',
-    title: 'Wie lange dauert die Bearbeitung meiner Rückerstattung?',
-    parentId: 'root-6',
-    richText: `
+  id: 'se-63',
+  title: 'Wie lange dauert die Bearbeitung meiner Rückerstattung?',
+  parentId: 'root-6',
+  richText: `
 		<article>
 			<header>
 				<h1>Wie lange dauert die Bearbeitung meiner Rückerstattung?</h1>
@@ -1320,10 +1320,10 @@ const question63 = {
 }
 
 const question64 = {
-    id: 'se-64',
-    title: 'Wie gebe ich meine Bestellung zurück?',
-    parentId: 'root-6',
-    richText: `
+  id: 'se-64',
+  title: 'Wie gebe ich meine Bestellung zurück?',
+  parentId: 'root-6',
+  richText: `
 		<article>
 			<header>
 				<h1>Wie gebe ich meine Bestellung zurück?</h1>
@@ -1339,10 +1339,10 @@ const question64 = {
 	`
 }
 const question65 = {
-    id: 'se-65',
-    title: 'Bekomme ich die volle Rückerstattung für meine Rücksendung?',
-    parentId: 'root-6',
-    richText: `
+  id: 'se-65',
+  title: 'Bekomme ich die volle Rückerstattung für meine Rücksendung?',
+  parentId: 'root-6',
+  richText: `
 		<article>
 			<header>
 				<h1>Bekomme ich die volle Rückerstattung für meine Rücksendung?</h1>
@@ -1356,10 +1356,10 @@ const question65 = {
 	`
 }
 const question66 = {
-    id: 'se-66',
-    title: 'Wie ist der Status meiner Rückgabe oder meines Tauschs?',
-    parentId: 'root-6',
-    richText: `
+  id: 'se-66',
+  title: 'Wie ist der Status meiner Rückgabe oder meines Tauschs?',
+  parentId: 'root-6',
+  richText: `
 		<article>
 			<header>
 				<h1>Wie ist der Status meiner Rückgabe oder meines Tauschs?</h1>
@@ -1369,17 +1369,17 @@ const question66 = {
 					Stellen Sie sicher, dass unser Team mit Ihnen an dem Problem gearbeitet hat, bevor Sie das Paket zurücksenden.
 				</p>
 				<p>
-				Sie können Ihre Rückkehr beginnen, indem Sie ein Support-Ticket oder eine E-Mail an unseren After-Sales-Kunden mit Ihrer Rückkehr senden. Sobald Ihre Rückkehr / Austausch bearbeitet worden ist, werden wir Ihnen antworten.
+				Sie können Ihre Rückkehr beginnen, indem Sie ein Support-Ticket oder eine E-Mail an unseren After-Sales-Kunden mit Ihrer Rückkehr senden. Sobald Ihre Rückkehr / Austausch bearbeitet worden ist, werden wir Ihnen antworten.Sie können Ihre Retoure beginnen, indem Sie mit Ihrer Retoure ein Support-Ticket einreichen. Sobald Ihre Rücksendung / Rückgabe bearbeitet wurde, werden wir Ihnen antworten.
 			    </p>
 			</section>
 		</article>
 	`
 }
 const question67 = {
-    id: 'se-67',
-    title: 'Welche Artikel können nicht zurückgegeben oder erstattet werden?',
-    parentId: 'root-6',
-    richText: `
+  id: 'se-67',
+  title: 'Welche Artikel können nicht zurückgegeben oder erstattet werden?',
+  parentId: 'root-6',
+  richText: `
 		<article>
 			<header>
 				<h1>Welche Artikel können nicht zurückgegeben oder erstattet werden?</h1>
@@ -1393,10 +1393,10 @@ const question67 = {
 	`
 }
 const question68 = {
-    id: 'se-68',
-    title: 'Was passiert, wenn ich einen defekten Artikel erhalten habe?',
-    parentId: 'root-6',
-    richText: `
+  id: 'se-68',
+  title: 'Was passiert, wenn ich einen defekten Artikel erhalten habe?',
+  parentId: 'root-6',
+  richText: `
 		<article>
 			<header>
 				<h1>Was passiert, wenn ich einen defekten Artikel erhalten habe?</h1>
@@ -1410,10 +1410,10 @@ const question68 = {
 	`
 }
 const question69 = {
-    id: 'se-69',
-    title: 'Was passiert, wenn ich einen defekten / falschen / verschmutzten Gegenstand erhalte?',
-    parentId: 'root-6',
-    richText: `
+  id: 'se-69',
+  title: 'Was passiert, wenn ich einen defekten / falschen / verschmutzten Gegenstand erhalte?',
+  parentId: 'root-6',
+  richText: `
 		<article>
 			<header>
 				<h1>Was passiert, wenn ich einen defekten / falschen / verschmutzten Gegenstand erhalte?</h1>
@@ -1427,10 +1427,10 @@ const question69 = {
 	`
 }
 const question70 = {
-    id: 'se-70',
-    title: 'Gibt es ein rücksendefreies Etikett für die Rücksendung der Bestellung?',
-    parentId: 'root-6',
-    richText: `
+  id: 'se-70',
+  title: 'Gibt es ein rücksendefreies Etikett für die Rücksendung der Bestellung?',
+  parentId: 'root-6',
+  richText: `
 		<article>
 			<header>
 				<h1>Gibt es ein rücksendefreies Etikett für die Rücksendung der Bestellung?</h1>
@@ -1440,16 +1440,16 @@ const question70 = {
 					Wir haben keine kostenlose Rücksendung, um die Bestellung zurückzusenden
 				</p>
 				<p>Stellen Sie sicher, dass unser Team mit Ihnen an dem Problem gearbeitet hat, bevor Sie das Paket zurücksenden. Die Adresse auf dem Paket ist nicht unsere Lageradresse und unser Team wird die Rücksendeadresse entsprechend senden.</p>
-				<p>Sie können Ihre Rücksendung beginnen, indem Sie ein Support-Ticket oder eine E-Mail an unseren Kundendienst mit Ihrem Rücksendegrund senden, unsere Mitarbeiter werden Ihnen die Rücksendeadresse senden</p>
+				<p>Você pode começar o seu retorno, enviando um ticket de suporte com o seu motivo de retorno, nossa equipe irá enviar-lhe o endereço de retorno</p>
 			</section>
 		</article>
 	`
 }
 const question71 = {
-    id: 'se-71',
-    title: 'Wie gebe ich einen Artikel zurück, der nicht passt?',
-    parentId: 'root-6',
-    richText: `
+  id: 'se-71',
+  title: 'Wie gebe ich einen Artikel zurück, der nicht passt?',
+  parentId: 'root-6',
+  richText: `
 		<article>
 			<header>
 				<h1>Wie gebe ich einen Artikel zurück, der nicht passt?</h1>
@@ -1465,10 +1465,10 @@ const question71 = {
 	`
 }
 const question72 = {
-    id: 'se-72',
-    title: 'Ich habe meine Rückerstattung immer noch nicht erhalten, was ist falsch?',
-    parentId: 'root-6',
-    richText: `
+  id: 'se-72',
+  title: 'Ich habe meine Rückerstattung immer noch nicht erhalten, was ist falsch?',
+  parentId: 'root-6',
+  richText: `
 		<article>
 			<header>
 				<h1>Ich habe meine Rückerstattung immer noch nicht erhalten, was ist falsch?</h1>
@@ -1486,10 +1486,10 @@ const question72 = {
 	`
 }
 const question73 = {
-    id: 'se-73',
-    title: 'Wie kann ich einen Artikel für einen Austausch zurückgeben?',
-    parentId: 'root-6',
-    richText: `
+  id: 'se-73',
+  title: 'Wie kann ich einen Artikel für einen Austausch zurückgeben?',
+  parentId: 'root-6',
+  richText: `
 		<article>
 			<header>
 				<h1>Wie kann ich einen Artikel für einen Austausch zurückgeben?</h1>
@@ -1504,10 +1504,10 @@ const question73 = {
 	`
 }
 const question74 = {
-    id: 'se-74',
-    title: 'Wie ist der Status meiner Rückerstattung?',
-    parentId: 'root-6',
-    richText: `
+  id: 'se-74',
+  title: 'Wie ist der Status meiner Rückerstattung?',
+  parentId: 'root-6',
+  richText: `
 		<article>
 			<header>
 				<h1>Wie ist der Status meiner Rückerstattung?</h1>
@@ -1524,10 +1524,10 @@ const question74 = {
 	`
 }
 const question75 = {
-    id: 'se-75',
-    title: 'Muss ich die Versandkosten bezahlen, wenn ich die Artikel zurücksende?',
-    parentId: 'root-6',
-    richText: `
+  id: 'se-75',
+  title: 'Muss ich die Versandkosten bezahlen, wenn ich die Artikel zurücksende?',
+  parentId: 'root-6',
+  richText: `
 		<article>
 			<header>
 				<h1>Muss ich die Versandkosten bezahlen, wenn ich die Artikel zurücksende?</h1>
@@ -1541,10 +1541,10 @@ const question75 = {
 	`
 }
 const question76 = {
-    id: 'se-76',
-    title: 'Was kann ich tun, wenn der Artikel nicht zu mir passt?',
-    parentId: 'root-6',
-    richText: `
+  id: 'se-76',
+  title: 'Was kann ich tun, wenn der Artikel nicht zu mir passt?',
+  parentId: 'root-6',
+  richText: `
 		<article>
 			<header>
 				<h1>Was kann ich tun, wenn der Artikel nicht zu mir passt?</h1>
@@ -1558,10 +1558,10 @@ const question76 = {
 	`
 }
 const question77 = {
-    id: 'se-77',
-    title: 'Was kann ich tun, wenn der Gegenstand beschädigt wurde?',
-    parentId: 'root-6',
-    richText: `
+  id: 'se-77',
+  title: 'Was kann ich tun, wenn der Gegenstand beschädigt wurde?',
+  parentId: 'root-6',
+  richText: `
 		<article>
 			<header>
 				<h1>Was kann ich tun, wenn der Gegenstand beschädigt wurde?</h1>
@@ -1578,10 +1578,10 @@ const question77 = {
 	`
 }
 const question78 = {
-    id: 'se-78',
-    title: 'Wird Chic Me meine persönlichen Daten speichern?',
-    parentId: 'root-7',
-    richText: `
+  id: 'se-78',
+  title: 'Wird Chic Me meine persönlichen Daten speichern?',
+  parentId: 'root-7',
+  richText: `
 		<article>
 			<header>
 				<h1>Wird Chic Me meine persönlichen Daten speichern?</h1>
@@ -1597,10 +1597,10 @@ const question78 = {
 	`
 }
 const question79 = {
-    id: 'se-79',
-    title: 'Is it safe to order from here?',
-    parentId: 'root-7',
-    richText: `
+  id: 'se-79',
+  title: 'Is it safe to order from here?',
+  parentId: 'root-7',
+  richText: `
 		<article>
 			<header>
 				<h1>Is it safe to order from here?</h1>
@@ -1614,10 +1614,10 @@ const question79 = {
 	`
 }
 const question80 = {
-    id: 'se-80',
-    title: 'Wie kann ich mich von Chicme abmelden?',
-    parentId: 'root-7',
-    richText: `
+  id: 'se-80',
+  title: 'Wie kann ich mich von Chicme abmelden?',
+  parentId: 'root-7',
+  richText: `
 		<article>
 			<header>
 				<h1>Wie kann ich mich von Chicme abmelden?</h1>
@@ -1631,10 +1631,10 @@ const question80 = {
 	`
 }
 const question81 = {
-    id: 'se-81',
-    title: 'Über uns ',
-    parentId: 'root-8',
-    richText: `
+  id: 'se-81',
+  title: 'Über uns ',
+  parentId: 'root-8',
+  richText: `
 		<article>
 			<header>
 				<h1>Über uns</h1>
@@ -1657,10 +1657,10 @@ Wir sammeln so schnell wie möglich Informationen über Damenmode und beziehen r
 	`
 }
 const question82 = {
-    id: 'se-82',
-    title: 'Wo finde ich Chic?',
-    parentId: 'root-8',
-    richText: `
+  id: 'se-82',
+  title: 'Wo finde ich Chic?',
+  parentId: 'root-8',
+  richText: `
 		<article>
 			<header>
 				<h1>Wo finde ich Chic?</h1>
@@ -1676,10 +1676,10 @@ const question82 = {
 	`
 }
 const question83 = {
-    id: 'se-83',
-    title: 'Warum schicke ich?',
-    parentId: 'root-8',
-    richText: `
+  id: 'se-83',
+  title: 'Warum schicke ich?',
+  parentId: 'root-8',
+  richText: `
 		<article>
 			<header>
 				<h1>Warum schicke ich?</h1>
@@ -1700,10 +1700,10 @@ const question83 = {
 	`
 }
 const question84 = {
-    id: 'se-84',
-    title: 'Ist die Website real?',
-    parentId: 'root-8',
-    richText: `
+  id: 'se-84',
+  title: 'Ist die Website real?',
+  parentId: 'root-8',
+  richText: `
 		<article>
 			<header>
 				<h1>Ist die Website real?</h1>
@@ -1717,10 +1717,10 @@ const question84 = {
 	`
 }
 const question85 = {
-    id: 'se-85',
-    title: 'Speichert es meine Karteninformationen?',
-    parentId: 'root-8',
-    richText: `
+  id: 'se-85',
+  title: 'Speichert es meine Karteninformationen?',
+  parentId: 'root-8',
+  richText: `
 		<article>
 			<header>
 				<h1>Speichert es meine Karteninformationen?</h1>
@@ -1734,10 +1734,10 @@ const question85 = {
 	`
 }
 const question86 = {
-    id: 'se-86',
-    title: 'Wo kann ich den Artikel finden, den ich gespeichert habe?',
-    parentId: 'root-8',
-    richText: `
+  id: 'se-86',
+  title: 'Wo kann ich den Artikel finden, den ich gespeichert habe?',
+  parentId: 'root-8',
+  richText: `
 		<article>
 			<header>
 				<h1>Wo kann ich den Artikel finden, den ich gespeichert habe?</h1>
@@ -1751,10 +1751,10 @@ const question86 = {
 	`
 }
 const question87 = {
-    id: 'se-87',
-    title: 'Wie lange bekomme ich die 30 Credits, sobald die Produkte geteilt wurden?',
-    parentId: 'root-8',
-    richText: `
+  id: 'se-87',
+  title: 'Wie lange bekomme ich die 30 Credits, sobald die Produkte geteilt wurden?',
+  parentId: 'root-8',
+  richText: `
 		<article>
 			<header>
 				<h1>Wie lange bekomme ich die 30 Credits, sobald die Produkte geteilt wurden?</h1>
@@ -1768,10 +1768,10 @@ const question87 = {
 	`
 }
 const question88 = {
-    id: 'se-88',
-    title: 'Was ist Ihre Versandrichtlinie?',
-    parentId: 'root-8',
-    richText: `
+  id: 'se-88',
+  title: 'Was ist Ihre Versandrichtlinie?',
+  parentId: 'root-8',
+  richText: `
 		<article>
 			<header>
 				<h1>Was ist Ihre Versandrichtlinie?</h1>
@@ -1788,10 +1788,10 @@ const question88 = {
 	`
 }
 const question89 = {
-    id: 'se-89',
-    title: 'Machst du einen Großhandel?',
-    parentId: 'root-8',
-    richText: `
+  id: 'se-89',
+  title: 'Machst du einen Großhandel?',
+  parentId: 'root-8',
+  richText: `
 		<article>
 			<header>
 				<h1>Machst du einen Großhandel?</h1>
@@ -1805,10 +1805,10 @@ const question89 = {
 	`
 }
 const question90 = {
-    id: 'se-90',
-    title: 'Wie kann ich mit Ihnen zusammenarbeiten?',
-    parentId: 'root-8',
-    richText: `
+  id: 'se-90',
+  title: 'Wie kann ich mit Ihnen zusammenarbeiten?',
+  parentId: 'root-8',
+  richText: `
 		<article>
 			<header>
 				<h1>Wie kann ich mit Ihnen zusammenarbeiten?</h1>
@@ -1822,10 +1822,10 @@ const question90 = {
 	`
 }
 const question91 = {
-    id: 'se-91',
-    title: 'Wie kann ich die Versandart wählen?',
-    parentId: 'root-8',
-    richText: `
+  id: 'se-91',
+  title: 'Wie kann ich die Versandart wählen?',
+  parentId: 'root-8',
+  richText: `
 		<article>
 			<header>
 				<h1>Wie kann ich die Versandart wählen?</h1>
@@ -1839,10 +1839,10 @@ const question91 = {
 	`
 }
 const question92 = {
-    id: 'se-92',
-    title: 'Hast du Läden?',
-    parentId: 'root-8',
-    richText: `
+  id: 'se-92',
+  title: 'Hast du Läden?',
+  parentId: 'root-8',
+  richText: `
 		<article>
 			<header>
 				<h1>Hast du Läden?</h1>
@@ -1856,10 +1856,10 @@ const question92 = {
 	`
 }
 const question93 = {
-    id: 'se-93',
-    title: 'Können Sie zu APO versenden?',
-    parentId: 'root-8',
-    richText: `
+  id: 'se-93',
+  title: 'Können Sie zu APO versenden?',
+  parentId: 'root-8',
+  richText: `
 		<article>
 			<header>
 				<h1>Können Sie zu APO versenden?</h1>
@@ -1873,10 +1873,10 @@ const question93 = {
 	`
 }
 const question94 = {
-    id: 'se-94',
-    title: 'Wie kann ich die Währung ändern?',
-    parentId: 'root-8',
-    richText: `
+  id: 'se-94',
+  title: 'Wie kann ich die Währung ändern?',
+  parentId: 'root-8',
+  richText: `
 		<article>
 			<header>
 				<h1>Wie kann ich die Währung ändern?</h1>
@@ -1891,249 +1891,249 @@ const question94 = {
 }
 
 const secondaries = [
-    question1,
-    question2,
-    question3,
-    question4,
-    question5,
-    question6,
-    question7,
-    question8,
-    question9,
-    question10,
-    question11,
-    question12,
-    question13,
-    question14,
-    question15,
-    question16,
-    question17,
-    question18,
-    question19,
-    question20,
-    question21,
-    question22,
-    question23,
-    question24,
-    question25,
-    question26,
-    question27,
-    question28,
-    question29,
-    question30,
-    question31,
-    question32,
-    question33,
-    question34,
-    question35,
-    question36,
-    question37,
-    question38,
-    question39,
-    question40,
-    question41,
-    question42,
-    question43,
-    question44,
-    question45,
-    question46,
-    question47,
-    question48,
-    question49,
-    question50,
-    question51,
-    question52,
-    question53,
-    question54,
-    question55,
-    question56,
-    question57,
-    question58,
-    question59,
-    question60,
-    question61,
-    question62,
-    question63,
-    question64,
-    question65,
-    question66,
-    question67,
-    question68,
-    question69,
-    question70,
-    question71,
-    question72,
-    question73,
-    question74,
-    question75,
-    question76,
-    question77,
-    question78,
-    question79,
-    question80,
-    question81,
-    question82,
-    question83,
-    question84,
-    question85,
-    question86,
-    question87,
-    question88,
-    question89,
-    question90,
-    question91,
-    question92,
-    question93,
-    question94
+  question1,
+  question2,
+  question3,
+  question4,
+  question5,
+  question6,
+  question7,
+  question8,
+  question9,
+  question10,
+  question11,
+  question12,
+  question13,
+  question14,
+  question15,
+  question16,
+  question17,
+  question18,
+  question19,
+  question20,
+  question21,
+  question22,
+  question23,
+  question24,
+  question25,
+  question26,
+  question27,
+  question28,
+  question29,
+  question30,
+  question31,
+  question32,
+  question33,
+  question34,
+  question35,
+  question36,
+  question37,
+  question38,
+  question39,
+  question40,
+  question41,
+  question42,
+  question43,
+  question44,
+  question45,
+  question46,
+  question47,
+  question48,
+  question49,
+  question50,
+  question51,
+  question52,
+  question53,
+  question54,
+  question55,
+  question56,
+  question57,
+  question58,
+  question59,
+  question60,
+  question61,
+  question62,
+  question63,
+  question64,
+  question65,
+  question66,
+  question67,
+  question68,
+  question69,
+  question70,
+  question71,
+  question72,
+  question73,
+  question74,
+  question75,
+  question76,
+  question77,
+  question78,
+  question79,
+  question80,
+  question81,
+  question82,
+  question83,
+  question84,
+  question85,
+  question86,
+  question87,
+  question88,
+  question89,
+  question90,
+  question91,
+  question92,
+  question93,
+  question94
 
 ]
 
 const questions = [
-    {
-        id: 'root-1',
-        title: 'Aufträge',
-        questions: [
-            question1,
-            question2,
-            question3,
-            question4,
-            question5,
-            question6,
-            question7
-        ]
-    },
-    {
-        id: 'root-2',
-        title: 'Konto',
-        questions: [
-            question8,
-            question9,
-            question10,
-            question11,
-            question12,
-            question13,
-            question14,
-            question15,
-            question16,
-            question17,
-            question18,
-            question19,
-            question20
-        ]
-    },
-    {
-        id: 'root-3',
-        title: 'Zahlung',
-        questions: [
-            question21,
-            question22,
-            question23,
-            question24,
-            question25,
-            question26,
-            question27,
-            question28,
-            question29,
-            question30,
-            question31,
-            question32
-        ]
-    },
-    {
-        id: 'root-4',
-        title: 'Produkte',
-        questions: [
-            question33,
-            question34,
-            question35,
-            question36,
-            question37,
-            question38,
-            question39,
-            question40,
-            question41,
-            question42
-        ]
-    },
-    {
-        id: 'root-5',
-        title: 'Lieferung',
-        questions: [
-            question43,
-            question44,
-            question45,
-            question46,
-            question47,
-            question48,
-            question49,
-            question50,
-            question51,
-            question52,
-            question53,
-            question54,
-            question55,
-            question56,
-            question57,
-            question58,
-            question59,
-            question60
-        ]
-    },
-    {
-        id: 'root-6',
-        title: 'Rückkehr',
-        questions: [
-            question61,
-            question62,
-            question63,
-            question64,
-            question65,
-            question66,
-            question67,
-            question68,
-            question69,
-            question70,
-            question71,
-            question72,
-            question73,
-            question74,
-            question75,
-            question76,
-            question77
-        ]
-    },
-    {
-        id: 'root-7',
-        title: 'Sicherheit und Privatsphäre',
-        questions: [
-            question78,
-            question79,
-            question80
-        ]
-    },
-    {
-        id: 'root-8',
-        title: 'Über Schick mich',
-        questions: [
-            question81,
-            question82,
-            question83,
-            question84,
-            question85,
-            question86,
-            question87,
-            question88,
-            question89,
-            question90,
-            question91,
-            question92,
-            question93,
-            question94
-        ]
-    }
+  {
+    id: 'root-1',
+    title: 'Aufträge',
+    questions: [
+      question1,
+      question2,
+      question3,
+      question4,
+      question5,
+      question6,
+      question7
+    ]
+  },
+  {
+    id: 'root-2',
+    title: 'Konto',
+    questions: [
+      question8,
+      question9,
+      question10,
+      question11,
+      question12,
+      question13,
+      question14,
+      question15,
+      question16,
+      question17,
+      question18,
+      question19,
+      question20
+    ]
+  },
+  {
+    id: 'root-3',
+    title: 'Zahlung',
+    questions: [
+      question21,
+      question22,
+      question23,
+      question24,
+      question25,
+      question26,
+      question27,
+      question28,
+      question29,
+      question30,
+      question31,
+      question32
+    ]
+  },
+  {
+    id: 'root-4',
+    title: 'Produkte',
+    questions: [
+      question33,
+      question34,
+      question35,
+      question36,
+      question37,
+      question38,
+      question39,
+      question40,
+      question41,
+      question42
+    ]
+  },
+  {
+    id: 'root-5',
+    title: 'Lieferung',
+    questions: [
+      question43,
+      question44,
+      question45,
+      question46,
+      question47,
+      question48,
+      question49,
+      question50,
+      question51,
+      question52,
+      question53,
+      question54,
+      question55,
+      question56,
+      question57,
+      question58,
+      question59,
+      question60
+    ]
+  },
+  {
+    id: 'root-6',
+    title: 'Rückkehr',
+    questions: [
+      question61,
+      question62,
+      question63,
+      question64,
+      question65,
+      question66,
+      question67,
+      question68,
+      question69,
+      question70,
+      question71,
+      question72,
+      question73,
+      question74,
+      question75,
+      question76,
+      question77
+    ]
+  },
+  {
+    id: 'root-7',
+    title: 'Sicherheit und Privatsphäre',
+    questions: [
+      question78,
+      question79,
+      question80
+    ]
+  },
+  {
+    id: 'root-8',
+    title: 'Über Schick mich',
+    questions: [
+      question81,
+      question82,
+      question83,
+      question84,
+      question85,
+      question86,
+      question87,
+      question88,
+      question89,
+      question90,
+      question91,
+      question92,
+      question93,
+      question94
+    ]
+  }
 ]
 
 export default {
-    questions,
-    secondaries
+  questions,
+  secondaries
 }

@@ -29,6 +29,7 @@ const PROMOTIONHEAD = styled.div`
 
   .__href{
     text-decoration: none;
+    color: #222;
     & > *{
       vertical-align: middle;
     }

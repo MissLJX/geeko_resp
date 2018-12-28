@@ -96,5 +96,10 @@ export default{
   set_password: 'Set Password',
   placeholder_street_address: 'Street name and street number, company name.',
   placeholder_unit: 'Apartment, Suite, Building, and floor number.',
-  selected: 'Selected'
+  selected: 'Selected',
+  add: 'Add',
+  you_may_also_like: 'you may also like',
+  recently_viewed: 'recently viewed',
+  account: 'Account',
+  change_email: 'Change Email'
 }
