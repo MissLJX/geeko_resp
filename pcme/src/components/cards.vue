@@ -6,7 +6,7 @@
                 <div class="tbl-cell el-card-img">
                     <img :src="card.cardStyle && card.style.imageURL ? card.style.imageURL : 'https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/chicme/Credit+Card.png'">
                 </div>
-                <div class="tbl-cell">
+                <div class="tbl-cell" :style="{'color': card.style && card.style.color && card.style.color !== '#ffffff' ? '#fff' : '#222'}">
                     <p class="el-card-name">{{card.style.name==='other' ? '' : card.style.name}}</p>
                     <p class="el-card-num">{{card.quickpayRecord.cardNumber}}</p>
                 </div>
@@ -91,6 +91,10 @@
                 border: 1px solid #e6e6e6;
                 float: left;
                 margin: 0 25px 25px 0;
+                .el-card-name{
+                    font-size: 16px;
+                    margin-bottom: 6px;
+                }
                 .el-card-img{
                     width: 60px;
                     padding: 15px 15px 15px 15px;

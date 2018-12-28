@@ -236,17 +236,17 @@
         },
         created(){
             this.$store.dispatch('getOrder',this.$route.query.orderid).then(()=>{
-                this.order = this.orderdetail.order
-                if(this.order && this.orderdetail.order.orderItems){
-                    this.orderdetail.order.orderItems.forEach(item =>{
+                this.order = this.orderdetail
+                if(this.order && this.orderdetail.orderItems){
+                    this.orderdetail.orderItems.forEach(item =>{
                         if(item.productId === this.$route.query.productid){
                             this.orderpro = item
                         }
                     })
                 }
-                this.shipping = this.orderdetail.order.shippingDetail
-                this.shippingstate = this.orderdetail.order.shippingDetail.state
-                this.shippingcountry =this.orderdetail.order.shippingDetail.country
+                this.shipping = this.orderdetail.shippingDetail
+                this.shippingstate = this.orderdetail.shippingDetail.state
+                this.shippingcountry =this.orderdetail.shippingDetail.country
             })
             this.$store.dispatch('loadComment', this.$route.query.productid).then(()=>{
 
@@ -262,7 +262,7 @@
         color: #999;
     }
     .infotabel{
-        border: 1px solid #cacaca;
+        border: 1px solid #e6e6e6;
         width: 100%;
         margin: 20px 0 30px 0;
         td{

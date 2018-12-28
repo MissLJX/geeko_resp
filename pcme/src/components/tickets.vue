@@ -17,7 +17,7 @@
                         <td @click="showTicket(ticket.operaId)"><a>{{ticket.id}}</a></td>
                         <td>{{getlastmsg(ticket.ticketReplies)}}</td>
                         <td>{{getDate(ticket.openDate)}}</td>
-                        <td :class="{'noreply':ticket.type===1,'replay':ticket.type===2}">{{getStatus(ticket.type)}}</td>
+                        <td :class="{'noreply':ticket.state===1,'replay':ticket.state===2}">{{getStatus(ticket.state)}}</td>
                     </tr>
                 </table>
             </div>
@@ -145,7 +145,7 @@
             table{
                 tr{
                     border-bottom: 1px solid #e6e6e6;
-                    line-height: 40px;
+                    line-height: 40px !important;
                     td{
                         color: #999;
                     }

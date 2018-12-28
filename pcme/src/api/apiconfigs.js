@@ -8,6 +8,7 @@ const instance = axios.create({
         appVersion: '3.5.7',
         countryCode: 'US',
         wid: '1234567u8i9956789456',
+        accessToken: window.accessToken || ''
     }
 })
 

@@ -22,7 +22,9 @@
                 </ul>
             </div>
             <div class="el-me-con">
-                <router-view></router-view>
+                <keep-alive>
+                    <router-view></router-view>
+                </keep-alive>
             </div>
         </div>
     </div>

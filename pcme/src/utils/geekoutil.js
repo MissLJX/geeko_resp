@@ -117,3 +117,37 @@ const _url_analyst = function (name) {
 export const producturl = function (product) {
     return _.concat('product', _url_analyst(product.name), product.parentSku, product.id + '.html').join('/')
 }
+export const STATUS_COLOR = function (value) {
+    var label;
+    let color;
+    switch (value) {
+        case 0:
+            label = 'Unpaid'
+            color = '#f9a646'
+            break
+        case 1:
+            label = 'Paid'
+            color = '#d088e1'
+            break
+        case 2:
+            label = 'Processing'
+            color = '#d088e1'
+            break
+        case 3:
+            label = 'Shipped'
+            color = '#57b936'
+            break
+        case 4:
+            label = 'Cancel'
+            color = '#e64545'
+            break
+        case 5:
+            label = 'Confirm'
+            color = '#a4a4a7'
+            break
+        default:
+            color = ''
+    }
+
+    return color
+}

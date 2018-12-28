@@ -17,7 +17,7 @@
                     <span class="add-edit" @click="editAdd(address.id)"><i class="iconfont" >&#xe61f;</i>{{$t('edit')}}</span>
                     <span class="add-del" @click="addId=address.id;isAlert=true"><i class="iconfont">&#xe629;</i>{{$t('delete')}}</span>
                 </div>
-                <div class="bgline"></div>
+                <div v-if="address.isDefaultAddress" class="bgline"></div>
             </div>
         </div>
         <div class="mask" v-if="isAlert">
@@ -50,7 +50,7 @@
                 isEdit:false,
                 addId:'',
                 editing:null,
-                isloding:false
+                isloding:false,
             }
         },
         components: {
@@ -123,8 +123,8 @@
         font-size:16px;font-style:normal;
         -webkit-font-smoothing: antialiased;
         -webkit-text-stroke-width: 0.2px;
-        -moz-osx-font-smoothing: grayscale;}
-
+        -moz-osx-font-smoothing: grayscale;
+	}
     .mt-20{
         margin-top: 20px;
         line-height: 25px;
@@ -141,94 +141,96 @@
             margin-bottom: 24px;
             cursor: pointer;
         }
-        .address{
-            width: 447px;
-            height: 170px;
-            border: 1px solid #e6e6e6;
-            color: #666;
-            float: left;
-            padding: 20px 20px 15px 20px;
-            margin-bottom: 20px;
-            position: relative;
-            strong{
-                color: #222;
-                margin-right: 10px;
-            }
-            &:nth-child(2n+1){
-                margin-right: 20px;
-            }
-            .bgline{
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                width: 100%;
-                height: 3px;
-                transform: skew(20deg, 0deg);
-                background: linear-gradient(to right, rgb(221, 116, 125) 35%, transparent 25%, transparent 50%, rgb(98, 110, 148) 50%, rgb(98, 110, 148) 85%, transparent 75%) 0% 0% / 56px 1px;
-            }
-            .add-default{
-                position: absolute;
-                bottom: 14px;
-                cursor: pointer;
-                &:hover{
-                    opacity: .8;
+        .add-block{
+            .address{
+                width: 447px;
+                height: 170px;
+                border: 1px solid #e6e6e6;
+                color: #666;
+                float: left;
+                padding: 20px 20px 15px 20px;
+                margin-bottom: 20px;
+                position: relative;
+                strong{
+                    color: #222;
+                    margin-right: 10px;
                 }
-                .default,.no-default{
-                    display: inline-block;
-                    width: 18px;
-                    height: 18px;
-                    background-color: #222;
-                    color: #fff;
-                    text-align: center;
-                    line-height: 18px;
-                    border-radius: 50%;
-                    margin-right: 5px;
-                    i{
-                        font-size: 10px;
-                    }
-                }
-                .no-default{
-                    width: 19px;
-                    height: 19px;
-                    position: relative;
-                    bottom: -4px;
-                    background-color: #fff;
-                    border: 1px solid #cacaca;
-                }
-            }
-            .add-edit-del{
-                position: absolute;
-                bottom: 14px;
-                right: 20px;
-
-                span{
-                    cursor: pointer;
-                }
-                span:nth-child(1){
+                &:nth-child(2n+1){
                     margin-right: 20px;
                 }
-                i{
-                    margin-right: 7px;
+                .bgline{
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 3px;
+                    transform: skew(20deg, 0deg);
+                    background: linear-gradient(to right, rgb(221, 116, 125) 35%, transparent 25%, transparent 50%, rgb(98, 110, 148) 50%, rgb(98, 110, 148) 85%, transparent 75%) 0% 0% / 56px 1px;
                 }
-                .add-edit{
+                .add-default{
+                    position: absolute;
+                    bottom: 14px;
+                    cursor: pointer;
                     &:hover{
                         opacity: .8;
                     }
+                    .default,.no-default{
+                        display: inline-block;
+                        width: 18px;
+                        height: 18px;
+                        background-color: #222;
+                        color: #fff;
+                        text-align: center;
+                        line-height: 18px;
+                        border-radius: 50%;
+                        margin-right: 5px;
+                        i{
+                            font-size: 10px;
+                        }
+                    }
+                    .no-default{
+                        width: 19px;
+                        height: 19px;
+                        position: relative;
+                        bottom: -4px;
+                        background-color: #fff;
+                        border: 1px solid #cacaca;
+                    }
                 }
-                .add-del{
+                .add-edit-del{
+                    position: absolute;
+                    bottom: 14px;
+                    right: 20px;
+
+                    span{
+                        cursor: pointer;
+                    }
+                    span:nth-child(1){
+                        margin-right: 20px;
+                    }
                     i{
-                        font-size: 18px;
+                        margin-right: 7px;
                     }
-                    &:hover{
-                        opacity: .8;
+                    .add-edit{
+                        &:hover{
+                            opacity: .8;
+                        }
+                    }
+                    .add-del{
+                        i{
+                            font-size: 18px;
+                        }
+                        &:hover{
+                            opacity: .8;
+                        }
                     }
                 }
             }
-        }
-        &:after{
-            display: block;
-            content: '';
-            clear: both;
+            &:after{
+                display: block;
+                clear: both;
+                content: '';
+            }
         }
     }
     .mask{

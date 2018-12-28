@@ -1,10 +1,10 @@
 <template>
     <div class="datail">
         <div class="detailHd">
-            <p style="text-transform:capitalize"><span @click="window.location.href = '/'">{{$t('home')}}</span><router-link to="/me/m"> > {{$t('me')}}</router-link><router-link to="/me/m/order"> > Orders</router-link> > Detail</p>
+            <p style="text-transform:capitalize"><span @click="window.location.href = '/'">{{$t('home')}}</span><router-link to="/me/m"> > {{$t('me')}}</router-link><router-link to="/me/m/order"> > {{$t('myorders')}}</router-link> > {{$t('detail')}}</p>
         </div>
         <div class="detailCon">
-            <h2>{{$t('orderdetail')}}</h2>
+            <h2>{{$t('detail')}}</h2>
             <h4>{{$t('shippinginfo')}}</h4>
             <div class="shippinginfo">
                 <p>{{shipping.name}}</p>
@@ -14,66 +14,89 @@
             <div class="bgline"></div>
             <h4>{{$t('orderinfo')}}</h4>
             <div class="orderinfo">
-                <p v-if="orderdetail.boletoPayCodeURL && order.status == 1 && orderoffset >= 1000 && couponshow">
-                    <span class="label" style="color: #E64545">Presente de cupão expirs</span>
-                    <count-down :timeStyle="{color:'#E64545'}" :timeLeft="orderoffset"></count-down>
-                </p>
-                <p><span>{{$t('timeofpayment')}}: </span>{{getDate}}</p>
-                <p><span>{{$t('orderno')}}: </span>{{order.id}}</p>
-                <p><span>Transaction No: </span>{{order.transactionId}}</p>
-                <p><span>{{$t('orderstatus')}}: </span>{{getStatus}}</p>
+                <p v-if="orderdetail.id"><strong>{{$t('orderno')}}: {{orderdetail.id}}</strong></p>
+                <p v-if="orderdetail.paymentTime"><span>{{$t('paymentTime')}}: </span>{{getDate}}</p>
+                <p v-if="orderdetail.payMethodName"><span>{{$t('paymentMethod')}}: </span>{{orderdetail.payMethodName}}</p>
             </div>
+            <div class="payNow" v-if="orderdetail.status === 0 && orderoffset >= 0">
+                <div class="otherPay">
+                    <div class="remain">{{$t("remaining")}}:<count-down :timeStyle="{color:'#fff'}" :timeLeft="orderoffset"></count-down></div>
 
+                    <a class="paybtn" :href="orderdetail.boletoPayCodeURL" target="_blank" v-if="orderdetail.boletoPayCodeURL && orderdetail.status === 0 && orderoffset >= 0">Imprimir Boleto</a>
+                    <a class="paybtn" :href="checkoutUrl(orderdetail.id)" v-if="orderdetail.boletoPayCodeURL && orderdetail.status === 0 && orderoffset >= 0">Outro método de pagamento</a>
+
+                    <a class="paybtn" :href="orderdetail.mercadopagoPayURL" target="_blank" v-if="orderdetail.mercadopagoPayURL && orderdetail.status === 0 && orderoffset >= 0">Generar Ticket</a>
+                    <a class="paybtn" :href="checkoutUrl(orderdetail.id)" v-if="orderdetail.mercadopagoPayURL && orderdetail.status === 0 && orderoffset >= 0">Otro método de pago</a>
+
+                    <a class="paybtn" :href="checkoutUrl(orderdetail.id)" v-if="!orderdetail.mercadopagoPayURL && !orderdetail.boletoPayCodeURL && orderdetail.status === 0 && orderoffset >= 0">{{$t("paynow")}}</a>
+                </div>
+            </div>
+            <div class="payTip" v-if="orderdetail.unPayMessage && orderoffset >= 0">
+                {{orderdetail.unPayMessage}}
+            </div>
+            <ul v-if="orderdetail && orderdetail.logistics && orderdetail.logistics.packages && orderdetail.logistics.packages.length > 1" class="packageTab">
+                <li class="tab" @click="changeTab(key)" :class="{'active': key===isActive}" v-for="(item,key) in orderdetail.logistics.packages" :key="key">
+                    {{item.name}}
+                </li>
+            </ul>
+            <ul v-else style="display: flex;margin-top: 20px;">
+                <li><span class="statusColor" :style="{backgroundColor : status_color}"></span>{{orderdetail.statusView}}</li>
+                <li v-if="orderpro.trackingId && !orderpro.logisticsSupplierWebsiteURL" style="line-height: 30px;margin-left: 20px;cursor:pointer;" ><a style="text-decoration: underline" @click="checkPackageLogistics(orderpro.status,orderpro.trackingId)">{{$t('track')}} ></a></li>
+                <li v-if="orderpro.logisticsSupplierWebsiteURL" style="line-height: 30px;margin-left: 20px;cursor:pointer;" ><a style="text-decoration: underline" :href="orderpro.logisticsSupplierWebsiteURL"></a></li>
+            </ul>
+            <div v-if="orderdetail && orderdetail.logistics && orderdetail.logistics.packages && orderdetail.logistics.packages.length > 1" class="packageStatus">
+                <p><span class="statusColor" :style="{backgroundColor : status_color}"></span>{{orderpro.statusView}}</p>
+                <p v-if="orderpro.trackingId && !orderpro.logisticsSupplierWebsiteURL"><a @click="checkPackageLogistics(orderpro.status,orderpro.trackingId)" >{{$t('track')}} ></a></p>
+                <p v-if="orderpro.logisticsSupplierWebsiteURL"><a :href="orderpro.logisticsSupplierWebsiteURL" >{{$t('track')}} ></a></p>
+            </div>
             <table class="infotabel">
                 <tr>
                     <td>{{$t('item')}}</td>
                     <td></td>
                     <td>{{$t('Qty')}}</td>
                     <td>{{$t('price')}}</td>
-                    <td></td>
-                    <td><p @click="showTicket(order.id)"><i class="iconfont">&#xe716;</i><a>{{$t('contactseller')}}</a></p></td>
+                    <td><p @click="showTicket(orderdetail.id)"><i class="iconfont">&#xe716;</i><a>{{$t('contactseller')}}</a></p></td>
                 </tr>
-                <tr v-for=" item in orderpro">
+                <tr v-for=" (item,key) in orderpro.products">
                     <td>
-                        <link-image href="#" :src="item.productImageUrl" :title="item.productName"/>
+                        <link-image href="#" :src="item.imageURL" :title="item.name"/>
                     </td>
-                    <td class="w-300">
-                        <p>{{item.productName}}</p>
+                    <td class="w-200">
+                        <p>{{item.name}}</p>
                         <p class="grey">{{item.color}} {{item.size}} </p>
                     </td>
                     <td>
-                        <p><span>X{{item.quantity}}</span></p>
+                        <p><span>X{{item.qty}}</span></p>
                     </td>
                     <td>
-                        <p class="price">{{realprice(item)}}</p>
-                    </td>
-                    <td>
-
+                        <p class="price">{{realprice(item.price)}}</p>
                     </td>
                     <td>
                         <div v-if="confirmedOrder" class="review-btn" :class="{'b-btn':confirmedOrder,'black':shippedOrder || processingOrder}">
-                            <span  @click="review(item.productId)">Review</span>
+                            <span  @click="review(item.productId)">{{$t('review')}}</span>
+                        </div>
+                        <div @click="addProduct(item.variantId)" v-if="item.variantId && orderdetail.status===4" class="review-btn">
+                            <span>{{$t("repurchase")}}</span>
                         </div>
                     </td>
                 </tr>
             </table>
 
             <div class="pricecon">
-                <div class="pricecon1" v-if="order">
-                    <p class="p-price">{{$t('subtotal')}}:<span class="price">{{subtotal}}</span></p>
-                    <p class="p-price" v-if="order.couponDiscount.amount!=='0'">{{$t('coupon')}}:<span class="price r-p">-{{coupon}}</span></p>
-                    <p class="p-price" v-if="order.pointDiscount.amount!=='0'">{{$t('credits')}}:<span class="price r-p">-{{pointDiscount}}</span></p>
-                    <p class="p-price" v-if="order.shippingPrice.amount!=='0'">{{$t('shipping')}}:<span class="price">{{shippingprice}}</span></p>
-                    <p class="p-price" v-if="order.shippingInsurancePrice.amount!=='0'">Insurance:<span class="price">{{shippingInsurancePrice}}</span></p>
+                <div class="pricecon1" v-if="orderdetail">
+                    <p class="p-price">ItemTotal:<span class="price">{{paymentItemTotal}}</span></p>
+                    <p class="p-price" v-if="orderdetail.shippingPrice && orderdetail.shippingPrice.amount!=='0'">{{$t('shipping')}}:<span class="price">{{shippingprice}}</span></p>
+                    <p class="p-price" v-if="orderdetail.shippingInsurancePrice && orderdetail.shippingInsurancePrice.amount!=='0'">Insurance:<span class="price">{{shippingInsurancePrice}}</span></p>
                     <p class="p-price t-p">{{$t('ordertotal')}}:<span class="price r-p">{{total}}</span></p>
                 </div>
             </div>
             <div class="actionbtn">
                 <div class="r-btn" :class="{'b-btn':confirmedOrder,'black':shippedOrder || processingOrder}">
-                    <a style="color: #fff;"  :href="orderdetail.boletoPayCodeURL" target="_blank" v-if="orderdetail.boletoPayCodeURL && orderdetail.order.status === 1">Imprimir Boleto</a>
-                    <a style="color: #fff;" :href="orderdetail.order.mercadopagoPayURL" target="_blank" v-if="orderdetail.order.mercadopagoPayURL && orderdetail.order.status === 1">Generar Ticket</a>
+                    <!--<a style="color: #fff;"  :href="orderdetail.boletoPayCodeURL" target="_blank" v-if="orderdetail.boletoPayCodeURL && orderdetail.status === 0 && !(orderoffset >= 0)">Imprimir Boleto</a>
+                    <a style="color: #fff;" :href="orderdetail.mercadopagoPayURL" target="_blank" v-if="orderdetail.mercadopagoPayURL && orderdetail.status === 0 && !(orderoffset >= 0)">Generar Ticket</a>-->
                     <span v-if="shippedOrder" @click="() => {this.isConfirmAlert = true}">{{$t('confirmorder')}}</span>
                     <span v-if="orderdetail.isCanCanceled" @click="() => {this.isAlert = true}">{{$t('cancelorder2')}}</span>
+                    <span @click="addProducts(orderdetail.orderItems)" v-if="orderdetail.id && orderdetail.status===4">{{$t("repurchase")}}</span>
                 </div>
             </div>
 
@@ -81,7 +104,7 @@
             <select-order v-if="isShowSelect" v-on:closeSelect="closeSelect1" v-on:showTicket="showTicket"></select-order>
             <order-ticket  v-if="isShowTicket" v-on:closeSelect="closeSelect1" v-on:selectOrder="selectorder"></order-ticket>
 
-            <div v-if="orderdetail.boletoPayCodeURL && order.status == 1 && orderoffset >= 1000 && couponshow">
+            <div v-if="orderdetail.boletoPayCodeURL && orderdetail.status == 0 && orderoffset >= 0 && couponshow">
                 <div class="mask"></div>
                 <div class="coupon-window">
                     <span class="coupon-close" @click="() => {this.couponshow = false}"><i class="iconfont">&#xe69a;</i></span>
@@ -101,7 +124,7 @@
                 </div>
             </div>
 
-            <div v-if="orderdetail.order.mercadopagoPayURL && order.status == 1 && orderoffset >= 1000 && couponshow">
+            <div v-if="orderdetail.mercadopagoPayURL && orderdetail.status === 0 && orderoffset >= 0 && couponshow">
                 <div class="mask"></div>
                 <div class="coupon-window">
                     <span class="coupon-close" @click="() => {this.couponshow = false}"><i class="iconfont">&#xe69a;</i></span>
@@ -115,7 +138,7 @@
                         </div>
                         <div class="white bottom-line">
                             <p>Después de realizar el pago, recibirás un cupón de regalo con un <span class="fc-r">15%</span> de descuento para tu siguiente compra.</p>
-                            <a  class="blackbtn" :href="orderdetail.order.mercadopagoPayURL">Pague ahora</a>
+                            <a  class="blackbtn" :href="orderdetail.mercadopagoPayURL">Pague ahora</a>
                         </div>
                     </div>
                 </div>
@@ -142,6 +165,9 @@
             </div>
         </div>
         <loding v-if="isloding"></loding>
+        <transition name="fade">
+            <div v-if="isAddProducts" class="addProductsMask">{{isAddProductstTip}}</div>
+        </transition>
     </div>
 </template>
 
@@ -165,9 +191,12 @@
                 isShowSelect: false,
                 isShowTicket:false,
                 couponshow: true,
-                isloding:false,
+                isloding:true,
                 isAlert:false,
-                isConfirmAlert:false
+                isConfirmAlert:false,
+                isActive:0,
+                isAddProducts:false,
+                isAddProductstTip:''
             }
         },
         components: {
@@ -180,72 +209,66 @@
         computed:{
             ...mapGetters(['orderdetail','shareurl']),
             getDate(){
-                if(this.order.paymentTime){
-                    return utils.enTime(new Date(this.order.paymentTime))
+                if(this.orderdetail.paymentTime){
+                    return utils.enTime(new Date(this.orderdetail.paymentTime))
                 }else{
                     return '-'
                 }
             },
             getStatus(){
-                return utils.STATUS_LABEL(this.order.status)
+                return utils.STATUS_LABEL(this.orderdetail.status)
             },
-            subtotal(){
-                if(this.order && this.order.subTotal){
-                    return this.order.subTotal.unit+this.order.subTotal.amount
-                }
-            },
-            coupon(){
-                if(this.order && this.order.couponDiscount){
-                    return this.order.couponDiscount.unit+this.order.couponDiscount.amount
-                }
-            },
-            pointDiscount(){
-                if(this.order && this.order.pointDiscount){
-                    return this.order.pointDiscount.unit+this.order.pointDiscount.amount
+            paymentItemTotal(){
+                if(this.order && this.orderdetail.paymentItemTotal){
+                    return this.orderdetail.paymentItemTotal.unit+this.orderdetail.paymentItemTotal.amount
                 }
             },
             shippingprice(){
-                if(this.order && this.order.shippingPrice){
-                    return this.order.shippingPrice.unit+this.order.shippingPrice.amount
+                if(this.orderdetail && this.orderdetail.shippingPrice){
+                    return this.orderdetail.shippingPrice.unit+this.orderdetail.shippingPrice.amount
                 }
             },
             shippingInsurancePrice(){
-                if(this.order && this.order.shippingInsurancePrice){
-                    return this.order.shippingInsurancePrice.unit+this.order.shippingInsurancePrice.amount
+                if(this.orderdetail && this.orderdetail.shippingInsurancePrice){
+                    return this.orderdetail.shippingInsurancePrice.unit+this.orderdetail.shippingInsurancePrice.amount
                 }
             },
             total(){
-                if(this.order && this.order.orderTotal){
-                    return this.order.orderTotal.unit+this.order.orderTotal.amount
+                if(this.orderdetail && this.orderdetail.orderTotal){
+                    return this.orderdetail.orderTotal.unit+this.orderdetail.orderTotal.amount
                 }
             },
             confirmedOrder(){
-                if(this.order && this.order.status===10){
+                if(this.orderdetail && this.orderdetail.status===5){
                     return true
                 }
             },
             shippedOrder(){
-                if(this.order && this.order.status===4){
+                if(this.order && this.orderdetail.status===3){
                     return true
                 }
             },
             processingOrder(){
-                if(this.order && this.order.status===3 || this.order.status === 2){
+                if(this.order && this.orderdetail.status===2){
                     return true
                 }
             },
             orderoffset() {
-                return this.order.orderTime + 5*24*60*60*1000 - this.orderdetail.serverTime;
-            }
+                if(this.orderdetail && this.orderdetail.expiredPaymentTime){
+                    return this.orderdetail.expiredPaymentTime - this.orderdetail.serverTime;
+                }
+            },
+            status_color() {
+                if(this.orderdetail && this.orderdetail.logistics && this.orderdetail.logistics.packages && this.orderdetail.logistics.packages.length=== 1){
+                    return utils.STATUS_COLOR(this.orderdetail.status)
+                }else{
+                    return utils.STATUS_COLOR(this.orderpro.status)
+                }
+            },
         },
         methods:{
-            sharePro(){
-                this.$store.dispatch('shareProduct',this.orderpro.productId).then(()=>{
-                    window.open(this.shareurl.shareUrl,"_blank")
-                })
-            },
             review(id){
-                this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/order-review', query: { orderid: this.order.id,productid: id }})
+                this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/order-review', query: { orderid: this.orderdetail.id,productid: id }})
             },
             closeSelect1(){
                 this.isShowTicket = false
@@ -260,9 +283,9 @@
                 this.isConfirmAlert = false
                 if(flag === '1'){
                     this.isloding = true;
-                    this.$store.dispatch('confirmOrder',this.order.id).then(()=>{
+                    this.$store.dispatch('confirmOrder',this.orderdetail.id).then(()=>{
                         this.isloding = false
-                        _this.order.status = 10
+                        _this.orderdetail.status = 10
                         alert("success")
                     }).catch((e) => {
                         alert(e);
@@ -275,8 +298,8 @@
                 if(flag === '1'){
                     let _this = this
                     this.isloding = true;
-                    this.$store.dispatch('cancelOrder',this.order.id).then(()=>{
-                        _this.order.status = 7
+                    this.$store.dispatch('cancelOrder',this.orderdetail.id).then(()=>{
+                        _this.orderdetail.status = 7
                         alert("success")
                         this.isloding = false
                     }).catch((e) => {
@@ -300,17 +323,70 @@
                 this.isShowTicket = false;
             },
             realprice(item){
-                return item.realPrice.unit+item.realPrice.amount
+                return item.unit+item.amount
             },
+            changeTab(index){
+                this.isActive = index;
+                this.orderpro = _.cloneDeep(this.orderdetail.logistics.packages[index])
+            },
+            checkPackageLogistics(type,packageId){
+                if(packageId){
+                    this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/packeage-logistics-detail', query: { type:type , packageid: packageId } })
+                }
+            },
+            checkoutUrl(id){
+                if(id){
+                    return window.ctx + '/checkout/' +id
+                }
+            },
+            addProduct(variantId){
+                let formData = [];
+                if(variantId){
+                    formData.push({"variantId":variantId,"quantity":'1'})
+                    this.$store.dispatch('addProducts',formData).then(()=>{
+                        this.isAddProductstTip = 'Add Success'
+                        this.isAddProducts = true;
+                        setTimeout(() => {
+                            this.isAddProducts = false;
+                        }, 2000);
+                    }).catch((e) => {
+                        this.isAddProductstTip = 'Add Failed'
+                        this.isAddProducts = true;
+                        setTimeout(() => {
+                            this.isAddProducts = false;
+                        }, 2000);
+                    })
+                }
+            },
+            addProducts(orderItems){
+                let formData = [];
+                if(orderItems){
+                    orderItems.forEach(product => {
+                        formData.push({"variantId":product.variantId,"quantity":'1'})
+                    })
+                    this.$store.dispatch('addProducts',formData).then(()=>{
+                        this.isAddProductstTip = 'Add Success'
+                        this.isAddProducts = true;
+                        setTimeout(() => {
+                            this.isAddProducts = false;
+                        }, 2000);
+                    }).catch((e) => {
+                        this.isAddProductstTip = 'Add Failed'
+                        this.isAddProducts = true;
+                        setTimeout(() => {
+                            this.isAddProducts = false;
+                        }, 2000);
+                    })
+                }
+            }
         },
         created(){
-            this.isloding=true
             this.$store.dispatch('getOrder',this.$route.query.orderid).then(()=>{
-                this.order = this.orderdetail.order
-                this.orderpro = _.cloneDeep(this.orderdetail.order.orderItems)
-                this.shipping = this.orderdetail.order.shippingDetail
-                this.shippingstate = this.orderdetail.order.shippingDetail.state
-                this.shippingcountry =this.orderdetail.order.shippingDetail.country
+                this.order = this.orderdetail
+                this.orderpro = _.cloneDeep(this.orderdetail.logistics.packages[0])
+                this.shipping = this.orderdetail.shippingDetail
+                this.shippingstate = this.orderdetail.shippingDetail.state
+                this.shippingcountry =this.orderdetail.shippingDetail.country
                 this.isloding = false
             })
         }
@@ -341,8 +417,6 @@
         color: #fff;
         text-align: center;
         line-height: 32px;
-        position: relative;
-        left: 40px;
         cursor: pointer;
     }
     .grey{
@@ -364,11 +438,11 @@
          cursor: pointer;
          text-decoration: none;
      }
-    .w-300{
-        max-width: 300px;
+    .w-200{
+        max-width: 250px;
     }
     .infotabel{
-        border: 1px solid #cacaca;
+        border: 1px solid #e6e6e6;
         width: 100%;
         margin: 20px 0 24px 0;
         td{
@@ -379,7 +453,9 @@
             text-align: center;
             p:last-child{
                 i{
-                    font-size: 20px;
+                    font-size: 22px;
+                    position: relative;
+                    top: 3px;
                 }
             }
             i{
@@ -397,13 +473,11 @@
         tr:first-child{
             background-color: #f5f5f5;
             border: none;
-            td{
-                font-weight: bold;
-            }
             td:last-child{
-                font-weight: normal !important;
-                padding-right: 20px;
-                text-align: right;
+                width: 150px;
+                vertical-align: middle;
+                padding: 0 10px;
+                text-align: center;
             }
         }
         tr{
@@ -412,9 +486,6 @@
                 width: 120px;
             }
             td:nth-child(2){
-                text-align: left;
-            }
-            td:last-child{
                 text-align: left;
             }
         }
@@ -449,7 +520,7 @@
         }
         h4 {
             font-size: 16px;
-            margin: 24px 0;
+            margin: 15px 0;
         }
         .shippinginfo{
             color: #222;
@@ -463,6 +534,7 @@
             margin: 20px 0;
         }
         .orderinfo{
+            padding-bottom: 20px;
             p{
                 line-height: 25px;
                 color: #222;
@@ -658,5 +730,107 @@
             }
         }
 
+    }
+    .packageTab{
+        height: 45px;
+        line-height: 45px;
+        display: flex;
+        margin-left: -10px;
+        margin-top: 20px;
+        border-bottom:1px solid #e6e6e6;
+        .tab{
+            cursor: pointer;
+        }
+        li{
+            margin: 0 20px;
+            color: #666;
+        }
+        .active{
+            border-bottom: 2px solid #222;
+            color: #222;
+        }
+    }
+    .statusColor{
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        margin: 7px 4px 0 0;
+    }
+    .packageStatus{
+        display: flex;
+        padding-top: 10px;
+        p:nth-of-type(2){
+            padding-top: 4px;
+            padding-left: 20px;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    }
+    .payNow{
+        width: 918px;
+        height: 48px;
+        line-height: 48px;
+        background-color: #f46e6d;
+        padding: 0 20px;
+        color: #fff;
+        font-size: 18px;
+        .otherPay{
+            .remain{
+                float: left;
+                .countdown{
+                    margin-left: 30px;
+                    .time{
+                        color:#fff !important;
+                    }
+                }
+            }
+            .paybtn{
+                display: block;
+                float: right;
+                width: 170px;
+                height: 32px;
+                background-color: #222222;
+                border-radius: 2px;
+                text-align: center;
+                line-height: 32px;
+                margin-top: 8px;
+                font-size: 14px;
+                color: #fff;
+                margin-left:10px;
+            }
+            &::after{
+                display: block;
+                content: '';
+                clear: both;
+            }
+        }
+    }
+    .payTip{
+        width: 918px;
+        padding:15px;
+        line-height: 18px;
+        color: #222;
+        border:1px solid #f46e6d;
+        border-top: none;
+    }
+    .addProductsMask{
+        position: fixed;
+        top: calc(50% - 20px);
+        background-color: rgba(0,0,0,.4);
+        text-align: center;
+        overflow-y: auto;
+        z-index: 999;
+        color:#fff;
+        width: 210px;
+        height: 40px;
+        line-height: 40px;
+        left: calc(50% - 110px);
+    }
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity .2s;
+    }
+    .fade-enter, .fade-leave-to {
+        opacity: 0;
     }
 </style>
