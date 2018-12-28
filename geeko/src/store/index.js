@@ -3,7 +3,6 @@
  */
 import Vue from 'vue'
 import Vuex from 'vuex'
-import shoppingcart from '../shoppingcart/store'
 import me from '../me/store'
 import {state, getters, mutations, actions} from './store'
 
@@ -15,7 +14,6 @@ export default new Vuex.Store({
     mutations,
     actions,
     modules: {
-        shoppingcart: shoppingcart,
         me: me
     }
 })
