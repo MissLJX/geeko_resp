@@ -17,9 +17,10 @@ const StyledMethod = styled.li`
 	}
 `
 
-const Method = ({shippingMethod, selected, onSelect}) => <StyledMethod className="x-table">
+const Method = ({shippingMethod, selected, onSelect, ignoreCheck}) => <StyledMethod className="x-table">
   <div className="x-cell">
-    <CheckBox onClick={ () => onSelect(shippingMethod.id) } style={{verticalAlign: 'middle', marginRight: 10}} className={selected ? 'selected' : ''}/>
+  	{!ignoreCheck && <CheckBox onClick={ () => onSelect(shippingMethod.id) } style={{verticalAlign: 'middle', marginRight: 10}} className={selected ? 'selected' : ''}/>}
+
     <span style={{verticalAlign: 'middle'}}>{ shippingMethod.title }</span>
   </div>
 
@@ -43,8 +44,8 @@ const StyledMethods = styled.ul`
 	}
 `
 
-export default ({shippingMethodList, selectedShippingMethod, onSelect}) => <StyledMethods>
+export default ({shippingMethodList, selectedShippingMethod, onSelect, ignoreCheck}) => <StyledMethods>
   {
-    shippingMethodList && shippingMethodList.map(method => <Method onSelect={onSelect} key={method.id} shippingMethod={ method } selected={selectedShippingMethod.id === method.id}/>)
+    shippingMethodList && shippingMethodList.map(method => <Method ignoreCheck={ignoreCheck} onSelect={onSelect} key={method.id} shippingMethod={ method } selected={selectedShippingMethod.id === method.id}/>)
   }
 </StyledMethods>

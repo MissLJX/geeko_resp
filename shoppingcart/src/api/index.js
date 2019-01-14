@@ -35,12 +35,12 @@ export const usePoint = (isopen) => axios.get(`${VPATH}/shopping-cart/set-point/
 export const useInsurance = (isuse) => axios.get(`${VPATH}/shopping-cart/anon/${isuse}/update-insurance`)
 
 export const creditcards = (payMethod) => axios.get(`/quickpay-record/${payMethod}/history?_=${new Date().getTime()}`)
-export const creditpay = (params) => axios.post(`/quickpay/pay`, params)
+export const creditpay = (params) => axios.post(`${VPATH}/pay/quickpay`, params)
 export const usecreditcard = (id) => axios.get(`/quickpay-record/${id}/use`)
 export const deletecreditcard = (id) => axios.get(`/quickpay-record/${id}/remove`)
 
 export const getpaypal = () => axios.get(`${VPATH}/paypal/anon/client-get-url`)
-export const paypalpay = (method) => siteType === 'new' ? axios.get(`${VPATH}/shoppingcart/pay/paypal/pay`, {method}) : axios.get(`${VPATH}/webpaypal/anon/pay`, {method})
+export const paypalpay = (method) => axios.get(`${VPATH}/webpaypal/anon/pay`, {method})
 
 export const getcoupons = () => axios.get(`${VPATH}/coupon/anon/get-coupon-selections?_=${new Date().getTime()}`)
 export const usecoupon = (id) => axios.get(`${VPATH}/shopping-cart/anon/use-coupon/${id}`)
@@ -71,15 +71,19 @@ export const getDLocalPayLink = (params) => axios.get('/dlocal/get-pay-link', pa
 export const bindDLocal = (params) => axios.post(`${VPATH}/dlocal/bind-card`, params)
 export const payDLocal = (params) => axios.post(`${VPATH}/dlocal/pay`, params)
 export const getDCards = (params) => axios.get(`${VPATH}/dlocal/get-cards`, {...params, _: new Date().getTime()})
+export const getDInstallments = (params) => axios.post(`${VPATH}/dlocal/get-installments-plans`, params)
+export const getDPaymethods = (payMethod) => axios.get(`${VPATH}/dlocal/get-payment-methods`, {payMethod})
+
+export const payCredit = (params) => axios.post(`${VPATH}/pay/quickpay`, {...params, _: new Date().getTime()})
 
 // checkout
 export const checkout = (orderId) => axios.get(`${VPATH}/order/checkout?_=${new Date().getTime()}`, {orderId})
 export const checkout_updatepaymethod = (orderId, payMethod) => axios.post(`${VPATH}/order/update-pay-method`, {orderId, payMethod})
 export const checkout_getparams = (params) => axios.get(`${VPATH}/pay/get-pay-params-by-order`, params)
 export const checkout_pay = (params) => axios.get(`${VPATH}/pay/pay-by-order`, params)
-export const checkout_credit = (params) => axios.get(`/quickpay/pay-by-order`, params)
+export const checkout_credit = (params) => axios.post(`${VPATH}/pay/quickpay-by-order`, params)
 export const checkout_paypal = (params) => axios.post(`${VPATH}/paypal2/pay-by-order`, params)
-export const checkout_computop = (params) => axios.post(`${VPATH}/computop/get-pay-params-by-order`)
+export const checkout_computop = (params) => axios.post(`${VPATH}/computop/get-pay-params-by-order`, {...params, _: new Date().getTime()})
 
 // order
 export const gettransaction = (id) => axios.get(`${VPATH}/order/anon/order-confim`, {transactionId: id})

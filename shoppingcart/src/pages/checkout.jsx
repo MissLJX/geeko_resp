@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import {injectIntl, FormattedMessage} from 'react-intl'
 import PayMethodList from '../components/msite/paymethod-list.jsx'
+import Refreshing from '../components/msite/refreshing.jsx'
 import {
   checkout,
   checkout_updatepaymethod,
@@ -12,6 +13,7 @@ import {
   checkout_paypal,
   useMercadocard, 
   mercadopay,
+  usecreditcard,
   checkout_computop
 } from '../api'
 
@@ -28,7 +30,8 @@ import {
   toggleCredit,
   toggleCreditStatus,
   fetchPaypalUrl,
-  fetchMe
+  fetchMe,
+  getDLocalCards
 } from '../store/actions.js'
 
 import {submit} from '../utils/common-pay.js'
@@ -64,6 +67,12 @@ const CheckoutAddress = Loadable({
 const CheckoutMercado = Loadable({
 	loader: () => import(/* webpackChunkName: "component--check-mercado" */ './checkout-mercado.jsx'),
 	loading: Loading
+})
+
+
+const CheckoutDLocal = Loadable({
+  loader: () => import(/* webpackChunkName: "component--check-dlocal" */ './checkout-dlocal.jsx'),
+  loading: Loading
 })
 
 
@@ -136,6 +145,7 @@ const mapDispatchToProps = (dispatch) => {
   		return dispatch(fetchMe())
   	},
   	GETCHECKOUT: (orderId) => {
+
   		return dispatch(fetchCheckout(orderId))
   	},
   	GETPAYPAL: () => {
@@ -173,6 +183,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     TOGGLECREDITSTATUS: (status) => {
       dispatch(toggleCreditStatus(status))
+    },
+    GETDLOCALCARDS: (payMethod) => {
+      return dispatch(getDLocalCards(payMethod))
     }
   }
 }
@@ -194,13 +207,23 @@ const Checkout = class extends React.Component {
     }
   }
 
+
+  refreshCheckout(orderId){
+    this.setState({
+      refreshing: true
+    })
+    this.props.GETCHECKOUT(orderId).catch(({result}) => {
+      alert(result)
+    }).then(() => {
+      this.setState({
+        refreshing: false
+      })
+    })
+  }
+
   componentWillMount () {
   	const { orderId } = this.props.match.params
-
-  	this.props.GETCHECKOUT(orderId).catch(({result}) => {
-  		alert(result)
-  		window.history.back()
-  	})
+    this.refreshCheckout(orderId)
   	this.props.GETPAYPAL()
   	this.props.GETME()
 
@@ -246,10 +269,19 @@ const Checkout = class extends React.Component {
 
   selectPayHandle (paymethod) {
   	const { orderId } = this.props.match.params
+    this.setState({
+      refreshing: true
+    })
   	checkout_updatepaymethod(orderId, paymethod.id).then(({result}) => {
   		this.props.SETCHECKOUT(result)
+      this.setState({
+        refreshing: false
+      })
   	}).catch(({result}) => {
   		alert(result)
+      this.setState({
+        refreshing: false
+      })
   	})
   }
 
@@ -334,6 +366,9 @@ const Checkout = class extends React.Component {
            window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
         } else {
           alert(details)
+          this.setState({
+            checking: false
+          })
         }
 	  } )
   }
@@ -423,10 +458,13 @@ const Checkout = class extends React.Component {
   				  this.setState({
 	            checking: true
 	          })
-  					this.checkcomputop({orderId}).catch(() => {
+  					this.checkcomputop({orderId}).catch((data) => {
   						this.setState({
 		            checking: false
 		          })
+              if(data){
+                alert(data.result)
+              }
   					})
   					break
   				case '5':
@@ -534,6 +572,42 @@ const Checkout = class extends React.Component {
 				      })
   					}
   					break
+
+          case '12':
+            this.setState({
+              checking: true
+            })
+
+            if(payMethod.id === '24'){
+              this.props.TOGGLECREDIT(true)
+              this.props.GETDLOCALCARDS(payMethod.id).then( cards => {
+                if(!cards || cards.length < 1){
+                  this.props.history.push(`${this.props.match.url}/dlocal/credit`)
+                }else{
+                  
+                }
+                this.setState({
+                  checking: false
+                })
+              } ).catch(({result}) => {
+                alert(result)
+                this.setState({
+                  checking: false
+                })
+              })
+            }else if(payMethod.id === '25'){
+              this.checkpay({
+                orderId,
+                payMethod: payMethod.id
+              }).catch(({result}) => {
+                alert(result)
+                this.setState({
+                  checking: false
+                })
+              })
+            }
+            break
+
   			}
 
   		}
@@ -552,7 +626,10 @@ const Checkout = class extends React.Component {
     })
     const {installments, checkout} = this.props
 
-    this.payCredit({orderId: checkout.orderId, payInstallments: installments}).catch( ({result}) => {
+    const params = checkout.payMethod === '24' ? {orderId: checkout.orderId,  installments, payMethod: checkout.payMethod} : {orderId: checkout.orderId, payInstallments: installments}
+
+
+    this.payCredit(params).catch( ({result}) => {
     	alert(result)
       this.setState({
         checking: false
@@ -566,6 +643,9 @@ const Checkout = class extends React.Component {
           window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
       } else {
         alert(details + '\n' + solutions)
+        this.setState({
+          checking: false
+        })
       }
     })
   }
@@ -586,6 +666,10 @@ const Checkout = class extends React.Component {
           refreshing: false
         })
       })
+    }else if(this.props.payMethod === '24'){
+  
+      this.props.history.push(`${this.props.match.url}/dlocal/credit`)
+
     } else {
       const path = {
         pathname: `${window.ctx || ''}${__route_root__}/credit-card`,
@@ -673,7 +757,7 @@ const Checkout = class extends React.Component {
 
   	let totalCount = 0
 
-  	let payMethod
+  	let payMethod, country
 
   	if (checkout) {
   		let checkoutItems = checkout.checkoutItems
@@ -682,10 +766,15 @@ const Checkout = class extends React.Component {
   		if(checkoutItems){
   			totalCount = checkoutItems.map( c => c.quantity ).reduce((prev, curr) => (prev + curr))
   		}
+
+      country = checkout.shippingDetail && checkout.shippingDetail.country ? checkout.shippingDetail.country.value : window.__country
   		
   	}
 
-    return checkout ? <div>
+    return <div>
+      {
+      checkout && <div>
+       {this.state.refreshing && <Refreshing/>}
     	<Boxs>
     		<Box style={{position: 'relative'}}>
     			<BoxBody>
@@ -704,6 +793,27 @@ const Checkout = class extends React.Component {
           </BoxBody>
           <DashedLine/>
     		</Box>
+
+        {
+          checkout.shippingMethod && <Box>
+          <BoxHead title={intl.formatMessage({id: 'shipping_method'})}/>
+          <div className="x-table" style={{paddingLeft: 10, paddingRight: 10, marginTop: 10}}>
+            <div className="x-cell">
+              <span style={{verticalAlign: 'middle'}}>{ checkout.shippingMethod.title }</span>
+            </div>
+
+            <div className="x-cell" style={{paddingLeft:10}}>
+              <Money money={ checkout.shippingMethod.price }/>
+            </div>
+
+            
+          </div>
+          <div style={{paddingLeft: 10, lineHeight: '18px', paddingBottom: 8}}>
+            <span>{ checkout.shippingMethod.shippingTime }</span>
+          </div>
+        </Box>
+        }
+        
 
     		<Box innerRef={c => { this.$paylistdom = c }}>
           <BoxHead title={intl.formatMessage({id: 'payment_method'})}/>
@@ -781,7 +891,7 @@ const Checkout = class extends React.Component {
 
 
     	{
-        isCreditShow && (payMethod.type === '11' || payMethod.type === '8') && creditcards && creditcards.length && (
+        isCreditShow && (payMethod.type === '11' || payMethod.type === '8' || payMethod.id === '24') && creditcards && creditcards.length && (
           <React.Fragment>
             <Mask/>
             <CreditCard
@@ -797,6 +907,7 @@ const Checkout = class extends React.Component {
               cardSelect={ this.cardSelect.bind(this)}
               status = {this.props.creditstatus}
               checking={this.state.checking}
+              country = {country}
               toggleBack= {() => {
                 this.props.TOGGLECREDITSTATUS(this.props.creditstatus === 0 ? 1 : 0)
               }}
@@ -859,12 +970,17 @@ const Checkout = class extends React.Component {
       })}
       path={`${this.props.match.path}/mercado/credit`} component={CheckoutMercado}/>
 
+      <AnimatedRoute {...defaultAnimations}
+      mapStyles={(styles) => ({
+        transform: `translateY(${styles.offset}%)`,
+        ...defaultStyles
+      })}
+      path={`${this.props.match.path}/dlocal/credit`} component={CheckoutDLocal}/>
 
-      
 
-
-
-    </div> : <div>loading</div>
+    </div>
+    }
+    </div>
   }
 }
 

@@ -166,7 +166,7 @@ const MercadoBinding = class extends React.Component {
   }
 
   pay (params) {
-    mercadopay(params).then(data => data.result).then(({success, transactionId, details, solutions}) => {
+    mercadopay(params).then(data => data.result).then(({success, transactionId, details, solutions, orderId}) => {
       if (success) {
         if (siteType === 'new') {
           window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/credit-card?order_number=${transactionId}`
@@ -175,6 +175,9 @@ const MercadoBinding = class extends React.Component {
         }
       } else {
         alert(details)
+        if (orderId) {
+          window.location.href = `${window.ctx || ''}/checkout/${orderId}`
+        }
       }
       this.setState({
         paying: false

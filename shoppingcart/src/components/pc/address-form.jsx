@@ -246,6 +246,7 @@ const AddressFrom = class extends React.Component {
                 className="x-select"
                 value={this.state.country}
                 name='country'
+                disabled={this.props.disablecountry}
                 style= {{width: '100%', height: 40}}
                 onChange={(evt) => { this.handleInputChange(evt); this.changeCountry(evt) }}
                 validations={[required]}>
@@ -417,6 +418,7 @@ const AddressFrom = class extends React.Component {
                 value={this.state.country}
                 name='country'
                 style= {{width: '100%', height: 40}}
+                disabled={this.props.disablecountry}
                 onChange={(evt) => { this.handleInputChange(evt); this.changeCountry(evt) }}
                 validations={[required]}>
                 <option value=''>Country</option>

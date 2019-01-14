@@ -8,6 +8,7 @@ import {MutiElement, FormElement} from './styled-control.jsx'
 import Ask from './ask.jsx'
 import {unitprice} from '../../utils/utils.js'
 import InputBtn from './input-btn.jsx'
+import { getDPaymethods } from '../../api'
 
 const __qoute_reg__ = /\([^\}]+\)/
 
@@ -133,6 +134,37 @@ const CashMethod = styled.span`
   }
 `
 
+const TicketCashMethod = styled.span`
+  display: inline-block;
+  cursor: pointer;
+  position: relative;
+  border: 1px solid #e5e5e5;
+  padding: 4px;
+  height: 100px;
+  width: 100px;
+  overflow: hidden;
+  background-color: #fff;
+  box-shadow: 0 0px 4px rgba(136,136,136,.2);
+  border-radius: 2px;
+  &.selected{
+    border: 1px solid #e5004f;
+    &::after{
+      content: '\\e742';
+      right: -2px;
+      bottom: -2px;
+      position: absolute;
+      color: #e5004f;
+      font-family: iconfont;
+      font-style: normal;
+    }
+  }
+
+  img{
+    display: block;
+    width: 100%;
+  }
+`
+
 const MoneyTransform = (props) => {
   const {atmMethods, atmMethod, setCouponHandle, couponCode, showMercadopagoCouponField} = props
   return <div>
@@ -157,6 +189,56 @@ const MoneyTransform = (props) => {
     }
 
   </div>
+}
+
+const TicketCash = class extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      tcMethods: []
+    }
+  }
+
+  componentWillMount () {
+    const { method } = this.props
+    if (method) {
+      getDPaymethods(method.id).then(({result}) => {
+        this.setState({
+          tcMethods: result
+        })
+      })
+    }
+  }
+
+  render () {
+    const { tcMethods } = this.state
+    const { tcMethod, tcClickHandle, document, handleInputChange, documentForm, documentRef } = this.props
+    return <div>
+      <Form ref={documentForm}>
+        <MutiElement>
+          <FormElement label={`DNI:`} className="__required">
+            <Input
+              name='document'
+              value={document}
+              style={{width: '100%', height: 35}}
+              onChange={handleInputChange}
+              validations={[required]}/>
+          </FormElement>
+          <FormElement/>
+        </MutiElement>
+        <Button style={{display: 'none'}} ref={documentRef}></Button>
+      </Form>
+      <CashMethods style={{marginTop: 15}}>
+        {
+          tcMethods && tcMethods.map(method => <li key={method.id}>
+            <TicketCashMethod className={tcMethod === method.id ? 'selected' : ''} onClick={(evt) => { tcClickHandle(method.id) }}>
+              <img src={method.logo}/>
+            </TicketCashMethod>
+          </li>)
+        }
+      </CashMethods>
+    </div>
+  }
 }
 
 const BrazilOcean = (props) => <Form ref={props.brazilOceanForm}>
@@ -211,6 +293,13 @@ const getPlugin = (props) => {
     case '19':
     case '21':
       return showMercadopagoCouponField && <Mercado {...props}/>
+    case '25':
+    case '29':
+    case '27':
+    case '28':
+    case '30':
+    case '31':
+      return <TicketCash {...props}/>
     default:
 		  return null
   }
@@ -253,7 +342,7 @@ const PayMethod = (props) => {
   return <METHODCONTAINER>
     		<METHOD onClick={() => { props.selectPayHandle(method) }} className="x-table x-fw __vm">
 		      <div className="x-cell">
-		        <CheckBox className={ selected ? 'selected' : ''}/>
+        <CheckBox className={ selected ? 'selected' : ''}/>
 		      </div>
 		      <div className="x-cell">
 		        <img src={ method.icon }/>

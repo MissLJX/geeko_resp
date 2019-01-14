@@ -9,6 +9,8 @@ import {required, email, cpf} from '../validator.jsx'
 import {StyledControl} from './styled-control.jsx'
 import InputBtn from './input-btn.jsx'
 
+import { getDPaymethods } from '../../api'
+
 const __qoute_reg__ = /\([^\}]+\)/
 
 const __Coupon_Code_Tip_Message__ = '就不告诉你，就不告诉你，就不告诉你~~~~~~~~~~~~~~~~~~~~~~~~'
@@ -118,12 +120,12 @@ const CashMethods = styled.div`
   padding: 10px 10px 0 10px;
   background-color: #e5e5e5;
   position: relative;
-  & > ul::after{
+  ul::after{
     content: '';
     clear: both;
     display: block;
   }
-  & > ul > li{
+  ul > li{
     float: left;
     margin-bottom: 10px;
     margin-right: 10px;
@@ -189,6 +191,37 @@ const CashMethod = styled.span`
   }
 `
 
+const TicketCashMethod = styled.span`
+  display: inline-block;
+  cursor: pointer;
+  position: relative;
+  border: 1px solid #e5e5e5;
+  padding: 4px;
+  height: 50px;
+  width: 50px;
+  overflow: hidden;
+  background-color: #fff;
+  box-shadow: 0 0px 4px rgba(136,136,136,.2);
+  border-radius: 2px;
+  &.selected{
+    border: 1px solid #e5004f;
+    &::after{
+      content: '\\e742';
+      right: -2px;
+      bottom: -2px;
+      position: absolute;
+      color: #e5004f;
+      font-family: iconfont;
+      font-style: normal;
+    }
+  }
+
+  img{
+    display: block;
+    width:100%;
+  }
+`
+
 const MoneyTransform = class extends React.Component {
   constructor (props) {
     super(props)
@@ -217,6 +250,64 @@ const MoneyTransform = class extends React.Component {
       }
 
     </CashMethods>
+  }
+}
+
+const TicketCash = class extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      tcMethods: []
+    }
+  }
+
+  componentWillMount () {
+    const { method } = this.props
+    if (method) {
+      getDPaymethods(method.id).then(({result}) => {
+        this.setState({
+          tcMethods: result
+        })
+      })
+    }
+  }
+
+  render () {
+    const { tcMethods } = this.state
+    const { method, tcMethod, tcClickHandle, document, handleInputChange, documentForm, documentRef } = this.props
+    return <div>
+
+      <CashMethods style={{marginTop: 15}}>
+        {
+          method.id !== '29' && <Form ref={documentForm} style={{marginBottom: 10}}>
+            <MethodInputLine className="x-table x-fw __vm __fixed">
+              <div className="x-cell">
+                <label>DNI<Ask style={{marginLeft: 4}} /></label>
+              </div>
+              <div className="x-cell">
+                <StyledControl inputColor="#fff">
+                  <Input
+                    name='document'
+                    value={this.props.document}
+                    onChange={this.props.handleInputChange}
+                    validations={[required]}/>
+                </StyledControl>
+              </div>
+            </MethodInputLine>
+          </Form>
+        }
+
+        <ul>
+          {
+            tcMethods && tcMethods.map(method => <li key={method.id}>
+              <TicketCashMethod className={tcMethod === method.id ? 'selected' : ''} onClick={(evt) => { tcClickHandle(method.id) }}>
+                <img src={method.logo}/>
+              </TicketCashMethod>
+            </li>)
+          }
+        </ul>
+      </CashMethods>
+    </div>
   }
 }
 
@@ -359,6 +450,12 @@ const getMethodBody = (props) => {
     case '19':
     case '21':
       return showMercadopagoCouponField && <Mercado {...props}/>
+    case '29':
+    case '27':
+    case '28':
+    case '30':
+    case '31':
+      return <TicketCash {...props}/>
     default:
       return null
   }
@@ -369,12 +466,12 @@ const PayMethodList = class extends React.Component {
     super(props)
   }
   render () {
-    const {methods, selectPayHandle, selectedPayId} = this.props
+    const {methods, selectPayHandle, selectedPayId, paypalDiscountMessage} = this.props
     return <MethodUL>
       {
         methods && methods.map(payMethod => (
           <li key={payMethod.id}>
-            <Method selected={payMethod.id === selectedPayId} selectPayHandle={selectPayHandle} payMethod={payMethod}>
+            <Method paypalDiscountMessage={paypalDiscountMessage} selected={payMethod.id === selectedPayId} selectPayHandle={selectPayHandle} payMethod={payMethod}>
               {getMethodBody({method: payMethod, ...this.props})}
             </Method>
           </li>

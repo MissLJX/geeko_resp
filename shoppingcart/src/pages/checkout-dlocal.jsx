@@ -4,7 +4,7 @@ import FullFixed from '../components/msite/full-fixed.jsx'
 import { connect } from 'react-redux'
 import {__route_root__} from '../utils/utils.js'
 import { Redirect } from 'react-router-dom'
-import { payDLocal } from '../api'
+import { checkout_pay } from '../api'
 import {goOrder} from '../utils/common-pay.js'
 
 const mapStateToProps = (state) => {
@@ -35,33 +35,32 @@ const DLocal = class extends React.Component {
 
   componentWillMount () {
   	window.dLocalPay = (result, errBack) => {
-      this.payDLocal(result).catch(({result}) => errBack(result))
+      const { checkout } = this.props
+      this.payDLocal({...result, orderId: checkout.orderId, payMethod: checkout.payMethod}).catch(({result}) => errBack(result))
     }
   }
 
   payDLocal (result) {
-    const {token, installments, bin} = result
-    return payDLocal({payMethod: this.props.payMethod, token, installments, bin}).then(goOrder)
+    return checkout_pay(result).then(goOrder)
   }
 
   close (evt) {
   	evt.preventDefault()
-    this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
+    this.props.history.replace(`${window.ctx || ''}/checkout/${this.props.checkout.orderId}`)
   }
 
   render () {
-    const { cart } = this.props
+    const { checkout } = this.props
 
     let currency, country, amount
-    if (cart) {
-      currency = cart.orderSummary.orderTotal.currency
-      amount = cart.orderSummary.orderTotal.amount
-      country = cart.shippingDetail.country ? cart.shippingDetail.country.value : window.__country
+    if (checkout) {
+      currency = checkout.orderTotal.currency
+      amount = checkout.orderTotal.amount
+      country = checkout.shippingDetail.country ? checkout.shippingDetail.country.value : window.__country
     }
 
   	return <FullFixed onClose={this.close} title="DLocal">
-      {cart && <IFrame src={`${window.ctx || ''}/i/dlocal?currency=${currency}&country=${country}&amount=${amount}`} frameBorder="0" scrolling="auto" seamless/>}
-
+    		<IFrame src={`${window.ctx || ''}/i/dlocal?currency=${currency}&country=${country}&amount=${amount}`} frameBorder="0" scrolling="auto" seamless/>
     </FullFixed>
   }
 }

@@ -19,6 +19,11 @@ export const StyledControl = styled.div`
     	background-color: ${props => props.inputColor || 'transparent'};
 	}
 
+	input[disabled], select[disabled]{
+		border-color: rgb(202,202,202);
+    color: rgb(202,202,202);
+	}
+
 
 	& .error{
 		p{
@@ -50,6 +55,11 @@ export const InlineStyledControl = styled.div`
     	width: 100%;
     	padding-left: 10px;
     	background-color: ${props => props.inputColor || 'transparent'};
+	}
+
+	input[disabled], select[disabled]{
+		border-color: rgb(202,202,202);
+    color: rgb(202,202,202);
 	}
 
 

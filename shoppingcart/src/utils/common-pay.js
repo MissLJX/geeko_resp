@@ -17,15 +17,20 @@ export const submit = (result) => {
   document.body.removeChild(form)
 }
 
-export const goOrder = ({success, transactionId, orderId, details, solutions}) => {
-  if (success) {
-    if (siteType === 'new') {
-      window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/credit-card?order_number=${transactionId}`
+export const goOrder = ({result}) => {
+  if (result) {
+    const {success, transactionId, orderId, details, solutions} = result
+    if (success) {
+      if (siteType === 'new') {
+        window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/credit-card?order_number=${transactionId}`
+      } else {
+        window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
+      }
     } else {
-      window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
+      alert(details + '\n' + (solutions || ''))
+      if (orderId) {
+        window.location.href = `${window.ctx || ''}/checkout/${orderId}`
+      }
     }
-  } else {
-    alert(details + '\n' + solutions)
-    window.location.href = `${window.ctx || ''}/me/m/order/${orderId}`
   }
 }

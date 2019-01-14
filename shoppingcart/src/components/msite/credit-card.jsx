@@ -9,11 +9,13 @@ import {BigButton} from './buttons.jsx'
 import {Form, Input, Select, Button} from './control.jsx'
 import {required, cpf} from '../validator.jsx'
 import {StyledControl} from './styled-control.jsx'
-import {injectIntl} from 'react-intl'
+import {injectIntl, FormattedMessage} from 'react-intl'
 
 import {unitprice} from '../../utils/utils.js'
 
 import CheckBox from '../checkbox.jsx'
+
+import { getDInstallments } from '../../api'
 
 const HD = styled.div`
 	height: 50px;
@@ -203,6 +205,66 @@ const MercadoPlugin = class extends React.Component {
   }
 }
 
+const DLocalPlugin = class extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      payer_costs: [
+
+      ]
+    }
+  }
+
+  componentDidMount () {
+    const { orderTotal, country, payMethod } = this.props
+    getDInstallments({...orderTotal, country: country, payMethod}).then(({result}) => {
+      if (result) {
+        const { installments } = result
+        if (installments) {
+          this.setState({
+            payer_costs: installments
+          })
+        }
+      }
+    })
+  }
+
+  render () {
+    const { orderTotal, country, payMethod } = this.props
+
+    return <Form ref={this.props.dlocalref} style={{marginTop: 10, paddingLeft: 10, paddingRight: 10}}>
+      {
+        this.state.payer_costs && this.state.payer_costs.length > 0 && <StyledControl>
+          <label>Installments</label>
+          <Select name="installments" value={this.props.installments}
+            onChange={this.props.handleInputChange}>
+            {
+              this.state.payer_costs.map((plan) => (
+                <option key={plan.id} value={plan.installments}>
+                  {`${plan.installments} of ${orderTotal.currency} ${plan.installment_amount} (Total: ${orderTotal.currency} ${plan.total_amount})`}
+                </option>
+              ))
+            }
+          </Select>
+        </StyledControl>
+
+      }
+
+      {
+        (payMethod !== '24') && <StyledControl style={{marginTop: 10}}>
+          <label>DNI</label>
+          <Input name="document"
+            value={this.props.document}
+            validations={[required]}
+            onChange={this.props.handleInputChange}/>
+
+        </StyledControl>
+      }
+
+    </Form>
+  }
+}
+
 const BraizlPlugin = class extends React.Component {
   constructor (props) {
     super(props)
@@ -267,6 +329,10 @@ const getPayPlugin = (payMethod, props) => {
       return <MercadoPlugin {...props}/>
     case '17':
       return <BraizlPlugin {...props}/>
+    case '24':
+    case '26':
+    case '32':
+      return <DLocalPlugin {...props} payMethod={payMethod}/>
     default:
       return null
   }

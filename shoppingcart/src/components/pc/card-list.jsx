@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import {FormattedMessage} from 'react-intl'
+import {FormattedMessage, injectIntl} from 'react-intl'
 import CheckBox from '../checkbox.jsx'
 import Icon from '../icon.jsx'
 
@@ -11,6 +11,7 @@ import {MutiElement, FormElement} from './styled-control.jsx'
 
 import Ask from './ask.jsx'
 import {unitprice} from '../../utils/utils.js'
+import { getDInstallments } from '../../api'
 
 const LABELICON = styled.span`
   color: #666;
@@ -164,10 +165,80 @@ const MercadoPlugin = class extends React.Component {
   }
 }
 
+const DLocalPlugin = class extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      payer_costs: [
+
+      ]
+    }
+  }
+
+  componentDidMount () {
+    const { orderTotal, country } = this.props
+    getDInstallments({...orderTotal, country: country, payMethod: '24'}).then(({result}) => {
+      if (result) {
+        const { installments } = result
+        if (installments) {
+          this.setState({
+            payer_costs: installments
+          })
+        }
+      }
+    })
+  }
+
+  render () {
+    const { orderTotal, country, document, intl } = this.props
+    return <CARDPLUGIN>
+
+      {
+        this.state.payer_costs && this.state.payer_costs.length > 0 && <Form id="dlocalform">
+          <MutiElement>
+            <FormElement label={intl.formatMessage({id: 'installments'})} className="__required">
+              <Select className="x-select" style={{width: '100%', height: 35, backgroundColor: '#fff'}} name="installments"
+                value={this.props.installments}
+                validations={[required]}
+                onChange={this.props.handleInputChange}>
+                {
+                  this.state.payer_costs.map((plan) => (
+                    <option key={plan.id} value={plan.installments}>
+                      {`${plan.installments} of ${orderTotal.currency} ${plan.installment_amount} (Total: ${orderTotal.currency} ${plan.total_amount})`}
+                    </option>
+                  ))
+                }
+              </Select>
+            </FormElement>
+
+            <FormElement>
+              <FormElement label={country === 'AR' ? 'DNI / CUIT' : 'CC'} className="__required">
+                <Input style={{width: '100%', height: 35}} name="document"
+                  value={document}
+                  validations={[required]}
+                  placeholder="DNI / CUIT"
+                  onChange={this.props.handleInputChange}/>
+              </FormElement>
+            </FormElement>
+
+          </MutiElement>
+        </Form>
+      }
+
+    </CARDPLUGIN>
+  }
+}
+
+const I18DLocalPlugin = injectIntl(DLocalPlugin)
+
 const getPlugin = props => {
   switch (props.card.quickpayRecord.payMethod) {
     case '19':
       return <MercadoPlugin { ...props }/>
+    case '24':
+    case '26':
+    case '32':
+      return <I18DLocalPlugin {...props}/>
     default:
       return null
   }

@@ -110,6 +110,7 @@ const Address = class extends React.Component {
 
   render () {
     const { intl, cart } = this.props
+    const { validate } = this.props.location.state || {}
 
     const address = this.getAddress()
 
@@ -119,7 +120,7 @@ const Address = class extends React.Component {
           { intl.formatMessage({id: 'shipping_address'}) }
         </ADDRESSTITLE>
         <div style={{marginTop: 25}}>
-          <AddressFrom updating={this.props.addressUpdating} address={address} editAddress={this.editAddress} showCancel={true} onCancel={this.close.bind(this)}/>
+          <AddressFrom needInitValidate={validate} updating={this.props.addressUpdating} address={address} editAddress={this.editAddress} showCancel={true} onCancel={this.close.bind(this)}/>
         </div>
 
       </ADDRESSBODY>

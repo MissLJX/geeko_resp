@@ -26,7 +26,7 @@ module.exports = {
     progress: true,
     proxy: {
       '/api': {
-        target: 'http://localhost:8080/boutiquefeel',
+        target: 'http://localhost:8080/wanna',
         pathRewrite: { '^/api': '' },
         secure: false
       }

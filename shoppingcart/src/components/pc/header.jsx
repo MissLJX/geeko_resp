@@ -196,7 +196,7 @@ const Currency = class extends React.Component {
   }
 }
 
-const Header = ({intl, lang, currency, currencies, changeLang}) => (
+const Header = ({intl, lang, currency, currencies, changeLang, hideTools}) => (
   <HEADER>
   	<div>
 	  	<div className="x-table __vm x-fh x-fw">
@@ -215,7 +215,8 @@ const Header = ({intl, lang, currency, currencies, changeLang}) => (
 		        </span>
 	  		</div>
 
-	  		<div className="x-cell __right">
+	  		{
+	  			!hideTools && <div className="x-cell __right">
 	  			<SELECT>
 	  				<span className="__title">{ currency }</span>
 	  				<div className="__displayer">
@@ -244,6 +245,8 @@ const Header = ({intl, lang, currency, currencies, changeLang}) => (
 	  				</div>
 	  			</SELECT>
 	  		</div>
+	  		}
+
 	  	</div>
   	</div>
   </HEADER>

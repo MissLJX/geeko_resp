@@ -25,7 +25,16 @@ import {
   GET_TRANSACTION,
   GET_ADDRESSES,
   UPDATE_ADDRESS, SET_ME, SET_COUPON_CODE,
-  SET_CHECKOUT, DLOCAL_CARDS} from './actions.js'
+  SET_CHECKOUT,
+  DLOCAL_CARDS,
+  CASH_METHOD_BR,
+  MONEY_TRANS_METHOD_BR,
+  CASH_METHOD_AR,
+  MONEY_TRANS_METHOD_AR,
+  CASH_METHOD_CL,
+  MONEY_TRANS_METHOD_CL,
+  SET_DOCUMENT
+} from './actions.js'
 
 const initialState = {
   lang: window.lang || 'en',
@@ -64,7 +73,14 @@ const initialState = {
   addressUpdating: false,
   couponCode: null,
   dlocal: null,
-  checkout: null
+  checkout: null,
+  brCS: storage.get('brCS'),
+  brMT: storage.get('brMT'),
+  arCS: storage.get('arCS'),
+  arMT: storage.get('arMT'),
+  clCS: storage.get('clCS'),
+  clMT: storage.get('clMT'),
+  document: null
 }
 
 const isEmpty = cart => !cart
@@ -90,7 +106,7 @@ const refresh = (state = initialState, action) => {
     case LOADING:
       return {...state, loading: true}
     case LOADED:
-      return {...state, loading: false, payType: getPaymethodType(action.values[0]), payMethod: getPaymethod(action.values[0]), paypal: action.values[1], empty: isEmpty(action.values[0]), cart: action.values[0], me: action.values[2], cpf: action.values[2].payCpf, email: action.values[2].communicationEmail}
+      return {...state, loading: false, payType: getPaymethodType(action.values[0]), payMethod: getPaymethod(action.values[0]), paypal: action.values[1], empty: isEmpty(action.values[0]), cart: action.values[0], me: action.values[2], cpf: action.values[2].payCpf, email: action.values[2].communicationEmail, document: action.values[2].document}
     case REFRESHING:
       return {...state, refreshing: true}
     case REFRESHED:
@@ -153,7 +169,21 @@ const refresh = (state = initialState, action) => {
     case 'SET_PAYPAL':
       return {...state, paypal: action.paypal}
     case DLOCAL_CARDS:
-      return {...state, dlocalcards: action.cards}
+      return {...state, creditcards: action.cards}
+    case CASH_METHOD_BR:
+      return {...state, brCS: action.method}
+    case MONEY_TRANS_METHOD_BR:
+      return {...state, brMT: action.method}
+    case CASH_METHOD_AR:
+      return {...state, arCS: action.method}
+    case MONEY_TRANS_METHOD_AR:
+      return {...state, arMT: action.method}
+    case CASH_METHOD_CL:
+      return {...state, clCS: action.method}
+    case MONEY_TRANS_METHOD_CL:
+      return {...state, clMT: action.method}
+    case SET_DOCUMENT:
+      return {...state, document: action.doc}
     default:
       return state
   }

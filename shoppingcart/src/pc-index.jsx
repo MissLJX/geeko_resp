@@ -94,9 +94,10 @@ const Index = class extends React.Component{
 
 		let _messages = getMessages(_lang)
 
+
 		return <IntlProvider locale={_lang} messages={_messages}>
 		<div>
-			<Header currencies={this.state.currencies} currency={this.state.currency} lang={_lang} changeLang={ ( lang ) => { this.props.SETLANG(lang) } }/>
+			<Header hideTools={this.props.history.location.pathname && this.props.history.location.pathname.indexOf('checkout') > 0} currencies={this.state.currencies} currency={this.state.currency} lang={_lang} changeLang={ ( lang ) => { this.props.SETLANG(lang) } }/>
 			<div>
 				<Switch>
 					<Route path={`${window.ctx || ''}/checkout/:orderId/credit`} component={CheckoutCredit}/>

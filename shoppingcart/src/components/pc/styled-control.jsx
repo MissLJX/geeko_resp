@@ -39,6 +39,11 @@ const FORMELEMENT = styled.div`
 		border: solid 1px #cacaca;
 	}
 
+	input[disabled], select[disabled]{
+		border-color: rgb(202,202,202);
+    color: rgb(202,202,202);
+	}
+
 
 `
 

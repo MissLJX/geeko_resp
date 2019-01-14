@@ -21,12 +21,19 @@ import { connect } from 'react-redux'
 import {fetchAll, refreshCart, selectItem, editing,
   edited, editItem, selectPay, CPF, EMAIL, getCreditCards,
   getMercadoCards, toggleCredit, setSecurityCode, setInstallments, fetchCoupons, deleteItem, deleteItems,
-  setMercadoInstallments, toggleCreditStatus, setAtmMethod, setTicketMethod, getDLocalCards} from '../store/actions.js'
+  setMercadoInstallments, toggleCreditStatus, setAtmMethod, setTicketMethod, getDLocalCards,setDocument,
+  setCashMethodBR,
+  setMoneyTransBR,
+  setCashMethodAR,
+  setMoneyTransAR,
+  setCashMethodCL,
+  setMoneyTransCL
+  } from '../store/actions.js'
 import Mask from '../components/mask.jsx'
 import _ from 'lodash'
 import PayMethodList from '../components/msite/paymethod-list.jsx'
 import {BigButton} from '../components/msite/buttons.jsx'
-import { useMercadocard, mercadopay, usePoint, useInsurance, creditpay, paypalpay, usecreditcard, movetooverseas, getMessage, placepaypal, givingCoupon, atmPay, ticketPay, getSafeCharge, getApacPay, apacPay, useMercadoCoupon, getDLocalPayLink } from '../api'
+import { payDLocal, useMercadocard, mercadopay, usePoint, useInsurance, creditpay, paypalpay, usecreditcard, movetooverseas, getMessage, placepaypal, givingCoupon, atmPay, ticketPay, getSafeCharge, getApacPay, apacPay, useMercadoCoupon, getDLocalPayLink, payCredit } from '../api'
 import {__route_root__, storage} from '../utils/utils.js'
 import {submit} from '../utils/common-pay.js'
 import {CountDownBlock} from '../components/msite/countdowns.jsx'
@@ -232,6 +239,27 @@ const mapDispatchToProps = (dispatch) => {
     },
     GETDLOCALCARDS: (payMethod) => {
       return dispatch(getDLocalCards(payMethod))
+    },
+    SETDOCUMENT: (document) => {
+      return dispatch(setDocument(document))
+    },
+    SETCSBR: (method) => {
+      return dispatch(setCashMethodBR(method))
+    },
+    SETMTBR: (method) => {
+      return dispatch(setMoneyTransBR(method))
+    },
+    SETCSAR: (method) => {
+      return dispatch(setCashMethodAR(method))
+    },
+    SETMTAR: (method) => {
+      return dispatch(setMoneyTransAR(method))
+    },
+    SETCSCL: (method) => {
+      return dispatch(setCashMethodCL(method))
+    },
+    SETMTCL: (method) => {
+      return dispatch(setMoneyTransCL(method))
     }
   }
 }
@@ -289,25 +317,33 @@ const ShoppingCart = class extends React.Component {
     this.props.FETCHCOUPONS()
     window.addEventListener('scroll', this.scrollhandle, false)
 
-    Mercadopago.getAllPaymentMethods((status, methods) => {
-      if (status === 200) {
-        const tickets = methods.filter(method => method.payment_type_id === 'ticket')
-        const atms = methods.filter(method => method.payment_type_id === 'atm')
 
-        if (tickets && tickets.length === 1) {
-          this.props.SETTICKETMETHOD(tickets[0].id)
+    if(window.Mercadopago){
+      Mercadopago.getAllPaymentMethods((status, methods) => {
+        if (status === 200) {
+          const tickets = methods.filter(method => method.payment_type_id === 'ticket')
+          const atms = methods.filter(method => method.payment_type_id === 'atm')
+
+          if (tickets && tickets.length === 1) {
+            this.props.SETTICKETMETHOD(tickets[0].id)
+          }
+
+          if (atms && atms.length === 1) {
+            this.props.SETATMMETHOD(atms[0].id)
+          }
+
+          this.setState({
+            ticketMethods: tickets,
+            atmMethods: atms
+          })
         }
+      })
+    }
 
-        if (atms && atms.length === 1) {
-          this.props.SETATMMETHOD(atms[0].id)
-        }
+    
 
-        this.setState({
-          ticketMethods: tickets,
-          atmMethods: atms
-        })
-      }
-    })
+
+
   }
 
   componentWillUnmount () {
@@ -499,11 +535,7 @@ const ShoppingCart = class extends React.Component {
         const {transactionId, success, details} = result
 
         if (success) {
-          if(siteType === 'new'){
-            window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/credit-card?order_number=${transactionId}`
-          }else{
-            window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-          }
+          window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
         } else {
           alert(details)
         }
@@ -530,16 +562,15 @@ const ShoppingCart = class extends React.Component {
 
       // ticketPay(this.props.ticketMethod).then(({result}) => {
       ticketPay('oxxo').then(({result}) => {
-        const {transactionId, success, details} = result
+        const {transactionId, success, details, orderId} = result
 
         if (success) {
-          if(siteType === 'new'){
-            window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/credit-card?order_number=${transactionId}`
-          }else{
-            window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-          }
+          window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
         } else {
           alert(details)
+          if (orderId) {
+            this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
+          }
         }
 
         this.setState({
@@ -558,13 +589,13 @@ const ShoppingCart = class extends React.Component {
 
       if(payMethod === '23'){
         const {cpf} = this.props
-        this.apac.validateAll()
-        if (this.apacBB.context._errors && this.apacBB.context._errors.length) {
-          this.setState({
-            checking: false
-          })
-          return
-        }
+        // this.apac.validateAll()
+        // if (this.apacBB.context._errors && this.apacBB.context._errors.length) {
+        //   this.setState({
+        //     checking: false
+        //   })
+        //   return
+        // }
 
         this.apacPay(payMethod, this.props.cpf, (result) => {
           this.setState({
@@ -605,9 +636,14 @@ const ShoppingCart = class extends React.Component {
       this.setState({
         checking: true
       })
+
+
+      this.props.TOGGLECREDIT(true)
       this.props.GETDLOCALCARDS(payMethod).then( cards => {
         if(!cards || cards.length < 1){
            this.props.history.push(`${window.ctx || ''}${__route_root__}/dlocal`)
+        }else{
+          
         }
         this.setState({
           checking: false
@@ -618,7 +654,91 @@ const ShoppingCart = class extends React.Component {
           checking: false
         })
       })
+
       
+      
+    }else if(payType === '13'){
+      this.setState({
+        checking: true
+      })
+      payDLocal({payMethod, paymentMethodId: 'BL'}).then(data => data.result).then( ({transactionId, success, details, orderId}) => {
+        if (success) {
+          
+          window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
+          
+        } else {
+          alert(details)
+          if (orderId) {
+            this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
+          }
+        }
+
+        this.setState({
+          checking: false
+        })
+      } ).catch(data => {
+        alert(data.result)
+        this.setState({
+          checking: false
+        })
+      })
+    }else if(payType === '14'){
+      this.setState({
+        checking: true
+      })
+      const paymentMethodId = this.getTcMethod()
+      payDLocal({payMethod, paymentMethodId}).then(data => data.result).then( ({transactionId, success, details, orderId}) => {
+        if (success) {
+          
+          window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
+          
+        } else {
+          alert(details)
+          if (orderId) {
+            this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
+          }
+        }
+
+        this.setState({
+          checking: false
+        })
+      } ).catch(data => {
+        alert(data.result)
+        this.setState({
+          checking: false
+        })
+      })
+    }else if(payType === '15' || payType === '16' || payType === '17' || payType === '18'){
+      this.setState({
+        checking: true
+      })
+      const paymentMethodId = this.getTcMethod()
+
+      this.documentForm.validateAll()
+
+      if(!paymentMethodId || !this.props.document) return
+
+      payDLocal({payMethod, paymentMethodId, document: this.props.document}).then(data => data.result).then( ({transactionId, success, details, orderId}) => {
+        if (success) {
+          
+          window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
+          
+        } else {
+          alert(details)
+          if (orderId) {
+            this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
+          }
+        }
+
+        this.setState({
+          checking: false
+        })
+      } ).catch(data => {
+        alert(data.result)
+        this.setState({
+          checking: false
+        })
+      })
     }
 
 
@@ -626,6 +746,65 @@ const ShoppingCart = class extends React.Component {
       givingCoupon()
     }
     window.eventcheck(cart, payMethod)
+  }
+
+  tcClickHandle (method) {
+    const {payMethod} = this.props.cart
+    switch(payMethod){
+      case '25':
+        this.props.SETCSBR(method)
+        storage.add('brCS', method, 365 * 24 * 60 * 60)
+        break
+      case '29':
+        this.props.SETMTBR(method)
+        storage.add('brMT', method, 365 * 24 * 60 * 60)
+        break
+      case '27':
+        this.props.SETCSAR(method)
+        storage.add('arCS', method, 365 * 24 * 60 * 60)
+        break
+      case '28':
+        this.props.SETMTAR(method)
+        storage.add('arMT', method, 365 * 24 * 60 * 60)
+        break
+      case '30':
+        this.props.SETCSCL(method)
+        storage.add('clCS', method, 365 * 24 * 60 * 60)
+        break
+      case '31':
+        this.props.SETMTCL(method)
+        storage.add('clMT', method, 365 * 24 * 60 * 60)
+        break
+      default:
+        break
+
+    }
+  }
+
+  getTcMethod(){
+    const {payMethod} = this.props.cart
+    switch(payMethod){
+      case '25':
+        return this.props.brCS
+      case '29':
+        return this.props.brMT
+      case '27':
+        return this.props.arCS
+      case '28':
+        return this.props.arMT
+      case '30':
+        return this.props.clCS
+      case '31':
+        return this.props.clMT
+      default:
+        break
+
+    }
+  }
+
+  ticketClickHandle (method) {
+    this.props.SETTICKETMETHOD(method.id)
+    storage.add('ticketMethod', method.id, 365 * 24 * 60 * 60)
   }
 
   getApacPay(payMethod, cpf, fail){
@@ -645,17 +824,18 @@ const ShoppingCart = class extends React.Component {
 
   apacPay(payMethod, cpf, fail){
     apacPay({payMethod, cpfNumber: cpf}).then(({result}) => {
-      const {isFree, transactionId, success,details,solutions} = result
+      const {isFree, orderId, transactionId, success,details,solutions} = result
       if (isFree) {
         window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
       } else {
         if( success ){
-          if(siteType === 'new'){
-            window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/credit-card?order_number=${transactionId}`
-          }else{
+          
             window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-          }
+          
         }else{
+          if (orderId) {
+            this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
+          }
           fail(details)
         }
       }
@@ -712,12 +892,7 @@ const ShoppingCart = class extends React.Component {
     })
 
     placepaypal().then(({result}) => {
-      if(siteType === 'new'){
-        window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/paypal`
-      }else{
-        // window.location.href = `${window.ctx || ''}/v7/orderConfirm/anon/order-confirm`
-         window.location.href = `${window.ctx || ''}/order-confirm/${result}`
-      }
+      window.location.href = `${window.ctx || ''}/order-confirm/${result}`
     }).catch(({result}) => {
       this.setState({
         paypaling: false
@@ -742,15 +917,16 @@ const ShoppingCart = class extends React.Component {
       mercadopay({
         token: response.id,
         installments: this.props.mercadoinstallments
-      }).then(data => data.result).then(({success, transactionId, details, solutions}) => {
+      }).then(data => data.result).then(({success, transactionId, orderId, details, solutions}) => {
         if (success) {
-          if(siteType === 'new'){
-            window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/credit-card?order_number=${transactionId}`
-          }else{
-            window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-          }
+          
+          window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
+          
         } else {
           alert(details)
+          if (orderId) {
+            this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
+          }
         }
         this.setState({
           checking: false
@@ -780,8 +956,13 @@ const ShoppingCart = class extends React.Component {
         break
       case 'installments':
         this.props.SETINSTALLMENTS(value)
+        break
       case 'mercado-installments':
         this.props.SETMERCADOINTALLMENTS(value)
+        break
+      case 'document':
+        this.props.SETDOCUMENT(value)
+        break
       default:
         break
     }
@@ -944,25 +1125,36 @@ const ShoppingCart = class extends React.Component {
           checking: false
         })
       }
+    }else if(this.props.payType === '12'){
+
+      const { document, payType, payMethod } = this.props
+
+      if(payMethod !== '24'){
+        dlocalref.validateAll()
+        if(document){
+          this.payCredit({installments, document})
+        }
+      }else{
+        this.payCredit({installments})
+      }
+
+      
     } else {
       this.payCredit({payCpf: cpf, payInstallments: installments})
     }
   }
 
   payCredit (params) {
-    creditpay(params).then(data => data.result).then(({success, transactionId, details, solutions}) => {
+    creditpay(params).then(data => data.result).then(({success, transactionId, details, orderId, solutions}) => {
       if (success) {
-        if(siteType === 'new'){
-          window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/credit-card?order_number=${transactionId}`
-        }else{
-          window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-        }
-
-        // this.props.history.push({
-        //   pathname: `${window.ctx || ''}/order-confirm/${transactionId}`
-        // })
+        
+        window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
+        
       } else {
         alert(details + '\n' + solutions)
+        if (orderId) {
+          this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
+        }
       }
       this.setState({
         checking: false
@@ -994,15 +1186,20 @@ const ShoppingCart = class extends React.Component {
         refreshing: true
       })
       getSafeCharge().then(({result}) => {
-        const {isFree, payURL, params, transactionId} = result
+        const {isFree, payURL, params, transactionId, orderId} = result
         if (isFree) {
           window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
         } else {
           // window.location.href = `${payURL}?${qs.stringify(params, true)}`
+          storage.add('temp-order', orderId,  1 * 60 * 60)
           submit(result)
         }
-      }).catch(({result}) => {
-        alert(data.result)
+      }).catch((data) => {
+        if(data.result){
+          alert(data.result)
+        }else{
+          alert(data)
+        }
         this.setState({
           refreshing: false
         })
@@ -1012,10 +1209,11 @@ const ShoppingCart = class extends React.Component {
         checking: true
       })
       getApacPay({payMethod:this.props.payMethod, cpfNumber: this.props.cpf}).then(({result}) => {
-        const {isFree, transactionId} = result
+        const {isFree, transactionId, orderId} = result
         if (isFree) {
           window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
         } else {
+          storage.add('temp-order', orderId,  1 * 60 * 60)
           submit(result)
         }
       }).catch(({result}) => {
@@ -1024,6 +1222,10 @@ const ShoppingCart = class extends React.Component {
           checking: false
         })
       })
+    } else if(this.props.payMethod === '24'){
+  
+      this.props.history.push(`${window.ctx || ''}${__route_root__}/dlocal`)
+
     } else {
       const path = {
         pathname: `${window.ctx || ''}${__route_root__}/credit-card`,
@@ -1202,10 +1404,10 @@ const ShoppingCart = class extends React.Component {
 
   render () {
     const {cart, loading, empty, editing, isCreditShow, mercadocards, creditcards, noCard, intl, noCreditCard} = this.props
-    
+    let tcMethod 
 
 
-    let formatedData, invalidItems,cancheckout,hasLocalItems, sendCouponMessage, couponcountdown, totalCount=0, hasOverseas, hasQuickPay
+    let country, formatedData, invalidItems,cancheckout,hasLocalItems, sendCouponMessage, couponcountdown, totalCount=0, hasOverseas, hasQuickPay
 
     if(cart){
       formatedData = this.formatData(cart)
@@ -1219,6 +1421,9 @@ const ShoppingCart = class extends React.Component {
       let validateOverseasItems = this.getValidItems(cart.shoppingCartProductsByOverseas) 
       hasOverseas = validateOverseasItems && validateOverseasItems.length > 0
       hasQuickPay = cart.payMethodList && cart.payMethodList.length && cart.payMethodList.find( m => m.id === "1")
+
+      country = this.props.cart.shippingDetail && this.props.cart.shippingDetail.country ? this.props.cart.shippingDetail.country.value : window.__country
+      tcMethod = this.getTcMethod()
     }
 
 
@@ -1459,6 +1664,12 @@ const ShoppingCart = class extends React.Component {
                       setCouponHandle={ this.useMercadoCoupon.bind(this) }
                       couponCode={this.props.couponCode}
                       mercadoCouponClickHandle={this.mercadoCouponClickHandle.bind(this)}
+                      tcClickHandle={this.tcClickHandle.bind(this)}
+                      tcMethod={tcMethod}
+
+                      documentForm = { c => this.documentForm = c}
+                      documentRef = { c => this.documentRef = c}
+                      document = { this.props.document }
                       />
                   </div>
                 </Box>
@@ -1620,13 +1831,14 @@ const ShoppingCart = class extends React.Component {
                   toggleBack= {() => {
                     this.props.TOGGLECREDITSTATUS(this.props.creditstatus === 0 ? 1 : 0)
                   }}
-                />
+                  
+                /> 
               </React.Fragment>
             )
           }
 
           {
-            isCreditShow && (this.props.payMethod === '3' || this.props.payMethod === '17' || this.props.payMethod === '18' || this.props.payMethod === '22') && creditcards && creditcards.length && (
+            isCreditShow && (this.props.payMethod === '3' || this.props.payMethod === '17' || this.props.payMethod === '18' || this.props.payMethod === '22' || this.props.payType === '12') && creditcards && creditcards.length && (
               <React.Fragment>
                 <Mask/>
                 <CreditCard
@@ -1650,6 +1862,9 @@ const ShoppingCart = class extends React.Component {
                   toggleBack= {() => {
                     this.props.TOGGLECREDITSTATUS(this.props.creditstatus === 0 ? 1 : 0)
                   }}
+                  country={country}
+                  document={this.props.document}
+                  dlocalref = { c => this.dlocalref = c }
                 />
               </React.Fragment>
             )

@@ -45,6 +45,17 @@ export const TICKET_METHOD = 'TICKET_METHOD'
 export const SET_COUPON_CODE = 'SET_COUPON_CODE'
 export const DLOCAL_CARDS = 'DLOCAL_CARDS'
 
+export const CASH_METHOD_BR = 'CASH_METHOD_BR'
+export const MONEY_TRANS_METHOD_BR = 'MONEY_TRANS_METHOD_BR'
+
+export const CASH_METHOD_AR = 'CASH_METHOD_AR'
+export const MONEY_TRANS_METHOD_AR = 'MONEY_TRANS_METHOD_AR'
+
+export const CASH_METHOD_CL = 'CASH_METHOD_CL'
+export const MONEY_TRANS_METHOD_CL = 'MONEY_TRANS_METHOD_CL'
+
+export const SET_DOCUMENT = 'SET_DOCUMENT'
+
 // order confirm
 export const GET_TRANSACTION_PAGE = 'GET_TRANSACTION_PAGE'
 export const GET_TRANSACTION = 'GET_TRANSACTION'
@@ -229,6 +240,7 @@ export const fetchAll = () => {
       } else {
         dispatch(loaded(values))
       }
+      return values
     })
   }
 }
@@ -359,6 +371,7 @@ export const getDLocalCards = (payMethod) => {
   return dispatch => {
     return getDCards({payMethod}).then(data => data.result).then(cards => {
       dispatch(setDLocalCards(cards))
+      return cards
     })
   }
 }
@@ -466,5 +479,54 @@ export const fetchPaypalUrl = () => {
       })
       return paypal
     })
+  }
+}
+
+export const setCashMethodBR = (method) => {
+  return {
+    type: CASH_METHOD_BR,
+    method
+  }
+}
+
+export const setMoneyTransBR = (method) => {
+  return {
+    type: MONEY_TRANS_METHOD_BR,
+    method
+  }
+}
+
+export const setCashMethodAR = (method) => {
+  return {
+    type: CASH_METHOD_AR,
+    method
+  }
+}
+
+export const setMoneyTransAR = (method) => {
+  return {
+    type: MONEY_TRANS_METHOD_AR,
+    method
+  }
+}
+
+export const setCashMethodCL = (method) => {
+  return {
+    type: CASH_METHOD_CL,
+    method
+  }
+}
+
+export const setMoneyTransCL = (method) => {
+  return {
+    type: MONEY_TRANS_METHOD_CL,
+    method
+  }
+}
+
+export const setDocument = (doc) => {
+  return {
+    type: SET_DOCUMENT,
+    doc
   }
 }

@@ -18,7 +18,7 @@ import {OrderAddress} from '../components/pc/address.jsx'
 import Icon from '../components/icon.jsx'
 import CardList from '../components/pc/card-list.jsx'
 
-import {fetchAll, getCreditCards, getMercadoCards, setMercadoInstallments, setSecurityCode} from '../store/actions.js'
+import {fetchAll, getCreditCards, getMercadoCards, setMercadoInstallments, setSecurityCode, setInstallments, setDocument} from '../store/actions.js'
 
 import { BigButton } from '../components/msite/buttons.jsx'
 
@@ -121,7 +121,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     INIT: () => {
-      dispatch(fetchAll())
+      return dispatch(fetchAll())
     },
     GETCREDITCARDS: (payMethod, multi) => {
       return dispatch(getCreditCards(payMethod, multi))
@@ -132,8 +132,14 @@ const mapDispatchToProps = (dispatch) => {
     SETMERCADOINTALLMENTS: (installments) => {
       dispatch(setMercadoInstallments(installments))
     },
+    SETINSTALLMENTS: (installments) => {
+      dispatch(setInstallments(installments))
+    },
     SETSECURITYCODE: (securityCode) => {
       dispatch(setSecurityCode(securityCode))
+    },
+    SETDOCUMENT: (document) => {
+      return dispatch(setDocument(document))
     }
   }
 }
@@ -151,9 +157,12 @@ const MercadoPago = class extends React.Component {
 const Credit = class extends React.Component {
   constructor (props) {
     super(props)
+
+    let _frame = this.getFrame()
+
     this.state = {
     	showFrame: false,
-    	frameUrl: __Frame__[this.props.payMethod] ? __Frame__[this.props.payMethod].url : null,
+    	frameUrl: _frame ? _frame.url : '#',
     	frameLoading: true,
     	showMercado: false,
       noCard: false,
@@ -177,6 +186,13 @@ const Credit = class extends React.Component {
         break
       case 'mercado-installments':
         this.props.SETMERCADOINTALLMENTS(value)
+        break
+      case 'installments':
+        this.props.SETINSTALLMENTS(value)
+        break
+      case 'document':
+        this.props.SETDOCUMENT(value)
+        break
       default:
         break
     }
@@ -216,15 +232,14 @@ const Credit = class extends React.Component {
       mercadopay({
         token: response.id,
         installments: this.props.mercadoinstallments
-      }).then(data => data.result).then(({success, transactionId, details, solutions}) => {
+      }).then(data => data.result).then(({success, transactionId, details, solutions, orderId}) => {
         if (success) {
-          if (siteType === 'new') {
-            window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/credit-card?order_number=${transactionId}`
-          } else {
-            window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-          }
+          window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
         } else {
           alert(details)
+          if (orderId) {
+            this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
+          }
         }
         this.setState({
           checking: false
@@ -284,10 +299,11 @@ const Credit = class extends React.Component {
         })
       })
     } else {
+      let _frame = this.getFrame()
       this.setState({
         frameLoading: !this.state.showFrame,
         showFrame: !this.state.showFrame,
-        frameUrl: __Frame__[this.props.payMethod].url
+        frameUrl: _frame ? _frame.url : '#'
       })
 
       setTimeout(() => {
@@ -311,28 +327,45 @@ const Credit = class extends React.Component {
   }
 
   checkout (evt) {
-    const {cpf, installments} = this.props
-    if (this.props.payMethod === '19') {
+    const {cpf, installments, cart, document} = this.props
+
+    const { payMethod } = cart
+
+    if (payMethod === '19') {
       this.checkmercado(evt)
+    } else if (payMethod === '24' || payMethod === '26' || payMethod === '32') {
+      this.payCredit({installments, payMethod, document})
     } else {
       this.payCredit({payCpf: cpf, payInstallments: installments})
     }
   }
 
-  payDLocal (token) {
+  payDLocal (params) {
     this.setState({
       checking: true
     })
-    return payDLocal({payMethod: this.props.payMethod, token}).then(({success, transactionId, details, solutions}) => {
+    payDLocal(params).then(data => data.result).then(({success, transactionId, details, solutions, orderId}) => {
       if (success) {
-        if (siteType === 'new') {
-          window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/credit-card?order_number=${transactionId}`
-        } else {
-          window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-        }
+        window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
+
+        // this.props.history.push({
+        //   pathname: `${window.ctx || ''}/order-confirm/${transactionId}`
+        // })
       } else {
         alert(details + '\n' + solutions)
+        this.setState({
+          frameUrl: this.state.frameUrl + '&_=' + new Date().getTime()
+
+        })
+        if (orderId) {
+          this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
+        }
       }
+      this.setState({
+        checking: false
+      })
+    }).catch(({result}) => {
+      alert(result)
       this.setState({
         checking: false
       })
@@ -343,13 +376,9 @@ const Credit = class extends React.Component {
     this.setState({
       checking: true
     })
-    creditpay(params).then(data => data.result).then(({success, transactionId, details, solutions}) => {
+    creditpay(params).then(data => data.result).then(({success, transactionId, details, solutions, orderId}) => {
       if (success) {
-        if (siteType === 'new') {
-          window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/credit-card?order_number=${transactionId}`
-        } else {
-          window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-        }
+        window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
 
         // this.props.history.push({
         //   pathname: `${window.ctx || ''}/order-confirm/${transactionId}`
@@ -359,6 +388,9 @@ const Credit = class extends React.Component {
         this.setState({
           frameUrl: this.state.frameUrl + '&_=' + new Date().getTime()
         })
+        if (orderId) {
+          this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
+        }
       }
       this.setState({
         checking: false
@@ -379,13 +411,18 @@ const Credit = class extends React.Component {
   componentWillMount () {
   	const { cart, INIT, payType, payMethod, GETCREDITCARDS, GETMERCADOCARDS, cpf, installments } = this.props
   	if (!cart) {
-  		INIT()
-  	}
-
-  	this.handleCreditCards()
-
-    window.dLocalPay = (token, errBack) => {
-      this.payDLocal(token).catch(({result}) => errBack(result))
+  		INIT().then((values) => {
+        window.dLocalPay = (result, errBack) => {
+          const _cart = values[0]
+          this.payDLocal({...result, payMethod: _cart.payMethod}).catch(({result}) => errBack(result))
+        }
+        this.handleCreditCards()
+      })
+  	} else {
+      window.dLocalPay = (result, errBack) => {
+        this.payDLocal({...result, payMethod: cart.payMethod}).catch(({result}) => errBack(result))
+      }
+      this.handleCreditCards()
     }
 
   	window.triggerPlace = () => {
@@ -406,7 +443,8 @@ const Credit = class extends React.Component {
   }
 
   handleCreditCards () {
-    const { payType, payMethod, GETCREDITCARDS, GETMERCADOCARDS } = this.props
+    const { payType, cart, GETCREDITCARDS, GETMERCADOCARDS } = this.props
+    const { payMethod } = cart
     if (payMethod === '3' || payMethod === '18') {
       let payMethods = ['3', '18']
       return GETCREDITCARDS(payMethods, true).then(cards => {
@@ -455,7 +493,8 @@ const Credit = class extends React.Component {
     evt.nativeEvent.stopImmediatePropagation()
     const deletor = card.quickpayRecord.payMethod === '19' ? removeMercadoCard : deletecreditcard
     const cardId = card.quickpayRecord.payMethod === '19' ? card.quickpayRecord.quickpayId : card.quickpayRecord.id
-    const { payMethod } = this.props
+    const { cart } = this.props
+    const { payMethod } = cart
     this.setState({
       showDeleteConfirm: true,
       cardDelete: () => {
@@ -492,25 +531,62 @@ const Credit = class extends React.Component {
   }
 
   payMercado (params) {
-    return mercadopay(params).then(data => data.result).then(({success, transactionId, details, solutions}) => {
+    return mercadopay(params).then(data => data.result).then(({success, transactionId, orderId, details, solutions}) => {
       if (success) {
-        if (siteType === 'new') {
-          window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/credit-card?order_number=${transactionId}`
-        } else {
-          // window.location.href = `${window.ctx || ''}/v7/order/confirm/web/ocean?transactionId=${transactionId}`
-          window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-        }
+        window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
       } else {
         alert(details)
+        if (orderId) {
+          this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
+        }
       }
       return transactionId
     })
+  }
+
+  getFrame () {
+    const { cart } = this.props
+
+    if (cart) {
+      const { payMethod, payMethodList } = cart
+      const payMethodInfo = payMethodList.find(p => p.id === payMethod)
+
+      let _paymethod
+      if (payMethodInfo) {
+        if (payMethodInfo.type === '12') {
+          _paymethod = '24'
+        } else {
+          _paymethod = payMethodInfo.id
+        }
+      } else {
+        _paymethod = payMethod
+      }
+
+      let __frame = __Frame__[_paymethod]
+      let { orderSummary } = cart
+
+      let currency = cart.orderSummary.orderTotal.currency
+      let amount = cart.orderSummary.orderTotal.amount
+      let country = cart.shippingDetail.country ? cart.shippingDetail.country.value : window.__country
+
+      if (_paymethod === '24') {
+        return {...__frame, url: `${__frame.url}?currency=${currency}&country=${country}&amount=${amount}`}
+      } else {
+        return __frame
+      }
+    }
   }
 
   render () {
   	const {cart, loading, empty, intl, payType, creditcards, mercadocards} = this.props
 
   	const cards = payType === '7' ? mercadocards : creditcards
+
+    const __Frame = this.getFrame()
+    let country
+    if (cart) {
+      country = cart.shippingDetail && cart.shippingDetail.country ? cart.shippingDetail.country.value : window.__country
+    }
 
   	return loading ? <Loading/> : (empty ? <Empty/> : cart && <div>
   		{(this.props.refreshing || this.state.refreshing) && <Refreshing/>}
@@ -546,7 +622,7 @@ const Credit = class extends React.Component {
                           <img alt="loading" src="https://dgzfssf1la12s.cloudfront.net/site/upgrade/20180316/loading.gif"/>
                         </div>
                       }
-                      <iframe onLoad={ this.frameLoadHandle.bind(this) } style={{height: __Frame__[ this.props.payMethod ].height, width: '100%'}} src={this.state.frameUrl}/>
+                      <iframe onLoad={ this.frameLoadHandle.bind(this) } style={{height: __Frame.height, width: '100%'}} src={__Frame.url}/>
                     </div>
 
                   }
@@ -560,6 +636,8 @@ const Credit = class extends React.Component {
                     handleInputChange = { this.handleInputChange }
                     deleteCardHandle = { this.deleteCardHandle.bind(this) }
                     selectCardHandle = { this.selectCardHandle.bind(this) }
+                    country={country}
+                    document={this.props.document}
                   />
 
                   { this.state.checking ? <CREDITBTN style={{marginTop: 15}}>{intl.formatMessage({id: 'please_wait'})}...</CREDITBTN> : <CREDITBTN style={{marginTop: 15}} onClick={ payType === '7' ? this.showMercadoHandle.bind(this) : this.showFrameHandle.bind(this) }>+ <FormattedMessage id="use_new_card" /></CREDITBTN>}
@@ -603,7 +681,7 @@ const Credit = class extends React.Component {
 	  		this.state.showFrame && <Modal onClose={ this.showFrameHandle.bind(this) }>
 	  			<CREDITMODAL>
 	  				<div className="__title">{intl.formatMessage({id: 'use_new_card'})}</div>
-	  				<iframe onLoad={ this.frameLoadHandle.bind(this) } style={{height: __Frame__[ this.props.payMethod ].height}} className="__frame" src={this.state.frameUrl}/>
+	  				<iframe onLoad={ this.frameLoadHandle.bind(this) } style={{height: __Frame.height}} className="__frame" src={__Frame.url}/>
 
 	  				{
 	  					this.state.frameLoading && <div className="__loading">
