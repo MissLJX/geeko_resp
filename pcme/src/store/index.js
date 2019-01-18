@@ -84,10 +84,12 @@ const state = {
     tickets : [],
     ticket:[],
     ticket_con:[],
+    ticket_sub:[],
     ticketid:'',
     shareurl:'',
     logistics:[],
-    packagelogistics:[]
+    packagelogistics:[],
+    cancelReasons:[]
 }
 const getters = {
     me: state => state.me,
@@ -157,10 +159,13 @@ const getters = {
     tickets: state => state.tickets,
     ticket: state => state.ticket,
     ticket_con: state => state.ticket_con,
+    ticket_sub: state => state.ticket_sub,
     ticketid:state => state.ticketid,
     shareurl:state => state.shareurl,
     logistics: state => state.logistics,
     packagelogistics: state => state.packagelogistics,
+
+    cancelReasons:state => state.cancelReasons
 }
 const mutations = {
     [types.INIT_ME](state, me){
@@ -366,6 +371,10 @@ const mutations = {
     [types.ME_ADD_ADDRESS](state, address){
         state.addresses.unshift(address)
     },
+    //cancel-order-reasons
+    [types.GLOBAL_CANCEL_REASONS](state,cancelReasons){
+        state.cancelReasons = cancelReasons
+    },
     //change-email
     [types.ME_CHANGE_EMAIL](state, email){
         state.me.communicationEmail = email
@@ -421,6 +430,9 @@ const mutations = {
     },
     [types.GLOBAL_GET_TICKET_ID](state,ticketid){
         state.ticketid =  ticketid
+    },
+    [types.GLOBAL_GET_TICKET_SUB](state,ticket_sub){
+        state.ticket_sub =  _.cloneDeep(ticket_sub)
     },
     [types.ME_SHARE_URL](state,shareurl){
         state.shareurl = shareurl
@@ -495,7 +507,7 @@ const actions = {
         if (state.allDone) return;
         commit(types.HOME_LOADING_ALL, true);
 
-        return api.getOrders(state.allSkip, 'get-orders').then( orders => {
+        return api.getOrders(state.allSkip, 'get-orders2').then( orders => {
             if (orders && orders.length > 0) {
                 commit(types.HOME_ORDERS_ALL, orders);
                 commit(types.HOME_ORDER_ALL_SKIP, limit);
@@ -640,8 +652,8 @@ const actions = {
     confirmOrder({commit},id){
         return api.confirmOrder(id)
     },
-    cancelOrder({commit},id){
-        return api.cancelOrder(id)
+    cancelOrder({commit},{id,reason}){
+        return api.cancelOrder(id,reason)
     },
     //coupons
     getCoupons({commit}){
@@ -746,6 +758,11 @@ const actions = {
     deleteAddress({commit}, {id}){
         return api.deleteAddress(id).then(() => {
             commit(types.ME_DELETE_ADDRESS, id)
+        })
+    },
+    getCancelOrderReason({commit}){
+        api.getCancelOrderReason().then((reasons)=>{
+            commit(types.GLOBAL_CANCEL_REASONS,reasons)
         })
     },
     getCountries({commit}){
@@ -861,6 +878,7 @@ const actions = {
                 commit(types.GLOBAL_GET_TICKET, ticket.order)
                 commit(types.GLOBAL_GET_TICKET_CON, ticket.ticket)
                 commit(types.GLOBAL_GET_TICKET_ID, ticket.order.id)
+                commit(types.GLOBAL_GET_TICKET_SUB, ticket.subjectSelections)
             }
         })
     },

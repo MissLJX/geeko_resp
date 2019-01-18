@@ -156,6 +156,9 @@
                     td{
                         text-overflow:ellipsis;
                         overflow:hidden;
+                        white-space: nowrap;
+                        max-width: 300px;
+                        padding-right: 49px;
                     }
                     td:first-child{
                         padding-left: 37px;

@@ -153,5 +153,6 @@ export default {
     review:'Rezension',
     paynow:'ZAHL JETZT',
     repurchase:'Rückkauf',
-    remaining:'Restliche Zahlungszeit'
+    remaining:'Restliche Zahlungszeit',
+    trackingDetailInfo:'Tracking-Detailinformationen'
 }

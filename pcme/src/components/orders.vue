@@ -326,12 +326,12 @@
                         setTimeout(() => {
                             this.isAddProducts = false;
                         }, 2000);
-                    }).catch((e) => {
-                        this.isAddProductstTip = 'Add Failed'
-                        this.isAddProducts = true;
-                        setTimeout(() => {
-                            this.isAddProducts = false;
-                        }, 2000);
+
+                        if(window.name === 'joyshoetique'){
+                            window.ninimour.shoppingcartutil.notify(true);
+                        }else{
+                            window.notifyMinicart();
+                        }
                     })
                 }
             }

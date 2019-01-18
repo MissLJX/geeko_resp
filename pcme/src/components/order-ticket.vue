@@ -11,9 +11,10 @@
             </div>
             <div class="help">
                 <h3>{{$t('howcanwehelp')}}</h3>
-                <select v-model="selected">
-                    <option v-for="option in options" v-bind:value="option.value">
-                        {{ option.text }}
+                <select v-model="selected" :class="{'redBorder':isRequired}" @change="isRequired=false">
+                    <option disabled="disabled" value="666">Please select your question type</option>
+                    <option v-for="option in ticket_sub" :value="option.value">
+                        {{ option.label }}
                     </option>
                 </select>
                 <span>{{$t('Expectedtime')}}</span>
@@ -71,7 +72,10 @@
                 <div class="rate-star" v-if="showRater">
                     <div class="rate-positive" >
                         <div class="rate-tit">{{$t("pleaserateMyService")}}</div>
-                        <star-list id="stars" :score="rateData.rate" @star="starClickHandle"/>
+                        <div class="rate-flex">
+                            <div class="box" :class="{'like-active': this.rateData.rate===5}" @click="starClickHandle(5)"><i class="iconfont">&#xe756;</i>Satisfied</div>
+                             <div class="box" :class="{'unlike-active': this.rateData.rate===1}" @click="starClickHandle(1)"><i class="iconfont">&#xe757;</i>Unsatisfied</div>
+                        </div>
                         <textarea v-model="rateData.message" style="resize:none;padding: 10px;height: 84px;" maxlength="500" :placeholder="$t('ratecontent')"></textarea>
                         <div class="rate-btn" @click="sendRateData">{{$t("confirm")}}</div>
                         <div class="rate-absolute"></div>
@@ -85,7 +89,6 @@
 </template>
 
 <script>
-    import GeekoSelect from './geeko-select';
     import {mapGetters,mapActions } from 'vuex';
     import * as utils from '../utils/geekoutil';
     import StarList from '../components/star-list.vue';
@@ -93,8 +96,9 @@
     export default {
         data (){
             return{
-                selected: '0',
-                options: [
+                selected: '666',
+                isRequired:false,
+                /*options: [
                     { text: this.$t('sizecolorpre'), value: '0' },
                     { text: this.$t('changeshippingaddress'), value: '2' },
                     { text: this.$t('shippingstatus'), value: '3' },
@@ -103,7 +107,7 @@
                     { text: this.$t('returnorexchange'), value: '6' },
                     { text: this.$t('cancelorder'), value: '8' },
                     { text: this.$t('others'), value: '7' },
-                ],
+                ],*/
                 msg:'',
                 addticket:'',
                 showRater:false,
@@ -119,7 +123,7 @@
             'star-list': StarList,
         },
         computed: {
-            ...mapGetters(['ticket','ticket_con','ticketid']),
+            ...mapGetters(['ticket','ticket_con','ticketid','ticket_sub']),
             baseHeaderUrl() {
                 return 'https://dgzfssf1la12s.cloudfront.net/site/pc/icon35.png';
             },
@@ -132,6 +136,9 @@
                 return 'https://dgzfssf1la12s.cloudfront.net/icon/support.jpg'
             },
             canBeRated(){
+                if(this.ticket_con && this.ticket_con.subject){
+                    this.selected = this.ticket_con.subject
+                }
                 if(this.ticket_con && this.ticket_con.canBeRated){
                     this.rateData.rate = this.ticket_con && this.ticket_con.ticketRateService ? this.ticket_con.ticketRateService.rate : 5;
                     this.rateData.message = this.ticket_con && this.ticket_con.ticketRateService ? this.ticket_con.ticketRateService.message : ''
@@ -139,8 +146,6 @@
                 }
                 return this.ticket_con && this.ticket_con.canBeRated
             },
-        },
-        created() {
         },
         methods: {
             getDate(paymentTime){
@@ -182,9 +187,12 @@
                 }else{
                     formData.append("operaId",this.ticket.id)
                 }
-
-                formData.append("subject",this.selected)
-
+                if(this.selected && this.selected !== '666'){
+                    formData.append("subject",this.selected)
+                }else{
+                    this.isRequired = true
+                    return ''
+                }
                 this.$store.dispatch('addTicket', formData).then(() => {
                     this.$store.dispatch('getTicket',this.ticketid)
                     this.msg = ''
@@ -196,7 +204,8 @@
                 return 'https://dgzfssf1la12s.cloudfront.net/ticket/'+url
             },
             starClickHandle(data){
-                this.rateData.rate = Number(data.star);
+                this.rateData.rate = data;
+                console.log(this.rateData.rate)
             },
             sendRateData(){
                 var formData = new FormData();
@@ -213,6 +222,15 @@
     };
 </script>
 <style scoped lang="scss">
+    @font-face {
+        font-family: 'iconfont';  /* project id 384296 */
+        src: url('//at.alicdn.com/t/font_384296_utjiw4kvxj7.eot');
+        src: url('//at.alicdn.com/t/font_384296_utjiw4kvxj7.eot?#iefix') format('embedded-opentype'),
+        url('//at.alicdn.com/t/font_384296_utjiw4kvxj7.woff2') format('woff2'),
+        url('//at.alicdn.com/t/font_384296_utjiw4kvxj7.woff') format('woff'),
+        url('//at.alicdn.com/t/font_384296_utjiw4kvxj7.ttf') format('truetype'),
+        url('//at.alicdn.com/t/font_384296_utjiw4kvxj7.svg#iconfont') format('svg');
+    }
     .orderTicket{
         width: 500px;
         position: fixed;
@@ -407,7 +425,7 @@
                 .rate-star{
                     position: absolute;
                     width: 304px;
-                    height: 203px;
+                    height: 225px;
                     border: 1px solid #999;
                     bottom: 10px;
                     background-color: #fff;
@@ -436,7 +454,7 @@
                         border-bottom: 1px solid #999;
                         border-left: 1px solid #999;
                         transform:rotate(-45deg);
-                        top: 187px;
+                        top: 209px;
                         left: 58px;
                         background-color: #fff;
                     }
@@ -480,8 +498,39 @@
             }
         }
     }
-
-
+.rate-flex{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    .box{
+        width: 48%;
+        text-align: center;
+        height: 33px;
+        line-height: 33px;
+        border: 1px solid #eee;
+        border-radius: 2px;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        cursor: pointer;
+        i{
+            display: inline-block;
+            margin-right: 5px;
+        }
+    }
+    .unlike-active{
+        background-color: #f46e6d;
+        color: #fff;
+        border-color: #f46e6d;
+    }
+    .like-active{
+        background-color: #57b936;
+        color: #fff;
+        border-color: #57b936;
+    }
+}
+.redBorder{
+    border:1px solid #e5004f !important;
+}
 
 
 
