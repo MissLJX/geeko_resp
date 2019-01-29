@@ -102,5 +102,8 @@ export default{
   you_may_also_like: 'Tu pourrais aussi aimer',
   recently_viewed: 'vu récemment',
   account: 'Compte',
-  change_email: 'Changer l\'e-mail'
+  change_email: 'Changer l\'e-mail',
+  credit_card: 'carte de crédit',
+  continue_shopping: 'Continuer vos achats'
+
 }

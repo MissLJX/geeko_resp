@@ -191,12 +191,9 @@ const OrderConfirm = class extends React.Component {
   }
 
   handleViewOrder (){
-    // if(!window.__is_login__ && this.props.transaction.orderVos[0].order.payMethod === '1'){
-    //   this.props.history.push(`${this.props.match.url}/set-password`)
-    // }else{
-      window.location.href = `${window.ctx || ''}/me/m/order`
-    // }
-    
+      const { transaction } = this.props
+
+      window.location.href = `${window.ctx || ''}/me/m/order/detail/${transaction.id}`
   }
 
   handleSetPassword(){
@@ -211,6 +208,83 @@ const OrderConfirm = class extends React.Component {
     alert(tip)
   }
 
+
+  isCashout(){
+    const { transaction } = this.props
+    const { payMethod } = transaction
+    return ['20','21','16','23','25','29','27','28','30','31','34','35','37'].indexOf(payMethod) >= 0
+  }
+
+  getPayUrl(){
+    const { transaction } = this.props
+    switch(transaction.payMethod){
+      case '20':
+      case '21':
+        return transaction.mercadopagoPayURL
+      case '16':
+      case '23':
+      case '25':
+      case '29':
+      case '27':
+      case '28':
+      case '30':
+      case '31':
+      case '34':
+      case '35':
+      case '37':
+        return transaction.boletoPayCodeURL
+      return null
+    }
+  }
+
+  getTips(){
+    const { m1186,transaction } = this.props
+    const bb = JSON.parse(m1186.message)
+    switch(transaction.payMethod){
+      case '20':
+      case '21':
+      case '27':
+      case '28':
+      case '30':
+      case '31':
+      case '34':
+      case '35':
+      case '37':
+        return bb.spain
+      case '16':
+      case '23':
+      case '25':
+      case '29':
+        return bb.portugal
+      default:
+        return null
+    }
+  }
+
+  getBtnText(){
+    const { transaction } = this.props
+    switch(transaction.payMethod){
+      case '20':
+      case '21':
+      case '27':
+      case '28':
+      case '30':
+      case '31':
+      case '34':
+      case '35':
+      case '37':
+        return 'Generar Ticket'
+      case '29':
+        return 'Gerar Ticket'
+      case '16':
+      case '23':
+      case '25':
+        return 'Imprimir boleto'
+      default:
+        return null
+    }
+  } 
+
   render () {
     const {transaction, me, m1186, m1147, m1073, intl} = this.props
   	const {message} = transaction || {}
@@ -218,16 +292,25 @@ const OrderConfirm = class extends React.Component {
 
     const communicationEmail = __me ? __me.communicationEmail : ''
 
-    let __BB__,__Tips__
+    let __Tips__, payUrl, isCashout, btnText
 
-    if(transaction && m1186){
-      __BB__ = m1186 ? JSON.parse(m1186.message) : null;
-      __Tips__ = transaction.mercadopagoPayURL ? __BB__.spain : __BB__.portugal
+    if(transaction){
+      isCashout = this.isCashout()
+      payUrl = this.getPayUrl()
+      btnText = this.getBtnText()
+      if(m1186){
+        __Tips__ = this.getTips()
+      }
     }
 
     const getTitle = () => {
-      if (transaction.boletoPayCodeURL) { return <div>Seu pedido de compra foi realizado! Pague agora seu Boleto Bancário paraagilizar a confirmação do seu pedido.</div> }
-      if (transaction.mercadopagoPayURL) { return null }
+
+      if(isCashout){
+        if (transaction.payMethod === '16' || transaction.payMethod === '23' || transaction.payMethod === '25' || transaction.payMethod === '29') { return <div>Seu pedido de compra foi realizado! Pague agora seu Boleto Bancário paraagilizar a confirmação do seu pedido.</div> }
+        return null
+      }
+
+
       return <div>
           <span dangerouslySetInnerHTML={{__html: message}}/> 
           <Link style={{color: 'skyblue'}} to={`${this.props.match.url}/change-email`}>{communicationEmail}<Icon style={{marginLeft: 10, color: 'skyblue', cursor: 'pointer'}}>&#xe61f;</Icon></Link>
@@ -253,7 +336,7 @@ const OrderConfirm = class extends React.Component {
     			</Box>
 
           {
-            transaction.mercadopagoPayURL && <Box style={{marginTop:-20}}>
+            isCashout && <Box style={{marginTop:-20}}>
               <div style={{paddingBottom: 10}}>
                 <OL style={{padding: 10}}>
                   {
@@ -272,36 +355,8 @@ const OrderConfirm = class extends React.Component {
                   }
                 </div>
 
-                <div onClick={() => { window.location.href = transaction.mercadopagoPayURL}} style={{marginTop: 10, marginLeft: 10, textAlign:'center'}}><Btn style={{backgroundColor: '#e64545', padding: '10px 12px'}}>Generar Ticket</Btn></div>
-              </div>
-            </Box>
-          }
-
-          {
-            transaction.boletoPayCodeURL && <Box>
-              <div style={{paddingBottom: 10}}>
-                <OL style={{padding: 10}}>
-                  {
-                    __Tips__ && __Tips__.map( (tip, index) =>  <LI key={index} data-index={index+1} dangerouslySetInnerHTML={{__html: tip.message}}/> )
-                  }
-                </OL>
-
-
-                <div style={{textAlign: 'center'}}>
-                  {
-                    transaction.shippingDetail.phoneNumber && <Link style={{textDecoration:'none'}} to={`${this.props.match.url}/change-phone`}>
-                      <Blue style={{cursor:'pointer'}}>
-                        <span>{transaction.shippingDetail.phoneNumber}</span>
-                        <Icon style={{marginLeft:5}}>&#xe62b;</Icon>
-                      </Blue>
-                    </Link>
-                  }
-                </div>
-
-
-                <div style={{marginTop: 10, marginLeft: 10, textAlign:'center'}}><Btn onClick={() => { window.location.href = transaction.boletoPayCodeURL}} style={{backgroundColor: '#e64545', padding: '10px 12px'}}>Imprimir boleto</Btn></div>
-              
-
+                <div onClick={() => { window.location.href = payUrl}} style={{marginTop: 10, marginLeft: 10, textAlign:'center'}}><Btn style={{backgroundColor: '#e64545', padding: '10px 12px'}}>{btnText}</Btn></div>
+                
                 {
                   transaction.barcodeNumber && <div style={{marginTop: 25}}>
                     <BARCODE>
@@ -323,6 +378,8 @@ const OrderConfirm = class extends React.Component {
               </div>
             </Box>
           }
+
+          
 
     			<Box>
     				<AddressBox>

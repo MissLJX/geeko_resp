@@ -5,7 +5,7 @@ import CheckBox from '../checkbox.jsx'
 import Icon from '../icon.jsx'
 
 import {Form, Input, Select, Button} from './control.jsx'
-import {required, email, zip, phone} from '../validator.jsx'
+import {required, email, zip, phone, getDNI} from '../validator.jsx'
 
 import {MutiElement, FormElement} from './styled-control.jsx'
 
@@ -189,12 +189,30 @@ const DLocalPlugin = class extends React.Component {
     })
   }
 
+  getLabel (payMethod) {
+    switch (payMethod) {
+      case '26':
+        return 'DNI / CUIT'
+      case '32':
+        return 'Cédula de ciudadanía'
+      case '33':
+        return 'CI/RUT'
+      case '37':
+        return 'Cédula de identidad'
+      default:
+        return 'Document'
+    }
+  }
+
   render () {
-    const { orderTotal, country, document, intl } = this.props
+    const { card, orderTotal, country, document, intl, documentRef, documentBtn } = this.props
+
+    const _dni = getDNI(card.quickpayRecord.payMethod)
+
     return <CARDPLUGIN>
 
       {
-        this.state.payer_costs && this.state.payer_costs.length > 0 && <Form id="dlocalform">
+        this.state.payer_costs && this.state.payer_costs.length > 0 && <Form id="dlocalform" ref={documentRef}>
           <MutiElement>
             <FormElement label={intl.formatMessage({id: 'installments'})} className="__required">
               <Select className="x-select" style={{width: '100%', height: 35, backgroundColor: '#fff'}} name="installments"
@@ -211,17 +229,17 @@ const DLocalPlugin = class extends React.Component {
               </Select>
             </FormElement>
 
-            <FormElement>
-              <FormElement label={country === 'AR' ? 'DNI / CUIT' : 'CC'} className="__required">
+            {
+              card.quickpayRecord.payMethod === '24' ? <FormElement/> : <FormElement label={this.getLabel(card.quickpayRecord.payMethod)} className="__required">
                 <Input style={{width: '100%', height: 35}} name="document"
                   value={document}
-                  validations={[required]}
-                  placeholder="DNI / CUIT"
+                  validations={[required, _dni]}
                   onChange={this.props.handleInputChange}/>
               </FormElement>
-            </FormElement>
+            }
 
           </MutiElement>
+          <Button style={{display: 'none'}} ref={documentBtn}></Button>
         </Form>
       }
 
@@ -238,6 +256,8 @@ const getPlugin = props => {
     case '24':
     case '26':
     case '32':
+    case '33':
+    case '36':
       return <I18DLocalPlugin {...props}/>
     default:
       return null

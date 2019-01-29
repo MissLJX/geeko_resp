@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import CheckBox from '../checkbox.jsx'
 
 import {Form, Input, Button, Select} from './control.jsx'
-import {required, email, cpf} from '../validator.jsx'
+import {required, email, cpf, getDNI} from '../validator.jsx'
 import {MutiElement, FormElement} from './styled-control.jsx'
 import Ask from './ask.jsx'
 import {unitprice} from '../../utils/utils.js'
@@ -210,27 +210,51 @@ const TicketCash = class extends React.Component {
     }
   }
 
+  getLabel (payMethod) {
+    switch (payMethod) {
+      case '27':
+      case '28':
+        return 'DNI / CUIT'
+      case '30':
+      case '31':
+        return 'Cédula de ciudadanía'
+      case '34':
+      case '35':
+        return 'CI/RUT'
+      case '37':
+        return 'Cédula de identidad'
+      default:
+        return 'Document'
+    }
+  }
+
   render () {
     const { tcMethods } = this.state
-    const { tcMethod, tcClickHandle, document, handleInputChange, documentForm, documentRef } = this.props
+    const { method, tcMethod, tcClickHandle, document, handleInputChange, documentForm, documentRef } = this.props
+
+    const _dni = getDNI(method.id)
+
     return <div>
-      <Form ref={documentForm}>
-        <MutiElement>
-          <FormElement label={`DNI:`} className="__required">
-            <Input
-              name='document'
-              value={document}
-              style={{width: '100%', height: 35}}
-              onChange={handleInputChange}
-              validations={[required]}/>
-          </FormElement>
-          <FormElement/>
-        </MutiElement>
-        <Button style={{display: 'none'}} ref={documentRef}></Button>
-      </Form>
+      {
+        method.id !== '29' && <Form ref={documentForm}>
+          <MutiElement>
+            <FormElement label={`${this.getLabel(method.id)}:`} className="__required">
+              <Input
+                name='document'
+                value={document}
+                style={{width: '100%', height: 35}}
+                onChange={handleInputChange}
+                validations={[required, _dni]}/>
+            </FormElement>
+            <FormElement/>
+          </MutiElement>
+          <Button style={{display: 'none'}} ref={documentRef}></Button>
+        </Form>
+      }
+
       <CashMethods style={{marginTop: 15}}>
         {
-          tcMethods && tcMethods.map(method => <li key={method.id}>
+          method.id !== '34' && method.id !== '35' && tcMethods && tcMethods.map(method => <li key={method.id}>
             <TicketCashMethod className={tcMethod === method.id ? 'selected' : ''} onClick={(evt) => { tcClickHandle(method.id) }}>
               <img src={method.logo}/>
             </TicketCashMethod>
@@ -293,12 +317,14 @@ const getPlugin = (props) => {
     case '19':
     case '21':
       return showMercadopagoCouponField && <Mercado {...props}/>
-    case '25':
     case '29':
     case '27':
     case '28':
     case '30':
     case '31':
+    case '34':
+    case '35':
+    case '37':
       return <TicketCash {...props}/>
     default:
 		  return null

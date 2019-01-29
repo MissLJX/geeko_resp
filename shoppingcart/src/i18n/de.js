@@ -102,5 +102,7 @@ export default{
   you_may_also_like: 'Sie können auch mögen',
   recently_viewed: 'zuletzt angesehen',
   account: 'Konto',
-  change_email: 'Ändern Sie die E-Mail'
+  change_email: 'Ändern Sie die E-Mail',
+  credit_card: 'Kreditkarte',
+  continue_shopping: 'mit dem Einkaufen fortfahren'
 }

@@ -7,7 +7,7 @@ import Money from '../money.jsx'
 import {BigButton} from './buttons.jsx'
 
 import {Form, Input, Select, Button} from './control.jsx'
-import {required, cpf} from '../validator.jsx'
+import {required, cpf, getDNI} from '../validator.jsx'
 import {StyledControl} from './styled-control.jsx'
 import {injectIntl, FormattedMessage} from 'react-intl'
 
@@ -229,8 +229,25 @@ const DLocalPlugin = class extends React.Component {
     })
   }
 
+  getLabel (payMethod) {
+    switch (payMethod) {
+      case '26':
+        return 'DNI / CUIT'
+      case '32':
+        return 'Cédula de ciudadanía'
+      case '33':
+        return 'CI/RUT'
+      case '37':
+        return 'Cédula de identidad'
+      default:
+        return 'Document'
+    }
+  }
+
   render () {
     const { orderTotal, country, payMethod } = this.props
+
+    const _dni = getDNI(payMethod)
 
     return <Form ref={this.props.dlocalref} style={{marginTop: 10, paddingLeft: 10, paddingRight: 10}}>
       {
@@ -252,14 +269,16 @@ const DLocalPlugin = class extends React.Component {
 
       {
         (payMethod !== '24') && <StyledControl style={{marginTop: 10}}>
-          <label>DNI</label>
+          <label>{this.getLabel(payMethod)}</label>
           <Input name="document"
             value={this.props.document}
-            validations={[required]}
+            validations={[required, _dni]}
             onChange={this.props.handleInputChange}/>
 
         </StyledControl>
       }
+
+      <Button style={{display: 'none'}} ref={this.props.dlocalbtn}></Button>
 
     </Form>
   }
@@ -332,6 +351,8 @@ const getPayPlugin = (payMethod, props) => {
     case '24':
     case '26':
     case '32':
+    case '33':
+    case '36':
       return <DLocalPlugin {...props} payMethod={payMethod}/>
     default:
       return null

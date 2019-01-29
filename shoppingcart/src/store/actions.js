@@ -54,6 +54,12 @@ export const MONEY_TRANS_METHOD_AR = 'MONEY_TRANS_METHOD_AR'
 export const CASH_METHOD_CL = 'CASH_METHOD_CL'
 export const MONEY_TRANS_METHOD_CL = 'MONEY_TRANS_METHOD_CL'
 
+export const CASH_METHOD_CHILE = 'CASH_METHOD_CHILE'
+export const MONEY_TRANS_METHOD_CHILE = 'MONEY_TRANS_METHOD_CHILE'
+
+export const CASH_METHOD_UY = 'CASH_METHOD_UY'
+export const MONEY_TRANS_METHOD_UY = 'MONEY_TRANS_METHOD_UY'
+
 export const SET_DOCUMENT = 'SET_DOCUMENT'
 
 // order confirm
@@ -528,5 +534,33 @@ export const setDocument = (doc) => {
   return {
     type: SET_DOCUMENT,
     doc
+  }
+}
+
+export const setCashMethodChile = (method) => {
+  return {
+    type: CASH_METHOD_CHILE,
+    method
+  }
+}
+
+export const setMoneyTransChile = (method) => {
+  return {
+    type: MONEY_TRANS_METHOD_CHILE,
+    method
+  }
+}
+
+export const setCashMethodUY = (method) => {
+  return {
+    type: CASH_METHOD_UY,
+    method
+  }
+}
+
+export const setMoneyTransUY = (method) => {
+  return {
+    type: MONEY_TRANS_METHOD_UY,
+    method
   }
 }

@@ -1,0 +1,23 @@
+{
+  "name":"Chic Me",
+  "short_name":"Chicme",
+  "start_url":"/cart?utm_source=a2hs",
+  "display":"fullscreen",
+  "icons":[
+	  {
+	  	"src":"/apple-touch-icon.png",
+	  	"type": "image/png",
+	    "sizes": "100x100"
+	  },
+	  {
+	  	"src":"/apple-touch-icon-57x57.png",
+	  	"type": "image/png",
+	    "sizes": "57x57"
+	  },
+	  {
+	  	"src":"/apple-touch-icon-144x144.png",
+	  	"type": "image/png",
+	    "sizes": "144x144"
+	  }
+  ]
+}

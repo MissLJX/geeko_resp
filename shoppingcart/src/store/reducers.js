@@ -33,6 +33,10 @@ import {
   MONEY_TRANS_METHOD_AR,
   CASH_METHOD_CL,
   MONEY_TRANS_METHOD_CL,
+  CASH_METHOD_CHILE,
+  MONEY_TRANS_METHOD_CHILE,
+  CASH_METHOD_UY,
+  MONEY_TRANS_METHOD_UY,
   SET_DOCUMENT
 } from './actions.js'
 
@@ -80,6 +84,10 @@ const initialState = {
   arMT: storage.get('arMT'),
   clCS: storage.get('clCS'),
   clMT: storage.get('clMT'),
+  chlieCS: storage.get('chlieCS'),
+  chlieMT: storage.get('chlieMT'),
+  uyCS: storage.get('uyCS'),
+  uyMT: storage.get('uyMT'),
   document: null
 }
 
@@ -182,6 +190,14 @@ const refresh = (state = initialState, action) => {
       return {...state, clCS: action.method}
     case MONEY_TRANS_METHOD_CL:
       return {...state, clMT: action.method}
+    case CASH_METHOD_CHILE:
+      return {...state, chlieCS: action.method}
+    case MONEY_TRANS_METHOD_CHILE:
+      return {...state, chlieMT: action.method}
+    case CASH_METHOD_UY:
+      return {...state, uyCS: action.method}
+    case MONEY_TRANS_METHOD_UY:
+      return {...state, uyMT: action.method}
     case SET_DOCUMENT:
       return {...state, document: action.doc}
     default:

@@ -56,6 +56,7 @@ import {
   setMoneyTransAR,
   setCashMethodCL,
   setMoneyTransCL,
+  setCashMethodUY,
   setDocument
 } from '../store/actions.js'
 
@@ -191,6 +192,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     SETMTCL: (method) => {
       return dispatch(setMoneyTransCL(method))
+    },
+    SETCSUY: (method) => {
+      return dispatch(setCashMethodUY(method))
     }
   }
 }
@@ -353,6 +357,9 @@ const Checkout = class extends React.Component {
         this.props.SETMTCL(method)
         storage.add('clMT', method, 365 * 24 * 60 * 60)
         break
+      case '37':
+        this.props.SETCSUY(method)
+        storage.add('uyCS', method, 365 * 24 * 60 * 60)
       default:
         break
 
@@ -374,6 +381,8 @@ const Checkout = class extends React.Component {
         return this.props.clCS
       case '31':
         return this.props.clMT
+      case '37':
+        return this.props.uyCS
       default:
         break
 
@@ -640,6 +649,7 @@ const Checkout = class extends React.Component {
             this.props.GETDLOCALCARDS(payMethod.id).then( cards => {
               this.props.history.push(`${this.props.match.url}/credit`)
             } )
+            break
           case '13':
             this.checkpay({
               orderId,
@@ -657,7 +667,14 @@ const Checkout = class extends React.Component {
           case '16':
           case '17':
           case '18':
-            this.documentForm.validateAll()
+          case '21':
+
+            if(payMethod.type !== '14') {
+              this.documentForm.validateAll()
+              if(this.documentRef.context && this.documentRef.context._errors && this.documentRef.context._errors.length > 0){
+                return
+              }
+            }
 
             const paymentMethodId = this.getTcMethod()
             const document = this.props.document
@@ -668,7 +685,7 @@ const Checkout = class extends React.Component {
               return
             }
 
-            if(this.props.document){
+            if(this.props.document || payMethod.type === '14'){
               this.setState({
                 checking: true
               })
@@ -677,6 +694,31 @@ const Checkout = class extends React.Component {
                 payMethod: payMethod.id,
                 paymentMethodId,
                 document
+              }).catch(({result}) => {
+                alert(result)
+                this.setState({
+                  checking: false
+                })
+              })
+            }
+
+            
+            break
+          case '19':
+          case '20':
+
+            this.documentForm.validateAll()
+
+
+            if(this.props.document){
+              this.setState({
+                checking: true
+              })
+              this.checkpay({
+                orderId,
+                payMethod: payMethod.id,
+                paymentMethodId: payMethod.id === '34' ? 'SP' : 'WP',
+                document: this.props.document
               }).catch(({result}) => {
                 alert(result)
                 this.setState({

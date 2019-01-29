@@ -10,6 +10,18 @@ export const __reg_phone_br__ = /^\d{8,9}$/
 export const __reg_phone_ae_ = /^(50|52|54|55|56|58|2|3|4|6|7|9){1,2}\d{7}$/
 export const __reg_phone_sa_ = /^(50|53|55|51|58|59|54|56|57|11|12|13|14|16|17|811){1,3}\d{7}$/
 
+// Argentina DNI or CUIT between 7 to 9, or 11 digits
+export const __reg_document_ar__ = /^(\d{7,9}|\d{11})$/
+
+// Chile CI/RUT between 8 to 9 digits
+export const __reg_document_cl__ = /^\d{8,9}$/
+
+// Colombia CC between 6 to 10 digits
+export const __reg_document_co__ = /^\d{6,10}$/
+
+// Uruguay CI between 6 to 8 digits
+export const __reg_document_ur__ = /^\d{6,8}$/
+
 export const cpfcheck = (value) => {
   var result = true
 
@@ -131,5 +143,59 @@ export const phone = (value, props, components) => {
   }
   if (reg && !reg.test(value)) {
     return error
+  }
+}
+
+export const dni = (country) => {
+  let reg, error
+  switch (country) {
+    case 'AR':
+      reg = __reg_document_ar__
+      error = 'DNI debe estar entre 7 a 9, u 11 dígitos'
+      break
+    case 'CL':
+      reg = __reg_document_cl__
+      error = 'CI/RUT debe tener entre 8 y 9 dígitos'
+      break
+    case 'CO':
+      reg = __reg_document_co__
+      error = 'Cédula de ciudadanía debe tener entre 6 y 10 dígitos'
+      break
+    case 'UY':
+      reg = __reg_document_ur__
+      error = 'Cédula de identidad debe tener entre 6 y 8 dígitos'
+      break
+    default:
+      reg = /\d/
+      error = 'Incorrect document'
+      break
+  }
+
+  return (value) => {
+    if (reg && !reg.test(value)) {
+      return error
+    }
+  }
+}
+
+export const getDNI = (payMethod) => {
+  switch (payMethod) {
+    case '26':
+    case '27':
+    case '28':
+      return dni('AR')
+    case '30':
+    case '31':
+    case '32':
+      return dni('CO')
+    case '30':
+    case '31':
+    case '32':
+      return dni('CL')
+    case '36':
+    case '37':
+      return dni('UY')
+    default:
+      return dni('US')
   }
 }

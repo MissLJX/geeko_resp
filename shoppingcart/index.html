@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+     <link rel="manifest" href="/manifest.json">
     <title>Shopping Cart</title>
     <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
     <script type="text/javascript">
@@ -40,6 +41,9 @@
     </script>
 </head>
 <body style="background-color: #fff;">
+
+
+    <button id="addtohome">Add to home page</button>
 <body>
 
 <script type="text/javascript">
@@ -65,6 +69,78 @@
 </script>
 
 <!-- <script src="https://js-sandbox.dlocal.com"></script> -->
+
+
+
+<script type="text/javascript">
+    /**
+     * Created by shao_ on 2017/9/30.
+     */
+
+    (function () {
+
+        function registerServiceWorker() {
+            return navigator.serviceWorker.register('/sw2.js',{
+                 scope: '.'
+            }).then(function (registration) {
+                console.log('Service worker successfully registered.')
+                return registration
+            }).catch(function (err) {
+                console.error('Unable to register service worker.', err)
+            })
+        }
+
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                registerServiceWorker().then(function(registration){
+                    alert('sw2')
+                    console.log(registration);
+                });
+            })
+        }
+    })();
+
+        
+    var deferredPrompt, btnAdd = document.getElementById("addtohome");
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+         alert('fuck2');
+      // Prevent Chrome 67 and earlier from automatically showing the prompt
+      e.preventDefault();
+      // Stash the event so it can be triggered later.
+      deferredPrompt = e;
+      // Update UI notify the user they can add to home screen
+      btnAdd.style.display = 'block';
+     
+    });
+    
+    
+    btnAdd.addEventListener('click', (e) => {
+      // hide our user interface that shows our A2HS button
+      btnAdd.style.display = 'none';
+      // Show the prompt
+      deferredPrompt.prompt();
+      // Wait for the user to respond to the prompt
+      deferredPrompt.userChoice
+        .then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted the A2HS prompt');
+          } else {
+            console.log('User dismissed the A2HS prompt');
+          }
+          deferredPrompt = null;
+        });
+    });
+    
+    window.addEventListener('appinstalled', (evt) => {
+         alert('Installed');
+         app.logEvent('a2hs', 'installed');
+    });
+    
+    
+</script>
+
 
 </body>
 </html>

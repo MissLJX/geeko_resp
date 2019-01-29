@@ -2,9 +2,9 @@ import React from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import FullFixed from '../components/msite/full-fixed.jsx'
-import {getCreditCards, toggleCreditStatus} from '../store/actions.js'
-import {__route_root__} from '../utils/utils.js'
-import {deletecreditcard} from '../api'
+import { getCreditCards, toggleCreditStatus } from '../store/actions.js'
+import { __route_root__ } from '../utils/utils.js'
+import { deletecreditcard } from '../api'
 import Refreshing from '../components/msite/refreshing.jsx'
 
 const StyledFrame = styled.div`
@@ -19,20 +19,20 @@ const StyledFrame = styled.div`
 `
 
 const mapStateToProps = (state) => {
-  return {
-    ...state
-  }
+	return {
+		...state
+	}
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-    GETCREDITCARDS: (payMethod) => {
-      return dispatch(getCreditCards(payMethod))
-    },
-    TOGGLECREDITSTATUS: (status) => {
-      dispatch(toggleCreditStatus(status))
-    }
-  }
+	return {
+		GETCREDITCARDS: (payMethod) => {
+			return dispatch(getCreditCards(payMethod))
+		},
+		TOGGLECREDITSTATUS: (status) => {
+			dispatch(toggleCreditStatus(status))
+		}
+	}
 }
 const Cards = styled.div`
   padding-left: 10px;
@@ -75,94 +75,94 @@ const DeleteIcon = styled.span`
 `
 
 const CardBinding = class extends React.Component {
-  constructor (props) {
-    super(props)
-    this.close = this.close.bind(this)
-    this.deleteCardHandle = this.deleteCardHandle.bind(this)
-    this.state = {
-      frameUrl: `${window.ctx || ''}/w-site/anon/oceanpay?payMethod=${props.payMethod}`,
-      frameLoading: true
-    }
-  }
+	constructor(props) {
+		super(props)
+		this.close = this.close.bind(this)
+		this.deleteCardHandle = this.deleteCardHandle.bind(this)
+		this.state = {
+			frameUrl: `${window.ctx || ''}/w-site/anon/oceanpay?payMethod=${props.payMethod}`,
+			frameLoading: true
+		}
+	}
 
-  componentDidMount () {
-  	window.bindSuccess = () => {
-  		this.props.GETCREDITCARDS(this.props.payMethod).then(() => {
-        this.props.TOGGLECREDITSTATUS(0)
-        this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
-      })
-  	}
+	componentDidMount() {
+		window.bindSuccess = () => {
+			this.props.GETCREDITCARDS(this.props.payMethod).then(() => {
+				this.props.TOGGLECREDITSTATUS(0)
+				this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
+			})
+		}
 
-    window.triggerFalse = (errcode) => {
-      this.setState({
-        frameUrl: this.state.frameUrl + '&_=' + new Date().getTime()
-      })
-    }
+		window.triggerFalse = (errcode) => {
+			this.setState({
+				frameUrl: this.state.frameUrl + '&_=' + new Date().getTime()
+			})
+		}
 
-    if (!this.props.creditcards && this.props.payMethod) {
-      this.props.GETCREDITCARDS(this.props.payMethod)
-    }
+		if (!this.props.creditcards && this.props.payMethod) {
+			this.props.GETCREDITCARDS(this.props.payMethod)
+		}
 
-    setTimeout(() => {
-      this.setState({
-        frameLoading: false
-      })
-    }, 5000)
-  }
+		setTimeout(() => {
+			this.setState({
+				frameLoading: false
+			})
+		}, 5000)
+	}
 
-  deleteCardHandle (evt, cardId) {
-    evt.preventDefault()
-    if (confirm('Are you sure to delete this card?')) {
-      deletecreditcard(cardId).then(() => {
-        this.props.GETCREDITCARDS(this.props.payMethod)
-      })
-    }
-  }
+	deleteCardHandle(evt, cardId) {
+		evt.preventDefault()
+		if (confirm('Are you sure to delete this card?')) {
+			deletecreditcard(cardId).then(() => {
+				this.props.GETCREDITCARDS(this.props.payMethod)
+			})
+		}
+	}
 
-  frameLoadHandle () {
-    this.setState({
-      frameLoading: false
-    })
-  }
+	frameLoadHandle() {
+		this.setState({
+			frameLoading: false
+		})
+	}
 
-  close (evt) {
-  	evt.stopPropagation()
-    this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
-  }
+	close(evt) {
+		evt.stopPropagation()
+		this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
+	}
 
-  render () {
-    const {creditcards} = this.props
-  	return <FullFixed onClose={this.close} title="Credit Card">
-  		 <StyledFrame>
-        {this.state.frameLoading && <Refreshing/>}
-  			<iframe onLoad={this.frameLoadHandle.bind(this)} seamless src={this.state.frameUrl}></iframe>
-        {
-          creditcards && <Cards>
-            <HD>Cards</HD>
-            <CardUL>
-              {
-                creditcards.map(card => <li key={card.quickpayRecord.id}>
-                  <StyledCard>
-                    <div className="x-table __fixed x-fw x-fh __vm">
-                      <div className="x-cell">
-                        {card.quickpayRecord.cardNumber}
-                      </div>
-                      <div className="x-cell __right">
-                        <DeleteIcon onClick={(evt) => { this.deleteCardHandle(evt, card.quickpayRecord.id) }} className="iconfont">&#xe731;</DeleteIcon>
-                      </div>
-                    </div>
-                  </StyledCard>
+	render() {
+		const { creditcards } = this.props
+		return <FullFixed onClose={this.close} title="Credit Card">
+			<StyledFrame>
+				{this.state.frameLoading && <Refreshing />}
+				<iframe onLoad={this.frameLoadHandle.bind(this)} seamless src={this.state.frameUrl}></iframe>
+				{
+					creditcards && <Cards>
+						<HD>Cards</HD>
+						<CardUL>
+							{
+								creditcards.map(card => <li key={card.quickpayRecord.id}>
+									<StyledCard>
+										<div className="x-table __fixed x-fw x-fh __vm">
+											<div className="x-cell">
+												{card.quickpayRecord.cardNumber}
+											</div>
+											<div className="x-cell __right">
+												<DeleteIcon onClick={(evt) => { this.deleteCardHandle(evt, card.quickpayRecord.id) }} className="iconfont">&#xe731;</DeleteIcon>
+											</div>
+										</div>
+									</StyledCard>
 
-                </li>)
-              }
-            </CardUL>
-          </Cards>
-        }
-        <div style={{height: 100}}></div>
-      </StyledFrame>
+								</li>)
+							}
+						</CardUL>
+					</Cards>
+				}
+				<div style={{ height: 100 }}></div>
+			</StyledFrame>
 
-  	</FullFixed>
-  }
+		</FullFixed>
+	}
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CardBinding)

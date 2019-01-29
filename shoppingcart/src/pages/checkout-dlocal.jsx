@@ -2,21 +2,20 @@ import React from 'react'
 import styled from 'styled-components'
 import FullFixed from '../components/msite/full-fixed.jsx'
 import { connect } from 'react-redux'
-import {__route_root__} from '../utils/utils.js'
-import { Redirect } from 'react-router-dom'
 import { checkout_pay } from '../api'
-import {goOrder} from '../utils/common-pay.js'
+import { goOrder } from '../utils/common-pay.js'
+import { injectIntl } from 'react-intl'
 
 const mapStateToProps = (state) => {
-  return {
-    ...state
-  }
+	return {
+		...state
+	}
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {
+	return {
 
-  }
+	}
 }
 
 const IFrame = styled.iframe`
@@ -28,41 +27,41 @@ const IFrame = styled.iframe`
 `
 
 const DLocal = class extends React.Component {
-  constructor (props) {
-    super(props)
-    this.close = this.close.bind(this)
-  }
+	constructor(props) {
+		super(props)
+		this.close = this.close.bind(this)
+	}
 
-  componentWillMount () {
-  	window.dLocalPay = (result, errBack) => {
-      const { checkout } = this.props
-      this.payDLocal({...result, orderId: checkout.orderId, payMethod: checkout.payMethod}).catch(({result}) => errBack(result))
-    }
-  }
+	componentWillMount() {
+		window.dLocalPay = (result, errBack) => {
+			const { checkout } = this.props
+			this.payDLocal({ ...result, orderId: checkout.orderId, payMethod: checkout.payMethod }).catch(({ result }) => errBack(result))
+		}
+	}
 
-  payDLocal (result) {
-    return checkout_pay(result).then(goOrder)
-  }
+	payDLocal(result) {
+		return checkout_pay(result).then(goOrder)
+	}
 
-  close (evt) {
-  	evt.preventDefault()
-    this.props.history.replace(`${window.ctx || ''}/checkout/${this.props.checkout.orderId}`)
-  }
+	close(evt) {
+		evt.preventDefault()
+		this.props.history.replace(`${window.ctx || ''}/checkout/${this.props.checkout.orderId}`)
+	}
 
-  render () {
-    const { checkout } = this.props
+	render() {
+		const { checkout, document, intl } = this.props
 
-    let currency, country, amount
-    if (checkout) {
-      currency = checkout.orderTotal.currency
-      amount = checkout.orderTotal.amount
-      country = checkout.shippingDetail.country ? checkout.shippingDetail.country.value : window.__country
-    }
+		let currency, country, amount
+		if (checkout) {
+			currency = checkout.orderTotal.currency
+			amount = checkout.orderTotal.amount
+			country = checkout.shippingDetail.country ? checkout.shippingDetail.country.value : window.__country
+		}
 
-  	return <FullFixed onClose={this.close} title="DLocal">
-    		<IFrame src={`${window.ctx || ''}/i/dlocal?currency=${currency}&country=${country}&amount=${amount}`} frameBorder="0" scrolling="auto" seamless/>
-    </FullFixed>
-  }
+		return <FullFixed onClose={this.close} title={intl.formatMessage({ id: 'credit_card' })}>
+			<IFrame src={`${window.ctx || ''}/i/dlocal?currency=${currency}&country=${country}&amount=${amount}&document=${document || ''}`} frameBorder="0" scrolling="auto" seamless />
+		</FullFixed>
+	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DLocal)
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(DLocal))

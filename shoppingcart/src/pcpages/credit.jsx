@@ -39,7 +39,7 @@ const __Frame__ = {
   },
   '24': {
     url: `${window.ctx || ''}/i/dlocal`,
-    height: 480
+    height: 550
   }
 }
 
@@ -333,7 +333,15 @@ const Credit = class extends React.Component {
 
     if (payMethod === '19') {
       this.checkmercado(evt)
-    } else if (payMethod === '24' || payMethod === '26' || payMethod === '32') {
+    } else if (payMethod === '24') {
+      this.payCredit({installments, payMethod})
+    } else if (payMethod === '26' || payMethod === '32' || payMethod === '33' || payMethod === '36') {
+      this.documentRef.validateAll()
+      if (this.documentBtn.context && this.documentBtn.context._errors && this.documentBtn.context._errors.length > 0) {
+        return
+      }
+
+      if (!document) return
       this.payCredit({installments, payMethod, document})
     } else {
       this.payCredit({payCpf: cpf, payInstallments: installments})
@@ -344,7 +352,7 @@ const Credit = class extends React.Component {
     this.setState({
       checking: true
     })
-    payDLocal(params).then(data => data.result).then(({success, transactionId, details, solutions, orderId}) => {
+    payDLocal(params).then(data => data.result).then(({success, transactionId, details, solutions = '', orderId}) => {
       if (success) {
         window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
 
@@ -376,7 +384,7 @@ const Credit = class extends React.Component {
     this.setState({
       checking: true
     })
-    creditpay(params).then(data => data.result).then(({success, transactionId, details, solutions, orderId}) => {
+    creditpay(params).then(data => data.result).then(({success, transactionId, details, solutions = '', orderId}) => {
       if (success) {
         window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
 
@@ -545,7 +553,7 @@ const Credit = class extends React.Component {
   }
 
   getFrame () {
-    const { cart } = this.props
+    const { cart, document } = this.props
 
     if (cart) {
       const { payMethod, payMethodList } = cart
@@ -570,7 +578,7 @@ const Credit = class extends React.Component {
       let country = cart.shippingDetail.country ? cart.shippingDetail.country.value : window.__country
 
       if (_paymethod === '24') {
-        return {...__frame, url: `${__frame.url}?currency=${currency}&country=${country}&amount=${amount}`}
+        return {...__frame, url: `${__frame.url}?currency=${currency}&country=${country}&amount=${amount}&document=${document || ''}`}
       } else {
         return __frame
       }
@@ -638,6 +646,8 @@ const Credit = class extends React.Component {
                     selectCardHandle = { this.selectCardHandle.bind(this) }
                     country={country}
                     document={this.props.document}
+                    documentRef={c => this.documentRef = c}
+                    documentBtn={c => this.documentBtn = c}
                   />
 
                   { this.state.checking ? <CREDITBTN style={{marginTop: 15}}>{intl.formatMessage({id: 'please_wait'})}...</CREDITBTN> : <CREDITBTN style={{marginTop: 15}} onClick={ payType === '7' ? this.showMercadoHandle.bind(this) : this.showFrameHandle.bind(this) }>+ <FormattedMessage id="use_new_card" /></CREDITBTN>}
