@@ -80,7 +80,7 @@
                 <a :href="confirmEmailUrl">
                     <i class="iconfont">&#xe73a;</i>
                     <p>{{$t('confirmemail')}}</p>
-                    <span>+100</span>
+                    <span>+50</span>
                 </a>
             </div>
             <div class="method-con">

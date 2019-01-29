@@ -150,6 +150,7 @@ export default {
     tracknum:'Numéro de suivi',
     currentStatus:'Statut actuel',
     paymentTime:'Temps de paiement',
+    paymentMethod:'Mode de paiement',
     review:'La revue',
     paynow:'PAYEZ MAINTENANT',
     repurchase:'Rachat',

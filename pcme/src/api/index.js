@@ -37,7 +37,7 @@ export const getOrderCountPaid = () => {
 }
 //orders
 export const getOrder = (id) => {
-    return axios.get(NVPATH + '/order/anon/get-order-details',{orderId:id}).then(data => data.result)
+    return axios.cpost(NVPATH + '/order/anon/get-order-details',id).then(data => data.result)
 }
 export const getOrders =(skip, api_suffix) => {
     return axios.get(`${NVPATH}/order/${skip}/20/${api_suffix}`).then(data => data.result)

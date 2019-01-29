@@ -99,7 +99,7 @@ const routes = [
         meta: {title:'ConfirmEmail'},
     },
     {
-        path:'/me/m/order-detail',
+        path:'/me/m/order/detail/:orderId',
         component: OrderDetail,
         meta: {title:'OrderDetail'},
     },

@@ -151,6 +151,7 @@ export default {
     currentStatus:'Estado actual',
     paymentTime:'Tiempo de pago',
     review:'revisión',
+    paymentMethod:'Método de pago',
     paynow:'PAGUE AHORA',
     repurchase:'Readquirir',
     remaining:'Tiempo de pago restante',

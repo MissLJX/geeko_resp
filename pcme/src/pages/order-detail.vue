@@ -21,13 +21,8 @@
             <div class="payNow" v-if="orderdetail.status === 0 && orderoffset >= 0">
                 <div class="otherPay">
                     <div class="remain">{{$t("remaining")}}:<count-down :timeStyle="{color:'#fff'}" :timeLeft="orderoffset"></count-down></div>
-
-                    <a class="paybtn" :href="orderdetail.boletoPayCodeURL" target="_blank" v-if="orderdetail.boletoPayCodeURL && orderdetail.status === 0 && orderoffset >= 0">Imprimir Boleto</a>
-                    <a class="paybtn" :href="checkoutUrl(orderdetail.id)" v-if="orderdetail.boletoPayCodeURL && orderdetail.status === 0 && orderoffset >= 0">Outro método de pagamento</a>
-
-                    <a class="paybtn" :href="orderdetail.mercadopagoPayURL" target="_blank" v-if="orderdetail.mercadopagoPayURL && orderdetail.status === 0 && orderoffset >= 0">Generar Ticket</a>
-                    <a class="paybtn" :href="checkoutUrl(orderdetail.id)" v-if="orderdetail.mercadopagoPayURL && orderdetail.status === 0 && orderoffset >= 0">Otro método de pago</a>
-
+                    <a class="paybtn" :href="getPayUrl" v-if="getBtnText && getPayUrl && orderdetail.status === 0 && orderoffset >= 0">{{getBtnText}}</a>
+                    <a class="paybtn" :href="checkoutUrl(orderdetail.id)" v-if="getBtnText2 && getPayUrl && orderdetail.status === 0 && orderoffset >= 0">{{getBtnText2}}</a>
                     <a class="paybtn" :href="checkoutUrl(orderdetail.id)" v-if="!orderdetail.mercadopagoPayURL && !orderdetail.boletoPayCodeURL && orderdetail.status === 0 && orderoffset >= 0">{{$t("paynow")}}</a>
                 </div>
             </div>
@@ -105,7 +100,7 @@
             <select-order v-if="isShowSelect" v-on:closeSelect="closeSelect1" v-on:showTicket="showTicket"></select-order>
             <order-ticket  v-if="isShowTicket" v-on:closeSelect="closeSelect1" v-on:selectOrder="selectorder"></order-ticket>
 
-            <div v-if="orderdetail.boletoPayCodeURL && orderdetail.status == 0 && orderoffset >= 0 && couponshow">
+            <div v-if="getBtnText==='Imprimir boleto' && orderdetail.status == 0 && orderoffset >= 0 && couponshow && getPayUrl">
                 <div class="mask"></div>
                 <div class="coupon-window">
                     <span class="coupon-close" @click="() => {this.couponshow = false}"><i class="iconfont">&#xe69a;</i></span>
@@ -119,13 +114,13 @@
                         </div>
                         <div class="white bottom-line">
                             <p>O cupom de <span class="fc-r">15%</span> de desconto será enviado para sua conta após o pagamento. Não perca</p>
-                            <a  class="blackbtn" :href="orderdetail.boletoPayCodeURL">Pague agora</a>
+                            <a  class="blackbtn" :href="getPayUrl">Pague agora</a>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div v-if="orderdetail.mercadopagoPayURL && orderdetail.status === 0 && orderoffset >= 0 && couponshow">
+            <div v-if="getBtnText==='Generar Ticket' && orderdetail.status === 0 && orderoffset >= 0 && couponshow && getPayUrl">
                 <div class="mask"></div>
                 <div class="coupon-window">
                     <span class="coupon-close" @click="() => {this.couponshow = false}"><i class="iconfont">&#xe69a;</i></span>
@@ -139,7 +134,7 @@
                         </div>
                         <div class="white bottom-line">
                             <p>Después de realizar el pago, recibirás un cupón de regalo con un <span class="fc-r">15%</span> de descuento para tu siguiente compra.</p>
-                            <a  class="blackbtn" :href="orderdetail.mercadopagoPayURL">Pague ahora</a>
+                            <a  class="blackbtn" :href="getPayUrl">Pague ahora</a>
                         </div>
                     </div>
                 </div>
@@ -219,6 +214,69 @@
         },
         computed:{
             ...mapGetters(['orderdetail','shareurl','cancelReasons']),
+            getPayUrl(){
+                switch(this.orderdetail.payMethod){
+                    case '20':
+                    case '21':
+                        return this.orderdetail.mercadopagoPayURL
+                    case '16':
+                    case '23':
+                    case '25':
+                    case '29':
+                    case '27':
+                    case '28':
+                    case '30':
+                    case '31':
+                    case '34':
+                    case '35':
+                    case '37':
+                        return this.orderdetail.boletoPayCodeURL
+                        return null
+                }
+            },
+            getBtnText(){
+                switch(this.orderdetail.payMethod){
+                    case '20':
+                    case '21':
+                    case '27':
+                    case '28':
+                    case '30':
+                    case '31':
+                    case '34':
+                    case '35':
+                    case '37':
+                        return 'Generar Ticket'
+                    case '29':
+                        return 'Gerar Ticket'
+                    case '16':
+                    case '23':
+                    case '25':
+                        return 'Imprimir boleto'
+                    default:
+                        return null
+                }
+            },
+            getBtnText2(){
+                switch(this.orderdetail.payMethod){
+                    case '20':
+                    case '21':
+                    case '27':
+                    case '28':
+                    case '30':
+                    case '31':
+                    case '34':
+                    case '35':
+                    case '37':
+                        return 'Otro método de pago'
+                    case '16':
+                    case '23':
+                    case '25':
+                    case '29':
+                        return 'Outro método de pagamento'
+                    default:
+                        return null
+                }
+            },
             getDate(){
                 if(this.orderdetail.paymentTime){
                     return utils.enTime(new Date(this.orderdetail.paymentTime))
@@ -369,11 +427,10 @@
                         setTimeout(() => {
                             this.isAddProducts = false;
                         }, 2000);
-
-                        if(window.name === 'joyshoetique'){
-                            window.ninimour.shoppingcartutil.notify(true);
-                        }else{
+                        if(window.name === 'chicme' || window.name === 'boutiquefeel' || window.name === 'ivrose'){
                             window.notifyMinicart();
+                        }else{
+                            window.ninimour.shoppingcartutil.notify(true);
                         }
                     })
                 }
@@ -390,10 +447,10 @@
                         setTimeout(() => {
                             this.isAddProducts = false;
                         }, 2000);
-                        if(window.name === 'joyshoetique'){
-                            window.ninimour.shoppingcartutil.notify(true);
-                        }else{
+                        if(window.name === 'chicme' || window.name === 'boutiquefeel' || window.name === 'ivrose'){
                             window.notifyMinicart();
+                        }else{
+                            window.ninimour.shoppingcartutil.notify(true);
                         }
                     })
                 }
@@ -403,7 +460,7 @@
             }
         },
         created(){
-            this.$store.dispatch('getOrder',this.$route.query.orderid).then(()=>{
+            this.$store.dispatch('getOrder',this.$route.params.orderId).then(()=>{
                 this.order = this.orderdetail
                 this.orderpro = _.cloneDeep(this.orderdetail.logistics.packages[0])
                 this.shipping = this.orderdetail.shippingDetail

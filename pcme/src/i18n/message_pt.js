@@ -151,6 +151,7 @@ export default {
     tracknum:'Numero de rastreio',
     currentStatus:'Status atual',
     paymentTime:'Tempo de pagamento',
+    paymentMethod:'Método de pagamento',
     review:'Reveja',
     paynow:'PAGUE AGORA',
     repurchase:'Recompra',

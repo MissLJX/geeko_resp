@@ -645,7 +645,7 @@ const actions = {
     },
 
     getOrder({commit},id){
-        return api.getOrder(id).then((order) => {
+        return api.getOrder({orderId:id}).then((order) => {
             commit(types.ME_ORDER_DETAIL, order)
         })
     },

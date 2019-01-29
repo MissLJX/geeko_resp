@@ -61,27 +61,19 @@
                             <p class="detail cur-p" v-if="item.id && item.status === 2 || item.status === 3"  @click="checkLogistics(item.id)">{{$t('track')}}</p>
                         </div>
                         <div class="tbl-cell v-m w-190 tx-c">
-                            <!--巴西支付按钮+倒计时-->
                             <div class="pos-rel">
-                                <a class="r-btn" :href="item.boletoPayCodeURL" target="_blank" v-if="item.boletoPayCodeURL && item.status === 0">Imprimir Boleto</a>
-                                <div class="offTip" v-if="orderoffset(item) >= 0 && item.boletoPayCodeURL && item.status === 0">
+                                <a class="r-btn" :href="getPayUrl(item)" target="_blank" v-if="getPayUrl(item) && item.status === 0">{{getBtnText(item)}}</a>
+                                <div class="offTip" v-if="orderoffset(item) >= 0 && getBtnText(item)==='Imprimir boleto' && item.status === 0 && getPayUrl(item)">
                                     <div class="triangle"></div>
                                     <span class="label">Presente de cupão expirs</span>
                                     <count-down :timeStyle="{color:'#fff'}" :timeLeft="orderoffset(item)"></count-down>
                                 </div>
-                            </div>
-
-
-                            <!--墨西哥支付按钮+倒计时-->
-                            <div class="pos-rel">
-                                <a class="r-btn" :href="item.mercadopagoPayURL" target="_blank" v-if="item.mercadopagoPayURL && item.status === 0">Generar Ticket</a>
-                                <div class="offTip" v-if="orderoffset(item) >= 0 && item.mercadopagoPayURL && item.status === 0">
+                                <div class="offTip" v-if="orderoffset(item) >= 0 && getBtnText(item)==='Generar Ticket' && item.status === 0 && getPayUrl(item)">
                                     <div class="triangle"></div>
                                     <span class="label" >Tiempo restante para realizar el pago</span>
                                     <count-down :timeStyle="{color:'#fff'}" :timeLeft="orderoffset(item)"></count-down>
                                 </div>
                             </div>
-
                             <!--线上其他支付按钮+倒计时-->
                             <div class="pos-rel">
                                 <a class="b-btn" :href="checkoutUrl(item.id)"  v-if="item.id && item.status===0 && !item.mercadopagoPayURL && !item.boletoPayCodeURL && orderoffset(item) >= 0">{{$t("paynow")}}</a>
@@ -91,7 +83,6 @@
                                     <count-down :timeStyle="{color:'#fff'}" :timeLeft="orderoffset(item)"></count-down>
                                 </div>
                             </div>
-
                             <!--重新加入购物车-->
                             <div class="b-btn" @click="addProducts(item.orderItems)" v-if="item.id && item.status===4">{{$t("repurchase")}}</div>
                         </div>
@@ -277,7 +268,7 @@
                 return utils.enTime(new Date(paymentTime))
             },
             checkDetail(orderid){
-                this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/order-detail', query: { orderid: orderid } })
+                this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/order/detail/'+orderid})
             },
             closeSelect1(){
                 this.isShowTicket = false
@@ -327,12 +318,54 @@
                             this.isAddProducts = false;
                         }, 2000);
 
-                        if(window.name === 'joyshoetique'){
-                            window.ninimour.shoppingcartutil.notify(true);
-                        }else{
+                        if(window.name === 'chicme' || window.name === 'boutiquefeel' || window.name === 'ivrose'){
                             window.notifyMinicart();
+                        }else{
+                            window.ninimour.shoppingcartutil.notify(true);
                         }
                     })
+                }
+            },
+            getPayUrl(item){
+                switch(item.payMethod){
+                    case '20':
+                    case '21':
+                        return item.mercadopagoPayURL
+                    case '16':
+                    case '23':
+                    case '25':
+                    case '29':
+                    case '27':
+                    case '28':
+                    case '30':
+                    case '31':
+                    case '34':
+                    case '35':
+                    case '37':
+                        return item.boletoPayCodeURL
+                        return null
+                }
+            },
+            getBtnText(item){
+                switch(item.payMethod){
+                    case '20':
+                    case '21':
+                    case '27':
+                    case '28':
+                    case '30':
+                    case '31':
+                    case '34':
+                    case '35':
+                    case '37':
+                        return 'Generar Ticket'
+                    case '29':
+                        return 'Gerar Ticket'
+                    case '16':
+                    case '23':
+                    case '25':
+                        return 'Imprimir boleto'
+                    default:
+                        return null
                 }
             }
         }
