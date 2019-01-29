@@ -154,5 +154,6 @@ export default {
     review:'Reveja',
     paynow:'PAGUE AGORA',
     repurchase:'Recompra',
-    remaining:'Tempo de Pagamento Restante'
+    remaining:'Tempo de Pagamento Restante',
+    trackingDetailInfo:'Informações detalhadas de rastreamento'
 }

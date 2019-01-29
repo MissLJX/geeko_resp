@@ -57,12 +57,13 @@
                     <td>{{$t('price')}}</td>
                     <td><p @click="showTicket(orderdetail.id)"><i class="iconfont">&#xe716;</i><a>{{$t('contactseller')}}</a></p></td>
                 </tr>
-                <tr v-for=" (item,key) in orderpro.products">
+                <tr v-for="(item,key) in orderpro.products">
                     <td>
-                        <link-image href="#" :src="item.imageURL" :title="item.name"/>
+                        <link-image :href="getProUrl(item)" :src="item.imageURL" :title="item.name"/>
                     </td>
                     <td class="w-200">
-                        <p>{{item.name}}</p>
+                        <p v-if="item.name">{{item.name}}</p>
+                        <p class="grey" v-if="item.sku" style="margin: 10px 0px;">SKU:{{item.sku}}</p>
                         <p class="grey">{{item.color}} {{item.size}} </p>
                     </td>
                     <td>
@@ -145,9 +146,17 @@
             </div>
         </div>
         <div class="mask" v-if="isAlert">
-            <div class="confirm-con">
+            <div class="confirm-con cancel-con">
                 <p class="cancel-btn" @click="cancelOrder(0)"><i class="iconfont">&#xe69a;</i></p>
-                <p>Are you sure want to cancel your order?</p>
+                <p>Are you sure to cancel this order? After cancelling, it can not be recovered.</p>
+                <p data-v-f8505664="" style="margin-top: 10px; color: rgb(153, 153, 153);">"Please choose the reason for cancelling the order"</p>
+                <select v-model="selected" :class="{'redBorder':isRequired}" @change="isRequired=false">
+                    <option disabled="disabled" value="0">Please select a reason</option>
+                    <option v-if="cancelReasons" v-for="(optionValue,index) in cancelReasons" :value="optionValue.value">
+                        {{index+1}}. {{optionValue.label}}
+                    </option>
+                </select>
+                <span style="color: rgb(230, 69, 69); display: inline-block; margin-left: 10px; position: relative; top: -10px;">*</span>
                 <div class="btn-arr">
                     <div class="n-btn" @click="cancelOrder(0)">{{$t('no')}}</div>
                     <div class="y-btn" @click="cancelOrder('1')">{{$t('yes')}}</div>
@@ -196,7 +205,9 @@
                 isConfirmAlert:false,
                 isActive:0,
                 isAddProducts:false,
-                isAddProductstTip:''
+                isAddProductstTip:'',
+                selected:0,
+                isRequired:false
             }
         },
         components: {
@@ -207,7 +218,7 @@
             'loding':loding
         },
         computed:{
-            ...mapGetters(['orderdetail','shareurl']),
+            ...mapGetters(['orderdetail','shareurl','cancelReasons']),
             getDate(){
                 if(this.orderdetail.paymentTime){
                     return utils.enTime(new Date(this.orderdetail.paymentTime))
@@ -265,6 +276,7 @@
                     return utils.STATUS_COLOR(this.orderpro.status)
                 }
             },
+
         },
         methods:{
             review(id){
@@ -294,18 +306,26 @@
                 }
             },
             cancelOrder(flag){
-                this.isAlert = false;
+                if(flag===0){
+                    this.isAlert = false;
+                    return ''
+                }
                 if(flag === '1'){
+                    if(this.selected === 0){
+                        this.isRequired = true
+                        return ''
+                    }
                     let _this = this
                     this.isloding = true;
-                    this.$store.dispatch('cancelOrder',this.orderdetail.id).then(()=>{
-                        _this.orderdetail.status = 7
+                    this.$store.dispatch('cancelOrder',{id:this.orderdetail.id,reason:this.selected}).then(()=>{
+                        this.$store.dispatch('getOrder',this.$route.query.orderid)
                         alert("success")
                         this.isloding = false
                     }).catch((e) => {
                         alert(e);
                         this.isloding = false
                     })
+                    this.isAlert = false;
                 }
             },
             closeSelect1(){
@@ -349,12 +369,12 @@
                         setTimeout(() => {
                             this.isAddProducts = false;
                         }, 2000);
-                    }).catch((e) => {
-                        this.isAddProductstTip = 'Add Failed'
-                        this.isAddProducts = true;
-                        setTimeout(() => {
-                            this.isAddProducts = false;
-                        }, 2000);
+
+                        if(window.name === 'joyshoetique'){
+                            window.ninimour.shoppingcartutil.notify(true);
+                        }else{
+                            window.notifyMinicart();
+                        }
                     })
                 }
             },
@@ -370,14 +390,16 @@
                         setTimeout(() => {
                             this.isAddProducts = false;
                         }, 2000);
-                    }).catch((e) => {
-                        this.isAddProductstTip = 'Add Failed'
-                        this.isAddProducts = true;
-                        setTimeout(() => {
-                            this.isAddProducts = false;
-                        }, 2000);
+                        if(window.name === 'joyshoetique'){
+                            window.ninimour.shoppingcartutil.notify(true);
+                        }else{
+                            window.notifyMinicart();
+                        }
                     })
                 }
+            },
+            getProUrl(product){
+                return "/w-product/anon/detail?productId="+product.productId
             }
         },
         created(){
@@ -389,6 +411,7 @@
                 this.shippingcountry =this.orderdetail.shippingDetail.country
                 this.isloding = false
             })
+            this.$store.dispatch('getCancelOrderReason')
         }
     }
 </script>
@@ -832,5 +855,22 @@
     }
     .fade-enter, .fade-leave-to {
         opacity: 0;
+    }
+    .mask .cancel-con{
+        width: 642px;
+        height: auto;
+        select{
+            width: 514px;
+            height: 40px;
+            line-height: 40px;
+            border-radius: 2px;
+            text-align-last: center;
+            border: solid 1px #cacaca;
+            padding: 0 10px;
+            margin: 20px auto 10px;
+        }
+    }
+    .redBorder{
+        border: 1px solid #e64545 !important;
     }
 </style>

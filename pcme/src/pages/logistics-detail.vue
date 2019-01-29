@@ -23,6 +23,7 @@
                 <div class="info" >
                     <p v-if="changePackage.slug"><span>{{$t('logisticsCompany')}}: </span>{{changePackage.slug}}</p>
                     <p v-if="changePackage.trackingNumber"><span>{{$t('tracknum')}}: </span>{{changePackage.trackingNumber}}</p>
+                    <P v-if="changePackage.logisticsSupplierWebsiteURL"><span>{{$t('trackingDetailInfo')}}: </span><a style="text-decoration: underline" :href="changePackage.logisticsSupplierWebsiteURL">{{changePackage.logisticsSupplierWebsiteURL}}</a></P>
                 </div>
             </div>
             <div class="logisticsinfo" v-if="changePackage.trackingId">

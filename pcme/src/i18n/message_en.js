@@ -162,5 +162,6 @@ export default {
     paymentMethod:' Payment Method',
     paynow:'PAY NOW',
     repurchase:'Repurchase',
-    remaining:'Remaining Payment Time'
+    remaining:'Remaining Payment Time',
+    trackingDetailInfo:'Tracking Detail Information'
 }

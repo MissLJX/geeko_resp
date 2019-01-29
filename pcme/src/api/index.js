@@ -13,7 +13,7 @@ export function logout(){
 }
 //读取count
 export const getOrderCountAll = () => {
-    return axios.get(NVPATH + '/order/orders-count').then(data => data.result)
+    return axios.get(NVPATH + '/order/orders-count2').then(data => data.result)
 }
 export const getOrderCountProcessing = () => {
     return axios.get(NVPATH + '/order/proccessing-orders-count').then(data => data.result)
@@ -45,8 +45,8 @@ export const getOrders =(skip, api_suffix) => {
 export const confirmOrder = (id) =>{
     return axios.get('/v8/order/'+id+'/receipt')
 }
-export const cancelOrder = (id) =>{
-    return axios.get('/v8/msite/order/'+id+'/cancel')
+export const cancelOrder = (id,reason) =>{
+    return axios.get('/v8/order/cancel',{orderId:id,cancelReason:reason})
 }
 //coupons
 export const getCoupons = () => {
@@ -102,6 +102,9 @@ export const deleteAddress = (id) => {
 }
 export function getDictionary(type) {
     return axios.get('/dictionary/anon/get', {typeCode: type}).then(data => data.result)
+}
+export function getCancelOrderReason(){
+    return getDictionary('cancel-order-reasons')
 }
 export function getCountries() {
     return getDictionary('country')

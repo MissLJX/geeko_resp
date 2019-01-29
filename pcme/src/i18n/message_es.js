@@ -153,5 +153,6 @@ export default {
     review:'revisión',
     paynow:'PAGUE AHORA',
     repurchase:'Readquirir',
-    remaining:'Tiempo de pago restante'
+    remaining:'Tiempo de pago restante',
+    trackingDetailInfo:'Información detallada de seguimiento'
 }
