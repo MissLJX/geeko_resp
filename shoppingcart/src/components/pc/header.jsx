@@ -205,7 +205,7 @@ const Header = ({intl, lang, currency, currencies, changeLang, hideTools}) => (
 	  				<LinkImage title="home" src={getLogo()} href={`${window.ctx}/`}/>
 	  			</span>
 	  		</div>
-	  		<div className="x-cell">
+	  		<div className="x-cell" style={{width: 230}}>
 	  			<span className="__hr">|</span>
 		        <span className="x-uppercase __secure">
 		  	  		<Icon style={{fontSize: 26, marginRight: 5}}>&#xe745;</Icon>
@@ -216,7 +216,7 @@ const Header = ({intl, lang, currency, currencies, changeLang, hideTools}) => (
 	  		</div>
 
 	  		{
-	  			!hideTools && <div className="x-cell __right">
+	  			!hideTools && <div className="x-cell">
 	  			<SELECT>
 	  				<span className="__title">{ currency }</span>
 	  				<div className="__displayer">
@@ -246,6 +246,11 @@ const Header = ({intl, lang, currency, currencies, changeLang, hideTools}) => (
 	  			</SELECT>
 	  		</div>
 	  		}
+
+	  		<div className="x-cell __right">
+		        <a style={{textDecoration: 'underline', color: '#222', textTransform: 'uppercase'}} href={ siteType === 'new' ? `${window.ctx || ''}/page/trending-now` : `${window.ctx || ''}/i/trending-now` }><FormattedMessage id="continue_shopping"/></a>
+		        <span style={{marginLeft: 5}}>▶</span>
+	  		</div>
 
 	  	</div>
   	</div>

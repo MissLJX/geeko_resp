@@ -1,26 +1,26 @@
 import React from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-import {selectMethod} from '../store/actions.js'
+import { selectMethod } from '../store/actions.js'
 import FullFixed from '../components/msite/full-fixed.jsx'
 import Money from '../components/money.jsx'
-import {Grey} from '../components/text.jsx'
-import {injectIntl} from 'react-intl'
-import {__route_root__} from '../utils/utils.js'
+import { Grey } from '../components/text.jsx'
+import { injectIntl } from 'react-intl'
+import { __route_root__ } from '../utils/utils.js'
 
 const mapStateToProps = (state) => {
-  return {
-    methods: state.cart ? state.cart.shippingMethodList : null,
-    selectedMethod: state.cart ? state.cart.shippingMethod : null
-  }
+	return {
+		methods: state.cart ? state.cart.shippingMethodList : null,
+		selectedMethod: state.cart ? state.cart.shippingMethod : null
+	}
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-    SELECT: (method) => {
-      dispatch(selectMethod(method))
-    }
-  }
+	return {
+		SELECT: (method) => {
+			dispatch(selectMethod(method))
+		}
+	}
 }
 
 const Method = styled.li`
@@ -42,7 +42,7 @@ const Method = styled.li`
   			top: calc(50% - 10px);
 		}
 	}
-`
+` 
 
 const Methods = styled.ul`
 	padding-left: 10px;
@@ -56,48 +56,48 @@ const Methods = styled.ul`
 `
 
 const ShippingMethods = class extends React.Component {
-  constructor (props) {
-    super(props)
-    this.close = this.close.bind(this)
-    this.clickHandle = this.clickHandle.bind(this)
-  }
+	constructor(props) {
+		super(props)
+		this.close = this.close.bind(this)
+		this.clickHandle = this.clickHandle.bind(this)
+	}
 
-  close (evt) {
-  	evt.preventDefault()
-    this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
-  }
+	close(evt) {
+		evt.preventDefault()
+		this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
+	}
 
-  clickHandle (evt, method) {
-  	evt.preventDefault()
-  	this.props.SELECT(method)
-    this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
-  }
+	clickHandle(evt, method) {
+		evt.preventDefault()
+		this.props.SELECT(method)
+		this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
+	}
 
-  render () {
-  	const {methods, selectedMethod, intl} = this.props
-  	return <FullFixed onClose={this.close} title={intl.formatMessage({id: 'shipping_method'})}>
-  		<Methods>
-  			{
-  				methods && methods.map(method => (
-  					<Method onClick={(evt) => { this.clickHandle(evt, method.id) }} className={method.id === selectedMethod.id ? 'selected' : ''}>
-  						<div>
-  							{method.title}: <Money money={method.price}/>
-  						</div>
+	render() {
+		const { methods, selectedMethod, intl } = this.props
+		return <FullFixed onClose={this.close} title={intl.formatMessage({ id: 'shipping_method' })}>
+			<Methods>
+				{
+					methods && methods.map(method => (
+						<Method onClick={(evt) => { this.clickHandle(evt, method.id) }} className={method.id === selectedMethod.id ? 'selected' : ''}>
+							<div>
+								{method.title}: <Money money={method.price} />
+							</div>
 
-  						<div style={{marginTop: 6}}>
-  							{method.shippingTime}
-  						</div>
-  					</Method>
-  				))
-  			}
-  		</Methods>
+							<div style={{ marginTop: 6 }}>
+								{method.shippingTime}
+							</div>
+						</Method>
+					))
+				}
+			</Methods>
 
-  		<p style={{fontSize: 12, padding: '12px 10px', borderTop: '1px dashed #666'}}><Grey>{intl.formatMessage({id: 'shipping_tip'})}</Grey></p>
-  		<div style={{padding: '12px 10px'}}>
-  			<img style={{width: '100%'}} src="https://dgzfssf1la12s.cloudfront.net/site/ninimour/msite/icon17.png"/>
-  		</div>
-  	</FullFixed>
-  }
+			<p style={{ fontSize: 12, padding: '12px 10px', borderTop: '1px dashed #666' }}><Grey>{intl.formatMessage({ id: 'shipping_tip' })}</Grey></p>
+			<div style={{ padding: '12px 10px' }}>
+				<img style={{ width: '100%' }} src="https://dgzfssf1la12s.cloudfront.net/site/ninimour/msite/icon17.png" />
+			</div>
+		</FullFixed>
+	}
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(ShippingMethods))

@@ -5,7 +5,7 @@ import {Grey} from '../text.jsx'
 import Ask from '../ask.jsx'
 
 import {Form, Input, Button} from './control.jsx'
-import {required, email, cpf} from '../validator.jsx'
+import {required, email, cpf, getDNI} from '../validator.jsx'
 import {StyledControl} from './styled-control.jsx'
 import InputBtn from './input-btn.jsx'
 
@@ -272,34 +272,50 @@ const TicketCash = class extends React.Component {
     }
   }
 
+  getLabel (payMethod) {
+    switch (payMethod) {
+      case '27':
+      case '28':
+        return 'DNI / CUIT'
+      case '30':
+      case '31':
+        return 'Cédula de ciudadanía'
+      case '34':
+      case '35':
+        return 'CI/RUT'
+      case '37':
+        return 'Cédula de identidad'
+      default:
+        return 'Document'
+    }
+  }
+
   render () {
     const { tcMethods } = this.state
     const { method, tcMethod, tcClickHandle, document, handleInputChange, documentForm, documentRef } = this.props
+    const _dni = getDNI(method.id)
     return <div>
 
       <CashMethods style={{marginTop: 15}}>
         {
           method.id !== '29' && <Form ref={documentForm} style={{marginBottom: 10}}>
-            <MethodInputLine className="x-table x-fw __vm __fixed">
-              <div className="x-cell">
-                <label>DNI<Ask style={{marginLeft: 4}} /></label>
-              </div>
-              <div className="x-cell">
-                <StyledControl inputColor="#fff">
-                  <Input
-                    name='document'
-                    value={this.props.document}
-                    onChange={this.props.handleInputChange}
-                    validations={[required]}/>
-                </StyledControl>
-              </div>
+            <MethodInputLine>
+              <label style={{marginBottom: 4, fontSize: 12, color: '#999', display: 'inline-block'}}>{this.getLabel(method.id)}</label>
+              <StyledControl inputColor="#fff">
+                <Input
+                  name='document'
+                  value={this.props.document}
+                  onChange={this.props.handleInputChange}
+                  validations={[required, _dni]}/>
+              </StyledControl>
             </MethodInputLine>
+            <Button style={{display: 'none'}} ref={documentRef}></Button>
           </Form>
         }
 
-        <ul>
+        <ul style={{paddingBottom: 5}}>
           {
-            tcMethods && tcMethods.map(method => <li key={method.id}>
+            method.id !== '34' && method.id !== '35' && tcMethods && tcMethods.map(method => <li key={method.id}>
               <TicketCashMethod className={tcMethod === method.id ? 'selected' : ''} onClick={(evt) => { tcClickHandle(method.id) }}>
                 <img src={method.logo}/>
               </TicketCashMethod>
@@ -455,6 +471,9 @@ const getMethodBody = (props) => {
     case '28':
     case '30':
     case '31':
+    case '34':
+    case '35':
+    case '37':
       return <TicketCash {...props}/>
     default:
       return null

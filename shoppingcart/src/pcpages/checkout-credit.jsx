@@ -64,7 +64,7 @@ const __Frame__ = {
   },
   '24': {
     url: `${window.ctx || ''}/i/dlocal`,
-    height: 480
+    height: 550
   }
 
 }
@@ -365,7 +365,15 @@ const Credit = class extends React.Component {
     const {checkout, installments, document} = this.props
     if (checkout.payMethod === '19') {
       this.checkmercado(evt)
-    } else if (checkout.payMethod === '24' || checkout.payMethod === '26' || checkout.payMethod === '32') {
+    } else if (checkout.payMethod === '24') {
+      this.payCredit({orderId: checkout.orderId, installments})
+    } else if (checkout.payMethod === '26' || checkout.payMethod === '32' || checkout.payMethod === '33' || checkout.payMethod === '36') {
+      this.documentRef.validateAll()
+      if (this.documentBtn.context && this.documentBtn.context._errors && this.documentBtn.context._errors.length > 0) {
+        return
+      }
+      if (!document) return
+
       this.payCredit({orderId: checkout.orderId, installments, document})
     } else {
       this.payCredit({orderId: checkout.orderId, payInstallments: installments})
@@ -376,7 +384,7 @@ const Credit = class extends React.Component {
     this.setState({
       checking: true
     })
-    checkout_credit(params).then(data => data.result).then(({success, transactionId, details, solutions}) => {
+    checkout_credit(params).then(data => data.result).then(({success, transactionId, details, solutions = ''}) => {
       if (success) {
         window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
       } else {
@@ -399,7 +407,7 @@ const Credit = class extends React.Component {
     this.setState({
       checking: true
     })
-    checkout_pay(params).then(data => data.result).then(({success, transactionId, details, solutions}) => {
+    checkout_pay(params).then(data => data.result).then(({success, transactionId, details, solutions = ''}) => {
       if (success) {
         window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
       } else {
@@ -518,7 +526,7 @@ const Credit = class extends React.Component {
   }
 
   getFrame () {
-    const { checkout } = this.props
+    const { checkout, document } = this.props
 
     if (checkout) {
       const { payMethod, orderTotal, shippingDetail, payMethods } = checkout
@@ -543,9 +551,9 @@ const Credit = class extends React.Component {
       let country = shippingDetail.country ? shippingDetail.country.value : window.__country
 
       if (_paymethod === '24') {
-        return {...__frame, url: `${__frame.url}?currency=${currency}&country=${country}&amount=${amount}`}
+        return {...__frame, url: `${__frame.url}?currency=${currency}&country=${country}&amount=${amount}&document=${document || ''}`}
       } else {
-        return {...__frame, url: `${__frame.url}?currency=${currency}&country=${country}&amount=${amount}&_=${new Date().getTime()}`}
+        return __frame
       }
     }
   }
@@ -614,6 +622,8 @@ const Credit = class extends React.Component {
                         selectCardHandle = { this.selectCardHandle.bind(this) }
                         country = {country}
                         document={this.props.document}
+                        documentRef={c => this.documentRef = c}
+                        documentBtn={c => this.documentBtn = c}
                       />
 
                       { this.state.checking ? <CREDITBTN style={{marginTop: 15}}>{intl.formatMessage({id: 'please_wait'})}...</CREDITBTN> : <CREDITBTN style={{marginTop: 15}} onClick={ payMethod === '19' ? this.showMercadoHandle.bind(this) : this.showFrameHandle.bind(this) }>+ <FormattedMessage id="use_new_card" /></CREDITBTN>}

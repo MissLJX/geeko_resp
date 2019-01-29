@@ -90,7 +90,7 @@ export default{
   no: 'Não',
   please_confirm_address: 'Por favor confirme o seu método de envio',
   please_select_paymethod: 'Por favor escolha o método de pagamento',
-  proceed_checkout: 'Fazer o check-out',
+  proceed_checkout: 'Continuar o pagamento',
   thanks_for_shopping: 'Obrigado por fazer compras',
   check_order: 'Verificar pedido',
   order_no: 'Encomendar Não',
@@ -102,5 +102,7 @@ export default{
   you_may_also_like: 'você pode gostar',
   recently_viewed: 'visto recentemente',
   account: 'Conta',
-  change_email: 'Mude o e-mail'
+  change_email: 'Mude o e-mail',
+  credit_card: 'cartão de crédito',
+  continue_shopping: 'continue comprando'
 }

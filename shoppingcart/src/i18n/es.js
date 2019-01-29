@@ -59,7 +59,7 @@ export default{
   add_new_address: 'Añadir una nueva dirección',
   choose_anthor_address: 'Elige otra dirección',
   item: 'Artículo',
-  qty: 'Cant.',
+  qty: 'Cantidad',
   unit_price: 'Precio Unitario',
   sum: 'Suma',
   use_now: 'Utilizar Ahora',
@@ -102,5 +102,7 @@ export default{
   you_may_also_like: 'También te puede interesar',
   recently_viewed: 'visto recientemente',
   account: 'Cuenta',
-  change_email: 'Cambiar e-mail'
+  change_email: 'Cambiar e-mail',
+  credit_card: 'tarjeta de crédito',
+  continue_shopping: 'seguir comprando'
 }

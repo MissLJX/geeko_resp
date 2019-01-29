@@ -37,6 +37,8 @@ import {fetchAll,
   setMoneyTransAR,
   setCashMethodCL,
   setMoneyTransCL,
+  setCashMethodUY,
+  setMoneyTransUY,
   setDocument} from '../store/actions.js'
 
 import Loading from '../components/msite/loading.jsx'
@@ -105,6 +107,14 @@ const getPayImage = country => {
       return 'https://s3-us-west-2.amazonaws.com/wanna/de_DE.png'
     case 'MX':
       return 'https://s3-us-west-2.amazonaws.com/wanna/es_ES.png'
+    case 'AR':
+      return 'https://s3-us-west-2.amazonaws.com/wanna/es_AR.png'
+    case 'CO':
+      return 'https://s3-us-west-2.amazonaws.com/wanna/es_CO.png'
+    case 'CL':
+      return 'https://s3-us-west-2.amazonaws.com/wanna/es_CL.png'
+    case 'UY':
+      return 'https://s3-us-west-2.amazonaws.com/wanna/es_UY.png'
     default:
       return 'https://s3-us-west-2.amazonaws.com/wanna/pc_default.png'
   }
@@ -282,6 +292,12 @@ const mapDispatchToProps = (dispatch) => {
     },
     SETMTCL: (method) => {
       return dispatch(setMoneyTransCL(method))
+    },
+    SETCSUY: (method) => {
+      return dispatch(setCashMethodUY(method))
+    },
+    SETMTUY: (method) => {
+      return dispatch(setMoneyTransUY(method))
     }
 
   }
@@ -681,27 +697,91 @@ const ShoppingCart = class extends React.Component {
       }
     }else if( payType === '15'){
       //Argentina Cash
+      if (!this.props.arCS) {
+        alert(__confirm_paymethod__)
+        this.$paylistdom.scrollIntoView()
+        return
+      }
       this.documentForm.validateAll()
-      if(this.props.arCS && this.props.document){
+      if(this.documentRef.context && this.documentRef.context._errors && this.documentRef.context._errors.length > 0){
+        return
+      }
+      if(this.props.document){
         this.dLocalPay({payMethod, paymentMethodId: this.props.arCS, document: this.props.document})
       }
     }else if( payType === '16' ){
       //Argentina Money Transform
+      if (!this.props.arMT) {
+        alert(__confirm_paymethod__)
+        this.$paylistdom.scrollIntoView()
+        return
+      }
       this.documentForm.validateAll()
-      if(this.props.arMT && this.props.document){
+      if(this.documentRef.context && this.documentRef.context._errors && this.documentRef.context._errors.length > 0){
+        return
+      }
+      if(this.props.document){
         this.dLocalPay({payMethod, paymentMethodId: this.props.arMT, document: this.props.document})
       }
     }else if( payType === '17' ){
       //Colombia Cash
+      if (!this.props.clCS) {
+        alert(__confirm_paymethod__)
+        this.$paylistdom.scrollIntoView()
+        return
+      }
       this.documentForm.validateAll()
+      if(this.documentRef.context && this.documentRef.context._errors && this.documentRef.context._errors.length > 0){
+        return
+      }
       if(this.props.clCS && this.props.document){
         this.dLocalPay({payMethod, paymentMethodId: this.props.clCS, document: this.props.document})
       }
     }else if( payType === '18' ){
       //Colombia Money Transform
+      if (!this.props.clMT) {
+        alert(__confirm_paymethod__)
+        this.$paylistdom.scrollIntoView()
+        return
+      }
       this.documentForm.validateAll()
-      if(this.props.clMT && this.props.document){
+      if(this.documentRef.context && this.documentRef.context._errors && this.documentRef.context._errors.length > 0){
+        return
+      }
+      if(this.props.document){
         this.dLocalPay({payMethod, paymentMethodId: this.props.clMT, document: this.props.document})
+      }
+    }else if( payType === '19' ){
+      this.documentForm.validateAll()
+      if(this.documentRef.context && this.documentRef.context._errors && this.documentRef.context._errors.length > 0){
+        return
+      }
+      if(this.props.document){
+        this.dLocalPay({payMethod, paymentMethodId: 'SP', document: this.props.document})
+      }
+    }else if( payType === '20' ){
+      this.documentForm.validateAll()
+      if(this.documentRef.context && this.documentRef.context._errors && this.documentRef.context._errors.length > 0){
+        return
+      }
+      if(this.props.document){
+        this.dLocalPay({payMethod, paymentMethodId: 'WP', document: this.props.document})
+      }
+    }else if( payType === '21' ){
+      if (!this.props.uyCS) {
+        alert(__confirm_paymethod__)
+        this.$paylistdom.scrollIntoView()
+        return
+      }
+
+      this.documentForm.validateAll()
+
+      if(this.documentRef.context && this.documentRef.context._errors && this.documentRef.context._errors.length > 0){
+        return
+      }
+
+      if(this.props.document){
+        this.dLocalPay({payMethod, paymentMethodId: this.props.uyCS, document: this.props.document})
       }
     }
 
@@ -1033,6 +1113,10 @@ const ShoppingCart = class extends React.Component {
         this.props.SETMTCL(method)
         storage.add('clMT', method, 365 * 24 * 60 * 60)
         break
+      case '37':
+        this.props.SETCSUY(method)
+        storage.add('uyCS', method, 365 * 24 * 60 * 60)
+        break
       default:
         break
 
@@ -1053,6 +1137,8 @@ const ShoppingCart = class extends React.Component {
         return this.props.clCS
       case '31':
         return this.props.clMT
+      case '37':
+        return this.props.uyCS
       default:
         break
 
@@ -1559,7 +1645,7 @@ const ShoppingCart = class extends React.Component {
   		          				<span style={{marginLeft: 10, verticalAlign: 'middle'}}>{intl.formatMessage({id:'select_all'})}</span>
   		          			</div>
   		          			<div className="x-cell __right">
-                        { cart.messages && cart.messages.shippingMsg && <span dangerouslySetInnerHTML={{__html: cart.messages.shippingMsg}}/>}
+                        { cart.messages && cart.messages.shippingMsg && <strong dangerouslySetInnerHTML={{__html: cart.messages.shippingMsg}}/>}
                       </div>
   		          		</div>
   		          	</SelectLine>
@@ -1686,7 +1772,7 @@ const ShoppingCart = class extends React.Component {
                       }
 
                       {
-                        cancheckout ? (
+                        cancheckout&&cart.canCheckout ? (
                           window.__is_login__ ? <div>
                             {
                               this.props.payMethod === '1' ? <div id='ip-paypal-pay' style={{marginTop: 30}} ref={ (c) => this.paypalRender(c, 'normal') }/> : (!this.state.checking ? <BigButton onClick={this.checkout.bind(this)} bgColor="#222" style={{marginTop: 30, height: 45, lineHeight: '45px', textTransform: 'uppercase', fontSize: 18}}>
