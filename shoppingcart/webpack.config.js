@@ -8,7 +8,8 @@ const BUILD_PATH = path.resolve(ROOT_PATH, 'dist')
 
 module.exports = {
 	entry: {
-		app: ['babel-polyfill', path.resolve(ROOT_PATH, 'app.jsx')]
+		// app: ['babel-polyfill', path.resolve(ROOT_PATH, 'app.jsx')]
+		app: [path.resolve(ROOT_PATH, 'app.jsx')]
 	},
 	output: {
 		path: BUILD_PATH,

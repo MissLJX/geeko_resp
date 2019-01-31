@@ -2,26 +2,26 @@ import React from 'react'
 import styled from 'styled-components'
 
 const DLocal = class extends React.Component {
-  constructor (props) {
-  	super(props)
-  }
+	constructor (props) {
+		super(props)
+	}
 
-  componentWillMount () {}
+	componentWillMount () {}
 
-  formRef (c) {
-  	this.form = c
-  	console.log(this.panHolder)
-  }
+	formRef (c) {
+		this.form = c
+		console.log(this.panHolder)
+	}
 
-  render () {
-  	return <div>
-  		<form ref={this.formRef.bind(this)}>
-  			<div ref={ c => this.panHolder = c}>
+	render () {
+		return <div>
+			<form ref={this.formRef.bind(this)}>
+				<div ref={ c => this.panHolder = c}>
 
-  			</div>
-  			<div ref={ c => this.expiratioHolder = c}></div>
-  			<div ref={ c => this.cvvHolder = c}></div>
-  		</form>
-  	</div>
-  }
+				</div>
+				<div ref={ c => this.expiratioHolder = c}></div>
+				<div ref={ c => this.cvvHolder = c}></div>
+			</form>
+		</div>
+	}
 }
