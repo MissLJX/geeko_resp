@@ -18,7 +18,7 @@ const __Coupon_Code_Tip_Message__ = 'Utiliza el código MERCADOPAGO para obtener
 const METHOD = styled.div`
 	cursor: pointer;
 	& > div{
-		&:nth-child(1){
+		&:nth-child(1){ 
 			width: 28px;
 		}
 		&:nth-child(2){
@@ -45,15 +45,15 @@ const METHODPLUGIN = styled.div`
 	margin-top: 10px;
 	position: relative;
 	&::before{
-	    content: '';
-	    display: inline-block;
-	    width: 10px;
-	    height: 10px;
-	    transform: rotate(-45deg);
-	    background-color: #eee;
-	    top: -5px;
-	    left: 50px;
-	    position: absolute;
+			content: '';
+			display: inline-block;
+			width: 10px;
+			height: 10px;
+			transform: rotate(-45deg);
+			background-color: #eee;
+			top: -5px;
+			left: 50px;
+			position: absolute;
 	}
 `
 
@@ -62,352 +62,355 @@ const METHODCONTAINER = styled.div`
 `
 
 const Boleto = (props) => <Form ref={props.boletoForm}>
-  <MutiElement>
-    <FormElement label={`EMAIL:`} className="__required">
-      <Input
-        name='email'
-        value={props.email}
-        style={{width: '100%', height: 35}}
-        onChange={props.handleInputChange}
-        validations={[required, email]}/>
-    </FormElement>
-    <FormElement/>
-  </MutiElement>
+	<MutiElement>
+		<FormElement label="EMAIL:" className="__required">
+			<Input
+				name='email'
+				value={props.email}
+				style={{width: '100%', height: 35}}
+				onChange={props.handleInputChange}
+				validations={[required, email]}/>
+		</FormElement>
+		<FormElement/>
+	</MutiElement>
 
-  <Button style={{display: 'none'}} ref={props.boleto}></Button>
+	<Button style={{display: 'none'}} ref={props.boleto}></Button>
 </Form>
 
 const Apac = (props) => <Form ref={props.apac}>
 
-  <MutiElement>
-    <FormElement label={`CPF:`} tipMessage={__Cpf_Tip_Message__} className="__required">
-      <Input
-        name='cpf'
-        value={props.cpf}
-        style={{width: '100%', height: 35}}
-        onChange={props.handleInputChange}
-        validations={[required, cpf]}/>
-    </FormElement>
-    <FormElement></FormElement>
-  </MutiElement>
-  <Button style={{display: 'none'}} ref={props.apacBB}></Button>
+	<MutiElement>
+		<FormElement label="CPF:" tipMessage={__Cpf_Tip_Message__} className="__required">
+			<Input
+				name='cpf'
+				value={props.cpf}
+				style={{width: '100%', height: 35}}
+				onChange={props.handleInputChange}
+				validations={[required, cpf]}/>
+		</FormElement>
+		<FormElement></FormElement>
+	</MutiElement>
+	<Button style={{display: 'none'}} ref={props.apacBB}></Button>
 </Form>
 
 const CashMethods = styled.ul`
-  &::after{
-    content: '';
-    clear: both;
-    display: block;
-  }
-  & > li{
-    float: left;
-    margin-right: 10px;
-  }
+	&::after{
+		content: '';
+		clear: both;
+		display: block;
+	}
+	& > li{
+		float: left;
+		margin-right: 10px;
+	}
 `
 
 const CashMethod = styled.span`
-  display: inline-block;
-  cursor: pointer;
-  position: relative;
-  border: 1px solid #e5e5e5;
-  padding: 4px;
-  height: 31px;
-  overflow: hidden;
-  background-color: #fff;
-  box-shadow: 0 0px 4px rgba(136,136,136,.2);
-  border-radius: 2px;
-  &.selected{
-    border: 1px solid #e5004f;
-    &::after{
-      content: '\\e742';
-      right: -2px;
-      bottom: -2px;
-      position: absolute;
-      color: #e5004f;
-      font-family: iconfont;
-      font-style: normal;
-    }
-  }
+	display: inline-block;
+	cursor: pointer;
+	position: relative;
+	border: 1px solid #e5e5e5;
+	padding: 4px;
+	height: 31px;
+	overflow: hidden;
+	background-color: #fff;
+	box-shadow: 0 0px 4px rgba(136,136,136,.2);
+	border-radius: 2px;
+	&.selected{
+		border: 1px solid #e5004f;
+		&::after{
+			content: '\\e742';
+			right: -2px;
+			bottom: -2px;
+			position: absolute;
+			color: #e5004f;
+			font-family: iconfont;
+			font-style: normal;
+		}
+	}
 
-  img{
-    display: block;
-  }
+	img{
+		display: block;
+	}
 `
 
 const TicketCashMethod = styled.span`
-  display: inline-block;
-  cursor: pointer;
-  position: relative;
-  border: 1px solid #e5e5e5;
-  padding: 4px;
-  height: 100px;
-  width: 100px;
-  overflow: hidden;
-  background-color: #fff;
-  box-shadow: 0 0px 4px rgba(136,136,136,.2);
-  border-radius: 2px;
-  &.selected{
-    border: 1px solid #e5004f;
-    &::after{
-      content: '\\e742';
-      right: -2px;
-      bottom: -2px;
-      position: absolute;
-      color: #e5004f;
-      font-family: iconfont;
-      font-style: normal;
-    }
-  }
+	display: inline-block;
+	cursor: pointer;
+	position: relative;
+	border: 1px solid #e5e5e5;
+	padding: 4px;
+	height: 100px;
+	width: 100px;
+	overflow: hidden;
+	background-color: #fff;
+	box-shadow: 0 0px 4px rgba(136,136,136,.2);
+	border-radius: 2px;
+	&.selected{
+		border: 1px solid #e5004f;
+		&::after{
+			content: '\\e742';
+			right: -2px;
+			bottom: -2px;
+			position: absolute;
+			color: #e5004f;
+			font-family: iconfont;
+			font-style: normal;
+		}
+	}
 
-  img{
-    display: block;
-    width: 100%;
-  }
+	img{
+		display: block;
+		width: 100%;
+	}
 `
 
 const MoneyTransform = (props) => {
-  const {atmMethods, atmMethod, setCouponHandle, couponCode, showMercadopagoCouponField} = props
-  return <div>
-    <CashMethods>
-      {
-        atmMethods && atmMethods.map(method => <li key={method.id}>
-          <CashMethod className={atmMethod === method.id ? 'selected' : ''} onClick={(evt) => { props.atmClickHandle(method) }}>
-            <img src={method.secure_thumbnail}/>
-          </CashMethod>
-        </li>)
-      }
-    </CashMethods>
+	const {atmMethods, atmMethod, setCouponHandle, couponCode, showMercadopagoCouponField} = props
+	return <div>
+		<CashMethods>
+			{
+				atmMethods && atmMethods.map(method => <li key={method.id}>
+					<CashMethod className={atmMethod === method.id ? 'selected' : ''} onClick={(evt) => { props.atmClickHandle(method) }}>
+						<img src={method.secure_thumbnail}/>
+					</CashMethod>
+				</li>)
+			}
+		</CashMethods>
 
-    {
-      showMercadopagoCouponField && <div style={{width: 320, marginTop: 10}}>
-        <div>MercadoPago Cupón  <Ask style={{marginLeft: 5}} message={__Coupon_Code_Tip_Message__}/></div>
-        <div style={{marginTop: 5}}>
-          <InputBtn initValue={couponCode} buttonText={'Utilizar Ahora'} buttonHandle={ setCouponHandle }/>
-        </div>
+		{
+			showMercadopagoCouponField && <div style={{width: 320, marginTop: 10}}>
+				<div>MercadoPago Cupón  <Ask style={{marginLeft: 5}} message={__Coupon_Code_Tip_Message__}/></div>
+				<div style={{marginTop: 5}}>
+					<InputBtn initValue={couponCode} buttonText={'Utilizar Ahora'} buttonHandle={ setCouponHandle }/>
+				</div>
 
-      </div>
-    }
+			</div>
+		}
 
-  </div>
+	</div>
 }
 
 const TicketCash = class extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      tcMethods: []
-    }
-  }
+	constructor (props) {
+		super(props)
+		this.state = {
+			tcMethods: []
+		}
+	}
 
-  componentWillMount () {
-    const { method } = this.props
-    if (method) {
-      getDPaymethods(method.id).then(({result}) => {
-        this.setState({
-          tcMethods: result
-        })
-      })
-    }
-  }
+	componentWillMount () {
+		const { method, initCashmethod } = this.props
+		if (method) {
+			getDPaymethods(method.id).then(({result}) => {
+				this.setState({
+					tcMethods: result
+				})
+				if(result && result.length > 0){
+					initCashmethod(method.id, result[0])
+				}
+			})
+		}
+	}
 
-  getLabel (payMethod) {
-    switch (payMethod) {
-      case '27':
-      case '28':
-        return 'DNI / CUIT'
-      case '30':
-      case '31':
-        return 'Cédula de ciudadanía'
-      case '34':
-      case '35':
-        return 'CI/RUT'
-      case '37':
-        return 'Cédula de identidad'
-      default:
-        return 'Document'
-    }
-  }
+	getLabel (payMethod) {
+		switch (payMethod) {
+		case '27':
+		case '28':
+			return 'DNI / CUIT'
+		case '30':
+		case '31':
+			return 'Cédula de ciudadanía'
+		case '34':
+		case '35':
+			return 'CI/RUT'
+		case '37':
+			return 'Cédula de identidad'
+		default:
+			return 'Document'
+		}
+	}
 
-  render () {
-    const { tcMethods } = this.state
-    const { method, tcMethod, tcClickHandle, document, handleInputChange, documentForm, documentRef } = this.props
+	render () {
+		const { tcMethods } = this.state
+		const { method, tcMethod, tcClickHandle, document, handleInputChange, documentForm, documentRef } = this.props
 
-    const _dni = getDNI(method.id)
+		const _dni = getDNI(method.id)
 
-    return <div>
-      {
-        method.id !== '29' && <Form ref={documentForm}>
-          <MutiElement>
-            <FormElement label={`${this.getLabel(method.id)}:`} className="__required">
-              <Input
-                name='document'
-                value={document}
-                style={{width: '100%', height: 35}}
-                onChange={handleInputChange}
-                validations={[required, _dni]}/>
-            </FormElement>
-            <FormElement/>
-          </MutiElement>
-          <Button style={{display: 'none'}} ref={documentRef}></Button>
-        </Form>
-      }
+		return <div>
+			{
+				method.id !== '29' && <Form ref={documentForm}>
+					<MutiElement>
+						<FormElement label={`${this.getLabel(method.id)}:`} className="__required">
+							<Input
+								name='document'
+								value={document}
+								style={{width: '100%', height: 35}}
+								onChange={handleInputChange}
+								validations={[required, _dni]}/>
+						</FormElement>
+						<FormElement/>
+					</MutiElement>
+					<Button style={{display: 'none'}} ref={documentRef}></Button>
+				</Form>
+			}
 
-      <CashMethods style={{marginTop: 15}}>
-        {
-          method.id !== '34' && method.id !== '35' && tcMethods && tcMethods.map(method => <li key={method.id}>
-            <TicketCashMethod className={tcMethod === method.id ? 'selected' : ''} onClick={(evt) => { tcClickHandle(method.id) }}>
-              <img src={method.logo}/>
-            </TicketCashMethod>
-          </li>)
-        }
-      </CashMethods>
-    </div>
-  }
+			<CashMethods style={{marginTop: 15}}>
+				{
+					tcMethods && tcMethods.map(method => <li key={method.id}>
+						<TicketCashMethod className={tcMethod === method.id ? 'selected' : ''} onClick={(evt) => { tcClickHandle(method.id) }}>
+							<img src={method.logo}/>
+						</TicketCashMethod>
+					</li>)
+				}
+			</CashMethods>
+		</div>
+	}
 }
 
 const BrazilOcean = (props) => <Form ref={props.brazilOceanForm}>
 
-  <MutiElement>
+	<MutiElement>
 
-    <FormElement label={`Installments:`} className="__required">
-      <Select
-        style={{width: '100%', height: 35, backgroundColor: '#fff'}}
-        name="installments"
-        className="x-select"
-        value={props.installments}
-        onChange={props.handleInputChange}>
-        <option value={1}>1*{unitprice(props.orderTotal)} ({unitprice(props.orderTotal)})  </option>
-        {
+		<FormElement label={'Installments:'} className="__required">
+			<Select
+				style={{width: '100%', height: 35, backgroundColor: '#fff'}}
+				name="installments"
+				className="x-select"
+				value={props.installments}
+				onChange={props.handleInputChange}>
+				<option value={1}>1*{unitprice(props.orderTotal)} ({unitprice(props.orderTotal)})  </option>
+				{
 
-          props.installmentoptions.map(i => (
-            <option key={i.number} value={i.number}>
-              {i.number}*{unitprice(i.stagePrice)} ({i.stagePrice.unit + (i.number * Number(i.stagePrice.amount)).toFixed(2)})
-            </option>
-          ))
-        }
-      </Select>
-    </FormElement>
-    <FormElement/>
-  </MutiElement>
-  <Button style={{display: 'none'}} ref={props.brazilOcean}></Button>
+					props.installmentoptions.map(i => (
+						<option key={i.number} value={i.number}>
+							{i.number}*{unitprice(i.stagePrice)} ({i.stagePrice.unit + (i.number * Number(i.stagePrice.amount)).toFixed(2)})
+						</option>
+					))
+				}
+			</Select>
+		</FormElement>
+		<FormElement/>
+	</MutiElement>
+	<Button style={{display: 'none'}} ref={props.brazilOcean}></Button>
 </Form>
 
 const Mercado = (props) => {
-  const { setCouponHandle, couponCode } = props
-  return <div style={{width: 320}}>
-    <div>MercadoPago Cupón  <Ask style={{marginLeft: 5}} message={__Coupon_Code_Tip_Message__}/></div>
-    <div style={{marginTop: 5}}>
-      <InputBtn initValue={couponCode} buttonText={'Utilizar Ahora'} buttonHandle={ setCouponHandle }/>
-    </div>
+	const { setCouponHandle, couponCode } = props
+	return <div style={{width: 320}}>
+		<div>MercadoPago Cupón  <Ask style={{marginLeft: 5}} message={__Coupon_Code_Tip_Message__}/></div>
+		<div style={{marginTop: 5}}>
+			<InputBtn initValue={couponCode} buttonText={'Utilizar Ahora'} buttonHandle={ setCouponHandle }/>
+		</div>
 
-  </div>
+	</div>
 }
 
 const getPlugin = (props) => {
-  const { method, showMercadopagoCouponField } = props
-  switch (method.id) {
-    case '16':
-      return <Boleto {...props}/>
-    // case '23':
-    //   return <Apac {...props}/>
-    case '20':
-      return <MoneyTransform {...props}/>
-    case '17':
-      return <BrazilOcean {...props}/>
-    case '19':
-    case '21':
-      return showMercadopagoCouponField && <Mercado {...props}/>
-    case '29':
-    case '27':
-    case '28':
-    case '30':
-    case '31':
-    case '34':
-    case '35':
-    case '37':
-      return <TicketCash {...props}/>
-    default:
-		  return null
-  }
+	const { method, showMercadopagoCouponField } = props
+	switch (method.id) {
+	case '16':
+		return <Boleto {...props}/>
+		// case '23':
+		//   return <Apac {...props}/>
+	case '20':
+		return <MoneyTransform {...props}/>
+	case '17':
+		return <BrazilOcean {...props}/>
+	case '19':
+	case '21':
+		return showMercadopagoCouponField && <Mercado {...props}/>
+	case '29':
+	case '27':
+	case '28':
+	case '30':
+	case '31':
+	case '34':
+	case '35':
+	case '37':
+		return <TicketCash {...props}/>
+	default:
+		return null
+	}
 }
 
 const DISCOUNTTIP = styled.span`
-  background-color:#fff9fc;
-  border: 1px solid #f3a6c0;
-  padding: 4px;
-  font-size: 12px;
-  position: relative;
-  margin-left: 12px;
-  &::before{
-    content:'';
-    border-left: 1px solid #f3a6c0;
-    border-top: 1px solid #f3a6c0;
-    background-color:#fff9fc;
-    transform: rotate(-45deg);
-    position:absolute;
-    left: -5px;
-    top: 6px;
-    width: 8px;
-    height: 8px;
-  }
+	background-color:#fff9fc;
+	border: 1px solid #f3a6c0;
+	padding: 4px;
+	font-size: 12px;
+	position: relative;
+	margin-left: 12px;
+	&::before{
+		content:'';
+		border-left: 1px solid #f3a6c0;
+		border-top: 1px solid #f3a6c0;
+		background-color:#fff9fc;
+		transform: rotate(-45deg);
+		position:absolute;
+		left: -5px;
+		top: 6px;
+		width: 8px;
+		height: 8px;
+	}
 `
 
 const PayMethod = (props) => {
-  const {method, selectedPayId, paypalDiscountMessage, children} = props
+	const {method, selectedPayId, paypalDiscountMessage, children} = props
 
-  const selected = method.id === selectedPayId
+	const selected = method.id === selectedPayId
 
-  const matched = method.name.match(__qoute_reg__)
-  let name
-  if (matched && matched.length) {
-	  name = method.name.replace(matched[0], `<span class="x-red">${matched[0]}</span>`)
-  } else {
-	  name = method.name
-  }
+	const matched = method.name.match(__qoute_reg__)
+	let name
+	if (matched && matched.length) {
+		name = method.name.replace(matched[0], `<span class="x-red">${matched[0]}</span>`)
+	} else {
+		name = method.name
+	}
 
-  return <METHODCONTAINER>
-    		<METHOD onClick={() => { props.selectPayHandle(method) }} className="x-table x-fw __vm">
-		      <div className="x-cell">
-        <CheckBox className={ selected ? 'selected' : ''}/>
-		      </div>
-		      <div className="x-cell">
-		        <img src={ method.icon }/>
-		      </div>
-		      <div className="x-cell">
-		        <span dangerouslySetInnerHTML={{__html: name}}/>
+	return <METHODCONTAINER>
+		<METHOD onClick={() => { props.selectPayHandle(method) }} className="x-table x-fw __vm">
+			<div className="x-cell">
+				<CheckBox className={ selected ? 'selected' : ''}/>
+			</div>
+			<div className="x-cell">
+				<img src={ method.icon }/>
+			</div>
+			<div className="x-cell">
+				<span dangerouslySetInnerHTML={{__html: name}}/>
 
-        {
-          method.id === '1' && paypalDiscountMessage && <DISCOUNTTIP><span dangerouslySetInnerHTML={{__html: paypalDiscountMessage}}/></DISCOUNTTIP>
-        }
-		      </div>
+				{
+					method.id === '1' && paypalDiscountMessage && <DISCOUNTTIP><span dangerouslySetInnerHTML={{__html: paypalDiscountMessage}}/></DISCOUNTTIP>
+				}
+			</div>
 
-		    </METHOD>
+		</METHOD>
 
-		    {
-		    	selected && children && <METHODPLUGIN>
-		    		{children}
-		    	</METHODPLUGIN>
-		    }
-  	</METHODCONTAINER>
+		{
+			selected && children && <METHODPLUGIN>
+				{children}
+			</METHODPLUGIN>
+		}
+	</METHODCONTAINER>
 }
 
 const PayMethods = class extends React.Component {
-  constructor (props) {
-    super(props)
-  }
+	constructor (props) {
+		super(props)
+	}
 
-  render () {
-  	const { payMethodList } = this.props
-  	return <METHODS>
-  		{
-  			payMethodList && payMethodList.length > 0 && payMethodList.map(method => <li key={method.id}>
-  				<PayMethod method={method} {...this.props}>
-  					{getPlugin({method, ...this.props})}
-  				</PayMethod>
-  			</li>)
-  		}
-  	</METHODS>
-  }
+	render () {
+		const { payMethodList } = this.props
+		return <METHODS>
+			{
+				payMethodList && payMethodList.length > 0 && payMethodList.map(method => <li key={method.id}>
+					<PayMethod method={method} {...this.props}>
+						{getPlugin({method, ...this.props})}
+					</PayMethod>
+				</li>)
+			}
+		</METHODS>
+	}
 }
 
 export default PayMethods

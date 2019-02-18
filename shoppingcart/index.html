@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
     <script type="text/javascript">
     	// window.accessToken = '59103148-d338-47c5-a6bd-9ce0e376a0e0'
-    	window.lang = 'en_US'
+    	window.lang = 'en'
     	window.__is_login__ = true
         window.__isnew = true
     	window.paypalEnv= 'sandbox'
@@ -17,6 +17,14 @@
         window.__payimage__ = 'https://s3-us-west-2.amazonaws.com/wanna/pc_default.png'
 
         window.__country = 'pt_BR'.split('_')[1];
+
+        window.__FB_Origin = 'https://www.chicme.xyz'
+        window.__FB_Page_ID = '843011132517448'
+        window.__FB_Messenger_App_ID = '628197333983380'
+
+        window.__Order_ID = '123'
+        window.__User_ID = '123'
+
 
         // https://s3-us-west-2.amazonaws.com/wanna/pt_BR.png
 
@@ -42,8 +50,7 @@
 </head>
 <body style="background-color: #fff;">
 
-
-    <button id="addtohome">Add to home page</button>
+    <button style="display: none;" id="addtohome">Add to home page</button>
 <body>
 
 <script type="text/javascript">
@@ -68,7 +75,13 @@
     }
 </script>
 
-<!-- <script src="https://js-sandbox.dlocal.com"></script> -->
+<script src="https://js-sandbox.dlocal.com"></script>
+
+<script type="text/javascript">
+    window.__dlocal = dlocal('8bba6985-ddc9-4882-a5b1-28c522a85d71');
+
+
+</script>
 
 
 
@@ -94,7 +107,7 @@
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function () {
                 registerServiceWorker().then(function(registration){
-                    alert('sw2')
+                    // alert('sw2')
                     console.log(registration);
                 });
             })
@@ -105,7 +118,7 @@
     var deferredPrompt, btnAdd = document.getElementById("addtohome");
 
     window.addEventListener('beforeinstallprompt', (e) => {
-         alert('fuck2');
+         // alert('fuck2');
       // Prevent Chrome 67 and earlier from automatically showing the prompt
       e.preventDefault();
       // Stash the event so it can be triggered later.
@@ -140,6 +153,30 @@
     
     
 </script>
+
+<script>
+    window.fbAsyncInit = function() {
+     FB.init({
+       appId            : '628197333983380',
+       autoLogAppEvents : true,
+       xfbml            : true,
+       version          : 'v3.1'
+     });
+
+    
+   };
+
+ 
+   (function(d, s, id){
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) {return;}
+      js = d.createElement(s); js.id = id;
+      js.src = "https://connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+  
+     
+ </script>
 
 
 </body>

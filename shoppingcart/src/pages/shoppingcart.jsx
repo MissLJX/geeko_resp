@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Switch, Route, Link, Redirect } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import Loading from '../components/msite/loading.jsx'
 import Empty from '../components/msite/empty.jsx'
 import Refreshing from '../components/msite/refreshing.jsx'
@@ -8,7 +8,7 @@ import Ask from '../components/ask.jsx'
 import FixedMessage from '../components/msite/fixed-message.jsx'
 import { Boxs, Box, BoxClickHead, BoxBody, LineBox, BoxHead } from '../components/msite/layout.jsx'
 // import GroupOverseasItems from '../components/msite/group-overseas-items.jsx'
-
+ 
 import PromotionGroup from '../components/msite/promotion-group.jsx'
 
 import GroupLocalItems from '../components/msite/group-local-items.jsx'
@@ -23,21 +23,13 @@ import {
 	edited, editItem, selectPay, CPF, EMAIL, getCreditCards,
 	getMercadoCards, toggleCredit, setSecurityCode, setInstallments, fetchCoupons, deleteItem, deleteItems,
 	setMercadoInstallments, toggleCreditStatus, setAtmMethod, setTicketMethod, getDLocalCards, setDocument,
-	setCashMethodBR,
-	setMoneyTransBR,
-	setCashMethodAR,
-	setMoneyTransAR,
-	setCashMethodCL,
-	setMoneyTransCL,
-	setCashMethodChile,
-	setMoneyTransChile,
-	setCashMethodUY
+	setCashout
 } from '../store/actions.js'
 import Mask from '../components/mask.jsx'
 import _ from 'lodash'
 import PayMethodList from '../components/msite/paymethod-list.jsx'
 import { BigButton } from '../components/msite/buttons.jsx'
-import { payDLocal, useMercadocard, mercadopay, usePoint, useInsurance, creditpay, paypalpay, usecreditcard, movetooverseas, getMessage, placepaypal, givingCoupon, atmPay, ticketPay, getSafeCharge, getApacPay, apacPay, useMercadoCoupon, getDLocalPayLink, payCredit } from '../api'
+import { payDLocal, useMercadocard, mercadopay, usePoint, useInsurance, creditpay, paypalpay, usecreditcard, movetooverseas, getMessage, placepaypal, givingCoupon, atmPay, ticketPay, getSafeCharge, getApacPay, apacPay, useMercadoCoupon } from '../api'
 import { __route_root__, storage } from '../utils/utils.js'
 import { submit } from '../utils/common-pay.js'
 import { CountDownBlock } from '../components/msite/countdowns.jsx'
@@ -163,6 +155,7 @@ const DashedLine = styled.div`
 		left:0;
 `
 
+
 const mapStateToProps = (state) => {
 	return {
 		...state
@@ -256,45 +249,11 @@ const mapDispatchToProps = (dispatch) => {
 		SETDOCUMENT: (document) => {
 			return dispatch(setDocument(document))
 		},
-		SETCSBR: (method) => {
-			return dispatch(setCashMethodBR(method))
-		},
-		SETMTBR: (method) => {
-			return dispatch(setMoneyTransBR(method))
-		},
-		SETCSAR: (method) => {
-			return dispatch(setCashMethodAR(method))
-		},
-		SETMTAR: (method) => {
-			return dispatch(setMoneyTransAR(method))
-		},
-		SETCSCL: (method) => {
-			return dispatch(setCashMethodCL(method))
-		},
-		SETMTCL: (method) => {
-			return dispatch(setMoneyTransCL(method))
-		},
-		SETCSCHILE: (method) => {
-			return dispatch(setCashMethodChile(method))
-		},
-		SETMTCHILE: (method) => {
-			return dispatch(setMoneyTransChile(method))
-		},
-		SETCSUY: (method) => {
-			return dispatch(setCashMethodUY(method))
+		SETCASHOUT: (method) => {
+			return dispatch(setCashout(method))
 		}
 	}
 }
-
-const SendCouponTip = styled.div`
-	width: 100%;
-	& > div{
-		&:first-child{
-		}
-		&:last-child{
-		}
-	}
-`
 
 const ShoppingCart = class extends React.Component {
 	constructor(props) {
@@ -319,7 +278,8 @@ const ShoppingCart = class extends React.Component {
 			showPayMsgOcean: false,
 			ticketMethods: [],
 			atmMethods: [],
-			successTip: null
+			successTip: null,
+			dlocalerror: null
 		}
 	}
 
@@ -332,6 +292,10 @@ const ShoppingCart = class extends React.Component {
 				successTip: null
 			})
 		}, 2000)
+	}
+
+	cvvRef(c) {
+		this.cvvField = c
 	}
 
 	componentDidMount() {
@@ -458,14 +422,12 @@ const ShoppingCart = class extends React.Component {
 				if (!cards || cards.length < 1) {
 					if (payType === '8') {
 						getSafeCharge().then(({ result }) => {
-							const { isFree, payURL, params, transactionId, orderId } = result
+							const { isFree, transactionId, orderId } = result
 							if (isFree) {
 								window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
 							} else {
 								storage.add('temp-order', orderId, 1 * 60 * 60)
 								submit(result)
-
-								// window.location.href = `${payURL}?${qs.stringify(params, true)}`
 							}
 						}).catch(({ result }) => {
 							alert(result)
@@ -610,15 +572,7 @@ const ShoppingCart = class extends React.Component {
 
 			if (payMethod === '23') {
 				const { cpf } = this.props
-				// this.apac.validateAll()
-				// if (this.apacBB.context._errors && this.apacBB.context._errors.length) {
-				//   this.setState({
-				//     checking: false
-				//   })
-				//   return
-				// }
-
-				this.apacPay(payMethod, this.props.cpf, (result) => {
+				this.apacPay(payMethod, cpf, (result) => {
 					this.setState({
 						checking: false
 					})
@@ -701,113 +655,30 @@ const ShoppingCart = class extends React.Component {
 					checking: false
 				})
 			})
-		} else if (payType === '14') {
-			this.setState({
-				checking: true
-			})
-			const paymentMethodId = this.getTcMethod()
-			payDLocal({ payMethod, paymentMethodId }).then(data => data.result).then(({ transactionId, success, details, orderId }) => {
-				if (success) {
-
-					window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-
-				} else {
-					alert(details)
-					if (orderId) {
-						this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
-					}
-				}
-
-				this.setState({
-					checking: false
-				})
-			}).catch(data => {
-				alert(data.result)
-				this.setState({
-					checking: false
-				})
-			})
-		} else if (payType === '15' || payType === '16' || payType === '17' || payType === '18' || payType === '21') {
+		} else if (payType === '14' || payType === '15' || payType === '16' || payType === '17' || payType === '18' || payType === '19' || payType === '20' || payType === '21') {
 
 			const paymentMethodId = this.getTcMethod()
-
 			if (!paymentMethodId) {
-
 				alert('Please select a pay method!')
 				this.$paylistdom.scrollIntoView()
-
 				return
 			}
-
-			this.documentForm.validateAll()
-
-			if (this.documentRef.context && this.documentRef.context._errors && this.documentRef.context._errors.length > 0) {
-				return
+			
+			if(payType !== '14'){
+				this.documentForm.validateAll()
+				if (this.documentRef.context && this.documentRef.context._errors && this.documentRef.context._errors.length > 0) {
+					return
+				}
 			}
+			
 
-			if (!paymentMethodId || !this.props.document) {
-				return
-			}
+
 
 			this.setState({
 				checking: true
 			})
 
 			payDLocal({ payMethod, paymentMethodId, document: this.props.document }).then(data => data.result).then(({ transactionId, success, details, orderId }) => {
-				if (success) {
-
-					window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-
-				} else {
-					alert(details)
-					if (orderId) {
-						this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
-					}
-				}
-
-				this.setState({
-					checking: false
-				})
-			}).catch(data => {
-				alert(data.result)
-				this.setState({
-					checking: false
-				})
-			})
-		} else if (payType === '19') {
-			this.setState({
-				checking: true
-			})
-
-
-			payDLocal({ payMethod, paymentMethodId: 'SP', document: this.props.document }).then(data => data.result).then(({ transactionId, success, details, orderId }) => {
-				if (success) {
-
-					window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-
-				} else {
-					alert(details)
-					if (orderId) {
-						this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
-					}
-				}
-
-				this.setState({
-					checking: false
-				})
-			}).catch(data => {
-				alert(data.result)
-				this.setState({
-					checking: false
-				})
-			})
-		} else if (payType === '20') {
-			this.setState({
-				checking: true
-			})
-
-
-			payDLocal({ payMethod, paymentMethodId: 'WP', document: this.props.document }).then(data => data.result).then(({ transactionId, success, details, orderId }) => {
 				if (success) {
 
 					window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
@@ -839,76 +710,31 @@ const ShoppingCart = class extends React.Component {
 
 	tcClickHandle(method) {
 		const { payMethod } = this.props.cart
-		switch (payMethod) {
-		case '25':
-			this.props.SETCSBR(method)
-			storage.add('brCS', method, 365 * 24 * 60 * 60)
-			break
-		case '29':
-			this.props.SETMTBR(method)
-			storage.add('brMT', method, 365 * 24 * 60 * 60)
-			break
-		case '27':
-			this.props.SETCSAR(method)
-			storage.add('arCS', method, 365 * 24 * 60 * 60)
-			break
-		case '28':
-			this.props.SETMTAR(method)
-			storage.add('arMT', method, 365 * 24 * 60 * 60)
-			break
-		case '30':
-			this.props.SETCSCL(method)
-			storage.add('clCS', method, 365 * 24 * 60 * 60)
-			break
-		case '31':
-			this.props.SETMTCL(method)
-			storage.add('clMT', method, 365 * 24 * 60 * 60)
-			break
-		case '34':
-			this.props.SETCSCHILE(method)
-			storage.add('chlieCS', method, 365 * 24 * 60 * 60)
-			break
-		case '35':
-			this.props.SETMTCHILE(method)
-			storage.add('chlieMT', method, 365 * 24 * 60 * 60)
-			break
-		case '37':
-			this.props.SETCSUY(method)
-			storage.add('uyCS', method, 365 * 24 * 60 * 60)
-
-		}
+		let _c = storage.get('cashoutMethod') || {}
+		let cashoutMethod = {..._c, [payMethod]: method}
+		this.props.SETCASHOUT(cashoutMethod)
+		storage.add('cashoutMethod', cashoutMethod, 365 * 24 * 60 * 60)
 	}
 
 	getTcMethod() {
 		const { payMethod } = this.props.cart
-		switch (payMethod) {
-		case '25':
-			return this.props.brCS
-		case '29':
-			return this.props.brMT
-		case '27':
-			return this.props.arCS
-		case '28':
-			return this.props.arMT
-		case '30':
-			return this.props.clCS
-		case '31':
-			return this.props.clMT
-		case '34':
-			return this.props.chlieCS
-		case '35':
-			return this.props.chlieMT
-		case '37':
-			return this.props.uyCS
-		default:
-			break
+		return (this.props.cashoutMethod || {})[payMethod]
+	}
 
+	initCashmethod(payMethod, method){
+		let _c = storage.get('cashoutMethod') || {}
+
+		if(!_c[payMethod]){
+			let cashoutMethod = {..._c, [payMethod]: method.id}
+			this.props.SETCASHOUT(cashoutMethod)
+			storage.add('cashoutMethod', cashoutMethod, 365 * 24 * 60 * 60)
 		}
+		
 	}
 
 	getApacPay(payMethod, cpf, fail) {
 		getApacPay({ payMethod, cpfNumber: cpf }).then(({ result }) => {
-			const { isFree, transactionId, success, details, solutions, orderId } = result
+			const { isFree, transactionId, orderId } = result
 			if (isFree) {
 				window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
 			} else {
@@ -923,7 +749,7 @@ const ShoppingCart = class extends React.Component {
 
 	apacPay(payMethod, cpf, fail) {
 		apacPay({ payMethod, cpfNumber: cpf }).then(({ result }) => {
-			const { isFree, orderId, transactionId, success, details, solutions } = result
+			const { isFree, orderId, transactionId, success, details } = result
 			if (isFree) {
 				window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
 			} else {
@@ -977,7 +803,7 @@ const ShoppingCart = class extends React.Component {
 	}
 
 	quickPlace(evt) {
-		const { cart, paypal } = this.props
+		const { cart } = this.props
 
 
 
@@ -1226,9 +1052,12 @@ const ShoppingCart = class extends React.Component {
 			}
 		} else if (this.props.payType === '12') {
 
-			const { document, payType, payMethod } = this.props
+			const { document, payMethod } = this.props
 
 			if (payMethod !== '24') {
+				this.setState({
+					dlocalerror: null
+				})
 				this.dlocalref.validateAll()
 
 
@@ -1240,7 +1069,20 @@ const ShoppingCart = class extends React.Component {
 				}
 
 				if (document) {
-					this.payCredit({ installments, document })
+					if(window.__dlocal){
+						window.__dlocal.createToken(this.cvvField).then(result => {
+							this.payCredit({ installments, document, token: result.token })
+						}).catch(result => {
+							if (result.error) {
+								// Inform the customer that there was an error.
+								this.setState({
+									checking: false,
+									dlocalerror: result.error.message
+								})
+							}
+						})
+					}
+
 				} else {
 					this.setState({
 						checking: false
@@ -1298,7 +1140,7 @@ const ShoppingCart = class extends React.Component {
 				refreshing: true
 			})
 			getSafeCharge().then(({ result }) => {
-				const { isFree, payURL, params, transactionId, orderId } = result
+				const { isFree, transactionId, orderId } = result
 				if (isFree) {
 					window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
 				} else {
@@ -1515,7 +1357,7 @@ const ShoppingCart = class extends React.Component {
 
 
 	render() {
-		const { cart, loading, empty, editing, isCreditShow, mercadocards, creditcards, noCard, intl, noCreditCard } = this.props
+		const { cart, loading, empty, editing, isCreditShow, mercadocards, creditcards, intl } = this.props
 		let tcMethod
 
 
@@ -1782,6 +1624,7 @@ const ShoppingCart = class extends React.Component {
 											documentForm={c => this.documentForm = c}
 											documentRef={c => this.documentRef = c}
 											document={this.props.document}
+											initCashmethod = {this.initCashmethod.bind(this)}
 										/>
 									</div>
 								</Box>
@@ -2013,6 +1856,8 @@ const ShoppingCart = class extends React.Component {
 									document={this.props.document}
 									dlocalref={c => this.dlocalref = c}
 									dlocalbtn={c => this.dlocalbtn = c}
+									cvvRef = { this.cvvRef.bind(this) }
+									dlocalerror = {this.state.dlocalerror}
 								/>
 							</React.Fragment>
 						)

@@ -29,18 +29,18 @@ import { payDLocal, getSafeCharge, creditpay, getApacPay, deletecreditcard, usec
 import {submit} from '../utils/common-pay.js'
 
 const __Frame__ = {
-  '17': {
-  	url: `${window.ctx || ''}/w-site/anon/oceanpay?payMethod=17`,
-  	height: 480
-  },
-  '3': {
-  	url: `${window.ctx || ''}/w-site/anon/oceanpay?payMethod=3`,
-  	height: 480
-  },
-  '24': {
-    url: `${window.ctx || ''}/i/dlocal`,
-    height: 550
-  }
+	'17': {
+		url: `${window.ctx || ''}/w-site/anon/oceanpay?payMethod=17`,
+		height: 480
+	},
+	'3': {
+		url: `${window.ctx || ''}/w-site/anon/oceanpay?payMethod=3`,
+		height: 480
+	},
+	'24': {
+		url: `${window.ctx || ''}/i/dlocal`,
+		height: 550
+	} 
 }
 
 const SHOPPINGBODY = styled.div`
@@ -73,659 +73,685 @@ const CREDITBTN = styled.div`
 	text-transform: uppercase;
 	text-align: center;
 	line-height: 40px;
-  cursor: pointer;
+	cursor: pointer;
 `
 
 const CREDITMODAL = styled.div`
-	  width: 860px;
-    background-color: #fff;
-    padding: 40px 20px;
+		width: 860px;
+		background-color: #fff;
+		padding: 40px 20px;
 
-    .__title{
-    	font-family: HelveticaNeue-Medium;
+		.__title{
+			font-family: HelveticaNeue-Medium;
 			font-size: 24px;
 			color: #222;
-    }
+		}
 
-    .__frame{
-    	width: 100%;
-    	margin-top: 15px;
-    }
-    position: relative;
-    .__loading{
-  		position: absolute;
-  		top: 50%;
-  		left: 50%;
-  		transform: translate(-50%, -50%);
-  	}
+		.__frame{
+			width: 100%;
+			margin-top: 15px;
+		}
+		position: relative;
+		.__loading{
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+		}
 `
 
 const MERCADOMODAL = styled.div`
 	width: 640px;
-  background-color: #fff;
-  padding: 60px 80px 60px 80px;
+	background-color: #fff;
+	padding: 60px 80px 60px 80px;
 
-  .__title{
-  	font-family: HelveticaNeue-Medium;
+	.__title{
+		font-family: HelveticaNeue-Medium;
 		font-size: 24px;
 		color: #222;
-  }
+	}
 `
 
 const mapStateToProps = (state) => {
-  return {
-    ...state
-  }
+	return {
+		...state
+	}
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-    INIT: () => {
-      return dispatch(fetchAll())
-    },
-    GETCREDITCARDS: (payMethod, multi) => {
-      return dispatch(getCreditCards(payMethod, multi))
-    },
-    GETMERCADOCARDS: () => {
-      return dispatch(getMercadoCards())
-    },
-    SETMERCADOINTALLMENTS: (installments) => {
-      dispatch(setMercadoInstallments(installments))
-    },
-    SETINSTALLMENTS: (installments) => {
-      dispatch(setInstallments(installments))
-    },
-    SETSECURITYCODE: (securityCode) => {
-      dispatch(setSecurityCode(securityCode))
-    },
-    SETDOCUMENT: (document) => {
-      return dispatch(setDocument(document))
-    }
-  }
+	return {
+		INIT: () => {
+			return dispatch(fetchAll())
+		},
+		GETCREDITCARDS: (payMethod, multi) => {
+			return dispatch(getCreditCards(payMethod, multi))
+		},
+		GETMERCADOCARDS: () => {
+			return dispatch(getMercadoCards())
+		},
+		SETMERCADOINTALLMENTS: (installments) => {
+			dispatch(setMercadoInstallments(installments))
+		},
+		SETINSTALLMENTS: (installments) => {
+			dispatch(setInstallments(installments))
+		},
+		SETSECURITYCODE: (securityCode) => {
+			dispatch(setSecurityCode(securityCode))
+		},
+		SETDOCUMENT: (document) => {
+			return dispatch(setDocument(document))
+		}
+	}
 }
 
 const MercadoPago = class extends React.Component {
-  constructor (props) {
-  	super(props)
-  }
+	constructor (props) {
+		super(props)
+	}
 
-  render () {
-  	return <div></div>
-  }
+	render () {
+		return <div></div>
+	}
 }
 
 const Credit = class extends React.Component {
-  constructor (props) {
-    super(props)
+	constructor (props) {
+		super(props)
 
-    let _frame = this.getFrame()
+		let _frame = this.getFrame()
 
-    this.state = {
-    	showFrame: false,
-    	frameUrl: _frame ? _frame.url : '#',
-    	frameLoading: true,
-    	showMercado: false,
-      noCard: false,
-      checking: false,
-      refreshing: false,
-      showDeleteConfirm: false,
-      cardDelete: null
-    }
+		this.state = {
+			showFrame: false,
+			frameUrl: _frame ? _frame.url : '#',
+			frameLoading: true,
+			showMercado: false,
+			noCard: false,
+			checking: false,
+			refreshing: false,
+			showDeleteConfirm: false,
+			cardDelete: null,
+			dlocalerror: null
+		}
 
-    this.handleInputChange = this.handleInputChange.bind(this)
-    this.sdkResponseHandler = this.sdkResponseHandler.bind(this)
-  }
+		this.handleInputChange = this.handleInputChange.bind(this)
+		this.sdkResponseHandler = this.sdkResponseHandler.bind(this)
+	}
 
-  handleInputChange (event) {
-    const target = event.target
-    const value = target.type === 'checkbox' ? target.checked : target.value
-    const name = target.name
-    switch (name) {
-      case 'securityCode':
-        this.props.SETSECURITYCODE(value)
-        break
-      case 'mercado-installments':
-        this.props.SETMERCADOINTALLMENTS(value)
-        break
-      case 'installments':
-        this.props.SETINSTALLMENTS(value)
-        break
-      case 'document':
-        this.props.SETDOCUMENT(value)
-        break
-      default:
-        break
-    }
-  }
+	handleInputChange (event) {
+		const target = event.target
+		const value = target.type === 'checkbox' ? target.checked : target.value
+		const name = target.name
+		switch (name) {
+		case 'securityCode':
+			this.props.SETSECURITYCODE(value)
+			break
+		case 'mercado-installments':
+			this.props.SETMERCADOINTALLMENTS(value)
+			break
+		case 'installments':
+			this.props.SETINSTALLMENTS(value)
+			break
+		case 'document':
+			this.props.SETDOCUMENT(value)
+			break
+		default:
+			break
+		}
+	}
 
-  mercadoref (c) {
-    this.mercadoform = c
-  }
+	mercadoref (c) {
+		this.mercadoform = c
+	}
 
-  checkmercado (event) {
-    event.preventDefault()
-    this.setState({
-      checking: true
-    })
-    Mercadopago.clearSession()
-    this.mercadoform.validateAll()
+	cvvRef(c) {
+		this.cvvField = c
+	}
 
-    if (!this.props.securityCode) {
-      this.setState({
-        checking: false
-      })
-      return
-    }
+	checkmercado (event) {
+		event.preventDefault()
+		this.setState({
+			checking: true
+		})
+		/*global Mercadopago b:true*/
+		/*eslint no-undef: "error"*/
+		Mercadopago.clearSession()
+		this.mercadoform.validateAll()
 
-    const $dommercado = document.getElementById('mercadoform')
-    Mercadopago.createToken($dommercado, this.sdkResponseHandler)
-  }
+		if (!this.props.securityCode) {
+			this.setState({
+				checking: false
+			})
+			return
+		}
 
-  sdkResponseHandler (status, response) {
-    if (status != 200 && status != 201) {
-      alert('verify filled data')
-    } else {
-      this.setState({
-        token: response.id
-      })
+		const $dommercado = document.getElementById('mercadoform')
+		Mercadopago.createToken($dommercado, this.sdkResponseHandler)
+	}
 
-      mercadopay({
-        token: response.id,
-        installments: this.props.mercadoinstallments
-      }).then(data => data.result).then(({success, transactionId, details, solutions, orderId}) => {
-        if (success) {
-          window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-        } else {
-          alert(details)
-          if (orderId) {
-            this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
-          }
-        }
-        this.setState({
-          checking: false
-        })
-      }).catch(({result}) => {
-        alert(result)
-        this.setState({
-          checking: false
-        })
-      })
-    }
-  }
+	sdkResponseHandler (status, response) {
+		if (status != 200 && status != 201) {
+			alert('verify filled data')
+		} else {
+			this.setState({
+				token: response.id
+			})
 
-  getApacPay (payMethod, cpf, fail) {
-    getApacPay({payMethod, cpfNumber: cpf}).then(({result}) => {
-      const {isFree, transactionId, orderId} = result
-      if (isFree) {
-        window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-      } else {
-        storage.add('temp-order', orderId, 1 * 60 * 60)
-        submit(result)
-      }
-    }).catch(({result}) => {
-      fail(result)
-    })
-  }
+			mercadopay({
+				token: response.id,
+				installments: this.props.mercadoinstallments
+			}).then(data => data.result).then(({success, transactionId, details, solutions, orderId}) => {
+				if (success) {
+					window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
+				} else {
+					alert(details)
+					if (orderId) {
+						this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
+					}
+				}
+				this.setState({
+					checking: false
+				})
+			}).catch(({result}) => {
+				alert(result)
+				this.setState({
+					checking: false
+				})
+			})
+		}
+	}
 
-  showFrameHandle () {
-    if (this.props.payMethod === '18') {
-      this.setState({
-        checking: true
-      })
-      getSafeCharge().then(({result}) => {
-        const {isFree, payURL, params, transactionId, orderId} = result
-        if (isFree) {
-          window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-        } else {
-          storage.add('temp-order', orderId, 1 * 60 * 60)
-          submit(result)
+	getApacPay (payMethod, cpf, fail) {
+		getApacPay({payMethod, cpfNumber: cpf}).then(({result}) => {
+			const {isFree, transactionId, orderId} = result
+			if (isFree) {
+				window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
+			} else {
+				storage.add('temp-order', orderId, 1 * 60 * 60)
+				submit(result)
+			}
+		}).catch(({result}) => {
+			fail(result)
+		})
+	}
 
-          // window.location.href = `${payURL}?${qs.stringify(params, true)}`
-        }
-      }).catch(({result}) => {
-        this.setState({
-          checking: false
-        })
-        alert(result)
-      })
-    } else if (this.props.payMethod === '22') {
-      this.setState({
-        checking: true
-      })
-      this.getApacPay(this.props.payMethod, this.props.cpf, (result) => {
-        alert(result)
-        this.setState({
-          checking: false
-        })
-      })
-    } else {
-      let _frame = this.getFrame()
-      this.setState({
-        frameLoading: !this.state.showFrame,
-        showFrame: !this.state.showFrame,
-        frameUrl: _frame ? _frame.url : '#'
-      })
+	showFrameHandle () {
+		if (this.props.payMethod === '18') {
+			this.setState({
+				checking: true
+			})
+			getSafeCharge().then(({result}) => {
+				const {isFree, transactionId, orderId} = result
+				if (isFree) {
+					window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
+				} else {
+					storage.add('temp-order', orderId, 1 * 60 * 60)
+					submit(result)
 
-      setTimeout(() => {
-        this.setState({
-          frameLoading: false
-        })
-      }, 5000)
-    }
-  }
+					// window.location.href = `${payURL}?${qs.stringify(params, true)}`
+				}
+			}).catch(({result}) => {
+				this.setState({
+					checking: false
+				})
+				alert(result)
+			})
+		} else if (this.props.payMethod === '22') {
+			this.setState({
+				checking: true
+			})
+			this.getApacPay(this.props.payMethod, this.props.cpf, (result) => {
+				alert(result)
+				this.setState({
+					checking: false
+				})
+			})
+		} else {
+			let _frame = this.getFrame()
+			this.setState({
+				frameLoading: !this.state.showFrame,
+				showFrame: !this.state.showFrame,
+				frameUrl: _frame ? _frame.url : '#'
+			})
 
-  frameLoadHandle () {
-  	this.setState({
-  		frameLoading: false
-  	})
-  }
+			setTimeout(() => {
+				this.setState({
+					frameLoading: false
+				})
+			}, 5000)
+		}
+	}
 
-  showMercadoHandle () {
-  	this.setState({
-  		showMercado: !this.state.showMercado
-  	})
-  }
+	frameLoadHandle () {
+		this.setState({
+			frameLoading: false
+		})
+	}
 
-  checkout (evt) {
-    const {cpf, installments, cart, document} = this.props
+	showMercadoHandle () {
+		this.setState({
+			showMercado: !this.state.showMercado
+		})
+	}
 
-    const { payMethod } = cart
+	checkout (evt) {
+		const {cpf, installments, cart, document} = this.props
 
-    if (payMethod === '19') {
-      this.checkmercado(evt)
-    } else if (payMethod === '24') {
-      this.payCredit({installments, payMethod})
-    } else if (payMethod === '26' || payMethod === '32' || payMethod === '33' || payMethod === '36') {
-      this.documentRef.validateAll()
-      if (this.documentBtn.context && this.documentBtn.context._errors && this.documentBtn.context._errors.length > 0) {
-        return
-      }
+		const { payMethod } = cart
 
-      if (!document) return
-      this.payCredit({installments, payMethod, document})
-    } else {
-      this.payCredit({payCpf: cpf, payInstallments: installments})
-    }
-  }
+		if (payMethod === '19') {
+			this.checkmercado(evt)
+		} else if (payMethod === '24' || payMethod === '26' || payMethod === '32' || payMethod === '33' || payMethod === '36') {
 
-  payDLocal (params) {
-    this.setState({
-      checking: true
-    })
-    payDLocal(params).then(data => data.result).then(({success, transactionId, details, solutions = '', orderId}) => {
-      if (success) {
-        window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
+			if(payMethod !== '24'){
+				this.documentRef.validateAll()
+				if (this.documentBtn.context && this.documentBtn.context._errors && this.documentBtn.context._errors.length > 0) {
+					return
+				}
 
-        // this.props.history.push({
-        //   pathname: `${window.ctx || ''}/order-confirm/${transactionId}`
-        // })
-      } else {
-        alert(details + '\n' + solutions)
-        this.setState({
-          frameUrl: this.state.frameUrl + '&_=' + new Date().getTime()
+				if (!document) return
+			}
 
-        })
-        if (orderId) {
-          this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
-        }
-      }
-      this.setState({
-        checking: false
-      })
-    }).catch(({result}) => {
-      alert(result)
-      this.setState({
-        checking: false
-      })
-    })
-  }
+			if(window.__dlocal){
+				window.__dlocal.createToken(this.cvvField).then(result => {
+					this.payCredit({installments, payMethod, document, token: result.token})
+				}).catch(result => {
+					if (result.error) {
+						// Inform the customer that there was an error.
+						this.setState({
+							checking: false,
+							dlocalerror: result.error.message
+						})
+					}
+				})
+			}
 
-  payCredit (params) {
-    this.setState({
-      checking: true
-    })
-    creditpay(params).then(data => data.result).then(({success, transactionId, details, solutions = '', orderId}) => {
-      if (success) {
-        window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
 
-        // this.props.history.push({
-        //   pathname: `${window.ctx || ''}/order-confirm/${transactionId}`
-        // })
-      } else {
-        alert(details + '\n' + solutions)
-        this.setState({
-          frameUrl: this.state.frameUrl + '&_=' + new Date().getTime()
-        })
-        if (orderId) {
-          this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
-        }
-      }
-      this.setState({
-        checking: false
-      })
-    }).catch(({result}) => {
-      alert(result)
-      this.setState({
-        checking: false
-      })
-      this.setState({
-        frameUrl: this.state.frameUrl + '&_=' + new Date().getTime()
-      })
-    })
-  }
+			
+		} else {
+			this.payCredit({payCpf: cpf, payInstallments: installments})
+		}
+	}
 
-  addcardback () {}
+	payDLocal (params) {
+		this.setState({
+			checking: true
+		})
+		payDLocal(params).then(data => data.result).then(({success, transactionId, details, solutions = '', orderId}) => {
+			if (success) {
+				window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
 
-  componentWillMount () {
-  	const { cart, INIT, payType, payMethod, GETCREDITCARDS, GETMERCADOCARDS, cpf, installments } = this.props
-  	if (!cart) {
-  		INIT().then((values) => {
-        window.dLocalPay = (result, errBack) => {
-          const _cart = values[0]
-          this.payDLocal({...result, payMethod: _cart.payMethod}).catch(({result}) => errBack(result))
-        }
-        this.handleCreditCards()
-      })
-  	} else {
-      window.dLocalPay = (result, errBack) => {
-        this.payDLocal({...result, payMethod: cart.payMethod}).catch(({result}) => errBack(result))
-      }
-      this.handleCreditCards()
-    }
+				// this.props.history.push({
+				//   pathname: `${window.ctx || ''}/order-confirm/${transactionId}`
+				// })
+			} else {
+				alert(details + '\n' + solutions)
+				this.setState({
+					frameUrl: this.state.frameUrl + '&_=' + new Date().getTime()
 
-  	window.triggerPlace = () => {
-  		this.payCredit({payCpf: cpf, payInstallments: installments})
-  	}
+				})
+				if (orderId) {
+					this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
+				}
+			}
+			this.setState({
+				checking: false
+			})
+		}).catch(({result}) => {
+			alert(result)
+			this.setState({
+				checking: false
+			})
+		})
+	}
 
-    window.triggerFalse = (errcode) => {
-      this.setState({
-        frameUrl: this.state.frameUrl + '&_=' + new Date().getTime()
-      })
-    }
+	payCredit (params) {
+		this.setState({
+			checking: true
+		})
+		creditpay(params).then(data => data.result).then(({success, transactionId, details, solutions = '', orderId}) => {
+			if (success) {
+				window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
 
-    setTimeout(() => {
-      this.setState({
-        frameLoading: false
-      })
-    }, 5000)
-  }
+				// this.props.history.push({
+				//   pathname: `${window.ctx || ''}/order-confirm/${transactionId}`
+				// })
+			} else {
+				alert(details + '\n' + solutions)
+				this.setState({
+					frameUrl: this.state.frameUrl + '&_=' + new Date().getTime()
+				})
+				if (orderId) {
+					this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
+				}
+			}
+			this.setState({
+				checking: false
+			})
+		}).catch(({result}) => {
+			alert(result)
+			this.setState({
+				checking: false
+			})
+			this.setState({
+				frameUrl: this.state.frameUrl + '&_=' + new Date().getTime()
+			})
+		})
+	}
 
-  handleCreditCards () {
-    const { payType, cart, GETCREDITCARDS, GETMERCADOCARDS } = this.props
-    const { payMethod } = cart
-    if (payMethod === '3' || payMethod === '18') {
-      let payMethods = ['3', '18']
-      return GETCREDITCARDS(payMethods, true).then(cards => {
-        if (!cards || !cards.length) {
-          if (payMethod === '18') {
-            this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
-          } else {
-            this.setState({
-              noCard: true
-            })
-          }
-        }
-        return cards
-      })
-    } else if (payMethod === '22') {
-      let payMethods = ['17', '22']
-      return GETCREDITCARDS(payMethods, true).then(cards => {
-        if (!cards || !cards.length) {
-          this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
-        }
-        return cards
-      })
-    } else if (payMethod === '19') {
-      return GETMERCADOCARDS().then(cards => {
-        if (!cards || !cards.length) {
-          this.setState({
-            noCard: true
-          })
-        }
-        return cards
-      })
-    } else {
-      return GETCREDITCARDS(payMethod).then(cards => {
-        if (!cards || !cards.length) {
-          this.setState({
-            noCard: true
-          })
-        }
-        return cards
-      })
-    }
-  }
+	addcardback () {}
 
-  deleteCardHandle (evt, card) {
-    evt.preventDefault()
-    evt.nativeEvent.stopImmediatePropagation()
-    const deletor = card.quickpayRecord.payMethod === '19' ? removeMercadoCard : deletecreditcard
-    const cardId = card.quickpayRecord.payMethod === '19' ? card.quickpayRecord.quickpayId : card.quickpayRecord.id
-    const { cart } = this.props
-    const { payMethod } = cart
-    this.setState({
-      showDeleteConfirm: true,
-      cardDelete: () => {
-        this.setState({
-          showDeleteConfirm: false,
-          refreshing: true
-        })
+	componentWillMount () {
+		const { cart, INIT, payType, payMethod, GETCREDITCARDS, GETMERCADOCARDS, cpf, installments } = this.props
+		if (!cart) {
+			INIT().then((values) => {
+				window.dLocalPay = (result, errBack) => {
+					const _cart = values[0]
+					this.payDLocal({...result, payMethod: _cart.payMethod}).catch(({result}) => errBack(result))
+				}
+				this.handleCreditCards()
+			})
+		} else {
+			window.dLocalPay = (result, errBack) => {
+				this.payDLocal({...result, payMethod: cart.payMethod}).catch(({result}) => errBack(result))
+			}
+			this.handleCreditCards()
+		}
 
-        deletor(cardId).then(() => {
-          this.handleCreditCards().then((cards) => {
-            this.setState({
-              refreshing: false
-            })
-          })
-        })
-      }
-    })
-  }
+		window.triggerPlace = () => {
+			this.payCredit({payCpf: cpf, payInstallments: installments})
+		}
 
-  selectCardHandle (evt, card) {
-    this.setState({
-      refreshing: true
-    })
-    const useor = card.quickpayRecord.payMethod === '19' ? useMercadocard : usecreditcard
-    const cardId = card.quickpayRecord.payMethod === '19' ? card.quickpayRecord.quickpayId : card.quickpayRecord.id
+		window.triggerFalse = (errcode) => {
+			this.setState({
+				frameUrl: this.state.frameUrl + '&_=' + new Date().getTime()
+			})
+		}
 
-    useor(cardId).then(() => {
-      this.handleCreditCards().then(() => {
-        this.setState({
-          refreshing: false
-        })
-      })
-    })
-  }
+		setTimeout(() => {
+			this.setState({
+				frameLoading: false
+			})
+		}, 5000)
+	}
 
-  payMercado (params) {
-    return mercadopay(params).then(data => data.result).then(({success, transactionId, orderId, details, solutions}) => {
-      if (success) {
-        window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-      } else {
-        alert(details)
-        if (orderId) {
-          this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
-        }
-      }
-      return transactionId
-    })
-  }
+	handleCreditCards () {
+		const { payType, cart, GETCREDITCARDS, GETMERCADOCARDS } = this.props
+		const { payMethod } = cart
+		if (payMethod === '3' || payMethod === '18') {
+			let payMethods = ['3', '18']
+			return GETCREDITCARDS(payMethods, true).then(cards => {
+				if (!cards || !cards.length) {
+					if (payMethod === '18') {
+						this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
+					} else {
+						this.setState({
+							noCard: true
+						})
+					}
+				}
+				return cards
+			})
+		} else if (payMethod === '22') {
+			let payMethods = ['17', '22']
+			return GETCREDITCARDS(payMethods, true).then(cards => {
+				if (!cards || !cards.length) {
+					this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
+				}
+				return cards
+			})
+		} else if (payMethod === '19') {
+			return GETMERCADOCARDS().then(cards => {
+				if (!cards || !cards.length) {
+					this.setState({
+						noCard: true
+					})
+				}
+				return cards
+			})
+		} else {
+			return GETCREDITCARDS(payMethod).then(cards => {
+				if (!cards || !cards.length) {
+					this.setState({
+						noCard: true
+					})
+				}
+				return cards
+			})
+		}
+	}
 
-  getFrame () {
-    const { cart, document } = this.props
+	deleteCardHandle (evt, card) {
+		evt.preventDefault()
+		evt.nativeEvent.stopImmediatePropagation()
+		const deletor = card.quickpayRecord.payMethod === '19' ? removeMercadoCard : deletecreditcard
+		const cardId = card.quickpayRecord.payMethod === '19' ? card.quickpayRecord.quickpayId : card.quickpayRecord.id
+		const { cart } = this.props
+		const { payMethod } = cart
+		this.setState({
+			showDeleteConfirm: true,
+			cardDelete: () => {
+				this.setState({
+					showDeleteConfirm: false,
+					refreshing: true
+				})
 
-    if (cart) {
-      const { payMethod, payMethodList } = cart
-      const payMethodInfo = payMethodList.find(p => p.id === payMethod)
+				deletor(cardId).then(() => {
+					this.handleCreditCards().then((cards) => {
+						this.setState({
+							refreshing: false
+						})
+					})
+				})
+			}
+		})
+	}
 
-      let _paymethod
-      if (payMethodInfo) {
-        if (payMethodInfo.type === '12') {
-          _paymethod = '24'
-        } else {
-          _paymethod = payMethodInfo.id
-        }
-      } else {
-        _paymethod = payMethod
-      }
+	selectCardHandle (evt, card) {
+		this.setState({
+			refreshing: true
+		})
+		const useor = card.quickpayRecord.payMethod === '19' ? useMercadocard : usecreditcard
+		const cardId = card.quickpayRecord.payMethod === '19' ? card.quickpayRecord.quickpayId : card.quickpayRecord.id
 
-      let __frame = __Frame__[_paymethod]
-      let { orderSummary } = cart
+		useor(cardId).then(() => {
+			this.handleCreditCards().then(() => {
+				this.setState({
+					refreshing: false
+				})
+			})
+		})
+	}
 
-      let currency = cart.orderSummary.orderTotal.currency
-      let amount = cart.orderSummary.orderTotal.amount
-      let country = cart.shippingDetail.country ? cart.shippingDetail.country.value : window.__country
+	payMercado (params) {
+		return mercadopay(params).then(data => data.result).then(({success, transactionId, orderId, details, solutions}) => {
+			if (success) {
+				window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
+			} else {
+				alert(details)
+				if (orderId) {
+					this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
+				}
+			}
+			return transactionId
+		})
+	}
 
-      if (_paymethod === '24') {
-        return {...__frame, url: `${__frame.url}?currency=${currency}&country=${country}&amount=${amount}&document=${document || ''}`}
-      } else {
-        return __frame
-      }
-    }
-  }
+	getFrame () {
+		const { cart, document } = this.props
 
-  render () {
-  	const {cart, loading, empty, intl, payType, creditcards, mercadocards} = this.props
+		if (cart) {
+			const { payMethod, payMethodList } = cart
+			const payMethodInfo = payMethodList.find(p => p.id === payMethod)
 
-  	const cards = payType === '7' ? mercadocards : creditcards
+			let _paymethod
+			if (payMethodInfo) {
+				if (payMethodInfo.type === '12') {
+					_paymethod = '24'
+				} else {
+					_paymethod = payMethodInfo.id
+				}
+			} else {
+				_paymethod = payMethod
+			}
 
-    const __Frame = this.getFrame()
-    let country
-    if (cart) {
-      country = cart.shippingDetail && cart.shippingDetail.country ? cart.shippingDetail.country.value : window.__country
-    }
+			let __frame = __Frame__[_paymethod]
+			let { orderSummary } = cart
 
-  	return loading ? <Loading/> : (empty ? <Empty/> : cart && <div>
-  		{(this.props.refreshing || this.state.refreshing) && <Refreshing/>}
-  		<SHOPPINGBODY>
-	  		<div className="__left">
-	  			<div>
-	  				<Link to={`${window.ctx || ''}${__route_root__}/`} style={{textDecoration: 'none', color: '#222'}}>
-	  					◀ {intl.formatMessage({id: 'back_to_cart'})}
-	  				</Link>
-	  				<div style={{marginTop: 10}}>
-	  					<OrderAddress address={cart.shippingDetail}/>
-	  				</div>
-	  				<div style={{marginTop: 50}}>
-	  					<div style={{borderBottom: 'solid 1px #e6e6e6', paddingBottom: 10}}>
-	  						<div style={{fontFamily: 'HelveticaNeue-Medium', fontSize: 18}}>
-                  {intl.formatMessage({id: 'card_information'})}
-		  					</div>
-		  					<div style={{marginTop: 5}}>
-		  						<Icon style={{fontSize: 20, marginRight: 5, verticalAlign: 'middle', color: '#57b936'}}>&#xe745;</Icon>
-		  						<span style={{verticalAlign: 'middle'}}>{intl.formatMessage({id: 'guarantee'})}</span>
-		  					</div>
-	  					</div>
-	  					{
-                this.state.noCard ? <div>
+			let currency = cart.orderSummary.orderTotal.currency
+			let amount = cart.orderSummary.orderTotal.amount
+			let country = cart.shippingDetail.country ? cart.shippingDetail.country.value : window.__country
 
-                  {
-                    payType === '7' ? <div style={{width: 500, paddingTop: 10}}>
-                      <img style={{display: 'block', marginBottom: 10}} src="https://dgzfssf1la12s.cloudfront.net/shoppingcart/maxicocard.png"/>
-                      <MercadoBinding orderTotal={cart.orderSummary.orderTotal} pay={this.payMercado.bind(this)} email={this.props.me ? this.props.me.email : ''}/>
-                    </div> : <div style={{position: 'relative'}}>
-                      {
-                        this.state.frameLoading && <div style={{textAlign: 'center', paddingTop: 40}} className="__loading">
-                          <img alt="loading" src="https://dgzfssf1la12s.cloudfront.net/site/upgrade/20180316/loading.gif"/>
-                        </div>
-                      }
-                      <iframe onLoad={ this.frameLoadHandle.bind(this) } style={{height: __Frame.height, width: '100%'}} src={__Frame.url}/>
-                    </div>
+			if (_paymethod === '24') {
+				return {...__frame, url: `${__frame.url}?currency=${currency}&country=${country}&amount=${amount}&document=${document || ''}`}
+			} else {
+				return __frame
+			}
+		}
+	}
 
-                  }
+	render () {
+		const {cart, loading, empty, intl, payType, creditcards, mercadocards} = this.props
 
-                </div> : <div>
-                  <CardList cards={ cards }
-                    orderTotal={cart.orderSummary.orderTotal}
-                    installments={this.props.mercadoinstallments}
-                    securityCode = {this.props.securityCode}
-                    mercadoref = {this.mercadoref.bind(this)}
-                    handleInputChange = { this.handleInputChange }
-                    deleteCardHandle = { this.deleteCardHandle.bind(this) }
-                    selectCardHandle = { this.selectCardHandle.bind(this) }
-                    country={country}
-                    document={this.props.document}
-                    documentRef={c => this.documentRef = c}
-                    documentBtn={c => this.documentBtn = c}
-                  />
+		const cards = payType === '7' ? mercadocards : creditcards
 
-                  { this.state.checking ? <CREDITBTN style={{marginTop: 15}}>{intl.formatMessage({id: 'please_wait'})}...</CREDITBTN> : <CREDITBTN style={{marginTop: 15}} onClick={ payType === '7' ? this.showMercadoHandle.bind(this) : this.showFrameHandle.bind(this) }>+ <FormattedMessage id="use_new_card" /></CREDITBTN>}
+		const __Frame = this.getFrame()
+		let country
+		if (cart) {
+			country = cart.shippingDetail && cart.shippingDetail.country ? cart.shippingDetail.country.value : window.__country
+		}
 
-                  <div style={{borderTop: 'solid 1px #e6e6e6', marginTop: 20, paddingTop: 40}}>
+		return loading ? <Loading/> : (empty ? <Empty/> : cart && <div>
+			{(this.props.refreshing || this.state.refreshing) && <Refreshing/>}
+			<SHOPPINGBODY>
+				<div className="__left">
+					<div>
+						<Link to={`${window.ctx || ''}${__route_root__}/`} style={{textDecoration: 'none', color: '#222'}}>
+							◀ {intl.formatMessage({id: 'back_to_cart'})}
+						</Link>
+						<div style={{marginTop: 10}}>
+							<OrderAddress address={cart.shippingDetail}/>
+						</div>
+						<div style={{marginTop: 50}}>
+							<div style={{borderBottom: 'solid 1px #e6e6e6', paddingBottom: 10}}>
+								<div style={{fontFamily: 'HelveticaNeue-Medium', fontSize: 18}}>
+									{intl.formatMessage({id: 'card_information'})}
+								</div>
+								<div style={{marginTop: 5}}>
+									<Icon style={{fontSize: 20, marginRight: 5, verticalAlign: 'middle', color: '#57b936'}}>&#xe745;</Icon>
+									<span style={{verticalAlign: 'middle'}}>{intl.formatMessage({id: 'guarantee'})}</span>
+								</div>
+							</div>
+							{
+								this.state.noCard ? <div>
 
-                    {
-                      this.state.checking ? <BigButton bgColor="#999" style={{width: 314, height: 45, lineHeight: '45px'}}>
-                        {intl.formatMessage({id: 'please_wait'})}...
-                      </BigButton> : <BigButton onClick={this.checkout.bind(this)} bgColor="#222" style={{width: 314, height: 45, lineHeight: '45px', textTransform: 'uppercase', fontSize: 18}}>
-                        {intl.formatMessage({id: 'pay_now'})}
-                      </BigButton>
-                    }
+									{
+										payType === '7' ? <div style={{width: 500, paddingTop: 10}}>
+											<img style={{display: 'block', marginBottom: 10}} src="https://dgzfssf1la12s.cloudfront.net/shoppingcart/maxicocard.png"/>
+											<MercadoBinding orderTotal={cart.orderSummary.orderTotal} pay={this.payMercado.bind(this)} email={this.props.me ? this.props.me.email : ''}/>
+										</div> : <div style={{position: 'relative'}}>
+											{
+												this.state.frameLoading && <div style={{textAlign: 'center', paddingTop: 40}} className="__loading">
+													<img alt="loading" src="https://dgzfssf1la12s.cloudfront.net/site/upgrade/20180316/loading.gif"/>
+												</div>
+											}
+											<iframe onLoad={ this.frameLoadHandle.bind(this) } style={{height: __Frame.height, width: '100%'}} src={__Frame.url}/>
+										</div>
 
-                  </div>
-                </div>
-	  					}
+									}
 
-	  				</div>
-	  			</div>
-	  		</div>
-	  		<div className="__right">
+								</div> : <div>
+									<CardList cards={ cards }
+										orderTotal={cart.orderSummary.orderTotal}
+										installments={this.props.mercadoinstallments}
+										securityCode = {this.props.securityCode}
+										mercadoref = {this.mercadoref.bind(this)}
+										handleInputChange = { this.handleInputChange }
+										deleteCardHandle = { this.deleteCardHandle.bind(this) }
+										selectCardHandle = { this.selectCardHandle.bind(this) }
+										country={country}
+										document={this.props.document}
+										documentRef={c => this.documentRef = c}
+										documentBtn={c => this.documentBtn = c}
+										cvvRef = { this.cvvRef.bind(this) }
+										dlocalerror = {this.state.dlocalerror}
+									/>
 
-	  			<Boxs>
-      	  	<Box title={intl.formatMessage({id: 'order_summary'})} style={{paddingTop: 40}}>
-      	  		<OrderSummary style={{marginTop: 20}} display={cart.orderSummary.display}/>
+									{ this.state.checking ? <CREDITBTN style={{marginTop: 15}}>{intl.formatMessage({id: 'please_wait'})}...</CREDITBTN> : <CREDITBTN style={{marginTop: 15}} onClick={ payType === '7' ? this.showMercadoHandle.bind(this) : this.showFrameHandle.bind(this) }>+ <FormattedMessage id="use_new_card" /></CREDITBTN>}
 
-              <div style={{borderTop: 'solid 1px #e6e6e6', marginTop: 25, paddingTop: 25}}>
-                <div>{intl.formatMessage({id: 'additional_payment'})}</div>
-                <div style={{textAlign: 'center', padding: '15px 0', marginTop: 10}}>
-                  <img src="https://dgzfssf1la12s.cloudfront.net/upgrade/20180831/payment.jpg"/>
-                </div>
-              </div>
-      	  	</Box>
-      	  </Boxs>
+									<div style={{borderTop: 'solid 1px #e6e6e6', marginTop: 20, paddingTop: 40}}>
 
-	  		</div>
-	  	</SHOPPINGBODY>
+										{
+											this.state.checking ? <BigButton bgColor="#999" style={{width: 314, height: 45, lineHeight: '45px'}}>
+												{intl.formatMessage({id: 'please_wait'})}...
+											</BigButton> : <BigButton onClick={this.checkout.bind(this)} bgColor="#222" style={{width: 314, height: 45, lineHeight: '45px', textTransform: 'uppercase', fontSize: 18}}>
+												{intl.formatMessage({id: 'pay_now'})}
+											</BigButton>
+										}
 
-	  	{
-	  		this.state.showFrame && <Modal onClose={ this.showFrameHandle.bind(this) }>
-	  			<CREDITMODAL>
-	  				<div className="__title">{intl.formatMessage({id: 'use_new_card'})}</div>
-	  				<iframe onLoad={ this.frameLoadHandle.bind(this) } style={{height: __Frame.height}} className="__frame" src={__Frame.url}/>
+									</div>
+								</div>
+							}
 
-	  				{
-	  					this.state.frameLoading && <div className="__loading">
-	  						<img alt="loading" src="https://dgzfssf1la12s.cloudfront.net/site/upgrade/20180316/loading.gif"/>
-	  					</div>
-	  				}
-	  			</CREDITMODAL>
-	  		</Modal>
-	  	}
+						</div>
+					</div>
+				</div>
+				<div className="__right">
 
-	  	{
-	  		this.state.showMercado && <Modal onClose={ this.showMercadoHandle.bind(this) }>
-	  			<MERCADOMODAL>
-	  				<div className="__title">Tarjeta de crédito o débito</div>
-	  				<div style={{marginTop: 20, marginBottom: 15}}>
-	  					<img src="https://dgzfssf1la12s.cloudfront.net/shoppingcart/maxicocard.png"/>
-	  				</div>
-	  				<div>
-	  					<MercadoBinding orderTotal={cart.orderSummary.orderTotal} pay={this.payMercado.bind(this)} email={this.props.me ? this.props.me.email : ''}/>
-	  				</div>
-	  			</MERCADOMODAL>
-	  		</Modal>
-	  	}
+					<Boxs>
+						<Box title={intl.formatMessage({id: 'order_summary'})} style={{paddingTop: 40}}>
+							<OrderSummary style={{marginTop: 20}} display={cart.orderSummary.display}/>
 
-      {
-        this.state.showDeleteConfirm && <Modal onClose={ () => { this.setState({showDeleteConfirm: false}) } }>
-          <Confirm yes={ this.state.cardDelete } no={ () => { this.setState({showDeleteConfirm: false}) } }>
-            <span>Are you sure to delete this card?</span>
-          </Confirm>
-        </Modal>
-      }
+							<div style={{borderTop: 'solid 1px #e6e6e6', marginTop: 25, paddingTop: 25}}>
+								<div>{intl.formatMessage({id: 'additional_payment'})}</div>
+								<div style={{textAlign: 'center', padding: '15px 0', marginTop: 10}}>
+									<img src="https://dgzfssf1la12s.cloudfront.net/upgrade/20180831/payment.jpg"/>
+								</div>
+							</div>
+						</Box>
+					</Boxs>
 
-  	</div>)
-  }
+				</div>
+			</SHOPPINGBODY>
+
+			{
+				this.state.showFrame && <Modal onClose={ this.showFrameHandle.bind(this) }>
+					<CREDITMODAL>
+						<div className="__title">{intl.formatMessage({id: 'use_new_card'})}</div>
+						<iframe onLoad={ this.frameLoadHandle.bind(this) } style={{height: __Frame.height}} className="__frame" src={__Frame.url}/>
+
+						{
+							this.state.frameLoading && <div className="__loading">
+								<img alt="loading" src="https://dgzfssf1la12s.cloudfront.net/site/upgrade/20180316/loading.gif"/>
+							</div>
+						}
+					</CREDITMODAL>
+				</Modal>
+			}
+
+			{
+				this.state.showMercado && <Modal onClose={ this.showMercadoHandle.bind(this) }>
+					<MERCADOMODAL>
+						<div className="__title">Tarjeta de crédito o débito</div>
+						<div style={{marginTop: 20, marginBottom: 15}}>
+							<img src="https://dgzfssf1la12s.cloudfront.net/shoppingcart/maxicocard.png"/>
+						</div>
+						<div>
+							<MercadoBinding orderTotal={cart.orderSummary.orderTotal} pay={this.payMercado.bind(this)} email={this.props.me ? this.props.me.email : ''}/>
+						</div>
+					</MERCADOMODAL>
+				</Modal>
+			}
+
+			{
+				this.state.showDeleteConfirm && <Modal onClose={ () => { this.setState({showDeleteConfirm: false}) } }>
+					<Confirm yes={ this.state.cardDelete } no={ () => { this.setState({showDeleteConfirm: false}) } }>
+						<span>Are you sure to delete this card?</span>
+					</Confirm>
+				</Modal>
+			}
+
+		</div>)
+	}
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(Credit))

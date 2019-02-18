@@ -20,19 +20,19 @@ const OrderConfirm = Loadable({
 
 
 const mapStateToProps = (state) => {
-  return {
-    lang: state.lang
-  }
+	return {
+		lang: state.lang
+	}
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-   	SETLANG: (lang) => {
-   		dispatch(changeLang(lang)).then(() => {
-   			window.location.reload()
-   		})
-   	}
-  }
+	return {
+	 	SETLANG: (lang) => {
+	 		dispatch(changeLang(lang)).then(() => {
+	 			window.location.reload()
+	 		})
+	 	}
+	}
 }
 
 
@@ -60,13 +60,13 @@ const Index =  class extends React.Component{
 		let _messages = getMessages(_lang)
 
 		return <IntlProvider locale={_lang} messages={_messages}>
-		<div>
-			<Header currencies={this.state.currencies} currency={this.state.currency} lang={_lang} changeLang={ ( lang ) => { this.props.SETLANG(lang) } }/>
 			<div>
-				<Route path={`${window.ctx || ''}/order-confirm/:transactionId`} component={OrderConfirm}/>
+				<Header currencies={this.state.currencies} currency={this.state.currency} lang={_lang} changeLang={ ( lang ) => { this.props.SETLANG(lang) } }/>
+				<div>
+					<Route path={`${window.ctx || ''}/order-confirm/:transactionId`} component={OrderConfirm}/>
+				</div>
 			</div>
-		</div>
-	</IntlProvider>
+		</IntlProvider>
 	}
 }
 

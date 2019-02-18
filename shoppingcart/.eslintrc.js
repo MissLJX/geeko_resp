@@ -35,11 +35,10 @@ module.exports = {
             "error",
             "never"
         ],
+        "react/jsx-uses-react": "error",
+        "react/jsx-uses-vars": "error",
         "no-unused-vars": [1, { "vars": "all", "args": "none" }],
         "no-console": 0,
-        // "dynamic-import-chunkname": [2, {
-        //     importFunctions: ["dynamicImport"],
-        //     webpackChunknameFormat: "[a-zA-Z0-57-9-/_]"
-        // }]
+        "no-duplicate-case": 0
     }
 };
