@@ -48,7 +48,7 @@
                     <div class="tbl">
                         <div class="tbl-cell w-523">
                             <div class="proimg" v-if="item.orderItems && index < 4" v-for="(img,index) in item.orderItems">
-                                <link-image   :href="productUrl(img.productId)" :src="img.productImageUrl" :title="img.productName"/>
+                                <link-image   :href="productUrl(img.productName,img.sku,img.productId)" :src="img.productImageUrl" :title="img.productName"/>
                             </div>
                             <div v-if="item.orderItems && item.orderItems.length > 4" class="viewmore" @click="checkDetail(item.id)">
                                 <div class="bg"></div>
@@ -68,7 +68,7 @@
                                     <span class="label">Presente de cupão expirs</span>
                                     <count-down :timeStyle="{color:'#fff'}" :timeLeft="orderoffset(item)"></count-down>
                                 </div>
-                                <div class="offTip" v-if="orderoffset(item) >= 0 && getBtnText(item)==='Generar Ticket' && item.status === 0 && getPayUrl(item)">
+                                <div class="offTip" v-if="orderoffset(item) >= 0 && (getBtnText(item)==='Generar Ticket' || getBtnText(item)==='Gerar Ticket') && item.status === 0 && getPayUrl(item)">
                                     <div class="triangle"></div>
                                     <span class="label" >Tiempo restante para realizar el pago</span>
                                     <count-down :timeStyle="{color:'#fff'}" :timeLeft="orderoffset(item)"></count-down>
@@ -297,8 +297,8 @@
                     this.getData(this.index,this.method,'scroll')
                 }
             },
-            productUrl(productId){
-                return window.ctx + '/w-product/anon/detail?productId=' + productId
+            productUrl(name,sku,id){
+                return window.ctx + "/product/"+name+"/"+sku+"/"+id+".html"
             },
             checkoutUrl(id){
                 if(id){
@@ -342,6 +342,11 @@
                     case '34':
                     case '35':
                     case '37':
+                    case '38':
+                    case '40':
+                    case '41':
+                    case '43':
+                    case '44':
                         return item.boletoPayCodeURL
                         return null
                 }
@@ -357,6 +362,11 @@
                     case '34':
                     case '35':
                     case '37':
+                    case '38':
+                    case '40':
+                    case '41':
+                    case '43':
+                    case '44':
                         return 'Generar Ticket'
                     case '29':
                         return 'Gerar Ticket'

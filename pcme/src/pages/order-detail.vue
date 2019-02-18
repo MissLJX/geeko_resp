@@ -120,7 +120,7 @@
                 </div>
             </div>
 
-            <div v-if="getBtnText==='Generar Ticket' && orderdetail.status === 0 && orderoffset >= 0 && couponshow && getPayUrl">
+            <div v-if="(getBtnText==='Generar Ticket' || getBtnText==='Gerar Ticket') && orderdetail.status === 0 && orderoffset >= 0 && couponshow && getPayUrl">
                 <div class="mask"></div>
                 <div class="coupon-window">
                     <span class="coupon-close" @click="() => {this.couponshow = false}"><i class="iconfont">&#xe69a;</i></span>
@@ -230,6 +230,11 @@
                     case '34':
                     case '35':
                     case '37':
+                    case '38':
+                    case '40':
+                    case '41':
+                    case '43':
+                    case '44':
                         return this.orderdetail.boletoPayCodeURL
                         return null
                 }
@@ -245,6 +250,11 @@
                     case '34':
                     case '35':
                     case '37':
+                    case '38':
+                    case '40':
+                    case '41':
+                    case '43':
+                    case '44':
                         return 'Generar Ticket'
                     case '29':
                         return 'Gerar Ticket'
@@ -267,6 +277,11 @@
                     case '34':
                     case '35':
                     case '37':
+                    case '38':
+                    case '40':
+                    case '41':
+                    case '43':
+                    case '44':
                         return 'Otro método de pago'
                     case '16':
                     case '23':
@@ -456,7 +471,7 @@
                 }
             },
             getProUrl(product){
-                return "/w-product/anon/detail?productId="+product.productId
+                return "/product/"+product.name+"/"+product.sku+"/"+product.productId+".html"
             }
         },
         created(){

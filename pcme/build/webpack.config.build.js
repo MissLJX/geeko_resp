@@ -39,6 +39,7 @@ const config = {
         modules: [setPath('../node_modules')]
     },
     mode: 'production',
+    devtool: '#eval-source-map',
     plugins: [
         extractHTML,
         new VueLoaderPlugin()
