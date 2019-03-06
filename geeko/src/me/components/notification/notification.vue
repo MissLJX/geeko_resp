@@ -17,7 +17,7 @@
     .el-notification-send-time{
         height: 22px;
         text-align: center;
-        margin:20px auto;
+        margin:15px auto 12px;
         width:130px;
         background-color: rgba(0, 0, 0, 0.1);
         font-size: 12px;
