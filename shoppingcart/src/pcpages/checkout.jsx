@@ -241,6 +241,7 @@ const Checkout = class extends React.Component {
 
 		this.props.GETCHECKOUT(orderId).catch(({result}) => {
 			alert(result)
+			window.location.href = `${window.ctx || ''}/me/m/order/detail/${orderId}`
 		})
 		this.props.GETPAYPAL()
 		this.props.GETME().then( ({document}) => this.props.SETDOCUMENT(document))
@@ -616,6 +617,10 @@ const Checkout = class extends React.Component {
 				case '19':
 				case '20':
 				case '21':
+				case '22':
+				case '23':
+				case '24':
+				case '25':
 					{
 						if(payMethod.type !== '14') {
 							this.documentForm.validateAll()

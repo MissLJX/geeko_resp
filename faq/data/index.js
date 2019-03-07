@@ -1,8 +1,8 @@
-// import Data from './data.js'
-// import PtData from './data_pt.js'
-// import DeData from './data_de.js'
-// import EsData from './data_es.js'
-// import FrData from './data_fr.js'
+import Data from './data.js'
+import PtData from './data_pt.js'
+import DeData from './data_de.js'
+import EsData from './data_es.js'
+import FrData from './data_fr.js'
 
 // import Data from './ivrose/data.js'
 // import PtData from './ivrose/data_pt.js'
@@ -10,11 +10,11 @@
 // import EsData from './ivrose/data_es.js'
 // import FrData from './ivrose/data_fr.js'
 
-import Data from './boutiquefeel/data.js'
-import PtData from './boutiquefeel/data_pt.js'
-import DeData from './boutiquefeel/data_de.js'
-import EsData from './boutiquefeel/data_es.js'
-import FrData from './boutiquefeel/data_fr.js'
+// import Data from './boutiquefeel/data.js'
+// import PtData from './boutiquefeel/data_pt.js'
+// import DeData from './boutiquefeel/data_de.js'
+// import EsData from './boutiquefeel/data_es.js'
+// import FrData from './boutiquefeel/data_fr.js'
 
 const messages = {
   en: Data,

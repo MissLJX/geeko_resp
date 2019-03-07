@@ -22,6 +22,12 @@ export const __reg_document_co__ = /^\d{6,10}$/
 // Uruguay CI between 6 to 8 digits
 export const __reg_document_ur__ = /^\d{6,8}$/
 
+// Mexico CURP between 10 to 18 digits
+export const __reg_document_mx__ = /^\d{10,18}$/
+
+// Peru DNI between 8 to 9 digits
+export const __reg_document_pe__ = /^\d{8,9}$/
+
 export const cpfcheck = (value) => {
 	var result = true 
 
@@ -165,6 +171,14 @@ export const dni = (country) => {
 		reg = __reg_document_ur__
 		error = 'Cédula de identidad debe tener entre 6 y 8 dígitos'
 		break
+	case 'MX':
+		reg = __reg_document_mx__
+		error = 'Cédula de identidad debe tener entre 10 y 18 dígitos'
+		break
+	case 'PE':
+		reg = __reg_document_pe__
+		error = 'Cédula de identidad debe tener entre 8 y 9 dígitos'
+		break
 	default:
 		reg = /\d/
 		error = 'Incorrect document'
@@ -188,13 +202,21 @@ export const getDNI = (payMethod) => {
 	case '31':
 	case '32':
 		return dni('CO')
-	case '30':
-	case '31':
-	case '32':
+	case '33':
+	case '34':
+	case '35':
 		return dni('CL')
 	case '36':
 	case '37':
 		return dni('UY')
+	case '39':
+	case '40':
+	case '41':
+		return dni('MX')
+	case '42':
+	case '43':
+	case '44':
+		return dni('PE')
 	default:
 		return dni('US')
 	}

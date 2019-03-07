@@ -15,7 +15,7 @@ export const getDictionary = (type) => axios.get('/dictionary/anon/get', {typeCo
 export const getCountries = () => getDictionary('country')
 export const getStates = (country) => getDictionary(`state-${country}`)
 export const getCurrencies = () => getDictionary('currency')
-export const updateCurrency = (currency) => axios.post(`/context/anon/update-currency`, {currency})
+export const updateCurrency = (currency) => axios.post('/context/anon/update-currency', {currency})
 
 export const changeShippingMethod = (method) => axios.get(`${VPATH}/shopping-cart/anon/${method}/update-shipping-method`)
 
@@ -23,7 +23,7 @@ export const product = (id) => axios.get(`${VPATH}/product/anon/${id}/show`)
 export const product2 = (id) => axios.get(`${VPATH}/product/anon/${id}/show2`)
 
 export const me = () => axios.get(`${VPATH}/customer/get`)
-export const changeCommunicationEmail = (transactionId, email) => axios.post(`/order/anon/change-communication-email`, {transactionId, email})
+export const changeCommunicationEmail = (transactionId, email) => axios.post('/order/anon/change-communication-email', {transactionId, email})
 
 export const mercadocards = () => axios.get(`${VPATH}/mercadopago/get-cards?_=${new Date().getTime()}`)
 export const mercadopay = (params) => axios.post(`${VPATH}/mercadopago/pay`, params)
@@ -85,7 +85,7 @@ export const checkout_credit = (params) => axios.post(`${VPATH}/pay/quickpay-by-
 export const checkout_paypal = (params) => axios.post(`${VPATH}/paypal2/pay-by-order`, params)
 export const checkout_computop = (params) => axios.post(`${VPATH}/computop/get-pay-params-by-order`, {...params, _: new Date().getTime()})
 
-// order
+//order
 export const gettransaction = (id) => axios.get(`${VPATH}/order/anon/order-confim`, {transactionId: id})
 export const updateorderaddress = (address) => axios.post(`${VPATH}/order/anon/shipping-detail-update`, address)
 export const gettransactionrelatedproducts = (id, skip, limit) => axios.get(`${VPATH}/order/anon/${skip}/${limit}/get-same-category-products

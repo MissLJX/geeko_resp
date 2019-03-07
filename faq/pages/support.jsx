@@ -12,14 +12,33 @@ const Support = class extends React.Component {
     super(props)
   }
 
+  comsponentWillMount () {
+    if (window.zE) {
+      zE('webWidget:on', 'open', function () {
+        zE('webWidget', 'show')
+      })
+
+      zE('webWidget:on', 'close', function () {
+        zE('webWidget', 'hide')
+      })
+
+      zE('webWidget', 'helpCenter:setSuggestions', { search: 'FAQ' })
+    }
+  }
+
+  onlineClickHandle () {
+    if (window.zE) {
+      zE('webWidget', 'show')
+      zE('webWidget', 'open')
+    }
+  }
+
   render () {
     const {intl} = this.props
 
   	const supportbuttons = <ul className='x-flex __around'>
   		<li>
-        <Link to="/support/online-help">
-          <SupportButton onClick={() => { return false }} href="#" color="#599386" label={intl.formatMessage({id: 'onlinehelp'})}>&#xe665;</SupportButton>
-        </Link>
+        <SupportButton onClick={this.onlineClickHandle.bind(this)} href="#" color="#599386" label={intl.formatMessage({id: 'onlinehelp'})}>&#xe665;</SupportButton>
       </li>
   		<li><SupportButton href={`https://m.me/${messageId}?isouter=1`} color="#4797b3" label={intl.formatMessage({id: 'messageus'})}>&#xe664;</SupportButton></li>
   		<li><SupportButton href="/support/ticket" color="#cc5139" label={intl.formatMessage({id: 'tickets'})}>&#xe666;</SupportButton></li>

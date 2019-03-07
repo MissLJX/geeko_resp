@@ -11,9 +11,9 @@ class App extends React.Component {
 
   render () {
     return (
-     	<BrowserRouter>
-     		<Index/>
-     	</BrowserRouter>
+		 	<BrowserRouter>
+		 		<Index/>
+		 	</BrowserRouter>
     )
   }
 }

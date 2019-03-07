@@ -104,6 +104,20 @@ const Tip = styled.div`
 	}
 `
 
+const BottomTip = styled.div`
+	background-color: #fef8f8;
+	padding: 10px;
+	line-height: 18px;
+	font-size: 12px;
+	position: fixed;
+	width: 100%;
+	z-index: 1;
+	bottom: 90px;
+	a{
+		text-decoration: underline;
+	}
+`
+
 const DoubleBtn = styled.div`
 	& > div{
 		width: calc(50% - 5px);
@@ -342,7 +356,7 @@ const ShoppingCart = class extends React.Component {
 
 		const headerHeight = window.headerHeight || 0
 
-		if (this.fixedTip && this.fixedTipWrapper) {
+		if (this.fixedTip && this.fixedTipWrapper && sitename !== 'bellewholesale') {
 			const { clientHeight } = this.fixedTip
 			this.fixedTipWrapper.style.height = clientHeight + 'px'
 			const rect = this.fixedTipWrapper.getBoundingClientRect()
@@ -388,14 +402,16 @@ const ShoppingCart = class extends React.Component {
 		const { payMethod, cart, paypal, payType } = this.props
 		const { shippingDetail } = cart
 
-		if (!payType) {
-			alert('Please select a pay method!')
-			this.$paylistdom.scrollIntoView()
-			return
-		}
+		
 
 		if (!cart.shippingDetail) {
 			this.props.history.push(`${window.ctx || ''}${__route_root__}/address`)
+			return
+		}
+
+		if (!payType) {
+			alert('Please select a pay method!')
+			this.$paylistdom.scrollIntoView()
 			return
 		}
 
@@ -655,7 +671,7 @@ const ShoppingCart = class extends React.Component {
 					checking: false
 				})
 			})
-		} else if (payType === '14' || payType === '15' || payType === '16' || payType === '17' || payType === '18' || payType === '19' || payType === '20' || payType === '21') {
+		} else if (payType === '14' || payType === '15' || payType === '16' || payType === '17' || payType === '18' || payType === '19' || payType === '20' || payType === '21' || payType === '22' || payType === '23' || payType === '24' || payType === '25') {
 
 			const paymentMethodId = this.getTcMethod()
 			if (!paymentMethodId) {
@@ -1054,43 +1070,35 @@ const ShoppingCart = class extends React.Component {
 
 			const { document, payMethod } = this.props
 
+			
+			this.setState({
+				dlocalerror: null
+			})
+
 			if (payMethod !== '24') {
-				this.setState({
-					dlocalerror: null
-				})
 				this.dlocalref.validateAll()
-
-
 				if (this.dlocalbtn && this.dlocalbtn.context && this.dlocalbtn.context._errors.length > 0) {
 					this.setState({
 						checking: false
 					})
 					return
 				}
+			}
 
-				if (document) {
-					if(window.__dlocal){
-						window.__dlocal.createToken(this.cvvField).then(result => {
-							this.payCredit({ installments, document, token: result.token })
-						}).catch(result => {
-							if (result.error) {
-								// Inform the customer that there was an error.
-								this.setState({
-									checking: false,
-									dlocalerror: result.error.message
-								})
-							}
+			if(window.__dlocal){
+				window.__dlocal.createToken(this.cvvField).then(result => {
+					this.payCredit({ installments, document, token: result.token })
+				}).catch(result => {
+					if (result.error) {
+						// Inform the customer that there was an error.
+						this.setState({
+							checking: false,
+							dlocalerror: result.error.message
 						})
 					}
-
-				} else {
-					this.setState({
-						checking: false
-					})
-				}
-			} else {
-				this.payCredit({ installments })
+				})
 			}
+
 
 
 		} else {
@@ -1421,6 +1429,7 @@ const ShoppingCart = class extends React.Component {
 		//   })
 		// }
 
+		const TipModal = sitename === 'bellewholesale' ? BottomTip : Tip
 
 		return loading ? <Loading /> : (empty ? <Empty /> : (
 			cart && (
@@ -1432,7 +1441,7 @@ const ShoppingCart = class extends React.Component {
 							<div ref={wrapper => { this.fixedTipWrapper = wrapper }}>
 								{
 									couponcountdown > 1000 ? (
-										<Tip innerRef={tip => { this.fixedTip = tip }}>
+										<TipModal innerRef={tip => { this.fixedTip = tip }}>
 											<div className="x-table __fixed x-fw __vm">
 												<div className="x-cell" style={{ width: 75 }}>
 													<CountDownBlock offset={couponcountdown} />
@@ -1441,12 +1450,12 @@ const ShoppingCart = class extends React.Component {
 													<span dangerouslySetInnerHTML={{ __html: sendCouponMessage.message }} />
 												</div>
 											</div>
-										</Tip>
+										</TipModal>
 									) : (
 										<React.Fragment>
-											{cart.messages && cart.messages.orderSummaryMsg && <Tip className={this.state.tipFixed ? '__fixed' : ''} innerRef={tip => { this.fixedTip = tip }}>
+											{cart.messages && cart.messages.orderSummaryMsg && <TipModal className={this.state.tipFixed ? '__fixed' : ''} innerRef={tip => { this.fixedTip = tip }}>
 												<span dangerouslySetInnerHTML={{ __html: cart.messages.orderSummaryMsg }} />
-											</Tip>}
+											</TipModal>}
 										</React.Fragment>
 									)
 								}
@@ -1659,7 +1668,7 @@ const ShoppingCart = class extends React.Component {
 						{
 							window.__is_login__ ? (
 								<Box>
-									<div style={{ height: 90 }}>
+									<div style={{ height: (sitename === 'bellewholesale' ? 140 : 90) }}>
 
 										{
 											cart.canCheckout ? <Checkout>
@@ -1701,7 +1710,7 @@ const ShoppingCart = class extends React.Component {
 							) : (
 								window.token ? (
 									<Box>
-										<div style={{ height: 90 }}>
+										<div style={{ height: (sitename === 'bellewholesale' ? 140 : 90) }}>
 											<Checkout>
 												<div className="__total">
 													<span>{intl.formatMessage({ id: 'total' })}: </span>
@@ -1723,8 +1732,7 @@ const ShoppingCart = class extends React.Component {
 									</Box>
 								) : (
 									<Box>
-										<div style={{ height: 90 }}>
-
+										<div style={{ height: (sitename === 'bellewholesale' ? 140 : 90) }}>
 										</div>
 
 

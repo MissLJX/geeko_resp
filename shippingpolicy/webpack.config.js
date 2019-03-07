@@ -1,13 +1,14 @@
 const path = require('path')
 const webpack = require('webpack')
 const HTMLWebpackPlugin = require('html-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 const ROOT_PATH = path.resolve(__dirname)
 const BUILD_PATH = path.resolve(ROOT_PATH, 'dist')
 
 module.exports = {
   entry: {
-  	app: path.resolve(ROOT_PATH, 'app.jsx')
+  	app: ['babel-polyfill', path.resolve(ROOT_PATH, 'app.jsx')]
   },
   output: {
   	path: BUILD_PATH,
@@ -43,24 +44,36 @@ module.exports = {
         exclude: [path.join(ROOT_PATH, 'node_modules')]
       },
       {
-        test: /.css$/,
-        use: ['style-loader', 'css-loader']
+        test: /\.(sa|sc|c)ss$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'sass-loader'
+        ]
       }
     ]
   },
   plugins: [
     new HTMLWebpackPlugin({
-      title: 'FAQ',
-      meta: {
-      	'charset': 'utf-8',
-        'viewport': 'width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no'
-      }
+      title: 'Shopping Cart',
+      template: 'index.html'
     }),
+    new MiniCssExtractPlugin({
+      // Options similar to the same options in webpackOptions.output
+      // both options are optional
+      filename: '[name].css',
+      chunkFilename: '[id].css'
+    }),
+
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({
-      'site': JSON.stringify('chicme'),
-      'messageId': JSON.stringify('1197317563662685')
+      'siteurl': JSON.stringify('http://localhost:8080/wanna'),
+      'MercadoPublicKey': JSON.stringify('TEST-aa971175-51cd-4be7-8ae4-f12006ac536d'),
+      'sitename': JSON.stringify('IVRose'),
+      'sitelogo': JSON.stringify('https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/site/pc/icon326_iv.png'),
+      'deviceType': JSON.stringify('msite'),
+      'siteType': JSON.stringify('old')
     })
   ]
 }

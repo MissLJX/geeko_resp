@@ -39,6 +39,7 @@ module.exports = {
         "react/jsx-uses-vars": "error",
         "no-unused-vars": [1, { "vars": "all", "args": "none" }],
         "no-console": 0,
-        "no-duplicate-case": 0
+        "no-duplicate-case": 0,
+        "linebreak-style": 0
     }
 };
