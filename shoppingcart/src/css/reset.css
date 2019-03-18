@@ -57,7 +57,7 @@ input , select , textarea{
   border-radius: 0;
   outline:none;
   box-shadow:none;
-  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-family: "Open Sans", Arial,"Helvetica Neue", Helvetica, sans-serif;
 }
 
 *, *::after, *::before{

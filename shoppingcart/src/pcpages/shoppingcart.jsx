@@ -1302,7 +1302,7 @@ const ShoppingCart = class extends React.Component {
 	countCart(overseasDelivery, domesticDeliveryCases){
 		let count = 0
 
-		const deliveryItems = overseasDelivery.deliveryItems
+		const deliveryItems = overseasDelivery ? overseasDelivery.deliveryItems : null
 
 		if(deliveryItems && deliveryItems.length){
 			deliveryItems.forEach(deliveryItem => {
