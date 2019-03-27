@@ -171,7 +171,9 @@ const Ticket = class extends React.Component {
   }
 
   render () {
-    const {intl} = this.props
+    const {intl, location} = this.props
+
+    const isFromNotification = location.search && location.search.indexOf('utm_source=pcnotification') >= 0
 
     //   subjectsizecolor: '尺码相关',
     // subjectaddress: '更改收货地址',
@@ -276,7 +278,9 @@ const Ticket = class extends React.Component {
   	}
 
     return <div>
-      <PageHeader label={intl.formatMessage({id: 'submitticket'})}/>
+
+      {isFromNotification ? <PageHeader href={'/'} label={intl.formatMessage({id: 'submitticket'})}/> : <PageHeader label={intl.formatMessage({id: 'submitticket'})}/>}
+
       <PageContanier>
         { this.state.loading ? (
       	<div style={{height: '50px', lineHeight: '50px', fontSize: '12px', textAlign: 'center', color: '#666'}}>

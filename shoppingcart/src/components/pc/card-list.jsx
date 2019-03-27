@@ -13,19 +13,19 @@ import {unitprice} from '../../utils/utils.js'
 import { getDInstallments } from '../../api'
 
 const LABELICON = styled.span`
-  color: #666;
-  cursor: pointer;
-  & > span{
-    vertical-align: middle;
-    margin-left: 4px;
-    &:first-child{
-      margin-left: 0;
-    }
-  }
+	color: #666;
+	cursor: pointer;
+	& > span{
+		vertical-align: middle;
+		margin-left: 4px;
+		&:first-child{
+			margin-left: 0;
+		}
+	}
 
-  &.disabled{
-    cursor: not-allowed;
-  }
+	&.disabled{
+		cursor: not-allowed;
+	}
 `
 
 const CARDPLUGIN = styled.div`
@@ -33,15 +33,15 @@ const CARDPLUGIN = styled.div`
 	padding: 15px 28px;
 	position: relative;
 	&::before{
-	    content: '';
-	    display: inline-block;
-	    width: 10px;
-	    height: 10px;
-	    transform: rotate(-45deg);
-	    background-color: #eee;
-	    top: -5px;
-	    left: 50px;
-	    position: absolute;
+			content: '';
+			display: inline-block;
+			width: 10px;
+			height: 10px;
+			transform: rotate(-45deg);
+			background-color: #eee;
+			top: -5px;
+			left: 50px;
+			position: absolute;
 	}
 `
 
@@ -192,7 +192,7 @@ const DLocalPlugin = class extends React.Component {
 			]
 		}
 	}
-  
+	
 	cvvRef(c) {
 		this.cvvHolder = c
 		if(this.cvvHolder && !this.cvvField){
@@ -236,8 +236,12 @@ const DLocalPlugin = class extends React.Component {
 			return 'Cédula de ciudadanía'
 		case '33':
 			return 'CI/RUT'
-		case '37':
+		case '36':
 			return 'Cédula de identidad'
+		case '39':
+			return 'CURP'
+		case '42':
+			return 'DNI'
 		default:
 			return 'Document'
 		}
@@ -276,7 +280,7 @@ const DLocalPlugin = class extends React.Component {
 									onChange={this.props.handleInputChange}/>
 							</FormElement>
 						}
-            
+						
 						
 
 					</MutiElement>
@@ -309,6 +313,8 @@ const getPlugin = props => {
 	case '32':
 	case '33':
 	case '36':
+	case '39':
+	case '42':
 		return <I18DLocalPlugin {...props}/>
 	default:
 		return null
@@ -328,13 +334,13 @@ const Card = (props) => <CARD>
 		</div>
 		<div className="x-cell __right">
 			<LABELICON className="__deleteicon" onClick={ (evt) => { props.deleteCardHandle(evt, props.card) }}>
-			  <Icon>&#xe629;</Icon>
-			  <span>Delete</span>
+				<Icon>&#xe629;</Icon>
+				<span>Delete</span>
 			</LABELICON>
 		</div>
 	</div>
 	{
-  	props.card.isSelected && getPlugin(props)
+		props.card.isSelected && getPlugin(props)
 	}
 
 </CARD>
@@ -344,7 +350,7 @@ export default (props) => {
 	return <CARDS>
 		{ cards && cards.length > 0 && cards.map(card => (
 			<li key={card.quickpayRecord.id}>
-      	<Card card={card} {...props}/>
+				<Card card={card} {...props}/>
 			</li>
 		))}
 	</CARDS>

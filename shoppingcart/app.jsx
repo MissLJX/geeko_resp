@@ -8,9 +8,9 @@ import { Provider } from 'react-redux'
 
 // import Index from './src/index.jsx'
 
-// import Index from './src/pc-index.jsx'
+import Index from './src/pc-index.jsx'
 // import Index from './src/pc-order-confirm.jsx'
-import Index from './src/order-confirm.jsx'
+// import Index from './src/order-confirm.jsx'
 
 import './src/css/reset.css'
 import './src/css/style.css'
@@ -33,7 +33,14 @@ class App extends React.Component {
 	}
 }
 
-const root = document.createElement('div')
-document.body.appendChild(root)
+// const root = document.createElement('div')
+// document.body.appendChild(root)
+
+let root = document.getElementById('root')
+
+if(!root){
+	root = document.createElement('div')
+	document.body.appendChild(root)
+}
 
 ReactDOM.render(<App />, root)

@@ -301,7 +301,7 @@ const OrderConfirm = class extends React.Component {
 	isCashout(){
 		const { transaction } = this.props
 		const { payMethod } = transaction
-		return ['20','21','16','23','25','29','27','28','30','31','34','35','37'].indexOf(payMethod) >= 0
+		return ['20','21','16','23','25','29','27','28','30','31','34','35','37','40','41','43','44'].indexOf(payMethod) >= 0
 	}
 
 	getPayUrl(){
@@ -321,6 +321,10 @@ const OrderConfirm = class extends React.Component {
 		case '34':
 		case '35':
 		case '37':
+		case '40':
+		case '41':
+		case '43':
+		case '44':
 			return transaction.boletoPayCodeURL
 		}
 	}
@@ -338,6 +342,10 @@ const OrderConfirm = class extends React.Component {
 		case '34':
 		case '35':
 		case '37':
+		case '40':
+		case '41':
+		case '43':
+		case '44':
 			return bb.spain
 		case '16':
 		case '23':
@@ -361,6 +369,10 @@ const OrderConfirm = class extends React.Component {
 		case '34':
 		case '35':
 		case '37':
+		case '40':
+		case '41':
+		case '43':
+		case '44':
 			return 'Generar Ticket'
 		case '29':
 			return 'Gerar Ticket'
@@ -545,18 +557,22 @@ const OrderConfirm = class extends React.Component {
 						</li>
 					</ORDERS>
 
-					<div style={{textAlign: 'center', position: 'relative', top: 30}}>
-						<div id="fmsg"  style={{display: 'none', fontSize: 12, color: '#e64545'}}>{intl.formatMessage({id: 'facebook_check'})}</div>
-						<div ref={ this.bindFBCheckBox.bind(this) } class="fb-messenger-checkbox"  
-							origin={window.__FB_Origin}
-							page_id={window.__FB_Page_ID}
-							messenger_app_id={window.__FB_Messenger_App_ID}
-							user_ref={me ? me.id : null}
-							size="small"
-							skin="light"
-							center_align="true">
+					{
+						me && !me.subscribeToFacebookMessage && <div style={{textAlign: 'center', position: 'relative', top: 30}}>
+							<div id="fmsg"  style={{display: 'none', fontSize: 12, color: '#e64545'}}>{intl.formatMessage({id: 'facebook_check'})}</div>
+							<div ref={ this.bindFBCheckBox.bind(this) } class="fb-messenger-checkbox"  
+								origin={window.__FB_Origin}
+								page_id={window.__FB_Page_ID}
+								messenger_app_id={window.__FB_Messenger_App_ID}
+								user_ref={window.__FB_User_Ref}
+								size="small"
+								skin="light"
+								center_align="true">
+							</div>
 						</div>
-					</div>
+					}
+
+					
 
 					<BigButton onClick={this.handleViewOrder.bind(this)} style={{width: 313, marginLeft: 'auto', marginRight: 'auto', marginTop: 40}}><FormattedMessage id="check_order"/></BigButton>
 

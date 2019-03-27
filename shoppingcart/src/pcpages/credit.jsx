@@ -340,7 +340,7 @@ const Credit = class extends React.Component {
 
 		if (payMethod === '19') {
 			this.checkmercado(evt)
-		} else if (payMethod === '24' || payMethod === '26' || payMethod === '32' || payMethod === '33' || payMethod === '36') {
+		} else if (payMethod === '24' || payMethod === '26' || payMethod === '32' || payMethod === '33' || payMethod === '36' || payMethod === '39' || payMethod === '42') {
 
 			if(payMethod !== '24'){
 				this.documentRef.validateAll()

@@ -67,7 +67,7 @@ export default{
 	credit_msg: 'aplique {credits} créditos de ({discount}) a este pedido',
 	we_accept: 'Aceptamos',
 	can_use_coupon: '{canUseCouponCount} Disponible',
-	shipping_time: 'Tiempo de EWe Acceptnvío',
+	shipping_time: 'tiempo de envío',
 	add_shipping_insurance: 'Añadir seguro de envío ({price})',
 	only_left: 'Sólo quedan {left}',
 	set_default_address: 'Establecer como dirección de envío predeterminada',

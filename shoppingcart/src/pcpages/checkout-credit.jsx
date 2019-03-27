@@ -25,14 +25,12 @@ import MercadoBinding from '../components/pc/mercado-binding.jsx'
 import {submit} from '../utils/common-pay.js'
 
 import {
-	checkout,
-	checkout_updatepaymethod,
 	checkout_getparams,
 	checkout_pay,
 	checkout_credit,
-	checkout_paypal,
 	usecreditcard,
 	useMercadocard,
+	removeMercadoCard,
 	deletecreditcard
 } from '../api'
 
@@ -40,15 +38,9 @@ import {
 	setSecurityCode,
 	setInstallments,
 	setMercadoInstallments,
-	setAtmMethod,
-	setTicketMethod,
-	SELECT_PAY,
 	fetchCheckout,
 	getCreditCards,
 	getMercadoCards,
-	toggleCredit,
-	toggleCreditStatus,
-	fetchPaypalUrl,
 	fetchMe,
 	setDocument
 } from '../store/actions.js'
@@ -370,7 +362,7 @@ const Credit = class extends React.Component {
 		const {checkout, installments, document} = this.props
 		if (checkout.payMethod === '19') {
 			this.checkmercado(evt)
-		}  else if (checkout.payMethod === '24' || checkout.payMethod === '26' || checkout.payMethod === '32' || checkout.payMethod === '33' || checkout.payMethod === '36') {
+		}  else if (checkout.payMethod === '24' || checkout.payMethod === '26' || checkout.payMethod === '32' || checkout.payMethod === '33' || checkout.payMethod === '36' || checkout.payMethod === '39' || checkout.payMethod === '42') {
 		
 			if(checkout.payMethod !== '24'){
 				this.documentRef.validateAll()
@@ -479,7 +471,6 @@ const Credit = class extends React.Component {
 		evt.nativeEvent.stopImmediatePropagation()
 		const deletor = card.quickpayRecord.payMethod === '19' ? removeMercadoCard : deletecreditcard
 		const cardId = card.quickpayRecord.payMethod === '19' ? card.quickpayRecord.quickpayId : card.quickpayRecord.id
-		const { payMethod } = this.props
 		this.setState({
 			showDeleteConfirm: true,
 			cardDelete: () => {

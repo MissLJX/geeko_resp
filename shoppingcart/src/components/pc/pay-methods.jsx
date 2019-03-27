@@ -226,6 +226,12 @@ const TicketCash = class extends React.Component {
 			return 'CI/RUT'
 		case '37':
 			return 'Cédula de identidad'
+		case '40':
+		case '41':
+			return 'CURP'
+		case '43':
+		case '44':
+			return 'DNI'
 		default:
 			return 'Document'
 		}
@@ -328,6 +334,10 @@ const getPlugin = (props) => {
 	case '34':
 	case '35':
 	case '37':
+	case '40':
+	case '41':
+	case '43':
+	case '44':
 		return <TicketCash {...props}/>
 	default:
 		return null

@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import { injectIntl } from 'react-intl'
 import PayMethodList from '../components/msite/paymethod-list.jsx'
 import Refreshing from '../components/msite/refreshing.jsx'
+import Ask from '../components/ask.jsx'
+import FixedMessage from '../components/msite/fixed-message.jsx'
 import {
 	paypalpay,
 	checkout_updatepaymethod,
@@ -221,6 +223,7 @@ const Checkout = class extends React.Component {
 		})
 		this.props.GETCHECKOUT(orderId).catch(({ result }) => {
 			alert(result)
+			window.location.href = `${window.ctx || ''}/me/m/order/detail/${orderId}`
 		}).then(() => {
 			this.setState({
 				refreshing: false
@@ -657,6 +660,10 @@ const Checkout = class extends React.Component {
 				case '19':
 				case '20':
 				case '21':
+				case '22':
+				case '23':
+				case '24':
+				case '25':
 					{
 						if (payMethod.type !== '14') {
 							this.documentForm.validateAll()
@@ -1085,6 +1092,17 @@ const Checkout = class extends React.Component {
 								</div>
 							</div>
 						</React.Fragment>
+					}
+
+					{
+						this.state.showAsk && this.state.askMessage && (
+							<React.Fragment>
+								<Mask />
+								<FixedMessage onClose={() => { this.setState({ showAsk: false, askMessage: null }) }}>
+									<p dangerouslySetInnerHTML={{ __html: this.state.askMessage }} />
+								</FixedMessage>
+							</React.Fragment>
+						)
 					}
 
 

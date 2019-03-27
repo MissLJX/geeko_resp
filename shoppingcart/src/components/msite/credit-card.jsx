@@ -278,8 +278,12 @@ const DLocalPlugin = class extends React.Component {
 			return 'Cédula de ciudadanía'
 		case '33':
 			return 'CI/RUT'
-		case '37':
+		case '36':
 			return 'Cédula de identidad'
+		case '39':
+			return 'CURP'
+		case '42':
+			return 'DNI'
 		default:
 			return 'Document'
 		}
@@ -406,6 +410,8 @@ const getPayPlugin = (payMethod, props) => {
 	case '32':
 	case '33':
 	case '36':
+	case '39':
+	case '42':
 		return <DLocalPlugin {...props} payMethod={payMethod}/>
 	default:
 		return null

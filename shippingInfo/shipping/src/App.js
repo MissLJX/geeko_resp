@@ -142,12 +142,28 @@ class ShippingRow extends React.Component {
             <tr>
                 {/*{this.props.isFirst && <ShippingCell col={this.props.col} value={this.props.row.region}/>}*/}
                 <ShippingCell value={this.props.row.country}/>
-                <ShippingCell value={this.props.row.standard.time}/>
-                <ShippingCell value={this.props.row.standard.free}/>
-                <ShippingCell value={this.props.row.expedited.time}/>
-                <ShippingCell value={this.props.row.expedited.free}/>
-                <ShippingCell value={this.props.row.express.time}/>
-                <ShippingCell value={this.props.row.express.free}/>
+
+                {
+                    this.props.hasStandard && <React.Fragment>
+                        <ShippingCell value={this.props.row.standard.time}/>
+                        <ShippingCell value={this.props.row.standard.free}/>
+                    </React.Fragment>
+                }
+
+                {
+                    this.props.hasExpedited && <React.Fragment>
+                        <ShippingCell value={this.props.row.expedited.time}/>
+                        <ShippingCell value={this.props.row.expedited.free}/>
+                    </React.Fragment>
+                }
+
+                {
+                    this.props.hasExpress && <React.Fragment>
+                        <ShippingCell value={this.props.row.express.time}/>
+                        <ShippingCell value={this.props.row.express.free}/>
+                    </React.Fragment>
+                }
+           
             </tr>
         )
     }
@@ -160,7 +176,7 @@ class ShippingRows extends React.Component {
         const result = stateKeys.map((sk) => {
             let rows = stateGroup[sk]
             return rows.map((row, index) => {
-                return <ShippingRow col={rows.length} key={row.country} isFirst={index === 0} row={row}/>
+                return <ShippingRow hasStandard={this.props.hasStandard} hasExpedited={this.props.hasExpedited} hasExpress={this.props.hasExpress} col={rows.length} key={row.country} isFirst={index === 0} row={row}/>
             })
         })
         return result
@@ -178,29 +194,48 @@ class ShippingTable extends React.Component {
 
         const stateGroup = _.groupBy(this.props.infos, info => info.region)
 
+        const hasStandard = _.find(this.props.infos, info => !!info.standard)
+        const hasExpedited = _.find(this.props.infos, info => !!info.expedited)
+        const hasExpress = _.find(this.props.infos, info => !!info.express)
+
         return (
             <table className="x-shipping-table">
                 <thead>
                 <tr>
                     {/*<th rowSpan='2'>REGION</th>*/}
                     <th rowSpan='2'>COUNTRY</th>
-                    <th colSpan='2'>Standard Shipping</th>
-                    <th colSpan='2'>Expedited Shipping</th>
-                    <th colSpan='2'>Express Shipping</th>
+                    {hasStandard && <th colSpan='2'>Standard Shipping</th>}
+                    {hasExpedited && <th colSpan='2'>Expedited Shipping</th>}
+                    {hasExpress && <th colSpan='2'>Express Shipping</th>}
                 </tr>
 
                 <tr className="x-shipping-back-grey">
-                    <th>Shipping Time</th>
-                    <th>Fee</th>
-                    <th>Shipping Time</th>
-                    <th>Fee</th>
-                    <th>Shipping Time</th>
-                    <th>Fee</th>
+
+                    {
+                        hasStandard && <React.Fragment>
+                            <th>Shipping Time</th>
+                            <th>Fee</th>
+                        </React.Fragment>
+                    }
+                    
+                    {
+                        hasExpedited && <React.Fragment>
+                            <th>Shipping Time</th>
+                            <th>Fee</th>
+                        </React.Fragment>
+                    }
+
+                    {
+                        hasExpress && <React.Fragment>
+                            <th>Shipping Time</th>
+                            <th>Fee</th>
+                        </React.Fragment>
+                    }
                 </tr>
                 </thead>
 
                 <tbody>
-                <ShippingRows stateGroup={stateGroup} />
+                <ShippingRows hasStandard={hasStandard} hasExpedited={hasExpedited} hasExpress={hasExpress} stateGroup={stateGroup} />
                 </tbody>
 
             </table>

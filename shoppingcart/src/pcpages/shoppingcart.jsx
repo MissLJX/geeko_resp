@@ -670,7 +670,7 @@ const ShoppingCart = class extends React.Component {
 		}else if( payType === '13'){
 			//Brazil BB
 			this.dLocalPay({payMethod, paymentMethodId: 'BL'})
-		}else if ( payType === '14' || payType === '15' || payType === '16' || payType === '17' || payType === '18' || payType === '19' || payType === '20' || payType === '21' ){
+		}else if ( payType === '14' || payType === '15' || payType === '16' || payType === '17' || payType === '18' || payType === '19' || payType === '20' || payType === '21' || payType === '22' || payType === '23' || payType === '24' || payType === '25'){
 
 			const paymentMethodId = this.getTcMethod()
 			if (!paymentMethodId) {
@@ -1302,7 +1302,7 @@ const ShoppingCart = class extends React.Component {
 	countCart(overseasDelivery, domesticDeliveryCases){
 		let count = 0
 
-		const deliveryItems = overseasDelivery.deliveryItems
+		const deliveryItems = overseasDelivery ? overseasDelivery.deliveryItems : null
 
 		if(deliveryItems && deliveryItems.length){
 			deliveryItems.forEach(deliveryItem => {
