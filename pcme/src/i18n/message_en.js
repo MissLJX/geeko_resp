@@ -163,5 +163,8 @@ export default {
     paynow:'PAY NOW',
     repurchase:'Repurchase',
     remaining:'Remaining Payment Time',
-    trackingDetailInfo:'Tracking Detail Information'
+    trackingDetailInfo:'Tracking Detail Information',
+    mymessages:'My Messages',
+    notiothers:"Others",
+    prmotion:"promotion"
 }

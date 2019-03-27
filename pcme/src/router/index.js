@@ -12,6 +12,7 @@ import Credits from '../components/credits.vue'
 import MakeSug from '../components/make-sug.vue'
 import Orders from '../components/orders.vue'
 import Tickets from '../components/tickets.vue'
+import Notification from '../components/notification.vue'
 import UpdateProfile from '../components/update-profile.vue'
 import Wishlist from '../components/wishlist.vue'
 import confirmSuccess from '../pages/confirm-success.vue'
@@ -45,6 +46,31 @@ const routes = [
                 path:'tickets',
                 component:Tickets,
                 meta: {title:'My Tickets'},
+            },
+            {
+                path:'notification',
+                component:Notification,
+                meta: {title:'My Messages'},
+                children: [
+                    {
+                        path: '',
+                        name: 'promotion',
+                        meta: {title: 'Notification promotion', depth: 1},
+                        component: () => import('../components/notification/notification-promotion.vue')
+                    },
+                    {
+                        path: 'order',
+                        name: 'order',
+                        meta: {title: 'Notification me', depth: 2},
+                        component: () => import('../components/notification/notification-order.vue')
+                    },
+                    {
+                        path: 'other',
+                        name: 'other',
+                        meta: {title: 'Notification others', depth: 3},
+                        component: () => import('../components/notification/notification-other.vue')
+                    }
+                ]
             },
             {
                 path:'coupons',
@@ -123,46 +149,8 @@ const routes = [
         component: uploadAvatar,
         meta: {title:'LogisticsDetail'},
     }
-]
-/*
+];
 
-const router = new VueRouter({
-  mode: 'history',
-  routes,
-  scrollBehavior (to, from, savedPosition) {
-    return { x: 0, y: 0 }
-  }
-})
-
-router.beforeEach((to, from, next) => {
-  document.title = to.meta.title
-  next();
-})
-
-router.afterEach(route => {
-
-})
-
-export default router*//*
-
-const router = new VueRouter({
-  mode: 'history',
-  routes,
-  scrollBehavior (to, from, savedPosition) {
-    return { x: 0, y: 0 }
-  }
-})
-
-router.beforeEach((to, from, next) => {
-  document.title = to.meta.title
-  next();
-})
-
-router.afterEach(route => {
-
-})
-
-export default router*/
 
 export default new VueRouter({
     mode: 'history',

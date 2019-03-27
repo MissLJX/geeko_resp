@@ -89,8 +89,23 @@ const state = {
     shareurl:'',
     logistics:[],
     packagelogistics:[],
-    cancelReasons:[]
-}
+    cancelReasons:[],
+
+    orderNotifications: [],
+    promotionNotifications: [],
+    otherNotifications: [],
+    promotionNtSkip: 0,
+    promotionNtLoaded: false,
+    promotionNtFinished: false,
+    orderNtSkip: 0,
+    orderNtLoaded: false,
+    orderNtFinished: false,
+    otherNtSkip: 0,
+    otherNtLoaded: false,
+    otherNtFinished: false,
+    notificationCount: 0,
+    wannalistNum:0
+};
 const getters = {
     me: state => state.me,
 
@@ -165,8 +180,23 @@ const getters = {
     logistics: state => state.logistics,
     packagelogistics: state => state.packagelogistics,
 
-    cancelReasons:state => state.cancelReasons
-}
+    cancelReasons:state => state.cancelReasons,
+
+    promotionNtSkip: state => state.promotionNtSkip,
+    promotionNtLoaded: state => state.promotionNtLoaded,
+    promotionNtFinished: state => state.promotionNtFinished,
+    orderNtSkip: state => state.orderNtSkip,
+    orderNtLoaded: state => state.orderNtLoaded,
+    orderNtFinished: state => state.orderNtFinished,
+    otherNtSkip: state => state.otherNtSkip,
+    otherNtLoaded: state => state.otherNtLoaded,
+    otherNtFinished: state => state.otherNtFinished,
+    notificationCount: state => state.notificationCount,
+    orderNotifications: state => state.orderNotifications,
+    promotionNotifications: state => state.promotionNotifications,
+    otherNotifications: state => state.otherNotifications,
+    wannalistNum: state => state.wannalistNum
+};
 const mutations = {
     [types.INIT_ME](state, me){
         state.me = me
@@ -443,6 +473,46 @@ const mutations = {
     [types.GLOBAL_GET_PACKAGE_LOGISTICS](state,logistics){
         state.packagelogistics = _.cloneDeep(logistics)
     },
+    //notification
+    [types.ME_GET_NOTIFICATIONS_ORDER](state, orderNotifications){
+        state.orderNotifications = _.concat(state.orderNotifications,orderNotifications)
+    },
+    [types.ME_GET_NOTIFICATION_O_SKIP](state){
+        state.orderNtSkip += 20
+    },
+    [types.ME_GET_NOTIFICATION_O_LOADED](state){
+        state.orderNtLoaded = true
+    },
+    [types.ME_GET_NOTIFICATION_O_FINISHED](state){
+        state.orderNtFinished = true
+    },
+    [types.ME_GET_NOTIFICATIONS_PROMOTION](state, promotionNotifications){
+        state.promotionNotifications = _.concat(state.promotionNotifications, promotionNotifications)
+    },
+    [types.ME_GET_NOTIFICATION_P_SKIP](state){
+        state.promotionNtSkip += 20
+    },
+    [types.ME_GET_NOTIFICATION_P_LOADED](state){
+        state.promotionNtLoaded = true
+    },
+    [types.ME_GET_NOTIFICATION_P_FINISHED](state){
+        state.promotionNtFinished = true
+    },
+    [types.ME_GET_NOTIFICATIONS_OTHER](state, otherNotifications){
+        state.otherNotifications = _.concat(state.otherNotifications, otherNotifications)
+    },
+    [types.ME_GET_NOTIFICATION_OT_SKIP](state){
+        state.otherNtSkip += 20
+    },
+    [types.ME_GET_NOTIFICATION_OT_LOADED](state){
+        state.otherNtLoaded = true
+    },
+    [types.ME_GET_NOTIFICATION_OT_FINISHED](state){
+        state.otherNtFinished = true
+    },
+    [types.ME_GET_FEED_SUMMARY](state,wannalistNum){
+        state.wannalistNum = wannalistNum
+    }
 }
 const actions = {
     init({commit}){
@@ -901,7 +971,61 @@ const actions = {
     //Add To Cart
     addProducts({commit},formData){
         return  api.addProducts(formData)
-    }
+    },
+
+    //notification
+    getOrderNotifications({commit}, {skip}){
+        return api.getOrderNotifications(skip).then((nts) => {
+            commit(types.ME_GET_NOTIFICATION_O_LOADED)
+
+            if (nts && nts.length) {
+                commit(types.ME_GET_NOTIFICATIONS_ORDER, nts)
+            } else {
+                commit(types.ME_GET_NOTIFICATION_O_FINISHED)
+            }
+        })
+    },
+
+    getOrderNtSkip({commit}){
+        commit(types.ME_GET_NOTIFICATION_O_SKIP)
+    },
+
+    getPromotionNotifications({commit}, {skip}){
+        return api.getPromotionNotification(skip).then((nts) => {
+            commit(types.ME_GET_NOTIFICATION_P_LOADED)
+            if (nts && nts.length) {
+                commit(types.ME_GET_NOTIFICATIONS_PROMOTION, nts)
+            } else {
+                commit(types.ME_GET_NOTIFICATION_P_FINISHED)
+            }
+        })
+    },
+    getPromotionNtSkip({commit}){
+        commit(types.ME_GET_NOTIFICATION_P_SKIP)
+    },
+
+    getOtherNotifications({commit}, {skip}){
+        return api.getOtherNotification(skip).then((nts) => {
+            commit(types.ME_GET_NOTIFICATION_OT_LOADED)
+            if (nts && nts.length) {
+                commit(types.ME_GET_NOTIFICATIONS_OTHER, nts)
+            } else {
+                commit(types.ME_GET_NOTIFICATION_OT_FINISHED)
+            }
+        })
+    },
+
+    getOtherNtSkip({commit}){
+        commit(types.ME_GET_NOTIFICATION_OT_SKIP)
+    },
+
+    getFeedSummary({commit, state}){
+        return api.getFeedSummary(state.me.id).then((userinfo) => {
+            if(userinfo) {
+                commit(types.ME_GET_FEED_SUMMARY, userinfo.wannaListNum)
+            }
+        })
+    },
 }
 export default new Vuex.Store({
     state,

@@ -25,7 +25,7 @@ const config = {
     },
     output: {
         path: setPath('dist'),
-        publicPath: '/',
+        publicPath: '/resources/vue/pcme/',
         filename:'[name].js'
     },
 

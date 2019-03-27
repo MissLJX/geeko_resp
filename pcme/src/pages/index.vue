@@ -9,6 +9,7 @@
                 <ul>
                     <li :class="{'active':isActive==='orders'}" @click="changeClass('orders')"><router-link to="/me/m/order">{{$t('myorders')}}</router-link></li>
                     <li :class="{'active':isActive==='tickets'}" @click="changeClass('tickets')"><router-link to="/me/m/tickets">{{$t('mytickets')}}</router-link></li>
+                    <li :class="{'active':isActive==='notification'}" @click="changeClass('notification')"><router-link to="/me/m/notification">{{$t('mymessages')}}</router-link></li>
                     <li :class="{'active':isActive==='coupons'}" @click="changeClass('coupons')"><router-link to="/me/m/coupons">{{$t('mycoupons')}}</router-link></li>
                     <li :class="{'active':isActive==='credits'}" @click="changeClass('credits')"><router-link to="/me/m/credits">{{$t('mycredits')}}</router-link></li>
                     <li :class="{'active':isActive==='cards'}" @click="changeClass('cards')"><router-link to="/me/m/cards">{{$t('mycreditscards')}}</router-link></li>

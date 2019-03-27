@@ -200,3 +200,21 @@ export const addProducts = (products) =>{
     return axios.post('/v8/shopping-cart/add-products',products)
 }
 
+//notifications
+export const getOrderNotifications = (skip) => {
+    return axios.get('/notification/' + skip + '/20/get-order-notifications').then(data => data.result)
+}
+
+export const getPromotionNotification = (skip) => {
+    return axios.get('/notification/' + skip + '/20/get-promotion-notifications').then(data => data.result)
+}
+
+export const getOtherNotification = (skip) => {
+    return axios.get('/notification/' + skip + '/20/get-other-notifications').then(data => data.result)
+}
+
+//用户个人信息集合
+export const getFeedSummary = (customerId) => {
+    return axios.get(VPATH +'/customer/anon/'+customerId+'/feed-summary').then(data => data.result)
+}
+

@@ -227,7 +227,7 @@ const question10 = {
 			</header>
 			<section>
 				<p>
-					Solo podemos actualizar su dirección de envío antes del envío.
+					Solo podemos ATUALIZAR su dirección de envío antes del envío.
 				</p>
 				<p>
 					Es completo y correcto con toda la información, incluidos los números de habitación / apartamento / suite.
@@ -924,7 +924,7 @@ const question44 = {
 			</header>
 			<section>
 				<p>
-					Cuando le enviamos nuestros paquetes, no hay más cambios de la compañía de envío debido a que su paquete está en tránsito. Una vez que haya llegado a la siguiente instalación de clasificación, se actualizará. Puede tomar un par de días (1-7 días).
+					Cuando le enviamos nuestros paquetes, no hay más cambios de la compañía de envío debido a que su paquete está en tránsito. Una vez que haya llegado a la siguiente instalación de clasificación, se ATUALIZARá. Puede tomar un par de días (1-7 días).
 				</p>
 			</section>
 		</article>
@@ -965,7 +965,7 @@ const question46 = {
 			</header>
 			<section>
 				<p>
-					Después de que le enviemos el paquete, la información de envío se actualizará en el próximo centro de clasificación, que puede demorar unos días. Luego puede iniciar sesión en el estado y seguimiento de la orden.
+					Después de que le enviemos el paquete, la información de envío se ATUALIZARá en el próximo centro de clasificación, que puede demorar unos días. Luego puede iniciar sesión en el estado y seguimiento de la orden.
 				</p>
 				<p>
 				  Para conocer la fecha estimada de llegada, consulte  <a href="http://www.Ivrose.com/fs/shipping-policy-pc">http://www.Ivrose.com/fs/shipping-policy-pc</a>

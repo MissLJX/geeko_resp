@@ -13,7 +13,7 @@
             <div class="ticket-data">
                 <table>
                     <tr v-if="!tickets">{{$t('nomoredata')}}</tr>
-                    <tr v-for="ticket in tickets">
+                    <tr v-for="ticket in tickets" v-if="ticket.type != 3">
                         <td @click="showTicket(ticket.operaId)"><a>{{ticket.id}}</a></td>
                         <td>{{getlastmsg(ticket.ticketReplies)}}</td>
                         <td>{{getDate(ticket.openDate)}}</td>

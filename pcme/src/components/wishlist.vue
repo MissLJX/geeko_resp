@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="imghd">
-            <p>{{wishProducts.length}} Products</p>
+            <p>{{wannalistNum}} Products</p>
             <p class="remove" @click="clearAllHandle()">Remove all Invalid Items</p>
         </div>
         <div class="imgCon">
@@ -58,11 +58,13 @@
             ...mapGetters([
                 'me',
                 'wishProducts',
-                'wishskip'
+                'wishskip',
+                'wannalistNum'
             ])
         },
         created(){
             this.$store.dispatch('getMe').then(()=>{
+                this.$store.dispatch("getFeedSummary")
                 if(!this.finished && !this.ifloding ){
                     this.ifloding=true;
                     this.$store.dispatch("getWishproducts",0).then(({finished})=>{
@@ -88,7 +90,8 @@
                         this.$store.dispatch("getWishproducts",this.wishskip).then(({finished})=>{
                             this.ifloding=false;
                             this.finished= finished;
-                            this.$store.dispatch("getWishskip")
+                            this.$store.dispatch("getWishskip");
+                            this.$store.dispatch("getFeedSummary");
                         });
                     }
                 }
@@ -115,6 +118,7 @@
                     this.$store.dispatch("removeWishProducts",{productIds}).then(()=>{
                         this.$store.dispatch("getWishproducts", 0).then(()=>{
                             this.isloding = false;
+                            this.$store.dispatch("getFeedSummary");
                         })
                     }).catch(e => {
                         this.isloding = false
@@ -236,7 +240,7 @@
                 margin-bottom: 38px;
                 img{
                     width: 216px;
-                    height: 288px;
+                    height: 270px;
                     position: relative;
                 }
                 .p-info{
