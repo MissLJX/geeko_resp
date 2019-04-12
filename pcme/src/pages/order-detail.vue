@@ -391,8 +391,9 @@
                     let _this = this
                     this.isloding = true;
                     this.$store.dispatch('cancelOrder',{id:this.orderdetail.id,reason:this.selected}).then(()=>{
-                        this.$store.dispatch('getOrder',this.$route.query.orderid)
-                        alert("success")
+                        this.$store.dispatch('getOrder',this.orderdetail.id).then(()=>{
+                            alert("success")
+                        });
                         this.isloding = false
                     }).catch((e) => {
                         alert(e);

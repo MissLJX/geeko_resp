@@ -1,3 +1,4 @@
+<script src="../../build/dist/0.js"></script>
 <template>
     <div>
         <div class="imghd">
@@ -13,11 +14,18 @@
                         </a>
                     </div>
                     <div class="p-info" v-if="item.status !== '2'">
-                        <span class="f-red">{{price(item)}}</span>
-                        <del class="f-gray">{{delPrice(item)}}</del>
+                        <div class="p-info-price">
+                            <span class="f-red">{{price(item)}}</span>
+                            <del class="f-gray">{{delPrice(item)}}</del>
+                        </div>
                         <i class="iconfont" @click="cancelSaveHandle(item.id)">&#xe629;</i>
                     </div>
-                    <div class="p-soldout" v-if="item.status === '2'">{{$t('soldout')}}</div>
+                    <div class="p-soldout-con" v-if="item.status === '2'">
+                        <div class="p-soldout">
+                            {{$t('soldout')}}
+                        </div>
+                        <i class="iconfont" @click="cancelSaveHandle(item.id)">&#xe629;</i>
+                    </div>
                 </li>
             </ul>
             <div v-show="ifloding" class="el-list-loading"><i class="iconfont">&#xe69f;</i></div>
@@ -242,37 +250,40 @@
                     width: 216px;
                     height: 270px;
                     position: relative;
+                    display: block;
                 }
                 .p-info{
                     padding-top: 7px;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
                     i{
-                        float: right;
                         font-size: 18px;
                         color: #666;
                         cursor: pointer;
                     }
+                    .p-info-price{
+                        display: flex;
+                        align-items: center;
+                    }
                 }
-                &:after{
-                    display: block;
-                    clear: both;
-                    content: '';
+                .p-soldout-con{
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding-top: 7px;
+                    i{
+                        font-size: 18px;
+                        cursor: pointer;
+                    }
+                    .p-soldout{
+                        width: 98px;
+                        background-color: #cacaca;
+                        border-radius: 100px;
+                        text-align: center;
+                        color: #fff;
+                    }
                 }
-                .p-soldout{
-                    width: 98px;
-                    height: 24px;
-                    background-color: #cacaca;
-                    border-radius: 100px;
-                    text-align: center;
-                    line-height: 24px;
-                    text-align: center;
-                    color: #fff;
-                    margin-top: 4px;
-                }
-            }
-            &:after{
-                display: block;
-                clear: both;
-                content: '';
             }
         }
     }

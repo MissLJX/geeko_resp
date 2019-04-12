@@ -42,17 +42,11 @@
                             <div class="sanjiao-left"></div>
                             <div class="txtcontent">
                                 <p>{{item.message}}</p>
-                                <div v-if="item.imageUrls">
+                                <div class="imgarea" v-if="item.imageUrls">
                                     <img v-for="img in item.imageUrls" :src="imgUrl(img)">
                                 </div>
                             </div>
                         </div>
-                        <!--<div class="cet" v-if="item.imageUrls">
-                            <div class="sanjiao-left"></div>
-                            <div class="imgarea">
-                                <img v-for="img in item.imageUrls" :src="imgUrl(img)">
-                            </div>
-                        </div>-->
                     </div>
                 </div>
             </div>
@@ -342,9 +336,12 @@
                     }
                     .txtcontent{
                         text-align: left;
+                        white-space: pre-line;
+                        word-break: break-all;
+                        word-wrap: break-word;
                     }
                     .imgarea{
-                        max-width: 150px;
+                        max-width: 280px;
                         float: right;
                         img{
                             width: 100%;
