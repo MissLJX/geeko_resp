@@ -102,7 +102,7 @@ module.exports = {
     contentBase: './dist',
     proxy: {
       '/api': {
-        target: 'http://localhost:8080/wanna',
+        target: 'http://localhost:8080/boutiquefeel',
         /*target: 'http://192.168.1.128:8080/wanna',*/
         pathRewrite: { '^/api': '' },
         secure: false
