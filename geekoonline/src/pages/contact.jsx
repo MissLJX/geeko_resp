@@ -4,7 +4,7 @@ import {BLOCKIMAGE} from '../components/elements.jsx'
 import {RES1, CONTAINER, CONTAINERGREY} from '../components/layout.jsx'
 import Styled from 'styled-components'
 import {ICONS, Icon} from '../components/icontext.jsx'
-import {Map, Marker, NavigationControl, InfoWindow} from 'react-bmap'
+// import {Map, Marker, NavigationControl, InfoWindow} from 'react-bmap'
 import { Form, Input, TextArea, Button, File} from '../components/control.jsx'
 import {required, email, phone} from '../components/validator.jsx'
 
@@ -35,6 +35,7 @@ const FIGURE = Styled.figure`
 
 const MAP = Styled.div`
   margin-top: 45px;
+  height: 394px;
 `
 
 const INFO = Styled.dd`
@@ -74,8 +75,57 @@ export default class extends React.Component{
   constructor(props){
     super(props)
     this.state = {
-      selectedcity: 's'
+      selectedcity: 's',
+      showMap: false
     }
+  }
+
+  maprender(c){
+
+    let _p = {
+      lng: 121.618243,
+      lat: 31.259722,
+      title: "方正大厦",
+      dsc: '上海市浦东新区新金桥路1122号901'
+    }
+
+    if(this.state.selectedcity === 's'){
+      _p = {
+        lng: 121.618243,
+        lat: 31.259722,
+        title: "方正大厦",
+        dsc: '上海市浦东新区新金桥路1122号901'
+      }
+    }else if(this.state.selectedcity === 'g'){
+      _p = {
+        lng: 113.24404,
+        lat: 23.191372,
+        title: "穗新创意园B栋",
+        dsc: '广州市 白云区 石井街道石槎路原潭村三社水松排工业区穗新创意园B栋302'
+      }
+    }else if(this.state.selectedcity === 'n'){
+      _p = {
+        lng: 118.791886,
+        lat: 32.058007,
+        title: "同仁西街7号",
+        dsc: '南京市玄武区同仁西街7号6楼'
+      }
+    }
+
+
+    const map = new window.BMap.Map("mapcontact"); 
+    const point = new window.BMap.Point(_p.lng, _p.lat); 
+    const marker = new  window.BMap.Marker(point);        // 创建标注    
+
+    map.addOverlay(marker);                     // 将标注添加到地图中 
+    map.centerAndZoom(point, 12);  
+    const opts = {    
+      width : 250,     // 信息窗口宽度    
+      height: 60,     // 信息窗口高度    
+      title : _p.title  // 信息窗口标题   
+    }    
+    var infoWindow = new window.BMap.InfoWindow(_p.dsc, opts);  // 创建信息窗口对象    
+    map.openInfoWindow(infoWindow, map.getCenter());
   }
 
   render(){
@@ -120,12 +170,13 @@ export default class extends React.Component{
      
     </CONTAINER>
   
-    <MAP>
-      <Map center={{lng: 121.618243, lat: 31.259722}} zoom="12" >
+    <MAP  ref={ this.maprender.bind(this) } id="mapcontact">
+      <div></div>
+      {/* <Map center={{lng: 121.618243, lat: 31.259722}} zoom="12" >
           <Marker position={{lng: 121.618243, lat: 31.259722}} />
-          {/* <NavigationControl />  */}
           <InfoWindow position={{lng: 121.618243, lat: 31.259722}} text="上海市浦东新区新金桥路1122号901" title="上海极高信息技术有限公司"/>
-      </Map>
+      </Map> */}
+
     </MAP>
 
     <CONTAINER>
