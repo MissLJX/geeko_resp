@@ -2,7 +2,8 @@
   "apps": [
     {
       "name": "geekoonline",
-      "cwd": "/opt/geeko_resp/geekoonline"
+      "cwd": "/opt/geeko_resp/geekoonline",
+      "script": "./server/index.js"
     }
   ]
 }
