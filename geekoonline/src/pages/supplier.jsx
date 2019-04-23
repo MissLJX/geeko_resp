@@ -48,6 +48,16 @@ const LABELINPUT = Styled.div`
   .__input{
     width: 320px;
   }
+
+  @media (max-width: 1200px) {
+    .__input{
+      width: 200px;
+    }
+
+    .__btn{
+      width: 220px;
+    }
+  }
 `
 
 const LABELINPUTS = Styled.div`

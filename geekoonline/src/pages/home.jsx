@@ -105,7 +105,7 @@ const HISTORIES = Styled.ul`
 
 export default () => <div>
   <section>
-    <BANNER src="/images/about/3.jpg" style={{position:'relative'}}>
+    <BANNER src="/images/about/3.jpg" src1="/images/about/3_1.jpg" style={{position:'relative'}}>
       <BANNERTITLE>
         <div className="__title">有温度的快时尚跨境电商</div>
         <div className="__dsc">以快时尚女装为业务主体，主要面对欧美、南美等消费市场是专注于欧美女装快时尚的跨境B2C互联网企业</div>
