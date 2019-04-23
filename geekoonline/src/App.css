@@ -1,0 +1,17 @@
+@font-face {
+  font-family: 'iconfont';  /* project id 791599 */
+  src: url('//at.alicdn.com/t/font_791599_zeu3xdya2oi.eot');
+  src: url('//at.alicdn.com/t/font_791599_zeu3xdya2oi.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_791599_zeu3xdya2oi.woff2') format('woff2'),
+  url('//at.alicdn.com/t/font_791599_zeu3xdya2oi.woff') format('woff'),
+  url('//at.alicdn.com/t/font_791599_zeu3xdya2oi.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_791599_zeu3xdya2oi.svg#iconfont') format('svg');
+}
+
+html{
+  font-size: 10px;
+}
+
+body{
+  font-family: PingFangSC-Regular, sans-serif, "Microsoft YaHei", Helvetica, Arial, 微软雅黑;
+}
