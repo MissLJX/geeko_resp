@@ -98,12 +98,12 @@ const Epy = ({job}) => <JOB>
   <div className="__bd">
     <JOBDS>
     {
-      job.descriptions.map( d => <li>
+      job.descriptions.map( d => <li key={d.id}>
         <JOBD>
           <div className="__title">{d.title}</div>
           <DS>
           {
-            d.descriptions.map( dd => <li>
+            d.descriptions.map( (dd, i) => <li key={i}>
               {dd}
             </li>
             )
@@ -171,9 +171,16 @@ const TAGS = Styled.ul`
 export default class extends React.Component{
   constructor(props){
     super(props)
-    this.state = {
-      data: null,
-      selectedId: null
+    if (props.staticContext && props.staticContext.data) {
+      this.state = {
+        data: props.staticContext.data,
+        selectedId: null
+      };
+    } else {
+      this.state = {
+        data: null,
+        selectedId: null
+      };
     }
   }
 
@@ -212,14 +219,14 @@ export default class extends React.Component{
             this.state.data.jobs && <React.Fragment>
                 <TAGS>
                 {
-                  this.state.data.jobs.map( job => <li>
+                  this.state.data.jobs.map( job => <li key={job.id}>
                     <TAG onClick={ () => {this.setState({selectedId: job.id})}} className={this.state.selectedId === job.id ? 'selected' : ''} href={`#${job.id}`}>{job.title}</TAG>
                   </li>)
                 }
                 </TAGS>
                 <JOBS>
                 {
-                  this.state.data.jobs.map( job => <li id={job.id}>
+                  this.state.data.jobs.map( job => <li key={job.id} id={job.id}>
                     <Epy job={job}/>
                   </li>)
                 }

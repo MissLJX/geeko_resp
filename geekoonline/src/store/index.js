@@ -713,3 +713,13 @@ export const data = {
     ]
   }
 }
+
+
+export const getSource = (type) => {
+  if(type === '1'){
+    
+    return params => {
+      return Promise.resolve(data[params.detail])
+    }
+  }
+}
