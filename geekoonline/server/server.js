@@ -4,7 +4,7 @@ import fs from 'fs'
 import express from 'express'
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
-import { StaticRouter } from 'react-router-dom'
+import { StaticRouter, matchPath } from 'react-router-dom'
 
 import App from '../src/App'
 import Loadable from 'react-loadable'
@@ -15,12 +15,13 @@ const application = express()
 
 const router = express.Router()
 
-application.use(express.static(path.resolve(__dirname, '../build')))
-application.use(express.static(path.resolve(__dirname, '../public')))
+application.use('/static', express.static(path.resolve(__dirname, '../build/static')))
+application.use('/images', express.static(path.resolve(__dirname, '../public')))
 
 const serverRenderer = (req, res, next) => {
 
   const context = {}
+
   const app = ReactDOMServer.renderToString(
     <StaticRouter location={req.url} context={context}>
       <App/>
@@ -45,7 +46,6 @@ const serverRenderer = (req, res, next) => {
 
 
 router.use('/', serverRenderer)
-
 
 // tell the app to use the above rules
 application.use(router)

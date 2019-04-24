@@ -533,5 +533,183 @@ export const data = {
         ]
       }
     ]
+  },
+  'nanjing': {
+    banner: {
+      pc: '/images/shanghai/1.jpg',
+      msite: '/images/shanghai/1_1.jpg'
+    },
+    jobs: [
+      {
+        id: 'nanjing-job-1',
+        title: '英语商务专员',
+        image: '/images/nanjing/7.jpg',
+        descriptions: [
+          {
+            id: 'nanjing-job-1-dsc-1',
+            title: '岗位职能',
+            descriptions: [
+              '通过电子邮件/在线软件回复海外客户的咨询与问题，提供相关业务和流程的介绍；',
+              '受理客户的投诉，确保客户对产品和服务满意；',
+              '处理问题订单，通过邮件联系客户以保证订单正常发出；',
+              '产品及店铺评价定期处理和维护，保证店铺好评率；',
+              '总结整理客户问题，提供改善建议，提升客户满意度。'
+            ]
+          },
+          {
+            id: 'nanjing-job-1-dsc-2',
+            title: '任职要求',
+            descriptions: [
+              '国际贸易与经济、英语相关专业优先，CET-6以上，熟悉常用办公软件，熟练的英文读写能力。'
+            ]
+          }
+        ]
+      },
+      {
+        id: 'nanjing-job-2',
+        title: '小语种商务专员',
+        image: '/images/nanjing/5.jpg',
+        descriptions: [
+          {
+            id: 'nanjing-job-2-dsc-1',
+            title: '岗位职能',
+            descriptions: [
+              '通过电子邮件/在线软件回复海外客户的咨询与问题，提供相关业务和流程的介绍；',
+              '受理客户的投诉，确保客户对产品和服务满意；',
+              '处理问题订单，通过邮件联系客户以保证订单正常发出；',
+              '产品及店铺评价定期处理和维护，保证店铺好评率；',
+              '总结整理客户问题，提供改善建议，提升客户满意度。'
+            ]
+          },
+          {
+            id: 'nanjing-job-2-dsc-2',
+            title: '任职要求',
+            descriptions: [
+              '葡萄牙语、西班牙语、德语、法语专业。'
+            ]
+          }
+        ]
+      },
+      {
+        id: 'nanjing-job-3',
+        title: '国外新媒体运营',
+        image: '/images/nanjing/2.jpg',
+        descriptions: [
+          {
+            id: 'nanjing-job-3-dsc-1',
+            title: '岗位职能',
+            descriptions: [
+              '熟悉网盟/信息流/SEM等广告操作系统，对推广渠道进行日常维护；',
+              '负责CPS/CPA资源洽谈、合作，并达成CPS、CPA等合作，负责公司产品对外广告付费推广，跟进合作所需的技术，市场，结算等相关工作事宜；',
+              '操作国外各大社交平台如facebook 、instagram、twitter等，并能挖掘到有价值的广告商；',
+              '负责网盟和海外广告平台推广投放分析及推广效果数据分析，根据分析结果调整优化（活动页面、标题创意）；',
+              '定期对网站联盟的流量进行分析，评估各种不同联盟的流量效果和ROI；',
+              '负责联系国外社交平台上的热门群体，网络红人/达人，进行合作推广，精通红人营销，社交网络营销等。'
+            ]
+          },
+          {
+            id: 'nanjing-job-3-dsc-2',
+            title: '任职要求',
+            descriptions: [
+              '有网络推广经验、对网络推广感兴趣。'
+            ]
+          }
+        ]
+      },
+      {
+        id: 'nanjing-job-4',
+        title: '自营站运营',
+        image: '/images/nanjing/8.jpg',
+        descriptions: [
+          {
+            id: 'nanjing-job-4-dsc-1',
+            title: '岗位职能',
+            descriptions: [
+              '负责外贸平台独立站的运营工作，对网站的转化率负责；',
+              '文案编辑，负责审查各种文案撰写：产品文案撰写、促销文案撰写、网站各部分内容编写、专题策划文案；',
+              '熟悉独立站的营销手法：谷歌，社交，EDM，联盟至少一种；',
+              '收集分析市场状况及竞争对手状况，进行分析汇总，制定有效的竞争销售策略，调整相关策略。'
+            ]
+          },
+          {
+            id: 'nanjing-job-4-dsc-2',
+            title: '任职要求',
+            descriptions: [
+              '国际贸易与经济、英语，葡萄牙语、西班牙语、德语、法语专业优先。'
+            ]
+          }
+        ]
+      },
+      {
+        id: 'nanjing-job-5',
+        title: '跨境电商运营专员',
+        image: '/images/nanjing/3.jpg',
+        descriptions: [
+          {
+            id: 'nanjing-job-5-dsc-1',
+            title: '岗位职能',
+            descriptions: [
+              '负责产品LISTING制作，图片上传，关键词，标题及描述的英文编写；',
+              '负责店铺日常维护；',
+              '能灵活处理客户投诉，维持客户满意度，提高好评率；',
+              '完成上级交予的相关工作任务。'
+            ]
+          },
+          {
+            id: 'nanjing-job-5-dsc-2',
+            title: '任职要求',
+            descriptions: [
+              '国际贸易与经济、英语，葡萄牙语、西班牙语、德语、法语专业优先。'
+            ]
+          }
+        ]
+      },
+      {
+        id: 'nanjing-job-6',
+        title: '小语种运营专员',
+        image: '/images/nanjing/6.jpg',
+        descriptions: [
+          {
+            id: 'nanjing-job-6-dsc-1',
+            title: '岗位职能',
+            descriptions: [
+              '负责产品LISTING制作，图片上传，关键词，标题及描述的英文编写；',
+              '负责店铺日常维护；',
+              '能灵活处理客户投诉，维持客户满意度，提高好评率；',
+              '完成上级交予的相关工作任务。'
+            ]
+          },
+          {
+            id: 'nanjing-job-6-dsc-2',
+            title: '任职要求',
+            descriptions: [
+              '国际贸易与经济、英语，葡萄牙语、西班牙语、德语、法语专业优先。'
+            ]
+          }
+        ]
+      },
+      {
+        id: 'nanjing-job-7',
+        title: '美工',
+        image: '/images/nanjing/4.jpg',
+        descriptions: [
+          {
+            id: 'nanjing-job-7-dsc-1',
+            title: '岗位职能',
+            descriptions: [
+              '负责公司模特图片、服装等产品的图片处理；',
+              '协助网站的平面设计工作，形象设计、营销活动平面专题。'
+            ]
+          },
+          {
+            id: 'nanjing-job-7-dsc-2',
+            title: '任职要求',
+            descriptions: [
+              '熟练掌握美工设计软件、手绘及工作技能，熟练使用photoshop等设计软件，会使用corelDRAW、flash者优先。'
+            ]
+          }
+        ]
+      }
+    ]
   }
 }
