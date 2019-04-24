@@ -3,7 +3,9 @@
     {
       "name": "geekoonline",
       "cwd": "/opt/geeko_resp/geekoonline",
-      "script": "./server/index.js"
+      "script": "./server/index.js",
+      "instances": "max",
+      "exec_mode" : "cluster" 
     }
   ]
 }
