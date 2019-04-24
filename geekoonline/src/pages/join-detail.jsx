@@ -128,11 +128,52 @@ const DETAILCONTAINER = Styled.div`
     }
 `
 
+const TAG = Styled.a`
+    display: inline-block;
+    width: 220px;
+	  height: 30px;
+    font-size: 1.6rem;
+    text-align: center;
+    line-height: 28px;
+    border: solid 1px #666666;
+    color: #222;
+    text-decoration: none;
+    &.selected{
+      background-color: #222222;
+      color: #ffffff;
+    }
+`
+
+const TAGS = Styled.ul`
+    margin-top: 20px;
+    &::after{
+      content:'';
+      clear: both;
+      display: block;
+    }
+    & > li{
+      margin-top: 15px;
+      margin-left: 25px;
+      float: left;
+      &:nth-child(5n+1){
+        margin-left: 0;
+      }
+    }
+    @media (max-width: 1200px) {
+      & > li{
+        float: none;
+        margin-left: auto;
+        text-align: center;
+      }
+    }
+`
+
 export default class extends React.Component{
   constructor(props){
     super(props)
     this.state = {
-      data: null
+      data: null,
+      selectedId: null
     }
   }
 
@@ -164,14 +205,26 @@ export default class extends React.Component{
             <BANNER src={this.state.data.banner.pc} src1={this.state.data.banner.msite}/>
           </section>
           <CONTAINER>
+
+
+
           {
-            this.state.data.jobs && <JOBS>
-              {
-                this.state.data.jobs.map( job => <li>
-                  <Epy job={job}/>
-                </li>)
-              }
-            </JOBS>
+            this.state.data.jobs && <React.Fragment>
+                <TAGS>
+                {
+                  this.state.data.jobs.map( job => <li>
+                    <TAG onClick={ () => {this.setState({selectedId: job.id})}} className={this.state.selectedId === job.id ? 'selected' : ''} href={`#${job.id}`}>{job.title}</TAG>
+                  </li>)
+                }
+                </TAGS>
+                <JOBS>
+                {
+                  this.state.data.jobs.map( job => <li id={job.id}>
+                    <Epy job={job}/>
+                  </li>)
+                }
+              </JOBS>
+            </React.Fragment>
           }
           </CONTAINER>
         </div>
