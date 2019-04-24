@@ -70,7 +70,7 @@ const ART = Styled.div`
 
 const ICONTEXT = Styled.div`
   .__icon{
-    background-color: #000000;
+    color: #000000;
     font-family: iconfont;
     font-size: 36px;
   }
@@ -146,6 +146,7 @@ export default () => <div>
       <RES1 width1={760} width2={440} style={{marginTop: 60}}>
         <BLOCKER>
           <ART className="__1">
+            
             <div className="__title">经营理念</div>
             <div style={{marginTop: 20}}>
               <p>公司自创办以来，全力推进全球资源供应整合，力求将物美价廉的快时尚产品和一流的服务带给全球的每一位用户，并积极与消费者互动，打造有温度的品牌。</p>
@@ -184,17 +185,17 @@ export default () => <div>
       <CONTAINER>
         <RES1 width1={365} width2={342} width3={405}>
           <ICONTEXT>
-            <div className="__icon"></div>
+            <div className="__icon">&#xe689;</div>
             <div className="__title">公司理念</div>
             <div className="__dsc">打造有温度的快时尚品牌，服务于全球消费者，提供卓越的产品和一流的服务</div>
           </ICONTEXT>
           <ICONTEXT>
-            <div className="__icon"></div>
+            <div className="__icon">&#xe68a;</div>
             <div className="__title">业务范围</div>
             <div className="__dsc">女装、配饰、女鞋、美妆、特殊服装、家居及童装</div>
           </ICONTEXT>
           <ICONTEXT>
-            <div className="__icon"></div>
+            <div className="__icon">&#xe68b;</div>
             <div className="__title">销售区域</div>
             <div className="__dsc">欧美及南美主要国家（美国、巴西、西班牙、德国、法国、英国、印度、加拿大、印度等）</div>
           </ICONTEXT>
