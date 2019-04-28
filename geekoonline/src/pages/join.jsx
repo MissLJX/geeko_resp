@@ -26,10 +26,28 @@ const FIGURE = Styled.figure`
     width: 80%;
     text-align: center;
   }
+
+  @media (min-width: 1200px) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: .1s ease;
+    &:hover{
+      width: 393px;
+      left: -10px;
+      top: -10px;
+    }
+  }
 `
 
 const BLOCKER = Styled.div`
   margin-top: 60px;
+
+  @media (min-width: 1200px) {
+    position: relative;
+    width: 373px;
+    height: 284px;
+  }
   
   @media (max-width: 1200px) {
     margin-top: 80px;
@@ -184,7 +202,7 @@ export default class extends React.Component{
     <CONTAINER>
       <section>
         <RES1 width1={373} width2={373} width3={373}>
-          <BLOCKER>
+          <BLOCKER style={{position: 'relative'}}>
             <Link to="/join/shanghai">
               <FIGURE>
                 <BLOCKIMAGE src="/images/join/1.jpg" src1="/images/join/1.jpg"/>
@@ -194,7 +212,7 @@ export default class extends React.Component{
               </FIGURE>
             </Link>
           </BLOCKER>
-          <BLOCKER>
+          <BLOCKER style={{position: 'relative'}}>
             <Link to="/join/guangzhou">
               <FIGURE>
                 <BLOCKIMAGE src="/images/join/2.jpg"/>
@@ -204,7 +222,7 @@ export default class extends React.Component{
               </FIGURE>
             </Link>
           </BLOCKER>
-          <BLOCKER>
+          <BLOCKER style={{position: 'relative'}}>
             <Link to="/join/nanjing">
               <FIGURE>
                 <BLOCKIMAGE src="/images/join/3.jpg"/>
