@@ -344,12 +344,15 @@ const Checkout = class extends React.Component {
 
 		const { checkout } = self.props
 
+		let locale = checkout && checkout.locale ? checkout.locale : 'en_US'
+
 		if (c && (!c.children || c.children.length < 1)) {
 			/*global paypal b:true*/
 			/*eslint no-undef: "error"*/
 			paypal.Button.render({
 				env: window.paypalEnv,
 				commit: window.__is_login__,
+				locale: locale,
 				payment: function () {
 					return checkout_paypal({ orderId: checkout.orderId }).then(data => data.result).then(({TOKEN, success, transactionId, ACK, L_LONGMESSAGE0}) => {
 						if (success && transactionId && !TOKEN) {
@@ -388,8 +391,19 @@ const Checkout = class extends React.Component {
 					label: window.__is_login__ ? 'pay' : 'checkout',
 					shape: 'rect',
 					size: 'responsive',
-					tagline: false
-				}
+					tagline: false,
+					layout: 'vertical' 
+				},
+				funding: {     
+					allowed: [       
+						paypal.FUNDING.BANCONTACT,       
+						paypal.FUNDING.EPS,       
+						paypal.FUNDING.GIROPAY,       
+						paypal.FUNDING.IDEAL,       
+						paypal.FUNDING.MYBANK,       
+						paypal.FUNDING.SOFORT     
+					]
+				}	 
 			}, '#ip-paypal-pay')
 		}
 	}

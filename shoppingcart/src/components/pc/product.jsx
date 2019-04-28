@@ -15,7 +15,7 @@ const PRODUCT = styled.figure`
 			top: 0;
 		}
 		&::after{
-			margin-top: 133%;
+			margin-top: 125%;
 			content:'';
 			display: block;
 		}
@@ -33,8 +33,8 @@ const PRODUCT = styled.figure`
 `
 
 export default ({product}) => {
-  const lower = getlowerprice(product), higher = gethigherprice(product)
-  return <PRODUCT>
+	const lower = getlowerprice(product), higher = gethigherprice(product)
+	return <PRODUCT>
   	<a href={producturl(product)} style={{textDecoration: 'none', color: '#222'}}>
 	    <div className="__image">
 	  		<img src={`https://dgzfssf1la12s.cloudfront.net/medium/${product.pcMainImage}`}/>
@@ -43,8 +43,8 @@ export default ({product}) => {
 	  		<div className="__prices">
 	        <Red><Money style={{fontWeight: 'bold', fontSize: 16}} money={lower}/></Red>
 	        {higher && <del style={{marginLeft: 10}}><Grey><Small ><Money money={higher}/></Small></Grey></del>}
-        </div>
-      </figcaption>
-    </a>
-  </PRODUCT>
+				</div>
+			</figcaption>
+		</a>
+	</PRODUCT>
 }

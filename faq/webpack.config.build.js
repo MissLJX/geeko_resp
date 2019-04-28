@@ -40,14 +40,14 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production'),
       // Chicme
-      'messageId': JSON.stringify('804997446264798')
+      // 'messageId': JSON.stringify('804997446264798')
       // IVRose
       // 'messageId': JSON.stringify('317606285243994')
       // Boutiquefeel
-      // 'messageId': JSON.stringify('1197317563662685')
+      'messageId': JSON.stringify('1197317563662685')
     }),
     new webpack.DefinePlugin({
-      'site': JSON.stringify('chicme')
+      'site': JSON.stringify('boutiquefeel')
     })
   ]
 }

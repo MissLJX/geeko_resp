@@ -16,7 +16,7 @@ const PRODUCT = styled.figure`
 			top: 0;
 		}
 		&::after{
-			margin-top: 133%;
+			margin-top: 125%;
 			content:'';
 			display: block;
 		}
@@ -37,8 +37,8 @@ const PRODUCT = styled.figure`
 `
 
 const Product = ({product}) => {
-  const lower = getlowerprice(product), higher = gethigherprice(product)
-  return <div>
+	const lower = getlowerprice(product), higher = gethigherprice(product)
+	return <div>
   	<a href={producturl(product)} style={{textDecoration: 'none', color: '#222'}}>
   	  <PRODUCT>
   	  	<div className="__image">
@@ -51,9 +51,9 @@ const Product = ({product}) => {
   				{higher && <del style={{marginLeft: 10}}><Grey><Small ><Money money={higher}/></Small></Grey></del>}
   			</div>
   	  	</figcaption>
-      </PRODUCT>
+			</PRODUCT>
   	</a>
-  </div>
+	</div>
 }
 
 export default Product

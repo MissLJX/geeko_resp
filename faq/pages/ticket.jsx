@@ -247,7 +247,8 @@ const Ticket = class extends React.Component {
 		  				))
 
 		  			}
-		  			<p>{message}</p>
+		  			<p style={{whiteSpace: 'pre-line', wordBreak: 'break-all', wordWrap: 'break-word'}}>{message}</p>
+
   				</ChatTip>
   	}
 
@@ -329,7 +330,7 @@ const Ticket = class extends React.Component {
 	      					</div>
 
 	      					<div className="x-cell" style={{textAlign: 'right'}}>
-	      						<ColoredButton onClick={this.handleTicket} style={{fontSize: '14px', fontWeight: '400', height: '30px', width: '70px'}} btnColor="#000"><FormattedMessage id="send"/></ColoredButton>
+	      						<ColoredButton onClick={this.handleTicket} style={{fontSize: '14px', fontWeight: '400', height: '30px', width: '100px'}} btnColor="#000"><FormattedMessage id="send"/></ColoredButton>
 	      					</div>
 	      				</div>
       			</div>
