@@ -71,6 +71,7 @@ const JoinForm = class extends React.Component{
 
   prepare(){
     let data = new FormData()
+    data.append('position', this.state.position)
     data.append('name', this.state.name)
     data.append('phone', this.state.phone)
     data.append('email', this.state.email)
@@ -87,7 +88,7 @@ const JoinForm = class extends React.Component{
         loading: true
       })
       personal(this.prepare()).then( (data) => {
-        console.log(data)
+        alert(data.data)
         this.setState({
           loading: false
         })
@@ -122,7 +123,7 @@ const JoinForm = class extends React.Component{
 
       <div style={{marginTop: 37}}>
         <BUTTONS>
-          <File name="attachments" type="file" text={`+ 上传建立 & 作品`} onChange={this.handleInputChange}/>
+          <File name="attachments" type="file" text={`+ 上传建立 & 作品`} onChange={this.handleInputChange} validations={[required]}/>
           {
             this.state.loading ? <div style={{backgroundColor: '#666', color:'#fff', textAlign: 'center', lineHeight:'40px' ,border: 'none', width: 108, height: 40}}>
               提交 >

@@ -103,7 +103,7 @@ router.post('/api/personal', bin.single('file') , function(req, res, next){
     ]
   }
   sendEmail(mailOptions)
-  res.send('投递成功!!!')
+  res.json('投递成功!!!')
 })
 
 
