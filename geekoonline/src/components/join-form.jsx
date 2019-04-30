@@ -144,7 +144,7 @@ const JoinForm = class extends React.Component{
         </LABELVALUE>
         <LABELVALUE>
           <span className="__label">E-mail：</span>
-          <span className="__value">22043806@qq.com</span>
+          <span className="__value">xialuping@geeko.online</span>
         </LABELVALUE>
       </LABEVALUES>
       
