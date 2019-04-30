@@ -4,6 +4,7 @@ import {BANNER} from '../components/banner.jsx'
 import {BLOCKIMAGE} from '../components/elements.jsx'
 import Styled from 'styled-components'
 import {CONTAINER} from '../components/layout.jsx'
+import JoinForm from '../components/join-form.jsx'
 
 const JOBS = Styled.ul`
   display: flex;
@@ -57,6 +58,7 @@ const JOB = Styled.div`
     position: absolute;
     right: 20px;
     bottom: 20px;
+    cursor: pointer;
   }
 `
 
@@ -88,7 +90,7 @@ const JOBDS = Styled.ul`
   }
 `
 
-const Epy = ({job}) => <JOB>
+const Epy = ({job, joinHandle}) => <JOB>
   <figure className="__hd">
     <BLOCKIMAGE src={ job.image }/>
     <figcaption>
@@ -115,7 +117,7 @@ const Epy = ({job}) => <JOB>
     }
     </JOBDS>
   </div>
-  <div className="__joinus">加入我们</div>
+  <div onClick={ () => {joinHandle(job.title)} } className="__joinus">加入我们</div>
 </JOB>
 
 const DETAILCONTAINER = Styled.div`
@@ -168,13 +170,52 @@ const TAGS = Styled.ul`
     }
 `
 
+const FIXEDWINDOW = Styled.div`
+    position: fixed;
+    z-index:10;
+    background-color: rgba(0, 0, 0, .4);
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+
+    .__window{
+      position: absolute;
+      width: 589px;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      padding: 40px;
+      background-color: #f2f2f2;
+
+      .__close{
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        font-size: 25px;
+        font-family: iconfont;
+        cursor: pointer;
+      }
+    }
+
+    
+
+    @media (max-width: 1200px) {
+      .__window{
+        padding: 40px 25px;
+        width: 90%;
+      }
+    }
+`
+
 export default class extends React.Component{
   constructor(props){
     super(props)
     if (props.staticContext && props.staticContext.data) {
       this.state = {
         data: props.staticContext.data,
-        selectedId: null
+        selectedId: null,
+        position: '招聘'
       };
     } else {
       this.state = {
@@ -182,6 +223,7 @@ export default class extends React.Component{
         selectedId: null
       };
     }
+    this.joinHandle = this.joinHandle.bind(this)
   }
 
   componentDidMount() {
@@ -201,6 +243,13 @@ export default class extends React.Component{
         })
       }
     }, 0)
+  }
+
+  joinHandle(position){
+    this.setState({
+      show: true,
+      position
+    })
   }
 
 
@@ -227,7 +276,7 @@ export default class extends React.Component{
                 <JOBS>
                 {
                   this.state.data.jobs.map( job => <li key={job.id} id={job.id}>
-                    <Epy job={job}/>
+                    <Epy job={job} joinHandle={this.joinHandle}/>
                   </li>)
                 }
               </JOBS>
@@ -236,6 +285,21 @@ export default class extends React.Component{
           </CONTAINER>
         </div>
       }
+
+
+      {
+        this.state.show && <FIXEDWINDOW>
+          <div className="__window">
+            <JoinForm position={this.state.position}/>
+            <span className="__close" onClick={ () => {this.setState({show: false})}}>&#xe69a;</span>
+          </div>
+        </FIXEDWINDOW>
+      }
+
+      
+
+      
+
       
       
     </DETAILCONTAINER>

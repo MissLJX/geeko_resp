@@ -5,9 +5,8 @@ import {RES1, CONTAINER, CONTAINERGREY} from '../components/layout.jsx'
 import Styled from 'styled-components'
 import {ICONS, Icon} from '../components/icontext.jsx'
 // import {Map, Marker, NavigationControl, InfoWindow} from 'react-bmap'
-import { Form, Input, TextArea, Button, File} from '../components/control.jsx'
-import {required, email, phone} from '../components/validator.jsx'
 import { Link } from 'react-router-dom'
+import JoinForm from '../components/join-form.jsx'
 
 
 const FIGURE = Styled.figure`
@@ -40,7 +39,23 @@ const FIGURE = Styled.figure`
   }
 `
 
+
+
 const BLOCKER = Styled.div`
+  margin-top: 60px;
+  
+  @media (max-width: 1200px) {
+    margin-top: 80px;
+    &.__1{
+      margin-top: 30px;
+    }
+    &:first-child{
+      margin-top: 20px;
+    }
+  }
+`
+
+const BLOCKER1 = Styled.div`
   margin-top: 60px;
 
   @media (min-width: 1200px) {
@@ -130,32 +145,6 @@ const JOINCONTAINER = Styled.div`
   }
 `
 
-const BUTTONS = Styled.div`
-  display: flex;
-  justify-content: space-between;
-`
-
-const LABELVALUE = Styled.div`
-  .__label{
-    font-size: 12px;
-	  font-weight: bold;
-	  color: #000000;
-  }
-  .__value{
-    font-size: 12px;
-	  color: #000000;
-  }
-`
-
-const LABEVALUES = Styled.div`
-  & > div{
-    margin-top: 13px;
-    &:first-child{
-      margin-top:0;
-    }
-  }
-  margin-top: 25px;
-`
 export default class extends React.Component{
   constructor(props){
     super(props)
@@ -192,6 +181,11 @@ export default class extends React.Component{
     
   }
 
+  onSumbit(data){
+    console.log(data)
+  }
+
+
 
   render(){
     return <div>
@@ -202,7 +196,7 @@ export default class extends React.Component{
     <CONTAINER>
       <section>
         <RES1 width1={373} width2={373} width3={373}>
-          <BLOCKER style={{position: 'relative'}}>
+          <BLOCKER1 style={{position: 'relative'}}>
             <Link to="/join/shanghai">
               <FIGURE>
                 <BLOCKIMAGE src="/images/join/1.jpg" src1="/images/join/1.jpg"/>
@@ -211,8 +205,8 @@ export default class extends React.Component{
                 </figcaption>
               </FIGURE>
             </Link>
-          </BLOCKER>
-          <BLOCKER style={{position: 'relative'}}>
+          </BLOCKER1>
+          <BLOCKER1 style={{position: 'relative'}}>
             <Link to="/join/guangzhou">
               <FIGURE>
                 <BLOCKIMAGE src="/images/join/2.jpg"/>
@@ -221,8 +215,8 @@ export default class extends React.Component{
                 </figcaption>
               </FIGURE>
             </Link>
-          </BLOCKER>
-          <BLOCKER style={{position: 'relative'}}>
+          </BLOCKER1>
+          <BLOCKER1 style={{position: 'relative'}}>
             <Link to="/join/nanjing">
               <FIGURE>
                 <BLOCKIMAGE src="/images/join/3.jpg"/>
@@ -231,7 +225,7 @@ export default class extends React.Component{
                 </figcaption>
               </FIGURE>
             </Link>
-          </BLOCKER>
+          </BLOCKER1>
         </RES1>
   
         <RES1 width1={537} width2={663} style={{marginTop: 60}}>
@@ -295,47 +289,7 @@ export default class extends React.Component{
             </Map> */}
           </MAP>
           <div className="__c">
-            <Form>
-              <div>
-                <Input placeholder="姓名" name="name" validations={[required]}/>
-              </div>
-  
-              <div style={{marginTop: 17}}>
-                <Input placeholder="电话" name="phone" validations={[required, phone]}/>
-              </div>
-  
-              <div style={{marginTop: 17}}>
-                <Input placeholder="邮箱" name="email" validations={[required, email]}/>
-              </div>
-  
-              <div style={{marginTop: 17}}>
-                <TextArea placeholder="个人信息" name="info" validations={[required, email]}/>
-              </div>
-  
-              <div style={{marginTop: 37}}>
-                <BUTTONS>
-                  <File type="file" text={`+ 上传建立 & 作品`}/>
-                  <Button style={{backgroundColor: '#000000', color:'#fff', border: 'none', width: 108, height: 40}}>提交 ></Button>
-                </BUTTONS>
-                
-              </div>
-              
-            </Form>
-  
-            <LABEVALUES>
-              <LABELVALUE>
-                <span className="__label">上海地址：</span>
-                <span className="__value">上海市浦东新区新金桥路1122号方正大厦9楼</span>
-              </LABELVALUE>
-              <LABELVALUE>
-                <span className="__label">电话：</span>
-                <span className="__value">37493293928</span>
-              </LABELVALUE>
-              <LABELVALUE>
-                <span className="__label">E-mail：</span>
-                <span className="__value">22043806@qq.com</span>
-              </LABELVALUE>
-            </LABEVALUES>
+            <JoinForm formHandle={ this.onSumbit.bind(this) }/>
           </div>
         </RES1>
       </JOINCONTAINER>

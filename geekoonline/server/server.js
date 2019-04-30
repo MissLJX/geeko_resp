@@ -11,12 +11,17 @@ import serialize from 'serialize-javascript'
 import App from '../src/App'
 import routes from '../src/routes'
 import Loadable from 'react-loadable'
+import {sendEmail} from './email'
 
 
 const PORT = process.env.PORT || 3000
 const application = express()
 
+
 const router = express.Router()
+
+const multer = require('multer')
+const bin = multer({dest:'bin'});//用来保存文件的文件夹名称
 
 application.use('/static', express.static(path.resolve(__dirname, '../build/static')))
 application.use('/images', express.static(path.resolve(__dirname, '../public/images')))
@@ -73,6 +78,33 @@ const serverRenderer = (req, res, next) => {
 
 
 }
+
+
+router.post('/api/personal', bin.single('file') , function(req, res, next){
+  var filename = req.file.originalname
+  fs.renameSync('./bin/'+req.file.filename,'./bin/'+filename)
+
+  const {name, phone, email, info, position} = req.body
+
+  console.log(req.body)
+
+  let mailOptions = {
+    from: 'ziruxi@qq.com', // sender address
+    to: '415948400@qq.com', // list of receivers
+    subject: `${ position } | ${name} | ${phone} | ${email}`, // Subject line
+    // 发送text或者html格式
+    // text: `${info}`, // plain text body
+    html: `<b>${ position } | ${name} | ${phone} | ${email}</b><br/><p>${info}</p>`, // html body
+    attachments: [
+      {
+        filename: filename,
+        path: './bin/'+filename
+      }
+    ]
+  }
+  sendEmail(mailOptions)
+  res.send('投递成功!!!')
+})
 
 
 router.use('/', serverRenderer)
