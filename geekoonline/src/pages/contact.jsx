@@ -71,6 +71,24 @@ const INFOS = Styled.dl`
   padding-bottom: 30px;
 `
 
+const Info = {
+  s: {
+    name: '夏先生',
+    phone:'021 61762186',
+    email:'xialuping@geeko.online'
+  },
+  n: {
+    name: '余小姐',
+    phone:'17327722266',
+    email:'yuping@geeko.online'
+  },
+  g: {
+    name: '蔡小姐',
+    phone:'020 32547002',
+    email:'caixiangping@geeko.online'
+  }
+}
+
 export default class extends React.Component{
   constructor(props){
     super(props)
@@ -86,7 +104,7 @@ export default class extends React.Component{
       lng: 121.618243,
       lat: 31.259722,
       title: "方正大厦",
-      dsc: '上海市浦东新区新金桥路1122号901'
+      dsc: '上海市浦东新区新金桥路'
     }
 
     if(this.state.selectedcity === 's'){
@@ -94,21 +112,21 @@ export default class extends React.Component{
         lng: 121.618243,
         lat: 31.259722,
         title: "方正大厦",
-        dsc: '上海市浦东新区新金桥路1122号901'
+        dsc: '上海市浦东新区新金桥路'
       }
     }else if(this.state.selectedcity === 'g'){
       _p = {
         lng: 113.24404,
         lat: 23.191372,
-        title: "穗新创意园B栋",
-        dsc: '广州市 白云区 石井街道石槎路原潭村三社水松排工业区穗新创意园B栋302'
+        title: "穗新创意园",
+        dsc: '广州市 白云区 石井街道石槎路'
       }
     }else if(this.state.selectedcity === 'n'){
       _p = {
         lng: 118.791886,
         lat: 32.058007,
-        title: "同仁西街7号",
-        dsc: '南京市玄武区同仁西街7号6楼'
+        title: "同仁西街",
+        dsc: '南京市玄武区同仁西街'
       }
     }
 
@@ -129,6 +147,11 @@ export default class extends React.Component{
   }
 
   render(){
+
+
+    let info = Info[this.state.selectedcity]
+
+
     return <div>
     <section>
       <BANNER src="/images/contact/2.jpg" src1="/images/contact/2_1.jpg"/>
@@ -179,24 +202,26 @@ export default class extends React.Component{
 
     </MAP>
 
+
     <CONTAINER>
-      <INFOS>
+      {
+        info && <INFOS>
         <INFO>
           <span className="__label">联系人</span>
           <span className="__label1">(CONTACT NAME)</span>
-          <span className="__value">夏先生</span>
+          <span className="__value">{info.name}</span>
         </INFO>
 
         <INFO>
           <span className="__label">电话</span>
           <span className="__label1">(TEL)</span>
-          <span className="__value">021 61762186</span>
+          <span className="__value">{info.phone}</span>
         </INFO>
 
         <INFO>
           <span className="__label">邮箱</span>
           <span className="__label1">(EMAIL)</span>
-          <span className="__value">xialuping@geeko.online</span>
+          <span className="__value">{info.email}</span>
         </INFO>
 
         <INFO>
@@ -205,6 +230,8 @@ export default class extends React.Component{
           <span className="__value">www.geeko.online</span>
         </INFO>
       </INFOS>
+      }
+      
     </CONTAINER>
   </div>
   }
