@@ -160,7 +160,7 @@ export default class extends React.Component{
       lng: 121.618243,
       lat: 31.259722,
       title: "方正大厦",
-      dsc: '上海市浦东新区新金桥路1122号901'
+      dsc: '上海市浦东新区新金桥路1122号'
     }
 
 

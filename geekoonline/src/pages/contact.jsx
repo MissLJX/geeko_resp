@@ -83,9 +83,9 @@ const Info = {
     email:'yuping@geeko.online'
   },
   g: {
-    name: '蔡小姐',
+    name: '夏先生',
     phone:'020 32547002',
-    email:'caixiangping@geeko.online'
+    email:'xialuping@geeko.online'
   }
 }
 

@@ -44,7 +44,7 @@ export default () => <FOOTER>
     上海极高信息技术有限公司
   </div>
   <div style={{textAlign:'center',marginTop: 20, lineHeight:'20px', color: '#fff'}}>
-    © 2015-2019 geekoonline.com All rights reserved.
+    © 2015-2019 geeko.online All rights reserved.
   </div>
   <div style={{textAlign:'center',marginTop: 20, lineHeight:'20px', color: '#fff'}}>
     沪ICP备19013724号-1
