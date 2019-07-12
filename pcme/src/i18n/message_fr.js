@@ -155,5 +155,6 @@ export default {
     paynow:'PAYEZ MAINTENANT',
     repurchase:'Rachat',
     remaining:'Temps de paiement restant',
-    trackingDetailInfo:'Informations de suivi'
+    trackingDetailInfo:'Informations de suivi',
+    returnlabel:"Étiquette de retour"
 }

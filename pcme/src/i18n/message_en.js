@@ -166,5 +166,6 @@ export default {
     trackingDetailInfo:'Tracking Detail Information',
     mymessages:'My Messages',
     notiothers:"Others",
-    prmotion:"promotion"
+    prmotion:"promotion",
+    returnlabel:"Return Label"
 }

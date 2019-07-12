@@ -270,6 +270,11 @@
                 border: solid 1px #222222;
                 text-align: center;
                 position: relative;
+                p{
+                    height: 40px;
+                    line-height: 40px;
+                    cursor: pointer;
+                }
                 input{
                     opacity: 0;
                     position: absolute;

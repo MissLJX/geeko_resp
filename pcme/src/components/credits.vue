@@ -62,13 +62,13 @@
 
         <div class="get-method">
             <div class="c-hd">{{$t('howtogetcre')}}</div>
-            <div class="method-con">
+            <!--<div class="method-con">
                 <a :href="indexUrl">
                     <i class="iconfont">&#xe739;</i>
                     <p>{{$t('shareitem')}}</p>
                     <span>+30</span>
                 </a>
-            </div>
+            </div>-->
             <div class="method-con">
                 <a :href="shoppingcartUrl">
                     <i class="iconfont">&#xe735;</i>
@@ -148,7 +148,7 @@
                 return utils.PROJECT + '/cart'
             },
             confirmEmailUrl(){
-                return utils.ROUTER_PATH_ME + '/m/changeEmail'
+                return utils.ROUTER_PATH_ME + '/m/change-email'
             },
             makeSuggestionUrl(){
                 return utils.ROUTER_PATH_ME + '/m/makeSug'

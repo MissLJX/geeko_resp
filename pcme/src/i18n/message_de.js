@@ -155,5 +155,6 @@ export default {
     paynow:'ZAHL JETZT',
     repurchase:'Rückkauf',
     remaining:'Restliche Zahlungszeit',
-    trackingDetailInfo:'Tracking-Detailinformationen'
+    trackingDetailInfo:'Tracking-Detailinformationen',
+    returnlabel:"Rücksendeetikett"
 }

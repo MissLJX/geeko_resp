@@ -104,7 +104,8 @@ const state = {
     otherNtLoaded: false,
     otherNtFinished: false,
     notificationCount: 0,
-    wannalistNum:0
+    wannalistNum:0,
+    returnLabelPdf:null
 };
 const getters = {
     me: state => state.me,
@@ -195,7 +196,8 @@ const getters = {
     orderNotifications: state => state.orderNotifications,
     promotionNotifications: state => state.promotionNotifications,
     otherNotifications: state => state.otherNotifications,
-    wannalistNum: state => state.wannalistNum
+    wannalistNum: state => state.wannalistNum,
+    returnLabelPdf:state => state.returnLabelPdf
 };
 const mutations = {
     [types.INIT_ME](state, me){
@@ -512,6 +514,9 @@ const mutations = {
     },
     [types.ME_GET_FEED_SUMMARY](state,wannalistNum){
         state.wannalistNum = wannalistNum
+    },
+    [types.GLOBAL_GET_RETURNLABEL](state,returnLabelPdf){
+        state.returnLabelPdf = returnLabelPdf
     }
 }
 const actions = {
@@ -1018,12 +1023,17 @@ const actions = {
     getOtherNtSkip({commit}){
         commit(types.ME_GET_NOTIFICATION_OT_SKIP)
     },
-
     getFeedSummary({commit, state}){
         return api.getFeedSummary(state.me.id).then((userinfo) => {
             if(userinfo) {
                 commit(types.ME_GET_FEED_SUMMARY, userinfo.wannaListNum)
             }
+        })
+    },
+    //getReturnLabel
+    getReturnLabel({commit},id){
+        return api.getReturnLabel(id).then((returnLabelPdf) => {
+            commit(types.GLOBAL_GET_RETURNLABEL,returnLabelPdf)
         })
     },
 }

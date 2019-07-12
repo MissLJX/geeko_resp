@@ -15,7 +15,7 @@
                     <li :class="{'active':isActive==='cards'}" @click="changeClass('cards')"><router-link to="/me/m/cards">{{$t('mycreditscards')}}</router-link></li>
                     <li :class="{'active':isActive==='wishlist'}" @click="changeClass('wishlist')"><router-link to="/me/m/wishlist">{{$t('mywishlist')}}</router-link></li>
                     <li :class="{'active':isActive==='addressBook'}" @click="changeClass('addressBook')"><router-link to="/me/m/addressBook">{{$t('addressBook')}}</router-link></li>
-                    <li :class="{'active':isActive==='changeEmail'}" @click="changeClass('changeEmail')"><router-link to="/me/m/changeEmail">{{$t('changeEmail')}}</router-link></li>
+                    <li :class="{'active':isActive==='changeEmail'}" @click="changeClass('changeEmail')"><router-link to="/me/m/change-email">{{$t('changeEmail')}}</router-link></li>
                     <li :class="{'active':isActive==='changePwd'}" @click="changeClass('changePwd')"><router-link to="/me/m/changePwd">{{$t('changepwd')}}</router-link></li>
                     <li :class="{'active':isActive==='updateProfile'}" @click="changeClass('updateProfile')"><router-link to="/me/m/updateProfile">{{$t('updatepro')}}</router-link></li>
                     <li :class="{'active':isActive==='makeSug'}" @click="changeClass('makeSug')"><router-link to="/me/m/makeSug">{{$t('makesug')}}</router-link></li>

@@ -208,13 +208,15 @@ export const getOrderNotifications = (skip) => {
 export const getPromotionNotification = (skip) => {
     return axios.get('/notification/' + skip + '/20/get-promotion-notifications').then(data => data.result)
 }
-
 export const getOtherNotification = (skip) => {
     return axios.get('/notification/' + skip + '/20/get-other-notifications').then(data => data.result)
 }
-
 //用户个人信息集合
 export const getFeedSummary = (customerId) => {
     return axios.get(VPATH +'/customer/anon/'+customerId+'/feed-summary').then(data => data.result)
 }
+//getReturnLabel
+export const getReturnLabel = (id) =>{
+    return axios.get(NVPATH +'/order/anon/report-return-label',{orderId:id}).then(data => data.result)
 
+}
