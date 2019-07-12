@@ -1,0 +1,43 @@
+{
+  "name": "geekoonline",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/preset-env": "^7.4.3",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/register": "^7.4.0",
+    "axios": "^0.18.0",
+    "express": "^4.16.4",
+    "ignore-styles": "^5.0.1",
+    "multer": "^1.4.1",
+    "nodemailer": "^6.1.1",
+    "react": "^16.8.6",
+    "react-bmap": "^1.0.96",
+    "react-dom": "^16.8.6",
+    "react-loadable": "^5.5.0",
+    "react-router-config": "^5.0.0",
+    "react-router-dom": "^5.0.0",
+    "react-scripts": "2.1.8",
+    "react-validation": "^3.0.7",
+    "serialize-javascript": "^1.7.0",
+    "styled-components": "^4.2.0",
+    "validator": "^10.11.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "deploy": "pm2 start processes.json"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}

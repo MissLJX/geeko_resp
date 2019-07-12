@@ -387,12 +387,48 @@ const ShoppingCart = class extends React.Component {
 
 		const __confirm_address__ = this.props.intl.formatMessage({id:'please_confirm_address'})
 
-		if (c && (!c.children || c.children.length < 1)) {
+		const { cart } = self.getProps()
+
+		let alloweds = []
+
+		if(cart && cart.currency === 'EUR'){
+			alloweds = [
+				paypal.FUNDING.BANCONTACT,       
+				paypal.FUNDING.EPS,       
+				paypal.FUNDING.GIROPAY,       
+				paypal.FUNDING.IDEAL,       
+				paypal.FUNDING.MYBANK,       
+				paypal.FUNDING.SOFORT  
+			]
+		}
+
+		let locale = null
+
+		if(cart){
+			locale = cart.locale || 'en_US'
+		}
+
+
+		if (c) {
+
+			let cs = c.children
+
+			if(cs && cs.length){
+
+				let _c
+				for(let i=0, len=cs.length; i< len; i++){
+					_c=cs[i]
+					_c.parentNode.removeChild(_c)
+				}
+			}
+
+
 			/*global paypal b:true*/
 			/*eslint no-undef: "error"*/
 			paypal.Button.render({
 				env: window.paypalEnv,
 				commit: window.__is_login__,
+				locale: locale, 
 				onClick: function(){
 					const {cart, history} = self.getProps()
 					if (!cart.shippingDetail && method !== 'quick') {
@@ -454,8 +490,12 @@ const ShoppingCart = class extends React.Component {
 					label: window.__is_login__ ? 'pay' : 'checkout',
 					shape: 'rect',
 					size: 'responsive',
-					tagline: false
-				}
+					tagline: false,
+					layout: 'vertical' 
+				},
+				funding: {     
+					allowed: alloweds
+				}	   
 			}, '#ip-paypal-pay')
 		}
 	}
@@ -1646,32 +1686,40 @@ const ShoppingCart = class extends React.Component {
 															</BigButton>
 														</div> : <div>
 
-															{ 
-																cart.paypalDiscountMessage && <DISCOUNTTIP style={{position:'relative', top:15}}>
-																	<span dangerouslySetInnerHTML={{__html: cart.paypalDiscountMessage}}/>
-																</DISCOUNTTIP> 
-															}
-
-															{
-																hasQuickPay && <React.Fragment>
-																	<div id='ip-paypal-pay' style={{marginTop: 30}} ref={ (c) => this.paypalRender(c, 'quick') }/>
-																	<div style={{color: '#999', textAlign: 'center', height: 30, lineHeight: '30px', textTransform: 'uppercase'}}>
-																		{intl.formatMessage({id: 'or'})}
-																	</div>
-																</React.Fragment>
-															}
-
 															
-
 
 
 															<BigButton onClick={ () => { window.location.href = `${window.ctx}/${
 																/*global siteType b:true*/
 																/*eslint no-undef: "error"*/
 																siteType === 'new' ? 'page' : 'i'
-															}/login?redirectUrl=${encodeURIComponent(window.location.href)}` } } bgColor="#222" style={{marginTop: hasQuickPay ? 0 : 30, height: 45, lineHeight: '45px', textTransform: 'uppercase', fontSize: 18}}>
+															}/login?redirectUrl=${encodeURIComponent(window.location.href)}` } } bgColor="#222" style={{marginTop: 30, height: 45, lineHeight: '45px', textTransform: 'uppercase', fontSize: 18}}>
 																{intl.formatMessage({id: 'proceed_checkout'})}
 															</BigButton>
+
+															{
+																hasQuickPay && <React.Fragment>
+																	
+																	<div style={{color: '#999', textAlign: 'center', height: 30, lineHeight: '30px', textTransform: 'uppercase'}}>
+																		{intl.formatMessage({id: 'or'})}
+																	</div>
+
+																	{ 
+																		cart.paypalDiscountMessage && <DISCOUNTTIP style={{marginBottom:10, display: 'inline-block'}}>
+																			<span dangerouslySetInnerHTML={{__html: cart.paypalDiscountMessage}}/>
+																		</DISCOUNTTIP> 
+																	}
+
+																	<div id='ip-paypal-pay'  ref={ (c) => this.paypalRender(c, 'quick') }/>
+
+																	
+
+																	
+																	
+																</React.Fragment>
+
+															}
+															
 														</div>
 
 													)
