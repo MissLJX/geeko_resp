@@ -4,9 +4,8 @@ import { connect } from 'react-redux'
 import FullFixed from '../components/msite/full-fixed.jsx'
 import { getCreditCards, toggleCreditStatus } from '../store/actions.js'
 import { __route_root__ } from '../utils/utils.js'
-import { deletecreditcard, 
-	creditpay, 
-	placeorder,
+import { checkout_credit, 
+	deletecreditcard,
 	getJwt,
 	getLookup,
 	oceanpay3d } from '../api'
@@ -84,8 +83,10 @@ const CardBinding = class extends React.Component {
 		super(props)
 		this.close = this.close.bind(this)
 		this.deleteCardHandle = this.deleteCardHandle.bind(this)
+		const {checkout} = props
+		const payMethod = checkout ? checkout.payMethod : null
 		this.state = {
-			frameUrl: `${window.ctx || ''}/w-site/anon/oceanpay?payMethod=${props.payMethod}`,
+			frameUrl: `${window.ctx || ''}/w-site/anon/oceanpay?payMethod=${payMethod}`,
 			frameLoading: true
 		}
 		this.processCallBack = this.processCallBack.bind(this)
@@ -93,11 +94,16 @@ const CardBinding = class extends React.Component {
 	}
 
 	componentDidMount() {
+		const { checkout } = this.props
+		const payMethod = checkout ? checkout.payMethod : null
 		window.bindSuccess = () => {
-			this.props.GETCREDITCARDS(this.props.payMethod).then(() => {
+			this.props.GETCREDITCARDS(payMethod).then(() => {
 				this.props.TOGGLECREDITSTATUS(0)
-				// this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
-				this.payCredit({})
+
+				this.payCredit({orderId: checkout.orderId})
+
+
+				// this.props.history.replace(`${window.ctx || ''}/checkout/${checkout.orderId}`)
 			})
 		}
 
@@ -107,8 +113,8 @@ const CardBinding = class extends React.Component {
 			})
 		}
 
-		if (!this.props.creditcards && this.props.payMethod) {
-			this.props.GETCREDITCARDS(this.props.payMethod)
+		if (!this.props.creditcards && payMethod) {
+			this.props.GETCREDITCARDS(payMethod)
 		}
 
 		setTimeout(() => {
@@ -119,19 +125,10 @@ const CardBinding = class extends React.Component {
 	}
 
 	triggerOcean(){
-		placeorder().then(({result: payment}) => {
-			if(payment){
-				const {orderId} = payment
-				getJwt(orderId).then(({result}) => {
-					const {jwt, bin} = result
-					this.listenOcean3D(orderId, jwt, bin)
-				}).catch(({result}) => {
-					alert(result)
-					this.setState({
-						checking: false
-					})
-				})
-			}
+		const { checkout } = this.props
+		getJwt(checkout.orderId).then(({result}) => {
+			const {jwt, bin} = result
+			this.listenOcean3D(checkout.orderId, jwt, bin)
 		}).catch(({result}) => {
 			alert(result)
 			this.setState({
@@ -199,35 +196,33 @@ const CardBinding = class extends React.Component {
 	}
 
 	payCredit(params) {
-		const {payMethod} = this.props
-		if(payMethod === '3'){
+		const { checkout } = this.props
+
+		if(checkout.payMethod === '3'){
 			this.triggerOcean()
 		}else{
-			creditpay(params).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
+			checkout_credit(params).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
 		}
 		
 	}
 
-	processCallBack({ success, transactionId, details, orderId, solutions = '' }){
+	processCallBack({ success, transactionId, details, solutions = '' }){
 		if (success) {
-
 			window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-
 		} else {
 			alert(details + '\n' + solutions)
-			if (orderId) {
-				this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
-			}
+			this.setState({
+				checking: false,
+				frameUrl: this.state.frameUrl + '&_=' + new Date().getTime()
+			})
 		}
-		this.setState({
-			checking: false
-		})
 	}
 
-	processErrorBack({ result }){
-		alert(result)
+	processErrorBack(data){
+		if(data && data.result) alert(data.result)
 		this.setState({
-			checking: false
+			checking: false,
+			frameUrl: this.state.frameUrl + '&_=' + new Date().getTime()
 		})
 	}
 
@@ -248,7 +243,7 @@ const CardBinding = class extends React.Component {
 
 	close(evt) {
 		evt.stopPropagation()
-		this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
+		this.props.history.replace(`${window.ctx || ''}/checkout/${this.props.checkout.orderId}`)
 	}
 
 	render() {

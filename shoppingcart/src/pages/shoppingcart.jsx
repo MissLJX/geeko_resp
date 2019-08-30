@@ -29,7 +29,10 @@ import Mask from '../components/mask.jsx'
 import _ from 'lodash'
 import PayMethodList from '../components/msite/paymethod-list.jsx'
 import { BigButton } from '../components/msite/buttons.jsx'
-import { payDLocal, useMercadocard, mercadopay, usePoint, useInsurance, creditpay, paypalpay, usecreditcard, movetooverseas, getMessage, placepaypal, givingCoupon, atmPay, ticketPay, getSafeCharge, getApacPay, apacPay, useMercadoCoupon } from '../api'
+import { payDLocal, useMercadocard, mercadopay, usePoint, useInsurance, creditpay, paypalpay, usecreditcard, movetooverseas, getMessage, placepaypal, givingCoupon, atmPay, ticketPay, getSafeCharge, getApacPay, apacPay, useMercadoCoupon, placeorder,
+	getJwt,
+	getLookup,
+	oceanpay3d } from '../api'
 import { __route_root__, storage } from '../utils/utils.js'
 import { submit } from '../utils/common-pay.js'
 import { CountDownBlock } from '../components/msite/countdowns.jsx'
@@ -295,6 +298,8 @@ const ShoppingCart = class extends React.Component {
 			successTip: null,
 			dlocalerror: null
 		}
+		this.processCallBack = this.processCallBack.bind(this)
+		this.processErrorBack = this.processErrorBack.bind(this)
 	}
 
 	showSuccessTip(tip) {
@@ -1106,27 +1111,131 @@ const ShoppingCart = class extends React.Component {
 		}
 	}
 
-	payCredit(params) {
-		creditpay(params).then(data => data.result).then(({ success, transactionId, details, orderId, solutions = '' }) => {
-			if (success) {
-
-				window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-
-			} else {
-				alert(details + '\n' + solutions)
-				if (orderId) {
-					this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
-				}
+	triggerOcean(){
+		placeorder().then(({result: payment}) => {
+			if(payment){
+				const {orderId} = payment
+				getJwt(orderId).then(({result}) => {
+					const {jwt, bin} = result
+					this.listenOcean3D(orderId, jwt, bin)
+				}).catch(({result}) => {
+					alert(result)
+					this.setState({
+						checking: false
+					})
+				})
 			}
-			this.setState({
-				checking: false
-			})
-		}).catch(({ result }) => {
+		}).catch(({result}) => {
 			alert(result)
 			this.setState({
 				checking: false
 			})
 		})
+	}
+
+	listenOcean3D(orderId, jwt, bin){
+
+		var self = this
+
+		/*global Cardinal b:true*/
+		/*eslint no-undef: "error"*/
+		Cardinal.setup('init', {
+			jwt: jwt
+		})
+
+		Cardinal.trigger('bin.process', bin)
+
+		Cardinal.off('payments.setupComplete')
+		Cardinal.off('payments.validated')
+
+		Cardinal.on('payments.setupComplete', function(setupCompleteData) {
+			const referenceId = setupCompleteData.sessionId
+			getLookup(referenceId, orderId).then(({result: lookup}) => {
+				if(lookup && lookup.lookupUrl){
+					Cardinal.continue('cca', {
+						'AcsUrl': lookup.lookupUrl,
+						'Payload': lookup.lookupLoad
+					},{
+						'OrderDetails': {
+							'TransactionId': lookup.transactionId
+						}
+					},
+					jwt
+					)
+				}else{
+					self.payOcean3D(orderId)
+				}
+			}).catch(({result}) => {
+				alert(result)
+				this.setState({
+					checking: false
+				})
+			})
+
+
+		})
+		
+		Cardinal.on('payments.validated', function(data, jwt) {
+			var cavv = data.Payment.ExtendedData.CAVV
+			var eci = data.Payment.ExtendedData.ECIFlag
+			var xid = data.Payment.ProcessorTransactionId
+			// var status = data.Payment.ExtendedData.PAResStatus
+			// var transactionId = data.Payment.ProcessorTransactionId
+			
+			//请求支付
+			self.payOcean3D(orderId, eci, cavv, xid)
+
+		})
+	}
+
+	payOcean3D(orderId, eci, cavv, xid){
+		oceanpay3d({orderId, cardEci: eci, cardCavv: cavv, cardXid:xid}).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
+	}
+
+	payDLocal (params) {
+		this.setState({
+			checking: true
+		})
+		payDLocal(params).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
+	}
+
+	processCallBack({ success, transactionId, details, orderId, solutions = '' }){
+		if (success) {
+
+			window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
+
+		} else {
+			alert(details + '\n' + solutions)
+			if (orderId) {
+				this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
+			}
+		}
+		this.setState({
+			checking: false
+		})
+	}
+
+	processErrorBack({ result }){
+		alert(result)
+		this.setState({
+			checking: false
+		})
+	}
+
+	payCredit(params) {
+		const {creditcards} = this.props
+
+		let card
+		if(creditcards && creditcards.length > 0){
+			card = creditcards.find( c => c.quickpayRecord.isSelected )
+		}
+
+		if(card && card.quickpayRecord.payMethod === '3'){
+			this.triggerOcean()
+		}else{
+			creditpay(params).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
+		}
+		
 	}
 
 	addMercadoCard(evt) {
@@ -1897,7 +2006,7 @@ const ShoppingCart = class extends React.Component {
 						this.state.showPayMsgOcean && cart.cancelOceanpaymentPayMsg && <Confirm title={
 							/*global sitename b:true */
 							/*eslint no-undef: "error"*/
-							sitename
+							window.siteName
 						}
 						no={() => {
 							this.setState({ showPayMsgOcean: false })

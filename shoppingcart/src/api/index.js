@@ -30,6 +30,7 @@ export const mercadopay = (params) => axios.post(`${VPATH}/mercadopago/pay`, par
 export const useMercadocard = (cardId) => axios.get(`${VPATH}/mercadopago/use-card?cardId=${cardId}&_=${new Date().getTime()}`)
 export const addMercadoCard = (token) => axios.post(`${VPATH}/mercadopago/add-card`, {token})
 export const removeMercadoCard = (token) => axios.post(`${VPATH}/mercadopago/remove-card`, {token})
+export const mercadopay_order = (params) => axios.post(`${VPATH}/mercadopago/pay-by-order`, params)
 
 export const usePoint = (isopen) => axios.get(`${VPATH}/shopping-cart/set-point/${isopen}`)
 export const useInsurance = (isuse) => axios.get(`${VPATH}/shopping-cart/anon/${isuse}/update-insurance`)
@@ -98,3 +99,16 @@ export const setdefaultaddress = (id) => axios.get(`${VPATH}/customer/${id}/set-
 export const getLeaveImage = () => axios.get(`${VPATH}/coupon/anon/get-shopping-cart-message`)
 export const getRecentlyProducts = () => axios.get(`${VPATH}/product/anon/get-browsing-history`)
 export const clientcall = (transationId) => axios.get(`${VPATH}/pay/client-call/${transationId}/true`)
+
+
+//new pay
+export const placeorder = () => axios.get(`${VPATH}/oceanpayment/place-order`, {_: new Date().getTime()})
+
+//new oceanpay
+export const getJwt = (orderId) => axios.get(`${VPATH}/oceanpayment/request-jwt`, {orderId, _: new Date().getTime()})
+export const getLookup = (referenceId, orderId) => axios.get(`${VPATH}/oceanpayment/request-lookup`,{referenceId, orderId, _: new Date().getTime()})
+/**
+ * orderId，cardEci （可选），cardCavv （可选），cardXid （可选）
+ * @param {*} params 
+ */
+export const oceanpay3d = (params) => axios.post(`${VPATH}/oceanpayment/pay-with-3d`, {...params, _: new Date().getTime()})

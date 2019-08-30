@@ -471,6 +471,7 @@ const ShoppingCart = class extends React.Component {
 					})
 				},
 				onAuthorize: function (data, actions) {
+					console.log(data)
 					return actions.redirect()
 				},
 
@@ -975,15 +976,21 @@ const ShoppingCart = class extends React.Component {
 				}
 			} else {
 				this.fixedSummary.classList.remove('__fixed')
+				this.fixedSmall.classList.remove('__fixed')
 				const { clientHeight } = this.fixedSmall
-				this.fixedSmallWrapper.style.height = clientHeight + 'px'
-				const rect = this.fixedSmallWrapper.getBoundingClientRect()
-				if (rect.top <= 0) {
-					this.fixedSmall.classList.add('__fixed')
-					this.fixedSmall.style.right = `${Math.floor((document.body.clientWidth - 1150) / 2)}px`
-				} else {
-					this.fixedSmall.classList.remove('__fixed')
+
+				if(clientHeight < window.innerHeight - 40){
+					this.fixedSmallWrapper.style.height = clientHeight + 'px'
+					const rect = this.fixedSmallWrapper.getBoundingClientRect()
+					if (rect.top <= 0) {
+						this.fixedSmall.classList.add('__fixed')
+						this.fixedSmall.style.right = `${Math.floor((document.body.clientWidth - 1150) / 2)}px`
+					} else {
+						this.fixedSmall.classList.remove('__fixed')
+					}
 				}
+
+				
 			}
 		}
 	}

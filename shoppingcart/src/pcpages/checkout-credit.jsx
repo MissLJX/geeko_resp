@@ -31,7 +31,12 @@ import {
 	usecreditcard,
 	useMercadocard,
 	removeMercadoCard,
-	deletecreditcard
+	deletecreditcard,
+	bindDLocal,
+	mercadopay_order,
+	getJwt,
+	getLookup,
+	oceanpay3d
 } from '../api'
 
 import {
@@ -48,11 +53,11 @@ import {
 const __Frame__ = {
 	'17': {
 		url: `${window.ctx || ''}/w-site/anon/oceanpay?payMethod=17`,
-		height: 480
+		height: 550
 	},
 	'3': {
 		url: `${window.ctx || ''}/w-site/anon/oceanpay?payMethod=3`,
-		height: 480
+		height: 550
 	},
 	'24': {
 		url: `${window.ctx || ''}/i/dlocal`,
@@ -186,7 +191,8 @@ const Credit = class extends React.Component {
 			refreshing: false,
 			showDeleteConfirm: false,
 			cardDelete: null,
-			dlocalerror: null
+			dlocalerror: null,
+			frameSuffix: new Date().getTime()
 		}
 
 		this.handleInputChange = this.handleInputChange.bind(this)
@@ -213,14 +219,16 @@ const Credit = class extends React.Component {
 			this.payNewCard({...result, payMethod: this.props.checkout.payMethod, orderId: this.props.checkout.orderId}).catch(({result}) => errBack(result))
 		}
 
+		window.bindDLocal = (result, callBack , errBack) => {
+			this.bindDLocal(result).then(callBack).catch(({ result }) => errBack(result))
+		}
+
 		window.triggerPlace = () => {
 			this.payCredit({payCpf: cpf, payInstallments: installments, orderId: this.props.checkout.orderId})
 		}
 
 		window.triggerFalse = (errcode) => {
-			this.setState({
-				frameUrl: this.state.frameUrl + '&_=' + new Date().getTime()
-			})
+			this.refreshFrame()
 		}
 
 		setTimeout(() => {
@@ -228,6 +236,17 @@ const Credit = class extends React.Component {
 				frameLoading: false
 			})
 		}, 5000)
+	}
+
+	refreshFrame(){
+		this.setState({
+			frameSuffix: new Date().getTime(),
+			checking: false
+		})
+	}
+
+	bindDLocal(result){
+		return bindDLocal({ ...result, payMethod: this.props.checkout.payMethod })
 	}
 
 	handleInputChange (event) {
@@ -393,50 +412,121 @@ const Credit = class extends React.Component {
 		}
 	}
 
+	triggerOcean(){
+		const { checkout } = this.props
+		getJwt(checkout.orderId).then(({result}) => {
+			const {jwt, bin} = result
+			this.listenOcean3D(checkout.orderId, jwt, bin)
+		}).catch(({result}) => {
+			alert(result)
+			this.setState({
+				checking: false
+			})
+		})
+	}
+
+	listenOcean3D(orderId, jwt, bin){
+
+		var self = this
+
+		
+
+		/*global Cardinal b:true*/
+		/*eslint no-undef: "error"*/
+		Cardinal.setup('init', {
+			jwt: jwt
+		})
+
+		Cardinal.trigger('bin.process', bin)
+
+		Cardinal.off('payments.setupComplete')
+		Cardinal.off('payments.validated')
+
+		Cardinal.on('payments.setupComplete', function(setupCompleteData) {
+			const referenceId = setupCompleteData.sessionId
+			getLookup(referenceId, orderId).then(({result: lookup}) => {
+				if(lookup && lookup.lookupUrl){
+					Cardinal.continue('cca', {
+						'AcsUrl': lookup.lookupUrl,
+						'Payload': lookup.lookupLoad
+					},{
+						'OrderDetails': {
+							'TransactionId': lookup.transactionId
+						}
+					},
+					jwt
+					)
+				}else{
+					self.payOcean3D(orderId)
+				}
+			}).catch(({result}) => {
+				alert(result)
+				this.setState({
+					checking: false
+				})
+			})
+
+
+		})
+		
+		Cardinal.on('payments.validated', function(data, jwt) {
+			var cavv = data.Payment.ExtendedData.CAVV
+			var eci = data.Payment.ExtendedData.ECIFlag
+			var xid = data.Payment.ProcessorTransactionId
+			// var status = data.Payment.ExtendedData.PAResStatus
+			// var transactionId = data.Payment.ProcessorTransactionId
+			
+			//请求支付
+			self.payOcean3D(orderId, eci, cavv, xid)
+
+		})
+	}
+
+	payOcean3D(orderId, eci, cavv, xid){
+		oceanpay3d({orderId, cardEci: eci, cardCavv: cavv, cardXid:xid}).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
+	}
+
 	payCredit (params) {
 		this.setState({
 			checking: true
 		})
-		checkout_credit(params).then(data => data.result).then(({success, transactionId, details, solutions = ''}) => {
-			if (success) {
-				window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-			} else {
-				alert(details + '\n' + solutions)
-				this.setState({
-					checking: false,
-					frameUrl: this.state.frameUrl + '&_=' + new Date().getTime()
-				})
-			}
-		}).catch(({result}) => {
-			alert(result)
-			this.setState({
-				checking: false,
-				frameUrl: this.state.frameUrl + '&_=' + new Date().getTime()
-			})
-		})
+
+		const { isTriggle } = params
+		const {checkout, creditcards} = this.props
+
+		let card
+		if(creditcards && creditcards.length > 0){
+			card = creditcards.find( c => c.quickpayRecord.isSelected )
+		}
+
+		if((isTriggle && checkout.payMethod === '3') || (card && card.quickpayRecord.payMethod === '3')){
+			this.triggerOcean()
+		}else{
+			checkout_credit(params).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
+		}
+
+		
 	}
 
 	payNewCard (params) {
 		this.setState({
 			checking: true
 		})
-		checkout_pay(params).then(data => data.result).then(({success, transactionId, details, solutions = ''}) => {
-			if (success) {
-				window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-			} else {
-				alert(details + '\n' + solutions)
-				this.setState({
-					checking: false,
-					frameUrl: this.state.frameUrl + '&_=' + new Date().getTime()
-				})
-			}
-		}).catch(({result}) => {
-			alert(result)
-			this.setState({
-				checking: false,
-				frameUrl: this.state.frameUrl + '&_=' + new Date().getTime()
-			})
-		})
+		checkout_pay(params).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
+	}
+
+	processCallBack({success, transactionId, details, solutions = ''}){
+		if (success) {
+			window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
+		} else {
+			alert(details + '\n' + solutions)
+			this.refreshFrame()
+		}
+	}
+
+	processErrorBack({result}){
+		alert(result)
+		this.refreshFrame()
 	}
 
 	addcardback () {}
@@ -531,9 +621,17 @@ const Credit = class extends React.Component {
 
 	payMercado (params) {
 		const { orderId } = this.props.checkout
-		return this.checkpay({
+		return mercadopay_order({
 			orderId,
 			...params
+		}).then(({result}) => {
+			const {transactionId, success, details} = result
+			if (success) {
+				window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
+			} else {
+				alert(details)
+			}
+			return result
 		})
 	}
 
@@ -611,14 +709,14 @@ const Credit = class extends React.Component {
 											{
 												payMethod === '19' ? <div style={{width: 500, paddingTop: 10}}>
 													<img style={{display: 'block', marginBottom: 10}} src="https://dgzfssf1la12s.cloudfront.net/shoppingcart/maxicocard.png"/>
-													<MercadoBinding orderTotal={checkout.orderTotal} pay={this.payMercado.bind(this)} email={this.props.me ? this.props.me.email : ''}/>
+													<MercadoBinding orderId={checkout.orderId} orderTotal={checkout.orderTotal} pay={this.payMercado.bind(this)} email={this.props.me ? this.props.me.email : ''}/>
 												</div> : <div style={{position: 'relative'}}>
 													{
 														this.state.frameLoading && <div style={{textAlign: 'center', paddingTop: 40}} className="__loading">
 															<img alt="loading" src="https://dgzfssf1la12s.cloudfront.net/site/upgrade/20180316/loading.gif"/>
 														</div>
 													}
-													<iframe onLoad={ this.frameLoadHandle.bind(this) } style={{height: _frame.height, width: '100%'}} src={_frame.url}/>
+													<iframe onLoad={ this.frameLoadHandle.bind(this) } style={{height: _frame.height, width: '100%'}} src={`${_frame.url}&_=${this.state.frameSuffix}`}/>
 												</div>
 
 											}
@@ -681,7 +779,7 @@ const Credit = class extends React.Component {
 						this.state.showFrame && <Modal onClose={ this.showFrameHandle.bind(this) }>
 							<CREDITMODAL>
 								<div className="__title">{intl.formatMessage({id: 'use_new_card'})}</div>
-								<iframe onLoad={ this.frameLoadHandle.bind(this) } style={{height: _frame.height}} className="__frame" src={_frame.url}/>
+								<iframe onLoad={ this.frameLoadHandle.bind(this) } style={{height: _frame.height}} className="__frame" src={`${_frame.url}&_=${this.state.frameSuffix}`}/>
 
 								{
 									this.state.frameLoading && <div className="__loading">

@@ -9,6 +9,7 @@ import {__route_root__} from '../utils/utils.js'
 
 import Coupons from '../components/pc/coupon.jsx'
 import Icon from '../components/icon.jsx'
+import TypeMessage from '../components/type-message.jsx'
 
 const COUPONWINDOW = styled.div`
 	position: fixed;
@@ -88,99 +89,130 @@ const CouponCode = styled.div`
   }
 `
 
+const MESSAGE = styled.div`
+  width: 332px;
+	background-color: rgb(255, 249, 232);
+	border: 1px solid rgb(245, 235, 206);
+	padding: 8px 10px;
+	line-height: 18px;
+	color: #666;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	a{
+		color: #666;
+		text-decoration: underline;
+	}
+`
+
 const mapStateToProps = (state) => {
-  return {
-    ...state
-  }
+	return {
+		...state
+	}
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-    REFRESHCART: (cart) => {
-      dispatch(refreshCart(cart))
-    }
-  }
+	return {
+		REFRESHCART: (cart) => {
+			dispatch(refreshCart(cart))
+		}
+	}
 }
 
 const CouponWindow = class extends React.Component {
-  constructor (props) {
-    super(props)
-    this.close = this.close.bind(this)
-    this.state = {
-      code: '',
-      using: false
-    }
-  }
+	constructor (props) {
+		super(props)
+		this.close = this.close.bind(this)
+		this.state = {
+			code: '',
+			using: false,
+			errorMsg: ''
+		}
+	}
 
-  close (evt) {
+	close (evt) {
   	evt.preventDefault()
-    this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
-  }
+		this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
+	}
 
-  codeUse () {
-    if (!this.state.code) return
-    this.setState({
-      using: true
-    })
-    usecouponcode(this.state.code).then(() => {
-      this.props.REFRESHCART()
-      this.setState({
-        using: false
-      })
-      this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
-    }).catch(({result}) => {
-      alert(result)
-      this.setState({
-        using: false
-      })
-    })
-  }
+	codeUse () {
+		if (!this.state.code) return
+		this.setState({
+			using: true
+		})
+		usecouponcode(this.state.code).then(() => {
+			this.props.REFRESHCART()
+			this.setState({
+				using: false
+			})
+			this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
+		}).catch(({result}) => {
+			this.setState({
+				using: false,
+				errorMsg: result
+			})
+		})
+	}
 
-  couponSelect (id) {
-    if (id) {
-      usecoupon(id).then(() => {
-        this.props.REFRESHCART()
-        this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
-      })
-    } else {
-      unusecoupon().then(() => {
-        this.props.REFRESHCART()
-        this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
-      })
-    }
-  }
+	couponSelect (id) {
+		if (id) {
+			usecoupon(id).then(() => {
+				this.props.REFRESHCART()
+				this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
+			})
+		} else {
+			unusecoupon().then(() => {
+				this.props.REFRESHCART()
+				this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
+			})
+		}
+	}
 
-  render () {
-    const {coupons, cart, intl, history} = this.props
-    return <COUPONWINDOW>
-      <div className="__hd">
-        <div className="__title">{intl.formatMessage({id: 'select_coupon'})}</div>
-        <span className="__close" onClick={ this.close }><Icon style={{fontSize: 28}}>&#xe69a;</Icon></span>
-      </div>
-      <div className="__bd">
+	render () {
+		const {coupons, cart, intl, history} = this.props
+		return <COUPONWINDOW>
+			<div className="__hd">
+				<div className="__title">{intl.formatMessage({id: 'select_coupon'})}</div>
+				<span className="__close" onClick={ this.close }><Icon style={{fontSize: 28}}>&#xe69a;</Icon></span>
+			</div>
+			<div className="__bd">
 
-        <CouponCode>
-          <div className="__input">
-            <input placeholder="Coupon code" value={this.state.code} onChange={ (evt) => { this.setState({code: evt.target.value }) }}/>
-          </div>
+				<CouponCode>
+					<div className="__input">
+						<input placeholder="Coupon code" value={this.state.code} onChange={ (evt) => { this.setState({code: evt.target.value }) }}/>
+					</div>
 
-          {
-            this.state.using ? <div className="__use" style={{backgroundColor: '#cacaca', cursor: 'default'}}>
+					{
+						this.state.using ? <div className="__use" style={{backgroundColor: '#cacaca', cursor: 'default'}}>
             USE
-            </div> : <div className="__use" onClick={ this.codeUse.bind(this) }>
+						</div> : <div className="__use" onClick={ this.codeUse.bind(this) }>
             USE
-            </div>
-          }
+						</div>
+					}
 
-        </CouponCode>
-        <div style={{marginTop: 20}}>
-          {coupons && cart && <Coupons couponSelect={this.couponSelect.bind(this)} couponVOs={coupons} selectedCoupon={cart.coupon} selectedCoupon2={cart.coupon2} />}
-        </div>
+				</CouponCode>
 
-      </div>
 
-    </COUPONWINDOW>
-  }
+				{
+					this.state.errorMsg && <MESSAGE style={{marginTop: 10}}>
+						<div style={{paddingRight: 10}}>
+							<span className="iconfont" style={{color: '#ce9a16', fontSize: 24}}>&#xe764;</span>
+						</div>
+						<div>
+							<TypeMessage messageHtml={this.state.errorMsg}/>
+						</div>
+					
+					</MESSAGE>
+				}
+
+				<div style={{marginTop: 20}}>
+					{coupons && cart && <Coupons couponSelect={this.couponSelect.bind(this)} couponVOs={coupons} selectedCoupon={cart.coupon} selectedCoupon2={cart.coupon2} />}
+				</div>
+
+			</div>
+
+		</COUPONWINDOW>
+	}
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(CouponWindow))

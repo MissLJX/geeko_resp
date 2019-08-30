@@ -10,19 +10,19 @@ import Cookie from 'js-cookie'
 import {updateCurrency} from '../../api'
 
 const __Language_Map__ = {
-  'en': 'English',
-  'es': 'Español',
-  'de': 'Deutsch',
-  'fr': 'Français',
-  'pt': 'Português'
+	'en': 'English',
+	'es': 'Español',
+	'de': 'Deutsch',
+	'fr': 'Français',
+	'pt': 'Português'
 }
 
 const __Support_Languages__ = [
-  'en_US',
-  'es_ES',
-  'de_DE',
-  'fr_FR',
-  'pt_BR'
+	'en_US',
+	'es_ES',
+	'de_DE',
+	'fr_FR',
+	'pt_BR'
 ]
 
 const getLangLabel = lang => __Language_Map__[lang.substring(0, 2)]
@@ -150,20 +150,11 @@ const LANGS = styled.ul`
 `
 
 const getLogo = () => {
-  switch (sitename.toLowerCase()) {
-    case 'ivrose':
-      return 'https://dgzfssf1la12s.cloudfront.net/site/ivrose/icon20.png'
-    case 'chicme':
-      return 'https://dgzfssf1la12s.cloudfront.net/site/pc/logo03.png'
-    case 'boutiquefeel':
-      return 'https://dgzfssf1la12s.cloudfront.net/site/bouti/logo01.png'
-    default:
-      return window.logoIcon
-  }
+	return window.logoIcon
 }
 
 const getIconPosition = (index) => {
-  return { x: (index % 4) * 30, y: Math.floor(index / 4) * 20 }
+	return { x: (index % 4) * 30, y: Math.floor(index / 4) * 20 }
 }
 
 // const Currency = ({currency, index}) => {
@@ -175,29 +166,29 @@ const getIconPosition = (index) => {
 // }
 
 const Currency = class extends React.Component {
-  constructor (props) {
-    super(props)
-  }
+	constructor (props) {
+		super(props)
+	}
 
-  changeCurrency (currency) {
+	changeCurrency (currency) {
   	Cookie.set('currency', currency, {expires: 365})
   	updateCurrency(currency).then(() => {
   		window.location.reload()
   	})
-  }
+	}
 
-  render () {
+	render () {
   	const {currency, index} = this.props
   	const position = getIconPosition(index)
 	  return <CURRENCY onClick={ () => { this.changeCurrency(currency.value) }}>
 	    <span className="__icon" style={{backgroundImage: `url(https://dgzfssf1la12s.cloudfront.net/site/ninimour/flags/flag-${currency.value}.png)`}}></span>
 	    <span className="__label">{currency.value}</span>
 	  </CURRENCY>
-  }
+	}
 }
 
 const Header = ({intl, lang, currency, currencies, changeLang, hideTools}) => (
-  <HEADER>
+	<HEADER>
   	<div>
 	  	<div className="x-table __vm x-fh x-fw">
 	  		<div className="x-cell" style={{width: 110}}>
@@ -254,7 +245,7 @@ const Header = ({intl, lang, currency, currencies, changeLang, hideTools}) => (
 
 	  	</div>
   	</div>
-  </HEADER>
+	</HEADER>
 
 )
 
