@@ -77,7 +77,6 @@
                     </td>
                 </tr>
             </table>
-
             <div class="pricecon">
                 <div class="pricecon1" v-if="orderdetail">
                     <p class="p-price">ItemTotal:<span class="price">{{paymentItemTotal}}</span></p>
@@ -87,16 +86,18 @@
                 </div>
             </div>
             <div class="actionbtn">
-                <div class="r-btn" :class="{'b-btn':confirmedOrder,'black':shippedOrder || processingOrder}">
-                    <!--<a style="color: #fff;"  :href="orderdetail.boletoPayCodeURL" target="_blank" v-if="orderdetail.boletoPayCodeURL && orderdetail.status === 0 && !(orderoffset >= 0)">Imprimir Boleto</a>
-                    <a style="color: #fff;" :href="orderdetail.mercadopagoPayURL" target="_blank" v-if="orderdetail.mercadopagoPayURL && orderdetail.status === 0 && !(orderoffset >= 0)">Generar Ticket</a>-->
+                <div class="r-btn" :class="{'b-btn':confirmedOrder,'black':shippedOrder || processingOrder}" v-if="shippedOrder || orderdetail.isCanCanceled || (orderdetail.id && orderdetail.status===4)">
                     <span v-if="shippedOrder" @click="() => {this.isConfirmAlert = true}">{{$t('confirmorder')}}</span>
                     <span v-if="orderdetail.isCanCanceled" @click="() => {this.isAlert = true}">{{$t('cancelorder2')}}</span>
                     <span @click="addProducts(orderdetail.orderItems)" v-if="orderdetail.id && orderdetail.status===4">{{$t("repurchase")}}</span>
                 </div>
+                <div class="r-btn black" v-if="orderdetail.hasReturnLabel">
+                    <a :href="getReturnLabel()">{{$t('returnlabel')}}</a>
+                </div>
+                <div class="r-btn w-btn" v-if="orderdetail.id && (orderdetail.status===2 || orderdetail.status===3) ">
+                    <span  @click="checkLogistics(orderdetail.id)">{{$t('track')}}</span>
+                </div>
             </div>
-
-
             <select-order v-if="isShowSelect" v-on:closeSelect="closeSelect1" v-on:showTicket="showTicket"></select-order>
             <order-ticket  v-if="isShowTicket" v-on:closeSelect="closeSelect1" v-on:selectOrder="selectorder"></order-ticket>
 
@@ -428,6 +429,9 @@
                     this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/packeage-logistics-detail', query: { type:type , packageid: packageId } })
                 }
             },
+            checkLogistics(orderid){
+                this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/logistics-detail', query: { orderid: orderid , method: 'orderlist' } })
+            },
             checkoutUrl(id){
                 if(id){
                     return window.ctx + '/checkout/' +id
@@ -473,6 +477,10 @@
             },
             getProUrl(product){
                 return "/product/"+product.name+"/"+product.sku+"/"+product.productId+".html"
+            },
+            getReturnLabel(){
+                window.recordReturnLabel(this.orderdetail.id);
+                return document.ctx + "/v8/order/report-return-label?orderId="+this.orderdetail.id ;
             }
         },
         created(){
@@ -483,6 +491,9 @@
                 this.shippingstate = this.orderdetail.shippingDetail.state
                 this.shippingcountry =this.orderdetail.shippingDetail.country
                 this.isloding = false
+            }).catch((e) => {
+                console.error(e);
+                window.location.href='/me/m/order'
             })
             this.$store.dispatch('getCancelOrderReason')
         }
@@ -677,7 +688,8 @@
     }
     .actionbtn{
         .r-btn{
-            width: 240px;
+            width: auto;
+            padding: 0 60px;
             float: right;
             line-height: 40px;
             margin-bottom: 20px;
@@ -687,6 +699,8 @@
             font-size: 14px;
             cursor: pointer;
             border-radius: 2px;
+            border: 1px solid #222;
+            margin-left: 20px;
             &:after{
                 display: block;
                 clear: both;
@@ -695,11 +709,18 @@
             a{
                 display: inline-block;
                 width: 100%;
+                color: #fff;
             }
             span{
                 display: inline-block;
                 width: 100%;
             }
+        }
+        .w-btn{
+            width: auto;
+            padding: 0 50px;
+            background-color: #fff !important;
+            color: #222;
         }
         .b-btn{
             background-color: #222 !important;

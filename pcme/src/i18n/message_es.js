@@ -155,5 +155,6 @@ export default {
     paynow:'PAGUE AHORA',
     repurchase:'Readquirir',
     remaining:'Tiempo de pago restante',
-    trackingDetailInfo:'Información detallada de seguimiento'
+    trackingDetailInfo:'Información detallada de seguimiento',
+    returnlabel:"Etiqueta de devolución"
 }

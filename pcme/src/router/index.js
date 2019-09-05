@@ -98,7 +98,7 @@ const routes = [
                 meta: {title:'Address Book'},
             },
             {
-                path:'changeEmail',
+                path:'change-email',
                 component:ChangeEmail,
                 meta: {title:'Change Email'},
             },

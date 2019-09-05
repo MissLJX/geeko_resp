@@ -152,8 +152,13 @@
                 var files = this.files;
                 var formData = new FormData(this.$refs.imageLoader);
                 formData.append("message", '-')
-                formData.append("operaId",this.ticket_con.operaId)
-                formData.append("subject",this.selected)
+                if(this.ticket_con){
+                    formData.append("operaId",this.ticket_con.operaId)
+                }else{
+                    formData.append("operaId",this.ticketid)
+                }
+
+                formData.append("subject",this.selected);
 
                 this.$store.dispatch('addTicket', formData).then(() => {
                     this.$store.dispatch('getTicket',this.ticketid)

@@ -79,7 +79,7 @@ export const STATUS_LABEL = function (value) {
     return label
 }
 //image util
-export const IMAGE_PREFIX = 'https://dgzfssf1la12s.cloudfront.net'
+export const IMAGE_PREFIX = 'https://s3-us-west-2.amazonaws.com/image.chic-fusion.com'
 export const IMAGE_SMALL = 'small'
 export const IMAGE_MEDIUM = 'medium'
 export const IMAGE_LARGE = 'large'

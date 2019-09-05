@@ -146,9 +146,6 @@
         mounted(){
             this.$refs.viewBox.addEventListener('scroll',this.scrollHandle)
         },
-        destroyed(){
-            this.$refs.viewBox.removeEventListener('scroll',this.scrollHandle)
-        },
         methods: {
             ...mapActions([
                 'changeTab','getM1135','loadAll'
