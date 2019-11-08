@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { refreshCart, changeLang } from '../store/actions.js'
 import FullFixed from '../components/msite/full-fixed.jsx'
 import AddressForm from '../components/msite/address-form.jsx'
-import { addAddress, editAddress, paypalAddress } from '../api'
+import { addAddress, editAddress, paypalAddress, saveTempAddress } from '../api'
 import { injectIntl } from 'react-intl'
 import { __route_root__ } from '../utils/utils.js'
 import Cookie from 'js-cookie'
@@ -37,19 +37,26 @@ const Modal = class extends React.Component {
 
 	close(evt) {
 		evt.preventDefault()
-		this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
+		this.props.history.replace(`${window.ctx || ''}${__route_root__}/checkout`)
 	}
 
 	editAddress(address) {
 		if (__address_token__) {
 			paypalAddress({ ...address, id: this.props.address.id, token: __address_token__ }).then(() => {
 				this.props.REFRESH()
-				this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
+				this.props.history.replace(`${window.ctx || ''}${__route_root__}/checkout`)
 			}).catch(({ result }) => {
 				alert(result)
 			})
 		} else {
-			const addressOpreator = this.props.address ? editAddress : addAddress
+			let addressOpreator
+
+			if(window.__is_login__){
+				addressOpreator = this.props.address ? editAddress : addAddress
+			}else{
+				addressOpreator = saveTempAddress
+			}
+			
 
 			addressOpreator({ ...address, id: this.props.address ? this.props.address.id : null }).then(() => {
 				if (address.country === 'BR') {
@@ -61,7 +68,7 @@ const Modal = class extends React.Component {
 				} else {
 					this.props.REFRESH()
 				}
-				this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
+				this.props.history.replace(`${window.ctx || ''}${__route_root__}/checkout`)
 			}).catch(({ result }) => {
 				alert(result)
 			})

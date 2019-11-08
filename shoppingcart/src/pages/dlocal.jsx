@@ -65,6 +65,7 @@ const DLocal = class extends React.Component {
 			currency = cart.orderSummary.orderTotal.currency
 			amount = cart.orderSummary.orderTotal.amount
 			country = cart.shippingDetail.country ? cart.shippingDetail.country.value : window.__country
+
 		}
 
 		return <FullFixed onClose={this.close} title={intl.formatMessage({ id: 'credit_card' })}>

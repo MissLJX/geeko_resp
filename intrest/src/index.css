@@ -1,0 +1,55 @@
+button{
+    background: green;
+    border: none;
+    color: #fff;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+button.delete{
+  background: red;
+}
+
+
+
+
+
+.GLC table{
+  width: 100%;
+  margin-bottom: 1em;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.GLC .table-wrapper table tbody tr td, .GLC .TableWrapper table tbody tr td {
+  text-align: center;
+  border: 1px solid #d2d2d2!important;
+  padding: 10px!important;
+}
+
+.GLC .table-wrapper, .GLC .TableWrapper {
+  max-width: 100%;
+  overflow: auto;
+}
+
+.GLC table {
+  table-layout: fixed;
+}
+
+.GLC .table-wrapper table tbody tr:nth-of-type(1), .GLC .TableWrapper table tbody tr:nth-of-type(1) {
+  background: #000;
+  color: #fff;
+}
+
+.GLC .table-wrapper table tbody tr:nth-child(even), .GLC .TableWrapper table tbody tr:nth-child(even) {
+  background: #f3f3f3;
+}
+.GLC .table-wrapper table tbody tr, .GLC .TableWrapper table tbody tr {
+  text-align: center;
+}
+
+.GLC .table-wrapper table tbody tr td, .GLC .TableWrapper table tbody tr td {
+  text-align: center;
+  border: 1px solid #d2d2d2!important;
+  padding: 10px!important;
+}

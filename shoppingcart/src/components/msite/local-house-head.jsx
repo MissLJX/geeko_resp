@@ -19,26 +19,26 @@ const StyledHead = styled.div`
 
 	& > div{
 		height: 100%;
-	    border-bottom: 1px solid #e5e5e5;
+			border-bottom: 1px solid #e5e5e5;
 
-	    & > div:first-child{
-	      width: 30px;
-	    }
+			& > div:first-child{
+				width: 30px;
+			}
 	}
 `
 
 const LocalHouseHead = ({icon, title, selected, groupClick, shippingPrice, count}) => <StyledHead >
-  <div className="x-table __vm x-fw x-fh __fixed">
-  	<div className="x-cell">
-      <CheckBox onClick={() => { groupClick(!selected) }} className={selected ? 'selected' : ''}/>
-    </div>
-  	<div className="x-cell">
-  		<Ellipsis>
-        	<span>{title}</span>
-  		</Ellipsis>
-  		{shippingPrice && shippingPrice.amount > 0 ? <span>Shipping Price:<Money money={shippingPrice}/></span> : <Small><Green><FormattedMessage id="free_shipping"/></Green></Small>}
-    </div>
-  </div>
+	<div className="x-table __vm x-fw x-fh __fixed">
+		<div className="x-cell">
+			<CheckBox onClick={() => { groupClick(!selected) }} className={selected ? 'selected' : ''}/>
+		</div>
+		<div className="x-cell">
+			<Ellipsis>
+				<span>{title}</span>
+			</Ellipsis>
+			{shippingPrice && shippingPrice.amount > 0 ? <span>Shipping Price:<Money money={shippingPrice}/></span> : <Small><Green><FormattedMessage id="free_shipping"/></Green></Small>}
+		</div>
+	</div>
 </StyledHead>
 
 export default LocalHouseHead

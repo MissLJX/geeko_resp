@@ -43,5 +43,10 @@ export default {
   order_status_refunded: 'Reintegrado',
   order_status_held: 'Retenida',
   count_items: '{count} artículo (s)',
-  ordertotal: 'Total'
+  ordertotal: 'Total',
+  rate: 'Evaluacion',
+  satisfied: 'Satisfecho',
+  unsatisfied: 'Insatisfecho',
+  you_can_rate: 'Puedes comentar servicio al cliente aquí',
+  please_rate: 'Por favor califica mi servicio'
 }

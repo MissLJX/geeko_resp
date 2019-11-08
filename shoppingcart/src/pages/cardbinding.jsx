@@ -199,12 +199,12 @@ const CardBinding = class extends React.Component {
 	}
 
 	payCredit(params) {
-		const {payMethod} = this.props
-		if(payMethod === '3'){
-			this.triggerOcean()
-		}else{
-			creditpay(params).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
-		}
+		// const {payMethod} = this.props
+		// if(payMethod === '3'){
+		// 	this.triggerOcean()
+		// }else{
+		creditpay(params).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
+		// }
 		
 	}
 

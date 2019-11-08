@@ -104,5 +104,6 @@ export default{
 	change_email: 'Change Email',
 	credit_card: 'Credit Card',
 	continue_shopping: 'continue shopping',
-	facebook_check: 'If you check this, we will send you logistics tracking status and order information in Messenger'
+	facebook_check: 'If you check this, we will send you logistics tracking status and order information in Messenger',
+	email: 'Email'
 }

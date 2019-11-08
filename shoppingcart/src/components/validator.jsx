@@ -92,7 +92,8 @@ export const number = (value) => {
 }
 
 export const email = (value) => {
-	if (!validator.isEmail(value)) {
+	const trimedEmail = value ? value.trim(): value
+	if (!validator.isEmail(trimedEmail)) {
 		return <p>{value} is not a valid email</p>
 	}
 }

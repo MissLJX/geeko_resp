@@ -491,19 +491,19 @@ const Credit = class extends React.Component {
 			checking: true
 		})
 
-		const { isTriggle } = params
-		const {checkout, creditcards} = this.props
+		// const { isTriggle } = params
+		// const {checkout, creditcards} = this.props
 
-		let card
-		if(creditcards && creditcards.length > 0){
-			card = creditcards.find( c => c.quickpayRecord.isSelected )
-		}
+		// let card
+		// if(creditcards && creditcards.length > 0){
+		// 	card = creditcards.find( c => c.quickpayRecord.isSelected )
+		// }
 
-		if((isTriggle && checkout.payMethod === '3') || (card && card.quickpayRecord.payMethod === '3')){
-			this.triggerOcean()
-		}else{
-			checkout_credit(params).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
-		}
+		// if((isTriggle && checkout.payMethod === '3') || (card && card.quickpayRecord.payMethod === '3')){
+		// 	this.triggerOcean()
+		// }else{
+		checkout_credit(params).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
+		// }
 
 		
 	}

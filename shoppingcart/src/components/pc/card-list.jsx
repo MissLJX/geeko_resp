@@ -254,9 +254,11 @@ const DLocalPlugin = class extends React.Component {
 
 		return <CARDPLUGIN>
 
-			{
-				this.state.payer_costs && this.state.payer_costs.length > 0 && <Form id="dlocalform" ref={documentRef}>
-					<MutiElement>
+			
+			<Form id="dlocalform" ref={documentRef}>
+
+				{
+					this.state.payer_costs && this.state.payer_costs.length > 0 && <MutiElement>
 						<FormElement label={intl.formatMessage({id: 'installments'})} className="__required">
 							<Select className="x-select" style={{width: '100%', height: 35, backgroundColor: '#fff'}} name="installments"
 								value={this.props.installments}
@@ -271,32 +273,35 @@ const DLocalPlugin = class extends React.Component {
 								}
 							</Select>
 						</FormElement>
+					</MutiElement>
+				}
+					
 
+				{
+					card.quickpayRecord.payMethod === '24' ? <FormElement/> : <FormElement label={this.getLabel(card.quickpayRecord.payMethod)} className="__required">
+						<Input style={{width: '100%', height: 35}} name="document"
+							value={document}
+							validations={[required, _dni]}
+							onChange={this.props.handleInputChange}/>
+					</FormElement>
+				}
+						
+						
+
+					
+
+				<MutiElement style={{marginTop: 15}}>
+					<FormElement label="CVV / CVV2" className="__required">
+						<div ref={ this.cvvRef.bind(this) } style={{border:'1px solid #cacaca', paddingLeft: 10, backgroundColor: '#fff'}}></div>
 						{
-							card.quickpayRecord.payMethod === '24' ? <FormElement/> : <FormElement label={this.getLabel(card.quickpayRecord.payMethod)} className="__required">
-								<Input style={{width: '100%', height: 35}} name="document"
-									value={document}
-									validations={[required, _dni]}
-									onChange={this.props.handleInputChange}/>
-							</FormElement>
+							dlocalerror && <div style={{fontSize: 12, marginTop:5}}><Red>{dlocalerror}</Red></div>
 						}
-						
-						
-
-					</MutiElement>
-
-					<MutiElement style={{marginTop: 15}}>
-						<FormElement label="CVV / CVV2" className="__required">
-							<div ref={ this.cvvRef.bind(this) } style={{border:'1px solid #cacaca', paddingLeft: 10, backgroundColor: '#fff'}}></div>
-							{
-								dlocalerror && <div style={{fontSize: 12, marginTop:5}}><Red>{dlocalerror}</Red></div>
-							}
-						</FormElement>
-						<FormElement/>
-					</MutiElement>
-					<Button style={{display: 'none'}} ref={documentBtn}></Button>
-				</Form>
-			}
+					</FormElement>
+					<FormElement/>
+				</MutiElement>
+				<Button style={{display: 'none'}} ref={documentBtn}></Button>
+			</Form>
+			
 
 		</CARDPLUGIN>
 	}

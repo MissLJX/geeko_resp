@@ -196,13 +196,13 @@ const CardBinding = class extends React.Component {
 	}
 
 	payCredit(params) {
-		const { checkout } = this.props
+		// const { checkout } = this.props
 
-		if(checkout.payMethod === '3'){
-			this.triggerOcean()
-		}else{
-			checkout_credit(params).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
-		}
+		// if(checkout.payMethod === '3'){
+		// 	this.triggerOcean()
+		// }else{
+		checkout_credit(params).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
+		// }
 		
 	}
 

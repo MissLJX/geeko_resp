@@ -4,7 +4,6 @@ import styled from 'styled-components'
 
 const ItemUL = styled.div`
 	& > li{
-		border-top: 1px dashed #e5e5e5;
     &:first-child{
       border-top: none;
     }
@@ -12,17 +11,17 @@ const ItemUL = styled.div`
 `
 
 export default class extends React.Component {
-  constructor (props) {
-    super(props)
-  }
+	constructor (props) {
+		super(props)
+	}
 
-  render () {
+	render () {
   	return <ItemUL>
   		{this.props.items && this.props.items.map((item) => (
   			<li key={item.variantId}>
   				<Item serverTime={this.props.serverTime}
 			            overseasHandle={this.props.overseasHandle}
-            setQuantity={this.props.setQuantity}
+						setQuantity={this.props.setQuantity}
 			            localitem={this.props.localitem}
 			            disabledFunc={this.props.disabledFunc}
 			            quantityChange={this.props.quantityChange}
@@ -31,10 +30,10 @@ export default class extends React.Component {
 			            item={item}
 			            invalidItem={this.props.invalidItem}
 			            itemSelect={this.props.itemSelect}
-            combinatorialPromotionTitle={this.props.combinatorialPromotionTitle} />
+						combinatorialPromotionTitle={this.props.combinatorialPromotionTitle} />
   			</li>
   			))
   		}
   	</ItemUL>
-  }
+	}
 }

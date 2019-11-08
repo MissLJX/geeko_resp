@@ -24,6 +24,7 @@ const getUUID = () => {
 }
 
 const getWid = () => {
+	if(window.wid) return window.wid
 	var wid = ''
 	wid = Cookie.get('clientId')
 	if (!wid) {

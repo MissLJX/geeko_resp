@@ -1,6 +1,6 @@
 import axios from './apiconfigs'
-const VPATH = '/v8'
-export const getMessage = (code) => axios.get(`/message/get/${code}`)
+const VPATH = '/v9'
+export const getMessage = (code) => axios.get(`${VPATH}/message/get/${code}`)
 export const get = () => axios.get(`${VPATH}/shopping-cart/show?_=${new Date().getTime()}&payMethod=${window.token ? '1' : ''}`)
 export const selectAll = (select) => axios.get(`${VPATH}/shopping-cart/select-all?_=${new Date().getTime()}`, {select})
 export const select = (params) => axios.post(`${VPATH}/shopping-cart/select?_=${new Date().getTime()}`, params)
@@ -25,7 +25,16 @@ export const product2 = (id) => axios.get(`${VPATH}/product/anon/${id}/show2`)
 export const me = () => axios.get(`${VPATH}/customer/get`)
 export const changeCommunicationEmail = (transactionId, email) => axios.post('/order/anon/change-communication-email', {transactionId, email})
 
-export const mercadocards = () => axios.get(`${VPATH}/mercadopago/get-cards?_=${new Date().getTime()}`)
+export const mercadocards = () => {
+	if(window.__is_login__){
+		return axios.get(`${VPATH}/mercadopago/get-cards?_=${new Date().getTime()}`)
+	}else{
+		return Promise.resolve({
+			code: 200,
+			result: null
+		})
+	}
+}
 export const mercadopay = (params) => axios.post(`${VPATH}/mercadopago/pay`, params)
 export const useMercadocard = (cardId) => axios.get(`${VPATH}/mercadopago/use-card?cardId=${cardId}&_=${new Date().getTime()}`)
 export const addMercadoCard = (token) => axios.post(`${VPATH}/mercadopago/add-card`, {token})
@@ -35,13 +44,24 @@ export const mercadopay_order = (params) => axios.post(`${VPATH}/mercadopago/pay
 export const usePoint = (isopen) => axios.get(`${VPATH}/shopping-cart/set-point/${isopen}`)
 export const useInsurance = (isuse) => axios.get(`${VPATH}/shopping-cart/anon/${isuse}/update-insurance`)
 
-export const creditcards = (payMethod) => axios.get(`/quickpay-record/${payMethod}/history?_=${new Date().getTime()}`)
+export const creditcards = (payMethod) => {
+	if(window.__is_login__){
+		return axios.get(`/quickpay-record/${payMethod}/history?_=${new Date().getTime()}`)
+	}else{
+		return Promise.resolve({
+			code: 200,
+			result: null
+		})
+	}
+}
 export const creditpay = (params) => axios.post(`${VPATH}/pay/quickpay`, params)
 export const usecreditcard = (id) => axios.get(`/quickpay-record/${id}/use`)
 export const deletecreditcard = (id) => axios.get(`/quickpay-record/${id}/remove`)
 
-export const getpaypal = () => axios.get(`${VPATH}/paypal/anon/client-get-url`)
+export const getpaypal = () => axios.get(`${VPATH}/paypal2/anon/client-get-url`)
 export const paypalpay = (method) => axios.get(`${VPATH}/webpaypal/anon/pay`, {method})
+export const quickpaypal = () => axios.get(`${VPATH}/webpaypal/anon/quickpay`)
+export const normalpaypal = () => axios.get(`${VPATH}/paypal2/pay`)
 
 export const getcoupons = () => axios.get(`${VPATH}/coupon/anon/get-coupon-selections?_=${new Date().getTime()}`)
 export const usecoupon = (id) => axios.get(`${VPATH}/shopping-cart/anon/use-coupon/${id}`)
@@ -59,19 +79,37 @@ export const givingCoupon = () => axios.get(`${VPATH}/order/anon/giving`)
 export const atmPay = (paymentMethodId) => axios.post(`${VPATH}/money-transfer/pay`, {paymentMethodId})
 export const ticketPay = (paymentMethodId) => axios.post(`${VPATH}/cash/pay`, {paymentMethodId})
 
-export const getSafeCharge = () => axios.get('/safe-charge/get-pay-params')
+export const getSafeCharge = () => axios.get(`${VPATH}/safe-charge/get-pay-params`)
 
-export const getMultiMethodCards = (payMethods) => axios.get(`/quickpay-record/history-by-pay-methods?payMethods=${payMethods.join(',')}`)
+export const getMultiMethodCards = (payMethods) => {
+	if(window.__is_login__){
+		return axios.get(`/quickpay-record/history-by-pay-methods?payMethods=${payMethods.join(',')}`)
+	}else{
+		return Promise.resolve({
+			code: 200,
+			result: null
+		})
+	}
+}
 
-export const getApacPay = (params) => axios.get('/apacpay/get-pay-params', params)
+export const getApacPay = (params) => axios.get(`${VPATH}/apacpay/get-pay-params`, params)
 
-export const apacPay = (params) => axios.get('/apacpay/pay', params)
+export const apacPay = (params) => axios.get(`${VPATH}/apacpay/pay`, params)
 
-export const getDLocalPayLink = (params) => axios.get('/dlocal/get-pay-link', params)
+export const getDLocalPayLink = (params) => axios.get(`${VPATH}/dlocal/get-pay-link`, params)
 
 export const bindDLocal = (params) => axios.post(`${VPATH}/dlocal/bind-card`, params)
 export const payDLocal = (params) => axios.post(`${VPATH}/dlocal/pay`, params)
-export const getDCards = (params) => axios.get(`${VPATH}/dlocal/get-cards`, {...params, _: new Date().getTime()})
+export const getDCards = (params) => {
+	if(window.__is_login__){
+		return axios.get(`${VPATH}/dlocal/get-cards`, {...params, _: new Date().getTime()})
+	}else{
+		return Promise.resolve({
+			code: 200,
+			result: null
+		})
+	}
+}
 export const getDInstallments = (params) => axios.post(`${VPATH}/dlocal/get-installments-plans`, params)
 export const getDPaymethods = (payMethod) => axios.get(`${VPATH}/dlocal/get-payment-methods`, {payMethod})
 
@@ -112,3 +150,12 @@ export const getLookup = (referenceId, orderId) => axios.get(`${VPATH}/oceanpaym
  * @param {*} params 
  */
 export const oceanpay3d = (params) => axios.post(`${VPATH}/oceanpayment/pay-with-3d`, {...params, _: new Date().getTime()})
+
+
+
+
+/**
+ * 购物车不登录改造
+ */
+
+export const saveTempAddress = (address) => axios.post(`${VPATH}/pay/save-address`, address)

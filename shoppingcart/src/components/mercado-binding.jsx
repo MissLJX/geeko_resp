@@ -214,7 +214,7 @@ const MercadoBinding = class extends React.Component {
 		return <div style={{margin: 'auto', width: '80%', maxWidth: 300}}>
 			<Form id="mercadoform" ref={c => { this.form = c }} onSubmit={this.handleSubmit.bind(this)}>
 				<FormLayout>
-
+					{/* 
 					{
 						!this.props.exsiting && <StyledControl style={{display: 'none'}}>
 							<label>
@@ -224,9 +224,9 @@ const MercadoBinding = class extends React.Component {
 								name='email'
 								value={this.state.email}
 								onChange={this.handleInputChange}
-								validations={[required, email]}/>
+								validations={[email]}/>
 						</StyledControl>
-					}
+					} */}
 
 					<StyledControl>
 						<label>{intl.formatMessage({id: 'credit_card_number'})}*</label>

@@ -255,39 +255,12 @@ const Credit = class extends React.Component {
 			mercadopay({
 				token: response.id,
 				installments: this.props.mercadoinstallments
-			}).then(data => data.result).then(({success, transactionId, details, solutions, orderId}) => {
-				if (success) {
-					window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-				} else {
-					alert(details)
-					if (orderId) {
-						this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
-					}
-				}
-				this.setState({
-					checking: false
-				})
-			}).catch(({result}) => {
-				alert(result)
-				this.setState({
-					checking: false
-				})
-			})
+			}).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
 		}
 	}
 
-	getApacPay (payMethod, cpf, fail) {
-		getApacPay({payMethod, cpfNumber: cpf}).then(({result}) => {
-			const {isFree, transactionId, orderId} = result
-			if (isFree) {
-				window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-			} else {
-				storage.add('temp-order', orderId, 1 * 60 * 60)
-				submit(result)
-			}
-		}).catch(({result}) => {
-			fail(result)
-		})
+	getApacPay (payMethod, cpf) {
+		getApacPay({payMethod, cpfNumber: cpf}).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
 	}
 
 	showFrameHandle () {
@@ -315,12 +288,7 @@ const Credit = class extends React.Component {
 			this.setState({
 				checking: true
 			})
-			this.getApacPay(this.props.payMethod, this.props.cpf, (result) => {
-				alert(result)
-				this.setState({
-					checking: false
-				})
-			})
+			this.getApacPay(this.props.payMethod, this.props.cpf)
 		} else {
 			let _frame = this.getFrame()
 			this.setState({
@@ -483,31 +451,31 @@ const Credit = class extends React.Component {
 		this.setState({
 			checking: true
 		})
-		const { isTriggle } = params
-		const {cart, creditcards} = this.props
+		// const { isTriggle } = params
+		// const {cart, creditcards} = this.props
 
-		let card
-		if(creditcards && creditcards.length > 0){
-			card = creditcards.find( c => c.quickpayRecord.isSelected )
-		}
+		// let card
+		// if(creditcards && creditcards.length > 0){
+		// 	card = creditcards.find( c => c.quickpayRecord.isSelected )
+		// }
 
 		
-		if((isTriggle && cart.payMethod === '3') || (card && card.quickpayRecord.payMethod === '3')){
-			this.triggerOcean()
-		}else{
-			creditpay(params).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
-		}
+		// if((isTriggle && cart.payMethod === '3') || (card && card.quickpayRecord.payMethod === '3')){
+		// 	this.triggerOcean()
+		// }else{
+		creditpay(params).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
+		// }
 
 		
 	}
 
-	processCallBack({success, transactionId, details, solutions = '', orderId}){
-		if (success) {
+	processCallBack({isFree, success, transactionId, details, solutions = '', orderId}){
+		if (isFree ||success) {
 			window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
 		} else {
 			alert(details + '\n' + solutions)
 			this.refreshFrame()
-			if (orderId) {
+			if (orderId && window.__is_login__) {
 				this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
 			}
 		}
@@ -677,7 +645,7 @@ const Credit = class extends React.Component {
 				window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
 			} else {
 				alert(details)
-				if (orderId) {
+				if (orderId && window.window.__is_login__) {
 					this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
 				}
 			}
@@ -734,7 +702,7 @@ const Credit = class extends React.Component {
 			<SHOPPINGBODY>
 				<div className="__left">
 					<div>
-						<Link to={`${window.ctx || ''}${__route_root__}/`} style={{textDecoration: 'none', color: '#222'}}>
+						<Link to={`${window.ctx || ''}${__route_root__}/checkout`} style={{textDecoration: 'none', color: '#222'}}>
 							◀ {intl.formatMessage({id: 'back_to_cart'})}
 						</Link>
 						<div style={{marginTop: 10}}>

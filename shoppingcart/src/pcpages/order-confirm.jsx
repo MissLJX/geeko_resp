@@ -414,7 +414,9 @@ const OrderConfirm = class extends React.Component {
 			}
 			return <div>
 				<span dangerouslySetInnerHTML={{__html: message}}/> 
-				<Link style={{color: 'skyblue'}} to={`${this.props.match.url}/change-email`}>{communicationEmail}<Icon style={{marginLeft: 10, color: 'skyblue', cursor: 'pointer'}}>&#xe61f;</Icon></Link>
+
+				{window.__is_login__ && <Link style={{color: 'skyblue'}} to={`${this.props.match.url}/change-email`}>{communicationEmail}<Icon style={{marginLeft: 10, color: 'skyblue', cursor: 'pointer'}}>&#xe61f;</Icon></Link>}
+				{!window.__is_login__ && !window.__isnew && <span style={{color: 'skyblue'}}>{communicationEmail}</span>}
 				{window.__isnew && <div style={{marginTop: 15}}><Btn onClick={this.handleSetPassword.bind(this)}><FormattedMessage id="set_password"/></Btn></div>}
 			</div>
 		}

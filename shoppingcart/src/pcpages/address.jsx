@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import {refreshCart, fetchAddresses, updateAddress, changeLang} from '../store/actions.js'
 import { connect } from 'react-redux'
-import {addAddress, editAddress, paypalAddress} from '../api'
+import {addAddress, editAddress, paypalAddress, saveTempAddress} from '../api'
 import { FormElement, MutiElement} from '../components/pc/styled-control.jsx'
 import { Modal } from '../components/pc/modal.jsx'
 import {injectIntl} from 'react-intl'
@@ -25,107 +25,118 @@ const ADDRESSTITLE = styled.div`
 `
 
 const mapStateToProps = (state) => {
-  return {
-    cart: state.cart,
-    addresses: state.addresses,
-    addressUpdating: state.addressUpdating
-  }
+	return {
+		cart: state.cart,
+		addresses: state.addresses,
+		addressUpdating: state.addressUpdating
+	}
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-    REFRESH: () => {
-      dispatch(refreshCart())
-    },
-    GETADDRESSES: () => {
-      return dispatch(fetchAddresses())
-    },
-    UPDATINGADDRESS: (updating) => {
-      dispatch(updateAddress(updating))
-    },
-    CHANGELANG: (lang) => {
-      dispatch(changeLang(lang))
-    }
-  }
+	return {
+		REFRESH: () => {
+			dispatch(refreshCart())
+		},
+		GETADDRESSES: () => {
+			return dispatch(fetchAddresses())
+		},
+		UPDATINGADDRESS: (updating) => {
+			dispatch(updateAddress(updating))
+		},
+		CHANGELANG: (lang) => {
+			dispatch(changeLang(lang))
+		}
+	}
 }
 
 const Address = class extends React.Component {
-  constructor (props) {
-    super(props)
-    this.editAddress = this.editAddress.bind(this)
-  }
+	constructor (props) {
+		super(props)
+		this.editAddress = this.editAddress.bind(this)
+	}
 
-  close (evt) {
-    evt.preventDefault()
-    this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
-  }
+	close () {
+		let ischeckoutaddress = this.props.location.pathname && this.props.location.pathname.indexOf('/checkout/address') >= 0
+    
+		if(ischeckoutaddress){
+			this.props.history.replace(`${window.ctx || ''}${__route_root__}/checkout`)
+		}else{
+			this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
+		}
 
-  editAddress (address) {
-    this.props.UPDATINGADDRESS(true)
-    if (__address_token__) {
-      paypalAddress({...address, defaultAddress: true, id: this.props.cart.shippingDetail.id, token: __address_token__}).then(() => {
-        this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
-        this.props.UPDATINGADDRESS(false)
-        this.props.REFRESH()
-      }).catch(({result}) => {
-        alert(result)
-        this.props.UPDATINGADDRESS(false)
-      })
-    } else {
-      const sAddress = this.getAddress()
-      const addressOpreator = sAddress && this.props.match.params.id !== 'add' ? editAddress : addAddress
+	
+	}
 
-      addressOpreator({...address, defaultAddress: true, id: sAddress ? sAddress.id : null}).then(() => {
-        this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
-        if (address.country === 'BR') {
-          Cookie.set('currency', 'BRL', {expires: 365})
-          this.props.CHANGELANG('pt_BR')
-        } else if (address.country === 'MX') {
-          Cookie.set('currency', 'MXN', {expires: 365})
-          this.props.CHANGELANG('es_MX')
-        } else {
-          this.props.REFRESH()
-        }
+	editAddress (address) {
+		this.props.UPDATINGADDRESS(true)
+		if (__address_token__) {
+			paypalAddress({...address, defaultAddress: true, id: this.props.cart.shippingDetail.id, token: __address_token__}).then(() => {
+				this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
+				this.props.UPDATINGADDRESS(false)
+				this.props.REFRESH()
+			}).catch(({result}) => {
+				alert(result)
+				this.props.UPDATINGADDRESS(false)
+			})
+		} else {
+			const sAddress = this.getAddress()
+			let addressOpreator = sAddress && this.props.match.params.id !== 'add' ? editAddress : addAddress
+      
+			if(!window.__is_login__){
+				addressOpreator = saveTempAddress
+			}
 
-        this.props.UPDATINGADDRESS(false)
+			addressOpreator({...address, defaultAddress: true, id: sAddress ? sAddress.id : null}).then(() => {
+				this.close()
+				if (address.country === 'BR') {
+					Cookie.set('currency', 'BRL', {expires: 365})
+					this.props.CHANGELANG('pt_BR')
+				} else if (address.country === 'MX') {
+					Cookie.set('currency', 'MXN', {expires: 365})
+					this.props.CHANGELANG('es_MX')
+				} else {
+					this.props.REFRESH()
+				}
 
-        this.props.GETADDRESSES()
-      }).catch(({result}) => {
-        this.props.UPDATINGADDRESS(false)
-        alert(result)
-      })
-    }
-  }
+				this.props.UPDATINGADDRESS(false)
 
-  getAddress () {
-    const { match, cart, addresses } = this.props
-    if (match.params.id === 'add') {
-      return null
-    } else if (match.params.id && addresses) {
-      return addresses.find(a => a.id === match.params.id)
-    }
+				this.props.GETADDRESSES()
+			}).catch(({result}) => {
+				this.props.UPDATINGADDRESS(false)
+				alert(result)
+			})
+		}
+	}
 
-    return cart ? cart.shippingDetail : null
-  }
+	getAddress () {
+		const { match, cart, addresses } = this.props
+		if (match.params.id === 'add') {
+			return null
+		} else if (match.params.id && addresses) {
+			return addresses.find(a => a.id === match.params.id)
+		}
 
-  render () {
-    const { intl, cart } = this.props
-    const { validate } = this.props.location.state || {}
+		return cart ? cart.shippingDetail : null
+	}
 
-    const address = this.getAddress()
+	render () {
+		const { intl, cart } = this.props
+		const { validate } = this.props.location.state || {}
 
-    return <Modal onClose={this.close.bind(this)}>
-      <ADDRESSBODY>
-        <ADDRESSTITLE>
-          { intl.formatMessage({id: 'shipping_address'}) }
-        </ADDRESSTITLE>
-        <div style={{marginTop: 25}}>
-          <AddressFrom needInitValidate={validate} updating={this.props.addressUpdating} address={address} editAddress={this.editAddress} showCancel={true} onCancel={this.close.bind(this)}/>
-        </div>
+		const address = this.getAddress()
 
-      </ADDRESSBODY>
-    </Modal>
-  }
+		return <Modal onClose={this.close.bind(this)}>
+			<ADDRESSBODY>
+				<ADDRESSTITLE>
+					{ intl.formatMessage({id: 'shipping_address'}) }
+				</ADDRESSTITLE>
+				<div style={{marginTop: 25}}>
+					<AddressFrom needInitValidate={validate} updating={this.props.addressUpdating} address={address} editAddress={this.editAddress} showCancel={true} onCancel={this.close.bind(this)}/>
+				</div>
+
+			</ADDRESSBODY>
+		</Modal>
+	}
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(Address))

@@ -43,5 +43,10 @@ export default {
   order_status_refunded: '已退款',
   order_status_held: '冻结',
   count_items: '{count} 件物品',
-  ordertotal: '订单金额'
+  ordertotal: '订单金额',
+  rate: '评价',
+  satisfied: '满意',
+  unsatisfied: '不满意',
+  you_can_rate: '这里写评价',
+  please_rate: '请给我评价'
 }

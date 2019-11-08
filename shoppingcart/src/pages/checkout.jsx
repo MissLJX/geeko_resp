@@ -876,16 +876,16 @@ const Checkout = class extends React.Component {
 	}
 
 	payCredit(params) {
-		const { creditcards } = this.props
-		let card
-		if(creditcards && creditcards.length > 0){
-			card = creditcards.find( c => c.quickpayRecord.isSelected )
-		}
-		if(card && card.quickpayRecord.payMethod === '3'){
-			this.triggerOcean()
-		}else{
-			checkout_credit(params).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
-		}
+		// const { creditcards } = this.props
+		// let card
+		// if(creditcards && creditcards.length > 0){
+		// 	card = creditcards.find( c => c.quickpayRecord.isSelected )
+		// }
+		// if(card && card.quickpayRecord.payMethod === '3'){
+		// 	this.triggerOcean()
+		// }else{
+		checkout_credit(params).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
+		// }
 	}
 
 	creditClose() {

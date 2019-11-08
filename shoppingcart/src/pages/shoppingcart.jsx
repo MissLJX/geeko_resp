@@ -29,7 +29,7 @@ import Mask from '../components/mask.jsx'
 import _ from 'lodash'
 import PayMethodList from '../components/msite/paymethod-list.jsx'
 import { BigButton } from '../components/msite/buttons.jsx'
-import { payDLocal, useMercadocard, mercadopay, usePoint, useInsurance, creditpay, paypalpay, usecreditcard, movetooverseas, getMessage, placepaypal, givingCoupon, atmPay, ticketPay, getSafeCharge, getApacPay, apacPay, useMercadoCoupon, placeorder,
+import { payDLocal, useMercadocard, mercadopay, usePoint, useInsurance, creditpay, normalpaypal, quickpaypal, usecreditcard, movetooverseas, getMessage, placepaypal, givingCoupon, atmPay, ticketPay, getSafeCharge, getApacPay, apacPay, useMercadoCoupon, placeorder,
 	getJwt,
 	getLookup,
 	oceanpay3d } from '../api'
@@ -182,7 +182,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		INIT: () => {
-			dispatch(fetchAll())
+			return dispatch(fetchAll())
 		},
 		REFRESHCART: (cart) => {
 			dispatch(refreshCart(cart))
@@ -318,7 +318,14 @@ const ShoppingCart = class extends React.Component {
 	}
 
 	componentDidMount() {
-		this.props.INIT()
+		this.props.INIT().then(() => {
+			var { cart } = this.props
+			if(cart){
+				if(window.enterCart){
+					window.enterCart(cart)
+				}
+			}
+		})
 		this.props.FETCHCOUPONS()
 		window.addEventListener('scroll', this.scrollhandle, false)
 
@@ -406,7 +413,7 @@ const ShoppingCart = class extends React.Component {
 		event.preventDefault()
 		const { payMethod, cart, paypal, payType } = this.props
 		const { shippingDetail } = cart
-
+		const isRequireEmail = !window.__is_login__ && !window.token && this.props.location.pathname && this.props.location.pathname.indexOf('/cart/checkout') >= 0
 		
 
 		if (!cart.shippingDetail) {
@@ -420,7 +427,7 @@ const ShoppingCart = class extends React.Component {
 			return
 		}
 
-		if (shippingDetail.country && shippingDetail.country.value === 'BR' && !shippingDetail.cpf) {
+		if (shippingDetail.country && shippingDetail.country.value === 'BR' && !shippingDetail.cpf || (isRequireEmail && !shippingDetail.email) || !shippingDetail.phoneNumber) {
 			const path = {
 				pathname: `${window.ctx || ''}${__route_root__}/address`,
 				state: {
@@ -493,7 +500,7 @@ const ShoppingCart = class extends React.Component {
 			this.setState({
 				paypaling: true
 			})
-			paypalpay('normal').then(data => data.result).then(({ TOKEN, success, transactionId, orderId, ACK, L_LONGMESSAGE0 }) => {
+			normalpaypal().then(data => data.result).then(({ TOKEN, success, transactionId, orderId, ACK, L_LONGMESSAGE0 }) => {
 				if (success && transactionId && !TOKEN) {
 					window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
 					return
@@ -565,27 +572,7 @@ const ShoppingCart = class extends React.Component {
 			})
 
 			// ticketPay(this.props.ticketMethod).then(({result}) => {
-			ticketPay('oxxo').then(({ result }) => {
-				const { transactionId, success, details, orderId } = result
-
-				if (success) {
-					window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-				} else {
-					alert(details)
-					if (orderId) {
-						this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
-					}
-				}
-
-				this.setState({
-					checking: false
-				})
-			}).catch(data => {
-				alert(data.result)
-				this.setState({
-					checking: false
-				})
-			})
+			ticketPay('oxxo').then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
 		} else if (payType === '11') {
 			this.setState({
 				checking: true
@@ -593,12 +580,7 @@ const ShoppingCart = class extends React.Component {
 
 			if (payMethod === '23') {
 				const { cpf } = this.props
-				this.apacPay(payMethod, cpf, (result) => {
-					this.setState({
-						checking: false
-					})
-					alert(result)
-				})
+				this.apacPay(payMethod, cpf)
 
 
 			} else {
@@ -655,27 +637,8 @@ const ShoppingCart = class extends React.Component {
 			this.setState({
 				checking: true
 			})
-			payDLocal({ payMethod, paymentMethodId: 'BL' }).then(data => data.result).then(({ transactionId, success, details, orderId }) => {
-				if (success) {
+			payDLocal({ payMethod, paymentMethodId: 'BL' }).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
 
-					window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-
-				} else {
-					alert(details)
-					if (orderId) {
-						this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
-					}
-				}
-
-				this.setState({
-					checking: false
-				})
-			}).catch(data => {
-				alert(data.result)
-				this.setState({
-					checking: false
-				})
-			})
 		} else if (payType === '14' || payType === '15' || payType === '16' || payType === '17' || payType === '18' || payType === '19' || payType === '20' || payType === '21' || payType === '22' || payType === '23' || payType === '24' || payType === '25') {
 
 			const paymentMethodId = this.getTcMethod()
@@ -699,27 +662,7 @@ const ShoppingCart = class extends React.Component {
 				checking: true
 			})
 
-			payDLocal({ payMethod, paymentMethodId, document: this.props.document }).then(data => data.result).then(({ transactionId, success, details, orderId }) => {
-				if (success) {
-
-					window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-
-				} else {
-					alert(details)
-					if (orderId) {
-						this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
-					}
-				}
-
-				this.setState({
-					checking: false
-				})
-			}).catch(data => {
-				alert(data.result)
-				this.setState({
-					checking: false
-				})
-			})
+			payDLocal({ payMethod, paymentMethodId, document: this.props.document }).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
 		}
 
 
@@ -768,26 +711,8 @@ const ShoppingCart = class extends React.Component {
 		})
 	}
 
-	apacPay(payMethod, cpf, fail) {
-		apacPay({ payMethod, cpfNumber: cpf }).then(({ result }) => {
-			const { isFree, orderId, transactionId, success, details } = result
-			if (isFree) {
-				window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-			} else {
-				if (success) {
-
-					window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-
-				} else {
-					if (orderId) {
-						this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
-					}
-					fail(details)
-				}
-			}
-		}).catch(({ result }) => {
-			fail(result)
-		})
+	apacPay(payMethod, cpf) {
+		apacPay({ payMethod, cpfNumber: cpf }).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
 	}
 
 	quickPaypal(evt) {
@@ -797,7 +722,7 @@ const ShoppingCart = class extends React.Component {
 			paypaling: true
 		})
 
-		paypalpay('quick').then(data => data.result).then(({ TOKEN, ACK, L_LONGMESSAGE0 }) => {
+		quickpaypal().then(data => data.result).then(({ TOKEN, ACK, L_LONGMESSAGE0 }) => {
 			if (ACK === 'Failure') {
 				alert(L_LONGMESSAGE0)
 				this.setState({
@@ -1199,14 +1124,16 @@ const ShoppingCart = class extends React.Component {
 		payDLocal(params).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
 	}
 
-	processCallBack({ success, transactionId, details, orderId, solutions = '' }){
-		if (success) {
+	processCallBack({ isFree, success, transactionId, details, orderId, solutions = '' }){
+		if (isFree) {
+			window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
+		}else if (success) {
 
 			window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
 
 		} else {
 			alert(details + '\n' + solutions)
-			if (orderId) {
+			if (orderId && window.__is_login__) {
 				this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
 			}
 		}
@@ -1223,18 +1150,18 @@ const ShoppingCart = class extends React.Component {
 	}
 
 	payCredit(params) {
-		const {creditcards} = this.props
+		// const {creditcards} = this.props
 
-		let card
-		if(creditcards && creditcards.length > 0){
-			card = creditcards.find( c => c.quickpayRecord.isSelected )
-		}
+		// let card
+		// if(creditcards && creditcards.length > 0){
+		// 	card = creditcards.find( c => c.quickpayRecord.isSelected )
+		// }
 
-		if(card && card.quickpayRecord.payMethod === '3'){
-			this.triggerOcean()
-		}else{
-			creditpay(params).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
-		}
+		// if(card && card.quickpayRecord.payMethod === '3'){
+		// 	this.triggerOcean()
+		// }else{
+		creditpay(params).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
+		// }
 		
 	}
 
@@ -1478,9 +1405,11 @@ const ShoppingCart = class extends React.Component {
 		let tcMethod
 
 
-		let country, formatedData, invalidItems, cancheckout, hasLocalItems, sendCouponMessage, couponcountdown, totalCount = 0, hasOverseas, hasQuickPay
+		let isprogresspage, country, formatedData, invalidItems, cancheckout, hasLocalItems, sendCouponMessage, couponcountdown, totalCount = 0, hasOverseas, hasQuickPay
 
 		if (cart) {
+			isprogresspage = !window.token && (window.__is_login__ || (cart && cart.shippingDetail) || (this.props.location.pathname && this.props.location.pathname.indexOf('/cart/checkout') >= 0))
+
 			formatedData = this.formatData(cart)
 			invalidItems = formatedData.invalidItems
 			sendCouponMessage = cart.sendCouponMessage
@@ -1540,6 +1469,7 @@ const ShoppingCart = class extends React.Component {
 
 		const TipModal = sitename === 'bellewholesale' ? BottomTip : Tip
 
+
 		return loading ? <Loading /> : (empty ? <Empty /> : (
 			cart && (
 				<div style={{ opacity: this.props.refreshing ? 0.9 : 1 }}>
@@ -1575,7 +1505,7 @@ const ShoppingCart = class extends React.Component {
 					<Boxs>
 						{
 							cart.shippingDetail ? (
-								(window.__is_login__ || window.token) && <Box style={{ position: 'relative' }}>
+								(isprogresspage || window.token) && <Box style={{ position: 'relative' }}>
 									<BoxBody>
 										<div className="x-fw x-table __vm">
 											<div className="x-cell">
@@ -1593,7 +1523,7 @@ const ShoppingCart = class extends React.Component {
 									<DashedLine />
 								</Box>
 							) : (
-								window.__is_login__ && <Box style={{ position: 'relative' }}>
+								isprogresspage && <Box style={{ position: 'relative' }}>
 									<BoxClickHead title={intl.formatMessage({ id: 'address' })} single={true}>
 										<Grey>
 											<Link style={{ color: '#222', textDecoration: 'none' }} to={`${window.ctx || ''}${__route_root__}/address`}>
@@ -1645,6 +1575,7 @@ const ShoppingCart = class extends React.Component {
 						{
 							hasOverseas && formatedData.overseasDelivery && <Box>
 								<PromotionGroup
+									isShippingHead={!!cart.shippingDetail && (isprogresspage || window.token)}
 									group={formatedData.overseasDelivery}
 									quantityChange={this.quantityChange.bind(this)}
 									itemEdit={this.itemEdit}
@@ -1686,7 +1617,7 @@ const ShoppingCart = class extends React.Component {
 
 							<LineBox style={{ paddingLeft: 10, paddingRight: 10 }}>
 								{
-									cart.shippingInsurancePrice2 && (
+									cart.shippingInsurancePrice2 && cart.shippingDetail && (isprogresspage || window.token) && (
 										<TurnTool ignoreButton={cart.isShippingInsuranceMust} open={this.openInsurance.bind(this)} turnAcitve={cart.insurance}>
 											<span style={{ fontSize: 15 }}>
 												<FormattedMessage id="add_shipping_insurance" values={{ price: <Red><Money money={cart.shippingInsurancePrice2} /></Red> }} />
@@ -1709,7 +1640,7 @@ const ShoppingCart = class extends React.Component {
 						</Box>
 
 						{
-							window.__is_login__ && (
+							isprogresspage && (
 								<Box innerRef={c => { this.$paylistdom = c }}>
 									<BoxHead title={intl.formatMessage({ id: 'payment_method' })} />
 									<div style={{ paddingLeft: 10, paddingRight: 10 }}>
@@ -1775,7 +1706,7 @@ const ShoppingCart = class extends React.Component {
 						</Box>
 
 						{
-							window.__is_login__ ? (
+							isprogresspage ? (
 								<Box>
 									<div style={{ height: (sitename === 'bellewholesale' ? 140 : 90) }}>
 
@@ -1862,11 +1793,7 @@ const ShoppingCart = class extends React.Component {
 													hasQuickPay ? <DoubleBtn className="x-flex __between">
 														<div>
 															<BigButton onClick={() => {
-																window.location.href = `${window.ctx}/${
-																	/*global siteType b:true */
-																	/*eslint no-undef: "error"*/
-																	siteType === 'new' ? 'page' : 'i'
-																}/login?redirectUrl=${encodeURIComponent(window.location.href)}`
+																this.props.history.push(`${window.ctx || ''}${__route_root__}/address`)
 															}} className="__btn" height={47} bgColor="#222">
 																{intl.formatMessage({ id: 'check_out' })} ({totalCount})
 															</BigButton>
@@ -1875,7 +1802,7 @@ const ShoppingCart = class extends React.Component {
 															<PaypalBtn onClick={this.quickPaypal.bind(this)}><img src={cart.paypalButtonImage} /></PaypalBtn>
 														</div>
 													</DoubleBtn> : <div>
-														<BigButton onClick={() => { window.location.href = `${window.ctx}/${siteType === 'new' ? 'page' : 'i'}/login?redirectUrl=${encodeURIComponent(window.location.href)}` }} className="__btn" height={47} bgColor="#222">
+														<BigButton onClick={() => {this.props.history.push(`${window.ctx || ''}${__route_root__}/address`)}} className="__btn" height={47} bgColor="#222">
 															{intl.formatMessage({ id: 'check_out' })} ({totalCount})
 														</BigButton>
 													</div>
