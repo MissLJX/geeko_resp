@@ -4,8 +4,8 @@ const PAGE_COLLECTION_URL = isNew ? '/page/collection/products?id=' : '/i/collec
 const PAGE_PRODUCT_URL =  isNew ? '/page/product?productId=' : '/i/product_detail?productId='
 const PAGE_EARLY_BIRD = isNew? '/page/pre-order' : '/i/early-bird'
 const PAGE_FLASH = isNew ? '/page/sale': '/i/flash/products'
-const PAGE_NEW = isNew? '': '/i/new-arrivals'
-const PAGE_TRENDING = isNew? '/page/flash-sale': '/i/trending-now'
+const PAGE_NEW = isNew? '/page/new-in': '/i/new-arrivals'
+const PAGE_TRENDING = isNew? '/page/trending-now': '/i/trending-now'
 const PAGE_CATEGORY = isNew? '/page/category/products?id=': '/i/category/products?categoryId='
 
 export default ( deepLink ) => {
