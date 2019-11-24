@@ -6,6 +6,9 @@
         <div class="detailHd" v-if="method==='ordertracking'">
             <p style="text-transform:capitalize"><span @click="window.location.href = '/'">{{$t('home')}}</span><a href = "/fs/shipping-guid">> Order Tracking</a> > {{$t('trackinfo')}}</p>
         </div>
+        <div class="detailHd" v-if="method==='ordercode'">
+            <p style="text-transform:capitalize"><span @click="window.location.href = '/'">{{$t('home')}}</span><span  @click="$router.back(-1)">> Order Detail</span> > {{$t('trackinfo')}}</p>
+        </div>
         <div class="detailCon">
             <h2>{{$t('trackinfo')}}</h2>
             <ul v-if="logistics && logistics.packages" class="packageTab">

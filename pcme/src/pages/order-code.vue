@@ -1,8 +1,5 @@
 <template>
     <div class="datail">
-        <div class="detailHd">
-            <p style="text-transform:capitalize"><span @click="window.location.href = '/'">{{$t('home')}}</span><router-link to="/me/m"> > {{$t('me')}}</router-link><router-link to="/me/m/order"> > {{$t('myorders')}}</router-link> > {{$t('detail')}}</p>
-        </div>
         <div class="detailCon">
             <h2>{{$t('detail')}}</h2>
             <h4>{{$t('shippinginfo')}}</h4>
@@ -50,7 +47,6 @@
                     <td></td>
                     <td>{{$t('Qty')}}</td>
                     <td>{{$t('price')}}</td>
-                    <td><p @click="showTicket(orderdetail.id)"><i class="iconfont">&#xe716;</i><a>{{$t('contactseller')}}</a></p></td>
                 </tr>
                 <tr v-for="(item,key) in orderpro.products">
                     <td>
@@ -67,14 +63,6 @@
                     <td>
                         <p class="price">{{realprice(item.price)}}</p>
                     </td>
-                    <td>
-                        <div v-if="confirmedOrder" class="review-btn" :class="{'b-btn':confirmedOrder,'black':shippedOrder || processingOrder}">
-                            <span  @click="review(item.productId)">{{$t('review')}}</span>
-                        </div>
-                        <div @click="addProduct(item.variantId)" v-if="item.variantId && orderdetail.status===4" class="review-btn">
-                            <span>{{$t("repurchase")}}</span>
-                        </div>
-                    </td>
                 </tr>
             </table>
             <div class="pricecon">
@@ -86,58 +74,8 @@
                 </div>
             </div>
             <div class="actionbtn">
-                <div class="r-btn" :class="{'b-btn':confirmedOrder,'black':shippedOrder || processingOrder}" v-if="shippedOrder || orderdetail.isCanCanceled || (orderdetail.id && orderdetail.status===4)">
-                    <span v-if="shippedOrder" @click="() => {this.isConfirmAlert = true}">{{$t('confirmorder')}}</span>
-                    <span v-if="orderdetail.isCanCanceled" @click="() => {this.isAlert = true}">{{$t('cancelorder2')}}</span>
-                    <span @click="addProducts(orderdetail.orderItems)" v-if="orderdetail.id && orderdetail.status===4">{{$t("repurchase")}}</span>
-                </div>
-                <div class="r-btn black" v-if="orderdetail.hasReturnLabel">
-                    <a :href="getReturnLabel()">{{$t('returnlabel')}}</a>
-                </div>
                 <div class="r-btn w-btn" v-if="orderdetail.id && (orderdetail.status===2 || orderdetail.status===3) ">
                     <span  @click="checkLogistics(orderdetail.id)">{{$t('track')}}</span>
-                </div>
-            </div>
-            <select-order v-if="isShowSelect" v-on:closeSelect="closeSelect1" v-on:showTicket="showTicket"></select-order>
-            <order-ticket  v-if="isShowTicket" v-on:closeSelect="closeSelect1" v-on:selectOrder="selectorder"></order-ticket>
-
-            <div v-if="getBtnText==='Imprimir boleto' && orderdetail.status == 0 && orderoffset >= 0 && couponshow && getPayUrl">
-                <div class="mask"></div>
-                <div class="coupon-window">
-                    <span class="coupon-close" @click="() => {this.couponshow = false}"><i class="iconfont">&#xe69a;</i></span>
-                    <div>
-                        <div class="white top-line">
-                            <h2>Atenção</h2>
-                            <img src="https://dgzfssf1la12s.cloudfront.net/upgrade/20180529/001.png">
-                        </div>
-                        <div class="middle-line">
-                            <img src="https://dgzfssf1la12s.cloudfront.net/upgrade/20180529/002.png">
-                        </div>
-                        <div class="white bottom-line">
-                            <p>O cupom de <span class="fc-r">15%</span> de desconto será enviado para sua conta após o pagamento. Não perca</p>
-                            <a  class="blackbtn" :href="getPayUrl">Pague agora</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div v-if="(getBtnText==='Generar Ticket' || getBtnText==='Gerar Ticket') && orderdetail.status === 0 && orderoffset >= 0 && couponshow && getPayUrl">
-                <div class="mask"></div>
-                <div class="coupon-window">
-                    <span class="coupon-close" @click="() => {this.couponshow = false}"><i class="iconfont">&#xe69a;</i></span>
-                    <div>
-                        <div class="white top-line">
-                            <h2>Atención</h2>
-                            <img src="https://dgzfssf1la12s.cloudfront.net/upgrade/20180529/001.png">
-                        </div>
-                        <div class="middle-line">
-                            <img src="https://dgzfssf1la12s.cloudfront.net/upgrade/20180529/002.png">
-                        </div>
-                        <div class="white bottom-line">
-                            <p>Después de realizar el pago, recibirás un cupón de regalo con un <span class="fc-r">15%</span> de descuento para tu siguiente compra.</p>
-                            <a  class="blackbtn" :href="getPayUrl">Pague ahora</a>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -430,7 +368,7 @@
                 }
             },
             checkLogistics(orderid){
-                this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/logistics-detail', query: { orderid: orderid , method: 'orderlist' } })
+                this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/logistics-detail', query: { orderid: orderid , method: 'ordercode' } })
             },
             checkoutUrl(id){
                 if(id){
@@ -479,12 +417,12 @@
                 return "/product/"+product.name+"/"+product.sku+"/"+product.productId+".html"
             },
             getReturnLabel(){
-                window.recordReturnLabel(this.orderdetail.id);
+
                 return document.ctx + "/v9/order/report-return-label?orderId="+this.orderdetail.id ;
             }
         },
         created(){
-            this.$store.dispatch('getOrder',this.$route.params.orderId).then(()=>{
+            this.$store.dispatch('getOrderByCode',this.$route.params.code).then(()=>{
                 this.order = this.orderdetail
                 this.orderpro = _.cloneDeep(this.orderdetail.logistics.packages[0])
                 this.shipping = this.orderdetail.shippingDetail
@@ -493,9 +431,7 @@
                 this.isloding = false
             }).catch((e) => {
                 console.error(e);
-               /* window.location.href='/me/m/order'*/
             })
-            this.$store.dispatch('getCancelOrderReason')
         }
     }
 </script>
