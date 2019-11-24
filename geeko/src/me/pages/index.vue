@@ -352,27 +352,27 @@
                 return this.orderCountUnpaid ? `${this.$t('label.unpaid')}(${this.orderCountUnpaid})` : ''
             },
             background() {
-                if (site === 'chicme') {
+                if (window.name === 'chicme') {
                     return 'url("https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/chicme/msite_bg.jpg")';
-                } else if (site === 'ivrose') {
+                } else if (window.name === 'ivrose') {
                     return '#e9546b';
                 } else {
                     return '#337ab7';
                 }
             },
             background_float() {
-                if (site === 'chicme') {
+                if (window.name === 'chicme') {
                     return '';
-                } else if (site === 'ivrose') {
+                } else if (window.name === 'ivrose') {
                     return '#e9546b';
                 } else {
                     return '#337ab7';
                 }
             },
             baseHeaderUrl() {
-                if (site === 'chicme') {
+                if (window.name === 'chicme') {
                     return 'https://dgzfssf1la12s.cloudfront.net/site/pc/icon35.png';
-                } else if (site === 'ivrose') {
+                } else if (window.name === 'ivrose') {
                     return 'https://dgzfssf1la12s.cloudfront.net/site/ivrose/icon47.png';
                 } else {
                     return 'https://dgzfssf1la12s.cloudfront.net/site/bouti/logo02.png';

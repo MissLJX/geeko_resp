@@ -30,7 +30,7 @@
                 'me'
             ]),
             sitename(){
-                return site
+                return window.name
             }
         },
         methods:{
