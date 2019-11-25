@@ -1419,7 +1419,7 @@ const ShoppingCart = class extends React.Component {
 			hasOverseasHead = hasOverseas && hasLocalItems
 			fullSelected = this.getFullSelected()
 
-			hasQuickPay = cart.payMethodList && cart.payMethodList.length && cart.payMethodList.find( m => m.id === '1')
+			hasQuickPay = cart.isSupportPaypal
 
 			tcMethod = this.getTcMethod()
 		}

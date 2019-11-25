@@ -1420,7 +1420,7 @@ const ShoppingCart = class extends React.Component {
 
 			let validateOverseasItems = this.getValidItems(cart.shoppingCartProductsByOverseas)
 			hasOverseas = validateOverseasItems && validateOverseasItems.length > 0
-			hasQuickPay = cart.payMethodList && cart.payMethodList.length && cart.payMethodList.find(m => m.id === '1')
+			hasQuickPay = cart.isSupportPaypal
 
 			country = this.props.cart.shippingDetail && this.props.cart.shippingDetail.country ? this.props.cart.shippingDetail.country.value : window.__country
 			tcMethod = this.getTcMethod()
