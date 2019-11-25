@@ -15,8 +15,18 @@ const instance = axios.create({
 /*        accessToken: '6f216d89-05df-47d2-b8f9-e7b92ec251ff',*/
         appVersion: utils.APP_VERSION,
         countryCode: utils.getCountry(),
-        wid: utils.getWid()
+        wid: utils.getWid(),
+        deviceType: 'msite',
+        xtoken: window.secret || ''
     }
+})
+
+const reRequest = () => instance.get('/context/anon/gat', {}, []).then((res) => {
+    window.xtoken = res.data.result
+    instance.defaults.headers.common['xtoken'] = window.xtoken
+    return window.xtoken
+}).catch(() => {
+    window.location.reload()
 })
 
 
@@ -37,7 +47,16 @@ export default {
                 params,
                 headers
             }).then((res) => {
-                apiResult(res, resolve, reject)
+                if (res.data.code === 310) {
+                    reRequest().then((res) => {
+                    this.get(url, params, headers)
+                }).catch((e) => {
+                    console.error(e)
+                    reject(e)
+                })
+                } else {
+                    apiResult(res, resolve, reject)
+                }
             }).catch((e) => {
                 console.error(e)
                 reject(e)
@@ -49,7 +68,16 @@ export default {
             instance.post(url, data, {
                 headers: {...headers}
             }).then((res) => {
-                apiResult(res, resolve, reject)
+                if (res.data.code === 310) {
+                    reRequest().then((res) => {
+                    this.post(url, data, headers)
+                }).catch((e) => {
+                    console.error(e)
+                    reject(e)
+                })
+                } else {
+                    apiResult(res, resolve, reject)
+                }
             }).catch((e) => {
                 console.error(e)
                 reject(e)
