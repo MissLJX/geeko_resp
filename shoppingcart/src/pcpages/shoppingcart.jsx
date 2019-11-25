@@ -1419,6 +1419,7 @@ const ShoppingCart = class extends React.Component {
 			hasOverseasHead = hasOverseas && hasLocalItems
 			fullSelected = this.getFullSelected()
 
+			//是否显示快捷支付按钮
 			hasQuickPay = cart.isSupportPaypal
 
 			tcMethod = this.getTcMethod()
