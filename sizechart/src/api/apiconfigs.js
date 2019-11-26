@@ -8,6 +8,8 @@ const instance = axios.create({
         appVersion: '3.5.7',
         /*countryCode: 'US',*/
         wid: '1234567u8i9956789456',
+        deviceType: 'pc',
+        xtoken: window.secret || ''
     }
 })
 
@@ -22,6 +24,14 @@ const apiResult = function (res, resolve, reject) {
 }
 
 
+const reRequest = () => instance.get('/context/anon/gat', {}, []).then((res) => {
+    window.xtoken = res.data.result
+    instance.defaults.headers['xtoken'] = window.xtoken
+    return window.xtoken
+}).catch(() => {
+    window.location.reload()
+})
+
 export default {
     get(url, params, headers = []){
         return new Promise((resolve, reject) => {
@@ -29,7 +39,17 @@ export default {
                 params,
                 headers
             }).then((res) => {
-                apiResult(res, resolve, reject)
+                if (res.data.code === 310) {
+                    reRequest().then((res) => {
+                        this.get(url, params, headers)
+                    }).catch((e) => {
+                        console.error(e)
+                        reject(e)
+                    })
+                } else {
+                    apiResult(res, resolve, reject)
+                }
+
             }).catch((e) => {
                 console.error(e)
                 reject(e)
@@ -41,7 +61,16 @@ export default {
             instance.post(url, data, {
                 headers: {...headers}
             }).then((res) => {
-                apiResult(res, resolve, reject)
+                if (res.data.code === 310) {
+                    reRequest().then((res) => {
+                        this.get(url, params, headers)
+                    }).catch((e) => {
+                        console.error(e)
+                        reject(e)
+                    })
+                } else {
+                    apiResult(res, resolve, reject)
+                }
             }).catch((e) => {
                 console.error(e)
                 reject(e)
