@@ -25,105 +25,112 @@ const PASSWORD_BODY = styled.div`
 `
 
 const mapStateToProps = (state) => {
-  return {
-    me: state.me
-  }
+	return {
+		me: state.me
+	}
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-    REFRESHME: () => {
-      dispatch(fetchMe())
-    }
-  }
+	return {
+		REFRESHME: () => {
+			dispatch(fetchMe())
+		}
+	}
 }
 
 const SetPassword = class extends React.Component {
-  constructor (props) {
-    super(props)
-    this.close = this.close.bind(this)
-    this.handleInputChange = this.handleInputChange.bind(this)
-    this.state = {
-      password: null,
-      confirm: null,
-      updating: false
-    }
-  }
+	constructor (props) {
+		super(props)
+		this.close = this.close.bind(this)
+		this.handleInputChange = this.handleInputChange.bind(this)
+		this.state = {
+			password: null,
+			confirm: null,
+			updating: false
+		}
+	}
 
-  close (evt) {
-    evt.preventDefault()
-    this.props.history.goBack()
-  }
+	close (evt) {
+		evt.preventDefault()
+		this.props.history.goBack()
+	}
 
-  handleInputChange (event) {
-    const target = event.target
-    let value = target.type === 'checkbox' ? target.checked : target.value
-    const name = target.name
-    this.setState({
-      [name]: value
-    })
-  }
+	handleInputChange (event) {
+		const target = event.target
+		let value = target.type === 'checkbox' ? target.checked : target.value
+		const name = target.name
+		this.setState({
+			[name]: value
+		})
+	}
 
-  handleSubmit (evt) {
-    evt.preventDefault()
-    this.form.validateAll()
-    if (!this.passwordBtn.context._errors || !this.passwordBtn.context._errors.length) {
-      changepassword(this.state.password).then(() => {
-        window.location.href = `${window.ctx || ''}/me/m/order`
-      })
-    }
-  }
+	handleSubmit (evt) {
+		evt.preventDefault()
+		this.form.validateAll()
+		if (!this.passwordBtn.context._errors || !this.passwordBtn.context._errors.length) {
+			changepassword(this.state.password).then(() => {
 
-  render () {
-    const { intl, me } = this.props
+				if(siteType === 'new'){
+					window.location.href = `${window.ctx || ''}/page/login?redirectUrl=${window.ctx || ''}/me/m/order&loginPage=1`
+				}else{
+					window.location.href = `${window.ctx || ''}/i/login?redirectUrl=${window.ctx || ''}/me/m/order`
+				}
 
-    return <Modal onClose={this.close.bind(this)}>
-      <PASSWORD_BODY>
-        <div style={{paddingTop: 10}}>
-          <div>
-            <span>{intl.formatMessage({id: 'account'})}: </span>
-            <Red>{me ? me.communicationEmail : ''}</Red>
-          </div>
-          <Form style={{marginTop: 10}} ref={ c => this.form = c } onSubmit={ this.handleSubmit.bind(this) }>
-            <ELEMENTS>
-              <FormElement label={`${intl.formatMessage({id: 'set_password'})}:`} className="__required">
-                <Input
-                  name='password'
-                  type="password"
-                  style= {{width: '100%', height: 40}}
-                  value={this.state.password}
-                  onChange={this.handleInputChange}
-                  validations={[required]}/>
-              </FormElement>
+				
+			})
+		}
+	}
 
-              <FormElement>
-                {
-                  this.state.updating ? <BigButton className="__btn" height={40} bgColor="#999">
-                    {intl.formatMessage({id: 'please_wait'})}...
-                  </BigButton> : <Button className="__submitbtn" ref={c => this.passwordBtn = c} ingoredisable="true" style={{
-                    display: 'block',
-                    backgroundColor: '#e7004d',
-                    borderRadius: 2,
-                    color: '#fff',
-                    height: 40,
-                    lineHeight: '40px',
-                    textAlign: 'center',
-                    outline: 'none',
-                    border: 'none',
-                    width: '100%',
-                    textTransform: 'uppercase',
-                    cursor: 'pointer',
-                    fontSize: 16
-                  }}>{intl.formatMessage({id: 'save'})}</Button>
+	render () {
+		const { intl, me } = this.props
 
-                }
-              </FormElement>
-            </ELEMENTS>
-          </Form>
-        </div>
-      </PASSWORD_BODY>
-    </Modal>
-  }
+		return <Modal onClose={this.close.bind(this)}>
+			<PASSWORD_BODY>
+				<div style={{paddingTop: 10}}>
+					<div>
+						<span>{intl.formatMessage({id: 'account'})}: </span>
+						<Red>{me ? me.communicationEmail : ''}</Red>
+					</div>
+					<Form style={{marginTop: 10}} ref={ c => this.form = c } onSubmit={ this.handleSubmit.bind(this) }>
+						<ELEMENTS>
+							<FormElement label={`${intl.formatMessage({id: 'set_password'})}:`} className="__required">
+								<Input
+									name='password'
+									type="password"
+									style= {{width: '100%', height: 40}}
+									value={this.state.password}
+									onChange={this.handleInputChange}
+									validations={[required]}/>
+							</FormElement>
+
+							<FormElement>
+								{
+									this.state.updating ? <BigButton className="__btn" height={40} bgColor="#999">
+										{intl.formatMessage({id: 'please_wait'})}...
+									</BigButton> : <Button className="__submitbtn" ref={c => this.passwordBtn = c} ingoredisable="true" style={{
+										display: 'block',
+										backgroundColor: '#e7004d',
+										borderRadius: 2,
+										color: '#fff',
+										height: 40,
+										lineHeight: '40px',
+										textAlign: 'center',
+										outline: 'none',
+										border: 'none',
+										width: '100%',
+										textTransform: 'uppercase',
+										cursor: 'pointer',
+										fontSize: 16
+									}}>{intl.formatMessage({id: 'save'})}</Button>
+
+								}
+							</FormElement>
+						</ELEMENTS>
+					</Form>
+				</div>
+			</PASSWORD_BODY>
+		</Modal>
+	}
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(SetPassword))

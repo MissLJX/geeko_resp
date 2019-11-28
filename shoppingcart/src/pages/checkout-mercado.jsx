@@ -118,7 +118,7 @@ const Mercado = class extends React.Component {
 						<CardInfos>
 							<img src="https://dgzfssf1la12s.cloudfront.net/shoppingcart/maxicocard.png" />
 						</CardInfos>
-						<MercadoBinding orderTotal={this.props.checkout.orderTotal} email={this.props.me ? this.props.me.email : ''} addcardback={this.addcardback.bind(this)} exsiting={exsiting} />
+						<MercadoBinding orderId={this.props.checkout.orderId} orderTotal={this.props.checkout.orderTotal} email={this.props.me ? this.props.me.email : ''} addcardback={this.addcardback.bind(this)} exsiting={exsiting} />
 					</Box>
 
 					{

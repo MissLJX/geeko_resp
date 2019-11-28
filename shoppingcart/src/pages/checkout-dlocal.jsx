@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import FullFixed from '../components/msite/full-fixed.jsx'
 import { connect } from 'react-redux'
-import { checkout_pay } from '../api'
+import { checkout_pay, bindDLocal } from '../api'
 import { goOrder } from '../utils/common-pay.js'
 import { injectIntl } from 'react-intl'
 
@@ -37,10 +37,18 @@ const DLocal = class extends React.Component {
 			const { checkout } = this.props
 			this.payDLocal({ ...result, orderId: checkout.orderId, payMethod: checkout.payMethod }).catch(({ result }) => errBack(result))
 		}
+		window.bindDLocal = (result, callBack , errBack) => {
+			const { checkout } = this.props
+			this.bindDLocal({ ...result, orderId: checkout.orderId, payMethod: checkout.payMethod }).then(callBack).catch(({ result }) => errBack(result))
+		}
 	}
 
 	payDLocal(result) {
 		return checkout_pay(result).then(goOrder)
+	}
+
+	bindDLocal(result){
+		return bindDLocal(result)
 	}
 
 	close(evt) {

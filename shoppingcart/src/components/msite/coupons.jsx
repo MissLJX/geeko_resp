@@ -18,12 +18,12 @@ const StyledAmount = styled.span`
 `
 
 const TimeRange = (props) => {
-  const {begin, end} = props
-  return <span style={{fontSize: 12}}>
-    <time>{new Date(begin).toLocaleDateString()}</time>
-    <span> - </span>
-    <time>{new Date(end).toLocaleDateString()}</time>
-  </span>
+	const {begin, end} = props
+	return <span style={{fontSize: 12}}>
+		<time>{new Date(begin).toLocaleDateString()}</time>
+		<span> - </span>
+		<time>{new Date(end).toLocaleDateString()}</time>
+	</span>
 }
 
 const StyleSelect = styled.span`
@@ -49,19 +49,19 @@ const StyleSelect = styled.span`
 `
 
 const SelectButton = (props) => {
-  const {selected, enabled} = props
-  return <React.Fragment>{
-    selected ? <StyleSelect {...props} className="selected"><FormattedMessage id='selected' /></StyleSelect> : (
-      !enabled ? <StyleSelect className="disabled"><FormattedMessage id='select' /></StyleSelect> : <StyleSelect {...props}><FormattedMessage id='select' /></StyleSelect>
-    )}
-  </React.Fragment>
+	const {selected, enabled} = props
+	return <React.Fragment>{
+		selected ? <StyleSelect {...props} className="selected"><FormattedMessage id='selected' /></StyleSelect> : (
+			!enabled ? <StyleSelect className="disabled"><FormattedMessage id='select' /></StyleSelect> : <StyleSelect {...props}><FormattedMessage id='select' /></StyleSelect>
+		)}
+	</React.Fragment>
 }
 
 export const Coupon = (props) => {
-  const {coupon, selected, enabled, couponSelect} = props
+	const {coupon, selected, enabled, couponSelect} = props
 
-  return <StyledCoupon className="x-table __vm x-fw __fixed">
-    <div className="x-cell">
+	return <StyledCoupon className="x-table __vm x-fw __fixed">
+		<div className="x-cell">
     	<div>
     		<Red>
     			<StyledAmount>{coupon.couponName2}</StyledAmount>
@@ -79,11 +79,11 @@ export const Coupon = (props) => {
     	<div>
 
     	</div>
-    </div>
-    <div className="x-cell">
-      <SelectButton onClick={(evt) => { couponSelect(!selected ? coupon.id : null) }} selected={selected} enabled={enabled} coupon={coupon}/>
-    </div>
-  </StyledCoupon>
+		</div>
+		<div className="x-cell">
+			<SelectButton onClick={(evt) => { couponSelect(!selected ? coupon.id : null) }} selected={selected} enabled={enabled} coupon={coupon}/>
+		</div>
+	</StyledCoupon>
 }
 
 const CouponUL = styled.ul`
@@ -91,13 +91,18 @@ const CouponUL = styled.ul`
   padding-right: 10px;
   & > li{
     border-top: 1px solid #e5e5e5;
+    &:first-child{
+      border-top: none;
+    }
   }
+
+  
 `
 
 export default (props) => <CouponUL>
-  {
-    props.coupons.map(({coupon, isAvailable}) => <li key={coupon.id}>
-      <Coupon couponSelect={props.couponSelect} coupon={coupon} selected={props.selectedId === coupon.id || props.selectedId2 === coupon.id} enabled={isAvailable}/>
-    </li>)
-  }
+	{
+		props.coupons.map(({coupon, isAvailable}) => <li key={coupon.id}>
+			<Coupon couponSelect={props.couponSelect} coupon={coupon} selected={props.selectedId === coupon.id || props.selectedId2 === coupon.id} enabled={isAvailable}/>
+		</li>)
+	}
 </CouponUL>

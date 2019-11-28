@@ -21,13 +21,7 @@ export const goOrder = ({ result }) => {
 	if (result) {
 		const { success, transactionId, orderId, details, solutions } = result
 		if (success) {
-			/*global siteType b:true */
-			/*eslint no-undef: "error"*/
-			if (siteType === 'new') {
-				window.location.href = `${window.ctx || ''}/shoppingcart/order-confirm/credit-card?order_number=${transactionId}`
-			} else {
-				window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-			}
+			window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
 		} else {
 			alert(details + '\n' + (solutions || ''))
 			if (orderId) {
@@ -36,3 +30,22 @@ export const goOrder = ({ result }) => {
 		}
 	}
 }
+
+export const payHandler = ( result ) => {
+	if(result){
+		const { success, transactionId, orderId, details, solutions } = result
+		if(success){
+			window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
+		}else{
+			alert(`${details}\n${solutions?solutions:''}`)
+			if (orderId) {
+				this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
+			}
+		}
+	}
+	this.setState({
+		checking: false
+	})
+}
+
+

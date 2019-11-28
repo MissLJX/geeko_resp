@@ -7,6 +7,8 @@ import Coupons from '../components/msite/coupons.jsx'
 import { getcoupons, usecoupon, unusecoupon, usecouponcode } from '../api'
 import { injectIntl } from 'react-intl'
 import { __route_root__ } from '../utils/utils.js'
+import TypeMessage from '../components/type-message.jsx'
+
 
 const CouponCode = styled.div`
   &::after{
@@ -46,6 +48,22 @@ const CouponCode = styled.div`
   }
 `
 
+
+const MESSAGE = styled.div`
+	background-color: rgb(255, 249, 232);
+	border: 1px solid rgb(245, 235, 206);
+	padding: 8px 10px;
+	line-height: 18px;
+	color: #666;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	a{
+		color: #666;
+		text-decoration: underline;
+	}
+`
+
 const mapStateToProps = (state) => {
 	return {
 		...state
@@ -66,7 +84,8 @@ const Coupon = class extends React.Component {
 		this.close = this.close.bind(this)
 		this.state = {
 			code: '',
-			using: false
+			using: false,
+			errorMsg: ''
 		}
 	}
 
@@ -87,9 +106,9 @@ const Coupon = class extends React.Component {
 			})
 			this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
 		}).catch(({ result }) => {
-			alert(result)
 			this.setState({
-				using: false
+				using: false,
+				errorMsg: result
 			})
 		})
 	}
@@ -127,6 +146,19 @@ const Coupon = class extends React.Component {
 
 				</CouponCode>
 			</div>
+
+			{
+				this.state.errorMsg && <MESSAGE style={{marginTop: 10}}>
+					<div style={{paddingRight: 10}}>
+						<span className="iconfont" style={{color: '#ce9a16', fontSize: 24}}>&#xe764;</span>
+					</div>
+					<div>
+						<TypeMessage messageHtml={this.state.errorMsg}/>
+					</div>
+					
+				</MESSAGE>
+			}
+			
 
 			{coupons && cart && <Coupons couponSelect={this.couponSelect.bind(this)} selectedId2={cart.coupon2 ? cart.coupon2.id : null} selectedId={cart.coupon ? cart.coupon.id : null} coupons={this.props.coupons} />}
 		</FullFixed>

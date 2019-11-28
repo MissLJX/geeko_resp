@@ -32,7 +32,11 @@ const Modal = class extends React.Component {
 		this.form.validateAll()
 		if (!this.passwordBtn.context._errors || !this.passwordBtn.context._errors.length) {
 			changepassword(this.state.password).then(() => {
-				window.location.href = `${window.ctx || ''}/me/m/order`
+				if(siteType === 'new'){
+					window.location.href = `${window.ctx || ''}/page/login?redirectUrl=${window.ctx || ''}/me/m/order&loginPage=1`
+				}else{
+					window.location.href = `${window.ctx || ''}/i/login?redirectUrl=${window.ctx || ''}/me/m/order`
+				}
 			})
 		}
 	}

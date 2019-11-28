@@ -170,10 +170,10 @@ const OrderList = class extends React.Component {
   				<OrderLI key={detail.id} onClick={(evt) => { this.props.clickHandler(evt, detail) }}>
 		            <OrderHD className="x-table __vm x-fw">
 		              <div className="x-cell">
-		                <LabelValue label={intl.formatMessage({id: 'orderno'})} value={detail.order.id}/>
+		                <LabelValue label={intl.formatMessage({id: 'orderno'})} value={detail.id}/>
 		              </div>
 		              <div className="x-cell" style={{textAlign: 'right'}}>
-		                <OrderStatus>{status(detail.order.status)}</OrderStatus>
+		                <OrderStatus>{status(detail.status)}</OrderStatus>
 		              </div>
 		            </OrderHD>
 		            <OrderBD className="x-table __vm x-fw">
@@ -182,7 +182,7 @@ const OrderList = class extends React.Component {
 		              </div>
 		              <div className="x-cell">
 		              	<OrderItems>
-		              	{detail.order.orderItems.map((item, index) => (
+		              	{detail.orderItems.map((item, index) => (
 		              		<OrderItem key={index}>
 		              			<OrderImage>
 		              				<img src={item.productImageUrl}/>
@@ -194,8 +194,8 @@ const OrderList = class extends React.Component {
 		            </OrderBD>
 
 		            <OrderFD>
-              <FormattedMessage id="count_items" values={{count: detail.order.orderItems.length}}/>
-		            	<LabelValue style={{marginLeft: '15px'}} label={intl.formatMessage({id: 'ordertotal'})} value={getMoney(detail.order.orderTotal)}/>
+              <FormattedMessage id="count_items" values={{count: detail.orderItems.length}}/>
+		            	<LabelValue style={{marginLeft: '15px'}} label={intl.formatMessage({id: 'ordertotal'})} value={getMoney(detail.orderTotal)}/>
 		            </OrderFD>
   				</OrderLI>
   			))

@@ -21,23 +21,23 @@ import { changeLang } from './store/actions.js'
 
 
 const ShoppingCart = Loadable({
-    loader: () => import(/* webpackChunkName: "page--pc-shoppingcart" */ './pcpages/shoppingcart.jsx'),
-    loading: Loading1
+	loader: () => import(/* webpackChunkName: "page--pc-shoppingcart" */ './pcpages/shoppingcart.jsx'),
+	loading: Loading1
 })
 
 const AddressModal = Loadable({
 	loader: () => import(/* webpackChunkName: "page--address-modal" */ './pcpages/address.jsx'),
-    loading: Loading
+	loading: Loading
 })
 
 const Coupon = Loadable({
 	loader: () => import(/* webpackChunkName: "page--coupon-modal" */ './pcpages/coupon.jsx'),
-    loading: Loading
+	loading: Loading
 })
 
 const Credit = Loadable({
 	loader: () => import(/* webpackChunkName: "page--credit-card" */ './pcpages/credit.jsx'),
-    loading: Loading
+	loading: Loading
 })
 
 const OrderConfirm = Loadable({
@@ -58,17 +58,17 @@ const CheckoutCredit = Loadable({
 
 
 const mapStateToProps = (state) => {
-  return {
-    lang: state.lang
-  }
+	return {
+		lang: state.lang
+	}
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {
+	return {
    	SETLANG: (lang) => {
    		dispatch(changeLang(lang))
    	}
-  }
+	}
 }
 
 
@@ -96,22 +96,24 @@ const Index = class extends React.Component{
 
 
 		return <IntlProvider locale={_lang} messages={_messages}>
-		<div>
-			<Header hideTools={this.props.history.location.pathname && this.props.history.location.pathname.indexOf('checkout') > 0} currencies={this.state.currencies} currency={this.state.currency} lang={_lang} changeLang={ ( lang ) => { this.props.SETLANG(lang) } }/>
 			<div>
-				<Switch>
-					<Route path={`${window.ctx || ''}/checkout/:orderId/credit`} component={CheckoutCredit}/>
-					<Route path={`${window.ctx || ''}/checkout/:orderId`} component={Checkout}/>
-					<Route path={`${window.ctx || ''}${__route_root__}/credit-card`} component={Credit}/>
-					<Route path={`${window.ctx || ''}${__route_root__}/`}  component={ShoppingCart}/>
-					<Route path={`${window.ctx || ''}/order-confirm/:transactionId`} component={OrderConfirm}/>
-				</Switch>
-				<Route path={`${window.ctx || ''}${__route_root__}/coupons`}  component={Coupon}/>
-				<Route path={`${window.ctx || ''}${__route_root__}/address`} exact component={AddressModal}/>
-				<Route path={`${window.ctx || ''}${__route_root__}/address/:id`} component={AddressModal}/>
+				<Header hideTools={this.props.history.location.pathname && this.props.history.location.pathname.indexOf('checkout') > 0} currencies={this.state.currencies} currency={this.state.currency} lang={_lang} changeLang={ ( lang ) => { this.props.SETLANG(lang) } }/>
+				<div>
+					<Switch>
+						<Route path={`${window.ctx || ''}/checkout/:orderId/credit`} component={CheckoutCredit}/>
+						<Route path={`${window.ctx || ''}/checkout/:orderId`} component={Checkout}/>
+						<Route path={`${window.ctx || ''}${__route_root__}/credit-card`} component={Credit}/>
+						<Route path={`${window.ctx || ''}${__route_root__}/`}  component={ShoppingCart}/>
+						<Route path={`${window.ctx || ''}/order-confirm/:transactionId`} component={OrderConfirm}/>
+					</Switch>
+					<Route path={`${window.ctx || ''}${__route_root__}/coupons`}  component={Coupon}/>
+					<Route path={`${window.ctx || ''}${__route_root__}/address`} exact component={AddressModal}/>
+					<Route path={`${window.ctx || ''}${__route_root__}/address/:id`} component={AddressModal}/>
+					<Route path={`${window.ctx || ''}${__route_root__}/**/address`} exact component={AddressModal}/>
+					<Route path={`${window.ctx || ''}${__route_root__}/**/address/:id`} component={AddressModal}/>
 				
 
-				{/*<AnimatedRoute
+					{/*<AnimatedRoute
 			      path={`${window.ctx || ''}${__route_root__}/coupons`}
 			      component={Coupon}
 			      atEnter={{ offset: 0}}
@@ -122,9 +124,9 @@ const Index = class extends React.Component{
 				        transform: `translateX(${styles.offset}%)`
 				    })}
 			    />*/}
+				</div>
 			</div>
-		</div>
-	</IntlProvider>
+		</IntlProvider>
 	}
 }
 

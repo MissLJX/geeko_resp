@@ -49,6 +49,7 @@ export const SET_DOCUMENT = 'SET_DOCUMENT'
 
 export const SET_CASH_OUT = 'SET_CASH_OUT'
 
+
 // order confirm
 export const GET_TRANSACTION_PAGE = 'GET_TRANSACTION_PAGE'
 export const GET_TRANSACTION = 'GET_TRANSACTION'
@@ -224,15 +225,7 @@ export const fetchAll = () => {
 				values.push({})
 			}
 
-			const cart = values[0]
-			if (window.token && !cart.shippingDetail) {
-				getSessionShipping(({result}) => {
-					cart.shippingDetail = result
-					dispatch(loaded([cart, values[1], values[2]]))
-				})
-			} else {
-				dispatch(loaded(values))
-			}
+			dispatch(loaded(values))
 			return values
 		})
 	}

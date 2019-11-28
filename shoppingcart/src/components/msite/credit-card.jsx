@@ -442,18 +442,7 @@ const CreditCard = class extends React.Component {
 		}
 
 		const getIcon = () => {
-			/*global sitename b:true*/
-			/*eslint no-undef: "error"*/
-			switch (sitename.toLowerCase()) {
-			case 'ivrose':
-				return 'https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/site/pc/icon326_iv.png'
-			case 'chicme':
-				return 'https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/site/pc/icon326.png'
-			case 'boutiquefeel':
-				return 'https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/site/pc/icon326_bq.png'
-			default:
-				return window.primeIcon
-			}
+			return window.primeIcon
 		}
 
 		const logoIcon = getIcon()

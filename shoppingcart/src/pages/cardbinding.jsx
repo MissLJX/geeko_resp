@@ -4,7 +4,12 @@ import { connect } from 'react-redux'
 import FullFixed from '../components/msite/full-fixed.jsx'
 import { getCreditCards, toggleCreditStatus } from '../store/actions.js'
 import { __route_root__ } from '../utils/utils.js'
-import { deletecreditcard } from '../api'
+import { deletecreditcard, 
+	creditpay, 
+	placeorder,
+	getJwt,
+	getLookup,
+	oceanpay3d } from '../api'
 import Refreshing from '../components/msite/refreshing.jsx'
 
 const StyledFrame = styled.div`
@@ -13,7 +18,7 @@ const StyledFrame = styled.div`
   -webkit-overflow-scrolling: touch;
 	iframe{
 		width: 100%;
-		height: calc(100% - 130px);
+		height: 100%;
 		border: none;
 	}
 `
@@ -83,13 +88,16 @@ const CardBinding = class extends React.Component {
 			frameUrl: `${window.ctx || ''}/w-site/anon/oceanpay?payMethod=${props.payMethod}`,
 			frameLoading: true
 		}
+		this.processCallBack = this.processCallBack.bind(this)
+		this.processErrorBack = this.processErrorBack.bind(this)
 	}
 
 	componentDidMount() {
 		window.bindSuccess = () => {
 			this.props.GETCREDITCARDS(this.props.payMethod).then(() => {
 				this.props.TOGGLECREDITSTATUS(0)
-				this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
+				// this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
+				this.payCredit({})
 			})
 		}
 
@@ -108,6 +116,119 @@ const CardBinding = class extends React.Component {
 				frameLoading: false
 			})
 		}, 5000)
+	}
+
+	triggerOcean(){
+		placeorder().then(({result: payment}) => {
+			if(payment){
+				const {orderId} = payment
+				getJwt(orderId).then(({result}) => {
+					const {jwt, bin} = result
+					this.listenOcean3D(orderId, jwt, bin)
+				}).catch(({result}) => {
+					alert(result)
+					this.setState({
+						checking: false
+					})
+				})
+			}
+		}).catch(({result}) => {
+			alert(result)
+			this.setState({
+				checking: false
+			})
+		})
+	}
+
+	listenOcean3D(orderId, jwt, bin){
+
+		var self = this
+
+		/*global Cardinal b:true*/
+		/*eslint no-undef: "error"*/
+		Cardinal.setup('init', {
+			jwt: jwt
+		})
+
+		Cardinal.trigger('bin.process', bin)
+		Cardinal.off('payments.setupComplete')
+		Cardinal.off('payments.validated')
+
+		Cardinal.on('payments.setupComplete', function(setupCompleteData) {
+			const referenceId = setupCompleteData.sessionId
+			getLookup(referenceId, orderId).then(({result: lookup}) => {
+				if(lookup && lookup.lookupUrl){
+					Cardinal.continue('cca', {
+						'AcsUrl': lookup.lookupUrl,
+						'Payload': lookup.lookupLoad
+					},{
+						'OrderDetails': {
+							'TransactionId': lookup.transactionId
+						}
+					},
+					jwt
+					)
+				}else{
+					self.payOcean3D(orderId)
+				}
+			}).catch(({result}) => {
+				alert(result)
+				this.setState({
+					checking: false
+				})
+			})
+
+
+		})
+		
+		Cardinal.on('payments.validated', function(data, jwt) {
+			var cavv = data.Payment.ExtendedData.CAVV
+			var eci = data.Payment.ExtendedData.ECIFlag
+			var xid = data.Payment.ProcessorTransactionId
+			// var status = data.Payment.ExtendedData.PAResStatus
+			// var transactionId = data.Payment.ProcessorTransactionId
+			
+			//请求支付
+			self.payOcean3D(orderId, eci, cavv, xid)
+
+		})
+	}
+
+	payOcean3D(orderId, eci, cavv, xid){
+		oceanpay3d({orderId, cardEci: eci, cardCavv: cavv, cardXid:xid}).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
+	}
+
+	payCredit(params) {
+		// const {payMethod} = this.props
+		// if(payMethod === '3'){
+		// 	this.triggerOcean()
+		// }else{
+		creditpay(params).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
+		// }
+		
+	}
+
+	processCallBack({ success, transactionId, details, orderId, solutions = '' }){
+		if (success) {
+
+			window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
+
+		} else {
+			alert(details + '\n' + solutions)
+			if (orderId) {
+				this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
+			}
+		}
+		this.setState({
+			checking: false
+		})
+	}
+
+	processErrorBack({ result }){
+		alert(result)
+		this.setState({
+			checking: false
+		})
 	}
 
 	deleteCardHandle(evt, cardId) {
@@ -131,12 +252,12 @@ const CardBinding = class extends React.Component {
 	}
 
 	render() {
-		const { creditcards } = this.props
+		// const { creditcards } = this.props
 		return <FullFixed onClose={this.close} title="Credit Card">
 			<StyledFrame>
 				{this.state.frameLoading && <Refreshing />}
 				<iframe onLoad={this.frameLoadHandle.bind(this)} seamless src={this.state.frameUrl}></iframe>
-				{
+				{/* {
 					creditcards && <Cards>
 						<HD>Cards</HD>
 						<CardUL>
@@ -157,8 +278,8 @@ const CardBinding = class extends React.Component {
 							}
 						</CardUL>
 					</Cards>
-				}
-				<div style={{ height: 100 }}></div>
+				} */}
+				{/* <div style={{ height: 100 }}></div> */}
 			</StyledFrame>
 
 		</FullFixed>

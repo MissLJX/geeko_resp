@@ -38,15 +38,15 @@ export default class Orders extends React.Component {
   }
 
   handleClick (evt, _detail) {
-  	gloabvars.selectedOrder = this.state.selectedOrderId === _detail.id ? null : _detail.order
-  	this.setState({
-  		selectedOrderId: this.state.selectedOrderId === _detail.id ? null : _detail.id,
-  		orders: this.state.orders.map(({detail, selected}) => ({
-  			selected: _detail.id === detail.id && !selected,
-  			id: detail.id,
-  			detail: detail
-  		}))
-  	})
+    gloabvars.selectedOrder = this.state.selectedOrderId === _detail.id ? null : _detail
+    this.setState({
+      selectedOrderId: this.state.selectedOrderId === _detail.id ? null : _detail.id,
+      orders: this.state.orders.map(({detail, selected}) => ({
+        selected: _detail.id === detail.id && !selected,
+        id: detail.id,
+        detail: detail
+      }))
+    })
   }
 
   scrollHandler (evt) {
@@ -55,25 +55,25 @@ export default class Orders extends React.Component {
 
   getData (page) {
     const getsuffix = () => {
-      let suffix = 'get-order-list'
+      let suffix = 'get-orders2'
       switch (page) {
         case 'processing':
-          suffix = 'get-unshipped-order-list2'
+          suffix = 'get-unpaid-orders2'
           break
         case 'unpaid':
-          suffix = 'get-unpayed-order-list'
+          suffix = 'get-unpaid-orders2'
           break
         case 'confirmed':
-          suffix = 'get-receipt-order-list'
+          suffix = 'get-receipt-orders'
           break
         case 'shipped':
-          suffix = 'get-shipped-order-list'
+          suffix = 'get-shipped-orders'
           break
         case 'canceled':
-          suffix = 'get-canceled-order-list'
+          suffix = 'get-canceled-orders'
           break
         default:
-          suffix = 'get-order-list'
+          suffix = 'get-orders2'
       }
       return suffix
     }
@@ -97,19 +97,19 @@ export default class Orders extends React.Component {
   }
 
   componentWillMount () {
-  	this.getData(this.state.page)
+    this.getData(this.state.page)
   }
 
   render () {
     const ScrollOrders = withScroll(OrderList)
 
     const Loading = styled.div`
-      height: 50px;
-      line-height: 50px;
-      color: '#666';
-      text-align: center;
-      font-size: 12px;
-    `
+			height: 50px;
+			line-height: 50px;
+			color: '#666';
+			text-align: center;
+			font-size: 12px;
+		`
 
     const loading = this.state.finished ? <Loading>No more.</Loading> : (this.state.loading && <Loading>Loading...</Loading>)
 

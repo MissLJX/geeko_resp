@@ -8,6 +8,7 @@ import Tickets from './tickets.jsx'
 import Ticket from './ticket.jsx'
 import Orders from './orders.jsx'
 import OnlineHelp from './onlinehelpframe.jsx'
+import Rate from './rate.jsx'
 
 import {addLocaleData, IntlProvider} from 'react-intl'
 import en from 'react-intl/locale-data/en'
@@ -52,6 +53,7 @@ export default () => (
         <Route path={`${window.ctx || ''}/support/ticket/:id`} component={Ticket}/>
         <Route path={`${window.ctx || ''}/support/ticket`} component={Tickets}/>
         <Route path={`${window.ctx || ''}/support/orders`} component={Orders}/>
+        <Route path={`${window.ctx || ''}/support/rate/:id`} component={Rate}/>
       </Switch>
     </div>
   </IntlProvider>

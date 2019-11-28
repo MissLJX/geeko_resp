@@ -105,5 +105,6 @@ export default{
 	change_email: 'Changer l\'e-mail',
 	credit_card: 'carte de crédit',
 	continue_shopping: 'Continuer vos achats',
-	facebook_check: 'Si vous cochez cette case, nous vous ferons parvenir le statut de suivi logistique et les informations de commande dans Messenger.'
+	facebook_check: 'Si vous cochez cette case, nous vous ferons parvenir le statut de suivi logistique et les informations de commande dans Messenger.',
+	email: 'E-Mail'
 }

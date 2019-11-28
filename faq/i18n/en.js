@@ -43,5 +43,11 @@ export default {
   order_status_refunded: 'Refunded',
   order_status_held: 'Held',
   count_items: '{count} item(s)',
-  ordertotal: 'Total'
+  ordertotal: 'Total',
+  confirm: 'Confirm',
+  rate: 'Rate',
+  satisfied: 'Satisfied',
+  unsatisfied: 'Unsatisfied',
+  you_can_rate: 'You can comment customer service here.',
+  please_rate: 'Please rate my service'
 }

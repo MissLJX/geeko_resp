@@ -1,0 +1,6 @@
+{
+  "paypal": {
+    "env": "sandbox",
+    "checkouturl": "https://www.sandbox.paypal.com/checkoutnow?token="
+  }
+}

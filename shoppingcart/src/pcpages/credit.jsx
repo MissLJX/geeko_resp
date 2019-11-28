@@ -24,18 +24,31 @@ import { BigButton } from '../components/msite/buttons.jsx'
 
 import MercadoBinding from '../components/pc/mercado-binding.jsx'
 
-import { payDLocal, getSafeCharge, creditpay, getApacPay, deletecreditcard, usecreditcard, removeMercadoCard, useMercadocard, mercadopay } from '../api'
+import { payDLocal, 
+	getSafeCharge, 
+	creditpay, 
+	getApacPay, 
+	deletecreditcard, 
+	usecreditcard, 
+	removeMercadoCard, 
+	useMercadocard, 
+	mercadopay, 
+	bindDLocal,
+	placeorder,
+	getJwt,
+	getLookup,
+	oceanpay3d } from '../api'
 
 import {submit} from '../utils/common-pay.js'
 
 const __Frame__ = {
 	'17': {
 		url: `${window.ctx || ''}/w-site/anon/oceanpay?payMethod=17`,
-		height: 480
+		height: 550
 	},
 	'3': {
 		url: `${window.ctx || ''}/w-site/anon/oceanpay?payMethod=3`,
-		height: 480
+		height: 550
 	},
 	'24': {
 		url: `${window.ctx || ''}/i/dlocal`,
@@ -170,11 +183,14 @@ const Credit = class extends React.Component {
 			refreshing: false,
 			showDeleteConfirm: false,
 			cardDelete: null,
-			dlocalerror: null
+			dlocalerror: null,
+			frameSuffix: new Date().getTime()
 		}
 
 		this.handleInputChange = this.handleInputChange.bind(this)
 		this.sdkResponseHandler = this.sdkResponseHandler.bind(this)
+		this.processCallBack = this.processCallBack.bind(this)
+		this.processErrorBack = this.processErrorBack.bind(this)
 	}
 
 	handleInputChange (event) {
@@ -239,39 +255,12 @@ const Credit = class extends React.Component {
 			mercadopay({
 				token: response.id,
 				installments: this.props.mercadoinstallments
-			}).then(data => data.result).then(({success, transactionId, details, solutions, orderId}) => {
-				if (success) {
-					window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-				} else {
-					alert(details)
-					if (orderId) {
-						this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
-					}
-				}
-				this.setState({
-					checking: false
-				})
-			}).catch(({result}) => {
-				alert(result)
-				this.setState({
-					checking: false
-				})
-			})
+			}).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
 		}
 	}
 
-	getApacPay (payMethod, cpf, fail) {
-		getApacPay({payMethod, cpfNumber: cpf}).then(({result}) => {
-			const {isFree, transactionId, orderId} = result
-			if (isFree) {
-				window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-			} else {
-				storage.add('temp-order', orderId, 1 * 60 * 60)
-				submit(result)
-			}
-		}).catch(({result}) => {
-			fail(result)
-		})
+	getApacPay (payMethod, cpf) {
+		getApacPay({payMethod, cpfNumber: cpf}).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
 	}
 
 	showFrameHandle () {
@@ -299,12 +288,7 @@ const Credit = class extends React.Component {
 			this.setState({
 				checking: true
 			})
-			this.getApacPay(this.props.payMethod, this.props.cpf, (result) => {
-				alert(result)
-				this.setState({
-					checking: false
-				})
-			})
+			this.getApacPay(this.props.payMethod, this.props.cpf)
 		} else {
 			let _frame = this.getFrame()
 			this.setState({
@@ -372,73 +356,150 @@ const Credit = class extends React.Component {
 		}
 	}
 
-	payDLocal (params) {
-		this.setState({
-			checking: true
-		})
-		payDLocal(params).then(data => data.result).then(({success, transactionId, details, solutions = '', orderId}) => {
-			if (success) {
-				window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-
-				// this.props.history.push({
-				//   pathname: `${window.ctx || ''}/order-confirm/${transactionId}`
-				// })
-			} else {
-				alert(details + '\n' + solutions)
-				this.setState({
-					frameUrl: this.state.frameUrl + '&_=' + new Date().getTime()
-
+	triggerOcean(){
+		placeorder().then(({result: payment}) => {
+			if(payment){
+				const {orderId} = payment
+				getJwt(orderId).then(({result}) => {
+					const {jwt, bin} = result
+					this.listenOcean3D(orderId, jwt, bin)
+				}).catch(({result}) => {
+					alert(result)
+					this.setState({
+						checking: false
+					})
 				})
-				if (orderId) {
-					this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
-				}
 			}
-			this.setState({
-				checking: false
-			})
 		}).catch(({result}) => {
 			alert(result)
 			this.setState({
 				checking: false
 			})
 		})
+	}
+
+
+	listenOcean3D(orderId, jwt, bin){
+
+		var self = this
+
+		/*global Cardinal b:true*/
+		/*eslint no-undef: "error"*/
+		Cardinal.setup('init', {
+			jwt: jwt
+		})
+
+		
+
+		Cardinal.trigger('bin.process', bin)
+
+		Cardinal.off('payments.setupComplete')
+		Cardinal.off('payments.validated')
+
+		Cardinal.on('payments.setupComplete', function(setupCompleteData) {
+			const referenceId = setupCompleteData.sessionId
+			getLookup(referenceId, orderId).then(({result: lookup}) => {
+				if(lookup && lookup.lookupUrl){
+					Cardinal.continue('cca', {
+						'AcsUrl': lookup.lookupUrl,
+						'Payload': lookup.lookupLoad
+					},{
+						'OrderDetails': {
+							'TransactionId': lookup.transactionId
+						}
+					},
+					jwt
+					)
+				}else{
+					self.payOcean3D(orderId)
+				}
+			}).catch(({result}) => {
+				alert(result)
+				this.setState({
+					checking: false
+				})
+			})
+
+
+		})
+		
+		Cardinal.on('payments.validated', function(data, jwt) {
+			var cavv = data.Payment.ExtendedData.CAVV
+			var eci = data.Payment.ExtendedData.ECIFlag
+			var xid = data.Payment.ProcessorTransactionId
+			// var status = data.Payment.ExtendedData.PAResStatus
+			// var transactionId = data.Payment.ProcessorTransactionId
+			
+			//请求支付
+			self.payOcean3D(orderId, eci, cavv, xid)
+
+		})
+	}
+
+	payOcean3D(orderId, eci, cavv, xid){
+		oceanpay3d({orderId, cardEci: eci, cardCavv: cavv, cardXid:xid}).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
+	}
+
+	payDLocal (params) {
+		this.setState({
+			checking: true
+		})
+		payDLocal(params).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
 	}
 
 	payCredit (params) {
 		this.setState({
 			checking: true
 		})
-		creditpay(params).then(data => data.result).then(({success, transactionId, details, solutions = '', orderId}) => {
-			if (success) {
-				window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
+		// const { isTriggle } = params
+		// const {cart, creditcards} = this.props
 
-				// this.props.history.push({
-				//   pathname: `${window.ctx || ''}/order-confirm/${transactionId}`
-				// })
-			} else {
-				alert(details + '\n' + solutions)
-				this.setState({
-					frameUrl: this.state.frameUrl + '&_=' + new Date().getTime()
-				})
-				if (orderId) {
-					this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
-				}
+		// let card
+		// if(creditcards && creditcards.length > 0){
+		// 	card = creditcards.find( c => c.quickpayRecord.isSelected )
+		// }
+
+		
+		// if((isTriggle && cart.payMethod === '3') || (card && card.quickpayRecord.payMethod === '3')){
+		// 	this.triggerOcean()
+		// }else{
+		creditpay(params).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
+		// }
+
+		
+	}
+
+	processCallBack({isFree, success, transactionId, details, solutions = '', orderId}){
+		if (isFree ||success) {
+			window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
+		} else {
+			alert(details + '\n' + solutions)
+			this.refreshFrame()
+			if (orderId && window.__is_login__) {
+				this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
 			}
-			this.setState({
-				checking: false
-			})
-		}).catch(({result}) => {
-			alert(result)
-			this.setState({
-				checking: false
-			})
-			this.setState({
-				frameUrl: this.state.frameUrl + '&_=' + new Date().getTime()
-			})
+		}
+		this.setState({
+			checking: false
 		})
 	}
 
+	processErrorBack({result}){
+		alert(result)
+		this.setState({
+			checking: false
+		})
+		this.refreshFrame()
+	}
+
 	addcardback () {}
+
+	refreshFrame(){
+		this.setState({
+			frameSuffix: new Date().getTime(),
+			checking: false
+		})
+	}
 
 	componentWillMount () {
 		const { cart, INIT, payType, payMethod, GETCREDITCARDS, GETMERCADOCARDS, cpf, installments } = this.props
@@ -448,23 +509,35 @@ const Credit = class extends React.Component {
 					const _cart = values[0]
 					this.payDLocal({...result, payMethod: _cart.payMethod}).catch(({result}) => errBack(result))
 				}
+
+
+				window.bindDLocal = (result, callBack , errBack) => {
+					const _cart = values[0]
+					this.bindDLocal({...result, payMethod: _cart.payMethod}).then(callBack).catch(({ result }) => errBack(result))
+				}
+
 				this.handleCreditCards()
 			})
 		} else {
 			window.dLocalPay = (result, errBack) => {
 				this.payDLocal({...result, payMethod: cart.payMethod}).catch(({result}) => errBack(result))
 			}
+
+			window.bindDLocal = (result, callBack , errBack) => {
+				this.bindDLocal({...result, payMethod: cart.payMethod}).then(callBack).catch(({ result }) => errBack(result))
+			}
+
 			this.handleCreditCards()
 		}
 
 		window.triggerPlace = () => {
-			this.payCredit({payCpf: cpf, payInstallments: installments})
+			this.payCredit({payCpf: cpf, payInstallments: installments, isTriggle: true})
 		}
 
 		window.triggerFalse = (errcode) => {
-			this.setState({
-				frameUrl: this.state.frameUrl + '&_=' + new Date().getTime()
-			})
+			
+			this.refreshFrame()
+			
 		}
 
 		setTimeout(() => {
@@ -472,6 +545,10 @@ const Credit = class extends React.Component {
 				frameLoading: false
 			})
 		}, 5000)
+	}
+
+	bindDLocal(result){
+		return bindDLocal(result)
 	}
 
 	handleCreditCards () {
@@ -568,7 +645,7 @@ const Credit = class extends React.Component {
 				window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
 			} else {
 				alert(details)
-				if (orderId) {
+				if (orderId && window.window.__is_login__) {
 					this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
 				}
 			}
@@ -625,7 +702,7 @@ const Credit = class extends React.Component {
 			<SHOPPINGBODY>
 				<div className="__left">
 					<div>
-						<Link to={`${window.ctx || ''}${__route_root__}/`} style={{textDecoration: 'none', color: '#222'}}>
+						<Link to={`${window.ctx || ''}${__route_root__}/checkout`} style={{textDecoration: 'none', color: '#222'}}>
 							◀ {intl.formatMessage({id: 'back_to_cart'})}
 						</Link>
 						<div style={{marginTop: 10}}>
@@ -654,7 +731,7 @@ const Credit = class extends React.Component {
 													<img alt="loading" src="https://dgzfssf1la12s.cloudfront.net/site/upgrade/20180316/loading.gif"/>
 												</div>
 											}
-											<iframe onLoad={ this.frameLoadHandle.bind(this) } style={{height: __Frame.height, width: '100%'}} src={__Frame.url}/>
+											<iframe onLoad={ this.frameLoadHandle.bind(this) } style={{height: __Frame.height, width: '100%'}} src={`${__Frame.url}&_=${this.state.frameSuffix}`}/>
 										</div>
 
 									}
@@ -717,7 +794,7 @@ const Credit = class extends React.Component {
 				this.state.showFrame && <Modal onClose={ this.showFrameHandle.bind(this) }>
 					<CREDITMODAL>
 						<div className="__title">{intl.formatMessage({id: 'use_new_card'})}</div>
-						<iframe onLoad={ this.frameLoadHandle.bind(this) } style={{height: __Frame.height}} className="__frame" src={__Frame.url}/>
+						<iframe onLoad={ this.frameLoadHandle.bind(this) } style={{height: __Frame.height}} className="__frame" src={`${__Frame.url}&_=${this.state.frameSuffix}`}/>
 
 						{
 							this.state.frameLoading && <div className="__loading">

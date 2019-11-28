@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import FullFixed from '../components/msite/full-fixed.jsx'
 import { connect } from 'react-redux'
 import { __route_root__ } from '../utils/utils.js'
-import { payDLocal } from '../api'
+import { payDLocal, bindDLocal } from '../api'
 import { goOrder } from '../utils/common-pay.js'
 import { injectIntl } from 'react-intl'
 
@@ -39,10 +39,17 @@ const DLocal = class extends React.Component {
 		window.dLocalPay = (result, errBack) => {
 			this.payDLocal(result).catch(({ result }) => errBack(result))
 		}
+		window.bindDLocal = (result, callBack , errBack) => {
+			this.bindDLocal(result).then(callBack).catch(({ result }) => errBack(result))
+		}
 	}
 
 	payDLocal(result) {
 		return payDLocal({ ...result, payMethod: this.props.payMethod }).then(goOrder)
+	}
+
+	bindDLocal(result){
+		return bindDLocal({ ...result, payMethod: this.props.payMethod })
 	}
 
 	close(evt) {
@@ -58,6 +65,7 @@ const DLocal = class extends React.Component {
 			currency = cart.orderSummary.orderTotal.currency
 			amount = cart.orderSummary.orderTotal.amount
 			country = cart.shippingDetail.country ? cart.shippingDetail.country.value : window.__country
+
 		}
 
 		return <FullFixed onClose={this.close} title={intl.formatMessage({ id: 'credit_card' })}>

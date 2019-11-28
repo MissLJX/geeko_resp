@@ -105,5 +105,6 @@ export default{
 	change_email: 'Mude o e-mail',
 	credit_card: 'cartão de crédito',
 	continue_shopping: 'continue comprando',
-	facebook_check: 'Se você verificar isso, enviaremos a você o status de rastreamento de logística e as informações do pedido no Messenger.'
+	facebook_check: 'Se você verificar isso, enviaremos a você o status de rastreamento de logística e as informações do pedido no Messenger.',
+	email: 'E-Mail'
 }

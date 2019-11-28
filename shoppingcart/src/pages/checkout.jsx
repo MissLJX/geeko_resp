@@ -15,7 +15,10 @@ import {
 	checkout_paypal,
 	useMercadocard,
 	usecreditcard,
-	checkout_computop
+	checkout_computop,
+	getJwt,
+	getLookup,
+	oceanpay3d
 } from '../api'
 
 import {
@@ -54,6 +57,7 @@ import Loading from '../components/msite/loading.jsx'
 import Loadable from 'react-loadable'
 
 import Mask from '../components/mask.jsx'
+import cardbinding from './cardbinding.jsx'
 
 
 const CreditCard = Loadable({
@@ -74,6 +78,11 @@ const CheckoutMercado = Loadable({
 
 const CheckoutDLocal = Loadable({
 	loader: () => import(/* webpackChunkName: "component--check-dlocal" */ './checkout-dlocal.jsx'),
+	loading: Loading
+})
+
+const CheckoutOcean = Loadable({
+	loader: () => import(/* webpackChunkName: "component--check-binding" */ './checkout-binding.jsx'),
 	loading: Loading
 })
 
@@ -214,6 +223,8 @@ const Checkout = class extends React.Component {
 			checking: false,
 			dlocalerror: null
 		}
+		this.processCallBack = this.processCallBack.bind(this)
+		this.processErrorBack = this.processErrorBack.bind(this)
 	}
 
 
@@ -499,6 +510,25 @@ const Checkout = class extends React.Component {
 						alert(result)
 					})
 					break
+				case '2':
+					this.setState({
+						checking: true
+					})
+					this.props.GETCREDITCARDS(payMethod.id).then(cards => {
+						if (!cards || cards.length < 1) {
+							this.props.history.push(`${this.props.match.url}/ocean/credit`)
+							this.setState({
+								checking: false
+							})
+						} else {
+							this.setState({
+								checking: false
+							})
+							this.props.TOGGLECREDIT(true)
+						}
+					})
+					break
+
 				case '3':
 					this.setState({
 						checking: true
@@ -733,12 +763,7 @@ const Checkout = class extends React.Component {
 
 			if(window.__dlocal){
 				window.__dlocal.createToken(this.cvvField).then(result => {
-					this.payCredit({...params, token: result.token}).catch(({ result }) => {
-						alert(result)
-						this.setState({
-							checking: false
-						})
-					})
+					this.payCredit({...params, token: result.token})
 				}).catch(result => {
 					if (result.error) {
 						// Inform the customer that there was an error.
@@ -752,28 +777,115 @@ const Checkout = class extends React.Component {
 
 
 		}else{
-			this.payCredit(params).catch(({ result }) => {
-				alert(result)
-				this.setState({
-					checking: false
-				})
-			})
+			this.payCredit(params)
 		}
 
 		
 	}
 
-	payCredit(params) {
-		return checkout_credit(params).then(data => data.result).then(({ success, transactionId, details, solutions = '' }) => {
-			if (success) {
-				window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-			} else {
-				alert(details + '\n' + solutions)
+	triggerOcean(){
+		const {orderId} = this.props.checkout
+		getJwt(orderId).then(({result}) => {
+			const {jwt, bin} = result
+			this.listenOcean3D(orderId, jwt, bin)
+		}).catch(({result}) => {
+			alert(result)
+			this.setState({
+				checking: false
+			})
+		})
+	}
+
+	listenOcean3D(orderId, jwt, bin){
+
+		var self = this
+
+		/*global Cardinal b:true*/
+		/*eslint no-undef: "error"*/
+		Cardinal.setup('init', {
+			jwt: jwt
+		})
+
+
+		Cardinal.trigger('bin.process', bin)
+		
+		Cardinal.off('payments.setupComplete')
+		Cardinal.off('payments.validated')
+
+		Cardinal.on('payments.setupComplete', function(setupCompleteData) {
+			const referenceId = setupCompleteData.sessionId
+			getLookup(referenceId, orderId).then(({result: lookup}) => {
+				if(lookup && lookup.lookupUrl){
+					Cardinal.continue('cca', {
+						'AcsUrl': lookup.lookupUrl,
+						'Payload': lookup.lookupLoad
+					},{
+						'OrderDetails': {
+							'TransactionId': lookup.transactionId
+						}
+					},
+					jwt
+					)
+				}else{
+					self.payOcean3D(orderId)
+				}
+			}).catch(({result}) => {
+				alert(result)
 				this.setState({
 					checking: false
 				})
-			}
+			})
+
+
 		})
+		
+		Cardinal.on('payments.validated', function(data, jwt) {
+			var cavv = data.Payment.ExtendedData.CAVV
+			var eci = data.Payment.ExtendedData.ECIFlag
+			var xid = data.Payment.ProcessorTransactionId
+			// var status = data.Payment.ExtendedData.PAResStatus
+			// var transactionId = data.Payment.ProcessorTransactionId
+			
+			//请求支付
+			self.payOcean3D(orderId, eci, cavv, xid)
+
+		})
+	}
+
+	payOcean3D(orderId, eci, cavv, xid){
+		oceanpay3d({orderId, cardEci: eci, cardCavv: cavv, cardXid:xid}).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
+	}
+
+
+	processCallBack({ success, transactionId, details, orderId, solutions = '' }){
+		if (success) {
+			window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
+		} else {
+			alert(details + '\n' + solutions)
+			this.setState({
+				checking: false
+			})
+		}
+	}
+
+	processErrorBack({ result }){
+		alert(result)
+		this.setState({
+			checking: false
+		})
+	}
+
+	payCredit(params) {
+		// const { creditcards } = this.props
+		// let card
+		// if(creditcards && creditcards.length > 0){
+		// 	card = creditcards.find( c => c.quickpayRecord.isSelected )
+		// }
+		// if(card && card.quickpayRecord.payMethod === '3'){
+		// 	this.triggerOcean()
+		// }else{
+		checkout_credit(params).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
+		// }
 	}
 
 	creditClose() {
@@ -800,7 +912,7 @@ const Checkout = class extends React.Component {
 
 		} else {
 			const path = {
-				pathname: `${window.ctx || ''}${__route_root__}/credit-card`,
+				pathname: `${this.props.match.url}/ocean/credit`,
 				state: {
 					exsiting: true
 				}
@@ -1026,7 +1138,7 @@ const Checkout = class extends React.Component {
 
 
 					{
-						isCreditShow && (payMethod.type === '11' || payMethod.type === '8' || payMethod.type === '12') && creditcards && creditcards.length && (
+						isCreditShow && (payMethod.type === '2' || payMethod.type === '11' || payMethod.type === '8' || payMethod.type === '12') && creditcards && creditcards.length && (
 							<React.Fragment>
 								<Mask />
 								<CreditCard
@@ -1127,6 +1239,15 @@ const Checkout = class extends React.Component {
 							...defaultStyles
 						})}
 						path={`${this.props.match.path}/dlocal/credit`} component={CheckoutDLocal} />
+
+
+					<AnimatedRoute {...defaultAnimations}
+						mapStyles={(styles) => ({
+							transform: `translateY(${styles.offset}%)`,
+							...defaultStyles
+						})}
+						path={`${this.props.match.path}/ocean/credit`} component={CheckoutOcean} />
+
 
 
 				</div>

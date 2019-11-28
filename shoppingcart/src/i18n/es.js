@@ -105,5 +105,6 @@ export default{
 	change_email: 'Cambiar e-mail',
 	credit_card: 'tarjeta de crédito',
 	continue_shopping: 'seguir comprando',
-	facebook_check: 'Si marca esta opción, le enviaremos el estado de seguimiento de la logística y la información del pedido en Messenger.'
+	facebook_check: 'Si marca esta opción, le enviaremos el estado de seguimiento de la logística y la información del pedido en Messenger.',
+	email: 'E-Mail'
 }
