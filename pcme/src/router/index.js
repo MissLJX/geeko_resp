@@ -17,6 +17,7 @@ import UpdateProfile from '../components/update-profile.vue'
 import Wishlist from '../components/wishlist.vue'
 import confirmSuccess from '../pages/confirm-success.vue'
 import OrderDetail from '../pages/order-detail.vue'
+import OrderCode from '../pages/order-code.vue'
 import LogisticsDetail from '../pages/logistics-detail.vue'
 import PackageLogisticsDetail from '../pages/package-logistics-detail.vue'
 import OrderReview from '../pages/order-review.vue'
@@ -128,6 +129,11 @@ const routes = [
         path:'/me/m/order/detail/:orderId',
         component: OrderDetail,
         meta: {title:'OrderDetail'},
+    },
+    {
+        path:'/me/m/order/code/:code',
+        component: OrderCode,
+        meta: {title:'OrderCode'},
     },
     {
         path:'/me/m/order-review',

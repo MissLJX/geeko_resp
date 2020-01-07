@@ -1,5 +1,9 @@
 import axios from 'axios'
 import qs from 'qs'
+import {getWid} from "../../../geeko/src/utils/geekoutils";
+
+
+
 
 
 
@@ -9,7 +13,11 @@ const instance = axios.create({
     timeout: 50000,
     headers: {
         appVersion: '3.5.7',
+<<<<<<< HEAD
+        wid: getWid(),
+=======
         wid: '1234567u8i9956789456',
+>>>>>>> 88a81fd2545fda8d8eb011cab083518636e22c16
         accessToken: window.accessToken || '',
         deviceType: 'pc',
         xtoken: window.secret || ''
@@ -28,7 +36,11 @@ const apiResult = function (res, resolve, reject) {
 
 const reRequest = () => instance.get('/context/anon/gat', {}, []).then((res) => {
     window.xtoken = res.data.result
+<<<<<<< HEAD
+    instance.defaults.headers['xtoken'] = window.xtoken
+=======
     instance.defaults.headers.common['xtoken'] = window.xtoken
+>>>>>>> 88a81fd2545fda8d8eb011cab083518636e22c16
     return window.xtoken
 }).catch(() => {
     window.location.reload()

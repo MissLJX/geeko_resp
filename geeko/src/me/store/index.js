@@ -44,6 +44,7 @@ const state = {
     orderCountUnpaid: 0,
     message:[],
     creditcards:[],
+    mercadocreditcards:[]
 }
 
 const getters = {
@@ -83,6 +84,7 @@ const getters = {
     orderCountUnpaid: state => state.orderCountUnpaid,
     message: state => state.message,
     creditcards: state =>state.creditcards,
+    mercadocreditcards: state => state.mercadocreditcards
 }
 
 const mutations = {
@@ -225,6 +227,9 @@ const mutations = {
     },
     [types.Me_GET_CREDITCARDS](state,creditcards){
         state.creditcards = creditcards
+    },
+    [types.Me_GET_MERCADOCREDITCARDS](state,mercadocreditcards){
+        state.mercadocreditcards = mercadocreditcards
     },
     [types.ME_DEL_CREDIT_CARD](state,id){
         state.id = id
@@ -559,6 +564,12 @@ const actions = {
     getCreditCards({commit}){
         return api.getCreditCards().then((creditcards) =>{
             commit(types.Me_GET_CREDITCARDS,creditcards)
+        })
+    },
+
+    getMercadoCreditCards({commit}){
+        return api.getMercadoCreditCards().then((mercadocreditcards) =>{
+            commit(types.Me_GET_MERCADOCREDITCARDS,mercadocreditcards)
         })
     },
 

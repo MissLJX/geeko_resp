@@ -1,6 +1,25 @@
+import Cookie from 'js-cookie'
+
 export const PROJECT = ''
 export const ROUTER_PATH_ME = PROJECT + '/me'
+export const getUUID = () => {
+    function S4() {
+        return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+    }
 
+    return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
+}
+
+
+export const getWid = () => {
+    var wid = '';
+    wid = Cookie.get('clientId');
+    if (!wid) {
+        Cookie.set('clientId', getUUID(), {expires: 365});
+        wid = Cookie.get('clientId');
+    }
+    return wid;
+}
 const month_names = [
     'Jan',
     'Feb',

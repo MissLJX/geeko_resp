@@ -1,7 +1,7 @@
 import axios from './apiconfigs'
 import qs from 'qs'
-const VPATH = '/v8'
-const NVPATH = '/v8'
+const VPATH = '/v9'
+const NVPATH = '/v9'
 import * as http_infos from "./http_infos";
 
 export const get = () => {
@@ -37,16 +37,19 @@ export const getOrderCountPaid = () => {
 }
 //orders
 export const getOrder = (id) => {
-    return axios.cpost(NVPATH + '/order/anon/get-order-details',id).then(data => data.result)
+    return axios.cpost(NVPATH + '/order/get-order-details',id).then(data => data.result)
+}
+export const getOrderByCode = (id) => {
+    return axios.cpost(NVPATH + '/order/anon/get-order-details-by-code',id).then(data => data.result)
 }
 export const getOrders =(skip, api_suffix) => {
     return axios.get(`${NVPATH}/order/${skip}/20/${api_suffix}`).then(data => data.result)
 }
 export const confirmOrder = (id) =>{
-    return axios.get('/v8/order/'+id+'/receipt')
+    return axios.get('/v9/order/'+id+'/receipt')
 }
 export const cancelOrder = (id,reason) =>{
-    return axios.get('/v8/order/cancel',{orderId:id,cancelReason:reason})
+    return axios.get('/v9/order/cancel',{orderId:id,cancelReason:reason})
 }
 //coupons
 export const getCoupons = () => {
@@ -81,8 +84,12 @@ export const removeWishProducts = (data) => {
 export const removeExpiredProducts = () => axios.get(VPATH + '/wanna-list/clear-products')
 
 //get-credit-cards
+
 export const getCreditCards = () => {
     return axios.get('/quickpay-record/history').then(data => data.result)
+}
+export const getMercadoCreditCards = () => {
+    return axios.get('/mercadopago/get-cards').then(data => data.result)
 }
 //delete-credit-cards
 export const deleteCreditCard = (cardId) => axios.get('/quickpay-record/'+cardId+'/remove')
@@ -197,7 +204,7 @@ export const rate = (rate) =>{
 }
 //addProducts
 export const addProducts = (products) =>{
-    return axios.post('/v8/shopping-cart/add-products',products)
+    return axios.post('/v9/shopping-cart/add-products',products)
 }
 
 //notifications

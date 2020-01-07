@@ -10,7 +10,7 @@
                 </div>
                 <div class="tbl pd0">
                     <!--<div class="tbc"><i class="iconfont">&#xe737;</i><p>Post style</p><span>+2000</span></div>-->
-                    <div class="tbc"><a :href="shoppingCartUrl"><i class="iconfont">&#xe739;</i><p>Share item</p><span>+30</span></a></div>
+                    <!--<div class="tbc"><a :href="shoppingCartUrl"><i class="iconfont">&#xe739;</i><p>Share item</p><span>+30</span></a></div>-->
                     <!--<div class="tbc"><i class="iconfont">&#xe738;</i><p>Invite friends</p><span>+200</span></div>-->
                     <div class="tbc"><a :href="indexUrl"><i class="iconfont">&#xe735;</i><p>Make purchase</p><span>$100=+100</span></a></div>
                     <!--<div class="tbc"><a :href="orderHref"><i class="iconfont">&#xe734;</i><p>Leave a review</p><span>+100</span></a></div>-->

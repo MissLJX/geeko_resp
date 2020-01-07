@@ -1,8 +1,8 @@
 <template>
     <div class="el-cards">
-        <div class="nocard" v-if="!creditcards">No Card.</div>
+        <div class="nocard" v-if="(!getAllCards)">No Card.</div>
         <div class="el-card">
-            <div class="el-card-info tbl" v-for="card in creditcards" :style="{'background-color': card.style && card.style.color ? card.style.color : '#fff'}">
+            <div class="el-card-info tbl" v-for="card in getAllCards" :style="{'background-color': card.style && card.style.color ? card.style.color : '#fff'}">
                 <div class="tbl-cell el-card-img">
                     <img :src="card.cardStyle && card.style.imageURL ? card.style.imageURL : 'https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/chicme/Credit+Card.png'">
                 </div>
@@ -10,7 +10,7 @@
                     <p class="el-card-name">{{card.style.name==='other' ? '' : card.style.name}}</p>
                     <p class="el-card-num">{{card.quickpayRecord.cardNumber}}</p>
                 </div>
-                <div class="tbl-cell el-card-del" @click="isAlert=true;cardId=card.quickpayRecord.id;cardMethod=card.quickpayRecord.payMethod">
+                <div class="tbl-cell el-card-del" @click="showMask(card)">
                     <i class="iconfont">&#xe629;</i>
                 </div>
             </div>
@@ -36,25 +36,49 @@
                 isAlert:false,
                 cardId:'',
                 cardMethod:'',
+                cardArr:[]
             }
         },
         computed: {
-            ...mapGetters(['creditcards'])
+            ...mapGetters([
+                'creditcards',
+                'mercadocreditcards'
+                ]),
+            getAllCards(){
+                if(this.mercadocreditcards){
+                    this.cardArr =  this.creditcards.concat(this.mercadocreditcards);
+                }else{
+                    this.cardArr =  this.creditcards;
+                }
+                return this.cardArr;
+            }
         },
         created() {
-            this.$store.dispatch('getCreditCards');
+            this.$store.dispatch('getCreditCards')
+            this.$store.dispatch('getMercadoCreditCards');
         },
         methods:{
+            showMask(currCard){
+                this.isAlert=true;
+                this.cardMethod=currCard.quickpayRecord.payMethod;
+                if(currCard.quickpayRecord.payMethod.length > 0  && currCard.quickpayRecord.payMethod=='19'){
+                    this.cardId = currCard.quickpayRecord.quickpayId;
+                }else{
+                    this.cardId = currCard.quickpayRecord.id;
+                }
+            },
             deleteCard(flag){
                 this.isAlert = false;
                 if(flag === '1'){
                     if(this.cardMethod === '19'){
                         this.$store.dispatch('deleteMercadoCard', {cardId:this.cardId}).then(()=>{
                             this.$store.dispatch('getCreditCards');
+                            this.$store.dispatch('getMercadoCreditCards');
                         });
                     }else{
                         this.$store.dispatch('deleteCreditCard', {cardId:this.cardId}).then(()=>{
                             this.$store.dispatch('getCreditCards');
+                            this.$store.dispatch('getMercadoCreditCards');
                         });
                     }
                 }

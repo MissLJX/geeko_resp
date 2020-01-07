@@ -350,9 +350,9 @@
                 return this.info.gender == 1 ? 'Man' : (this.info.gender == 2 ? 'Woman' : 'Other')
             },
             baseHeaderUrl() {
-                if (site == 'chicme') {
+                if (window.name == 'chicme') {
                     return 'https://dgzfssf1la12s.cloudfront.net/site/pc/icon35.png';
-                } else if (site == 'ivrose') {
+                } else if (window.name == 'ivrose') {
                     return 'https://dgzfssf1la12s.cloudfront.net/site/ivrose/icon47.png';
                 } else {
                     return 'https://dgzfssf1la12s.cloudfront.net/site/bouti/logo02.png';
