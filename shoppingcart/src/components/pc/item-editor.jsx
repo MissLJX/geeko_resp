@@ -28,7 +28,7 @@ const TIP = styled.span`
 	color: #666666;
 	padding: 4px 10px;
 	line-height: 18px;
-  display: inline-block;
+	display: inline-block;
 `
 
 const LINE = styled.div`
@@ -49,7 +49,8 @@ const BLOCKS = styled.div`
 
 const IMAGE = styled.div`
 	width: 45px;
-	height: 59px;
+	height: 56px;
+	overflow: hidden;
 	cursor: pointer;
 	&.__selected{
 		border: solid 1px #222222;
@@ -69,10 +70,10 @@ const SIZE = styled.span`
 
 const QInput = styled.input`
 	&::-webkit-outer-spin-button, &::-webkit-inner-spin-button{                
-    -webkit-appearance: none !important;
-    -moz-appearance:textfield;
-  } 
-  width: 88px;
+		-webkit-appearance: none !important;
+		-moz-appearance:textfield;
+	} 
+	width: 88px;
 	height: 32px;
 	border: solid 1px #cacaca;
 	text-align: center;
@@ -80,169 +81,170 @@ const QInput = styled.input`
 `
 
 const QUANITTY = styled.div`
-  & > *{
-    margin-left:4px;
-    vertical-align: top;
-    &:first-child{
-      margin-left:0;
-    }
-  }
+	& > *{
+		margin-left:4px;
+		vertical-align: top;
+		&:first-child{
+			margin-left:0;
+		}
+	}
 `
 
 const OPBTN = styled.span`
-  width: 40px;
-  height: 32px;
-  border: solid 1px #e6e6e6;
-  line-height: 30px;
-  text-align: center;
-  cursor: pointer;
-  display: inline-block;
-  &:active{
-    border-color: #222;
-    color: #222;
-  }
+	width: 40px;
+	height: 32px;
+	border: solid 1px #e6e6e6;
+	line-height: 30px;
+	text-align: center;
+	cursor: pointer;
+	display: inline-block;
+	&:active{
+		border-color: #222;
+		color: #222;
+	}
 `
 
 export default class extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-    	selectedProduct: null,
-      selectedVariant: null,
-      selectedQuantity: 1
-    }
-  }
+	constructor (props) {
+		super(props)
+		this.state = {
+			selectedProduct: null,
+			selectedVariant: null,
+			selectedQuantity: 1
+		}
+	}
 
-  existVariant (product, variantId) {
-    return product.variants && product.variants.find(v => v.id === variantId)
-  }
+	existVariant (product, variantId) {
+		return product.variants && product.variants.find(v => v.id === variantId)
+	}
 
-  componentWillMount () {
-    // 预处理
-    const { products, productId, variantId } = this.props
+	componentWillMount () {
+		// 预处理
+		const { products, productId, variantId } = this.props
 
-    let selectedProduct = products.find(p => p.id === productId && this.existVariant(p, variantId)), selectedVariant
-    // 如果productId已经下架  不存在products中
-    if (!selectedProduct) {
-      selectedProduct = products[0]
-    }
+		let selectedProduct = products.find(p => p.id === productId && this.existVariant(p, variantId)), selectedVariant
+		// 如果productId已经下架  不存在products中
+		if (!selectedProduct) {
+			selectedProduct = products[0]
+		}
 
-    // 如果选中产品中已经没有此子产品  则取第一个
-    selectedVariant = selectedProduct.variants.find(v => v.id === variantId) || selectedProduct.variants[0]
+		// 如果选中产品中已经没有此子产品  则取第一个
+		selectedVariant = selectedProduct.variants.find(v => v.id === variantId) || selectedProduct.variants[0]
 
-    this.setState({
-      selectedVariant: selectedVariant,
-      selectedProduct: selectedProduct,
-      selectedQuantity: this.props.quantity
-    })
-  }
+		this.setState({
+			selectedVariant: selectedVariant,
+			selectedProduct: selectedProduct,
+			selectedQuantity: this.props.quantity
+		})
+	}
 
-  setProductHandle (product) {
-    this.setState({
-      selectedProduct: product,
-      selectedVariant: product.variants[0]
-    })
-  }
+	setProductHandle (product) {
+		this.setState({
+			selectedProduct: product,
+			selectedVariant: product.variants[0]
+		})
+	}
 
-  editHandle () {
-    const newVaraintId = this.state.selectedVariant.id
-    const newQuantity = this.state.selectedQuantity
+	editHandle () {
+		const newVaraintId = this.state.selectedVariant.id
+		const newQuantity = this.state.selectedQuantity
 
-    this.props.editHandle(this.props.variantId, newVaraintId, newQuantity)
-  }
+		this.props.editHandle(this.props.variantId, newVaraintId, newQuantity)
+	}
 
-  changeQuantity (op) {
-    if (op === '+') {
-      this.setState({
-        selectedQuantity: this.state.selectedQuantity + 1
-      })
-    } else {
-      if (this.state.selectedQuantity > 1) {
-        this.setState({
-          selectedQuantity: this.state.selectedQuantity - 1
-        })
-      }
-    }
-  }
+	changeQuantity (op) {
+		if (op === '+') {
+			this.setState({
+				selectedQuantity: this.state.selectedQuantity + 1
+			})
+		} else {
+			if (this.state.selectedQuantity > 1) {
+				this.setState({
+					selectedQuantity: this.state.selectedQuantity - 1
+				})
+			}
+		}
+	}
 
-  render () {
-    const { products } = this.props
-    const { selectedVariant, selectedProduct, selectedQuantity} = this.state
+	render () {
+		const { products } = this.props
+		const { selectedVariant, selectedProduct, selectedQuantity} = this.state
 
-    return <Modal onClose={this.props.onClose}>
-      <EDITOR>
-        <LINE className="x-table x-fw __vt __fixed">
-          <div className="x-cell" style={{paddingTop: 15}}>
-            <LABEL><FormattedMessage id="color"/></LABEL>
-          </div>
 
-          <div className="x-cell">
-            <BLOCKS>
-            	{
-            		products.map((product, index) => <div className="__block" key={index}>
-                  <IMAGE onClick={ () => { this.setProductHandle(product) }} className={ selectedProduct.id === product.id && this.existVariant(product, selectedVariant.id) ? '__selected' : '' } style={{backgroundImage: `url(https://dgzfssf1la12s.cloudfront.net/medium/${product.variants[0].image})`}}/>
-                </div>)
-            	}
-            </BLOCKS>
+		return <Modal onClose={this.props.onClose}>
+			<EDITOR>
+				<LINE className="x-table x-fw __vt __fixed">
+					<div className="x-cell" style={{paddingTop: 15}}>
+						<LABEL><FormattedMessage id="color"/></LABEL>
+					</div>
 
-            {
-            	<TIP>{`You selected ${selectedVariant.color}`}</TIP>
-            }
-          </div>
-        </LINE>
+					<div className="x-cell">
+						<BLOCKS>
+							{
+								products.map((product, index) => <div className="__block" key={index}>
+									<IMAGE onClick={ () => { this.setProductHandle(product) }} className={ selectedProduct.id === product.id && this.existVariant(product, selectedVariant.id) ? '__selected' : '' } style={{backgroundImage: `url(https://dgzfssf1la12s.cloudfront.net/medium/${product.variants[0].image})`}}/>
+								</div>)
+							}
+						</BLOCKS>
 
-        {
-          (!selectedProduct.variants.length === 1 || selectedProduct.variants[0].size) && <LINE style={{marginTop: 25}} className="x-table x-fw __vt __fixed">
-            <div className="x-cell" style={{paddingTop: 2}}>
-              <LABEL><FormattedMessage id="size"/></LABEL>
-            </div>
-            <div className="x-cell">
-              <BLOCKS>
-                {
-                  selectedProduct.variants.map(variant => <div key={variant.id} className="__block">
-                    <SIZE onClick={ () => { this.setState({selectedVariant: variant}) } } className={ selectedVariant.id === variant.id ? '__selected' : '' }>{variant.size}</SIZE>
-                  </div>)
-                }
-              </BLOCKS>
+						{
+							<TIP>{`You selected ${selectedVariant.color}${selectedProduct.theme?`-${selectedProduct.theme}`:''}`}</TIP>
+						}
+					</div>
+				</LINE>
 
-              {
-                selectedVariant && selectedVariant.description && <TIP>{ selectedVariant.description }</TIP>
-              }
-            </div>
-          </LINE>
-        }
+				{
+					(!selectedProduct.variants.length === 1 || selectedProduct.variants[0].size) && <LINE style={{marginTop: 25}} className="x-table x-fw __vt __fixed">
+						<div className="x-cell" style={{paddingTop: 2}}>
+							<LABEL><FormattedMessage id="size"/></LABEL>
+						</div>
+						<div className="x-cell">
+							<BLOCKS>
+								{
+									selectedProduct.variants.map(variant => <div key={variant.id} className="__block">
+										<SIZE onClick={ () => { this.setState({selectedVariant: variant}) } } className={ selectedVariant.id === variant.id ? '__selected' : '' }>{variant.size}</SIZE>
+									</div>)
+								}
+							</BLOCKS>
 
-        <LINE className="x-table x-fw __vt __fixed" style={{marginTop: 25}}>
-        	<div className="x-cell" style={{paddingTop: 2}}>
-          	<LABEL><FormattedMessage id="qty"/></LABEL>
-        	</div>
-        	<div className="x-cell">
+							{
+								selectedVariant && selectedVariant.description && <TIP>{ selectedVariant.description }</TIP>
+							}
+						</div>
+					</LINE>
+				}
 
-            <QUANITTY>
-              <OPBTN onClick={ (evt) => { this.changeQuantity('-') } }><Icon>&#xe6ba;</Icon></OPBTN>
-        		  <QInput type="number" value={selectedQuantity} onChange={ (evt) => { this.setState({selectedQuantity: evt.target.value >= 1 ? Math.floor(evt.target.value) : 1 }) } }/>
-        	    <OPBTN onClick={ (evt) => { this.changeQuantity('+') } } ><Icon>&#xe6b9;</Icon></OPBTN>
-            </QUANITTY>
-          </div>
-        </LINE>
+				<LINE className="x-table x-fw __vt __fixed" style={{marginTop: 25}}>
+					<div className="x-cell" style={{paddingTop: 2}}>
+						<LABEL><FormattedMessage id="qty"/></LABEL>
+					</div>
+					<div className="x-cell">
 
-        <div style={{marginTop: 30}}>
-          {
-            selectedVariant && selectedVariant.status === '1' && (selectedVariant.inventory > 0 || selectedProduct.isAutoInventory) ? (
-              <BigButton bgColor="#222" style={{width: 240, height: 40}} onClick={ this.editHandle.bind(this) }>
-                <FormattedMessage id="submit"/>
-              </BigButton>
+						<QUANITTY>
+							<OPBTN onClick={ (evt) => { this.changeQuantity('-') } }><Icon>&#xe6ba;</Icon></OPBTN>
+							<QInput type="number" value={selectedQuantity} onChange={ (evt) => { this.setState({selectedQuantity: evt.target.value >= 1 ? Math.floor(evt.target.value) : 1 }) } }/>
+							<OPBTN onClick={ (evt) => { this.changeQuantity('+') } } ><Icon>&#xe6b9;</Icon></OPBTN>
+						</QUANITTY>
+					</div>
+				</LINE>
 
-            ) : (
-              <BigButton bgColor="#999" style={{width: 240, height: 40, cursor: 'not-allowed'}}>
-                <FormattedMessage id="sold_out"/>
-              </BigButton>
-            )
-          }
+				<div style={{marginTop: 30}}>
+					{
+						selectedVariant && selectedVariant.status === '1' && (selectedVariant.inventory > 0 || selectedProduct.isAutoInventory) ? (
+							<BigButton bgColor="#222" style={{width: 240, height: 40}} onClick={ this.editHandle.bind(this) }>
+								<FormattedMessage id="submit"/>
+							</BigButton>
 
-        </div>
+						) : (
+							<BigButton bgColor="#999" style={{width: 240, height: 40, cursor: 'not-allowed'}}>
+								<FormattedMessage id="sold_out"/>
+							</BigButton>
+						)
+					}
 
-      </EDITOR>
-    </Modal>
-  }
+				</div>
+
+			</EDITOR>
+		</Modal>
+	}
 }

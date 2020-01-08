@@ -11,27 +11,27 @@ const Blockers = styled.ol`
 `
 
 const SizeColorBlockers = class extends React.Component {
-  constructor (props) {
-    super(props)
-  }
+	constructor (props) {
+		super(props)
+	}
 
-  isDisabled (item) {
-  	return this.props.isDisabled(item)
-  }
+	isDisabled (item) {
+		return this.props.isDisabled(item)
+	}
 
-  render () {
-  	const {items, onClick, selectedItem} = this.props
+	render () {
+		const {items, onClick, selectedItem} = this.props
 
-  	return <Blockers>
-  		{
-  			items && items.map(item => (
-	  			<li key={item}>
-	  				 <Blocker disabled={this.isDisabled(item)} selected={item === selectedItem} onClick={onClick} value={item} label={item}/>
-	  			</li>
-  			))
-  		}
-  	</Blockers>
-  }
+		return <Blockers>
+			{
+				items && items.map(item => (
+					<li key={item}>
+						 <Blocker disabled={this.isDisabled(item)} selected={item === selectedItem} onClick={onClick} value={item} label={item}/>
+					</li>
+				))
+			}
+		</Blockers>
+	}
 }
 
 export default SizeColorBlockers
