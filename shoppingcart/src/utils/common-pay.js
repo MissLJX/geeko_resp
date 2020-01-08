@@ -24,7 +24,7 @@ export const goOrder = ({ result }) => {
 			window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
 		} else {
 			alert(details + '\n' + (solutions || ''))
-			if (orderId) {
+			if (orderId && window.__is_login__) {
 				window.location.href = `${window.ctx || ''}/checkout/${orderId}`
 			}
 		}
@@ -38,7 +38,7 @@ export const payHandler = ( result ) => {
 			window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
 		}else{
 			alert(`${details}\n${solutions?solutions:''}`)
-			if (orderId) {
+			if (orderId && window.__is_login__) {
 				this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
 			}
 		}
