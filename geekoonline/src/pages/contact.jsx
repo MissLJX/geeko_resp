@@ -73,9 +73,9 @@ const INFOS = Styled.dl`
 
 const Info = {
   s: {
-    name: '夏先生',
+    name: '何小姐',
     phone:'021 61762186',
-    email:'xialuping@geeko.online'
+    email:'hejie@geeko.online'
   },
   n: {
     name: '余小姐',
@@ -83,9 +83,9 @@ const Info = {
     email:'yuping@geeko.online'
   },
   g: {
-    name: '夏先生',
+    name: '何小姐',
     phone:'020 32547002',
-    email:'xialuping@geeko.online'
+    email:'hejie@geeko.online'
   }
 }
 

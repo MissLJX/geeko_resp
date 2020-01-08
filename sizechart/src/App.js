@@ -3,7 +3,7 @@
  */
 import 'babel-polyfill'
 import Vue from 'vue'
-import App from './pages/index.vue'
+import App from './pages/m-index.vue'
 import i18n from './i18n'
 
 new Vue({

@@ -61,6 +61,7 @@ const state = {
     wishProducts: [],
     wishskip: 0,
     creditcards:[],
+    mercadocreditcards:[],
     addresses: [],
 
     countries: null,
@@ -161,6 +162,7 @@ const getters = {
     wishProducts: state => state.wishProducts,
     wishskip: state => state.wishskip,
     creditcards: state =>state.creditcards,
+    mercadocreditcards: state =>state.mercadocreditcards,
     addresses: state => state.addresses,
     countries: state => state.countries,
     states: state => state.states,
@@ -359,6 +361,9 @@ const mutations = {
     //crdits-cards
     [types.ME_GET_CREDITCARDS](state,creditcards){
         state.creditcards = creditcards
+    },
+    [types.ME_GET_MERCADOCREDITCARDS](state,mercadocreditcards){
+        state.mercadocreditcards = mercadocreditcards
     },
     //address-book
     [types.ME_GET_ADDRESSES](state, _addresses){
@@ -718,9 +723,13 @@ const actions = {
     getOrderDetail({commit},id){
       commit(types.HOME_ORDER_ID,id)
     },
-
     getOrder({commit},id){
         return api.getOrder({orderId:id}).then((order) => {
+            commit(types.ME_ORDER_DETAIL, order)
+        })
+    },
+    getOrderByCode({commit},id){
+        return api.getOrderByCode({code:id}).then((order) => {
             commit(types.ME_ORDER_DETAIL, order)
         })
     },
@@ -795,6 +804,11 @@ const actions = {
     getCreditCards({commit}){
         return api.getCreditCards().then((creditcards) =>{
             commit(types.ME_GET_CREDITCARDS,creditcards)
+        })
+    },
+    getMercadoCreditCards({commit}){
+        return api.getMercadoCreditCards().then((mercadocreditcards) =>{
+            commit(types.ME_GET_MERCADOCREDITCARDS,mercadocreditcards)
         })
     },
     //delete-credit-card

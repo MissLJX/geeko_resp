@@ -49,7 +49,11 @@
             deleteHandle(isTrue){
                 this.isShow = false;
                 if(isTrue === '1'){
-                    this.$emit('delete', this.quickpayRecord.id , this.quickpayRecord.payMethod)
+                    let cardId = this.quickpayRecord.id
+                    if(this.quickpayRecord.payMethod == '19'){
+                        cardId = this.quickpayRecord.quickpayId
+                    }
+                    this.$emit('delete', cardId , this.quickpayRecord.payMethod)
                 }
             }
         },
@@ -92,9 +96,9 @@
                 }
             },
             promptTextColor() {
-                if (site === 'chicme') {
+                if (window.name === 'chicme') {
                     return '#e5004f';
-                } else if (site === 'ivrose') {
+                } else if (window.name === 'ivrose') {
                     return '#e9546b';
                 } else {
                     return '#337ab7';

@@ -1,8 +1,8 @@
 <template>
     <div class="el-wallet-body">
         <page-header>{{$t('label.creditcard')}}</page-header>
-        <card-list :creditcards="creditcards" @delete="deleteHandle"></card-list>
-        <div style="text-align: center;line-height: 50px" v-if="!creditcards">No Card.</div>
+        <card-list :creditcards="getAllCards" @delete="deleteHandle"></card-list>
+        <div style="text-align: center;line-height: 50px" v-if="!getAllCards">No Card.</div>
     </div>
 </template>
 
@@ -24,18 +24,29 @@
     export default{
         computed: {
             ...mapGetters('me', [
-                'creditcards'
-            ])
+                'creditcards','mercadocreditcards'
+            ]),
+            getAllCards(){
+                let cardArr = [];
+                if(this.mercadocreditcards){
+                    cardArr =  this.creditcards.concat(this.mercadocreditcards);
+                }else{
+                    cardArr =  this.creditcards;
+                }
+                return cardArr;
+            }
         },
         methods: {
             deleteHandle(cardId,method){
                 if(method === '19'){
                     store.dispatch('me/deleteMercadoCard', {cardId}).then(()=>{
                         store.dispatch('me/getCreditCards');
+                        store.dispatch('me/getMercadoCreditCards');
                     });
                 }else{
                     store.dispatch('me/deleteCreditCard', {cardId}).then(()=>{
                         store.dispatch('me/getCreditCards');
+                        store.dispatch('me/getMercadoCreditCards');
                     });
                 }
             },
@@ -46,6 +57,7 @@
         },
         created() {
             store.dispatch('me/getCreditCards');
+            store.dispatch('me/getMercadoCreditCards');
         }
     }
 </script>

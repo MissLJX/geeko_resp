@@ -480,7 +480,7 @@
             },
             getReturnLabel(){
                 window.recordReturnLabel(this.orderdetail.id);
-                return document.ctx + "/v8/order/report-return-label?orderId="+this.orderdetail.id ;
+                return document.ctx + "/v9/order/report-return-label?orderId="+this.orderdetail.id ;
             }
         },
         created(){
@@ -493,7 +493,7 @@
                 this.isloding = false
             }).catch((e) => {
                 console.error(e);
-                window.location.href='/me/m/order'
+               /* window.location.href='/me/m/order'*/
             })
             this.$store.dispatch('getCancelOrderReason')
         }

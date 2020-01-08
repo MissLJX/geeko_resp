@@ -123,7 +123,7 @@ const JoinForm = class extends React.Component{
 
       <div style={{marginTop: 37}}>
         <BUTTONS>
-          <File name="attachments" type="file" text={`+ 上传建立 & 作品`} onChange={this.handleInputChange} validations={[required]}/>
+          <File name="attachments" type="file" text={`+ 上传简历 & 作品`} onChange={this.handleInputChange} validations={[required]}/>
           {
             this.state.loading ? <div style={{backgroundColor: '#666', color:'#fff', textAlign: 'center', lineHeight:'40px' ,border: 'none', width: 108, height: 40}}>
               提交 >
@@ -145,7 +145,7 @@ const JoinForm = class extends React.Component{
         </LABELVALUE>
         <LABELVALUE>
           <span className="__label">E-mail：</span>
-          <span className="__value">xialuping@geeko.online</span>
+          <span className="__value">hejie@geeko.online</span>
         </LABELVALUE>
       </LABEVALUES>
       

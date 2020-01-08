@@ -49,6 +49,24 @@
                         </div>
                     </div>
                 </div>
+                <!--客服评价对话框-->
+                <div class="buyer" v-if="addRated && showAddRate">
+                    <div class="el-me-headerImage fl" :style="{'background-image': 'url('+sellerheaderImage+'' }" style="margin-right: 10px"></div>
+                    <div class="cet fl">
+                        <div class="sanjiao-left"></div>
+                        <div class="txtcontent">
+                            <p>{{addRated}}</p>
+                            <div class="addRate">
+                                <div class="rate-flex">
+                                    <div class="box" :class="{'like-active': rateData.rate===5}" @click="starClickHandle(5)"><i class="iconfont">&#xe756;</i>Satisfied</div>
+                                    <div class="box" :class="{'unlike-active': rateData.rate===1}" @click="starClickHandle(1)"><i class="iconfont">&#xe757;</i>Unsatisfied</div>
+                                </div>
+                                <textarea v-model="initReviewMsg" style="resize:none;padding: 10px;height: 84px;" maxlength="500" placeholder="We'd love to hear what you think of our customer service to help us to serve you better."></textarea>
+                                <div class="rate-btn" @click="sendRateData(true)">{{$t("confirm")}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="s-sd">
@@ -61,7 +79,7 @@
             <div class="rate-con">
                 <div v-if="canBeRated" class="rate-tbl">
                     <i class="iconfont rate-cell">&#xe60d;</i>
-                    <span class="rate-cell rate-click" @click="() => {this.showRater = true}">{{$t("rateMyService")}}</span>
+                    <span class="rate-cell rate-click" @click="() => {this.showRater = true,this.showAddRate = false}">{{$t("rateMyService")}}</span>
                 </div>
                 <div class="rate-star" v-if="showRater">
                     <div class="rate-positive" >
@@ -71,7 +89,7 @@
                              <div class="box" :class="{'unlike-active': this.rateData.rate===1}" @click="starClickHandle(1)"><i class="iconfont">&#xe757;</i>Unsatisfied</div>
                         </div>
                         <textarea v-model="rateData.message" style="resize:none;padding: 10px;height: 84px;" maxlength="500" :placeholder="$t('ratecontent')"></textarea>
-                        <div class="rate-btn" @click="sendRateData">{{$t("confirm")}}</div>
+                        <div class="rate-btn" @click="sendRateData(false)">{{$t("confirm")}}</div>
                         <div class="rate-absolute"></div>
                     </div>
 
@@ -92,16 +110,6 @@
             return{
                 selected: '666',
                 isRequired:false,
-                /*options: [
-                    { text: this.$t('sizecolorpre'), value: '0' },
-                    { text: this.$t('changeshippingaddress'), value: '2' },
-                    { text: this.$t('shippingstatus'), value: '3' },
-                    { text: this.$t('wrongitem'), value: '4' },
-                    { text: this.$t('upgrade'), value: '5' },
-                    { text: this.$t('returnorexchange'), value: '6' },
-                    { text: this.$t('cancelorder'), value: '8' },
-                    { text: this.$t('others'), value: '7' },
-                ],*/
                 msg:'',
                 addticket:'',
                 showRater:false,
@@ -111,6 +119,8 @@
                     id: '',
                     reviewMsg:[]
                 },
+                showAddRate:true,
+                initReviewMsg:''
             }
         },
         components: {
@@ -140,6 +150,20 @@
                 }
                 return this.ticket_con && this.ticket_con.canBeRated
             },
+            addRated(){
+                if(this.ticket_con && this.ticket_con.reviewFlag === 1){
+                    return this.ticket_con.reviewPrompt ? this.ticket_con.reviewPrompt : ''
+                }else{
+                    return false
+                }
+            },
+            ticketId(){
+                if(this.ticket_con && this.ticket_con.id ){
+                    return this.ticket_con.id
+                }else{
+                    return false
+                }
+            }
         },
         methods: {
             getDate(paymentTime){
@@ -206,15 +230,19 @@
                 this.rateData.rate = data;
                 console.log(this.rateData.rate)
             },
-            sendRateData(){
-                var formData = new FormData();
+            sendRateData(flag){
+                let formData = new FormData();
+                this.showAddRate = false;
+                this.showRater = false;
+                if(flag){
+                    this.rateData.message = this.initReviewMsg;
+                }
                 formData.append("rate", this.rateData.rate)
                 formData.append("message",this.rateData.message)
                 formData.append("id",this.rateData.id)
                 formData.append("reviewMsg",this.rateData.reviewMsg)
                 this.$store.dispatch('rate', formData).then(() => {
                     this.ticket_con.ticketRateService = this.rateData
-                    this.showRater = false
                 })
             }
         },
@@ -229,6 +257,27 @@
         url('//at.alicdn.com/t/font_384296_utjiw4kvxj7.woff') format('woff'),
         url('//at.alicdn.com/t/font_384296_utjiw4kvxj7.ttf') format('truetype'),
         url('//at.alicdn.com/t/font_384296_utjiw4kvxj7.svg#iconfont') format('svg');
+    }
+    .addRate{
+        textarea{
+            width: 100%;
+            height: 120px;
+            border: 1px solid #cacaca;
+            resize: none;
+            margin: 14px 0;
+            padding: 15px;
+        }
+        .rate-btn{
+            height: 26px;
+            line-height: 26px;
+            background-color: #222222;
+            border-radius: 2px;
+            text-align: center;
+            color: #fff;
+            float: right;
+            padding: 0 25px;
+            cursor: pointer;
+        }
     }
     .orderTicket{
         width: 500px;
@@ -337,7 +386,9 @@
                         left: -6px;
                         width: 12px;
                         height: 12px;
-                        background-color: rgb(26, 149, 211);
+                        background-color: #fff;
+                        border-top: 1px solid #cacaca;
+                        border-left: 1px solid #cacaca;
                     }
                     .txtcontent{
                         text-align: left;
@@ -362,6 +413,9 @@
                 }
                 .fl{
                     float: left !important;
+                    background-color: #fff;
+                    color: #222;
+                    border: 1px solid #cacaca;
                 }
 
                 &:after{
@@ -504,6 +558,7 @@
     display: flex;
     justify-content: space-between;
     margin-top: 10px;
+    min-width: 280px;
     .box{
         width: 48%;
         text-align: center;

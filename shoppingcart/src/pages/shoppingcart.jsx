@@ -795,7 +795,7 @@ const ShoppingCart = class extends React.Component {
 
 				} else {
 					alert(details)
-					if (orderId) {
+					if (orderId && window.__is_login__) {
 						this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
 					}
 				}
