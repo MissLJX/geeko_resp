@@ -197,6 +197,9 @@ const Credit = class extends React.Component {
 
 		this.handleInputChange = this.handleInputChange.bind(this)
 		this.sdkResponseHandler = this.sdkResponseHandler.bind(this)
+
+		this.processCallBack = this.processCallBack.bind(this)
+		this.processErrorBack = this.processErrorBack.bind(this)
 	}
 
 	cvvRef(c) {
