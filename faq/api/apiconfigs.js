@@ -57,7 +57,8 @@ const apiResult = function (res, resolve, reject) {
 
 const reRequest = () => instance.get('/context/anon/gat', {}, []).then((res) => {
   window.xtoken = res.data.result
-  instance.defaults.headers.common['xtoken'] = window.xtoken
+  // instance.defaults.headers.common['xtoken'] = window.xtoken
+  instance.defaults.headers['xtoken'] = window.xtoken
   return window.xtoken
 }).catch(() => {
   window.location.reload()

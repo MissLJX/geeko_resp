@@ -5,7 +5,8 @@
   "dependencies": {
     "axios": "^0.18.0",
     "lodash": "^4.17.10",
-    "react": "^16.4.2",
+    "react": "^16.12.0",
+    "react-intl": "^2.4.0",
     "react-scripts": "1.1.4"
   },
   "scripts": {
@@ -16,5 +17,13 @@
   },
   "devDependencies": {
     "react-dom": "^16.4.2"
+  },
+  "proxy": {
+    "/api": {
+      "target": "http://localhost:8080/wanna",
+      "pathRewrite": {
+        "^/api": "/"
+      }
+    }
   }
 }

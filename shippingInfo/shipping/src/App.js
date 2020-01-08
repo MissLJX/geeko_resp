@@ -2,6 +2,21 @@ import React from 'react';
 import './App.css';
 import _ from 'lodash'
 
+import {addLocaleData, IntlProvider, FormattedMessage} from 'react-intl'
+import en from 'react-intl/locale-data/en'
+import zh from 'react-intl/locale-data/zh'
+import de from 'react-intl/locale-data/de'
+import fr from 'react-intl/locale-data/fr'
+import es from 'react-intl/locale-data/es'
+import pt from 'react-intl/locale-data/pt'
+
+import zh_L from './i18n/zh'
+import de_L from './i18n/de'
+import fr_L from './i18n/fr'
+import es_L from './i18n/es'
+import pt_L from './i18n/pt'
+import en_L from './i18n/en'
+
 
 import axios from 'axios'
 
@@ -70,10 +85,12 @@ const getGroupCountries = (infos) => {
 
 class FilterInpunt extends React.Component {
     render() {
+        
         return (
             <div className="x-filter-input">
-                <i className="iconfont">&#xe71c;</i>
-                <input placeholder="Please choose your country" value={this.props.ds} onMouseOver={(e) => {this.props.focusHandle(e, true)}} onChange={this.props.filterHandle}/>
+
+                
+                <span className="x-filter-title"><FormattedMessage id="shipping_to"/>:</span> <FilterGSelect searchValue={this.props.searchValue} selectHandle={this.props.selectHandle} infos ={this.props.infos}/>
             </div>
 
         )
@@ -130,6 +147,26 @@ class LiDisplayer extends React.Component {
     }
 }
 
+
+class FilterGSelect extends React.Component{
+
+    render(){
+        const groupCountry =  getGroupCountries(this.props.infos)
+        const sortedKeys = Object.keys(groupCountry).sort()
+
+    
+        return <select value={this.props.searchValue} className="x-filter-select" onChange={this.props.selectHandle}>
+            {
+                sortedKeys.map(k => <optgroup label={k} key={k}>
+                    {
+                        groupCountry[k].map(info => <option value={info.country} key={info.country}>{info.country}</option>)
+                    }
+                </optgroup>)
+            }
+        </select>
+    }
+}
+
 class ShippingCell extends React.Component {
     render() {
         return <td rowSpan={this.props.col || 1}>{this.props.value}</td>
@@ -138,32 +175,12 @@ class ShippingCell extends React.Component {
 
 class ShippingRow extends React.Component {
     render() {
+        const {row} = this.props
         return (
             <tr>
-                {/*{this.props.isFirst && <ShippingCell col={this.props.col} value={this.props.row.region}/>}*/}
-                <ShippingCell value={this.props.row.country}/>
-
-                {
-                    this.props.hasStandard && <React.Fragment>
-                        <ShippingCell value={this.props.row.standard.time}/>
-                        <ShippingCell value={this.props.row.standard.free}/>
-                    </React.Fragment>
-                }
-
-                {
-                    this.props.hasExpedited && <React.Fragment>
-                        <ShippingCell value={this.props.row.expedited.time}/>
-                        <ShippingCell value={this.props.row.expedited.free}/>
-                    </React.Fragment>
-                }
-
-                {
-                    this.props.hasExpress && <React.Fragment>
-                        <ShippingCell value={this.props.row.express.time}/>
-                        <ShippingCell value={this.props.row.express.free}/>
-                    </React.Fragment>
-                }
-           
+                <td>{row.label}</td>
+                <td>{row.time}</td>
+                <td>{row.free}</td>
             </tr>
         )
     }
@@ -171,15 +188,14 @@ class ShippingRow extends React.Component {
 
 class ShippingRows extends React.Component {
     render() {
-        const stateGroup = this.props.stateGroup
-        const stateKeys = Object.keys(stateGroup).sort()
-        const result = stateKeys.map((sk) => {
-            let rows = stateGroup[sk]
-            return rows.map((row, index) => {
-                return <ShippingRow hasStandard={this.props.hasStandard} hasExpedited={this.props.hasExpedited} hasExpress={this.props.hasExpress} col={rows.length} key={row.country} isFirst={index === 0} row={row}/>
-            })
-        })
-        return result
+        const infos = this.props.infos
+        return infos.map(info => (
+            <React.Fragment key={info.country}>
+                {this.props.hasStandard && <ShippingRow row={{...info.standard}}/>}
+                {this.props.hasExpedited && <ShippingRow row={{...info.expedited}}/>}
+                {this.props.hasExpress && <ShippingRow row={{...info.express}}/>}
+            </React.Fragment>
+        ))
     }
 }
 
@@ -192,51 +208,25 @@ class ShippingTable extends React.Component {
 
 
 
-        const stateGroup = _.groupBy(this.props.infos, info => info.region)
+        const infos = this.props.infos
 
         const hasStandard = _.find(this.props.infos, info => !!info.standard)
         const hasExpedited = _.find(this.props.infos, info => !!info.expedited)
         const hasExpress = _.find(this.props.infos, info => !!info.express)
 
         return (
-            <table className="x-shipping-table">
-                <thead>
-                <tr>
-                    {/*<th rowSpan='2'>REGION</th>*/}
-                    <th rowSpan='2'>COUNTRY</th>
-                    {hasStandard && <th colSpan='2'>Standard Shipping</th>}
-                    {hasExpedited && <th colSpan='2'>Expedited Shipping</th>}
-                    {hasExpress && <th colSpan='2'>Express Shipping</th>}
-                </tr>
-
-                <tr className="x-shipping-back-grey">
-
-                    {
-                        hasStandard && <React.Fragment>
-                            <th>Shipping Time</th>
-                            <th>Fee</th>
-                        </React.Fragment>
-                    }
-                    
-                    {
-                        hasExpedited && <React.Fragment>
-                            <th>Shipping Time</th>
-                            <th>Fee</th>
-                        </React.Fragment>
-                    }
-
-                    {
-                        hasExpress && <React.Fragment>
-                            <th>Shipping Time</th>
-                            <th>Fee</th>
-                        </React.Fragment>
-                    }
-                </tr>
-                </thead>
-
+            <table className="x-shipping-table" style={{width:'100%'}}>
                 <tbody>
-                <ShippingRows hasStandard={hasStandard} hasExpedited={hasExpedited} hasExpress={hasExpress} stateGroup={stateGroup} />
+                <tr>
+                        <td><FormattedMessage id="shipping_method"/></td>
+                        <td><FormattedMessage id="shipping_time"/></td>
+                        <td><FormattedMessage id="costs"/></td>
+                    </tr>
+
+                <ShippingRows hasStandard={hasStandard} hasExpedited={hasExpedited} hasExpress={hasExpress} infos={infos} />
+
                 </tbody>
+                   
 
             </table>
 
@@ -272,11 +262,20 @@ class ShippingFilter extends React.Component {
 
        
 
-        window.addEventListener('click', (e) => {
-            this.setState({focused: false})
-        }, false);
-
         getData().then(_infos => {
+
+            _infos.push({
+                country: {
+                    label: 'Country/Region',
+                    value:'-'
+                },
+                standard:{
+                    free:'-',
+                    time:'-',
+                    label:'-'
+                }
+            })
+
             let infos = _infos ? _infos.map( info => ({standard: info.standard, expedited: info.expedited, express: info.express, country: info.country.label}) ) : []
             
             let countries = {}
@@ -288,7 +287,7 @@ class ShippingFilter extends React.Component {
             }
             
 
-            let searchkey = countries[window.__searchkey__] || ''
+            let searchkey = countries[window.__searchkey__] || countries['-']
 
 
             this.setState({
@@ -296,7 +295,7 @@ class ShippingFilter extends React.Component {
                 displayValue: searchkey,
                 infos: infos,
                 filteredInfos: infos,
-                filteredDisplyInfos: searchkey ? infos.filter(p => _.startsWith((p.country || '').toLowerCase(), searchkey.toLowerCase())) :infos
+                filteredDisplyInfos: searchkey ? infos.filter(p => p.country.toLowerCase() === searchkey.toLowerCase()) :infos
             })
         })
     }
@@ -358,13 +357,27 @@ class ShippingFilter extends React.Component {
     }
 
 
+    selectHandle(e){
+        e.preventDefault()
+        let f = e.target.value
+        const {infos} = this.state
+        this.setState(
+            {
+                filteredDisplyInfos: f ? infos.filter(p => p.country.toLowerCase() === f.toLowerCase()) :infos,
+                searchValue: f,
+                focused: false,
+                displayValue: f
+            }
+        )
+    }
+
+
     render() {
         return (
             <div className="x-country-filter">
                 <div className="hd" onClick={(e) => { e.nativeEvent.stopImmediatePropagation()}}>
                     <div className="x-filter-putor">
-                        <FilterInpunt focused={this.state.focused} sv={this.state.searchValue} ds={this.state.displayValue} changeHandle={this.changeHandle} focusHandle={this.focusHandle} filterHandle={this.filterHandle}/>
-                        <LiDisplayer liClickHandle={this.liClickHandle} isShow={this.state.focused} infos={this.state.filteredInfos}/>
+                        <FilterInpunt searchValue={this.state.searchValue} selectHandle={ this.selectHandle.bind(this)} infos={this.state.infos}/>
                     </div>
 
                 </div>
@@ -378,4 +391,28 @@ class ShippingFilter extends React.Component {
     }
 }
 
-export default {ShippingFilter}
+
+
+
+addLocaleData([...en, ...zh, ...fr, ...de, ...pt, ...es])
+
+const messages = {}
+
+const lang = (window.lang || 'en').substring(0, 2)
+
+messages['en'] = en_L
+messages['zh'] = zh_L
+
+messages['de'] = de_L
+messages['fr'] = fr_L
+
+messages['es'] = es_L
+messages['pt'] = pt_L
+
+const IntlFilter = () => {
+    return <IntlProvider locale={lang} messages={messages[lang]}>
+        <ShippingFilter/>
+    </IntlProvider>
+}
+
+export default IntlFilter
