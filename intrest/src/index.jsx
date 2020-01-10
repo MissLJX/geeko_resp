@@ -259,6 +259,11 @@ export default class extends React.Component{
     }
   }
 
+  convertInch(num){
+    if(!num || isNaN(num)) return num
+    return (num*0.3937008).toFixed(1)
+  }
+
 
   getHtml(){
     return `
@@ -287,9 +292,9 @@ export default class extends React.Component{
         ${
           this.state.sizes.map( s => (`
           <tr style="border-top: 1px solid #DDDDDD;">
-            ${
+            ${//TODO
               this.state.sizeheaders.map( h => (`
-                <td style="border: none; padding-left: 0px; padding-bottom: 24px;">${s[h.id]}</td>
+                <td style="border: none; padding-left: 0px; padding-bottom: 24px;">${this.convertInch(s[h.id])}</td>
               `)).join('')
             }
           </tr>
