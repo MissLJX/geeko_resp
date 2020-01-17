@@ -36,8 +36,8 @@ const DLocal = class extends React.Component {
 	}
 
 	componentWillMount() {
-		window.dLocalPay = (result, errBack) => {
-			this.payDLocal(result).catch(({ result }) => errBack(result))
+		window.dLocalPay = (result, errBack, finnalBack) => {
+			this.payDLocal(result).then(finnalBack).catch(({ result }) => errBack(result))
 		}
 		window.bindDLocal = (result, callBack , errBack) => {
 			this.bindDLocal(result).then(callBack).catch(({ result }) => errBack(result))

@@ -29,6 +29,7 @@ export const goOrder = ({ result }) => {
 			}
 		}
 	}
+	return result
 }
 
 export const payHandler = ( result ) => {

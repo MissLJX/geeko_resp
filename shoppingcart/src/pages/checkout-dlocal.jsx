@@ -33,9 +33,9 @@ const DLocal = class extends React.Component {
 	}
 
 	componentWillMount() {
-		window.dLocalPay = (result, errBack) => {
+		window.dLocalPay = (result, errBack, finalBack) => {
 			const { checkout } = this.props
-			this.payDLocal({ ...result, orderId: checkout.orderId, payMethod: checkout.payMethod }).catch(({ result }) => errBack(result))
+			this.payDLocal({ ...result, orderId: checkout.orderId, payMethod: checkout.payMethod }).then(finalBack).catch(({ result }) => errBack(result))
 		}
 		window.bindDLocal = (result, callBack , errBack) => {
 			const { checkout } = this.props
