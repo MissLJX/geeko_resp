@@ -25,8 +25,8 @@ export default{
 	full_name: 'Full Name',
 	street_address: 'Street Address',
 	unit: 'Unit',
-	country: 'Country',
-	state: 'State / Province / Region',
+	country: 'Country / Region',
+	state: 'State / Province',
 	city: 'City',
 	zip_code: 'Zip Code',
 	phone_number: 'Phone Number',
@@ -105,5 +105,6 @@ export default{
 	credit_card: 'Credit Card',
 	continue_shopping: 'continue shopping',
 	facebook_check: 'If you check this, we will send you logistics tracking status and order information in Messenger',
-	email: 'Email'
+	email: 'Email',
+	sign_me_up_for: 'Sign me up for {siteName} emails (you can unsubscribe at any time).'
 }

@@ -142,56 +142,56 @@ const LABELICON = styled.span`
 `
 
 const Item = class extends Component {
-  constructor (props) {
-    super(props)
-  }
+	constructor (props) {
+		super(props)
+	}
 
-  render () {
+	render () {
   	const {item, intl, serverTime, invalidItem} = this.props
 
-    const isEabled = !this.props.disabledFunc(item)
-    const isOverseas = !item.isDomesticDelivery
+		const isEabled = !this.props.disabledFunc(item)
+		const isOverseas = !item.isDomesticDelivery
 
-    const showLeftBtn = !isEabled && !isOverseas && !item.isDomesticDeliveryEnabled && item.inventory > 0
-    const showShipFromBtn = !isEabled && !isOverseas && !item.isDomesticDeliveryEnabled && item.inventory < 1
+		const showLeftBtn = !isEabled && !isOverseas && !item.isDomesticDeliveryEnabled && item.inventory > 0
+		const showShipFromBtn = !isEabled && !isOverseas && !item.isDomesticDeliveryEnabled && item.inventory < 1
 
   	return <ITEMCONTAINER>
   		<div style={{paddingLeft: 28}}>
-        {
-          isEabled && item.endLimitedTimePurchaseTime && item.limitedTimePurchasePromotionPrice && <LIMITTIP>
-            <span className="__label">{intl.formatMessage({id: 'limited_time'})}</span>
-            <Icon style={{fontSize: 14, marginLeft: 20, verticalAlign: 'middle'}}>&#xe655;</Icon>
-            <CountDown className="__time" offset={item.endLimitedTimePurchaseTime - serverTime}/>
-          </LIMITTIP>
-        }
-      </div>
-      <div style={{position: 'relative'}} >
-        {
-          item.isUsedCombinatorialPromotion && this.props.combinatorialPromotionTitle && <div style={{
-            position: 'absolute',
-            top: 7,
-            left: 357,
-            fontSize: 12,
-            textTransform: 'uppercase',
-            border: '1px solid #e64545',
-            height: 24,
-            paddingLeft: 10,
-            paddingRight: 10,
-            lineHeight: '22px'
-          }}>
-            <Red>{ this.props.combinatorialPromotionTitle }</Red>
-          </div>
-        }
+				{
+					isEabled && item.endLimitedTimePurchaseTime && item.limitedTimePurchasePromotionPrice && <LIMITTIP>
+						<span className="__label">{intl.formatMessage({id: 'limited_time'})}</span>
+						<Icon style={{fontSize: 14, marginLeft: 20, verticalAlign: 'middle'}}>&#xe655;</Icon>
+						<CountDown className="__time" offset={item.endLimitedTimePurchaseTime - serverTime}/>
+					</LIMITTIP>
+				}
+			</div>
+			<div style={{position: 'relative'}} >
+				{
+					item.isUsedCombinatorialPromotion && this.props.combinatorialPromotionTitle && <div style={{
+						position: 'absolute',
+						top: 7,
+						left: 357,
+						fontSize: 12,
+						textTransform: 'uppercase',
+						border: '1px solid #e64545',
+						height: 24,
+						paddingLeft: 10,
+						paddingRight: 10,
+						lineHeight: '22px'
+					}}>
+						<Red>{ this.props.combinatorialPromotionTitle }</Red>
+					</div>
+				}
 
     		<ITEM className={`x-table __vm __fixed x-fw ${!isEabled && !invalidItem ? 'disabled' : ''} ${invalidItem ? 'invalid' : ''}`}>
 
-          <div className="x-cell">
-            { isEabled && <CheckBox onClick={(evt) => { this.props.itemSelect(item.variantId, !item.selected) }} className={item.selected ? 'selected' : ''}/>}
+					<div className="x-cell">
+						{ isEabled && <CheckBox onClick={(evt) => { this.props.itemSelect(item.variantId, !item.selected) }} className={item.selected ? 'selected' : ''}/>}
     			</div>
     			<div className="x-cell">
-            <div style={{width: 96}}>
-              <LinkImage href={producturl({id: item.productId, name: item.productName, parentSku: item.parentSku})} src={item.imageUrl}/>
-            </div>
+						<div style={{width: 96}}>
+							<LinkImage href={producturl({id: item.productId, name: item.productName, parentSku: item.parentSku})} src={item.imageUrl}/>
+						</div>
     			</div>
     			<div className="x-cell">
     				<div>
@@ -201,66 +201,72 @@ const Item = class extends Component {
             	<Grey>{strconcat(item.color, item.size)}</Grey>
           	</div>
 
-            <div>
+						<div>
 
-              {
-                isEabled && !invalidItem && <LABELICON style={{marginRight: 20}} onClick={(evt) => { this.props.itemEdit(item) }} className={`${invalidItem ? 'disabled' : ''}`}>
-                  <Icon>&#xe61f;</Icon>
-                  <span><FormattedMessage id="edit"/></span>
-                </LABELICON>
-              }
+							{
+								isEabled && !invalidItem && <LABELICON style={{marginRight: 20}} onClick={(evt) => { this.props.itemEdit(item) }} className={`${invalidItem ? 'disabled' : ''}`}>
+									<Icon>&#xe61f;</Icon>
+									<span><FormattedMessage id="edit"/></span>
+								</LABELICON>
+							}
 
-              <LABELICON onClick={(evt) => { this.props.itemDelete(item) }}>
-                <Icon>&#xe629;</Icon>
-                <span><FormattedMessage id="delete"/></span>
-              </LABELICON>
-            </div>
+							<LABELICON onClick={(evt) => { this.props.itemDelete(item) }}>
+								<Icon>&#xe629;</Icon>
+								<span><FormattedMessage id="delete"/></span>
+							</LABELICON>
+						</div>
     			</div>
     			<div className="x-cell __center">
 
-            {
+						{
     				  !isEabled ? <Grey>{item.quantity}</Grey> : <Quantity quantity={item.quantity} onChange={(quantity, isRemove) => { this.props.quantityChange(item.variantId, quantity, isRemove) }}/>
-            }
+						}
     			</div>
     			<div className="x-cell __center">
-    				<div><Red><Money money={item.realPrice} /></Red></div>
+    				
   		          {
   		            item.itemPrice.amount - item.realPrice.amount > 0 && (
                     	<Fragment>
   	                    <div>
   	                      <del><Grey style={{fontSize: '13px'}}><Money money={item.itemPrice} /> </Grey></del>
   	                    </div>
-  	                    <div>
-  	                      <span dangerouslySetInnerHTML={{__html: item.discountDescription}} />
-  	                    </div>
+  	                    
   		             </Fragment>
   		            )
   		          }
+						<div><Red><Money money={item.realPrice} /></Red></div>
+
+						{
+							item.itemPrice.amount - item.realPrice.amount > 0 &&  <div>
+								<span dangerouslySetInnerHTML={{__html: item.discountDescription}} />
+							</div>
+						}
+						 
     			</div>
     			<div className="x-cell __center">
     				<Money money={quantityMoney(item.realPrice, item.quantity)}/>
     			</div>
     		</ITEM>
-      </div>
+			</div>
   		<div style={{marginTop: 10, textAlign: 'right'}}>
-        {
-          showShipFromBtn && !invalidItem && <Btn style={{padding: '8px 18px'}} onClick={ () => { this.props.overseasHandle(this.props.item.variantId) }}> Ships From Overseas WareHouse</Btn>
-        }
+				{
+					showShipFromBtn && !invalidItem && <Btn style={{padding: '8px 18px'}} onClick={ () => { this.props.overseasHandle(this.props.item.variantId) }}> Ships From Overseas WareHouse</Btn>
+				}
 
-        {
-          showLeftBtn && !invalidItem && <Btn style={{padding: '8px 18px'}} onClick={ () => { this.props.setQuantity(item.variantId, item.inventory) }}>
-            <FormattedMessage
-              id="only_left"
-              values={{
-                left: item.inventory
-              }}
-            />
-          </Btn>
-        }
+				{
+					showLeftBtn && !invalidItem && <Btn style={{padding: '8px 18px'}} onClick={ () => { this.props.setQuantity(item.variantId, item.inventory) }}>
+						<FormattedMessage
+							id="only_left"
+							values={{
+								left: item.inventory
+							}}
+						/>
+					</Btn>
+				}
 
-      </div>
+			</div>
   	</ITEMCONTAINER>
-  }
+	}
 }
 
 export default injectIntl(Item)

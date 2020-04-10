@@ -22,53 +22,53 @@ const ADDRESSTITLE = styled.div`
 `
 
 const mapStateToProps = (state) => {
-  return {
-    transaction: state.transaction,
-    address: state.transaction ? state.transaction.shippingDetail : null,
-    addressUpdating: state.addressUpdating
-  }
+	return {
+		transaction: state.transaction,
+		address: state.transaction ? state.transaction.shippingDetail : null,
+		addressUpdating: state.addressUpdating
+	}
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-    REFRESHORDERCONFIRM: (transactionId) => {
-      dispatch(fetchTransaction(transactionId))
-    },
-    UPDATINGADDRESS: (updating) => {
-      dispatch(updateAddress(updating))
-    }
-  }
+	return {
+		REFRESHORDERCONFIRM: (transactionId) => {
+			dispatch(fetchTransaction(transactionId))
+		},
+		UPDATINGADDRESS: (updating) => {
+			dispatch(updateAddress(updating))
+		}
+	}
 }
 
 const Address = class extends React.Component {
-  constructor (props) {
-    super(props)
-    this.close = this.close.bind(this)
-    this.editAddress = this.editAddress.bind(this)
-  }
+	constructor (props) {
+		super(props)
+		this.close = this.close.bind(this)
+		this.editAddress = this.editAddress.bind(this)
+	}
 
-  close (evt) {
+	close (evt) {
   	evt.preventDefault()
-    this.props.history.goBack()
-  }
+		this.props.history.goBack()
+	}
 
-  editAddress (address) {
-    const transactionId = this.props.transaction.transactionId
-    this.props.UPDATINGADDRESS(true)
+	editAddress (address) {
+		const transactionId = this.props.transaction.transactionId
+		this.props.UPDATINGADDRESS(true)
   		updateorderaddress({...address, id: this.props.address.id, transactionId: transactionId }).then(() => {
-      this.props.UPDATINGADDRESS(false)
+			this.props.UPDATINGADDRESS(false)
   			this.props.history.goBack()
-      this.props.REFRESHORDERCONFIRM(transactionId)
+			this.props.REFRESHORDERCONFIRM(transactionId)
   		}).catch(({result}) => {
   			alert(result)
-      this.props.UPDATINGADDRESS(false)
+			this.props.UPDATINGADDRESS(false)
   		})
-  }
+	}
 
-  render () {
-    const { address, intl } = this.props
+	render () {
+		const { address, intl } = this.props
 
-    const FormBody = styled.div`
+		const FormBody = styled.div`
     	max-width: 320px;
     	width: 80%;
     	margin-left: auto;
@@ -77,18 +77,18 @@ const Address = class extends React.Component {
 
     `
 
-    return <Modal onClose={this.close.bind(this)}>
-      <ADDRESSBODY>
-        <ADDRESSTITLE>
-          { intl.formatMessage({id: 'shipping_address'}) }
-        </ADDRESSTITLE>
-        <div style={{marginTop: 25}}>
-          <AddressFrom updating={this.props.addressUpdating} address={address} editAddress={this.editAddress} showCancel={true} onCancel={this.close.bind(this)}/>
-        </div>
+		return <Modal onClose={this.close.bind(this)}>
+			<ADDRESSBODY>
+				<ADDRESSTITLE>
+					{ intl.formatMessage({id: 'shipping_address'}) }
+				</ADDRESSTITLE>
+				<div style={{marginTop: 25}}>
+					<AddressFrom disablecountry={ true } updating={this.props.addressUpdating} address={address} editAddress={this.editAddress} showCancel={true} onCancel={this.close.bind(this)}/>
+				</div>
 
-      </ADDRESSBODY>
-    </Modal>
-  }
+			</ADDRESSBODY>
+		</Modal>
+	}
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(Address))

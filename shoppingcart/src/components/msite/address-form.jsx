@@ -2,19 +2,88 @@ import React from 'react'
 import {Form, Input, Select, Button} from './control.jsx'
 import {required, email, zip, phone, number, cpf} from '../validator.jsx'
 import {StyledControl} from './styled-control.jsx'
+import styled from 'styled-components'
 import {FormLayout, MultiControl} from './layout.jsx'
-import {getCountries, getStates} from '../../api'
-import {injectIntl} from 'react-intl'
+import {getCountries, getStates, getCites, getCityByZip} from '../../api'
+import {injectIntl, FormattedMessage} from 'react-intl'
 import Ask from '../ask.jsx'
 
 import FixedMessage from './fixed-message.jsx'
 import Mask from '../mask.jsx'
 
 import { storage } from '../../utils/utils'
+import { MutiElement } from '../pc/styled-control.jsx'
 
 const getCountryCode = () => {
 	let strs = window.lang ? window.lang.split('_') : []
 	return strs[1] || 'US'
+}
+
+const SELECTINPUT = styled.div`
+	position: relative;
+
+	.__listing{
+		display: none;
+		&.active{
+			display: block;
+		}
+		position: absolute;
+		top: 35px;
+		width: 100%;
+	
+		
+		background-color: #fff;
+		z-index: 2;
+		
+		ul{
+			border-left: solid 1px #666;
+			border-bottom: solid 1px #666;
+			border-right: solid 1px #666;
+			max-height: 150px;
+			overflow: auto;
+			& > li{
+				line-height: 30px;
+				font-size: 12px;
+				padding-left:10px;
+				cursor: pointer;
+				&:hover{
+					background-color: #efefef;
+				}
+			}
+		}
+	}
+`
+
+const SelectInput = class extends React.Component{
+	constructor(props){
+		super(props)
+
+	}
+
+
+	render(){
+		let { searchValue, listValues, isActive } = this.props
+		searchValue = searchValue||''
+		let fetchedList = searchValue?(listValues||[]).filter( v => v.toLowerCase().indexOf(searchValue.toLowerCase()) >= 0):listValues
+		return <SELECTINPUT>
+			<div>
+				{this.props.children}
+			</div>
+			<div className={`__listing ${isActive? 'active': ''}`}>
+				{
+					fetchedList && fetchedList.length> 0 && <ul>
+						{
+							
+							fetchedList.map( (value, i) => <li key={i} city={value} onClick={ () => this.props.selectHandle(value) }>
+								<span dangerouslySetInnerHTML={{__html: value.replace(searchValue, `<b>${searchValue}</b>`)}}/>
+							</li>)
+						}
+					</ul>
+				}
+				
+			</div>
+		</SELECTINPUT>
+	}
 }
 
 const AdressForm = class extends React.Component {
@@ -38,7 +107,12 @@ const AdressForm = class extends React.Component {
 			email: '',
 			hasValidated: false,
 			askMessage: '',
-			showAsk: false
+			showAsk: false,
+			schecked: true,
+			countryStateCities: {},
+			cityFocus: false,
+			zipFocus: false,
+			selectedZips:[]
 		}
 		this.handleInputChange = this.handleInputChange.bind(this)
 	}
@@ -123,7 +197,7 @@ const AdressForm = class extends React.Component {
 				defaultAddress,
 				phoneArea,
 				cpf,
-				email
+				email: (email || '').trim()
 			})
 
 			storage.add('shippingDetail', {
@@ -243,6 +317,110 @@ const AdressForm = class extends React.Component {
 		})
 	}
 
+
+	handleCityFocus(event){
+		const {country, state} = this.state
+		
+
+		if(country && state){
+			this.setState({
+				cityFocus: true
+			})
+			const key = `${country}#${state}`
+
+			if(this.state.countryStateCities[key])
+				return
+
+			getCites(country, state).then(data => data.result).then(cities => {
+				const newState = {...this.state.countryStateCities, [key]: cities}
+				this.setState({
+					countryStateCities: newState
+				})
+			})
+		}
+
+		
+
+
+	}
+
+	handleCityFocusout(event){
+		// this.setState({
+		// 	cityFocus: false
+		// })
+
+		setTimeout( () => {
+			this.setState({
+				cityFocus: false
+			})
+		}, 200)
+	}
+
+
+	handleZipFocus(event){
+		const {country, state, city} = this.state
+		this.setState({
+			selectedZips: []
+		})
+
+		if(country && state){
+			this.setState({
+				zipFocus: true
+			})
+			const key = `${country}#${state}`
+			const cities = this.state.countryStateCities[key]
+			const selectedCity = cities.find( c => c.name === city)
+			if(selectedCity){
+				setTimeout(()=>{
+					this.setState({
+						selectedZips: selectedCity.zipCodes
+					})
+				}, 0)
+				
+			}
+
+		}
+
+		
+
+
+	}
+
+	handleZipFocusout(event){
+		setTimeout( () => {
+			this.setState({
+				zipFocus: false
+			})
+
+
+			getCityByZip(this.state.country, this.state.zipCode).then(data => data.result).then((result) => {
+				if(result){
+					const {country, state, city} = result
+
+					if(country && country.code === this.state.country){
+						if(!this.state.state && state && state.code){
+							this.setState({
+								state: state.code
+							})
+						}
+	
+						if(!this.state.city && city && city.name){
+							this.setState({
+								city: city.name
+							})
+						}
+					}
+
+					
+
+				}
+				
+			})
+
+
+		}, 200)
+	}
+
 	render () {
 		const {intl} = this.props
 
@@ -250,12 +428,40 @@ const AdressForm = class extends React.Component {
 
 		const isEmailRequired = !(window.__is_login__ || window.token)
 
+		const key = `${this.state.country}#${this.state.state}`
+		const listValues = this.state.countryStateCities[key] || []
+
 		return <div>
 			<Form style={{...this.props.style, display: `${isNormalAddress ? 'block' : 'none'}`}} ref={ c => { this.formRef(c) } } onSubmit={this.handleSubmit.bind(this)}>
 				<FormLayout>
 
+					<MultiControl>
+						<StyledControl>
+							<label>
+								{intl.formatMessage({id: 'country'})}*
+							</label>
+							<Select
+								className="x-select"
+								value={this.state.country}
+								name='country'
+								disabled={this.props.disablecountry}
+								onChange={(evt) => { this.handleInputChange(evt); this.changeCountry(evt) }}
+								validations={[required]}>
+								<option value=''>Country</option>
+								{
+									this.state.countries && this.state.countries.map(country => (
+										<option key={country.value} value={country.value} >{country.label}</option>
+									))
+								}
+
+							</Select>
+						</StyledControl>
+
+						<StyledControl/>
+					</MultiControl>
+
 					{
-						isEmailRequired && <div>
+						isEmailRequired && <div style={{position:'relative'}}>
 							<StyledControl>
 								<label>
 									{intl.formatMessage({id: 'email'})}*
@@ -266,8 +472,12 @@ const AdressForm = class extends React.Component {
 									onChange={this.handleInputChange}
 									validations={[required, email]}/>
 							</StyledControl>
-							<div style={{textAlign: 'center', marginTop:10}}>
-								<span style={{fontSize:14, color:'#999'}}>Already have an account? </span>
+							<div style={{ marginTop: 5}}>
+								<input style={{verticalAlign:'middle', WebkitAppearance:'checkbox'}} type="checkbox" checked={ this.state.schecked } onChange={ () => { this.setState({ schecked: !this.state.schecked }) } }/>
+								<span style={{fontSize:13, color: '#999', verticalAlign:'middle'}}><FormattedMessage  id="sign_me_up_for" values={{siteName: window.siteName}}/></span>
+							</div>
+							<div style={{position: 'absolute', top:0, right:0, fontSize: 12 }}>
+								<span style={{fontSize:12, color:'#999'}}>Already have an account? </span>
 								<a style={{color: '#222'}} href={`${window.ctx}/${
 									/*global siteType b:true*/
 									/*eslint no-undef: "error"*/
@@ -313,27 +523,8 @@ const AdressForm = class extends React.Component {
 							onChange={this.handleInputChange}/>
 					</StyledControl>
 
-					<MultiControl>
-						<StyledControl>
-							<label>
-								{intl.formatMessage({id: 'country'})}*
-							</label>
-							<Select
-								className="x-select"
-								value={this.state.country}
-								name='country'
-								disabled={this.props.disablecountry}
-								onChange={(evt) => { this.handleInputChange(evt); this.changeCountry(evt) }}
-								validations={[required]}>
-								<option value=''>Country</option>
-								{
-									this.state.countries && this.state.countries.map(country => (
-										<option key={country.value} value={country.value} >{country.label}</option>
-									))
-								}
+					<MutiElement>
 
-							</Select>
-						</StyledControl>
 
 						<StyledControl>
 							<label>
@@ -366,28 +557,46 @@ const AdressForm = class extends React.Component {
 							}
 
 						</StyledControl>
-					</MultiControl>
 
-					<StyledControl>
-						<label>
-							{intl.formatMessage({id: 'city'})}
-						</label>
-						<Input
-							name='city'
-							value={this.state.city}
-							onChange={this.handleInputChange}/>
-					</StyledControl>
+						<StyledControl>
+							<label>
+								{intl.formatMessage({id: 'city'})}
+							</label>
+
+
+							<SelectInput selectHandle={ (city) =>  { this.setState({city})} } isActive={ this.state.cityFocus } searchValue={this.state.city} listValues={ listValues.map(l => l.name ) }>
+								<Input
+									name='city'
+									value={this.state.city}
+									onFocus={this.handleCityFocus.bind(this)}
+									onBlur={this.handleCityFocusout.bind(this)}
+									onChange={this.handleInputChange}/>
+							</SelectInput>
+
+
+
+						
+						</StyledControl>
+					</MutiElement>
+
+					
 
 					<MultiControl>
 						<StyledControl>
 							<label>
 								{intl.formatMessage({id: 'zip_code'})}*
 							</label>
-							<Input
-								name='zipCode'
-								value={this.state.zipCode}
-								onChange={this.handleInputChange}
-								validations={[required, zip]}/>
+
+							<SelectInput selectHandle={ (zipCode) =>  { this.setState({zipCode})} } isActive={ this.state.zipFocus } searchValue={this.state.zipCode} listValues={ this.state.selectedZips }>
+								<Input
+									name='zipCode'
+									value={this.state.zipCode}
+									onFocus={this.handleZipFocus.bind(this)}
+									onBlur={this.handleZipFocusout.bind(this)}
+									onChange={this.handleInputChange}
+									validations={[required, zip]}/>
+							</SelectInput>
+							
 						</StyledControl>
 
 						<StyledControl>
@@ -401,6 +610,20 @@ const AdressForm = class extends React.Component {
 								validations={[required, phone]}/>
 						</StyledControl>
 					</MultiControl>
+
+					{
+						(this.state.country == 'TW' || this.state.country == 'MO' || this.state.country == 'HK') && <StyledControl>
+							<label>
+							身份證*
+							</label>
+							<Input
+								name='cpf'
+								value={this.state.cpf}
+								onChange={this.handleInputChange}
+								validations={[required]}/>
+						</StyledControl>
+					}
+					
 
 					<div>
 						<Button className="__submitbtn" ref={c => this.addressButtn = c} ingoredisable="true" style={{
@@ -420,10 +643,37 @@ const AdressForm = class extends React.Component {
 
 			<Form style={{...this.props.style, display: `${this.state.country === 'BR' ? 'block' : 'none'}`}} ref={ c => { this.formRef(c, 'BR') } } onSubmit={this.handleSubmit.bind(this)}>
 				<FormLayout>
+					
+					<MultiControl>
+						<StyledControl>
+							<label>
+								{intl.formatMessage({id: 'country'})}*
+							</label>
+							<Select
+								className="x-select"
+								value={this.state.country}
+								name='country'
+								disabled={this.props.disablecountry}
+								onChange={(evt) => { this.handleInputChange(evt); this.changeCountry(evt) }}
+								validations={[required]}>
+								<option value=''>Country</option>
+								{
+									this.state.countries && this.state.countries.map(country => (
+										<option key={country.value} value={country.value} >{country.label}</option>
+									))
+								}
+
+							</Select>
+						</StyledControl>
+
+						<StyledControl/>
+
+						
+					</MultiControl>
 
 
 					{
-						isEmailRequired && <div>
+						isEmailRequired && <div style={{position:'relative'}}>
 							<StyledControl>
 								<label>
 									{intl.formatMessage({id: 'email'})}*
@@ -434,13 +684,17 @@ const AdressForm = class extends React.Component {
 									onChange={this.handleInputChange}
 									validations={[required, email]}/>
 							</StyledControl>
-							<div style={{textAlign: 'center', marginTop:10}}>
-								<span style={{fontSize:14, color:'#999'}}>Already have an account? </span>
+							<div style={{ marginTop: 5}}>
+								<input style={{verticalAlign:'middle', WebkitAppearance:'checkbox'}} type="checkbox" checked={ this.state.schecked } onChange={ () => { this.setState({ schecked: !this.state.schecked }) } }/>
+								<span style={{fontSize:13, color: '#999', verticalAlign:'middle'}}><FormattedMessage  id="sign_me_up_for" values={{siteName: window.siteName}}/></span>
+							</div>
+							<div style={{position: 'absolute', top:0, right:0, fontSize: 12 }}>
+								<span style={{fontSize:12, color:'#999'}}>Already have an account? </span>
 								<a style={{color: '#222'}} href={`${window.ctx}/${
 									/*global siteType b:true*/
 									/*eslint no-undef: "error"*/
 									siteType === 'new' ? 'page' : 'i'
-								}/login?redirectUrl=${encodeURIComponent(window.location.href)}`}>Login</a>
+								}/login?redirectUrl=${encodeURIComponent(window.location.href)}&loginPage=1`}>Login</a>
 							</div>
 						</div>
 						
@@ -480,28 +734,7 @@ const AdressForm = class extends React.Component {
 							onChange={this.handleInputChange}/>
 					</StyledControl>
 
-					<MultiControl>
-						<StyledControl>
-							<label>
-								{intl.formatMessage({id: 'country'})}*
-							</label>
-							<Select
-								className="x-select"
-								value={this.state.country}
-								name='country'
-								disabled={this.props.disablecountry}
-								onChange={(evt) => { this.handleInputChange(evt); this.changeCountry(evt) }}
-								validations={[required]}>
-								<option value=''>Country</option>
-								{
-									this.state.countries && this.state.countries.map(country => (
-										<option key={country.value} value={country.value} >{country.label}</option>
-									))
-								}
-
-							</Select>
-						</StyledControl>
-
+					<MutiElement>
 						<StyledControl>
 							<label>
 								{intl.formatMessage({id: 'state'})}
@@ -533,17 +766,23 @@ const AdressForm = class extends React.Component {
 							}
 
 						</StyledControl>
-					</MultiControl>
 
-					<StyledControl>
-						<label>
-							{intl.formatMessage({id: 'city'})}
-						</label>
-						<Input
-							name='city'
-							value={this.state.city}
-							onChange={this.handleInputChange}/>
-					</StyledControl>
+						<StyledControl>
+							<label>
+								{intl.formatMessage({id: 'city'})}
+							</label>
+							<Input
+								name='city'
+								value={this.state.city}
+								onChange={this.handleInputChange}/>
+						</StyledControl>
+
+
+					</MutiElement>
+
+					
+
+					
 
 					<StyledControl>
 						<label>
@@ -615,9 +854,36 @@ const AdressForm = class extends React.Component {
 			<Form style={{...this.props.style, display: `${this.state.country === 'AE' || this.state.country === 'SA' ? 'block' : 'none'}`}} ref={c => { this.alForm = c }} onSubmit={this.handleSubmit.bind(this)}>
 				<FormLayout>
 
+					<MultiControl>
+						<StyledControl>
+							<label>
+								{intl.formatMessage({id: 'country'})}*
+							</label>
+							<Select
+								className="x-select"
+								value={this.state.country}
+								disabled={this.props.disablecountry}
+								name='country'
+								onChange={(evt) => { this.handleInputChange(evt); this.changeCountry(evt) }}
+								validations={[required]}>
+								<option value=''>Country</option>
+								{
+									this.state.countries && this.state.countries.map(country => (
+										<option key={country.value} value={country.value} >{country.label}</option>
+									))
+								}
+
+							</Select>
+						</StyledControl>
+
+						<StyledControl/>
+
+						
+					</MultiControl>
+
 
 					{
-						isEmailRequired && <div>
+						isEmailRequired && <div style={{position:'relative'}}>
 							<StyledControl>
 								<label>
 									{intl.formatMessage({id: 'email'})}*
@@ -628,13 +894,17 @@ const AdressForm = class extends React.Component {
 									onChange={this.handleInputChange}
 									validations={[required, email]}/>
 							</StyledControl>
-							<div style={{textAlign: 'center', marginTop:10}}>
-								<span style={{fontSize:14, color:'#999'}}>Already have an account? </span>
+							<div style={{ marginTop: 5}}>
+								<input style={{verticalAlign:'middle', WebkitAppearance:'checkbox'}} type="checkbox" checked={ this.state.schecked } onChange={ () => { this.setState({ schecked: !this.state.schecked }) } }/>
+								<span style={{fontSize:13, color: '#999', verticalAlign:'middle'}}><FormattedMessage  id="sign_me_up_for" values={{siteName: window.siteName}}/></span>
+							</div>
+							<div style={{position: 'absolute', top:0, right:0, fontSize: 12 }}>
+								<span style={{fontSize:12, color:'#999'}}>Already have an account? </span>
 								<a style={{color: '#222'}} href={`${window.ctx}/${
 									/*global siteType b:true*/
 									/*eslint no-undef: "error"*/
 									siteType === 'new' ? 'page' : 'i'
-								}/login?redirectUrl=${encodeURIComponent(window.location.href)}`}>Login</a>
+								}/login?redirectUrl=${encodeURIComponent(window.location.href)}&loginPage=1`}>Login</a>
 							</div>
 						</div>
 						
@@ -674,28 +944,7 @@ const AdressForm = class extends React.Component {
 							onChange={this.handleInputChange}/>
 					</StyledControl>
 
-					<MultiControl>
-						<StyledControl>
-							<label>
-								{intl.formatMessage({id: 'country'})}*
-							</label>
-							<Select
-								className="x-select"
-								value={this.state.country}
-								disabled={this.props.disablecountry}
-								name='country'
-								onChange={(evt) => { this.handleInputChange(evt); this.changeCountry(evt) }}
-								validations={[required]}>
-								<option value=''>Country</option>
-								{
-									this.state.countries && this.state.countries.map(country => (
-										<option key={country.value} value={country.value} >{country.label}</option>
-									))
-								}
-
-							</Select>
-						</StyledControl>
-
+					<MutiElement>
 						<StyledControl>
 							<label>
 								{intl.formatMessage({id: 'state'})}
@@ -727,18 +976,23 @@ const AdressForm = class extends React.Component {
 							}
 
 						</StyledControl>
-					</MultiControl>
 
-					<StyledControl>
-						<label>
-							{intl.formatMessage({id: 'city'})}
-						</label>
-						<Input
-							name='city'
-							value={this.state.city}
-							onChange={this.handleInputChange}/>
-					</StyledControl>
+						<StyledControl>
+							<label>
+								{intl.formatMessage({id: 'city'})}
+							</label>
+							<Input
+								name='city'
+								value={this.state.city}
+								onChange={this.handleInputChange}/>
+						</StyledControl>
 
+
+					</MutiElement>
+
+					
+
+					
 					<StyledControl>
 						<label>
 							{intl.formatMessage({id: 'zip_code'})}*

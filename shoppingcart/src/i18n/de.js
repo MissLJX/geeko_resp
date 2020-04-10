@@ -106,5 +106,6 @@ export default{
 	credit_card: 'Kreditkarte',
 	continue_shopping: 'mit dem Einkaufen fortfahren',
 	facebook_check: 'Wenn Sie dies überprüfen, senden wir Ihnen den Status der Sendungsverfolgung und Bestellinformationen in Messenger',
-	email: 'E-Mail'
+	email: 'E-Mail',
+	sign_me_up_for: 'Melden Sie mich für {siteName} E-Mails an (Sie können sich jederzeit abmelden).'
 }

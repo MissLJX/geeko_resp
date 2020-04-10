@@ -37,7 +37,7 @@ export const storage = {
 	}
 }
 
-const _url_analyst = name => name.replace(new RegExp(/\s/g), '-')
+const _url_analyst = name => name.replace(RegExp(/[\s|%|?|"|']/g), '-')
 /*global siteType b:true */
 /*eslint no-undef: "error"*/
 export const producturl = product => siteType === 'new' ? `/product/${_url_analyst(product.name)}/${product.parentSku}/${product.id}.html` : `/product/${_url_analyst(product.name)}/${product.id}.html`

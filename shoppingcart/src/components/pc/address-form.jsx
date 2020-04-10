@@ -3,8 +3,8 @@ import styled from 'styled-components'
 import {Form, Input, Select, Button} from './control.jsx'
 import {required, email, zip, phone, number, cpf} from '../validator.jsx'
 import {FormElement, MutiElement, ELEMENTS} from './styled-control.jsx'
-import {injectIntl} from 'react-intl'
-import {getCountries, getStates} from '../../api'
+import {injectIntl, FormattedMessage} from 'react-intl'
+import {getCountries, getStates, getCites, getCityByZip} from '../../api'
 import CheckBox from '../checkbox.jsx'
 import {BigButton} from '../msite/buttons.jsx'
 import { storage } from '../../utils/utils'
@@ -15,6 +15,74 @@ const getCountryCode = () => {
 	let strs = window.lang ? window.lang.split('_') : []
 	return strs[1] || 'US'
 }
+
+const SELECTINPUT = styled.div`
+	position: relative;
+
+	.__listing{
+		display: none;
+		&.active{
+			display: block;
+		}
+		position: absolute;
+		top: 40px;
+		width: 100%;
+		max-height: 300px;
+		overflow: auto;
+		background-color: #fff;
+		z-index: 2;
+		
+		ul{
+			border-left: solid 1px #cacaca;
+			border-bottom: solid 1px #cacaca;
+			border-right: solid 1px #cacaca;
+			& > li{
+				line-height: 25px;
+				font-size: 12px;
+				padding-left:10px;
+				cursor: pointer;
+				&:hover{
+					background-color: #efefef;
+				}
+			}
+		}
+	}
+`
+
+const SelectInput = class extends React.Component{
+	constructor(props){
+		super(props)
+
+	}
+
+
+	render(){
+		let { searchValue, listValues, isActive } = this.props
+		searchValue = searchValue||''
+		let fetchedList = searchValue?(listValues||[]).filter( v => v.toLowerCase().indexOf(searchValue.toLowerCase()) >= 0):listValues
+		return <SELECTINPUT>
+			<div>
+				{this.props.children}
+			</div>
+			<div className={`__listing ${isActive? 'active': ''}`}>
+				{
+					fetchedList && fetchedList.length> 0 && <ul>
+						{
+							
+							fetchedList.map( (value, i) => <li key={i} city={value} onClick={ () => this.props.selectHandle(value) }>
+								<span dangerouslySetInnerHTML={{__html: value.replace(searchValue, `<b>${searchValue}</b>`)}}/>
+							</li>)
+						}
+					</ul>
+				}
+				
+			</div>
+		</SELECTINPUT>
+	}
+}
+
+
+
 
 const AddressFrom = class extends React.Component {
 	constructor (props) {
@@ -35,7 +103,12 @@ const AddressFrom = class extends React.Component {
 			phoneArea: '',
 			cpf: '',
 			email: '',
-			hasValidated: false
+			hasValidated: false,
+			schecked: true,
+			countryStateCities: {},
+			cityFocus: false,
+			zipFocus: false,
+			selectedZips:[]
 		}
 		this.handleInputChange = this.handleInputChange.bind(this)
 	}
@@ -67,6 +140,109 @@ const AddressFrom = class extends React.Component {
 		const {value} = event.target
 		this.getStates(value)
 		this.setState({state: ''})
+	}
+
+	handleCityFocus(event){
+		const {country, state} = this.state
+		
+
+		if(country && state){
+			this.setState({
+				cityFocus: true
+			})
+			const key = `${country}#${state}`
+
+			if(this.state.countryStateCities[key])
+				return
+
+			getCites(country, state).then(data => data.result).then(cities => {
+				const newState = {...this.state.countryStateCities, [key]: cities}
+				this.setState({
+					countryStateCities: newState
+				})
+			})
+		}
+
+		
+
+
+	}
+
+	handleCityFocusout(event){
+		// this.setState({
+		// 	cityFocus: false
+		// })
+
+		setTimeout( () => {
+			this.setState({
+				cityFocus: false
+			})
+		}, 400)
+	}
+
+
+	handleZipFocus(event){
+		const {country, state, city} = this.state
+		this.setState({
+			selectedZips: []
+		})
+
+		if(country && state){
+			this.setState({
+				zipFocus: true
+			})
+			const key = `${country}#${state}`
+			const cities = this.state.countryStateCities[key]
+			const selectedCity = cities.find( c => c.name === city)
+			if(selectedCity){
+				setTimeout(()=>{
+					this.setState({
+						selectedZips: selectedCity.zipCodes
+					})
+				}, 0)
+				
+			}
+
+		}
+
+		
+
+
+	}
+
+	handleZipFocusout(event){
+		setTimeout( () => {
+			this.setState({
+				zipFocus: false
+			})
+
+
+			getCityByZip(this.state.country, this.state.zipCode).then(data => data.result).then((result) => {
+				if(result){
+					const {country, state, city} = result
+
+					if(country && country.code === this.state.country){
+						if(!this.state.state && state && state.code){
+							this.setState({
+								state: state.code
+							})
+						}
+	
+						if(!this.state.city && city && city.name){
+							this.setState({
+								city: city.name
+							})
+						}
+					}
+
+					
+
+				}
+				
+			})
+
+
+		}, 400)
 	}
 
 	handleSubmit (event) {
@@ -105,7 +281,7 @@ const AddressFrom = class extends React.Component {
 				defaultAddress,
 				phoneArea,
 				cpf,
-				email
+				email:(email || '').trim()
 			})
 
 			storage.add('shippingDetail', {
@@ -229,13 +405,51 @@ const AddressFrom = class extends React.Component {
 		const divStyle = (this.state.country === 'AE' || this.state.country === 'SA') ? {width: 'calc(100% - 79px)', marginLeft: 10, display: 'inline-block', verticalAlign: 'middle'} : {}
 
 		const isEmailRequired = !(window.__is_login__ || window.token)
+
+		const key = `${this.state.country}#${this.state.state}`
+
+		const listValues = this.state.countryStateCities[key] || []
     
 		return <div>
 			<Form ref={ c => { this.formRef(c) } } style={{display: `${this.state.country !== 'BR' ? 'block' : 'none'}`}} onSubmit={this.handleSubmit.bind(this)}>
 				<ELEMENTS>
 
+					
+
+					<MutiElement>
+						<FormElement label={`${intl.formatMessage({id: 'country'})}:`} className="__required">
+							<Select
+								className="x-select"
+								value={this.state.country}
+								name='country'
+								disabled={this.props.disablecountry}
+								style= {{width: '100%', height: 40}}
+								onChange={(evt) => { this.handleInputChange(evt); this.changeCountry(evt) }}
+								validations={[required]}>
+								<option value=''>Country</option>
+								{
+									this.state.countries && this.state.countries.map(country => (
+										<option key={country.value} value={country.value} >{country.label}</option>
+									))
+								}
+
+							</Select>
+						</FormElement>
+						<FormElement/>
+
+						
+					</MutiElement>
+
 					{
-						isEmailRequired && <React.Fragment>
+						isEmailRequired && <div style={{position:'relative'}}>
+							<div style={{textAlign: 'right', position: 'absolute', right: 0, top: 0}}>
+								<span style={{fontSize:14, color:'#999'}}>Already have an account? </span>
+								<a style={{color: '#222'}} href={`${window.ctx}/${
+									/*global siteType b:true*/
+									/*eslint no-undef: "error"*/
+									siteType === 'new' ? 'page' : 'i'
+								}/login?redirectUrl=${encodeURIComponent(window.location.href)}`}>Login</a>
+							</div>
 							<FormElement label={`${intl.formatMessage({id: 'email'})}:`} className="__required">
 								<Input
 									name='email'
@@ -245,16 +459,14 @@ const AddressFrom = class extends React.Component {
 									validations={[required, email]}/>
 							</FormElement>
 
-							<div style={{textAlign: 'right', marginTop:5}}>
-								<span style={{fontSize:14, color:'#999'}}>Already have an account? </span>
-								<a style={{color: '#222'}} href={`${window.ctx}/${
-									/*global siteType b:true*/
-									/*eslint no-undef: "error"*/
-									siteType === 'new' ? 'page' : 'i'
-								}/login?redirectUrl=${encodeURIComponent(window.location.href)}`}>Login</a>
+							<div style={{ marginTop: 5 }}>
+								<input style={{verticalAlign:'middle'}} type="checkbox" checked={ this.state.schecked } onChange={ () => { this.setState({ schecked: !this.state.schecked }) } }/>
+								<FormattedMessage style={{fontSize:13, color: '#999', verticalAlign:'middle'}} id="sign_me_up_for" values={{siteName: window.siteName}}/>
 							</div>
 
-						</React.Fragment>
+							
+
+						</div>
 					}
 					
 
@@ -285,36 +497,7 @@ const AddressFrom = class extends React.Component {
 							placeholder={intl.formatMessage({id: 'placeholder_unit'})}
 							onChange={this.handleInputChange}/>
 					</FormElement>
-
-					<FormElement label={`${intl.formatMessage({id: 'city'})}:`} className="__required">
-						<Input
-							name='city'
-							style= {{width: '100%', height: 40}}
-							value={this.state.city}
-							onChange={this.handleInputChange}
-							validations={[required]}/>
-					</FormElement>
-
 					<MutiElement>
-						<FormElement label={`${intl.formatMessage({id: 'country'})}:`} className="__required">
-							<Select
-								className="x-select"
-								value={this.state.country}
-								name='country'
-								disabled={this.props.disablecountry}
-								style= {{width: '100%', height: 40}}
-								onChange={(evt) => { this.handleInputChange(evt); this.changeCountry(evt) }}
-								validations={[required]}>
-								<option value=''>Country</option>
-								{
-									this.state.countries && this.state.countries.map(country => (
-										<option key={country.value} value={country.value} >{country.label}</option>
-									))
-								}
-
-							</Select>
-						</FormElement>
-
 						<FormElement label={`${intl.formatMessage({id: 'state'})}:`} className={this.state.states && this.state.states.length ? '__required' : ''}>
 							{
 								this.state.states && this.state.states.length ? (
@@ -343,16 +526,45 @@ const AddressFrom = class extends React.Component {
 								)
 							}
 						</FormElement>
+						<FormElement label={`${intl.formatMessage({id: 'city'})}:`} className="__required">
+							<SelectInput selectHandle={ (city) =>  { this.setState({city})} } isActive={ this.state.cityFocus } searchValue={this.state.city} listValues={ listValues.map(l => l.name ) }>
+								
+								<Input
+									autocomplete="off"
+									name='city'
+									style= {{width: '100%', height: 40}}
+									value={this.state.city}
+									onChange={this.handleInputChange}
+									onFocus={this.handleCityFocus.bind(this)}
+									onBlur={this.handleCityFocusout.bind(this)}
+									validations={[required]}/>
+							</SelectInput>
+							
+						</FormElement>
+
 					</MutiElement>
+
+					
+
+					
 
 					<MutiElement>
 						<FormElement label={`${intl.formatMessage({id: 'zip_code'})}:`} className="__required">
-							<Input
-								name='zipCode'
-								style= {{width: '100%', height: 40}}
-								value={this.state.zipCode}
-								onChange={this.handleInputChange}
-								validations={[required, zip]}/>
+
+							<SelectInput selectHandle={ (zipCode) =>  { this.setState({zipCode})} } isActive={ this.state.zipFocus } searchValue={this.state.zipCode} listValues={ this.state.selectedZips }>
+								<Input
+									name='zipCode'
+									style= {{width: '100%', height: 40}}
+									value={this.state.zipCode}
+									onChange={this.handleInputChange}
+									onFocus={this.handleZipFocus.bind(this)}
+									onBlur={this.handleZipFocusout.bind(this)}
+									validations={[required, zip]}/>
+							
+							</SelectInput>
+
+
+							
 						</FormElement>
 
 						<FormElement label={`${intl.formatMessage({id: 'phone_number'})}:`} className="__required">
@@ -375,6 +587,20 @@ const AddressFrom = class extends React.Component {
 						</FormElement>
 
 					</MutiElement>
+
+
+					{
+						(this.state.country == 'TW' || this.state.country == 'MO' || this.state.country == 'HK') && <FormElement label={'身份證'} className="__required">
+							<Input
+								name="cpf"
+								value={this.state.cpf}
+								onChange={this.handleInputChange}
+								style= {{width: '100%', height: 40}}
+								validations={[required]}/>
+						</FormElement>
+					}
+
+					
 
 					<MutiElement style={{marginTop: 24}}>
 						<div>
@@ -430,8 +656,42 @@ const AddressFrom = class extends React.Component {
 			<Form style={{display: `${this.state.country === 'BR' ? 'block' : 'none'}`}} ref={ c => { this.formRef(c, 'BR') } } onSubmit={this.handleSubmit.bind(this)}>
 				<ELEMENTS>
 
+					
+
+					<MutiElement>
+						<FormElement label={`${intl.formatMessage({id: 'country'})}:`} className="__required">
+							<Select
+								className="x-select"
+								value={this.state.country}
+								name='country'
+								style= {{width: '100%', height: 40}}
+								disabled={this.props.disablecountry}
+								onChange={(evt) => { this.handleInputChange(evt); this.changeCountry(evt) }}
+								validations={[required]}>
+								<option value=''>Country</option>
+								{
+									this.state.countries && this.state.countries.map(country => (
+										<option key={country.value} value={country.value} >{country.label}</option>
+									))
+								}
+
+							</Select>
+						</FormElement>
+						<FormElement/>
+
+						
+					</MutiElement>
+
 					{
-						isEmailRequired && <React.Fragment>
+						isEmailRequired && <div style={{position:'relative'}}>
+							<div style={{textAlign: 'right', position: 'absolute', right: 0, top: 0}}>
+								<span style={{fontSize:14, color:'#999'}}>Already have an account? </span>
+								<a style={{color: '#222'}} href={`${window.ctx}/${
+									/*global siteType b:true*/
+									/*eslint no-undef: "error"*/
+									siteType === 'new' ? 'page' : 'i'
+								}/login?redirectUrl=${encodeURIComponent(window.location.href)}`}>Login</a>
+							</div>
 							<FormElement label={`${intl.formatMessage({id: 'email'})}:`} className="__required">
 								<Input
 									name='email'
@@ -441,16 +701,14 @@ const AddressFrom = class extends React.Component {
 									validations={[required, email]}/>
 							</FormElement>
 
-							<div style={{textAlign: 'right', marginTop:5}}>
-								<span style={{fontSize:14, color:'#999'}}>Already have an account? </span>
-								<a style={{color: '#222'}} href={`${window.ctx}/${
-									/*global siteType b:true*/
-									/*eslint no-undef: "error"*/
-									siteType === 'new' ? 'page' : 'i'
-								}/login?redirectUrl=${encodeURIComponent(window.location.href)}`}>Login</a>
+							<div style={{ marginTop: 5 }}>
+								<input style={{verticalAlign:'middle'}} type="checkbox" checked={ this.state.schecked } onChange={ () => { this.setState({ schecked: !this.state.schecked }) } }/>
+								<FormattedMessage style={{fontSize:13, color: '#999', verticalAlign:'middle'}} id="sign_me_up_for" values={{siteName: window.siteName}}/>
 							</div>
 
-						</React.Fragment>
+							
+
+						</div>
 					}
 
 					<FormElement label={`${intl.formatMessage({id: 'full_name'})}:`} className="__required">
@@ -481,35 +739,7 @@ const AddressFrom = class extends React.Component {
 							onChange={this.handleInputChange}/>
 					</FormElement>
 
-					<FormElement label={`${intl.formatMessage({id: 'city'})}:`} className="__required">
-						<Input
-							name='city'
-							style= {{width: '100%', height: 40}}
-							value={this.state.city}
-							onChange={this.handleInputChange}
-							validations={[required]}/>
-					</FormElement>
-
 					<MutiElement>
-						<FormElement label={`${intl.formatMessage({id: 'country'})}:`} className="__required">
-							<Select
-								className="x-select"
-								value={this.state.country}
-								name='country'
-								style= {{width: '100%', height: 40}}
-								disabled={this.props.disablecountry}
-								onChange={(evt) => { this.handleInputChange(evt); this.changeCountry(evt) }}
-								validations={[required]}>
-								<option value=''>Country</option>
-								{
-									this.state.countries && this.state.countries.map(country => (
-										<option key={country.value} value={country.value} >{country.label}</option>
-									))
-								}
-
-							</Select>
-						</FormElement>
-
 						<FormElement label={`${intl.formatMessage({id: 'state'})}:`} className={this.state.states && this.state.states.length ? '__required' : ''}>
 							{
 								this.state.states && this.state.states.length ? (
@@ -538,6 +768,16 @@ const AddressFrom = class extends React.Component {
 								)
 							}
 						</FormElement>
+
+						<FormElement label={`${intl.formatMessage({id: 'city'})}:`} className="__required">
+							<Input
+								name='city'
+								style= {{width: '100%', height: 40}}
+								value={this.state.city}
+								onChange={this.handleInputChange}
+								validations={[required]}/>
+						</FormElement>
+
 					</MutiElement>
 
 					<MutiElement>

@@ -106,5 +106,6 @@ export default{
 	credit_card: 'carte de crédit',
 	continue_shopping: 'Continuer vos achats',
 	facebook_check: 'Si vous cochez cette case, nous vous ferons parvenir le statut de suivi logistique et les informations de commande dans Messenger.',
-	email: 'E-Mail'
+	email: 'E-Mail',
+	sign_me_up_for: 'Abonnez-moi aux e-mails {siteName} (vous pouvez vous désabonner à tout moment).'
 }

@@ -98,6 +98,7 @@ const CardBinding = class extends React.Component {
 				this.props.TOGGLECREDITSTATUS(0)
 				// this.props.history.replace(`${window.ctx || ''}${__route_root__}/`)
 				this.payCredit({})
+			}).catch(() => {
 			})
 		}
 
@@ -215,9 +216,13 @@ const CardBinding = class extends React.Component {
 
 		} else {
 			alert(details + '\n' + solutions)
-			if (orderId) {
+			if (orderId && window.__is_login__) {
 				this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
 			}
+
+			this.setState({
+				frameUrl: `${this.state.frameUrl}&_=${new Date().getTime()}`
+			})
 		}
 		this.setState({
 			checking: false

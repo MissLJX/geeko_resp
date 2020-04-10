@@ -14,6 +14,10 @@ export const paypalAddress = (address) => axios.post(`${VPATH}/paypal2/anon/ship
 export const getDictionary = (type) => axios.get('/dictionary/anon/get', {typeCode: type})
 export const getCountries = () => getDictionary('country')
 export const getStates = (country) => getDictionary(`state-${country}`)
+export const getCites = (countryCode, stateCode) => axios.get('/context/anon/get-cities', {countryCode, stateCode})
+export const getCityByZip = (countryCode, zipCode) => axios.get('/context/anon/get-address', {countryCode, zipCode})
+
+
 export const getCurrencies = () => getDictionary('currency')
 export const updateCurrency = (currency) => axios.post('/context/anon/update-currency', {currency})
 

@@ -243,8 +243,13 @@ const Checkout = class extends React.Component {
 	componentWillMount () {
 		const { orderId } = this.props.match.params
 
-		this.props.GETCHECKOUT(orderId).catch(({result}) => {
-			alert(result)
+		this.props.GETCHECKOUT(orderId).catch((error) => {
+			if(error.result){
+				alert(error.result)
+			}else{
+				alert(error)
+			}
+			
 			window.location.href = `${window.ctx || ''}/me/m/order/detail/${orderId}`
 		})
 		this.props.GETPAYPAL()

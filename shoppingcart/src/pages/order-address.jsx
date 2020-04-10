@@ -60,7 +60,7 @@ const Modal = class extends React.Component {
 
 			<FormBody>
 				<p>* {intl.formatMessage({ id: 'required_tips' })}</p>
-				<AddressForm editAddress={this.editAddress} style={{ marginTop: 15 }} address={address} />
+				<AddressForm disablecountry={ true } editAddress={this.editAddress} style={{ marginTop: 15 }} address={address} />
 			</FormBody>
 
 		</FullFixed>
