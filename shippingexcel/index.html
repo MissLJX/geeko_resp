@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <script src="./jquery-1.11.3.min.js"></script>
+    <style>
+      body{
+        margin: 0;
+        padding: 0;
+        font-size: 14px;
+      }
+
+      figure{
+        margin: 0;
+        padding: 0;
+      }
+
+      ul, li{
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      
+      .x-geeko-swaper .__figure a{
+        text-decoration: none;
+      }
+      .x-geeko-swaper .__figure .__image img{
+        display: block;
+        max-width: 100%;
+      }
+
+      .x-geeko-swaper{
+        overflow: hidden;
+      }
+
+      .x-geeko-swaper .__items{
+        position: relative;
+      }
+
+      .x-geeko-swaper .__items > .__item{
+        position: absolute;
+        opacity: 0;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      .x-geeko-swaper .__items > .__item.ani{
+        transition: .2s all ease;
+      }
+
+      .x-geeko-swaper .__items > .__item.prev, .x-geeko-swaper .__items > .__item.next{
+        z-index: 1;
+        opacity: 1;
+      }
+
+      .x-geeko-swaper .__items > .__item.prevv, .x-geeko-swaper .__items > .__item.nextt{
+        opacity: .5;
+        z-index: 1;
+      }
+
+      .x-geeko-swaper .__items > .__item.prev{
+        left: 0;
+      }
+
+      .x-geeko-swaper .__items > .__item.next{
+        left: 100%;
+      }
+
+      .x-geeko-swaper .__items > .__item.active{
+        width: 50%;
+        z-index: 2;
+        opacity: 1;
+        top: 0;
+        transform: translateY(0);
+      }
+
+
+    </style>
+
+
+    
+  </head>
+  <body>
+    <div class="x-geeko-swaper" id="geekoswaper">
+      <ul class="__items">
+        <li class="__item">
+          <figure class="__figure">
+            <div class="__image">
+              <a>
+                <img src="https://dgzfssf1la12s.cloudfront.net/medium/c612a3c7-223f-4e2f-a9eb-ecbccf5465bc-21932-pc-sec">
+              </a>
+            </div>
+            <figcaption class="__title">Double V Lace Splicing Vest</figcaption>
+          </figure>
+        </li>
+        <li class="__item">
+          <figure class="__figure">
+            <div class="__image">
+              <a>
+                <img src="https://dgzfssf1la12s.cloudfront.net/medium/c612a3c7-223f-4e2f-a9eb-ecbccf5465bc-21932-pc">
+              </a>
+            </div>
+            <figcaption>Double V Lace Splicing Vest</figcaption>
+          </figure>
+          
+        </li>
+        <li class="__item">
+          <figure class="__figure">
+            <div class="__image">
+              <a>
+                <img src="https://dgzfssf1la12s.cloudfront.net/medium/cd3517f2-f6c1-48d6-92f4-d59dd53d8439-65902-pc-sec">
+              </a>
+            </div>
+            <figcaption>Double V Lace Splicing Vest</figcaption>
+          </figure>
+          
+        </li>
+        <li class="__item">
+          <figure class="__figure">
+            <div class="__image">
+              <a>
+                <img src="https://dgzfssf1la12s.cloudfront.net/medium/cd3517f2-f6c1-48d6-92f4-d59dd53d8439-65902-pc">
+              </a>
+            </div>
+            <figcaption>Double V Lace Splicing Vest</figcaption>
+          </figure>
+          
+        </li>
+        <li class="__item">
+          <figure class="__figure">
+            <div class="__image">
+              <a>
+                <img src="https://dgzfssf1la12s.cloudfront.net/medium/064bdccc-6c45-4b5a-bfce-609835738005-96117-pc-sec">
+              </a>
+            </div>
+            <figcaption>Double V Lace Splicing Vest</figcaption>
+          </figure>
+          
+        </li>
+        <li class="__item">
+          <figure class="__figure">
+            <div class="__image">
+              <a>
+                <img src="https://dgzfssf1la12s.cloudfront.net/medium/064bdccc-6c45-4b5a-bfce-609835738005-96117-pc">
+              </a>
+            </div>
+            <figcaption>Double V Lace Splicing Vest</figcaption>
+          </figure>
+          
+        </li>
+      </ul>
+    </div>
+
+
+    <script>
+
+      var GeekoSwaper = (function(){
+        _swaper.prototype.next = function(){}
+        _swaper.prototype.prev = function(){}
+        _swaper.prototype.refreshNext = function(){
+
+
+
+          if(this.$next.hasClass('last')){
+            this.activeIndex = 0
+
+            this.$activeEl.removeClass('active')
+            this.$next.removeClass('next')
+            this.$nextt.removeClass('nextt')
+            this.$prev.removeClass('prev')
+            this.$prevv.removeClass('prevv')
+
+            this.activeIndex = 0
+            this.$activeEl =  this.$items.eq(this.activeIndex)
+
+            this.$prev = this.$activeEl.prev()
+            this.$prevv = this.$prev.prev()
+            this.$next = this.$activeEl.next()
+            this.$nextt = this.$next.next()
+
+            this.$activeEl.addClass('active')
+
+            this.$prev.css({width: this.subWidth})
+            this.$prevv.css({width: this.subWidth})
+            this.$next.css({width: this.subWidth})
+            this.$nextt.css({width: this.subWidth})
+            this.$activeEl.css({width: this.activeWidth})
+            this.$activeEl.css({left: 'calc(50% - '+(this.activeWidth/2)+'px)'})
+            this.$next.css({left:'calc(100% - '+(this.subWidth/2)+'px)'})
+            this.$prev.css({left:'-'+(this.subWidth/2)+'px'})
+            this.$prevv.css({left: 'calc(-100% - '+(this.subWidth/2+this.margin)+'px)'})
+            this.$nextt.css({left: 'calc(100% + '+(this.subWidth/2+this.margin)+'px)'})
+
+            this.$prev.addClass('prev')
+            this.$prevv.addClass('prevv')
+            this.$next.addClass('next')
+            this.$nextt.addClass('nextt')
+
+
+          }else{
+            
+            this.$activeEl.removeClass('active').addClass('prev')
+            this.$next.removeClass('next').addClass('active')
+            this.$nextt.removeClass('nextt').addClass('next')
+            this.$prev.removeClass('prev').addClass('prevv')
+            this.$prevv.removeClass('prevv')
+            
+            this.activeIndex = this.activeIndex + 1
+            this.$items.addClass('ani')
+            this.$activeEl =  this.$items.eq(this.activeIndex)
+            this.$prev = this.$activeEl.prev()
+            this.$prevv = this.$prev.prev()
+            this.$next = this.$activeEl.next()
+            this.$nextt =  this.$next.next()
+            this.$prev.css({width: this.subWidth})
+            this.$prevv.css({width: this.subWidth})
+            this.$next.css({width: this.subWidth})
+            this.$nextt.css({width: this.subWidth})
+            this.$activeEl.css({width: this.activeWidth})
+            this.$activeEl.css({left: 'calc(50% - '+(this.activeWidth/2)+'px)'})
+            this.$next.css({left:'calc(100% - '+(this.subWidth/2)+'px)'})
+            this.$prev.css({left:'-'+(this.subWidth/2)+'px'})
+            this.$prevv.css({left: 'calc(-100% - '+(this.subWidth/2+this.margin)+'px)'})
+            this.$nextt.css({left: 'calc(100% + '+(this.subWidth/2+this.margin)+'px)'})
+            var self = this
+            setTimeout(function(){
+              self.$items.removeClass('ani')
+            },300)
+          }
+
+
+          
+        }
+
+        _swaper.prototype.refreshPrev = function(){
+
+
+
+          if(this.$prev.hasClass('first')){
+            this.$activeEl.removeClass('active')
+            this.$next.removeClass('next')
+            this.$nextt.removeClass('nextt')
+            this.$prev.removeClass('prev')
+            this.$prevv.removeClass('prevv')
+
+            this.activeIndex = this.$items.length-1
+            this.$activeEl =  this.$items.eq(this.activeIndex)
+
+            this.$prev = this.$activeEl.prev()
+            this.$prevv = this.$prev.prev()
+            this.$next = this.$activeEl.next()
+            this.$nextt = this.$next.next()
+
+            this.$activeEl.addClass('active')
+
+            this.$prev.css({width: this.subWidth})
+            this.$prevv.css({width: this.subWidth})
+            this.$next.css({width: this.subWidth})
+            this.$nextt.css({width: this.subWidth})
+            this.$activeEl.css({width: this.activeWidth})
+            this.$activeEl.css({left: 'calc(50% - '+(this.activeWidth/2)+'px)'})
+            this.$next.css({left:'calc(100% - '+(this.subWidth/2)+'px)'})
+            this.$prev.css({left:'-'+(this.subWidth/2)+'px'})
+            this.$prevv.css({left: 'calc(-100% - '+(this.subWidth/2+this.margin)+'px)'})
+            this.$nextt.css({left: 'calc(100% + '+(this.subWidth/2+this.margin)+'px)'})
+
+            this.$prev.addClass('prev')
+            this.$prevv.addClass('prevv')
+            this.$next.addClass('next')
+            this.$nextt.addClass('nextt')
+          }else{
+            this.$activeEl.removeClass('active').addClass('next')
+            this.$prev.removeClass('prev').addClass('active')
+            this.$prevv.removeClass('prevv').addClass('prev')
+
+            this.$next.removeClass('next').addClass('nextt')
+            this.$nextt.removeClass('nextt')
+            
+
+            this.activeIndex = this.activeIndex - 1
+            this.$items.addClass('ani')
+            this.$activeEl =  this.$items.eq(this.activeIndex)
+            this.$prev = this.$activeEl.prev()
+            this.$prevv = this.$prev.prev()
+            this.$next = this.$activeEl.next()
+            this.$nextt =  this.$next.next()
+            this.$prev.css({width: this.subWidth})
+            this.$prevv.css({width: this.subWidth})
+            this.$next.css({width: this.subWidth})
+            this.$nextt.css({width: this.subWidth})
+            this.$activeEl.css({width: this.activeWidth})
+            this.$activeEl.css({left: 'calc(50% - '+(this.activeWidth/2)+'px)'})
+            this.$next.css({left:'calc(100% - '+(this.subWidth/2)+'px)'})
+            this.$prev.css({left:'-'+(this.subWidth/2)+'px'})
+            this.$prevv.css({left: 'calc(-100% - '+(this.subWidth/2+this.margin)+'px)'})
+            this.$nextt.css({left: 'calc(100% + '+(this.subWidth/2+this.margin)+'px)'})
+
+            var self = this
+            setTimeout(function(){
+              self.$items.removeClass('ani')
+            },300)
+          }
+
+
+          
+        }
+
+        _swaper.prototype.init = function(){
+          this.$dom = $(this.dom)
+          this.$itemcontaimer = this.$dom.find('.__items')
+          this.$items = this.$itemcontaimer.children('.__item')
+
+          //clone
+          this.$items.eq(0).clone(false).addClass('last').appendTo(this.$itemcontaimer)
+          this.$items.eq(this.$items.length-1).clone(false).addClass('first').prependTo(this.$itemcontaimer)
+
+
+          this.activeIndex = this.activeIndex || 0
+
+          this.$activeEl =  this.$items.eq(this.activeIndex)
+
+          this.$prev = this.$activeEl.prev()
+          this.$prevv = this.$prev.prev()
+          this.$next = this.$activeEl.next()
+          this.$nextt = this.$next.next()
+
+          this.$activeEl.addClass('active')
+
+          var $activeImage = this.$activeEl.find('.__image img')
+
+          
+
+          var _self = this
+          $activeImage.load(function(event){
+           
+            var activeHeight = _self.$items.eq(_self.activeIndex).outerHeight()
+            var activeWidth =  _self.activeWidth =  _self.$items.eq(_self.activeIndex).outerWidth()
+
+
+            var subWidth = _self.subWidth = activeWidth*.75
+
+            var margin = _self.margin = (_self.$itemcontaimer.width() - _self.activeWidth - _self.subWidth) / 2
+            _self.$prev.css({width: subWidth})
+            _self.$prevv.css({width: subWidth})
+            _self.$next.css({width: subWidth})
+            _self.$nextt.css({width: subWidth})
+
+            _self.$itemcontaimer.css({height: activeHeight+'px'})
+            _self.$activeEl.css({left: 'calc(50% - '+(activeWidth/2)+'px)'})
+            _self.$next.css({left:'calc(100% - '+(subWidth/2)+'px)'})
+            _self.$nextt.css({left: 'calc(100% + '+(subWidth/2+margin)+'px)'})
+            _self.$prev.css({left:'-'+(subWidth/2)+'px'})
+
+
+            _self.$prev.addClass('prev')
+            _self.$prevv.addClass('prevv')
+            _self.$next.addClass('next')
+            _self.$nextt.addClass('nextt')
+
+            _self.listen()
+            
+          })
+
+
+          
+
+          
+
+         
+        }
+
+
+        _swaper.prototype.listen = function(){
+          var startX = 0 , offset = 0, oX = 0, tX = 0;
+          var containerWidth = this.$itemcontaimer.width()
+          var offsetdistance = containerWidth/2
+          var percent = this.subWidth / this.activeWidth
+          
+
+
+          var self = this
+          $(this.$itemcontaimer).on('touchstart', '.__item.active' ,function(e) {
+            var _touch = e.originalEvent.targetTouches[0]; 
+            var _x= _touch.pageX;
+            startX = _x;
+            oX = _x;
+          });
+
+
+          $(this.$itemcontaimer).on('touchmove','.__item.active', function(e){
+            var _touch = e.originalEvent.targetTouches[0]; 
+            var _x= _touch.pageX;
+            offset = _x - startX;
+            startX = _x;
+            tX = _x - oX;
+            
+            var curr = $(this).offset().left;
+
+            //总共需要减少  1-percent
+            //总共距离  offsetdistance
+
+            //每px减少  (1-percent) / offsetdistance
+            //总共走了 tX
+            // Math.abs(tX) * (1-percent) / offsetdistance
+
+
+
+
+            
+            var movingWidth = self.activeWidth * (1 + tX * (1-percent) / offsetdistance)
+
+            $(this).css({
+              'left': curr + offset,
+              'width': movingWidth >= self.subWidth ? movingWidth: self.subWidth
+            })
+
+            $(this).next().css({
+              width: self.subWidth * (1 - tX * (1-percent) / offsetdistance)
+            })
+
+            $(this).siblings().each(function(){
+              var scurr = $(this).offset().left
+              $(this).css({
+                'left': scurr + offset
+              })
+            })
+
+          })
+
+
+          $(this.$itemcontaimer).on('touchend','.__item.active', function(e){
+            var _touch = e.originalEvent.changedTouches[0]; 
+            var _x= _touch.pageX;
+
+            if(tX < 0){
+              self.refreshNext()
+            }else{
+              self.refreshPrev()
+            }
+
+
+            
+
+          })
+
+
+        }
+
+
+        
+
+
+        function _swaper(options){
+          this.dom = options.dom
+          this.init()
+        }
+
+        return _swaper
+      })();
+
+      $(function(){
+        var s = new GeekoSwaper({
+          dom: $('#geekoswaper')
+        })
+      })
+
+
+
+    </script>
+  </body>
+</html>

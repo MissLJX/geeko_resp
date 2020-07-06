@@ -27,7 +27,8 @@ module.exports = {
       '/api': {
         target: 'https://www.chicme.com',
         pathRewrite: { '^/api': '' },
-        secure: false
+        secure: false,
+        changeOrigin: true
       }
     }
   },

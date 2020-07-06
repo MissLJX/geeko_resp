@@ -1,0 +1,237 @@
+{
+	"jsFun": "function (weight, rate, fixedHeavyAmount, discountRate, initatingWeight) { var weight = weight - initatingWeight; weight = weight > 0 ? weight : 0; return fixedHeavyAmount + (weight * rate) / discountRate; }",
+	"upPercent": 0,
+	"weightLimitExpression": "US:5000,GB:2000,FR:5000,DE:2000,SA:2000,ES:4000,IT:4000,MX:5000,AU:2000,AT:2000,ZA:2000,AE:5000",
+	"weightUpPercent": 0.05,
+	"ruleConfigs": [{
+		"country": "US",
+		"rate": 0.065,
+		"fixedHeavyAmount": 7.98,
+		"initatingWeight":"200",
+		"discountRate": 6.5
+	}, {
+		"country": "GB",
+		"rate": 0.065,
+		"fixedHeavyAmount": 6.86,
+		"initatingWeight":"200",
+		"discountRate": 6.5
+	}, {
+		"country": "CA",
+		"rate": 0.095,
+		"fixedHeavyAmount": 8.21,
+		"initatingWeight":"200",
+		"discountRate": 6.5
+	}, {
+		"country": "FR",
+		"rate": 0.085,
+		"fixedHeavyAmount": 8.99,
+		"initatingWeight":"200",
+		"discountRate": 6.5
+	}, {
+		"country": "DE",
+		"rate": 0.085,
+		"fixedHeavyAmount": 8.99,
+		"initatingWeight":"200",
+		"discountRate": 6.5
+	}, {
+		"country": "BR",
+		"rate": 0.15,
+		"fixedHeavyAmount": 9.65,
+		"initatingWeight":"200",
+		"discountRate": 6.5
+	}, {
+		"country": "MX",
+		"rate": 0.055,
+		"fixedHeavyAmount": 10.2,
+		"initatingWeight":"400",
+		"discountRate": 6.5
+	}, {
+		"country": "ES",
+		"rate": 0.2,
+		"fixedHeavyAmount": 8.99,
+		"initatingWeight":"200",
+		"discountRate": 6.5
+
+	}, {
+		"country": "IT",
+		"rate": 0.065,
+		"fixedHeavyAmount": 7.67,
+		"initatingWeight":"200",
+		"discountRate": 6.5
+
+	}, {
+		"country": "CH",
+		"rate": 0.065,
+		"fixedHeavyAmount": 6.9,
+		"initatingWeight":"200",
+		"discountRate": 6.5
+
+	}, {
+		"country": "ZA",
+		"rate": 0.022,
+		"fixedHeavyAmount": 11.2,
+		"initatingWeight":"500",
+		"discountRate": 6.5
+
+	}, {
+		"country": "AE",
+		"rate": 0.055,
+		"fixedHeavyAmount": 9,
+		"initatingWeight":"500",
+		"discountRate": 6.5
+
+	}, {
+		"country": "NL",
+		"rate": 0.08,
+		"fixedHeavyAmount": 5.99,
+		"initatingWeight":"200",
+		"discountRate": 6.5
+
+	}, {
+		"country": "SE",
+		"rate": 0.08,
+		"fixedHeavyAmount": 6.6,
+		"initatingWeight":"200",
+		"discountRate": 6.5
+
+	}, {
+		"country": "BE",
+		"rate": 0.063,
+		"fixedHeavyAmount": 6.5,
+		"initatingWeight":"200",
+		"discountRate": 6.5
+
+	}, {
+		"country": "SA",
+		"rate": 0.015,
+		"fixedHeavyAmount": 18.99,
+		"initatingWeight":"500",
+		"discountRate": 6.5
+
+	}, {
+		"country": "IE",
+		"rate": 0.1,
+		"fixedHeavyAmount": 9.99,
+		"initatingWeight":"200",
+		"discountRate": 6.5
+
+	}, {
+		"country": "PT",
+		"rate": 0.2,
+		"fixedHeavyAmount": 9.66,
+		"initatingWeight":"200",
+		"discountRate": 6.5
+
+	}, {
+		"country": "KW",
+		"rate": 0.015,
+		"fixedHeavyAmount": 18.99,
+		"initatingWeight":"500",
+		"discountRate": 6.5
+
+	}, {
+		"country": "GP",
+		"rate": 0.2,
+		"fixedHeavyAmount": 9.66,
+		"initatingWeight":"200",
+		"discountRate": 6.5
+
+	}, {
+		"country": "NO",
+		"rate": 0.065,
+		"fixedHeavyAmount": 5.89,
+		"initatingWeight":"200",
+		"discountRate": 6.5
+
+	}, {
+		"country": "GF",
+		"rate": 0.2,
+		"fixedHeavyAmount": 9.66,
+		"initatingWeight":"200",
+		"discountRate": 6.5
+
+	}, {
+		"country": "AT",
+		"rate": 0.085,
+		"fixedHeavyAmount": 7.25,
+		"initatingWeight":"200",
+		"discountRate": 6.5
+
+	}, {
+		"country": "DK",
+		"rate": 0.1,
+		"fixedHeavyAmount": 8.2,
+		"initatingWeight":"200",
+		"discountRate": 6.5
+
+	}, {
+		"country": "IL",
+		"rate": 0.015,
+		"fixedHeavyAmount": 13.7,
+		"initatingWeight":"500",
+		"discountRate": 6.5
+
+	}, {
+		"country": "PH",
+		"rate": 0.041,
+		"fixedHeavyAmount": 5.85,
+		"initatingWeight":"200",
+		"discountRate": 6.5
+
+	}, {
+		"country": "PL",
+		"rate": 0.085,
+		"fixedHeavyAmount": 6.5,
+		"initatingWeight":"200",
+		"discountRate": 6.5
+
+	}, {
+		"country": "SC",
+		"rate": 0.2,
+		"fixedHeavyAmount": 9.66,
+		"initatingWeight":"200",
+		"discountRate": 6.5
+
+	}, {
+		"country": "IN",
+		"rate": 0.08,
+		"fixedHeavyAmount": 4.9,
+		"initatingWeight":"200",
+		"discountRate": 6.5
+
+	}, {
+		"country": "MQ",
+		"rate": 0.2,
+		"fixedHeavyAmount": 9.66,
+		"initatingWeight":"200",
+		"discountRate": 6.5
+
+	}, {
+		"country": "QA",
+		"rate": 0.015,
+		"fixedHeavyAmount": 18.99,
+		"initatingWeight":"500",
+		"discountRate": 6.5
+
+	}, {
+		"country": "JP",
+		"rate": 0.039,
+		"fixedHeavyAmount": 6.37,
+		"initatingWeight":"200",
+		"discountRate": 6.5
+
+	}, {
+		"country": "HK",
+		"rate": 0.025,
+		"fixedHeavyAmount": 40,
+		"initatingWeight":"200",
+		"discountRate": 6.5
+
+	}, {
+		"country": "other",
+		"rate": 0.124,
+		"fixedHeavyAmount": 18,
+		"initatingWeight":"200",
+		"discountRate": 6.5
+	}]
+}

@@ -255,7 +255,16 @@ const Ticket = class extends React.Component {
 
     const ReplyTip = (props) => {
       const imageUrls = props.reply.imageUrls
-      const message = props.reply.message === '-' ? '' : props.reply.message
+      let message = props.reply.message === '-' ? '' : props.reply.message
+
+      let messages = (message || '').split(/[\s|\n]/)
+
+      message = messages.map(m => {
+        if (m.indexOf('https://') === 0 || m.indexOf('http://') === 0) {
+          return `<a style="text-decoration:underline;" href="${m}">${m}</a>`
+        }
+        return m
+      }).join(' ')
 
       return <ChatTip className={props.reply.sender === 'buyers' ? 'buyer' : 'seller'}>
         {
@@ -264,7 +273,7 @@ const Ticket = class extends React.Component {
           ))
 
         }
-        <p style={{whiteSpace: 'pre-line', wordBreak: 'break-all', wordWrap: 'break-word'}}>{message}</p>
+        <p style={{whiteSpace: 'pre-line', wordBreak: 'break-all', wordWrap: 'break-word'}} dangerouslySetInnerHTML={{__html: message}}/>
 
       </ChatTip>
     }
