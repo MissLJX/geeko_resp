@@ -508,8 +508,10 @@ const ShoppingCart = class extends React.Component {
 				},
  
 				payment: function () {
-					return self.paypalcheck(method).then(data => data.result).then(({TOKEN, success, transactionId, orderId, ACK, L_LONGMESSAGE0}) => {
-						if (success && transactionId && !TOKEN) {
+					return self.paypalcheck(method).then(data => data.result).then(({TOKEN, success, tokenSuccess, transactionId, orderId, ACK, L_LONGMESSAGE0, method}) => {
+
+
+						if (success && transactionId && !TOKEN   || method === 'DoReferenceTransaction' && tokenSuccess) {
 							window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
 							throw new Error('free')
 						}
@@ -643,7 +645,7 @@ const ShoppingCart = class extends React.Component {
 
 			this.props.GETCREDITCARDS(['3', '18'], true).then(cards => {
 				if (!cards || !cards.length) {
-					getSafeCharge().then(({result}) => {
+					getSafeCharge(payMethod).then(({result}) => {
 						const {isFree, payURL, params, transactionId, orderId} = result
 						if (isFree) {
 							window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
@@ -665,6 +667,27 @@ const ShoppingCart = class extends React.Component {
 					})
 					this.props.history.push(`${window.ctx || ''}${__route_root__}/credit-card`)
 				}
+			})
+		}else if(payType === '26'){
+			this.setState({
+				checking: true
+			})
+
+			getSafeCharge(payMethod).then(({result}) => {
+				const {isFree, payURL, params, transactionId, orderId} = result
+				if (isFree) {
+					window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
+				} else {
+					storage.add('temp-order', orderId,  1 * 60 * 60)
+					submit(result)
+
+					// window.location.href = `${payURL}?${qs.stringify(params, true)}`
+				}
+			}).catch(({result}) => {
+				alert(result)
+				this.setState({
+					checking: false
+				})
 			})
 		} else if (payType === '9') {
 			if (!this.props.atmMethod) {

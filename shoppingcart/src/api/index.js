@@ -83,7 +83,7 @@ export const givingCoupon = () => axios.get(`${VPATH}/order/anon/giving`)
 export const atmPay = (paymentMethodId) => axios.post(`${VPATH}/money-transfer/pay`, {paymentMethodId})
 export const ticketPay = (paymentMethodId) => axios.post(`${VPATH}/cash/pay`, {paymentMethodId})
 
-export const getSafeCharge = () => axios.get(`${VPATH}/safe-charge/get-pay-params`)
+export const getSafeCharge = (payMethod) => axios.get(`${VPATH}/safe-charge/get-pay-params`, {payMethod, _: new Date().getTime()})
 
 export const getMultiMethodCards = (payMethods) => {
 	if(window.__is_login__){

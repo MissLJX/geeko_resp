@@ -115,6 +115,7 @@ const AdressForm = class extends React.Component {
 			selectedZips:[]
 		}
 		this.handleInputChange = this.handleInputChange.bind(this)
+		this.autoZip = this.autoZip.bind(this)
 	}
 
 	handleInputChange (event) {
@@ -386,6 +387,29 @@ const AdressForm = class extends React.Component {
 
 	}
 
+	autoZip(city){
+		if(!this.state.zipCode && this.state.countryStateCities){
+			const {country, state} = this.state
+			this.setState({
+				selectedZips: []
+			})
+
+			if(country && state){
+				const key = `${country}#${state}`
+				const cities = this.state.countryStateCities[key]
+				const selectedCity = cities.find( c => c.name === city)
+				if(selectedCity && selectedCity.zipCodes && selectedCity.zipCodes.length === 1){
+					setTimeout(()=>{
+						this.setState({
+							zipCode: selectedCity.zipCodes[0]
+						})
+					}, 0)
+				}
+
+			}
+		}
+	}
+
 	handleZipFocusout(event){
 		setTimeout( () => {
 			this.setState({
@@ -435,30 +459,8 @@ const AdressForm = class extends React.Component {
 			<Form style={{...this.props.style, display: `${isNormalAddress ? 'block' : 'none'}`}} ref={ c => { this.formRef(c) } } onSubmit={this.handleSubmit.bind(this)}>
 				<FormLayout>
 
-					<MultiControl>
-						<StyledControl>
-							<label>
-								{intl.formatMessage({id: 'country'})}*
-							</label>
-							<Select
-								className="x-select"
-								value={this.state.country}
-								name='country'
-								disabled={this.props.disablecountry}
-								onChange={(evt) => { this.handleInputChange(evt); this.changeCountry(evt) }}
-								validations={[required]}>
-								<option value=''>Country</option>
-								{
-									this.state.countries && this.state.countries.map(country => (
-										<option key={country.value} value={country.value} >{country.label}</option>
-									))
-								}
+						
 
-							</Select>
-						</StyledControl>
-
-						<StyledControl/>
-					</MultiControl>
 
 					{
 						isEmailRequired && <div style={{position:'relative'}}>
@@ -487,6 +489,27 @@ const AdressForm = class extends React.Component {
 						</div>
 						
 					}
+
+					<StyledControl>
+						<label>
+							{intl.formatMessage({id: 'country'})}*
+						</label>
+						<Select
+							className="x-select"
+							value={this.state.country}
+							name='country'
+							disabled={this.props.disablecountry}
+							onChange={(evt) => { this.handleInputChange(evt); this.changeCountry(evt) }}
+							validations={[required]}>
+							<option value=''>Country</option>
+							{
+								this.state.countries && this.state.countries.map(country => (
+									<option key={country.value} value={country.value} >{country.label}</option>
+								))
+							}
+
+						</Select>
+					</StyledControl>
 					
 
 					<StyledControl>
@@ -523,7 +546,7 @@ const AdressForm = class extends React.Component {
 							onChange={this.handleInputChange}/>
 					</StyledControl>
 
-					<MutiElement>
+					<MultiControl>
 
 
 						<StyledControl>
@@ -564,7 +587,7 @@ const AdressForm = class extends React.Component {
 							</label>
 
 
-							<SelectInput selectHandle={ (city) =>  { this.setState({city})} } isActive={ this.state.cityFocus } searchValue={this.state.city} listValues={ listValues.map(l => l.name ) }>
+							<SelectInput selectHandle={ (city) =>  { this.setState({city}); this.autoZip(city)} } isActive={ this.state.cityFocus } searchValue={this.state.city} listValues={ listValues.map(l => l.name ) }>
 								<Input
 									name='city'
 									value={this.state.city}
@@ -577,7 +600,7 @@ const AdressForm = class extends React.Component {
 
 						
 						</StyledControl>
-					</MutiElement>
+					</MultiControl>
 
 					
 
@@ -644,32 +667,10 @@ const AdressForm = class extends React.Component {
 			<Form style={{...this.props.style, display: `${this.state.country === 'BR' ? 'block' : 'none'}`}} ref={ c => { this.formRef(c, 'BR') } } onSubmit={this.handleSubmit.bind(this)}>
 				<FormLayout>
 					
-					<MultiControl>
-						<StyledControl>
-							<label>
-								{intl.formatMessage({id: 'country'})}*
-							</label>
-							<Select
-								className="x-select"
-								value={this.state.country}
-								name='country'
-								disabled={this.props.disablecountry}
-								onChange={(evt) => { this.handleInputChange(evt); this.changeCountry(evt) }}
-								validations={[required]}>
-								<option value=''>Country</option>
-								{
-									this.state.countries && this.state.countries.map(country => (
-										<option key={country.value} value={country.value} >{country.label}</option>
-									))
-								}
+						
 
-							</Select>
-						</StyledControl>
-
-						<StyledControl/>
 
 						
-					</MultiControl>
 
 
 					{
@@ -699,6 +700,27 @@ const AdressForm = class extends React.Component {
 						</div>
 						
 					}
+
+					<StyledControl>
+						<label>
+							{intl.formatMessage({id: 'country'})}*
+						</label>
+						<Select
+							className="x-select"
+							value={this.state.country}
+							name='country'
+							disabled={this.props.disablecountry}
+							onChange={(evt) => { this.handleInputChange(evt); this.changeCountry(evt) }}
+							validations={[required]}>
+							<option value=''>Country</option>
+							{
+								this.state.countries && this.state.countries.map(country => (
+									<option key={country.value} value={country.value} >{country.label}</option>
+								))
+							}
+
+						</Select>
+					</StyledControl>
 
 					<StyledControl>
 						<label>
@@ -734,7 +756,7 @@ const AdressForm = class extends React.Component {
 							onChange={this.handleInputChange}/>
 					</StyledControl>
 
-					<MutiElement>
+					<MultiControl>
 						<StyledControl>
 							<label>
 								{intl.formatMessage({id: 'state'})}
@@ -778,7 +800,7 @@ const AdressForm = class extends React.Component {
 						</StyledControl>
 
 
-					</MutiElement>
+					</MultiControl>
 
 					
 
@@ -854,32 +876,10 @@ const AdressForm = class extends React.Component {
 			<Form style={{...this.props.style, display: `${this.state.country === 'AE' || this.state.country === 'SA' ? 'block' : 'none'}`}} ref={c => { this.alForm = c }} onSubmit={this.handleSubmit.bind(this)}>
 				<FormLayout>
 
-					<MultiControl>
-						<StyledControl>
-							<label>
-								{intl.formatMessage({id: 'country'})}*
-							</label>
-							<Select
-								className="x-select"
-								value={this.state.country}
-								disabled={this.props.disablecountry}
-								name='country'
-								onChange={(evt) => { this.handleInputChange(evt); this.changeCountry(evt) }}
-								validations={[required]}>
-								<option value=''>Country</option>
-								{
-									this.state.countries && this.state.countries.map(country => (
-										<option key={country.value} value={country.value} >{country.label}</option>
-									))
-								}
+						
 
-							</Select>
-						</StyledControl>
-
-						<StyledControl/>
 
 						
-					</MultiControl>
 
 
 					{
@@ -909,6 +909,27 @@ const AdressForm = class extends React.Component {
 						</div>
 						
 					}
+
+					<StyledControl>
+						<label>
+							{intl.formatMessage({id: 'country'})}*
+						</label>
+						<Select
+							className="x-select"
+							value={this.state.country}
+							disabled={this.props.disablecountry}
+							name='country'
+							onChange={(evt) => { this.handleInputChange(evt); this.changeCountry(evt) }}
+							validations={[required]}>
+							<option value=''>Country</option>
+							{
+								this.state.countries && this.state.countries.map(country => (
+									<option key={country.value} value={country.value} >{country.label}</option>
+								))
+							}
+
+						</Select>
+					</StyledControl>
 
 					<StyledControl>
 						<label>
@@ -944,7 +965,7 @@ const AdressForm = class extends React.Component {
 							onChange={this.handleInputChange}/>
 					</StyledControl>
 
-					<MutiElement>
+					<MultiControl>
 						<StyledControl>
 							<label>
 								{intl.formatMessage({id: 'state'})}
@@ -988,7 +1009,7 @@ const AdressForm = class extends React.Component {
 						</StyledControl>
 
 
-					</MutiElement>
+					</MultiControl>
 
 					
 

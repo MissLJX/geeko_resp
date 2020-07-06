@@ -111,6 +111,7 @@ const AddressFrom = class extends React.Component {
 			selectedZips:[]
 		}
 		this.handleInputChange = this.handleInputChange.bind(this)
+		this.autoZip = this.autoZip.bind(this)
 	}
 
 	handleInputChange (event) {
@@ -208,6 +209,29 @@ const AddressFrom = class extends React.Component {
 		
 
 
+	}
+
+	autoZip(city){
+		if(!this.state.zipCode && this.state.countryStateCities){
+			const {country, state} = this.state
+			this.setState({
+				selectedZips: []
+			})
+
+			if(country && state){
+				const key = `${country}#${state}`
+				const cities = this.state.countryStateCities[key]
+				const selectedCity = cities.find( c => c.name === city)
+				if(selectedCity && selectedCity.zipCodes && selectedCity.zipCodes.length === 1){
+					setTimeout(()=>{
+						this.setState({
+							zipCode: selectedCity.zipCodes[0]
+						})
+					}, 0)
+				}
+
+			}
+		}
 	}
 
 	handleZipFocusout(event){
@@ -416,29 +440,9 @@ const AddressFrom = class extends React.Component {
 
 					
 
-					<MutiElement>
-						<FormElement label={`${intl.formatMessage({id: 'country'})}:`} className="__required">
-							<Select
-								className="x-select"
-								value={this.state.country}
-								name='country'
-								disabled={this.props.disablecountry}
-								style= {{width: '100%', height: 40}}
-								onChange={(evt) => { this.handleInputChange(evt); this.changeCountry(evt) }}
-								validations={[required]}>
-								<option value=''>Country</option>
-								{
-									this.state.countries && this.state.countries.map(country => (
-										<option key={country.value} value={country.value} >{country.label}</option>
-									))
-								}
-
-							</Select>
-						</FormElement>
-						<FormElement/>
+						
 
 						
-					</MutiElement>
 
 					{
 						isEmailRequired && <div style={{position:'relative'}}>
@@ -468,6 +472,25 @@ const AddressFrom = class extends React.Component {
 
 						</div>
 					}
+
+					<FormElement label={`${intl.formatMessage({id: 'country'})}:`} className="__required">
+						<Select
+							className="x-select"
+							value={this.state.country}
+							name='country'
+							disabled={this.props.disablecountry}
+							style= {{width: '100%', height: 40}}
+							onChange={(evt) => { this.handleInputChange(evt); this.changeCountry(evt) }}
+							validations={[required]}>
+							<option value=''>Country</option>
+							{
+								this.state.countries && this.state.countries.map(country => (
+									<option key={country.value} value={country.value} >{country.label}</option>
+								))
+							}
+
+						</Select>
+					</FormElement>
 					
 
 					<FormElement label={`${intl.formatMessage({id: 'full_name'})}:`} className="__required">
@@ -527,7 +550,7 @@ const AddressFrom = class extends React.Component {
 							}
 						</FormElement>
 						<FormElement label={`${intl.formatMessage({id: 'city'})}:`} className="__required">
-							<SelectInput selectHandle={ (city) =>  { this.setState({city})} } isActive={ this.state.cityFocus } searchValue={this.state.city} listValues={ listValues.map(l => l.name ) }>
+							<SelectInput selectHandle={ (city) =>  { this.setState({city}); this.autoZip(city)} } isActive={ this.state.cityFocus } searchValue={this.state.city} listValues={ listValues.map(l => l.name ) }>
 								
 								<Input
 									autocomplete="off"
@@ -658,29 +681,9 @@ const AddressFrom = class extends React.Component {
 
 					
 
-					<MutiElement>
-						<FormElement label={`${intl.formatMessage({id: 'country'})}:`} className="__required">
-							<Select
-								className="x-select"
-								value={this.state.country}
-								name='country'
-								style= {{width: '100%', height: 40}}
-								disabled={this.props.disablecountry}
-								onChange={(evt) => { this.handleInputChange(evt); this.changeCountry(evt) }}
-								validations={[required]}>
-								<option value=''>Country</option>
-								{
-									this.state.countries && this.state.countries.map(country => (
-										<option key={country.value} value={country.value} >{country.label}</option>
-									))
-								}
-
-							</Select>
-						</FormElement>
-						<FormElement/>
+						
 
 						
-					</MutiElement>
 
 					{
 						isEmailRequired && <div style={{position:'relative'}}>
@@ -710,6 +713,25 @@ const AddressFrom = class extends React.Component {
 
 						</div>
 					}
+
+					<FormElement label={`${intl.formatMessage({id: 'country'})}:`} className="__required">
+						<Select
+							className="x-select"
+							value={this.state.country}
+							name='country'
+							style= {{width: '100%', height: 40}}
+							disabled={this.props.disablecountry}
+							onChange={(evt) => { this.handleInputChange(evt); this.changeCountry(evt) }}
+							validations={[required]}>
+							<option value=''>Country</option>
+							{
+								this.state.countries && this.state.countries.map(country => (
+									<option key={country.value} value={country.value} >{country.label}</option>
+								))
+							}
+
+						</Select>
+					</FormElement>
 
 					<FormElement label={`${intl.formatMessage({id: 'full_name'})}:`} className="__required">
 						<Input

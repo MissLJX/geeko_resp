@@ -543,6 +543,7 @@ const Checkout = class extends React.Component {
 					})
 					break
 				case '5':
+				case '26':
 					this.setState({
 						checking: true
 					})

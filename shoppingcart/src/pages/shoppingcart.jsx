@@ -449,7 +449,7 @@ const ShoppingCart = class extends React.Component {
 			this.props.GETCREDITCARDS(multi ? ['18', '3'] : payMethod, multi).then((cards) => {
 				if (!cards || cards.length < 1) {
 					if (payType === '8') {
-						getSafeCharge().then(({ result }) => {
+						getSafeCharge(payMethod).then(({ result }) => {
 							const { isFree, transactionId, orderId } = result
 							if (isFree) {
 								window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
@@ -479,6 +479,26 @@ const ShoppingCart = class extends React.Component {
 					checking: false
 				})
 			})
+		}else if(payType === '26'){
+			this.setState({
+				checking: true
+			})
+
+			getSafeCharge(payMethod).then(({ result }) => {
+				const { isFree, transactionId, orderId } = result
+				if (isFree) {
+					window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
+				} else {
+					storage.add('temp-order', orderId, 1 * 60 * 60)
+					submit(result)
+				}
+			}).catch(({ result }) => {
+				alert(result)
+				this.setState({
+					checking: false
+				})
+			})
+
 		} else if (payType === '7') {
 			this.props.TOGGLECREDIT(true)
 			this.setState({
@@ -500,8 +520,8 @@ const ShoppingCart = class extends React.Component {
 			this.setState({
 				paypaling: true
 			})
-			normalpaypal().then(data => data.result).then(({ TOKEN, success, transactionId, orderId, ACK, L_LONGMESSAGE0 }) => {
-				if (success && transactionId && !TOKEN) {
+			normalpaypal().then(data => data.result).then(({ TOKEN, success,tokenSuccess , transactionId, orderId, ACK, L_LONGMESSAGE0, method }) => {
+				if (success && transactionId && !TOKEN   || method === 'DoReferenceTransaction' && tokenSuccess) {
 					window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
 					return
 				}

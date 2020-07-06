@@ -33,7 +33,7 @@ module.exports = {
 				cookiePathRewrite: {
 					'/wanna': '/',
 				},
-				secure: false
+				secure: true
 			}
 		}
 	},

@@ -268,7 +268,7 @@ const Credit = class extends React.Component {
 			this.setState({
 				checking: true
 			})
-			getSafeCharge().then(({result}) => {
+			getSafeCharge(this.props.payMethod).then(({result}) => {
 				const {isFree, transactionId, orderId} = result
 				if (isFree) {
 					window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
