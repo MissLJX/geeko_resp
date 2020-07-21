@@ -27,11 +27,11 @@ module.exports = {
 		progress: true,
 		proxy: {
 			'/api': {
-				target: 'http://localhost:8080/wanna',
+				target: 'http://localhost:8080/chiquedoll',
 				pathRewrite: { '^/api': '' },
 				cookieDomainRewrite: 'localhost',
 				cookiePathRewrite: {
-					'/wanna': '/',
+					'/chiquedoll': '/',
 				},
 				secure: true
 			}

@@ -5,10 +5,11 @@ import Loading from '../components/msite/loading.jsx'
 import Empty from '../components/msite/empty.jsx'
 import Refreshing from '../components/msite/refreshing.jsx'
 import Ask from '../components/ask.jsx'
+import Ellipsis from '../components/ellipsis.jsx'
 import FixedMessage from '../components/msite/fixed-message.jsx'
 import { Boxs, Box, BoxClickHead, BoxBody, LineBox, BoxHead } from '../components/msite/layout.jsx'
 // import GroupOverseasItems from '../components/msite/group-overseas-items.jsx'
- 
+
 import PromotionGroup from '../components/msite/promotion-group.jsx'
 
 import GroupLocalItems from '../components/msite/group-local-items.jsx'
@@ -29,11 +30,13 @@ import Mask from '../components/mask.jsx'
 import _ from 'lodash'
 import PayMethodList from '../components/msite/paymethod-list.jsx'
 import { BigButton } from '../components/msite/buttons.jsx'
-import { payDLocal, useMercadocard, mercadopay, usePoint, useInsurance, creditpay, normalpaypal, quickpaypal, usecreditcard, movetooverseas, getMessage, placepaypal, givingCoupon, atmPay, ticketPay, getSafeCharge, getApacPay, apacPay, useMercadoCoupon, placeorder,
+import {
+	payDLocal, useMercadocard, mercadopay, usePoint, useInsurance, creditpay, normalpaypal, quickpaypal, usecreditcard, movetooverseas, getMessage, placepaypal, givingCoupon, atmPay, ticketPay, getSafeCharge, getApacPay, apacPay, useMercadoCoupon, placeorder,
 	getJwt,
 	getLookup,
-	oceanpay3d } from '../api'
-import { __route_root__, storage } from '../utils/utils.js'
+	oceanpay3d
+} from '../api'
+import { __route_root__, storage, producturl, unitprice } from '../utils/utils.js'
 import { submit } from '../utils/common-pay.js'
 import { CountDownBlock } from '../components/msite/countdowns.jsx'
 import { injectIntl, FormattedMessage } from 'react-intl'
@@ -59,6 +62,7 @@ const ProductEditor = Loadable({
 	),
 	loading: Refreshing
 })
+
 
 
 const OrderSummary = styled.div`
@@ -320,8 +324,8 @@ const ShoppingCart = class extends React.Component {
 	componentDidMount() {
 		this.props.INIT().then(() => {
 			var { cart } = this.props
-			if(cart){
-				if(window.enterCart){
+			if (cart) {
+				if (window.enterCart) {
 					window.enterCart(cart)
 				}
 			}
@@ -414,7 +418,7 @@ const ShoppingCart = class extends React.Component {
 		const { payMethod, cart, paypal, payType } = this.props
 		const { shippingDetail } = cart
 		const isRequireEmail = !window.__is_login__ && !window.token && this.props.location.pathname && this.props.location.pathname.indexOf('/cart/checkout') >= 0
-		
+
 
 		if (!cart.shippingDetail) {
 			this.props.history.push(`${window.ctx || ''}${__route_root__}/address`)
@@ -479,7 +483,7 @@ const ShoppingCart = class extends React.Component {
 					checking: false
 				})
 			})
-		}else if(payType === '26'){
+		} else if (payType === '26') {
 			this.setState({
 				checking: true
 			})
@@ -520,8 +524,8 @@ const ShoppingCart = class extends React.Component {
 			this.setState({
 				paypaling: true
 			})
-			normalpaypal().then(data => data.result).then(({ TOKEN, success,tokenSuccess , transactionId, orderId, ACK, L_LONGMESSAGE0, method }) => {
-				if (success && transactionId && !TOKEN   || method === 'DoReferenceTransaction' && tokenSuccess) {
+			normalpaypal().then(data => data.result).then(({ TOKEN, success, tokenSuccess, transactionId, orderId, ACK, L_LONGMESSAGE0, method }) => {
+				if (success && transactionId && !TOKEN || method === 'DoReferenceTransaction' && tokenSuccess) {
 					window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
 					return
 				}
@@ -667,14 +671,14 @@ const ShoppingCart = class extends React.Component {
 				this.$paylistdom.scrollIntoView()
 				return
 			}
-			
-			if(payType !== '14'){
+
+			if (payType !== '14') {
 				this.documentForm.validateAll()
 				if (this.documentRef.context && this.documentRef.context._errors && this.documentRef.context._errors.length > 0) {
 					return
 				}
 			}
-			
+
 
 
 
@@ -695,7 +699,7 @@ const ShoppingCart = class extends React.Component {
 	tcClickHandle(method) {
 		const { payMethod } = this.props.cart
 		let _c = storage.get('cashoutMethod') || {}
-		let cashoutMethod = {..._c, [payMethod]: method}
+		let cashoutMethod = { ..._c, [payMethod]: method }
 		this.props.SETCASHOUT(cashoutMethod)
 		storage.add('cashoutMethod', cashoutMethod, 365 * 24 * 60 * 60)
 	}
@@ -705,15 +709,15 @@ const ShoppingCart = class extends React.Component {
 		return (this.props.cashoutMethod || {})[payMethod]
 	}
 
-	initCashmethod(payMethod, method){
+	initCashmethod(payMethod, method) {
 		let _c = storage.get('cashoutMethod') || {}
 
-		if(!_c[payMethod]){
-			let cashoutMethod = {..._c, [payMethod]: method.id}
+		if (!_c[payMethod]) {
+			let cashoutMethod = { ..._c, [payMethod]: method.id }
 			this.props.SETCASHOUT(cashoutMethod)
 			storage.add('cashoutMethod', cashoutMethod, 365 * 24 * 60 * 60)
 		}
-		
+
 	}
 
 	getApacPay(payMethod, cpf, fail) {
@@ -836,26 +840,26 @@ const ShoppingCart = class extends React.Component {
 		const value = target.type === 'checkbox' ? target.checked : target.value
 		const name = target.name
 		switch (name) {
-		case 'cpf':
-			this.props.SETCPF(value)
-			break
-		case 'email':
-			this.props.SETEMAIL(value)
-			break
-		case 'securityCode':
-			this.props.SETSECURITYCODE(value)
-			break
-		case 'installments':
-			this.props.SETINSTALLMENTS(value)
-			break
-		case 'mercado-installments':
-			this.props.SETMERCADOINTALLMENTS(value)
-			break
-		case 'document':
-			this.props.SETDOCUMENT(value)
-			break
-		default:
-			break
+			case 'cpf':
+				this.props.SETCPF(value)
+				break
+			case 'email':
+				this.props.SETEMAIL(value)
+				break
+			case 'securityCode':
+				this.props.SETSECURITYCODE(value)
+				break
+			case 'installments':
+				this.props.SETINSTALLMENTS(value)
+				break
+			case 'mercado-installments':
+				this.props.SETMERCADOINTALLMENTS(value)
+				break
+			case 'document':
+				this.props.SETDOCUMENT(value)
+				break
+			default:
+				break
 		}
 	}
 
@@ -1020,7 +1024,7 @@ const ShoppingCart = class extends React.Component {
 
 			const { document, payMethod } = this.props
 
-			
+
 			this.setState({
 				dlocalerror: null
 			})
@@ -1035,7 +1039,7 @@ const ShoppingCart = class extends React.Component {
 				}
 			}
 
-			if(window.__dlocal){
+			if (window.__dlocal) {
 				window.__dlocal.createToken(this.cvvField).then(result => {
 					this.payCredit({ installments, document, token: result.token })
 				}).catch(result => {
@@ -1056,21 +1060,21 @@ const ShoppingCart = class extends React.Component {
 		}
 	}
 
-	triggerOcean(){
-		placeorder().then(({result: payment}) => {
-			if(payment){
-				const {orderId} = payment
-				getJwt(orderId).then(({result}) => {
-					const {jwt, bin} = result
+	triggerOcean() {
+		placeorder().then(({ result: payment }) => {
+			if (payment) {
+				const { orderId } = payment
+				getJwt(orderId).then(({ result }) => {
+					const { jwt, bin } = result
 					this.listenOcean3D(orderId, jwt, bin)
-				}).catch(({result}) => {
+				}).catch(({ result }) => {
 					alert(result)
 					this.setState({
 						checking: false
 					})
 				})
 			}
-		}).catch(({result}) => {
+		}).catch(({ result }) => {
 			alert(result)
 			this.setState({
 				checking: false
@@ -1078,7 +1082,7 @@ const ShoppingCart = class extends React.Component {
 		})
 	}
 
-	listenOcean3D(orderId, jwt, bin){
+	listenOcean3D(orderId, jwt, bin) {
 
 		var self = this
 
@@ -1093,24 +1097,24 @@ const ShoppingCart = class extends React.Component {
 		Cardinal.off('payments.setupComplete')
 		Cardinal.off('payments.validated')
 
-		Cardinal.on('payments.setupComplete', function(setupCompleteData) {
+		Cardinal.on('payments.setupComplete', function (setupCompleteData) {
 			const referenceId = setupCompleteData.sessionId
-			getLookup(referenceId, orderId).then(({result: lookup}) => {
-				if(lookup && lookup.lookupUrl){
+			getLookup(referenceId, orderId).then(({ result: lookup }) => {
+				if (lookup && lookup.lookupUrl) {
 					Cardinal.continue('cca', {
 						'AcsUrl': lookup.lookupUrl,
 						'Payload': lookup.lookupLoad
-					},{
+					}, {
 						'OrderDetails': {
 							'TransactionId': lookup.transactionId
 						}
 					},
-					jwt
+						jwt
 					)
-				}else{
+				} else {
 					self.payOcean3D(orderId)
 				}
-			}).catch(({result}) => {
+			}).catch(({ result }) => {
 				alert(result)
 				this.setState({
 					checking: false
@@ -1119,35 +1123,35 @@ const ShoppingCart = class extends React.Component {
 
 
 		})
-		
-		Cardinal.on('payments.validated', function(data, jwt) {
+
+		Cardinal.on('payments.validated', function (data, jwt) {
 			var cavv = data.Payment.ExtendedData.CAVV
 			var eci = data.Payment.ExtendedData.ECIFlag
 			var xid = data.Payment.ProcessorTransactionId
 			// var status = data.Payment.ExtendedData.PAResStatus
 			// var transactionId = data.Payment.ProcessorTransactionId
-			
+
 			//请求支付
 			self.payOcean3D(orderId, eci, cavv, xid)
 
 		})
 	}
 
-	payOcean3D(orderId, eci, cavv, xid){
-		oceanpay3d({orderId, cardEci: eci, cardCavv: cavv, cardXid:xid}).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
+	payOcean3D(orderId, eci, cavv, xid) {
+		oceanpay3d({ orderId, cardEci: eci, cardCavv: cavv, cardXid: xid }).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
 	}
 
-	payDLocal (params) {
+	payDLocal(params) {
 		this.setState({
 			checking: true
 		})
 		payDLocal(params).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
 	}
 
-	processCallBack({ isFree, success, transactionId, details, orderId, solutions = '' }){
+	processCallBack({ isFree, success, transactionId, details, orderId, solutions = '' }) {
 		if (isFree) {
 			window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-		}else if (success) {
+		} else if (success) {
 
 			window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
 
@@ -1162,7 +1166,7 @@ const ShoppingCart = class extends React.Component {
 		})
 	}
 
-	processErrorBack({ result }){
+	processErrorBack({ result }) {
 		alert(result)
 		this.setState({
 			checking: false
@@ -1182,7 +1186,7 @@ const ShoppingCart = class extends React.Component {
 		// }else{
 		creditpay(params).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
 		// }
-		
+
 	}
 
 	addMercadoCard(evt) {
@@ -1426,7 +1430,7 @@ const ShoppingCart = class extends React.Component {
 
 
 		let isprogresspage, country, formatedData, invalidItems, cancheckout, hasLocalItems, sendCouponMessage, couponcountdown, totalCount = 0, hasOverseas, hasQuickPay
-
+		let gifts
 		if (cart) {
 			isprogresspage = !window.token && (window.__is_login__ || (cart && cart.shippingDetail) || (this.props.location.pathname && this.props.location.pathname.indexOf('/cart/checkout') >= 0))
 
@@ -1444,6 +1448,7 @@ const ShoppingCart = class extends React.Component {
 
 			country = this.props.cart.shippingDetail && this.props.cart.shippingDetail.country ? this.props.cart.shippingDetail.country.value : window.__country
 			tcMethod = this.getTcMethod()
+			gifts = cart.gifts
 		}
 
 
@@ -1511,12 +1516,12 @@ const ShoppingCart = class extends React.Component {
 											</div>
 										</TipModal>
 									) : (
-										<React.Fragment>
-											{cart.messages && cart.messages.orderSummaryMsg && <TipModal className={this.state.tipFixed ? '__fixed' : ''} innerRef={tip => { this.fixedTip = tip }}>
-												<span dangerouslySetInnerHTML={{ __html: cart.messages.orderSummaryMsg }} />
-											</TipModal>}
-										</React.Fragment>
-									)
+											<React.Fragment>
+												{cart.messages && cart.messages.orderSummaryMsg && <TipModal className={this.state.tipFixed ? '__fixed' : ''} innerRef={tip => { this.fixedTip = tip }}>
+													<span dangerouslySetInnerHTML={{ __html: cart.messages.orderSummaryMsg }} />
+												</TipModal>}
+											</React.Fragment>
+										)
 								}
 							</div>
 						)
@@ -1543,17 +1548,17 @@ const ShoppingCart = class extends React.Component {
 									<DashedLine />
 								</Box>
 							) : (
-								isprogresspage && <Box style={{ position: 'relative' }}>
-									<BoxClickHead title={intl.formatMessage({ id: 'address' })} single={true}>
-										<Grey>
-											<Link style={{ color: '#222', textDecoration: 'none' }} to={`${window.ctx || ''}${__route_root__}/address`}>
+									isprogresspage && <Box style={{ position: 'relative' }}>
+										<BoxClickHead title={intl.formatMessage({ id: 'address' })} single={true}>
+											<Grey>
+												<Link style={{ color: '#222', textDecoration: 'none' }} to={`${window.ctx || ''}${__route_root__}/address`}>
 													Add
 											</Link>
-										</Grey>
-									</BoxClickHead>
-									<DashedLine />
-								</Box>
-							)
+											</Grey>
+										</BoxClickHead>
+										<DashedLine />
+									</Box>
+								)
 						}
 
 						{
@@ -1609,6 +1614,47 @@ const ShoppingCart = class extends React.Component {
 						}
 
 						{
+							gifts && gifts.length > 0 && <Box>
+								<div style={{ padding: 10 }}>
+									<div>
+										<span className="iconfont" style={{ color: '#ff8454', fontSize: 30, verticalAlign: 'middle' }}>&#xec45;</span>
+										<span style={{ fontWeight: 'bold', verticalAlign: 'middle' }}>Free Gift</span>
+									</div>
+									<div className="x-table" style={{ width: '100%', tableLayout: 'fixed', marginTop: 10 }}>
+										<div className="x-cell" style={{ width: 40, verticalAlign: 'middle' }}>
+											<img style={{ display: 'inline-block', width: '100%' }} href={producturl({ id: gifts[0].productId, name: gifts[0].productName, parentSku: gifts[0].parentSku })} src={gifts[0].imageUrl} />
+										</div>
+										<div className="x-cell" style={{ paddingLeft: 10, verticalAlign: 'middle' }}>
+											<Ellipsis>
+												<span style={{ display: 'inline-block', lineHeight: '14px', fontSize: 12, color: '#e64545', border: '1px solid #e64545', paddingLeft: 5, paddingRight: 5 }}>
+													Gift
+											</span>
+												<span style={{ lineHeight: '14px', fontSize: 12, marginLeft: 10 }}>
+													{gifts[0].productName}
+												</span>
+											</Ellipsis>
+											<div style={{marginTop:10}}>
+												<Red>{unitprice(gifts[0].realPrice)}</Red>
+												<Link style={{float:'right', color:'#e64545'}} to={`${__route_root__}/gifts`}>View gift </Link>
+											</div>
+
+										</div>
+									</div>
+								</div>
+
+							</Box>
+						}
+
+						{
+							cart.giftWarnMsg && <Box>
+								<div style={{ padding: 10 }}>
+									<span className="iconfont" style={{ color: '#ff8454', fontSize: 30, verticalAlign: 'middle' }}>&#xec45;</span>
+									<span style={{verticalAlign: 'middle'}} dangerouslySetInnerHTML={{__html: cart.giftWarnMsg}}></span>
+								</div>
+							</Box>
+						}
+
+						{
 							invalidItems && invalidItems.length > 0 && <Box>
 								<GroupInvalidItems serverTime={cart.serverTime}
 									items={this.getInvalidItems(cart)}
@@ -1624,8 +1670,8 @@ const ShoppingCart = class extends React.Component {
 									{cart.coupon ? (
 										<span><strong>{cart.coupon.couponName}</strong> {cart.coupon.name}</span>
 									) : (
-										<span>Available <Red>{cart.canUseCouponCount}</Red></span>
-									)}
+											<span>Available <Red>{cart.canUseCouponCount}</Red></span>
+										)}
 								</Link>
 							</BoxClickHead>
 
@@ -1693,7 +1739,7 @@ const ShoppingCart = class extends React.Component {
 											documentForm={c => this.documentForm = c}
 											documentRef={c => this.documentRef = c}
 											document={this.props.document}
-											initCashmethod = {this.initCashmethod.bind(this)}
+											initCashmethod={this.initCashmethod.bind(this)}
 										/>
 									</div>
 								</Box>
@@ -1744,110 +1790,110 @@ const ShoppingCart = class extends React.Component {
 														!this.state.checking ? <BigButton onClick={this.checkout.bind(this)} className="__btn" height={47} bgColor="#222">
 															{intl.formatMessage({ id: 'check_out' })} ({totalCount})
 														</BigButton> : <BigButton className="__btn" height={47} bgColor="#999">
-															{intl.formatMessage({ id: 'please_wait' })}...
+																{intl.formatMessage({ id: 'please_wait' })}...
 														</BigButton>
 													) : (
-														<BigButton className="__btn" height={47} bgColor="#999">
-															{intl.formatMessage({ id: 'check_out' })} ({totalCount})
-														</BigButton>
-													)
+															<BigButton className="__btn" height={47} bgColor="#999">
+																{intl.formatMessage({ id: 'check_out' })} ({totalCount})
+															</BigButton>
+														)
 												}
 											</Checkout> : <Checkout>
-												<div className="__total">
-													<span>{intl.formatMessage({ id: 'total' })}: </span>
-													<Red><Money money={cart.orderSummary.orderTotal} /></Red>
-												</div>
-												<div>
-													<BigButton className="__btn" height={47} bgColor="#999">
-														{intl.formatMessage({ id: 'check_out' })} ({totalCount})
+													<div className="__total">
+														<span>{intl.formatMessage({ id: 'total' })}: </span>
+														<Red><Money money={cart.orderSummary.orderTotal} /></Red>
+													</div>
+													<div>
+														<BigButton className="__btn" height={47} bgColor="#999">
+															{intl.formatMessage({ id: 'check_out' })} ({totalCount})
 													</BigButton>
-												</div>
-											</Checkout>
+													</div>
+												</Checkout>
 										}
 
 									</div>
 								</Box>
 							) : (
-								window.token ? (
-									<Box>
-										<div style={{ height: (sitename === 'bellewholesale' ? 140 : 90) }}>
-											<Checkout>
-												<div className="__total">
-													<span>{intl.formatMessage({ id: 'total' })}: </span>
-													<Red><Money money={cart.orderSummary.orderTotal} /></Red>
-												</div>
-												{
-													cancheckout ? (
-														<BigButton onClick={this.quickPlace.bind(this)} className="__btn" height={47} bgColor="#222">
-																Place Order
-														</BigButton>
-													) : (
-														<BigButton className="__btn" height={47} bgColor="#ddd">
-															{intl.formatMessage({ id: 'check_out' })}
-														</BigButton>
-													)
-												}
-											</Checkout>
-										</div>
-									</Box>
-								) : (
-									<Box>
-										<div style={{ height: (sitename === 'bellewholesale' ? 140 : 90) }}>
-										</div>
-
-
-										{
-											cart.canCheckout ? <Checkout>
-												<div className="__total">
-													<span>{intl.formatMessage({ id: 'total' })}: </span>
-													<Red><Money money={cart.orderSummary.orderTotal} /></Red>
-
-
-													{cart.paypalDiscountMessage && <DISCOUNTTIP dangerouslySetInnerHTML={{ __html: cart.paypalDiscountMessage }} />}
-
-												</div>
-
-
-
-												{
-													hasQuickPay ? <DoubleBtn className="x-flex __between">
-														<div>
-															<BigButton onClick={() => {
-																this.props.history.push(`${window.ctx || ''}${__route_root__}/address`)
-															}} className="__btn" height={47} bgColor="#222">
-																{intl.formatMessage({ id: 'check_out' })} ({totalCount})
-															</BigButton>
-														</div>
-														<div>
-															<PaypalBtn onClick={this.quickPaypal.bind(this)}><img src={cart.paypalButtonImage} /></PaypalBtn>
-														</div>
-													</DoubleBtn> : <div>
-														<BigButton onClick={() => {this.props.history.push(`${window.ctx || ''}${__route_root__}/address`)}} className="__btn" height={47} bgColor="#222">
-															{intl.formatMessage({ id: 'check_out' })} ({totalCount})
-														</BigButton>
+									window.token ? (
+										<Box>
+											<div style={{ height: (sitename === 'bellewholesale' ? 140 : 90) }}>
+												<Checkout>
+													<div className="__total">
+														<span>{intl.formatMessage({ id: 'total' })}: </span>
+														<Red><Money money={cart.orderSummary.orderTotal} /></Red>
 													</div>
+													{
+														cancheckout ? (
+															<BigButton onClick={this.quickPlace.bind(this)} className="__btn" height={47} bgColor="#222">
+																Place Order
+															</BigButton>
+														) : (
+																<BigButton className="__btn" height={47} bgColor="#ddd">
+																	{intl.formatMessage({ id: 'check_out' })}
+																</BigButton>
+															)
+													}
+												</Checkout>
+											</div>
+										</Box>
+									) : (
+											<Box>
+												<div style={{ height: (sitename === 'bellewholesale' ? 140 : 90) }}>
+												</div>
+
+
+												{
+													cart.canCheckout ? <Checkout>
+														<div className="__total">
+															<span>{intl.formatMessage({ id: 'total' })}: </span>
+															<Red><Money money={cart.orderSummary.orderTotal} /></Red>
+
+
+															{cart.paypalDiscountMessage && <DISCOUNTTIP dangerouslySetInnerHTML={{ __html: cart.paypalDiscountMessage }} />}
+
+														</div>
+
+
+
+														{
+															hasQuickPay ? <DoubleBtn className="x-flex __between">
+																<div>
+																	<BigButton onClick={() => {
+																		this.props.history.push(`${window.ctx || ''}${__route_root__}/address`)
+																	}} className="__btn" height={47} bgColor="#222">
+																		{intl.formatMessage({ id: 'check_out' })} ({totalCount})
+															</BigButton>
+																</div>
+																<div>
+																	<PaypalBtn onClick={this.quickPaypal.bind(this)}><img src={cart.paypalButtonImage} /></PaypalBtn>
+																</div>
+															</DoubleBtn> : <div>
+																	<BigButton onClick={() => { this.props.history.push(`${window.ctx || ''}${__route_root__}/address`) }} className="__btn" height={47} bgColor="#222">
+																		{intl.formatMessage({ id: 'check_out' })} ({totalCount})
+														</BigButton>
+																</div>
+														}
+
+
+
+
+													</Checkout> : <Checkout>
+															<div className="__total">
+																<span>{intl.formatMessage({ id: 'total' })}: </span>
+																<Red><Money money={cart.orderSummary.orderTotal} /></Red>
+															</div>
+															<div>
+																<BigButton className="__btn" height={47} bgColor="#999">
+																	{intl.formatMessage({ id: 'check_out' })} ({totalCount})
+													</BigButton>
+															</div>
+														</Checkout>
 												}
 
 
-
-
-											</Checkout> : <Checkout>
-												<div className="__total">
-													<span>{intl.formatMessage({ id: 'total' })}: </span>
-													<Red><Money money={cart.orderSummary.orderTotal} /></Red>
-												</div>
-												<div>
-													<BigButton className="__btn" height={47} bgColor="#999">
-														{intl.formatMessage({ id: 'check_out' })} ({totalCount})
-													</BigButton>
-												</div>
-											</Checkout>
-										}
-
-
-									</Box>
+											</Box>
+										)
 								)
-							)
 						}
 
 					</Boxs>
@@ -1920,8 +1966,8 @@ const ShoppingCart = class extends React.Component {
 									document={this.props.document}
 									dlocalref={c => this.dlocalref = c}
 									dlocalbtn={c => this.dlocalbtn = c}
-									cvvRef = { this.cvvRef.bind(this) }
-									dlocalerror = {this.state.dlocalerror}
+									cvvRef={this.cvvRef.bind(this)}
+									dlocalerror={this.state.dlocalerror}
 								/>
 							</React.Fragment>
 						)
@@ -1955,13 +2001,13 @@ const ShoppingCart = class extends React.Component {
 							/*eslint no-undef: "error"*/
 							window.siteName
 						}
-						no={() => {
-							this.setState({ showPayMsgOcean: false })
-							this.props.TOGGLECREDIT(false)
-						}}
-						close={() => { this.setState({ showPayMsgOcean: false }) }}
-						yes={() => { this.setState({ showPayMsgOcean: false }) }}
-						yesLabel="Continue" noLabel="No, Thanks">
+							no={() => {
+								this.setState({ showPayMsgOcean: false })
+								this.props.TOGGLECREDIT(false)
+							}}
+							close={() => { this.setState({ showPayMsgOcean: false }) }}
+							yes={() => { this.setState({ showPayMsgOcean: false }) }}
+							yesLabel="Continue" noLabel="No, Thanks">
 							<span dangerouslySetInnerHTML={{ __html: cart.cancelOceanpaymentPayMsg }} />
 						</Confirm>
 					}

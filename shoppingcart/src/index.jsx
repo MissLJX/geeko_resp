@@ -1,11 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
-import {Switch, Route, withRouter} from 'react-router-dom'
-import {IntlProvider} from 'react-intl'
-import {getMessages, getLang} from './i18n'
+import { Switch, Route, withRouter } from 'react-router-dom'
+import { IntlProvider } from 'react-intl'
+import { getMessages, getLang } from './i18n'
 // import ShoppingCart from './pages/shoppingcart.jsx'
-import {__route_root__} from './utils/utils.js'
-import {AnimatedRoute} from 'react-router-transition'
+import { __route_root__ } from './utils/utils.js'
+import { AnimatedRoute } from 'react-router-transition'
 import Loadable from 'react-loadable'
 import Loading from './components/msite/refreshing.jsx'
 import Loading1 from './components/msite/loading.jsx'
@@ -36,6 +36,13 @@ const Coupons = Loadable({
 	loader: () => import(/* webpackChunkName: "page--coupons" */ './pages/coupons.jsx'),
 	loading: Loading
 })
+
+// const Gifts = Loadable({
+// 	loader: () => import(/* webpackChunkName: "page--gifts" */ './pages/gifts.jsx'),
+// 	loading: Loading
+// })
+
+import Gifts from './pages/gifts.jsx'
 
 const ShoppingCart = Loadable({
 	loader: () => import(/* webpackChunkName: "page--shoppingcart" */ './pages/shoppingcart.jsx'),
@@ -68,9 +75,9 @@ const defaultStyles = {
 }
 
 const defaultAnimations = {
-	atEnter: { offset: 100, height: 0},
-	atLeave: { offset: 100, height: 0},
-	atActive: { offset: 0, height: 100}
+	atEnter: { offset: 100, height: 0 },
+	atLeave: { offset: 100, height: 0 },
+	atActive: { offset: 0, height: 100 }
 }
 
 const mapStateToProps = (state) => {
@@ -81,9 +88,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-   	SETLANG: (lang) => {
-   		dispatch(changeLang(lang))
-   	}
+		SETLANG: (lang) => {
+			dispatch(changeLang(lang))
+		}
 	}
 }
 
@@ -104,45 +111,55 @@ const Index = (props) => {
 		<div>
 
 			<Switch>
-				<Route path={`${window.ctx || ''}/checkout/:orderId`}  component={Checkout}/>
-				<Route path={`${window.ctx || ''}/order-confirm/:transactionId`} component={OrderConfirm}/>
-				<Route path={`${window.ctx || ''}${__route_root__}/`}  component={ShoppingCart}/>
+				<Route path={`${window.ctx || ''}/checkout/:orderId`} component={Checkout} />
+				<Route path={`${window.ctx || ''}/order-confirm/:transactionId`} component={OrderConfirm} />
+				<Route path={`${window.ctx || ''}${__route_root__}/`} component={ShoppingCart} />
 			</Switch>
 
 			{/*<Route path={`${window.ctx || ''}${__route_root__}/`}  component={ShoppingCart}/>*/}
-		
-			
+
+
 			<AnimatedRoute	{...defaultAnimations}
 				mapStyles={(styles) => ({
 					transform: `translateY(${styles.offset}%)`,
 					...defaultStyles
 				})}
-				path={`${window.ctx || ''}${__route_root__}/address`} component={AddressModal}/>
+				path={`${window.ctx || ''}${__route_root__}/address`} component={AddressModal} />
 			<AnimatedRoute	{...defaultAnimations}
 				mapStyles={(styles) => ({
 					transform: `translateY(${styles.offset}%)`,
 					...defaultStyles
 				})}
-				path={`${window.ctx || ''}${__route_root__}/shipping-methods`} component={ShippingMethods}/>
+				path={`${window.ctx || ''}${__route_root__}/shipping-methods`} component={ShippingMethods} />
 			<AnimatedRoute	{...defaultAnimations}
 				mapStyles={(styles) => ({
 					transform: `translateY(${styles.offset}%)`,
 					...defaultStyles
 				})}
-				path={`${window.ctx || ''}${__route_root__}/mercado`} component={Mercado}/>
+				path={`${window.ctx || ''}${__route_root__}/mercado`} component={Mercado} />
 			<AnimatedRoute	{...defaultAnimations}
 				mapStyles={(styles) => ({
 					transform: `translateY(${styles.offset}%)`,
 					...defaultStyles
 				})}
-				path={`${window.ctx || ''}${__route_root__}/credit-card`} component={CardBinding}/>
+				path={`${window.ctx || ''}${__route_root__}/credit-card`} component={CardBinding} />
 			<AnimatedRoute	{...defaultAnimations}
 				mapStyles={(styles) => ({
 					transform: `translateY(${styles.offset}%)`,
 					...defaultStyles
 				})}
 				path={`${window.ctx || ''}${__route_root__}/coupons`}
-				component={Coupons}/>
+				component={Coupons} />
+
+
+			<AnimatedRoute	{...defaultAnimations}
+				mapStyles={(styles) => ({
+					transform: `translateY(${styles.offset}%)`,
+					...defaultStyles
+				})}
+				path={`${window.ctx || ''}${__route_root__}/gifts`}
+				component={Gifts} />
+
 			<FixedWrapper>
 				<AnimatedRoute  {...defaultAnimations}
 					mapStyles={(styles) => ({
@@ -150,7 +167,7 @@ const Index = (props) => {
 						...defaultStyles
 					})}
 					path={`${window.ctx || ''}${__route_root__}/dlocal`}
-					component={DLocal}/>
+					component={DLocal} />
 
 			</FixedWrapper>
 		</div>
