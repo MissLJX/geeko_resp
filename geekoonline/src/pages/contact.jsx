@@ -101,18 +101,18 @@ export default class extends React.Component{
   maprender(c){
 
     let _p = {
-      lng: 121.618243,
-      lat: 31.259722,
-      title: "方正大厦",
-      dsc: '上海市浦东新区新金桥路'
+      lng: 121.62993802581306,
+      lat: 31.24801387597708,
+      title: "华虹创新园",
+      dsc: '上海市浦东新区锦绣东路2777弄36号10楼'
     }
 
     if(this.state.selectedcity === 's'){
       _p = {
-        lng: 121.618243,
-        lat: 31.259722,
-        title: "方正大厦",
-        dsc: '上海市浦东新区新金桥路'
+        lng: 121.62993802581306,
+        lat: 31.24801387597708,
+        title: "华虹创新园",
+        dsc: '上海市浦东新区锦绣东路2777弄36号10楼'
       }
     }else if(this.state.selectedcity === 'g'){
       _p = {
