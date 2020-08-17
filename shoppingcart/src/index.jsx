@@ -37,12 +37,12 @@ const Coupons = Loadable({
 	loading: Loading
 })
 
-// const Gifts = Loadable({
-// 	loader: () => import(/* webpackChunkName: "page--gifts" */ './pages/gifts.jsx'),
-// 	loading: Loading
-// })
+const Gifts = Loadable({
+	loader: () => import(/* webpackChunkName: "page--gifts" */ './pages/gifts.jsx'),
+	loading: Loading
+})
 
-import Gifts from './pages/gifts.jsx'
+// import Gifts from './pages/gifts.jsx'
 
 const ShoppingCart = Loadable({
 	loader: () => import(/* webpackChunkName: "page--shoppingcart" */ './pages/shoppingcart.jsx'),

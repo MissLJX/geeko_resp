@@ -16,7 +16,7 @@ const Refreshing = styled.span`
 	width: 20px;
 	height: 20px;
 	position: fixed;
-	z-index: 50;
+	z-index: 101;
 	&::after{
 		content: '\\e62d';
 		position: absolute;

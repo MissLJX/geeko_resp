@@ -1,18 +1,20 @@
 import React from 'react'
 import styled from 'styled-components'
-import {injectIntl, FormattedMessage} from 'react-intl'
-import {__route_root__, storage} from '../utils/utils.js'
+import { injectIntl, FormattedMessage } from 'react-intl'
+import { __route_root__, storage } from '../utils/utils.js'
 import _ from 'lodash'
 
-import {submit} from '../utils/common-pay.js'
-import {CountDownBlock} from '../components/msite/countdowns.jsx'
+import { submit } from '../utils/common-pay.js'
+import { CountDownBlock } from '../components/msite/countdowns.jsx'
 import AddressFrom from '../components/pc/address-form.jsx'
 import Mask from '../components/mask.jsx'
 import SUCCESSTIP from '../components/pc/successtip.jsx'
 import Confirm from '../components/pc/confirm.jsx'
+import { producturl, unitprice } from '../utils/utils'
 
 import { connect } from 'react-redux'
-import {fetchAll,
+import {
+	fetchAll,
 	refreshCart,
 	fetchCoupons,
 	selectItem,
@@ -34,7 +36,8 @@ import {fetchAll,
 	changeLang,
 	getDLocalCards,
 	setCashout,
-	setDocument} from '../store/actions.js'
+	setDocument
+} from '../store/actions.js'
 
 import Loading from '../components/msite/loading.jsx'
 import Refreshing from '../components/msite/refreshing.jsx'
@@ -44,13 +47,13 @@ import PromotionGroup from '../components/pc/promotion-group.jsx'
 import GroupLocalItems from '../components/pc/group-local-items.jsx'
 import GroupIvalidItems from '../components/pc/group-invalid-items.jsx'
 import Empty from '../components/pc/empty.jsx'
-import {Boxs, Box, SecondBox} from '../components/pc/layouts.jsx'
+import { Boxs, Box, SecondBox } from '../components/pc/layouts.jsx'
 import CheckBox from '../components/checkbox.jsx'
 import LabelCheck from '../components/label-check.jsx'
 import Address from '../components/pc/address.jsx'
 import Addresses from '../components/pc/shipping-details.jsx'
 import ItemTableHead from '../components/pc/item-table-head.jsx'
-import {Red} from '../components/text.jsx'
+import { Red } from '../components/text.jsx'
 import CouponSelect from '../components/pc/coupon-select.jsx'
 import Money from '../components/money.jsx'
 import Ask from '../components/pc/ask.jsx'
@@ -60,13 +63,17 @@ import MessageTip from '../components/pc/message-tip.jsx'
 import ShippingMethods from '../components/pc/shipping-methods.jsx'
 import PayMethods from '../components/pc/pay-methods.jsx'
 import Icon from '../components/icon.jsx'
-import {Modal} from '../components/pc/modal.jsx'
+import { Modal } from '../components/pc/modal.jsx'
 
 import Loadable from 'react-loadable'
 import Cookie from 'js-cookie'
 
+import Ellipsis from '../components/ellipsis.jsx'
+import { Link } from 'react-router-dom'
 
-import { paypalpay,
+
+import {
+	paypalpay,
 	setdefaultaddress,
 	atmPay,
 	ticketPay,
@@ -87,31 +94,32 @@ import { paypalpay,
 	product2,
 	getLeaveImage,
 	useMercadoCoupon,
-	payDLocal, 
+	payDLocal,
 	quickpaypal,
-	normalpaypal} from '../api'
+	normalpaypal
+} from '../api'
 
 export const __address_token__ = window.token
 
 
 const getPayImage = country => {
-	switch(country){
-	case 'BR':
-		return 'https://s3-us-west-2.amazonaws.com/wanna/pt_BR.png'
-	case 'DE':
-		return 'https://s3-us-west-2.amazonaws.com/wanna/de_DE.png'
-	case 'MX':
-		return 'https://s3-us-west-2.amazonaws.com/wanna/es_ES.png'
-	case 'AR':
-		return 'https://s3-us-west-2.amazonaws.com/wanna/es_AR.png'
-	case 'CO':
-		return 'https://s3-us-west-2.amazonaws.com/wanna/es_CO.png'
-	case 'CL':
-		return 'https://s3-us-west-2.amazonaws.com/wanna/es_CL.png'
-	case 'UY':
-		return 'https://s3-us-west-2.amazonaws.com/wanna/es_UY.png'
-	default:
-		return 'https://s3-us-west-2.amazonaws.com/wanna/pc_default.png'
+	switch (country) {
+		case 'BR':
+			return 'https://s3-us-west-2.amazonaws.com/wanna/pt_BR.png'
+		case 'DE':
+			return 'https://s3-us-west-2.amazonaws.com/wanna/de_DE.png'
+		case 'MX':
+			return 'https://s3-us-west-2.amazonaws.com/wanna/es_ES.png'
+		case 'AR':
+			return 'https://s3-us-west-2.amazonaws.com/wanna/es_AR.png'
+		case 'CO':
+			return 'https://s3-us-west-2.amazonaws.com/wanna/es_CO.png'
+		case 'CL':
+			return 'https://s3-us-west-2.amazonaws.com/wanna/es_CL.png'
+		case 'UY':
+			return 'https://s3-us-west-2.amazonaws.com/wanna/es_UY.png'
+		default:
+			return 'https://s3-us-west-2.amazonaws.com/wanna/pc_default.png'
 	}
 }
 
@@ -278,7 +286,7 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 const ShoppingCart = class extends React.Component {
-	constructor (props) {
+	constructor(props) {
 		super(props)
 		this.scrollhandle = this.scrollhandle.bind(this)
 		this.leavehandle = this.leavehandle.bind(this)
@@ -297,7 +305,7 @@ const ShoppingCart = class extends React.Component {
 			editing: null,
 			paypaling: false,
 			showLeaveImage: false,
-			leaveImage:'',
+			leaveImage: '',
 			successTip: null,
 			showDeleteConfirm: false,
 			itemDelete: null
@@ -306,10 +314,10 @@ const ShoppingCart = class extends React.Component {
 
 	}
 
-	processCallBack({ isFree, success, transactionId, details, orderId, solutions = '' }){
+	processCallBack({ isFree, success, transactionId, details, orderId, solutions = '' }) {
 		if (isFree) {
 			window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-		}else if (success) {
+		} else if (success) {
 
 			window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
 
@@ -324,14 +332,14 @@ const ShoppingCart = class extends React.Component {
 		})
 	}
 
-	processErrorBack({ result }){
+	processErrorBack({ result }) {
 		alert(result)
 		this.setState({
 			checking: false
 		})
 	}
 
-	showSuccessTip(tip){
+	showSuccessTip(tip) {
 		this.setState({
 			successTip: tip
 		})
@@ -342,12 +350,12 @@ const ShoppingCart = class extends React.Component {
 		}, 2000)
 	}
 
-	componentDidMount () {
+	componentDidMount() {
 		if (!this.props.cart) {
 			this.props.INIT().then(() => {
 				var { cart } = this.props
-				if(cart){
-					if(window.enterCart){
+				if (cart) {
+					if (window.enterCart) {
 						window.enterCart(cart)
 					}
 				}
@@ -355,7 +363,7 @@ const ShoppingCart = class extends React.Component {
 		}
 		this.props.FETCHCOUPONS()
 
-		getLeaveImage().then( ({result}) => {
+		getLeaveImage().then(({ result }) => {
 			this.setState({
 				leaveImage: result
 			})
@@ -365,7 +373,7 @@ const ShoppingCart = class extends React.Component {
 		window.addEventListener('resize', this.scrollhandle, false)
 		window.document.addEventListener('mouseleave', this.leavehandle, false)
 
-		getMessage('M1136').then(({result}) => {
+		getMessage('M1136').then(({ result }) => {
 			this.setState({
 				pointMessage: result.message,
 				cpfMessage: 'CPF (Cadastro de Pessoa Física), utilizado para tributação, é necessário para todos os produtos enviados ao Brasil, independentemente de encomendas expressas ou contêineres logísticos.Quando preenchemos o conhecimento de embarque e fatura, por favor, não esqueça de preencher o número de contribuinte do destinatário.Na maioria dos casos, sua forma é o número digital como abaixo, XXX.XXX.XXX-XX'
@@ -397,11 +405,11 @@ const ShoppingCart = class extends React.Component {
 		}
 	}
 
-	overseasHandle (variantId) {
+	overseasHandle(variantId) {
 		this.setState({
 			refreshing: true
 		})
-		movetooverseas({variantId}).then(({result}) => {
+		movetooverseas({ variantId }).then(({ result }) => {
 			this.setState({
 				refreshing: false
 			})
@@ -410,29 +418,29 @@ const ShoppingCart = class extends React.Component {
 		})
 	}
 
-	togglePaypalButton(actions){
-		const {cart} = this.props
+	togglePaypalButton(actions) {
+		const { cart } = this.props
 		return cart.shippingDetail && cart.shippingDetail.phoneNumber ? actions.enable() : actions.disable()
 	}
 
-	getProps(){
+	getProps() {
 		return this.props
 	}
 
-	paypalcheck(method){
-		if('quick' === method){
+	paypalcheck(method) {
+		if ('quick' === method) {
 			return quickpaypal()
-		}else{
+		} else {
 			return normalpaypal()
 		}
 	}
 
-	paypalRender (c, method) {
+	paypalRender(c, method) {
 		const self = this
 
-		
 
-		const __confirm_address__ = this.props.intl.formatMessage({id:'please_confirm_address'})
+
+		const __confirm_address__ = this.props.intl.formatMessage({ id: 'please_confirm_address' })
 
 		const { cart } = self.getProps()
 
@@ -442,20 +450,20 @@ const ShoppingCart = class extends React.Component {
 
 		let alloweds = []
 
-		if(cart && cart.currency === 'EUR'){
+		if (cart && cart.currency === 'EUR') {
 			alloweds = [
-				paypal.FUNDING.BANCONTACT,       
-				paypal.FUNDING.EPS,       
-				paypal.FUNDING.GIROPAY,       
-				paypal.FUNDING.IDEAL,       
-				paypal.FUNDING.MYBANK,       
-				paypal.FUNDING.SOFORT  
+				paypal.FUNDING.BANCONTACT,
+				paypal.FUNDING.EPS,
+				paypal.FUNDING.GIROPAY,
+				paypal.FUNDING.IDEAL,
+				paypal.FUNDING.MYBANK,
+				paypal.FUNDING.SOFORT
 			]
 		}
 
 		let locale = null
 
-		if(cart){
+		if (cart) {
 			locale = cart.locale || 'en_US'
 		}
 
@@ -464,11 +472,11 @@ const ShoppingCart = class extends React.Component {
 
 			let cs = c.children
 
-			if(cs && cs.length){
+			if (cs && cs.length) {
 
 				let _c
-				for(let i=0, len=cs.length; i< len; i++){
-					_c=cs[i]
+				for (let i = 0, len = cs.length; i < len; i++) {
+					_c = cs[i]
 					_c.parentNode.removeChild(_c)
 				}
 			}
@@ -478,18 +486,18 @@ const ShoppingCart = class extends React.Component {
 			paypal.Button.render({
 				env: window.paypalEnv,
 				commit: isprogresspage,
-				locale: locale, 
-				onClick: function(){
-					const {cart, history} = self.getProps()
+				locale: locale,
+				onClick: function () {
+					const { cart, history } = self.getProps()
 					if (!cart.shippingDetail && method !== 'quick') {
 						alert(__confirm_address__)
 						self.$addressdom.scrollIntoView()
 						return false
 					}
 
-					if(cart.shippingDetail && !cart.shippingDetail.phoneNumber && method !== 'quick'){
+					if (cart.shippingDetail && !cart.shippingDetail.phoneNumber && method !== 'quick') {
 						const path = {
-							pathname: isCheckout?`${window.ctx || ''}${__route_root__}/checkout/address`:`${window.ctx || ''}${__route_root__}/address`,
+							pathname: isCheckout ? `${window.ctx || ''}${__route_root__}/checkout/address` : `${window.ctx || ''}${__route_root__}/address`,
 							state: {
 								validate: true
 							}
@@ -498,20 +506,20 @@ const ShoppingCart = class extends React.Component {
 						return false
 					}
 				},
- 
-				validate: function(actions) {
-					if( method !== 'quick' ){
+
+				validate: function (actions) {
+					if (method !== 'quick') {
 						self.togglePaypalButton(actions)
 						self.actions = actions
 					}
-					
+
 				},
- 
+
 				payment: function () {
-					return self.paypalcheck(method).then(data => data.result).then(({TOKEN, success, tokenSuccess, transactionId, orderId, ACK, L_LONGMESSAGE0, method}) => {
+					return self.paypalcheck(method).then(data => data.result).then(({ TOKEN, success, tokenSuccess, transactionId, orderId, ACK, L_LONGMESSAGE0, method }) => {
 
 
-						if (success && transactionId && !TOKEN   || method === 'DoReferenceTransaction' && tokenSuccess) {
+						if (success && transactionId && !TOKEN || method === 'DoReferenceTransaction' && tokenSuccess) {
 							window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
 							throw new Error('free')
 						}
@@ -519,18 +527,18 @@ const ShoppingCart = class extends React.Component {
 							throw new Error(L_LONGMESSAGE0)
 						}
 
-						if(method == 'normal'){
-							storage.add('temp-order', orderId,  1 * 60 * 60)
+						if (method == 'normal') {
+							storage.add('temp-order', orderId, 1 * 60 * 60)
 						}
-						
+
 						return TOKEN
 					}).catch((err) => {
-						if(err.result){
+						if (err.result) {
 							throw new Error(err.result)
-						}else{
+						} else {
 							throw new Error(err)
 						}
-						
+
 					})
 				},
 				onAuthorize: function (data, actions) {
@@ -555,27 +563,27 @@ const ShoppingCart = class extends React.Component {
 					shape: 'rect',
 					size: 'responsive',
 					tagline: false,
-					layout: 'vertical' 
+					layout: 'vertical'
 				},
-				funding: {     
+				funding: {
 					allowed: alloweds
-				}	   
+				}
 			}, '#ip-paypal-pay')
 		}
 	}
 
-	componentWillUnmount () {
+	componentWillUnmount() {
 		window.removeEventListener('scroll', this.scrollhandle, false)
 		window.removeEventListener('resize', this.scrollhandle, false)
 		window.removeEventListener('mouseleave', this.leavehandle, false)
 	}
 
 	// 支付
-	checkout (event) {
+	checkout(event) {
 		event.preventDefault()
 		const { payMethod, cart, paypal, payType } = this.props
-		const __confirm_address__ = this.props.intl.formatMessage({id:'please_confirm_address'})
-		const __confirm_paymethod__ = this.props.intl.formatMessage({id:'please_select_paymethod'})
+		const __confirm_address__ = this.props.intl.formatMessage({ id: 'please_confirm_address' })
+		const __confirm_paymethod__ = this.props.intl.formatMessage({ id: 'please_select_paymethod' })
 
 		const isRequireEmail = !window.__is_login__ && !window.token && this.props.location.pathname && this.props.location.pathname.indexOf('/cart/checkout') >= 0
 
@@ -589,26 +597,26 @@ const ShoppingCart = class extends React.Component {
 
 		if (!cart.shippingDetail) {
 
-			if(this.$addressdom){
+			if (this.$addressdom) {
 				this.$addressdom.scrollIntoView()
 				alert(__confirm_address__)
-			}else{
-				if(isCheckout){
+			} else {
+				if (isCheckout) {
 					this.props.history.push(`${window.ctx || ''}${__route_root__}/checkout/address/add`)
-				}else{
+				} else {
 					this.props.history.push(`${window.ctx || ''}${__route_root__}/address/add`)
 				}
-				
+
 			}
 
-			
+
 			return
 		}
 
-		
-		if(cart.shippingDetail.country && cart.shippingDetail.country.value === 'BR' && !cart.shippingDetail.cpf || (isRequireEmail && !cart.shippingDetail.email) || !cart.shippingDetail.phoneNumber){
+
+		if (cart.shippingDetail.country && cart.shippingDetail.country.value === 'BR' && !cart.shippingDetail.cpf || (isRequireEmail && !cart.shippingDetail.email) || !cart.shippingDetail.phoneNumber) {
 			const path = {
-				pathname: isCheckout?`${window.ctx || ''}${__route_root__}/checkout/address`:`${window.ctx || ''}${__route_root__}/address`,
+				pathname: isCheckout ? `${window.ctx || ''}${__route_root__}/checkout/address` : `${window.ctx || ''}${__route_root__}/address`,
 				state: {
 					validate: true
 				}
@@ -617,11 +625,11 @@ const ShoppingCart = class extends React.Component {
 			return
 		}
 
-		
+
 
 		if (payType === '2' || payType === '7') {
 			if (payMethod === '17') {
-				const {cpf} = this.props
+				const { cpf } = this.props
 				this.brazilOceanForm.validateAll()
 				if (!this.brazilOcean.context._errors || !this.brazilOcean.context._errors.length) {
 					this.props.history.push(`${window.ctx || ''}${__route_root__}/credit-card`)
@@ -632,7 +640,7 @@ const ShoppingCart = class extends React.Component {
 		} else if (payType === '3') {
 			window.location.href = `${window.ctx || ''}/computoppay/pay?payMethod=${payMethod}`
 		} else if (payType === '5') {
-			const {cpf, email} = this.props
+			const { cpf, email } = this.props
 			this.boletoForm.validateAll()
 			if (!this.boleto.context._errors || !this.boleto.context._errors.length) {
 				window.location.href = `${window.ctx || ''}/geekopay/pay?cpf=${cpf}&email=${email}&payMethod=${payMethod}`
@@ -645,17 +653,17 @@ const ShoppingCart = class extends React.Component {
 
 			this.props.GETCREDITCARDS(['3', '18'], true).then(cards => {
 				if (!cards || !cards.length) {
-					getSafeCharge(payMethod).then(({result}) => {
-						const {isFree, payURL, params, transactionId, orderId} = result
+					getSafeCharge(payMethod).then(({ result }) => {
+						const { isFree, payURL, params, transactionId, orderId } = result
 						if (isFree) {
 							window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
 						} else {
-							storage.add('temp-order', orderId,  1 * 60 * 60)
+							storage.add('temp-order', orderId, 1 * 60 * 60)
 							submit(result)
 
 							// window.location.href = `${payURL}?${qs.stringify(params, true)}`
 						}
-					}).catch(({result}) => {
+					}).catch(({ result }) => {
 						alert(result)
 						this.setState({
 							checking: false
@@ -668,22 +676,22 @@ const ShoppingCart = class extends React.Component {
 					this.props.history.push(`${window.ctx || ''}${__route_root__}/credit-card`)
 				}
 			})
-		}else if(payType === '26'){
+		} else if (payType === '26') {
 			this.setState({
 				checking: true
 			})
 
-			getSafeCharge(payMethod).then(({result}) => {
-				const {isFree, payURL, params, transactionId, orderId} = result
+			getSafeCharge(payMethod).then(({ result }) => {
+				const { isFree, payURL, params, transactionId, orderId } = result
 				if (isFree) {
 					window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
 				} else {
-					storage.add('temp-order', orderId,  1 * 60 * 60)
+					storage.add('temp-order', orderId, 1 * 60 * 60)
 					submit(result)
 
 					// window.location.href = `${payURL}?${qs.stringify(params, true)}`
 				}
-			}).catch(({result}) => {
+			}).catch(({ result }) => {
 				alert(result)
 				this.setState({
 					checking: false
@@ -720,7 +728,7 @@ const ShoppingCart = class extends React.Component {
 			})
 
 			if (payMethod === '23') {
-				const {cpf} = this.props
+				const { cpf } = this.props
 				// this.apac.validateAll()
 				// if (this.apacBB.context._errors && this.apacBB.context._errors.length) {
 				//   this.setState({
@@ -751,16 +759,16 @@ const ShoppingCart = class extends React.Component {
 					})
 				})
 			}
-		}else if(payType === '12'){
+		} else if (payType === '12') {
 
-			this.props.GETDLOCALCARDS(payMethod).then( cards => {
+			this.props.GETDLOCALCARDS(payMethod).then(cards => {
 				this.props.history.push(`${window.ctx || ''}${__route_root__}/credit-card`)
-			} )
-			
-		}else if( payType === '13'){
+			})
+
+		} else if (payType === '13') {
 			//Brazil BB
-			this.dLocalPay({payMethod, paymentMethodId: 'BL'})
-		}else if ( payType === '14' || payType === '15' || payType === '16' || payType === '17' || payType === '18' || payType === '19' || payType === '20' || payType === '21' || payType === '22' || payType === '23' || payType === '24' || payType === '25'){
+			this.dLocalPay({ payMethod, paymentMethodId: 'BL' })
+		} else if (payType === '14' || payType === '15' || payType === '16' || payType === '17' || payType === '18' || payType === '19' || payType === '20' || payType === '21' || payType === '22' || payType === '23' || payType === '24' || payType === '25') {
 
 			const paymentMethodId = this.getTcMethod()
 			if (!paymentMethodId) {
@@ -769,14 +777,14 @@ const ShoppingCart = class extends React.Component {
 				return
 			}
 
-			if(payType !== '14'){
+			if (payType !== '14') {
 				this.documentForm.validateAll()
-				if(this.documentRef.context && this.documentRef.context._errors && this.documentRef.context._errors.length > 0){
+				if (this.documentRef.context && this.documentRef.context._errors && this.documentRef.context._errors.length > 0) {
 					return
 				}
 			}
 
-			this.dLocalPay({payMethod, paymentMethodId, document: this.props.document})
+			this.dLocalPay({ payMethod, paymentMethodId, document: this.props.document })
 		}
 
 		if (this.getCountdown(this.props.cart) > 0) {
@@ -786,7 +794,7 @@ const ShoppingCart = class extends React.Component {
 	}
 
 
-	dLocalPay(params){
+	dLocalPay(params) {
 
 		this.setState({
 			checking: true
@@ -794,29 +802,29 @@ const ShoppingCart = class extends React.Component {
 		payDLocal(params).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
 	}
 
-	getApacPay (payMethod, cpf, fail) {
-		getApacPay({payMethod, cpfNumber: cpf}).then(({result}) => {
-			const {isFree, transactionId, orderId, success,details,solutions} = result
+	getApacPay(payMethod, cpf, fail) {
+		getApacPay({ payMethod, cpfNumber: cpf }).then(({ result }) => {
+			const { isFree, transactionId, orderId, success, details, solutions } = result
 			if (isFree) {
 				window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
 			} else {
-				storage.add('temp-order', orderId,  1 * 60 * 60)
+				storage.add('temp-order', orderId, 1 * 60 * 60)
 				submit(result)
 				// console.log(result)
 			}
-		}).catch(({result}) => {
+		}).catch(({ result }) => {
 			fail(result)
 		})
 	}
 
-	apacPay(payMethod, cpf, fail){
-		apacPay({payMethod, cpfNumber: cpf}).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
+	apacPay(payMethod, cpf, fail) {
+		apacPay({ payMethod, cpfNumber: cpf }).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
 	}
 
-	quickPlace (evt) {
+	quickPlace(evt) {
 		const { cart, paypal } = this.props
 
-		const __confirm_address__ = this.props.intl.formatMessage({id:'please_confirm_address'})
+		const __confirm_address__ = this.props.intl.formatMessage({ id: 'please_confirm_address' })
 
 		if (!cart.shippingDetail || !this.state.paypalAddressConfirmed) {
 			alert(__confirm_address__)
@@ -827,9 +835,9 @@ const ShoppingCart = class extends React.Component {
 			paypaling: true
 		})
 
-		placepaypal().then(({result}) => {
+		placepaypal().then(({ result }) => {
 			window.location.href = `${window.ctx || ''}/order-confirm/${result}`
-		}).catch(({result}) => {
+		}).catch(({ result }) => {
 			this.setState({
 				paypaling: false
 			})
@@ -838,8 +846,8 @@ const ShoppingCart = class extends React.Component {
 		})
 	}
 
-	getCountdown (cart) {
-		const {sendCouponMessage} = cart || {sendCouponMessage: null}
+	getCountdown(cart) {
+		const { sendCouponMessage } = cart || { sendCouponMessage: null }
 		let couponcountdown = 0
 		if (sendCouponMessage) {
 			// 设置15分钟后的毫秒数
@@ -853,7 +861,7 @@ const ShoppingCart = class extends React.Component {
 		return couponcountdown
 	}
 
-	chooseAnthorAddresHandle () {
+	chooseAnthorAddresHandle() {
 		this.setState({
 			refreshing: true
 		})
@@ -870,30 +878,30 @@ const ShoppingCart = class extends React.Component {
 		})
 	}
 
-	closeAddressesHandle () {
+	closeAddressesHandle() {
 		this.setState({
 			showAddresses: false
 		})
 	}
 	//TODO
-	addressEditHandle (shipping) {
+	addressEditHandle(shipping) {
 		this.props.history.push(`${window.ctx || ''}${__route_root__}/address/${shipping.id}`)
 	}
 
-	addressEditHandle1 (){
+	addressEditHandle1() {
 		this.goAddress()
-		
+
 	}
 
-	goAddress(){
+	goAddress() {
 		let isp = this.props.location.pathname && this.props.location.pathname.indexOf('/cart/checkout') >= 0
 
-		let goPage = isp ? `${window.ctx || ''}${__route_root__}/checkout/address`: `${window.ctx || ''}${__route_root__}/address`
+		let goPage = isp ? `${window.ctx || ''}${__route_root__}/checkout/address` : `${window.ctx || ''}${__route_root__}/address`
 
 		this.props.history.push(goPage)
 	}
 
-	addressSelectHandle (shipping) {
+	addressSelectHandle(shipping) {
 		this.setState({
 			refreshing: true
 		})
@@ -912,12 +920,12 @@ const ShoppingCart = class extends React.Component {
 
 			let __refreshCart
 			if (shipping.country.value === 'BR') {
-				Cookie.set('currency', 'BRL', {expires: 365})
+				Cookie.set('currency', 'BRL', { expires: 365 })
 				__refreshCart = this.props.CHANGELANG('pt_BR')
 			} else if (shipping.country.value === 'MX') {
-				Cookie.set('currency', 'MXN', {expires: 365})
+				Cookie.set('currency', 'MXN', { expires: 365 })
 				__refreshCart = this.props.CHANGELANG('es_MX')
-			}else{
+			} else {
 				__refreshCart = this.props.REFRESHCART()
 			}
 
@@ -935,51 +943,51 @@ const ShoppingCart = class extends React.Component {
 		})
 	}
 
-	selectShippingMethodHandle (method) {
+	selectShippingMethodHandle(method) {
 		this.props.SELECTSHIPPINGMETHOD(method)
 	}
 
-	handleInputChange (event) {
+	handleInputChange(event) {
 		const target = event.target
 		const value = target.type === 'checkbox' ? target.checked : target.value
 		const name = target.name
 		switch (name) {
-		case 'cpf':
-			this.props.SETCPF(value)
-			break
-		case 'email':
-			this.props.SETEMAIL(value)
-			break
-		case 'securityCode':
-			this.props.SETSECURITYCODE(value)
-			break
-		case 'installments':
-			this.props.SETINSTALLMENTS(value)
-			break
-		case 'mercado-installments':
-			this.props.SETMERCADOINTALLMENTS(value)
-			break
-		case 'document':
-			this.props.SETDOCUMENT(value)
-			break
-		default:
-			break
+			case 'cpf':
+				this.props.SETCPF(value)
+				break
+			case 'email':
+				this.props.SETEMAIL(value)
+				break
+			case 'securityCode':
+				this.props.SETSECURITYCODE(value)
+				break
+			case 'installments':
+				this.props.SETINSTALLMENTS(value)
+				break
+			case 'mercado-installments':
+				this.props.SETMERCADOINTALLMENTS(value)
+				break
+			case 'document':
+				this.props.SETDOCUMENT(value)
+				break
+			default:
+				break
 		}
 	}
 
-	leavehandle (evt) {
+	leavehandle(evt) {
 		const scrollTop = document.documentElement.scrollTop || document.body.scrollTop
-		if(evt.pageY - scrollTop <= 0 && !storage.get('leaveImageShowed')){
+		if (evt.pageY - scrollTop <= 0 && !storage.get('leaveImageShowed')) {
 			this.setState({
 				showLeaveImage: true
 			})
-			storage.add('leaveImageShowed', 1 ,  24 * 60 * 60)
+			storage.add('leaveImageShowed', 1, 24 * 60 * 60)
 		}
 	}
 
-	scrollhandle (evt) {
+	scrollhandle(evt) {
 		if (this.fixedCart && this.fixedCartWrapper) {
-			const {clientHeight} = this.fixedCart
+			const { clientHeight } = this.fixedCart
 			this.fixedCartWrapper.style.height = clientHeight + 'px'
 			const rect = this.fixedCartWrapper.getBoundingClientRect()
 			if (rect.top <= 0) {
@@ -992,7 +1000,7 @@ const ShoppingCart = class extends React.Component {
 
 		if (this.fixedSummary && this.fixedSummaryWrapper) {
 			this.fixedSmall.classList.remove('__fixed')
-			const {clientHeight} = this.fixedSummary
+			const { clientHeight } = this.fixedSummary
 			if (window.innerHeight > clientHeight) {
 				this.fixedSummaryWrapper.style.height = clientHeight + 'px'
 				const rect = this.fixedSummaryWrapper.getBoundingClientRect()
@@ -1007,7 +1015,7 @@ const ShoppingCart = class extends React.Component {
 				this.fixedSmall.classList.remove('__fixed')
 				const { clientHeight } = this.fixedSmall
 
-				if(clientHeight < window.innerHeight - 40){
+				if (clientHeight < window.innerHeight - 40) {
 					this.fixedSmallWrapper.style.height = clientHeight + 'px'
 					const rect = this.fixedSmallWrapper.getBoundingClientRect()
 					if (rect.top <= 0) {
@@ -1018,20 +1026,20 @@ const ShoppingCart = class extends React.Component {
 					}
 				}
 
-				
+
 			}
 		}
 	}
 
-	isOutStock (item) {
+	isOutStock(item) {
 		return (item.inventory <= 0 && !item.isDomesticDelivery) && !item.isAutoInventory || item.status !== '1'
 	}
 
-	getValidItems (items = []) {
+	getValidItems(items = []) {
 		return items.filter(item => !this.isOutStock(item))
 	}
 
-	getInvalidItems ({shoppingCartProductsByOverseas, domesticDeliveryCases}) {
+	getInvalidItems({ shoppingCartProductsByOverseas, domesticDeliveryCases }) {
 		const invalidItems = []
 		if (shoppingCartProductsByOverseas) {
 			_.each(shoppingCartProductsByOverseas, (item) => {
@@ -1040,7 +1048,7 @@ const ShoppingCart = class extends React.Component {
 		}
 
 		if (domesticDeliveryCases) {
-			_.each(domesticDeliveryCases, ({shoppingCartProducts}) => {
+			_.each(domesticDeliveryCases, ({ shoppingCartProducts }) => {
 				_.each(shoppingCartProducts, (item) => {
 					if (this.isOutStock(item)) invalidItems.push(item)
 				})
@@ -1050,9 +1058,9 @@ const ShoppingCart = class extends React.Component {
 	}
 
 	// PayMethods
-	selectPayHandle (paymethod) {
+	selectPayHandle(paymethod) {
 		this.props.SELECTPAY(paymethod).then((cart) => {
-			if(cart && cart.changeCurrencyMsg){
+			if (cart && cart.changeCurrencyMsg) {
 				alert(cart.changeCurrencyMsg)
 			}
 		})
@@ -1061,7 +1069,7 @@ const ShoppingCart = class extends React.Component {
 		// storage.add('payType', paymethod.type, 365 * 24 * 60 * 60)
 	}
 
-	atmClickHandle (method) {
+	atmClickHandle(method) {
 		this.props.SETATMMETHOD(method.id)
 		storage.add('atmMethod', method.id, 365 * 24 * 60 * 60)
 	}
@@ -1069,7 +1077,7 @@ const ShoppingCart = class extends React.Component {
 	tcClickHandle(method) {
 		const { payMethod } = this.props.cart
 		let _c = storage.get('cashoutMethod') || {}
-		let cashoutMethod = {..._c, [payMethod]: method}
+		let cashoutMethod = { ..._c, [payMethod]: method }
 		this.props.SETCASHOUT(cashoutMethod)
 		storage.add('cashoutMethod', cashoutMethod, 365 * 24 * 60 * 60)
 	}
@@ -1079,33 +1087,33 @@ const ShoppingCart = class extends React.Component {
 		return (this.props.cashoutMethod || {})[payMethod]
 	}
 
-	initCashmethod(payMethod, method){
+	initCashmethod(payMethod, method) {
 		let _c = storage.get('cashoutMethod') || {}
 
-		if(!_c[payMethod]){
-			let cashoutMethod = {..._c, [payMethod]: method.id}
+		if (!_c[payMethod]) {
+			let cashoutMethod = { ..._c, [payMethod]: method.id }
 			this.props.SETCASHOUT(cashoutMethod)
 			storage.add('cashoutMethod', cashoutMethod, 365 * 24 * 60 * 60)
 		}
-		
+
 	}
 
-	ticketClickHandle (method) {
+	ticketClickHandle(method) {
 		this.props.SETTICKETMETHOD(method.id)
 		storage.add('ticketMethod', method.id, 365 * 24 * 60 * 60)
 	}
 
-	editAddress (address) {
+	editAddress(address) {
 		const { cart } = this.props
 		this.props.UPDATINGADDRESS(true)
 		if (__address_token__ && cart.shippingDetail) {
-			paypalAddress({...address, id: cart.shippingDetail.id, token: __address_token__}).then(() => {
+			paypalAddress({ ...address, id: cart.shippingDetail.id, token: __address_token__ }).then(() => {
 				this.props.UPDATINGADDRESS(false)
 				this.setState({
 					paypalAddressConfirmed: true
 				})
 				this.props.REFRESHCART()
-			}).catch(({result}) => {
+			}).catch(({ result }) => {
 				alert(result)
 				this.props.UPDATINGADDRESS(false)
 			})
@@ -1113,9 +1121,9 @@ const ShoppingCart = class extends React.Component {
 
 			let addressOpreator
 
-			if(window.__is_login__){
+			if (window.__is_login__) {
 				addressOpreator = addAddress
-			}else{
+			} else {
 				addressOpreator = saveTempAddress
 			}
 
@@ -1125,58 +1133,58 @@ const ShoppingCart = class extends React.Component {
 
 				let __refreshCart
 				if (address.country === 'BR') {
-					Cookie.set('currency', 'BRL', {expires: 365})
+					Cookie.set('currency', 'BRL', { expires: 365 })
 					__refreshCart = this.props.CHANGELANG('pt_BR')
 				} else if (address.country === 'MX') {
-					Cookie.set('currency', 'MXN', {expires: 365})
+					Cookie.set('currency', 'MXN', { expires: 365 })
 					__refreshCart = this.props.CHANGELANG('es_MX')
-				}else{
+				} else {
 					__refreshCart = this.props.REFRESHCART()
 				}
-				
-				__refreshCart.then( () => {
+
+				__refreshCart.then(() => {
 					this.props.UPDATINGADDRESS(false)
-					if(this.actions){
+					if (this.actions) {
 						this.togglePaypalButton(this.actions)
 					}
-				}).catch( () => {
+				}).catch(() => {
 					this.props.UPDATINGADDRESS(false)
 				})
-				
-				
-			}).catch(({result}) => {
+
+
+			}).catch(({ result }) => {
 				alert(result)
 				this.props.UPDATINGADDRESS(false)
 			})
 		}
 	}
 
-	openPoints () {
-		this.setState({refreshing: true})
+	openPoints() {
+		this.setState({ refreshing: true })
 		usePoint(!this.props.cart.openPointUse).then(data => data.result).then((cart) => {
-			this.setState({refreshing: false})
+			this.setState({ refreshing: false })
 			this.props.REFRESHCART(cart)
 		}).catch(() => {
-			this.setState({refreshing: false})
+			this.setState({ refreshing: false })
 		})
 	}
 
-	openInsurance () {
-		this.setState({refreshing: true})
+	openInsurance() {
+		this.setState({ refreshing: true })
 		useInsurance(!this.props.cart.insurance).then(data => data.result).then(cart => {
-			this.setState({refreshing: false})
+			this.setState({ refreshing: false })
 			this.props.REFRESHCART(cart)
 		}).catch(() => {
-			this.setState({refreshing: false})
+			this.setState({ refreshing: false })
 		})
 	}
 
-	getItemUnselected (items) {
+	getItemUnselected(items) {
 		return items && items.length > 0 && items.find(item => !item.selected)
 	}
 
-	getLocalFullSelected () {
-		const {cart} = this.props
+	getLocalFullSelected() {
+		const { cart } = this.props
 		const { domesticDeliveryCases } = cart
 
 		if (!domesticDeliveryCases || domesticDeliveryCases.length < 1) { return true }
@@ -1184,8 +1192,8 @@ const ShoppingCart = class extends React.Component {
 		return !domesticDeliveryCases.find(domestic => this.getItemUnselected(this.getValidItems(domestic.shoppingCartProducts)))
 	}
 
-	getOverseasFullSelected () {
-		const {cart} = this.props
+	getOverseasFullSelected() {
+		const { cart } = this.props
 
 		const shoppingCartProductsByOverseas = this.getValidItems(cart.shoppingCartProductsByOverseas)
 
@@ -1193,11 +1201,11 @@ const ShoppingCart = class extends React.Component {
 		return !this.getItemUnselected(shoppingCartProductsByOverseas)
 	}
 
-	getFullSelected () {
+	getFullSelected() {
 		return this.getOverseasFullSelected() && this.getLocalFullSelected()
 	}
 
-	selectAllHandle (select) {
+	selectAllHandle(select) {
 		this.setState({
 			refreshing: true
 		})
@@ -1209,21 +1217,21 @@ const ShoppingCart = class extends React.Component {
 		})
 	}
 
-	itemSelect (variantId, selected) {
+	itemSelect(variantId, selected) {
 		this.props.SELECT({
 			variantIds: variantId,
 			select: selected
 		})
 	}
 
-	groupClick (variantIds, selected) {
+	groupClick(variantIds, selected) {
 		this.props.SELECT({
 			variantIds: variantIds.join(','),
 			select: selected
 		})
 	}
 
-	itemDelete (item) {
+	itemDelete(item) {
 
 		this.setState({
 			showDeleteConfirm: true,
@@ -1237,10 +1245,10 @@ const ShoppingCart = class extends React.Component {
 				})
 			}
 		})
-		
+
 	}
 
-	itemIdDelete (itemId) {
+	itemIdDelete(itemId) {
 		this.setState({
 			showDeleteConfirm: true,
 			itemDelete: () => {
@@ -1255,11 +1263,11 @@ const ShoppingCart = class extends React.Component {
 		})
 	}
 
-	itemEdit (item){
+	itemEdit(item) {
 		this.setState({
 			refreshing: true
 		})
-		product2(item.productId).then( ({result}) => {
+		product2(item.productId).then(({ result }) => {
 			this.setState({
 				refreshing: false,
 				editing: {
@@ -1272,56 +1280,56 @@ const ShoppingCart = class extends React.Component {
 		})
 	}
 
-	itemEditClose (){
+	itemEditClose() {
 		this.setState({
 			editing: null
 		})
 	}
 
-	unSelectCoupon () {
+	unSelectCoupon() {
 		unusecoupon().then(() => {
 			this.props.REFRESHCART()
 		})
 	}
 
-	editHandle(oldId, newId, quantity){
+	editHandle(oldId, newId, quantity) {
 		this.props.EDITITEM(oldId, newId, quantity)
 		this.itemEditClose()
 	}
 
-	clearall () {
-		const {cart} = this.props
+	clearall() {
+		const { cart } = this.props
 		const ivalidItems = this.getInvalidItems(cart)
 		const itemIds = (ivalidItems || []).map(item => item.variantId)
 
-		this.props.DELETEITEMS(itemIds.join(',')).then( () => {
+		this.props.DELETEITEMS(itemIds.join(',')).then(() => {
 			this.showSuccessTip('Changed Successed')
-		} )
+		})
 	}
 
-	quantityChange(itemId, quantity, isRemove){
-		if(isRemove){
+	quantityChange(itemId, quantity, isRemove) {
+		if (isRemove) {
 			this.itemIdDelete(itemId)
-		}else{
+		} else {
 			this.props.EDITITEM(itemId, itemId, quantity)
 		}
 	}
 
-	useMercadoCoupon(couponCode){
+	useMercadoCoupon(couponCode) {
 
-		if(!couponCode) return
+		if (!couponCode) return
 
 		this.setState({
 			refreshing: true
 		})
-		useMercadoCoupon(couponCode).then( ({result}) => {
+		useMercadoCoupon(couponCode).then(({ result }) => {
 			this.setState({
 				refreshing: false
 			})
 			this.props.REFRESHCART(result)
 			this.showSuccessTip('Used Successed')
 
-		} ).catch(({result}) => {
+		}).catch(({ result }) => {
 			this.setState({
 				refreshing: false
 			})
@@ -1330,20 +1338,20 @@ const ShoppingCart = class extends React.Component {
 	}
 
 
-	hasSelectedItem(items){
+	hasSelectedItem(items) {
 		return items && !!items.find(item => item.selected)
 	}
 
-	formatOverseasDelivery(overseasDelivery){
+	formatOverseasDelivery(overseasDelivery) {
 		const deliveryItems = overseasDelivery ? overseasDelivery.deliveryItems : []
 		let hasSelectedItem = false
 
-		if(deliveryItems && deliveryItems.length){
+		if (deliveryItems && deliveryItems.length) {
 			deliveryItems.forEach(deliveryItem => {
 				let items = this.getValidItems(deliveryItem.shoppingCartProducts)
 				deliveryItem.shoppingCartProducts = items || []
 
-				if(!hasSelectedItem) hasSelectedItem = this.hasSelectedItem(items)
+				if (!hasSelectedItem) hasSelectedItem = this.hasSelectedItem(items)
 
 			})
 		}
@@ -1354,14 +1362,14 @@ const ShoppingCart = class extends React.Component {
 		}
 	}
 
-	formatDomesticDeliveryCases(domesticDeliveryCases){
+	formatDomesticDeliveryCases(domesticDeliveryCases) {
 		let hasSelectedItem = false
-		if(domesticDeliveryCases && domesticDeliveryCases.length){
-			domesticDeliveryCases.forEach( domestic => {
+		if (domesticDeliveryCases && domesticDeliveryCases.length) {
+			domesticDeliveryCases.forEach(domestic => {
 				let items = this.getValidItems(domestic.shoppingCartProducts)
 				domestic.shoppingCartProducts = items || []
-				if(!hasSelectedItem) hasSelectedItem = this.hasSelectedItem(items)
-			} )
+				if (!hasSelectedItem) hasSelectedItem = this.hasSelectedItem(items)
+			})
 		}
 		return {
 			domesticDeliveryCases,
@@ -1370,7 +1378,7 @@ const ShoppingCart = class extends React.Component {
 	}
 
 
-	formatData(cart){
+	formatData(cart) {
 		const invalidItems = this.getInvalidItems(cart)
 		let data1 = this.formatOverseasDelivery(cart.overseasDelivery)
 		let data2 = this.formatDomesticDeliveryCases(cart.domesticDeliveryCases)
@@ -1385,30 +1393,30 @@ const ShoppingCart = class extends React.Component {
 		}
 	}
 
-	countCart(overseasDelivery, domesticDeliveryCases){
+	countCart(overseasDelivery, domesticDeliveryCases) {
 		let count = 0
 
 		const deliveryItems = overseasDelivery ? overseasDelivery.deliveryItems : null
 
-		if(deliveryItems && deliveryItems.length){
+		if (deliveryItems && deliveryItems.length) {
 			deliveryItems.forEach(deliveryItem => {
 				let items = deliveryItem.shoppingCartProducts
-				if(items && items.length){
-					items.forEach( item => {
-						if(item.selected) count += item.quantity
-					} )
+				if (items && items.length) {
+					items.forEach(item => {
+						if (item.selected) count += item.quantity
+					})
 				}
 			})
 		}
 
 
-		if(domesticDeliveryCases && domesticDeliveryCases.length){
-			domesticDeliveryCases.forEach( domestic => {
+		if (domesticDeliveryCases && domesticDeliveryCases.length) {
+			domesticDeliveryCases.forEach(domestic => {
 				let items = domestic.shoppingCartProducts
-				if(items && items.length){
-					items.forEach( item => {
-						if(item.selected) count += item.quantity
-					} )
+				if (items && items.length) {
+					items.forEach(item => {
+						if (item.selected) count += item.quantity
+					})
 				}
 			})
 		}
@@ -1417,16 +1425,16 @@ const ShoppingCart = class extends React.Component {
 
 	}
 
-	render () {
-		const {cart, loading, empty, intl} = this.props
+	render() {
+		const { cart, loading, empty, intl } = this.props
 
 		let isprogresspage
 
 
-		let formatedData, invalidItems,cancheckout,hasLocalItems, sendCouponMessage, couponcountdown, totalCount=0, hasOverseas
+		let formatedData, invalidItems, cancheckout, hasLocalItems, sendCouponMessage, couponcountdown, totalCount = 0, hasOverseas
 		let hasOverseasHead, fullSelected, cancheckout1, hasQuickPay, tcMethod
-
-		if(cart){
+		let gifts
+		if (cart) {
 			isprogresspage = window.__is_login__ || (!window.token && cart.shippingDetail) || (this.props.location.pathname && this.props.location.pathname.indexOf('/cart/checkout') >= 0)
 			formatedData = this.formatData(cart)
 			invalidItems = formatedData.invalidItems
@@ -1434,10 +1442,10 @@ const ShoppingCart = class extends React.Component {
 			couponcountdown = this.getCountdown(cart)
 			cancheckout = formatedData.hasSelectedItem
 			cancheckout1 = formatedData.hasSelectedItem1
-			hasLocalItems = formatedData.domesticDeliveryCases && !!formatedData.domesticDeliveryCases.find( domestic => domestic.shoppingCartProducts && domestic.shoppingCartProducts.length )
+			hasLocalItems = formatedData.domesticDeliveryCases && !!formatedData.domesticDeliveryCases.find(domestic => domestic.shoppingCartProducts && domestic.shoppingCartProducts.length)
 			totalCount = this.countCart(formatedData.overseasDelivery, formatedData.domesticDeliveryCases)
 
-			let validateOverseasItems = this.getValidItems(cart.shoppingCartProductsByOverseas) 
+			let validateOverseasItems = this.getValidItems(cart.shoppingCartProductsByOverseas)
 			hasOverseas = validateOverseasItems && validateOverseasItems.length > 0
 			hasOverseasHead = hasOverseas && hasLocalItems
 			fullSelected = this.getFullSelected()
@@ -1446,45 +1454,46 @@ const ShoppingCart = class extends React.Component {
 			hasQuickPay = cart.isSupportPaypal
 
 			tcMethod = this.getTcMethod()
+			gifts = cart.gifts
 		}
 
 
 
 
-		const Address1 = cart && <Box title={intl.formatMessage({id: 'shipping_address'})}>
-			<div style={{position: 'relative'}}>
+		const Address1 = cart && <Box title={intl.formatMessage({ id: 'shipping_address' })}>
+			<div style={{ position: 'relative' }}>
 
 				{
 					this.state.showAddresses && this.props.addresses ? (
 						<React.Fragment>
-							<Icon onClick={this.closeAddressesHandle.bind(this)} style={{position: 'absolute', right: 0, top: -35, fontSize: 28, cursor: 'pointer'}}>&#xe69a;</Icon>
-							<Addresses shippings={this.props.addresses} onSelect= { this.addressSelectHandle.bind(this) } onEdit= { this.addressEditHandle.bind(this)}/>
+							<Icon onClick={this.closeAddressesHandle.bind(this)} style={{ position: 'absolute', right: 0, top: -35, fontSize: 28, cursor: 'pointer' }}>&#xe69a;</Icon>
+							<Addresses shippings={this.props.addresses} onSelect={this.addressSelectHandle.bind(this)} onEdit={this.addressEditHandle.bind(this)} />
 						</React.Fragment>
 
 					) : (
 
-						<div className="x-table x-fw __fixed __vm" style={{paddingTop: 15}}>
-							<div className="x-cell" style={{width: 362}}>
-								<Address onEdit={ this.addressEditHandle1.bind(this) } address={cart.shippingDetail}/>
-							</div>
-							{
-								!window.token && window.__is_login__ && <div className="x-cell">
-									<AddressBTN onClick={ this.chooseAnthorAddresHandle.bind(this) } style={{marginBottom: 10}}>{intl.formatMessage({id: 'choose_anthor_address'})}</AddressBTN>
-									<AddressBTN onClick={ () => { this.props.history.push(`${window.ctx || ''}${__route_root__}/address/add`) } } >+ {intl.formatMessage({id: 'add_new_address'})}</AddressBTN>
+							<div className="x-table x-fw __fixed __vm" style={{ paddingTop: 15 }}>
+								<div className="x-cell" style={{ width: 362 }}>
+									<Address onEdit={this.addressEditHandle1.bind(this)} address={cart.shippingDetail} />
 								</div>
-							}
+								{
+									!window.token && window.__is_login__ && <div className="x-cell">
+										<AddressBTN onClick={this.chooseAnthorAddresHandle.bind(this)} style={{ marginBottom: 10 }}>{intl.formatMessage({ id: 'choose_anthor_address' })}</AddressBTN>
+										<AddressBTN onClick={() => { this.props.history.push(`${window.ctx || ''}${__route_root__}/address/add`) }} >+ {intl.formatMessage({ id: 'add_new_address' })}</AddressBTN>
+									</div>
+								}
 
-						</div>
+							</div>
 
-					)
+						)
 				}
 
 			</div>
 		</Box>
 
-		const Address2 = cart && <Box title={intl.formatMessage({id: 'shipping_address'})}>
-			<div style={{paddingTop: 20}}>
-				<AddressFrom isConfirm={true} updating={this.props.addressUpdating} address={cart.shippingDetail} editAddress={this.editAddress.bind(this)} isNew={true}/>
+		const Address2 = cart && <Box title={intl.formatMessage({ id: 'shipping_address' })}>
+			<div style={{ paddingTop: 20 }}>
+				<AddressFrom isConfirm={true} updating={this.props.addressUpdating} address={cart.shippingDetail} editAddress={this.editAddress.bind(this)} isNew={true} />
 			</div>
 		</Box>
 
@@ -1510,15 +1519,15 @@ const ShoppingCart = class extends React.Component {
 		const __addressbook = cart ? AddressBook() : null
 
 
-		const shippingLabel = !hasLocalItems ? intl.formatMessage({id: 'shipping_method'}) : 'Shipping Method For Overseas Warehouse' 
+		const shippingLabel = !hasLocalItems ? intl.formatMessage({ id: 'shipping_method' }) : 'Shipping Method For Overseas Warehouse'
 
 
 		const country = cart && cart.shippingDetail && cart.shippingDetail.country ? cart.shippingDetail.country.value : window.__country
 
-		
 
-		return loading ? <Loading/> : (empty ? <Empty/> : cart && <div>
-			{(this.props.refreshing || this.state.refreshing) && <Refreshing/>}
+
+		return loading ? <Loading /> : (empty ? <Empty /> : cart && <div>
+			{(this.props.refreshing || this.state.refreshing) && <Refreshing />}
 			<SHOPPINGBODY>
 
 				<div className="__left">
@@ -1526,22 +1535,22 @@ const ShoppingCart = class extends React.Component {
 					<Boxs>
 						{
 							__addressbook && <div ref={c => { this.$addressdom = c }}>
-								{ __addressbook }
+								{__addressbook}
 							</div>
 						}
-						
 
-						
+
+
 
 						{
-							isprogresspage && <div ref={ c => this.$paylistdom = c}>
-								<Box title={intl.formatMessage({id: 'payment_method'})}>
-									<div style={{paddingTop: 20}}>
+							isprogresspage && <div ref={c => this.$paylistdom = c}>
+								<Box title={intl.formatMessage({ id: 'payment_method' })}>
+									<div style={{ paddingTop: 20 }}>
 										<PayMethods
 											couponCode={this.props.couponCode}
 											cpf={this.props.cpf}
 											email={this.props.email}
-											payMethodList={ cart.payMethodList }
+											payMethodList={cart.payMethodList}
 											selectedPayId={this.props.payMethod}
 											selectPayHandle={this.selectPayHandle.bind(this)}
 											ticketMethods={this.state.ticketMethods}
@@ -1554,8 +1563,8 @@ const ShoppingCart = class extends React.Component {
 											installmentoptions={this.props.cart.payInstalmentsByOceanpaymentBRACreditCard || []}
 											installments={this.props.installments}
 											orderTotal={cart.orderSummary.orderTotal}
-											paypalDiscountMessage = {cart.paypalDiscountMessage}
-											showMercadopagoCouponField = {cart.showMercadopagoCouponField}
+											paypalDiscountMessage={cart.paypalDiscountMessage}
+											showMercadopagoCouponField={cart.showMercadopagoCouponField}
 
 											boletoForm={(c) => this.boletoForm = c}
 											boleto={(c) => { this.boleto = c }}
@@ -1563,19 +1572,19 @@ const ShoppingCart = class extends React.Component {
 											apac={c => this.apac = c}
 											apacBB={c => this.apacBB = c}
 
-											brazilOceanForm={ c => this.brazilOceanForm = c }
-											brazilOcean={ c => this.brazilOcean = c }
+											brazilOceanForm={c => this.brazilOceanForm = c}
+											brazilOcean={c => this.brazilOcean = c}
 
-											setCouponHandle={ this.useMercadoCoupon.bind(this) }
+											setCouponHandle={this.useMercadoCoupon.bind(this)}
 											couponCode={this.props.couponCode}
 
 											tcClickHandle={this.tcClickHandle.bind(this)}
 											tcMethod={tcMethod}
 
-											documentForm = { c => this.documentForm = c}
-											documentRef = { c => this.documentRef = c}
-											document = { this.props.document }
-											initCashmethod = {this.initCashmethod.bind(this)}
+											documentForm={c => this.documentForm = c}
+											documentRef={c => this.documentRef = c}
+											document={this.props.document}
+											initCashmethod={this.initCashmethod.bind(this)}
 										/>
 									</div>
 								</Box>
@@ -1583,43 +1592,84 @@ const ShoppingCart = class extends React.Component {
 						}
 
 						{
-							(cart.shippingDetail && (cancheckout1 || !hasLocalItems) || ( window.token && cancheckout1 )) && <Box title={shippingLabel}>
-								<ShippingMethods onSelect={this.selectShippingMethodHandle.bind(this)} shippingMethodList={ cart.shippingMethodList } selectedShippingMethod={ cart.shippingMethod }/>
+							(cart.shippingDetail && (cancheckout1 || !hasLocalItems) || (window.token && cancheckout1)) && <Box title={shippingLabel}>
+								<ShippingMethods onSelect={this.selectShippingMethodHandle.bind(this)} shippingMethodList={cart.shippingMethodList} selectedShippingMethod={cart.shippingMethod} />
 								{
-									cart.shippingInsurancePrice2 && <div style={{borderTop:'1px solid #e6e6e6', paddingTop: 10}}>
+									cart.shippingInsurancePrice2 && <div style={{ borderTop: '1px solid #e6e6e6', paddingTop: 10 }}>
 										<LabelCheck clickHandle={this.openInsurance.bind(this)} disabled={cart.isShippingInsuranceMust} selected={cart.insurance}>
-											<FormattedMessage id="add_shipping_insurance" values={{price: <Red><Money money={cart.shippingInsurancePrice2}/></Red>}}/>
+											<FormattedMessage id="add_shipping_insurance" values={{ price: <Red><Money money={cart.shippingInsurancePrice2} /></Red> }} />
 										</LabelCheck>
-										<Ask style={{marginLeft: 5}} message={cart.shippingInsuranceMsg2}/>
+										<Ask style={{ marginLeft: 5 }} message={cart.shippingInsuranceMsg2} />
 									</div>
 								}
-								
-								
+
+
 							</Box>
 						}
 
-						<Box title={`${intl.formatMessage({id: 'shopping_bag'})} (${totalCount})`} ignoreLine={true}>
+						<Box title={`${intl.formatMessage({ id: 'shopping_bag' })} (${totalCount})`} ignoreLine={true}>
+
+
+							{
+								gifts && gifts.length > 0 && <div style={{ padding: 14, backgroundColor: '#fafafa' }}>
+									<div>
+										<span className="iconfont" style={{ color: '#ff8454', fontSize: 30, verticalAlign: 'middle' }}>&#xec45;</span>
+										<span style={{ fontWeight: 'bold', verticalAlign: 'middle', fontSize: 18 }}>Free Gift</span>
+									</div>
+									<div className="x-table" style={{ width: '100%', tableLayout: 'fixed', marginTop: 10 }}>
+										<div className="x-cell" style={{ width: 40, verticalAlign: 'middle' }}>
+										<a style={{textDecoration:'none'}} href={producturl({ id: gifts[0].productId, name: gifts[0].productName, parentSku: gifts[0].parentSku })}>
+												<img style={{ display: 'inline-block', width: '100%' }}  src={gifts[0].imageUrl} />
+											</a>
+										</div>
+										<div className="x-cell" style={{ paddingLeft: 10, verticalAlign: 'middle' }}>
+											<Ellipsis>
+												<span style={{ display: 'inline-block', lineHeight: '14px', fontSize: 12, color: '#e64545', border: '1px solid #e64545', paddingLeft: 5, paddingRight: 5 }}>
+													Gift
+										</span>
+												<span style={{ lineHeight: '14px', fontSize: 12, marginLeft: 10 }}>
+													{gifts[0].productName}
+												</span>
+											</Ellipsis>
+											<div style={{ marginTop: 10 }}>
+												<Red>{unitprice(gifts[0].realPrice)}</Red>
+												<Link style={{ float: 'right', color: '#e64545', fontSize:16 }} to={`${__route_root__}/gifts`}>View gift </Link>
+											</div>
+
+										</div>
+									</div>
+								</div>
+							}
+
+
+						{
+							cart.giftWarnMsg && <div style={{ padding: 14, backgroundColor: '#fafafa' }}>
+									<span className="iconfont" style={{ color: '#ff8454', fontSize: 30, verticalAlign: 'middle' }}>&#xec45;</span>
+									<span style={{verticalAlign: 'middle'}} dangerouslySetInnerHTML={{__html: cart.giftWarnMsg}}></span>
+								</div>
+						}
+
 							<div ref={c => this.fixedCartWrapper = c}>
-								<FixedTop style={{width: 726}} innerRef={c => this.fixedCart = c}>
-									<SelectLine style={{paddingTop: 20}}>
+								<FixedTop style={{ width: 726 }} innerRef={c => this.fixedCart = c}>
+									<SelectLine style={{ paddingTop: 20 }}>
 										<div className="x-table __vm x-fw">
 											<div className="x-cell">
-												<CheckBox className={`${fullSelected ? 'selected' : ''}`} onClick={ (evt) => { this.selectAllHandle(!fullSelected) } } style={{verticalAlign: 'middle'}}/>
-												<span style={{marginLeft: 10, verticalAlign: 'middle'}}>{intl.formatMessage({id:'select_all'})}</span>
+												<CheckBox className={`${fullSelected ? 'selected' : ''}`} onClick={(evt) => { this.selectAllHandle(!fullSelected) }} style={{ verticalAlign: 'middle' }} />
+												<span style={{ marginLeft: 10, verticalAlign: 'middle' }}>{intl.formatMessage({ id: 'select_all' })}</span>
 											</div>
 											<div className="x-cell __right">
-												{ cart.messages && cart.messages.shippingMsg && <strong dangerouslySetInnerHTML={{__html: cart.messages.shippingMsg}}/>}
+												{cart.messages && cart.messages.shippingMsg && <strong dangerouslySetInnerHTML={{ __html: cart.messages.shippingMsg }} />}
 											</div>
 										</div>
 									</SelectLine>
-									<ItemTableHead/>
+									<ItemTableHead />
 								</FixedTop>
 							</div>
 
 
 
-							{ 
-								hasOverseas && formatedData.overseasDelivery && <PromotionGroup style={{marginTop: 25}}
+							{
+								hasOverseas && formatedData.overseasDelivery && <PromotionGroup style={{ marginTop: 25 }}
 									hasHead={hasOverseasHead}
 									group={formatedData.overseasDelivery}
 									serverTime={cart.serverTime}
@@ -1628,15 +1678,15 @@ const ShoppingCart = class extends React.Component {
 									itemSelect={this.itemSelect.bind(this)}
 									itemEdit={this.itemEdit.bind(this)}
 									setQuantity={(itemId, quantity) => { this.props.EDITITEM(itemId, itemId, quantity) }}
-									quantityChange={ this.quantityChange.bind(this)}/>
+									quantityChange={this.quantityChange.bind(this)} />
 							}
-							
+
 
 							{
 								hasLocalItems && formatedData.domesticDeliveryCases.map(domestic => <GroupLocalItems
-									style={{marginTop: 25, borderBottom: '1px dashed #e6e6e6'}}
-									key={ domestic.countryCode }
-									domestic= {domestic}
+									style={{ marginTop: 25, borderBottom: '1px dashed #e6e6e6' }}
+									key={domestic.countryCode}
+									domestic={domestic}
 									serverTime={cart.serverTime}
 									groupClick={this.groupClick.bind(this)}
 									itemDelete={this.itemDelete.bind(this)}
@@ -1644,16 +1694,16 @@ const ShoppingCart = class extends React.Component {
 									overseasHandle={this.overseasHandle.bind(this)}
 									itemEdit={this.itemEdit.bind(this)}
 									setQuantity={(itemId, quantity) => { this.props.EDITITEM(itemId, itemId, quantity) }}
-									quantityChange={ this.quantityChange.bind(this)}
+									quantityChange={this.quantityChange.bind(this)}
 								/>)
 							}
 
 							{
-								invalidItems && invalidItems.length > 0 && <GroupIvalidItems style={{marginTop: 25, borderBottom: '1px dashed #e6e6e6'}}
+								invalidItems && invalidItems.length > 0 && <GroupIvalidItems style={{ marginTop: 25, borderBottom: '1px dashed #e6e6e6' }}
 									items={invalidItems}
 									clearall={this.clearall.bind(this)}
 									itemDelete={this.itemDelete.bind(this)}
-									serverTime={cart.serverTime}/>
+									serverTime={cart.serverTime} />
 							}
 
 						</Box>
@@ -1661,31 +1711,31 @@ const ShoppingCart = class extends React.Component {
 
 				</div>
 				<div className="__right">
-					<div style={{height: 32}}></div>
-					<div ref={ c => this.fixedSummaryWrapper = c}>
-						<FixedTop style={{paddingTop: 20, width: 314}} innerRef={c => this.fixedSummary = c}>
+					<div style={{ height: 32 }}></div>
+					<div ref={c => this.fixedSummaryWrapper = c}>
+						<FixedTop style={{ paddingTop: 20, width: 314 }} innerRef={c => this.fixedSummary = c}>
 							<SecondBox>
 								<div className="__hd">
-									{intl.formatMessage({id: 'coupon'})}
+									{intl.formatMessage({ id: 'coupon' })}
 								</div>
 								<div className="__bd">
-									<CouponSelect unSelectCoupon={this.unSelectCoupon.bind(this)} selectCoupon={ () => { this.props.history.push(`${window.ctx || ''}${__route_root__}/coupons`) } } coupon={cart.coupon} canUseCouponCount={cart.canUseCouponCount}/>
+									<CouponSelect unSelectCoupon={this.unSelectCoupon.bind(this)} selectCoupon={() => { this.props.history.push(`${window.ctx || ''}${__route_root__}/coupons`) }} coupon={cart.coupon} canUseCouponCount={cart.canUseCouponCount} />
 									{
-										cart.messages && cart.messages.couponMsg && <MessageTip style={{marginTop: 20}}>
-											<span dangerouslySetInnerHTML={{__html: cart.messages.couponMsg}}/>
+										cart.messages && cart.messages.couponMsg && <MessageTip style={{ marginTop: 20 }}>
+											<span dangerouslySetInnerHTML={{ __html: cart.messages.couponMsg }} />
 										</MessageTip>
 									}
 
 								</div>
 							</SecondBox>
 							{
-								cart.expectedPoints > 0 && <SecondBox style={{marginTop: 22}}>
+								cart.expectedPoints > 0 && <SecondBox style={{ marginTop: 22 }}>
 									<div className="__hd">
-										{intl.formatMessage({id: 'credits'})}
+										{intl.formatMessage({ id: 'credits' })}
 									</div>
 									<div className="__bd">
 										<LabelCheck clickHandle={this.openPoints.bind(this)} selected={cart.openPointUse}>
-											<FormattedMessage  id="credit_msg" values={{credits: cart.expectedPoints, discount: <Red><Money money={cart.expectedPointDiscount}/></Red>}}/>
+											<FormattedMessage id="credit_msg" values={{ credits: cart.expectedPoints, discount: <Red><Money money={cart.expectedPointDiscount} /></Red> }} />
 										</LabelCheck>
 										<span> </span>
 										<Ask message={this.state.pointMessage} />
@@ -1693,128 +1743,128 @@ const ShoppingCart = class extends React.Component {
 								</SecondBox>
 							}
 							{
-								!cancheckout1 && hasLocalItems && !window.__is_login__ && cart.shippingDetail && !window.token && <SecondBox style={{marginTop: 22}}>
+								!cancheckout1 && hasLocalItems && !window.__is_login__ && cart.shippingDetail && !window.token && <SecondBox style={{ marginTop: 22 }}>
 									<div className="__hd">
-										{intl.formatMessage({id: 'shipping_insurance'})}
+										{intl.formatMessage({ id: 'shipping_insurance' })}
 									</div>
 									<div className="__bd">
 										<LabelCheck clickHandle={this.openInsurance.bind(this)} disabled={cart.isShippingInsuranceMust} selected={cart.insurance}>
-											<FormattedMessage id="add_shipping_insurance" values={{price: <Red><Money money={cart.shippingInsurancePrice2}/></Red>}}/>
+											<FormattedMessage id="add_shipping_insurance" values={{ price: <Red><Money money={cart.shippingInsurancePrice2} /></Red> }} />
 										</LabelCheck>
-										<Ask style={{marginLeft: 5}} message={cart.shippingInsuranceMsg2}/>
+										<Ask style={{ marginLeft: 5 }} message={cart.shippingInsuranceMsg2} />
 
 									</div>
 								</SecondBox>
 							}
-							
 
-			
 
-							<div ref={ c => this.fixedSmallWrapper = c }>
-								<FixedTop style={{paddingTop: 40, width: 314}} innerRef={c => this.fixedSmall = c}>
+
+
+							<div ref={c => this.fixedSmallWrapper = c}>
+								<FixedTop style={{ paddingTop: 40, width: 314 }} innerRef={c => this.fixedSmall = c}>
 									<Boxs>
-										<Box title={intl.formatMessage({id: 'order_summary'})}>
+										<Box title={intl.formatMessage({ id: 'order_summary' })}>
 
-											<OrderSummary style={{marginTop: 20}} display={cart.orderSummary.display}/>
+											<OrderSummary style={{ marginTop: 20 }} display={cart.orderSummary.display} />
 											{
-												this.props.payMethod === '22' && <div style={{marginTop:5, textAlign:'right'}}>
-													<Red style={{fontWeight:'normal', marginLeft:5, fontSize: 14}}>(Em até 3x s/ juros)</Red>
+												this.props.payMethod === '22' && <div style={{ marginTop: 5, textAlign: 'right' }}>
+													<Red style={{ fontWeight: 'normal', marginLeft: 5, fontSize: 14 }}>(Em até 3x s/ juros)</Red>
 												</div>
 											}
 
 											{
-												cancheckout&&cart.canCheckout ? (
+												cancheckout && cart.canCheckout ? (
 													isprogresspage ? <div>
 														{
-															this.props.payMethod === '1' ? <div id='ip-paypal-pay' style={{marginTop: 30}} ref={ (c) => this.paypalRender(c, 'normal') }/> : (!this.state.checking ? <BigButton onClick={this.checkout.bind(this)} bgColor="#222" style={{marginTop: 30, height: 45, lineHeight: '45px', textTransform: 'uppercase', fontSize: 18}}>
-																{intl.formatMessage({id: 'check_out'})}
-															</BigButton> : <BigButton bgColor="#999" style={{marginTop: 30, height: 45, lineHeight: '45px'}}>
-																{intl.formatMessage({id: 'please_wait'})}...
+															this.props.payMethod === '1' ? <div id='ip-paypal-pay' style={{ marginTop: 30 }} ref={(c) => this.paypalRender(c, 'normal')} /> : (!this.state.checking ? <BigButton onClick={this.checkout.bind(this)} bgColor="#222" style={{ marginTop: 30, height: 45, lineHeight: '45px', textTransform: 'uppercase', fontSize: 18 }}>
+																{intl.formatMessage({ id: 'check_out' })}
+															</BigButton> : <BigButton bgColor="#999" style={{ marginTop: 30, height: 45, lineHeight: '45px' }}>
+																	{intl.formatMessage({ id: 'please_wait' })}...
 															</BigButton>)
 														}
 
 													</div> : (
-														window.token ? <div>
-															<BigButton onClick={this.quickPlace.bind(this)} bgColor="#e5004f" style={{marginTop: 30, height: 45, lineHeight: '45px', textTransform: 'uppercase', fontSize: 18}}>
-																{intl.formatMessage({id: 'place_order'})}
-															</BigButton>
-														</div> : <div>
-
-															
+															window.token ? <div>
+																<BigButton onClick={this.quickPlace.bind(this)} bgColor="#e5004f" style={{ marginTop: 30, height: 45, lineHeight: '45px', textTransform: 'uppercase', fontSize: 18 }}>
+																	{intl.formatMessage({ id: 'place_order' })}
+																</BigButton>
+															</div> : <div>
 
 
-															<BigButton onClick={ 
-																() => {
-																	this.props.history.push(`${window.ctx || ''}${__route_root__}/checkout`)
-																}
-															} bgColor="#222" style={{marginTop: 30, height: 45, lineHeight: '45px', textTransform: 'uppercase', fontSize: 18}}>
-																{intl.formatMessage({id: 'proceed_checkout'})}
-															</BigButton>
 
-															{
-																hasQuickPay && <React.Fragment>
-																	
-																	<div style={{color: '#999', textAlign: 'center', height: 30, lineHeight: '30px', textTransform: 'uppercase'}}>
-																		{intl.formatMessage({id: 'or'})}
-																	</div>
 
-																	{ 
-																		cart.paypalDiscountMessage && <DISCOUNTTIP style={{marginBottom:10, display: 'inline-block'}}>
-																			<span dangerouslySetInnerHTML={{__html: cart.paypalDiscountMessage}}/>
-																		</DISCOUNTTIP> 
+																	<BigButton onClick={
+																		() => {
+																			this.props.history.push(`${window.ctx || ''}${__route_root__}/checkout`)
+																		}
+																	} bgColor="#222" style={{ marginTop: 30, height: 45, lineHeight: '45px', textTransform: 'uppercase', fontSize: 18 }}>
+																		{intl.formatMessage({ id: 'proceed_checkout' })}
+																	</BigButton>
+
+																	{
+																		hasQuickPay && <React.Fragment>
+
+																			<div style={{ color: '#999', textAlign: 'center', height: 30, lineHeight: '30px', textTransform: 'uppercase' }}>
+																				{intl.formatMessage({ id: 'or' })}
+																			</div>
+
+																			{
+																				cart.paypalDiscountMessage && <DISCOUNTTIP style={{ marginBottom: 10, display: 'inline-block' }}>
+																					<span dangerouslySetInnerHTML={{ __html: cart.paypalDiscountMessage }} />
+																				</DISCOUNTTIP>
+																			}
+
+																			<div id='ip-paypal-pay' ref={(c) => this.paypalRender(c, 'quick')} />
+
+
+
+
+
+																		</React.Fragment>
+
 																	}
 
-																	<div id='ip-paypal-pay'  ref={ (c) => this.paypalRender(c, 'quick') }/>
+																</div>
 
-																	
-
-																	
-																	
-																</React.Fragment>
-
-															}
-															
-														</div>
-
-													)
+														)
 
 												) : (
-													<BigButton bgColor="#999" style={{marginTop: 30, cursor: 'not-allowed', height: 45, lineHeight: '45px', textTransform: 'uppercase', fontSize: 18}}>
-														{intl.formatMessage({id: 'check_out'})}
-													</BigButton>
-												)
+														<BigButton bgColor="#999" style={{ marginTop: 30, cursor: 'not-allowed', height: 45, lineHeight: '45px', textTransform: 'uppercase', fontSize: 18 }}>
+															{intl.formatMessage({ id: 'check_out' })}
+														</BigButton>
+													)
 											}
 
-												
+
 
 
 
 											{
 
-												couponcountdown > 1000 ?  <MessageTip style={{marginTop: 20}}>
+												couponcountdown > 1000 ? <MessageTip style={{ marginTop: 20 }}>
 													<div className="x-table __fixed x-fw __vm">
-														<div className="x-cell" style={{width: 75}}>
-															<CountDownBlock offset={couponcountdown}/>
+														<div className="x-cell" style={{ width: 75 }}>
+															<CountDownBlock offset={couponcountdown} />
 														</div>
 														<div className="x-cell">
-															<span dangerouslySetInnerHTML={{__html: cart.sendCouponMessage.message}}/>
+															<span dangerouslySetInnerHTML={{ __html: cart.sendCouponMessage.message }} />
 														</div>
 													</div>
 												</MessageTip> : (
-													cart.messages && cart.messages.orderSummaryMsg && <MessageTip style={{marginTop: 20}}>
-														<span dangerouslySetInnerHTML={{__html: cart.messages.orderSummaryMsg}}/>
-													</MessageTip>
+														cart.messages && cart.messages.orderSummaryMsg && <MessageTip style={{ marginTop: 20 }}>
+															<span dangerouslySetInnerHTML={{ __html: cart.messages.orderSummaryMsg }} />
+														</MessageTip>
 
-												)
+													)
 											}
 
 
-											<div style={{marginTop: 40}}>
+											<div style={{ marginTop: 40 }}>
 												<div>
-													{intl.formatMessage({id: 'we_accept'})}
+													{intl.formatMessage({ id: 'we_accept' })}
 												</div>
-												<div style={{marginTop: 10}}>
-													<img style={{width: '100%'}} src={getPayImage(country)}/>
+												<div style={{ marginTop: 10 }}>
+													<img style={{ width: '100%' }} src={getPayImage(country)} />
 												</div>
 											</div>
 
@@ -1832,12 +1882,12 @@ const ShoppingCart = class extends React.Component {
 			</SHOPPINGBODY>
 
 			{
-				this.state.editing && <ItemEditor editHandle={this.editHandle.bind(this)} onClose={this.itemEditClose.bind(this)} { ...this.state.editing }/>
+				this.state.editing && <ItemEditor editHandle={this.editHandle.bind(this)} onClose={this.itemEditClose.bind(this)} {...this.state.editing} />
 			}
 
 			{
 				this.state.paypaling && <React.Fragment>
-					<Mask/>
+					<Mask />
 					<div className="paypal-loading-wrap">
 						<div className="paypal-back"></div>
 						<div className="paypal-loading">
@@ -1847,22 +1897,22 @@ const ShoppingCart = class extends React.Component {
 			}
 
 			{
-				this.state.showLeaveImage && this.state.leaveImage && <Modal onClose={ () => {this.setState({showLeaveImage: false})} }>
-					<img style={{cursor: 'pointer'}} onClick={ () => {this.setState({showLeaveImage: false})} } src={this.state.leaveImage}/>
+				this.state.showLeaveImage && this.state.leaveImage && <Modal onClose={() => { this.setState({ showLeaveImage: false }) }}>
+					<img style={{ cursor: 'pointer' }} onClick={() => { this.setState({ showLeaveImage: false }) }} src={this.state.leaveImage} />
 				</Modal>
 			}
 
 
 			{
 				this.state.successTip && <SUCCESSTIP>
-					{ this.state.successTip }
+					{this.state.successTip}
 				</SUCCESSTIP>
 			}
 
 			{
-				this.state.showDeleteConfirm && <Modal onClose={ () => {this.setState({showDeleteConfirm: false})} }>
-					<Confirm yes={ this.state.itemDelete } no={ () => {this.setState({showDeleteConfirm: false})} }>
-						<span><FormattedMessage id="sure_delete_item"/></span>
+				this.state.showDeleteConfirm && <Modal onClose={() => { this.setState({ showDeleteConfirm: false }) }}>
+					<Confirm yes={this.state.itemDelete} no={() => { this.setState({ showDeleteConfirm: false }) }}>
+						<span><FormattedMessage id="sure_delete_item" /></span>
 					</Confirm>
 				</Modal>
 			}

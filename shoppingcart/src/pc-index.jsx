@@ -55,7 +55,12 @@ const CheckoutCredit = Loadable({
 	loading: Loading
 })
 
+// import Gifts from './pcpages/gifts.jsx'
 
+const Gifts = Loadable({
+	loader: () => import(/* webpackChunkName: "page--gifts" */ './pcpages/gifts.jsx'),
+	loading: Loading
+})
 
 const mapStateToProps = (state) => {
 	return {
@@ -112,7 +117,7 @@ const Index = class extends React.Component{
 					<Route path={`${window.ctx || ''}${__route_root__}/**/address`} exact component={AddressModal}/>
 					<Route path={`${window.ctx || ''}${__route_root__}/**/address/:id`} component={AddressModal}/>
 				
-
+					<Route path={`${window.ctx || ''}${__route_root__}/gifts`} exact component={Gifts}/>
 					{/*<AnimatedRoute
 			      path={`${window.ctx || ''}${__route_root__}/coupons`}
 			      component={Coupon}
