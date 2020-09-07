@@ -20,7 +20,7 @@ export default{
 	shipping_insurance: 'Seguro de envió',
 	order_total: 'Total del Pedido',
 	total: 'Total',
-	check_out: 'FINALIZAR PEDIDO',
+	check_out: 'pagar',
 	required_tips: 'Indica que se requiere un campo',
 	full_name: 'Nombre completo',
 	street_address: 'Dirección de la calle',
