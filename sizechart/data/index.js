@@ -7,7 +7,7 @@ let imgSrc = [];
 let result = [];
 let pMethod = [];
 
-axios.get('/productCategory/anon/get-taglia?productId='+productId).then(function (response) {
+axios.get('/productCategory/anon/get-taglia?productId='+"a069ce60-5107-4bee-8e1e-142bbfe9b93b").then(function (response) {
     const pMethods = response.result;
     pMethod.push(pMethods)
     imgSrc.push(imgData['imgData'][pMethods]);
@@ -21,7 +21,7 @@ axios.get('/productCategory/anon/get-taglia?productId='+productId).then(function
     const sizeArr = [];
     const changeArr = [];
 
-    axios.get('/v9/product/anon/'+productId+'/show').then(function ({result: productVO}) {
+    axios.get('/v9/product/anon/'+"a069ce60-5107-4bee-8e1e-142bbfe9b93b"+'/show').then(function ({result: productVO}) {
         let product = _.uniqBy(productVO.product.variants,'size')
         for(let i= 0 ; i <product.length;i++ ){
             const valArr = [];

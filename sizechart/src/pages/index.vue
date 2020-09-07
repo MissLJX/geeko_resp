@@ -28,7 +28,7 @@
                 <tr>
                     <th colspan="2">Tag Size</th>
                     <th colspan="2">{{selected}}</th>
-                    <th colspan="2" v-for="(key,val) in getLabel" v-if="val!=='unit'">
+                    <th colspan="2" v-for="(key,val) in getLabel" v-if="val!=='unit' && val!=='unidad' && val!=='Einheit' && val!=='unité' && val!=='unidade'">
                         {{ val }}
                     </th>
                 </tr>
@@ -276,7 +276,7 @@
                 for(let i = 0; i< this.result.length;i++){
                     let obj=[];
                     for(let j in this.getLabel){
-                        if(j!=='unit'){
+                        if(j!=='unit' && j!=='unidad' && j!=='Einheit' && j!=='unité' && j!=='unidade'){
                             if(this.result[i][2]){
                                 let currVal = this.result[i][2][this.picked];
                                 if(currVal[j]){
