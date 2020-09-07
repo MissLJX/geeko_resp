@@ -21,7 +21,8 @@ const ADDRESSBODY = styled.div`
 const ADDRESSTITLE = styled.div`
   font-family: HelveticaNeue-Medium;
   font-size: 24px;
-  color: #222;
+	color: #222;
+	text-align: center;
 `
 
 const mapStateToProps = (state) => {

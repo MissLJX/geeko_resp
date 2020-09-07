@@ -1622,7 +1622,10 @@ const ShoppingCart = class extends React.Component {
 									</div>
 									<div className="x-table" style={{ width: '100%', tableLayout: 'fixed', marginTop: 10 }}>
 										<div className="x-cell" style={{ width: 40, verticalAlign: 'middle' }}>
-											<img style={{ display: 'inline-block', width: '100%' }} href={producturl({ id: gifts[0].productId, name: gifts[0].productName, parentSku: gifts[0].parentSku })} src={gifts[0].imageUrl} />
+											<a style={{textDecoration:'none'}} href={producturl({ id: gifts[0].productId, name: gifts[0].productName, parentSku: gifts[0].parentSku })}>
+												<img style={{ display: 'inline-block', width: '100%' }}  src={gifts[0].imageUrl} />
+											</a>
+											
 										</div>
 										<div className="x-cell" style={{ paddingLeft: 10, verticalAlign: 'middle' }}>
 											<Ellipsis>

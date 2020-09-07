@@ -12,7 +12,7 @@ import { storage } from '../../utils/utils'
 const __Cpf_Tip_Message__ = 'CPF (Cadastro de Pessoa Física), utilizado para tributação, é necessário para todos os produtos enviados ao Brasil, independentemente de encomendas expressas ou contêineres logísticos.Quando preenchemos o conhecimento de embarque e fatura, por favor, não esqueça de preencher o número de contribuinte do destinatário.Na maioria dos casos, sua forma é o número digital como abaixo, XXX.XXX.XXX-XX'
 
 const getCountryCode = () => {
-	let strs = window.lang ? window.lang.split('_') : []
+	let strs = window.locale ? window.locale.split('_') : []
 	return strs[1] || 'US'
 }
 

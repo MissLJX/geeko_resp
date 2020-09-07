@@ -137,7 +137,7 @@ const JoinForm = class extends React.Component{
       <LABEVALUES>
         <LABELVALUE>
           <span className="__label">上海地址：</span>
-          <span className="__value">上海市浦东新区新金桥路1122号</span>
+          <span className="__value">上海市浦东新区锦绣东路2777弄36号10楼</span>
         </LABELVALUE>
         <LABELVALUE>
           <span className="__label">电话：</span>

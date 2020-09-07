@@ -15,7 +15,7 @@ import { storage } from '../../utils/utils'
 import { MutiElement } from '../pc/styled-control.jsx'
 
 const getCountryCode = () => {
-	let strs = window.lang ? window.lang.split('_') : []
+	let strs = window.locale ? window.locale.split('_') : []
 	return strs[1] || 'US'
 }
 
