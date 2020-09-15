@@ -23,7 +23,7 @@ export const __reg_document_co__ = /^\d{6,10}$/
 export const __reg_document_ur__ = /^\d{6,8}$/
 
 // Mexico CURP between 10 to 18 digits
-export const __reg_document_mx__ = /^\d{10,18}$/
+export const __reg_document_mx__ = /^\w{10,18}$/
 
 // Peru DNI between 8 to 9 digits
 export const __reg_document_pe__ = /^\d{8,9}$/
@@ -174,7 +174,7 @@ export const dni = (country) => {
 		break
 	case 'MX':
 		reg = __reg_document_mx__
-		error = 'Cédula de identidad debe tener entre 10 y 18 dígitos'
+		error = 'Cédula de identidad debe tener entre 10 y 18 caracteres.'
 		break
 	case 'PE':
 		reg = __reg_document_pe__
