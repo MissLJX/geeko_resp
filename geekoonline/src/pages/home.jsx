@@ -113,7 +113,11 @@ export default () => <div>
     </BANNER>
 
   </section>
-  
+  <CONTAINER>
+  <section style={{marginTop: 50}}>
+    <video style={{width: '100%'}} src="/videos/chic.mp4" autoPlay/>
+  </section>
+  </CONTAINER>
   <CONTAINER>
     <section style={{padding: '40px 0'}}>
       <RES1 width1={624} width2={513}>
