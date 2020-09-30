@@ -107,5 +107,7 @@ export default{
 	continue_shopping: 'continue comprando',
 	facebook_check: 'Se você verificar isso, enviaremos a você o status de rastreamento de logística e as informações do pedido no Messenger.',
 	email: 'E-Mail',
-	sign_me_up_for: 'Inscreva-me nos emails de {siteName} (você pode cancelar a inscrição a qualquer momento).'
+	sign_me_up_for: 'Inscreva-me nos emails de {siteName} (você pode cancelar a inscrição a qualquer momento).',
+	already_has_account: 'Já tem uma conta?',
+	login: 'Conecte-se'
 }

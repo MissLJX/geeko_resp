@@ -106,5 +106,8 @@ export default{
 	continue_shopping: 'continue shopping',
 	facebook_check: 'If you check this, we will send you logistics tracking status and order information in Messenger',
 	email: 'Email',
-	sign_me_up_for: 'Sign me up for {siteName} emails (you can unsubscribe at any time).'
+	sign_me_up_for: 'Sign me up for {siteName} emails (you can unsubscribe at any time).',
+	already_has_account: 'Already have an account',
+	login: 'Login'
+
 }

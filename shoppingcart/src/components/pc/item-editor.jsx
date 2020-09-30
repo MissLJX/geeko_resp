@@ -34,7 +34,7 @@ const TIP = styled.span`
 const LINE = styled.div`
 	& > div{
 		&:first-child{
-			width: ${(window.lang.indexOf('pt_') >= 0 || window.lang.indexOf('fr_') >= 0) ? 100 : 60}px;
+			width: 90px;
 		}
 	}
 `
