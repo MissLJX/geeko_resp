@@ -103,7 +103,7 @@ class TicketList extends React.Component {
     			ticket.ticketReplies &&
     			<TicketLI key={ticket.id}>
 
-    				<Link to={`/support/ticket/${ticket.id}`}>
+    				<Link to={`${window.ctx||''}/support/ticket/${ticket.id}`}>
     			    	<TicketHD className="x-table __vm">
 	    					<div className="x-cell">
 	    						<TicketGrey><FormattedMessage id="ticketid"/>: </TicketGrey>
@@ -190,7 +190,7 @@ const Tickets = class extends React.Component {
               textTransform: 'uppercase',
               textDecoration: 'none'
             }}
-            to="/support/ticket/add"><FormattedMessage id="submitticket"/></Link>
+            to={`${window.ctx||''}/support/ticket/add`}><FormattedMessage id="submitticket"/></Link>
           </div>
         </PageContanier>
       </div>
