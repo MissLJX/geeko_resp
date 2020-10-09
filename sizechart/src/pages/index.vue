@@ -1,5 +1,9 @@
 <template>
     <div class="mainArea">
+        <div class="close">
+            <i class="iconfont">&#xe69a;</i>
+        </div>
+        <div style="text-align: center; font-weight: bold; padding-top: 21px; font-size: 18px;">{{$t('label.size_chart')}}</div>
         <div class="selectArea" v-show="!ifShoe">
             <div class="sizeSelect">
                 <span>{{$t('label.sizeconversation')}}</span>
@@ -26,16 +30,21 @@
             <table class="chartable" v-show="!ifShoe">
                 <tbody>
                 <tr>
-                    <th colspan="2">Tag Size</th>
-                    <th colspan="2">{{selected}}</th>
-                    <th colspan="2" v-for="(key,val) in getLabel" v-if="val!=='unit' && val!=='unidad' && val!=='Einheit' && val!=='unité' && val!=='unidade'">
-                        {{ val }}
-                    </th>
+                    <td>{{$t("label.size")}}</td>
+                    <td v-for="item in getDataArr">{{item[0][0]}}</td>
                 </tr>
-                <tr v-for="item in getDataArr">
-                    <td colspan="2">{{item[0][0]}}</td>
-                    <td colspan="2">{{item[0][1][selected.substring(5,7)]}}</td>
-                    <td colspan="2" v-for="i in item[1]">{{i}}</td>
+                <tr>
+                    <td>{{selected}}</td>
+                    <td v-for="item in getDataArr">{{item[0][1][selected.substring(5,7)]}}</td>
+                </tr>
+
+                <tr v-for="(item,key) in objName">
+                    <td v-if="objName[key]!=='unit' && objName[key]!=='unidad' && objName[key]!=='Einheit' && objName[key]!=='unité' && objName[key]!=='unidade'">{{objName[key]}}</td>
+                    
+                    <td v-for="(item,index) in getDataArr">
+                        {{item[1][key]}}
+                    </td>
+                    
                 </tr>
                 </tbody>
             </table>
@@ -55,21 +64,402 @@
             </table>
         </div>
         <div class="topArea">
-            <warm-prompt></warm-prompt>
-            <picture-show :imgSrc="imgSrc[0]"></picture-show>
+            <div class="tit_">{{$t('label.itemmeasurements')}}</div>
+            <div class="con_">{{$t('message.measurements')}}</div>
+
+            <div class="_img" v-if="pmethod[0] === 'jumpsuits'">
+                <div>
+                    <div style="margin: 25px 0px; width: 100%; text-align: center;">
+                        <img v-bind:src="imgSrc">
+                    </div>
+                </div>
+
+                <div>
+                    <div style="margin-bottom: 15px;">
+                        <div class="img_t">
+                            <span>1</span>
+                            <span>{{$t("label.waist")}}</span>
+                        </div>
+
+                        <div class="img_c">
+                            {{$t("message.waist_note")}}
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div class="img_t">
+                            <span>2</span>
+                            <span>{{$t("label.hip")}}</span>
+                        </div>
+
+                        <div class="img_c">
+                            {{$t("message.hip_note")}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="_img" v-if="pmethod[0] === 'dress'">
+                <div>
+                    <div style="margin: 25px 0px; width: 100%; text-align: center;">
+                        <img v-bind:src="imgSrc">
+                    </div>
+                </div>
+
+                <div>
+                    <div style="margin-bottom: 15px;">
+                        <div class="img_t">
+                            <span>1</span>
+                            <span>{{$t("label.bust")}}</span>
+                        </div>
+
+                        <div class="img_c">
+                            {{$t("message.bust_note")}}
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div class="img_t">
+                            <span>2</span>
+                            <span>{{$t("label.waist")}}</span>
+                        </div>
+
+                        <div class="img_c">
+                            {{$t("message.waist_note")}}
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div class="img_t">
+                            <span>3</span>
+                            <span>{{$t("label.hip")}}</span>
+                        </div>
+
+                        <div class="img_c">
+                            {{$t("message.hip_note")}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="_img" v-if="pmethod[0] === 'shoes'">
+                <div>
+                    <div style="margin: 25px 0px; width: 100%; text-align: center;">
+                        <img v-bind:src="imgSrc">
+                    </div>
+                </div>
+
+                <div>
+                    <div style="margin-bottom: 15px;">
+                        <div class="img_t">
+                            <span>1</span>
+                            <span>{{$t("label.length")}}</span>
+                        </div>
+
+                        <div class="img_c">
+                            {{$t("message.length_note")}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="_img" v-if="pmethod[0] === 'top'">
+                <div>
+                    <div style="margin: 25px 0px; width: 100%; text-align: center;">
+                        <img v-bind:src="imgSrc">
+                    </div>
+                </div>
+
+                <div>
+                    <div style="margin-bottom: 15px;">
+                        <div class="img_t">
+                            <span>1</span>
+                            <span>{{$t("label.bust")}}</span>
+                        </div>
+
+                        <div class="img_c">
+                            {{$t("message.bust_note")}}
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div class="img_t">
+                            <span>2</span>
+                            <span>{{$t("label.waist")}}</span>
+                        </div>
+
+                        <div class="img_c">
+                            {{$t("message.waist_note")}}
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div class="img_t">
+                            <span>3</span>
+                            <span>{{$t("label.hip")}}</span>
+                        </div>
+
+                        <div class="img_c">
+                            {{$t("message.hip_note")}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="_img" v-if="pmethod[0] === 'underwear'">
+                <div>
+                    <div style="margin: 25px 0px; width: 100%; text-align: center;">
+                        <img v-bind:src="imgSrc">
+                    </div>
+                </div>
+
+                <div>
+                    <div style="margin-bottom: 15px;">
+                        <div class="img_t">
+                            <span>1</span>
+                            <span>{{$t("label.bust")}}</span>
+                        </div>
+
+                        <div class="img_c">
+                            {{$t("message.bust_note")}}
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div class="img_t">
+                            <span>2</span>
+                            <span>{{$t("label.waist")}}</span>
+                        </div>
+
+                        <div class="img_c">
+                            {{$t("message.waist_note")}}
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div class="img_t">
+                            <span>3</span>
+                            <span>{{$t("label.hip")}}</span>
+                        </div>
+
+                        <div class="img_c">
+                            {{$t("message.hip_note")}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="_img" v-if="pmethod[0] === 'bathing'">
+                <div>
+                    <div style="margin: 25px 0px; width: 100%; text-align: center;">
+                        <img v-bind:src="imgSrc">
+                    </div>
+                </div>
+
+                <div>
+                    <div style="margin-bottom: 15px;">
+                        <div class="img_t">
+                            <span>1</span>
+                            <span>{{$t("label.bust")}}</span>
+                        </div>
+
+                        <div class="img_c">
+                            {{$t("message.bust_note")}}
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div class="img_t">
+                            <span>2</span>
+                            <span>{{$t("label.hip")}}</span>
+                        </div>
+
+                        <div class="img_c">
+                            {{$t("message.hip_note")}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="_img" v-if="pmethod[0] === 'bottom'">
+                <div>
+                    <div style="margin: 25px 0px; width: 100%; text-align: center;">
+                        <img v-bind:src="imgSrc">
+                    </div>
+                </div>
+
+                <div>
+                    <div style="margin-bottom: 15px;">
+                        <div class="img_t">
+                            <span>1</span>
+                            <span>{{$t("label.waist")}}</span>
+                        </div>
+
+                        <div class="img_c">
+                            {{$t("message.waist_note")}}
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div class="img_t">
+                            <span>2</span>
+                            <span>{{$t("label.hip")}}</span>
+                        </div>
+
+                        <div class="img_c">
+                            {{$t("message.hip_note")}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="_img" v-if="pmethod[0] === 'coat'">
+                <div>
+                    <div style="margin: 25px 0px; width: 100%; text-align: center;">
+                        <img v-bind:src="imgSrc">
+                    </div>
+                </div>
+
+                <div>
+                    <div style="margin-bottom: 15px;">
+                        <div class="img_t">
+                            <span>1</span>
+                            <span>{{$t("label.bust")}}</span>
+                        </div>
+
+                        <div class="img_c">
+                            {{$t("message.bust_note")}}
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div class="img_t">
+                            <span>2</span>
+                            <span>{{$t("label.waist")}}</span>
+                        </div>
+
+                        <div class="img_c">
+                            {{$t("message.waist_note")}}
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div class="img_t">
+                            <span>3</span>
+                            <span>{{$t("label.hip")}}</span>
+                        </div>
+
+                        <div class="img_c">
+                            {{$t("message.hip_note")}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="_img" v-if="pmethod[0] === 'onepiece'">
+                <div>
+                    <div style="margin: 25px 0px; width: 100%; text-align: center;">
+                        <img v-bind:src="imgSrc">
+                    </div>
+                </div>
+
+                <div>
+                    <div style="margin-bottom: 15px;">
+                        <div class="img_t">
+                            <span>1</span>
+                            <span>{{$t("label.bust")}}</span>
+                        </div>
+
+                        <div class="img_c">
+                            {{$t("message.bust_note")}}
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div class="img_t">
+                            <span>2</span>
+                            <span>{{$t("label.waist")}}</span>
+                        </div>
+
+                        <div class="img_c">
+                            {{$t("message.waist_note")}}
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div class="img_t">
+                            <span>3</span>
+                            <span>{{$t("label.hip")}}</span>
+                        </div>
+
+                        <div class="img_c">
+                            {{$t("message.hip_note")}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="_img" v-if="pmethod[0] === 'highheels'">
+                <div>
+                    <div style="margin: 25px 0px; width: 100%; text-align: center;">
+                        <img v-bind:src="imgSrc">
+                    </div>
+                </div>
+
+                <div>
+                    <div style="margin-bottom: 15px;">
+                        <div class="img_t">
+                            <span>1</span>
+                            <span>{{$t("label.waist")}}</span>
+                        </div>
+
+                        <div class="img_c">
+                            {{$t("message.bust_note")}}
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div class="img_t">
+                            <span>2</span>
+                            <span>{{$t("label.hip")}}</span>
+                        </div>
+
+                        <div class="img_c">
+                            {{$t("message.hip_note")}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            
+            
+
+            <div class="tit_">{{$t('label.pleasenote')}}</div>
+            <div class="con_ conicon">
+                {{$t('message.note1')}}
+            </div>
+            <div class="con_ conicon">
+                {{$t('message.note2')}}
+            </div>
+            <div class="con_">
+                <span class="_t">{{$t('label.inelastic')}}</span>
+                {{$t('message.inelastic_message')}}
+            </div>
+             <div class="con_">
+                <span class="_t">{{$t('label.micro')}}</span>
+                {{$t('message.micro_message')}}
+            </div>
+            <div class="con_">
+                <span class="_t">{{$t('label.stretchy')}}</span>
+                {{$t('message.stretchy_message')}}
+            </div>
+            <div class="con_">
+                <span class="_t">{{$t('label.high')}}</span>
+                {{$t('message.high_message')}}
+            </div>
         </div>
     </div>
 </template>
 
 <style scoped lang="scss">
+
     .mainArea{
-        width: 990px;
+        width: 528px;
         height: auto;
         margin: 0 auto;
-        border: 1px solid #e3e3e3;
-        padding: 0 50px ;
+        padding: 0 20px;
+        position: relative;
         font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        padding-bottom: 30px;
     }
+
     .picture-show{
         width: 50%;
         float: left;
@@ -82,7 +472,7 @@
         margin-top: 10px;
     }
     .currLocal{
-        background-color: #e5004f !important;
+        background-color: black !important;
         color: white !important;
     }
     .topArea{
@@ -97,6 +487,7 @@
         width: 100%;
         border-collapse: collapse;
         margin-bottom: 30px;
+        cursor: pointer;
     }
     .chartable th{
         border: 1px solid #d6d6d6;
@@ -123,7 +514,7 @@
     .sizeSelect{
         float: left;
         span{
-            font-size: 14px;
+            font-size: 13px;
             color: #20282f;
             font-weight: bold;
         }
@@ -147,7 +538,7 @@
             position: relative;
             line-height: 30px;
             float: left;
-            margin-left: 15px;
+            margin-left: 10px;
         }
 
         input[type="radio"] {
@@ -168,8 +559,8 @@
             cursor: pointer;
         }
         input:checked+label {
-            background-color: #e5004f;
-            border: 1px solid #e5004f;
+            background-color: black;
+            border: 1px solid black;
         }
 
         input:checked+label::after {
@@ -185,13 +576,121 @@
             transform: rotate(45deg)
         }
     }
+
+    .chartable td{
+        border: 1px solid #e0e0e0;
+        text-align: center;
+        vertical-align: middle;
+        line-height: 40px;
+        font-size:12px;
+        color: #999;
+    }
+
+    .chartable tr:first-child td{
+        font-weight: bold;
+        text-transform: capitalize;
+        color: #666;
+        font-size:12px;
+    }
+
+    .chartable td:first-child {
+        font-weight: bold;
+        font-size: 13px;
+        color: #111;
+        font-size:12px;
+    }
+
+    .tit_ {
+        font-size: 16px;
+        color: #222;
+        line-height: 19px;
+        margin-bottom: 6px;
+        text-transform: capitalize;
+        font-weight: bold;
+    }
+
+    .con_ {
+        font-size: 12px;
+        color: #666;
+        line-height: 20px;
+    }
+    .conicon {
+        margin-bottom: 11px;
+    }
+
+    ._t {
+        font-weight: bold;
+        color: #111;
+    }
+
+    ._img img{
+        display: flex;
+        display: block;
+        width: 135px;
+        margin-right: 38px;
+    }
+
+    ._img{
+        padding-top: 15px;
+        padding-bottom: 25px;
+        display: flex;
+        align-items: center;
+    }
+
+    .img_t span:first-child {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background-color: #111;
+        color: #fff;
+        text-align: center;
+        line-height: 16px;
+        font-size: 14px;
+        margin-right: 10px;
+        font-weight: normal;
+    }
+
+    .img_c {
+        font-size: 12px;
+        color: #666;
+        line-height: 16px;
+        padding-top: 8px;
+    }
+
+    .img_t{
+        text-transform: capitalize;
+        font-weight: bold;
+    }
+
+    .img_t span {
+        display: inline-block;
+    }
+
+    .close i {
+        font-size: 18px;
+    }
+
+    .close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+    }
 </style>
 
 <script type="es6">
     import store from '../store'
-    import DataMap from '../../data/index.js'
+
+
+    // import DataMap from '../../data/index.js'
+    import { getData } from '../../data/index.js'
+
+
+
     import WarmPrompt from '../components/warm-prompt.vue'
     import PictureShow from '../components/picture-show.vue'
+    import ImageDATA from '../../data/image.js'
 
 
     export default {
@@ -212,7 +711,9 @@
                 selected:'',
                 picked:'1',
                 isActive:'true',
-                pmethod:''
+                pmethod:'',
+                objName:[],
+                message:""
             }
         },
         computed: {
@@ -253,6 +754,15 @@
                     }
                 }
                 if(this.result[index]){
+                    var i = 0;
+                    for(var item in this.result[index][2][0]){
+                        if(item === 'unit' || item==='unidad' || item==='Einheit' || item==='unité' || item==='unidade'){
+                            continue;
+                        }
+                        this.objName[i] = item;
+                        i += 1;
+                    }
+                    // console.log(this.objName);
                     return this.result[index][2][0]
                 }
             },
@@ -316,14 +826,33 @@
         },
         mounted() {
             this.getData();
+            // this.getLocalMessage(this.pmethod[0]);
         },
         methods:{
             getData() {
-                this.result = DataMap['result'];
-                this.imgSrc = DataMap['imgSrc'];
-                this.pmethod = DataMap['pMethod'];
+                // this.result = DataMap['result'];
+                // this.pmethod = DataMap['pMethod'];
+                // console.log("this.pmethod",this.pmethod);
+                // console.log(this.pmethod[0]);
+                
+                // console.log("this.imgSrc",this.imgSrc);
                 this.selected='Size('+this.getLang+')';
-            }
+
+                
+                getData(window.productId).then(dataMap => {
+                    if(dataMap){
+                        this.result = dataMap['result']
+                        this.pmethod = dataMap['pMethod']
+                        this.imgSrc = ImageDATA.imgDataPc[this.pmethod[0]]
+                    }else{
+                        return;
+                    }
+                })
+                
+            },
+            // getLocalMessage(value){
+                
+            // }
         }
     };
 </script>

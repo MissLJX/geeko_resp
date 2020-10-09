@@ -13,16 +13,21 @@
             <table class="chartable" v-show="!ifShoe">
                 <tbody>
                 <tr>
-                    <th colspan="2">Tag Size</th>
-                    <th colspan="2">{{selected}}</th>
-                    <th colspan="2" v-for="(key,val) in getLabel" v-if="val!=='unit' && val!=='unidad' && val!=='Einheit' && val!=='unité' && val!=='unidade'">
-                        {{ val }}
-                    </th>
+                    <td>{{$t('label.size')}}</td>
+                    <td v-for="item in getDataArr">{{item[0][0]}}</td>
                 </tr>
-                <tr v-for="item in getDataArr">
-                    <td colspan="2">{{item[0][0]}}</td>
-                    <td colspan="2">{{item[0][1][selected]}}</td>
-                    <td colspan="2" v-for="i in item[1]">{{i}}</td>
+                <tr>
+                    <td>{{$t('label.size')}} ({{selected}})</td>
+                    <td v-for="item in getDataArr">{{item[0][1][selected]}}</td>
+                </tr>
+
+                <tr v-for="(item,key) in objName">
+                    <td v-if="objName[key]!=='unit' && objName[key]!=='unidad' && objName[key]!=='Einheit' && objName[key]!=='unité' && objName[key]!=='unidade'">{{objName[key]}}</td>
+                    
+                    <td v-for="(item,index) in getDataArr">
+                        {{item[1][key]}}
+                    </td>
+                    
                 </tr>
                 </tbody>
             </table>
@@ -43,24 +48,38 @@
         </div>
 
         <div class="tipArea">
-            <ul>
-                <li>
-                    <h4>{{$t('label.itemmeasurements')}}:</h4>
-                    <p>{{$t('message.measurements')}}</p>
-                </li>
-                <li>
-                    <picture-show :imgSrc="imgSrc[0]"></picture-show>
-                </li>
-                <li>
-                    <h4 class="t-red">{{$t('label.pleasenote')}}:</h4>
-                    <p class="mb8">1.{{$t('message.note1')}}</p>
-                    <p>2.{{$t('message.note2')}}</p>
-                </li>
-                <li>
-                    <h4 class="t-red">{{$t('label.disclaimer')}}</h4>
-                    <p>{{$t('message.disclaimer')}}</p>
-                </li>
-            </ul>
+            <div class="tit_">{{$t('label.itemmeasurements')}}</div>
+            <div class="con_">{{$t('message.measurements')}}</div>
+
+            <div class="_img">
+                <div style="margin: 25px 0px; width: 100%; text-align: center;">
+                    <img v-bind:src="imgSrc[0]" style="width: 237px;">
+                </div>
+            </div>
+
+            <div class="tit_">{{$t('label.pleasenote')}}</div>
+            <div class="con_ conicon">
+                {{$t('message.note1')}}
+            </div>
+            <div class="con_ conicon">
+                {{$t('message.note2')}}
+            </div>
+            <div class="con_">
+                <span class="_t">{{$t('label.inelastic')}}</span>
+                {{$t('message.inelastic_message')}}
+            </div>
+             <div class="con_">
+                <span class="_t">{{$t('label.micro')}}</span>
+                {{$t('message.micro_message')}}
+            </div>
+            <div class="con_">
+                <span class="_t">{{$t('label.stretchy')}}</span>
+                {{$t('message.stretchy_message')}}
+            </div>
+            <div class="con_">
+                <span class="_t">{{$t('label.high')}}</span>
+                {{$t('message.high_message')}}
+            </div>
         </div>
     </div>
 </template>
@@ -75,7 +94,6 @@
         div{
             height: 33px;
             float: left;
-            background-color: #f3f3f3;
             color: #666;
             line-height: 33px;
             text-align: center;
@@ -83,17 +101,22 @@
             padding: 0 10px;
             cursor: pointer;
             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            border: 1px solid #f3f3f3;
         }
         .active{
-            background-color: #e5004f;
+            background-color: #111;
             color: white;
         }
         select{
-            float: right;
-            border: none;
             height: 33px;
             line-height: 33px;
             cursor: pointer;
+            border: 1px solid #dbdbdb;
+            text-align: center;
+            list-style: none;
+            background-color: #fff;
+            padding-left: 11px;
+            float: right;
         }
         &:after{
             display: block;
@@ -103,7 +126,7 @@
         }
     }
     .currLocal{
-        background-color: #e5004f !important;
+        background-color: black !important;
         color: white !important;
     }
 
@@ -111,6 +134,7 @@
         width: 100%;
         border-collapse: collapse;
         margin-bottom: 30px;
+        table-layout: fixed;
     }
     .chartable th{
         border: 1px solid #e0e0e0;
@@ -126,12 +150,37 @@
         text-align: center;
         vertical-align: middle;
         line-height: 40px;
+        font-size:12px;
+        color: #999;
     }
+
+    .chartable tr:nth-child(even) td{
+        background-color: #f5f5f5;
+    }
+
+    .chartable tr:first-child td{
+        font-weight: bold;
+        text-transform: capitalize;
+        color: #222;
+        font-size:13px;
+    }
+
+    .chartable td:first-child {
+        font-weight: bold;
+        font-size: 13px;
+        color: #111;
+    }
+
     .picture-show{
         width: 100%;
     }
     .t-red{
-        color: #e5004f;
+        font-size: 16px;
+        color: #222;
+        line-height: 19px;
+        margin-bottom: 6px;
+        text-transform: capitalize;
+        font-weight: bold;
     }
     .tipArea{
         p{
@@ -148,12 +197,38 @@
     li{
         list-style: none;
     }
+
+    .tit_ {
+        font-size: 14px;
+        color: #222;
+        line-height: 19px;
+        margin-bottom: 6px;
+        text-transform: capitalize;
+        font-weight: bold;
+    }
+
+    .con_ {
+        font-size: 12px;
+        color: #666;
+        line-height: 20px;
+    }
+    .conicon {
+        margin-bottom: 11px;
+    }
+
+    ._t {
+        font-weight: bold;
+        color: #111;
+    }
+    
 </style>
 
 <script type="es6">
     import store from '../store'
     import { mapGetters } from 'vuex'
-    import DataMap from '../../data/index.js'
+    // import DataMap from '../../data/index.js'
+
+    import { getData } from '../../data/index.js'
 
     import WarmPrompt from '../components/warm-prompt.vue'
     import PictureShow from '../components/picture-show.vue'
@@ -177,7 +252,8 @@
                 selected:'',
                 picked:'1',
                 isActive:false,
-                pmethod:[]
+                pmethod:[],
+                objName:[]
             }
         },
         computed: {
@@ -223,6 +299,16 @@
                     }
                 }
                 if(this.result[index]){
+                    // console.log("this.result[index][2][0]",this.result[index][2]);
+                    var i = 0;
+                    for(var item in this.result[index][2][0]){
+                        if(item === 'unit' || item==='unidad' || item==='Einheit' || item==='unité' || item==='unidade'){
+                            continue;
+                        }
+                        this.objName[i] = item;
+                        i += 1;
+                    }
+                    // console.log(this.objName);
                     return this.result[index][2][0]
                 }
             },
@@ -289,10 +375,21 @@
         },
         methods:{
             getData() {
-                this.result = DataMap['result'];
-                this.imgSrc = DataMap['imgSrc'];
-                this.pmethod = DataMap['pMethod'];
-                this.selected=this.getLang;
+                getData(window.productId).then(dataMap => {
+                    if(dataMap){
+                        this.result = dataMap['result']
+                        this.pmethod = dataMap['pMethod']
+                   
+                        this.imgSrc = dataMap['imgSrc'];
+                    }else{
+                        return;
+                    }
+                    
+                })
+                // this.result = DataMap['result'];
+                // this.pmethod = DataMap['pMethod'];
+                // this.imgSrc = DataMap['imgSrc'];
+                this.selected=this.getLang; 
             },
             changeMethod(method){
                 this.picked = method;

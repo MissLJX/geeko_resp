@@ -49,6 +49,7 @@ const config = {
       '/api': {
 /*        target: 'https://www.chicme.xyz',*/
         target: 'http://localhost:8080/wanna',
+        // target:"https://www.chicme.com",
         pathRewrite: { '^/api': '' },
         secure: false
       }

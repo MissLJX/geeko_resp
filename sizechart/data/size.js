@@ -1,7 +1,7 @@
 const sizedata = {
     "size":[
         {
-            label: 'S(160/84A)',
+            label: 'S',
             value: 'S',
             sizeMap: {
                 US: '2-4',
@@ -15,75 +15,75 @@ const sizedata = {
             }
         },
         {
-            label: 'M(165/88A)',
+            label: 'M',
             value: 'M',
             sizeMap: {
                 US: '6-8',
                 CA: '6-8',
                 UK: '12-14',
                 AU: '12-14',
-                EU: '36-38',
+                EU: '38-40',
                 BR: 'P',
                 FR: '38-40',
                 RU: '38-40'
             }
         },
         {
-            label: 'L(170/92A)',
+            label: 'L',
             value: 'L',
             sizeMap: {
                 US: '10-12',
                 CA: '10-12',
                 UK: '16-18',
                 AU: '16-18',
-                EU: '36-38',
+                EU: '40-42',
                 BR: 'M',
                 FR: '42-44',
                 RU: '42-44'
             }
         },
         {
-            label: 'XL(175/96A)',
+            label: 'XL',
             value: 'XL',
             sizeMap: {
                 US: '12-14',
                 CA: '12-14',
                 UK: '20-22',
                 AU: '20-22',
-                EU: '36-38',
+                EU: '42-44',
                 BR: 'G',
                 FR: '46-48',
                 RU: '46-48'
             }
         },
         {
-            label: '2XL(180/100A)',
+            label: '2XL',
             value: '2XL',
             sizeMap: {
                 US: '14-16',
                 CA: '14-16',
                 UK: '24-26',
                 AU: '24-26',
-                EU: '36-38',
+                EU: '44-46',
                 BR: 'GG',
                 FR: '48-50',
                 RU: '48-50'
             }
         },
         {
-            label: '3XL(185/104A)',
+            label: '3XL',
             value: '3XL',
             sizeMap: {
                 US: '16-18',
                 CA: '16-18',
                 UK: '28-30',
                 AU: '28-30',
-                EU: '36-38',
+                EU: '46-48',
                 BR: 'G3',
                 FR: '50-52',
                 RU: '50-52'
             }
-        },
+        }
     ],
     "shoeSize":[
         {
