@@ -17,7 +17,7 @@
                 <div>
                     <input type="radio" id="in" value="0" v-model="picked">
                     <label for="in"></label>
-                    <span>{{$t('label.inches')}}</span>
+                    <span>{{$t('label.inches')}}</span> 
                 </div>
                 <div>
                     <input type="radio" id="cm" value="1" v-model="picked">
