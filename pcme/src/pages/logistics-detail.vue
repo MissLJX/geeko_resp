@@ -1,7 +1,7 @@
 <template>
     <div class="datail">
         <div class="detailHd" v-if="method==='orderlist'">
-            <p style="text-transform:capitalize"><span @click="window.location.href = '/'">{{$t('home')}}</span><router-link to="/me/m"> > {{$t('me')}}</router-link><router-link to="/me/m/order"> > {{$t('myorders')}}</router-link> > {{$t('trackinfo')}}</p>
+            <p style="text-transform:capitalize"><span @click="window.location.href = '/'">{{$t('home')}}</span><router-link :to="getUrl('/me/m')"> > {{$t('me')}}</router-link><router-link :to="getUrl('/me/m/order')"> > {{$t('myorders')}}</router-link> > {{$t('trackinfo')}}</p>
         </div>
         <div class="detailHd" v-if="method==='ordertracking'">
             <p style="text-transform:capitalize"><span @click="window.location.href = '/'">{{$t('home')}}</span><a href = "/fs/shipping-guid">> Order Tracking</a> > {{$t('trackinfo')}}</p>
@@ -94,6 +94,9 @@
             changeTab(index){
                 this.isActive = index;
                 this.changePackage = _.cloneDeep(this.logistics.packages[index])
+            },
+            getUrl(suffix){
+                return utils.PROJECT + suffix;
             }
         },
         created(){
