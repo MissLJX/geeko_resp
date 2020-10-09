@@ -11,22 +11,27 @@ Vue.use(VueI18n)
 
 
 const messages = {
-    en_US: ENMessage,
-    de_DE: DEMessage,
-    es_ES: ESMessage,
-    fr_FR: FRMessage,
-    pt_BR: PTMessage
+    en: ENMessage,
+    de: DEMessage,
+    es: ESMessage,
+    fr: FRMessage,
+    pt: PTMessage
 }
 
 const languages = [
-    'en_US',
-    'de_DE',
-    'es_ES',
-    'fr_FR',
-    'pt_BR'
+    'en',
+    'de',
+    'es',
+    'fr',
+    'pt'
 ]
 
+
+const getLang = lang => {
+    return lang? lang.split('_')[0]:'en'
+}
+
 export default new VueI18n({
-    locale: languages.find(language => language === window.locale) || 'en_US', // set locale
+    locale: languages.find(language => language === getLang(window.locale)) || 'en', // set locale 
     messages, // set locale messages
 })

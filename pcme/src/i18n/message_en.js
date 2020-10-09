@@ -167,5 +167,7 @@ export default {
     mymessages:'My Messages',
     notiothers:"Others",
     prmotion:"promotion",
-    returnlabel:"Return Label"
+    returnlabel:"Return Label",
+    share_get:"SHARE UP TO 50% OFF, GET $10",
+    share_lucky:"Share lucky draw with your friends, and get up to 50% off together.  And you'll get $10 when they make a purchase."
 }

@@ -17,13 +17,16 @@
             <div class="refer-con">
                 <img src="https://dgzfssf1la12s.cloudfront.net/upgrade/20180920/gift.png">
                 <p>
-                    <span class="refer-info">SHARE UP TO 50% OFF , GET $15</span><br/>
-                    <span class="refer-info-1">Share lucky draw with your friends who will get UP TO 50% OFF discount. And you'll get $15 when they make a purchase.</span>
+                    <span class="refer-info">{{$t('share_get')}}</span><br/>
+                    <span class="refer-info-1">{{$t('share_lucky')}}</span>
                 </p>
                 <div class="bgline"></div>
                 <div class="refer-method">
                     <div id="face-share">
                         <img src="https://dgzfssf1la12s.cloudfront.net/upgrade/20180920/Facebook.png"><br/><span>Facebook</span>
+                    </div>
+                    <div id="face-messenger" v-if="showShare">
+                        <img src="https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/chicme/20200824/messenger-1.png"><br/><span>Messenger</span>
                     </div>
                     <div @click="showEmail">
                         <img src="https://dgzfssf1la12s.cloudfront.net/upgrade/20180920/email.png"><br/><span>{{$t('email')}}</span>
@@ -80,7 +83,7 @@
                     *Up to 50% OFF is valid only for new customers
                 </p>
                 <p class="term-info">
-                    If customers want to use the discount of up to  50% off, the referred person must (i) be a new customer, (ii) use a referral link to obtain the discount and (iii) make a purchase on  {{this.GLOBAL.siteurl}} specified in the referral offer prior to the discount's expiration. Referring customers will also receive a $15 coupon in their  {{this.GLOBAL.siteurl}} account after the referred person pay for the order.  And $15 coupon can be used when the order amount is more than $59. Custom-ers may not refer anyone who has an existing  {{this.GLOBAL.siteurl}} account under an alternate email address. The discount is only valid for one month and the referred person can only use the discount once.
+                    If customers want to use the discount of up to  50% off, the referred person must (i) be a new customer, (ii) use a referral link to obtain the discount and (iii) make a purchase on  {{this.GLOBAL.siteurl}} specified in the referral offer prior to the discount's expiration. Referring customers will also receive a $10 coupon in their  {{this.GLOBAL.siteurl}} account after the referred person pay for the order.  And $10 coupon can be used when the order amount is more than $59. Custom-ers may not refer anyone who has an existing  {{this.GLOBAL.siteurl}} account under an alternate email address. The discount is only valid for one month and the referred person can only use the discount once.
                 </p>
                 <p class="term-info">
                 Any abuse of this offer, as determined by us in our sole discretion, may result in the rescission of the refer-ring customer's referral discount and the referred person's discount as well as both parties' inability to partici-pate in this or future promotions. Discount cannot be applied to previous purchases, and is not redeemable for cash. This referral program is subject to modification or termination at any time without notice in our sole discretion.
@@ -147,6 +150,9 @@
             },
             creditstUrl(){
                 return utils.ROUTER_PATH_ME + '/m/credits'
+            },
+            showShare(){
+                return !!window.showShare
             }
         },
         mounted(){
@@ -206,8 +212,6 @@
             this.$store.dispatch('getMe')
             this.$store.dispatch('getShareKey','facebook')
             this.$store.dispatch('getShareKey','copy')
-
-
         }
     }
 
@@ -277,11 +281,14 @@
                 & > div{
                     float: left;
                     text-align: center;
-                    padding: 0 14px;
+                    padding: 0 7px;
                     cursor: pointer;
                     img{
                         width: 32px;
                         height: 32px;
+                    }
+                    span{
+                        font-size:11px;
                     }
                 }
                 &:after{

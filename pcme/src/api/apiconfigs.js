@@ -13,7 +13,8 @@ const instance = axios.create({
     timeout: 50000,
     headers: {
         appVersion: '3.5.7',
-        wid: getWid(),
+        // wid: "b1beccb8-f365-edc3-e254-72990ed36bf7",
+        wid:getWid(),
         accessToken: window.accessToken || '',
         deviceType: 'pc',
         xtoken: window.secret || ''

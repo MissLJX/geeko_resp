@@ -59,7 +59,7 @@ export default {
     newemailaddress:'New email address',
     verify:'Verify for 100 credits',
     verified:'Verified',
-    refer:'Refer a Friend',
+    refer:'Recomendar a un amigo',
     give:'GIVE',
     get:'GET',
     email:'email',
@@ -156,5 +156,7 @@ export default {
     repurchase:'Readquirir',
     remaining:'Tiempo de pago restante',
     trackingDetailInfo:'Información detallada de seguimiento',
-    returnlabel:"Etiqueta de devolución"
+    returnlabel:"Etiqueta de devolución",
+    share_get:"COMPARTE HASTA 50% DE DESCUENTO, OBTÉN $ 10",
+    share_lucky:"Comparta el sorteo con sus amigos y obtenga hasta un 50% de descuento juntos. Y obtendrás $ 10 cuando tus amigos realicen una compra."
 }
