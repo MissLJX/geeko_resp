@@ -41,7 +41,7 @@ const Support = class extends React.Component {
         <SupportButton onClick={this.onlineClickHandle.bind(this)} href="#" color="#599386" label={intl.formatMessage({id: 'onlinehelp'})}>&#xe665;</SupportButton>
       </li>
   		<li><SupportButton href={`https://m.me/${messageId}?isouter=1`} color="#4797b3" label={intl.formatMessage({id: 'messageus'})}>&#xe664;</SupportButton></li>
-  		<li><SupportButton href="/support/ticket" color="#cc5139" label={intl.formatMessage({id: 'tickets'})}>&#xe666;</SupportButton></li>
+  		<li><SupportButton href={`${window.ctx||''}/support/ticket`} color="#cc5139" label={intl.formatMessage({id: 'tickets'})}>&#xe666;</SupportButton></li>
   	</ul>
 
   	const styleSupportbuttons = {
@@ -161,7 +161,7 @@ const Support = class extends React.Component {
   			        					{
   			        						(question.questions || []).map((q) => (
   			        							<li key={q.id}>
-  			        								<Link style={{color: '#666'}} activeStyle={{color: '#e5004f'}} to={`/support/question/${q.id}`}>{q.title}</Link>
+  			        								<Link style={{color: '#666'}} activeStyle={{color: '#e5004f'}} to={`${window.ctx||''}/support/question/${q.id}`}>{q.title}</Link>
   			        							</li>
   			        						))
   			        					}

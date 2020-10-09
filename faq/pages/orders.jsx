@@ -55,8 +55,8 @@ const Orders = class extends React.Component {
       	<div style={{marginTop: '120px'}}>
       		<Switch>
 
-            <Route path="/support/orders/:page" component={OrdersPath}/>
-            <Route path="/support/orders" component={OrdersPath}/>
+            <Route path={`${window.ctx||''}/support/orders/:page`} component={OrdersPath}/>
+            <Route path={`${window.ctx||''}/support/orders`} component={OrdersPath}/>
       		</Switch>
       	</div>
       </PageContanier>
