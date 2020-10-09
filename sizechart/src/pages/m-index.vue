@@ -370,7 +370,7 @@
                 next();
             })
         },
-        mounted() {
+        mounted() { 
             this.getData();
         },
         methods:{
