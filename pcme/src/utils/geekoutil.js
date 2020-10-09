@@ -1,6 +1,6 @@
 import Cookie from 'js-cookie'
 
-export const PROJECT = ''
+export const PROJECT = window.ctx || ''
 export const ROUTER_PATH_ME = PROJECT + '/me'
 export const getUUID = () => {
     function S4() {

@@ -115,7 +115,7 @@ export default () => <div>
   </section>
   <CONTAINER>
   <section style={{marginTop: 50}}>
-    <video style={{width: '100%'}} src="/images/chic.mp4" autoplay="autoplay" controls/>
+    <video style={{width: '100%'}} src="/images/chic.mp4" preload autoplay="autoplay" controls/>
   </section>
   </CONTAINER>
   <CONTAINER>

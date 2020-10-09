@@ -7,7 +7,7 @@
             <div class="el-me-nav">
                 <h3  @click="changeClass('me')"><router-link to="/me/m">{{$t('me')}}</router-link></h3>
                 <ul>
-                    <li :class="{'active':isActive==='orders'}" @click="changeClass('orders')"><router-link to="/me/m/order">{{$t('myorders')}}</router-link></li>
+                    <li :class="{'active':isActive==='orders'}" @click="changeClass('orders')"><router-link to="getUrl('/me/m/order')">{{$t('myorders')}}</router-link></li>
                     <li :class="{'active':isActive==='tickets'}" @click="changeClass('tickets')"><router-link to="/me/m/tickets">{{$t('mytickets')}}</router-link></li>
                     <li :class="{'active':isActive==='notification'}" @click="changeClass('notification')"><router-link to="/me/m/notification">{{$t('mymessages')}}</router-link></li>
                     <li :class="{'active':isActive==='coupons'}" @click="changeClass('coupons')"><router-link to="/me/m/coupons">{{$t('mycoupons')}}</router-link></li>
@@ -31,6 +31,8 @@
     </div>
 </template>
 <script>
+
+    import {PROJECT} from '../utils/geekoutil'
     export default {
         data(){
           return{
@@ -45,6 +47,9 @@
             },
             changeClass(currIndex){
                 this.isActive = currIndex
+            },
+            getUrl(suffix){
+                return PROJECT + suffix;
             }
         }
     }
