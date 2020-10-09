@@ -107,5 +107,7 @@ export default{
 	continue_shopping: 'mit dem Einkaufen fortfahren',
 	facebook_check: 'Wenn Sie dies überprüfen, senden wir Ihnen den Status der Sendungsverfolgung und Bestellinformationen in Messenger',
 	email: 'E-Mail',
-	sign_me_up_for: 'Melden Sie mich für {siteName} E-Mails an (Sie können sich jederzeit abmelden).'
+	sign_me_up_for: 'Melden Sie mich für {siteName} E-Mails an (Sie können sich jederzeit abmelden).',
+	already_has_account: 'Haben Sie bereits einen Account?',
+	login: 'Einloggen'
 }

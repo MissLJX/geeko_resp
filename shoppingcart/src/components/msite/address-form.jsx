@@ -479,12 +479,12 @@ const AdressForm = class extends React.Component {
 								<span style={{fontSize:13, color: '#999', verticalAlign:'middle'}}><FormattedMessage  id="sign_me_up_for" values={{siteName: window.siteName}}/></span>
 							</div>
 							<div style={{position: 'absolute', top:0, right:0, fontSize: 12 }}>
-								<span style={{fontSize:12, color:'#999'}}>Already have an account? </span>
+								<span style={{fontSize:12, color:'#999'}}><FormattedMessage id="already_has_account"/> </span>
 								<a style={{color: '#222'}} href={`${window.ctx}/${
 									/*global siteType b:true*/
 									/*eslint no-undef: "error"*/
 									siteType === 'new' ? 'page' : 'i'
-								}/login?redirectUrl=${encodeURIComponent(window.location.href)}&loginPage=1`}>Login</a>
+								}/login?redirectUrl=${encodeURIComponent(window.location.href)}&loginPage=1`}><FormattedMessage id="login"/></a>
 							</div>
 						</div>
 						

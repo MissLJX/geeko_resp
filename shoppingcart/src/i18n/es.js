@@ -106,6 +106,8 @@ export default{
 	credit_card: 'tarjeta de crédito',
 	continue_shopping: 'seguir comprando',
 	facebook_check: 'Si marca esta opción, le enviaremos el estado de seguimiento de la logística y la información del pedido en Messenger.',
-	email: 'E-Mail',
-	sign_me_up_for: 'Regístrese para recibir correos electrónicos de {siteName} (puede darse de baja en cualquier momento).'
+	email: 'Correo Electrónico',
+	sign_me_up_for: 'Regístrese para recibir correos electrónicos de {siteName} (puede darse de baja en cualquier momento).',
+	already_has_account: '¿Ya tiene una cuenta?',
+	login: 'Iniciar sesión'
 }

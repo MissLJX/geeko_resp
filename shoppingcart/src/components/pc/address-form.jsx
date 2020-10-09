@@ -447,12 +447,12 @@ const AddressFrom = class extends React.Component {
 					{
 						isEmailRequired && <div style={{position:'relative'}}>
 							<div style={{textAlign: 'right', position: 'absolute', right: 0, top: 0}}>
-								<span style={{fontSize:14, color:'#999'}}>Already have an account? </span>
+								<span style={{fontSize:14, color:'#999'}}><FormattedMessage id="already_has_account"/> </span>
 								<a style={{color: '#222'}} href={`${window.ctx}/${
 									/*global siteType b:true*/
 									/*eslint no-undef: "error"*/
 									siteType === 'new' ? 'page' : 'i'
-								}/login?redirectUrl=${encodeURIComponent(window.location.href)}`}>Login</a>
+								}/login?redirectUrl=${encodeURIComponent(window.location.href)}`}><FormattedMessage id="login"/></a>
 							</div>
 							<FormElement label={`${intl.formatMessage({id: 'email'})}:`} className="__required">
 								<Input
