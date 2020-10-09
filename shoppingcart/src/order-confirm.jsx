@@ -8,6 +8,7 @@ import {AnimatedRoute} from 'react-router-transition'
 import Loadable from 'react-loadable'
 import Loading from './components/msite/refreshing.jsx'
 import Loading1 from './components/msite/loading.jsx'
+import TermsConditions from './pages/terms-condition.jsx'
 
 
 const OrderConfirm = Loadable({

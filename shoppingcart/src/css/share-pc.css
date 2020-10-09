@@ -1,0 +1,256 @@
+.share_main{
+    width: 910px;
+    margin: 20px auto 20px auto;
+}
+
+.share_main_1{
+    width: 910px;
+    margin: 60px auto 0 auto;
+}
+
+.share_main::after,.share_main_1::after{
+    content:'';
+    display: block;
+    clear: both;
+}
+
+.share_main > div,.share_main_1 > div{
+    float: left;
+}
+
+.share_main > div:first-child,.share_main_1 > div:first-child{
+    width: 385px;
+}
+
+.share_main > div:last-child{
+    width: 525px;
+    height: 512px;
+    border-top: solid 1px rgba(153, 153, 153, 0.27);
+    border-right: solid 1px rgba(153, 153, 153, 0.27);
+    border-bottom: solid 1px rgba(153, 153, 153, 0.27);
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.share_image{
+    width: 384px;
+    height: 512px;
+    background: no-repeat center/100%;
+    position: relative;
+}
+
+.share_title{
+    font-size: 28px;
+    font-weight: bold;
+    color: #e5004f;
+}
+
+.share_icon{
+    display: inline-block;
+    cursor: pointer;
+}
+
+.share_icon .icon img{
+    width: 100%;
+}
+
+
+.share_icon .icon{
+    width: 52px;
+    height: 52px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.share_icon .txt{
+    font-size: 14px;
+    color: #666666;
+    margin-top: 10px;
+}
+
+.icons > .share_icon{
+    margin-left: 22px;
+}
+.icons > .share_icon:first-child{
+    margin-left:0;
+}
+.icons::after{
+    content:'';
+    clear: both;
+    display: block;
+}
+
+
+.share-ask{
+    width: 14px;
+    height: 14px;
+    color: #999;
+    border: 1px solid #999;
+    text-align: center;
+    line-height: 12px;
+    display: inline-block;
+    font-size: 12px;
+    border-radius: 50%;
+}
+
+.share_terms{
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    top: 8px;
+    bottom: 8px;
+    background-color: rgba(255,255,255,.95);
+    font-size: 12px;
+}
+
+.share-mask{
+    display: none;
+    width: 100%;
+    height: 100%;
+    background-color:rgba(0,0,0,.6);
+    z-index: 5;
+    top:0;
+    left:0;
+    position: fixed;
+    overflow: auto;
+}
+
+.share-email-body{
+    display: block;
+    width: 100%;
+    background-color: #fff;
+    width: 696px;
+    margin: 40px auto 20px auto;
+    padding: 40px 80px 60px 80px;
+    position: relative;
+}
+
+.share-email-body .__close{
+    position:absolute; 
+    right: 10px; 
+    top: 10px; 
+    font-size:26px;
+    cursor:pointer;
+}
+
+.share-email-title{
+    font-size: 24px;
+}
+
+.share-email-description{
+    margin-top: 25px;
+    color: #666666;
+}
+
+.share-to{
+    color: #222;
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+.share-email-control label{
+    color: #666;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.share-email-control input, .share-input{
+    height: 40px;
+    border-radius: 2px;
+    border: solid 1px #cacaca;
+    width: 100%;
+    padding-left: 10px;
+}
+
+.share-email-control textarea{
+    height: 102px;
+    border-radius: 2px;
+    border: solid 1px #cacaca;
+    width: 100%;
+    padding: 10px;
+}
+
+.share-email-control input.error, .share-email-control textarea.error{
+    border-color: #e7004d;
+}
+
+.share-invite-button{
+    width: 240px;
+    height: 40px;
+    border-radius: 2px;
+    border: solid 1px #cacaca;
+    text-align: center;
+    cursor: pointer;
+    line-height: 40px;
+    color: #222222;
+    margin-top: 15px;
+    text-transform: uppercase;
+}
+
+.share-invite-button.disabled{
+    background-color: #e3e3e3;
+    color: #fff;
+}
+
+.share-check::after{
+    content:'\e65a';
+    display: inline-block;
+    cursor: pointer;
+    font-family: iconfont;
+    font-style: normal;	
+    font-size: 18px;
+    cursor: pointer;	
+}
+
+.share-check.active::after{
+    content:'\e658';
+    color: #e5004f;
+}
+
+.share-email-button{
+    width: 240px;
+    height: 40px;
+    background-color: #e7004d;
+    border-radius: 2px;
+    line-height: 40px;
+    text-align: center;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 16px;
+    margin-top: 20px;
+    border: none;
+    outline: none;
+    box-shadow:none;
+    -webkit-appearance: none;
+    cursor: pointer;
+}
+
+.share-emails > li{
+    margin-top: 10px;
+    
+}
+
+.share-emails > li:first-child{
+    margin-top:0;
+}
+
+.share-copy-window{
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,.6);
+    position: fixed;
+    left:0;
+    top:0;
+    z-index: 5;
+}
+
+.share-copy-body{
+    z-index:6;
+    width: 642px;
+    height: 275px;
+    background-color: #fff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

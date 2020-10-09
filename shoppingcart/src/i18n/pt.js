@@ -108,6 +108,25 @@ export default{
 	facebook_check: 'Se você verificar isso, enviaremos a você o status de rastreamento de logística e as informações do pedido no Messenger.',
 	email: 'E-Mail',
 	sign_me_up_for: 'Inscreva-me nos emails de {siteName} (você pode cancelar a inscrição a qualquer momento).',
+<<<<<<< Updated upstream
 	already_has_account: 'Já tem uma conta?',
 	login: 'Conecte-se'
+=======
+	share_up_to:'COMPARTILHE ATÉ 50% DE DESCONTO, Ganhe $ 10',
+	share_luckly_draw:'Compartilhe sorteio com seus amigos, ganhe até 50% de desconto juntos. E você receberá $ 10 quando eles fizerem uma compra.',
+	facebook:"Facebook",
+	messenger:"Messenger",
+	copy:'Cópia',
+	terms_conditions:"Termos e Condições ",
+	invitation_link:"Link de convite",
+	share_via_email:"Compartilhar via e-mail",
+	to:"Para",
+	friend_email:'Email de amigos',
+	invite_more:"+CONVIDAR MAIS",
+	subject:"Sujeito",
+	note:'Nota',
+	the_site_has_so_many:"Este site tem muitos itens indispensáveis. Confira as novidades e ganhe até 50% de desconto no seu primeiro pedido !! De nada",
+	send_email:"Enviar email",
+	send_you_up:"Enviar até 50% DE DESCONTO para você"
+>>>>>>> Stashed changes
 }

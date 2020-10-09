@@ -108,6 +108,26 @@ export default{
 	facebook_check: 'Si vous cochez cette case, nous vous ferons parvenir le statut de suivi logistique et les informations de commande dans Messenger.',
 	email: 'E-Mail',
 	sign_me_up_for: 'Abonnez-moi aux e-mails {siteName} (vous pouvez vous désabonner à tout moment).',
+<<<<<<< Updated upstream
 	already_has_account: 'Vous avez déjà un compte?',
 	login: "S'identifier"
+=======
+
+	share_up_to:'PARTAGEZ JUSQU\'À 50% DE RABAIS, OBTENEZ 10 $',
+	share_luckly_draw:'Partagez le tirage au sort avec vos amis, obtenez jusqu\'à 50% de réduction ensemble. Et vous recevrez 10 $ lorsqu\'ils feront un achat.',
+	facebook:"Facebook",
+	messenger:"Messenger",
+	copy:'Copie',
+	terms_conditions:"termes et conditions",
+	invitation_link:"Lien d'invitation",
+	share_via_email:"Partager par e-mail",
+	to:"À",
+	friend_email:'Courriels d `amis',
+	invite_more:"+ INVITER PLUS",
+	subject:"Matière",
+	note:'Remarque',
+	the_site_has_so_many:"Ce site a tellement d'incontournables. Découvrez leurs nouveaux arrivages et obtenez jusqu'à 50% de réduction sur votre première commande !! Vous êtes les bienvenus",
+	send_email:"Envoyer un e-mail",
+	send_you_up:"Vous envoyer jusqu'à 50% de réduction"
+>>>>>>> Stashed changes
 }

@@ -73,7 +73,6 @@ export default {
 				params,
 				headers
 			}).then((res) => {
-
 				if(res.data.code == 310){
 					reRequest().then((res) => {
 						this.get(url, params, headers)

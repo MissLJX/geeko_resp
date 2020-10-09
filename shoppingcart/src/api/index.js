@@ -168,3 +168,13 @@ export const saveTempAddress = (address) => axios.post(`${VPATH}/pay/save-addres
 export const getGifts = collectionId => axios.get(`${VPATH}/product/0/20/${collectionId}/c/show`)
 export const getGiftId = () => axios.get(`/context/anon/get-gift-collection-id`)
 export const selectGift = variantId => axios.post(`${VPATH}/shopping-cart/update-gift`, {variantId})
+
+/**
+ 分享页面添加接口
+ */
+
+ export const getFaceBookUrl = () => axios.get(`${VPATH}/customer/get-register-share-key`,{shareTo:'facebook'})
+ export const getShareInputUrl = () => axios.get(`${VPATH}/customer/get-register-share-key`,{shareTo:'copy'})
+
+//  Handler.ajaxLoaddingHandler(ctx + '/' + VERSION + '','POST', paylod, function(data){
+ export const toShareEmail = (paylod) => axios.post(`${VPATH}/customer/send-share-via-emails`,paylod);

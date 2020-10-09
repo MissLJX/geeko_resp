@@ -1,0 +1,208 @@
+body{
+    font-size: 14px;
+    font-family: SlatePro, "Open Sans", Arial,"Helvetica Neue", Helvetica, sans-serif;
+    width: 100%;
+    height: 100%;
+}
+
+html{
+    width: 100%;
+    height: 100%;
+}
+
+
+.share-head{
+    background-color: #fff;
+    height: 45px;
+    text-align: center;
+    line-height: 45px;
+    /*border-bottom: 1px solid #e6e6e6;*/
+    font-size: 17px;
+    font-weight: bold;
+    position: relative;
+}
+
+.share-body{
+    background-color: #fff;
+    text-align: center;
+    padding: 10px 40px 20px 40px;
+    border-bottom: 1px solid #e6e6e6;
+}
+
+.shares {
+    /*margin-top: 10px;*/
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: #fff;
+    display: flex;
+    justify-content: space-around;
+    margin-top:33px;
+}
+
+.myimg img {
+    width: 54px;
+    height: 54px;
+}
+
+.shares>div {
+    text-align: center;
+    /* margin-left: 30px; */
+}
+
+.shares>div>div {
+    font-family: FuturaBT-Book;
+    font-size: 13px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #323232;
+    margin-top: 7px;
+    margin-left:5x;
+}
+
+.share-icon-copy{
+    width: 17px;
+    height: 17px;
+    color:#999999;
+}
+
+
+/*
+.shares > div{
+    height: 60px;
+    border-top: 1px solid #e6e6e6;
+    line-height: 60px;
+}
+
+.shares > div:first-child{
+    border-top: none;
+}
+
+.share-icon{
+    width: 36px;
+    height: 36px;
+    display: inline-block;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 36px;
+    background-color: #ffffff;
+    box-shadow: 0px 1px 1px 0px 
+        rgba(102, 102, 102, 0.5);
+}
+*/
+.share-ask{
+    width: 14px;
+    height: 14px;
+    color: #999;
+    border: 1px solid #999;
+    text-align: center;
+    line-height: 12px;
+    display: inline-block;
+    font-size: 12px;
+    border-radius: 50%;
+}
+
+.share-input{
+    /*background-color: #efefef;*/
+    height: 32px;
+    padding-left: 10px;
+    color: #666;
+    -webkit-appearance: none;
+    border:none;
+    box-shadow:none;
+    margin-top: 15px;
+    width: 80%;
+}
+
+.share-input-pc{
+    /*background-color: #efefef;*/
+    height: 40px;
+    border-radius: 2px;
+    border: solid 1px #cacaca;
+    width: 100%;
+    padding-left: 10px;
+}
+
+.share-btn{
+    background-color: #e5004f;
+    border-radius: 1px;
+    font-size: 18px;
+    color: #ffffff;
+    text-align: center;
+    line-height: 45px;
+    height: 45px;
+    border: none;
+    box-shadow: none;
+    width: 100%;
+    margin-top: 15px;
+    cursor: pointer;
+}
+
+
+.share-form-control{
+    margin-top: 15px;
+}
+
+.share-form-label{
+    color: #999999;
+}
+
+.share-form-input{
+    height: 40px;
+    border-radius: 2px;
+    border: solid 1px #cacaca;
+    outline: none;
+    box-shadow: none;
+    -webkit-appearance: none;
+    width:100%;
+    margin-top:5px;
+    padding-left: 10px;
+    color: #666666;
+}
+
+.share-form-input:focus{
+    color: #222;
+}
+
+.share-form-input.error{
+    border-color: #e7004d;
+}
+
+
+.invite-btn{
+    width: 118px;
+    height: 40px;
+    border-radius: 1px;
+    border: solid 1px #e3e3e3;
+    line-height: 40px;
+    text-align: center;
+    background: transparent !important;
+    font-size: 10px;
+}
+
+.invite-btn.disabled{
+    background-color: #e3e3e3;
+    color: #fff;
+}
+
+.share-check::after{
+    content:'\e65a';
+    display: inline-block;
+    cursor: pointer;
+    font-family: iconfont;
+    font-style: normal;	
+    font-size: 18px;
+    cursor: pointer;	
+}
+
+.share-check.active::after{
+    content:'\e658';
+    color: #e5004f;
+}
+
+.share-back{
+    line-height: 40px;
+    position: absolute;
+    left:5px;
+    font-size: 18px;
+}

@@ -57,7 +57,7 @@ module.exports = {
 			'MercadoPublicKey': JSON.stringify('TEST-aa971175-51cd-4be7-8ae4-f12006ac536d'),
 			'sitelogo': JSON.stringify('https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/site/pc/icon326_iv.png'),
 			'deviceType': JSON.stringify('pc'),
-			'siteType': JSON.stringify('new')
+			'siteType': JSON.stringify('old')
 		}),
 		new MiniCssExtractPlugin({
 			// Options similar to the same options in webpackOptions.output
