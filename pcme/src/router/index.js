@@ -25,10 +25,12 @@ import uploadAvatar from '../components/upload-avatar.vue'
 
 Vue.use(VueRouter)
 
+const __Base_Path__ = window.ctx || ''
+
 const routes = [
     {
         /*path:'/ivrose/me/m',*/
-        path:'/me/m',
+        path:__Base_Path__ + '/me/m',
         component: Index,
         meta: {title:'Me'},
         children:[
@@ -121,37 +123,37 @@ const routes = [
         ]
         },
     {
-        path:'/me/m/confirmSuccess*',
+        path:__Base_Path__+'/me/m/confirmSuccess*',
         component: confirmSuccess,
         meta: {title:'ConfirmEmail'},
     },
     {
-        path:'/me/m/order/detail/:orderId',
+        path:__Base_Path__+'/me/m/order/detail/:orderId',
         component: OrderDetail,
         meta: {title:'OrderDetail'},
     },
     {
-        path:'/me/m/order/code/:code',
+        path:__Base_Path__+'/me/m/order/code/:code',
         component: OrderCode,
         meta: {title:'OrderCode'},
     },
     {
-        path:'/me/m/order-review',
+        path:__Base_Path__+'/me/m/order-review',
         component: OrderReview,
         meta: {title:'OrderReview'},
     },
     {
-        path:'/me/m/logistics-detail',
+        path:__Base_Path__+'/me/m/logistics-detail',
         component: LogisticsDetail,
         meta: {title:'LogisticsDetail'},
     },
     {
-        path:'/me/m/packeage-logistics-detail',
+        path:__Base_Path__+'/me/m/packeage-logistics-detail',
         component: PackageLogisticsDetail,
         meta: {title:'PackageLogisticsDetail'},
     },
     {
-        path:'/me/m/load',
+        path:__Base_Path__+'/me/m/load',
         component: uploadAvatar,
         meta: {title:'LogisticsDetail'},
     }
