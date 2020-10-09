@@ -18,7 +18,7 @@ export const VERSION = 'v9'
 export const APP_VERSION = '3.2.0'
 export const VPATH = '/' + VERSION
 // export const PROJECT = '/boutiquefeel'
-export const PROJECT = ''
+export const PROJECT = window.ctx || ''
 export const ROUTER_PATH_ME = PROJECT + '/me/m'
 
 
