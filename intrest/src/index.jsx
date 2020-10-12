@@ -15,24 +15,27 @@ export default class extends React.Component {
       dsc: '',
       tips: [{
         id: this.getId(),
+        value: 'The size chart in the description is for the item\'s tile measurement. Please don\'t take it as the body\'s size. In generally, it will make you more comfortable when the size of clothes is larger than your size of bust/waist/hips. You can go up one size if you\'d prefer more loose.'
+      },{
+        id: this.getId(),
         value: 'Due to the many variations in monitors, the color in the image could look slightly different, please take physical design and color shall prevail.'
       }, {
         id: this.getId(),
         value: 'Please allow 0.4"-1" differs due to manual measurement.'
       }],
       details: [
-        {
-          id: this.getId(),
-          value: 'Material:'
-        },
+        // {
+        //   id: this.getId(),
+        //   value: 'Material:'
+        // },
         {
           id: this.getId(),
           value: 'Sleeve Type:'
         },
-        {
-          id: this.getId(),
-          value: 'Sleeve Length:'
-        },
+        // {
+        //   id: this.getId(),
+        //   value: 'Sleeve Length:'
+        // },
         {
           id: this.getId(),
           value: 'Neckline:'
