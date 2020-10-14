@@ -1,69 +1,69 @@
 export default{
 	address: 'Adresse',
 	edit: 'Modifier',
-	all: 'Tous',
+	all: 'Tout',
 	express_shipping: 'Livraison Express',
-	limited_time: 'Temps limite',
+	limited_time: 'Temps limite',	//无
 	free_shipping: 'LIVRAISON GRATUITE',
-	worldwide: 'MONDIAL',
+	worldwide: 'MONDIAL',	//无
 	product_options: 'Options du produit',
 	size: 'TAILLE',
 	color: 'COULEUR',
-	quantity: 'QUANTITÉ',
+	quantity: 'QUANTITÉ',	//无
 	confirm: 'Confirmer',
 	coupon: 'Coupon',
-	payment_method: 'Mode de paiement',
-	order_summary: 'Résumé de Commande',
-	item_total: 'Total d\'Articles',
-	subtotal: 'sous-total',
-	shipping_price: 'Frais d\'expédition',
-	shipping_insurance: 'L\'assurance d\'expédition',
-	order_total: 'total de la Commande',
+	payment_method: 'Méthode de paiement',
+	order_summary: 'Résumé de la commande',
+	item_total: 'Total d\'Articles',	//无
+	subtotal: 'Total partiel',
+	shipping_price: 'Frais d\'expédition',	//无
+	shipping_insurance: 'L\'assurance d\'expédition',	//无
+	order_total: 'Total de la commande',
 	total: 'Total',
-	check_out: 'compléter la commande',
-	required_tips: 'Indique qu\'un champ est requis',
+	check_out: 'Vérifier',
+	required_tips: 'Indique qu\'un champ est requis',	//无
 	full_name: 'Nom Complet',
 	street_address: 'Adresse de rue',
-	unit: 'Unité',
+	unit: 'Unité',	//无
 	country: 'Pays',
 	state: 'État',
 	city: 'Ville',
-	zip_code: 'Code postal',
-	phone_number: 'Numéro de téléphone',
-	submit: 'Envoyer',
+	zip_code: 'Code postal',	//无
+	phone_number: 'Numéro de téléphone',	//无
+	submit: 'Soumettre',
 	shipping_method: 'Méthode d\'Expédition',
-	shipping_tip: 'Expédition Express : Nous choisirons le messager le plus approprié pour vous.',
-	select: 'Sélectionnez',
-	add_new_card: 'Ajouter une nouvelle carte',
-	add_shipping_insurance: 'Ajouter une assurance d\'expédition',
+	shipping_tip: 'Livraison express : Nous choisirons le transporteur le plus approprié pour vous.',
+	select: 'Sélectionner',
+	add_new_card: 'Ajouter une nouvelle carte',	//无
+	add_shipping_insurance: 'Ajouter une assurance d\'expédition',	//无
 	apply: 'Appliquer',
-	to_this_order: 'à cette commande',
-	credit_card_number: 'Credit card number',
-	securit_code: 'securit code',
-	expiration_month: 'Expiration month',
-	expiration_year: 'Expiration year',
-	ard_holder_name: 'Card holder name',
-	installments: 'Installments',
-	pay_now: 'pay now',
-	please_wait: 'S\'il vous plaît, attendez\n',
-	ivalid_tems: 'Articles non valides',
-	clear_all: 'tout effacer',
+	to_this_order: 'à cette commande',	//无
+	credit_card_number: 'Credit card number',	//无
+	securit_code: 'securit code',	//无
+	expiration_month: 'Expiration month',	//无
+	expiration_year: 'Expiration year',	//无
+	ard_holder_name: 'Card holder name',	//无
+	installments: 'Versements',
+	pay_now: 'PAYER MAINTENANT',
+	please_wait: 'S\'il vous plaît, attendez\n',	//无
+	ivalid_tems: 'Articles non valides',	//无
+	clear_all: 'Effacer tout',
 	out_of_stock: 'En rupture de stock ',
-	empty_cart_description: 'Votre sac est actuellement vide',
-	go_shopping: 'Aller faire du Shopping',
+	empty_cart_description: 'Votre sac est actuellement vide',	//无
+	go_shopping: 'Aller faire du Shopping',	//无
 	// 未翻译
-	secure_check_out: 'Achat Sécurisé',
+	secure_check_out: 'Achat Sécurisé',	//无
 	shipping_address: 'ADRESSE DE LIVRAISON',
-	shopping_bag: 'Panier',
+	shopping_bag: 'Sac à provisions',
 	default_address: 'Adresse par défaut',
-	add_new_address: 'Ajouter une nouvelle adresse',
-	choose_anthor_address: 'Choisissez une autre adresse',
-	item: 'Article',
-	qty: 'Qté.',
-	unit_price: 'Prix Unitaire',
-	sum: 'Somme',
-	use_now: 'Utiliser Maintenant',
-	credits: 'Crédit',
+	add_new_address: 'Ajouter une nouvelle adresse',	//无
+	choose_anthor_address: 'Choisissez une autre adresse',	//无
+	item: 'Article',	//无
+	qty: 'QTÉ.',
+	unit_price: 'Prix Unitaire',	//无
+	sum: 'Somme',	//无
+	use_now: 'Utiliser Maintenant',	//无
+	credits: 'Crédits',
 	credit_msg: 'Appliquez {credits} crédits de ({discount}) à cette commande',
 	we_accept: 'Nous acceptons',
 	can_use_coupon: '{canUseCouponCount} Disponible',
@@ -108,10 +108,8 @@ export default{
 	facebook_check: 'Si vous cochez cette case, nous vous ferons parvenir le statut de suivi logistique et les informations de commande dans Messenger.',
 	email: 'E-Mail',
 	sign_me_up_for: 'Abonnez-moi aux e-mails {siteName} (vous pouvez vous désabonner à tout moment).',
-<<<<<<< Updated upstream
 	already_has_account: 'Vous avez déjà un compte?',
-	login: "S'identifier"
-=======
+	login: "S'identifier",
 
 	share_up_to:'PARTAGEZ JUSQU\'À 50% DE RABAIS, OBTENEZ 10 $',
 	share_luckly_draw:'Partagez le tirage au sort avec vos amis, obtenez jusqu\'à 50% de réduction ensemble. Et vous recevrez 10 $ lorsqu\'ils feront un achat.',
@@ -129,5 +127,4 @@ export default{
 	the_site_has_so_many:"Ce site a tellement d'incontournables. Découvrez leurs nouveaux arrivages et obtenez jusqu'à 50% de réduction sur votre première commande !! Vous êtes les bienvenus",
 	send_email:"Envoyer un e-mail",
 	send_you_up:"Vous envoyer jusqu'à 50% de réduction"
->>>>>>> Stashed changes
 }

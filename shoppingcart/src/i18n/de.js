@@ -108,10 +108,8 @@ export default{
 	facebook_check: 'Wenn Sie dies überprüfen, senden wir Ihnen den Status der Sendungsverfolgung und Bestellinformationen in Messenger',
 	email: 'E-Mail',
 	sign_me_up_for: 'Melden Sie mich für {siteName} E-Mails an (Sie können sich jederzeit abmelden).',
-<<<<<<< Updated upstream
 	already_has_account: 'Haben Sie bereits einen Account?',
-	login: 'Einloggen'
-=======
+	login: 'Einloggen',
 
 	share_up_to:'TEILEN SIE BIS ZU 50% RABATT, BECOMMEN SIE 10 USD',
 	share_luckly_draw:'Teilen Sie die Glücksziehung mit Ihren Freunden und bekommen Sie bis zu 50% Rabatt zusammen. Und Sie erhalten 10 US-Dollar, wenn sie etwas kaufen.',
@@ -129,5 +127,4 @@ export default{
 	the_site_has_so_many:"Diese Seite hat so viele Dinge, die Sie einkaufen müssen. Schauen Sie sich die Neuankömmlinge an und erhalten Sie bis zu 50% Rabatt für Ihre erste Bestellung! Senden Sie Email, bitte.",
 	send_email:"Send Email",
 	send_you_up:"Senden Sie bis zu 50% Rabatt"
->>>>>>> Stashed changes
 }

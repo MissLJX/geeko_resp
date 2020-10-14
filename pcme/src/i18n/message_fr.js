@@ -132,7 +132,7 @@ export default {
     logout:'Déconnexion',
     shippinginfo:'Informations d\'Expédition',
     orderinfo:'Order Information',
-    price:'Price',
+    price:'Prix',
     shipping:'Livraison Gratuite',
     share:'Partager',
     confirmorder:'Confirmer la Commande',

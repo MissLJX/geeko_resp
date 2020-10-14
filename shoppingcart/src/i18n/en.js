@@ -107,11 +107,9 @@ export default{
 	facebook_check: 'If you check this, we will send you logistics tracking status and order information in Messenger',
 	email: 'Email',
 	sign_me_up_for: 'Sign me up for {siteName} emails (you can unsubscribe at any time).',
-<<<<<<< Updated upstream
 	already_has_account: 'Already have an account',
-	login: 'Login'
+	login: 'Login',
 
-=======
 	
 	share_up_to:'SHARE UP TO 50% OFF , GET $10',
 	share_luckly_draw:'Share lucky draw with your friends who will get UP TO 50% OFF discount. And you\'ll get $10 when they make a purchase.',
@@ -129,5 +127,4 @@ export default{
 	the_site_has_so_many:"This site has so many must-haves. Check out their new arrivals and get up to 50% OFF for your first order!! You’re welcome",
 	send_email:"Send Email",
 	send_you_up:"Sending you up to 50% OFF"
->>>>>>> Stashed changes
 }

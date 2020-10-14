@@ -106,12 +106,10 @@ export default{
 	credit_card: 'tarjeta de crédito',
 	continue_shopping: 'seguir comprando',
 	facebook_check: 'Si marca esta opción, le enviaremos el estado de seguimiento de la logística y la información del pedido en Messenger.',
-<<<<<<< Updated upstream
 	email: 'Correo Electrónico',
 	sign_me_up_for: 'Regístrese para recibir correos electrónicos de {siteName} (puede darse de baja en cualquier momento).',
 	already_has_account: '¿Ya tiene una cuenta?',
-	login: 'Iniciar sesión'
-=======
+	login: 'Iniciar sesión',
 	email: 'E-Mail',
 	sign_me_up_for: 'Regístrese para recibir correos electrónicos de {siteName} (puede darse de baja en cualquier momento).',
 
@@ -131,5 +129,4 @@ export default{
 	the_site_has_so_many:"Este sitio web tiene muchos elementos indispensables. Consulta las novedades y obtén hasta un 50% de descuento en tu primer pedido !! De nada",
 	send_email:"Enviar correo electrónico",
 	send_you_up:"Enviarle hasta un 50% de descuento"
->>>>>>> Stashed changes
 }
