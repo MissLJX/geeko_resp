@@ -1,3 +1,5 @@
+// 瑞典语
+
 export default{
 	address: 'adress',
 	edit: 'Ändra',
