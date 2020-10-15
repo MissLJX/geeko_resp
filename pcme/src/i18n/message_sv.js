@@ -1,3 +1,5 @@
+// 瑞典语
+
 export default {
     addnewaddress : 'Lägg till Nyheter adress',  //google
     default:'Standard',  //google
