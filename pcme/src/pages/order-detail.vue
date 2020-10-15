@@ -1,7 +1,7 @@
 <template>
     <div class="datail">
         <div class="detailHd">
-            <p style="text-transform:capitalize"><span @click="window.location.href = '/'">{{$t('home')}}</span><router-link to="/me/m"> > {{$t('me')}}</router-link><router-link to="/me/m/order"> > {{$t('myorders')}}</router-link> > {{$t('detail')}}</p>
+            <p style="text-transform:capitalize"><span @click="window.location.href = '/'">{{$t('home')}}</span><router-link :to="getUrl('/me/m')"> > {{$t('me')}}</router-link><router-link :to="getUrl('/me/m/order')"> > {{$t('myorders')}}</router-link> > {{$t('detail')}}</p>
         </div>
         <div class="detailCon">
             <h2>{{$t('detail')}}</h2>
@@ -481,6 +481,9 @@
             getReturnLabel(){
                 window.recordReturnLabel(this.orderdetail.id);
                 return document.ctx + "/v9/order/report-return-label?orderId="+this.orderdetail.id ;
+            },
+            getUrl(suffix){
+                return utils.PROJECT + suffix;
             }
         },
         created(){
