@@ -155,7 +155,7 @@ export default {
     confirm:'Bekräfta',
     track:'Spårning',
     trackinfo:'Spårningsinformation',
-    logisticsInfo:'Spårningsinformation',  //google
+    logisticsInfo:'Logistikinformation',  //google
     logisticsCompany:'Logistikföretag',
     tracknum:'Spårningsnummer', //google
     currentStatus:'Nuvarande status',

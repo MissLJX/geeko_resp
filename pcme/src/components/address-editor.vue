@@ -13,7 +13,7 @@
                 </div>
             </div>
             <div class="input-con required">
-                <label>Street Address:</label>
+                <label>{{$t('streetaddress')}}:</label>
                 <div class="x-default-input">
                     <input name="streetAddress" v-model="shipping.streetAddress1" v-validate="'required'"
                            :class="{'st-input':true, 'st-input-danger':errors.has('streetAddress')}" type="text"
@@ -24,7 +24,7 @@
                 </div>
             </div>
             <div class="input-con">
-                <label>Unit:</label>
+                <label>{{$t('unit')}}:</label>
                 <div class="x-default-input">
                     <input name="unit" v-model="shipping.unit"
                            :class="{'st-input':true}" type="text"
@@ -32,7 +32,7 @@
                 </div>
             </div>
             <div class="input-con required">
-                <label>City:</label>
+                <label>{{$t('city')}}:</label>
                 <div class="x-default-input">
                     <input name="city" v-model="shipping.city" v-validate="'required'"
                            :class="{'st-input':true, 'st-input-danger':errors.has('city')}" type="text"
@@ -72,7 +72,7 @@
             </div>
             <div class="clearBoth">
                 <div class="input-con required w-left">
-                    <label>Zip Code:</label>
+                    <label>{{$t('zipCode')}}:</label>
                     <div class="x-default-input">
                         <input name="zipCode" v-model="shipping.zipCode" v-validate="zip_validate"
                                :class="{'st-input':true, 'st-input-danger':errors.has('zipCode')}" type="text"
