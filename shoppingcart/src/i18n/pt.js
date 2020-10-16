@@ -125,5 +125,9 @@ export default{
 	note:'Nota',
 	the_site_has_so_many:"Este site tem muitos itens indispensáveis. Confira as novidades e ganhe até 50% de desconto no seu primeiro pedido !! De nada",
 	send_email:"Enviar email",
-	send_you_up:"Enviar até 50% DE DESCONTO para você"
+	send_you_up:"Enviar até 50% DE DESCONTO para você",
+
+	you_selected:'Voc\u00ea selecionou ',
+	coupon_code:'Código de cupom',
+	use:'Usar'
 }

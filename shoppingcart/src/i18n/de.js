@@ -126,5 +126,9 @@ export default{
 	note:'Hinweis',
 	the_site_has_so_many:"Diese Seite hat so viele Dinge, die Sie einkaufen müssen. Schauen Sie sich die Neuankömmlinge an und erhalten Sie bis zu 50% Rabatt für Ihre erste Bestellung! Senden Sie Email, bitte.",
 	send_email:"Send Email",
-	send_you_up:"Senden Sie bis zu 50% Rabatt"
+	send_you_up:"Senden Sie bis zu 50% Rabatt",
+
+	you_selected:'Sie w\u00e4hlten ',
+	coupon_code:'Gutschriftcode',
+	use:'Nutzen'
 }

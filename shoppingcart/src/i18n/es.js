@@ -111,7 +111,6 @@ export default{
 	already_has_account: '¿Ya tiene una cuenta?',
 	login: 'Iniciar sesión',
 	email: 'E-Mail',
-	sign_me_up_for: 'Regístrese para recibir correos electrónicos de {siteName} (puede darse de baja en cualquier momento).',
 
 	share_up_to:'COMPARTE HASTA 50% DE DESCUENTO, Gana $ 10',
 	share_luckly_draw:'Comparta la rifa con sus amigos, obtenga hasta un 50% de descuento juntos. Y recibirás $ 10 cuando realicen una compra.',
@@ -128,5 +127,9 @@ export default{
 	note:'Nota',
 	the_site_has_so_many:"Este sitio web tiene muchos elementos indispensables. Consulta las novedades y obtén hasta un 50% de descuento en tu primer pedido !! De nada",
 	send_email:"Enviar correo electrónico",
-	send_you_up:"Enviarle hasta un 50% de descuento"
+	send_you_up:"Enviarle hasta un 50% de descuento",
+
+	you_selected:'Usted seleccion\u00f3 ',
+	coupon_code:'Código del cupón',
+	use:'Usar'
 }

@@ -67,8 +67,8 @@ export default{
 	we_accept: 'Vi accepterer',  //google
 	can_use_coupon: '{canUseCouponCount} tilgængelig',  //google
 	shipping_time: 'Leveringstid',
-	add_shipping_insurance: 'Tilføj forsendelsesforsikring ({pris})',  //google
-	only_left: 'Kun {venstre} tilbage',  //google
+	add_shipping_insurance: 'Tilføj forsendelsesforsikring ({price})',  //google
+	only_left: 'Kun {left} tilbage',  //google
 	set_default_address: 'Angiv som standard leveringsadresse',   //google
 	save: 'Gem',
 	cancel: 'Annuller',
@@ -128,5 +128,9 @@ export default{
 	note:'Bemærk',
 	the_site_has_so_many:"Dette websted har så mange must-haves. Tjek deres nyankomne og få op til 50% rabat på din første ordre !! Du er velkommen",   //google
 	send_email:"Send e-mail",
-	send_you_up:"Sender dig op til 50% FRA"   //google
+	send_you_up:"Sender dig op til 50% FRA",   //google
+
+	you_selected:'Du valgte ',
+	coupon_code:'Kuponkode',
+	use:'Brug'
 }

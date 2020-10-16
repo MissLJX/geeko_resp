@@ -68,7 +68,7 @@ export default{
 	can_use_coupon: '{canUseCouponCount} Í boði',	//google
 	shipping_time: 'Afhendingart\u00edmi',
 	add_shipping_insurance: 'Bæta við flutningatryggingu ({price})',	//google
-	only_left: 'Aðeins {vinstri} vinstri',	//google
+	only_left: 'Aðeins {left} vinstri',	//google
 	set_default_address: 'Setja sem sjálfgefið flutningsnetfang',	//google
 	save: 'Vista',
 	cancel: 'Hætta við',
@@ -128,5 +128,9 @@ export default{
 	note:'Glósa',
 	the_site_has_so_many:"Þessi síða hefur svo mörg skylduþarfir. Skoðaðu nýkomna þeirra og fáðu allt að 50% afslátt fyrir fyrstu pöntunina !! Þú ert velkominn",		//google
 	send_email:"Senda tölvupóst",
-	send_you_up:"Sendir þér allt að 50% afslátt"		//google
+	send_you_up:"Sendir þér allt að 50% afslátt",		//google
+
+	you_selected:'\u00de\u00fa valdir ',
+	coupon_code:'Kóði fyrir afsláttarmiða',
+	use:'Nota'
 }

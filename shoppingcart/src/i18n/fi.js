@@ -128,5 +128,9 @@ export default{
 	note:'Huomautus',
 	the_site_has_so_many:"Tällä sivustolla on niin paljon pakollisia kohteita. Tarkista heidän uudet saapumistaan ​​ja saat jopa 50% alennusta ensimmäisestä tilauksestasi !! Olet tervetullut",   //google
 	send_email:"Lähetä sähköpostia",
-	send_you_up:"Lähetämme sinulle jopa 50% POIS"   //google
+	send_you_up:"Lähetämme sinulle jopa 50% POIS",   //google
+
+	you_selected:'Valitsit ',
+	coupon_code:'Kuponkikoodi',
+	use:'K\u00e4yt\u00e4'
 }

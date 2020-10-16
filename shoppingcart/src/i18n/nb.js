@@ -63,12 +63,12 @@ export default{
 	sum: 'Sum',
 	use_now: 'Bruk n\u00e5',
 	credits: 'Kredittpoeng',
-	credit_msg: 'Bruk {credits} studiepoeng ({rabatt}) på denne bestillingen',		//google
+	credit_msg: 'Bruk {credits} studiepoeng ({discount}) på denne bestillingen',		//google
 	we_accept: 'Vi godtar',		//google
 	can_use_coupon: '{canUseCouponCount} tilgjengelig',		//google
 	shipping_time: 'Leveringstid',
-	add_shipping_insurance: 'Legg til fraktforsikring ({pris})',		//google
-	only_left: 'Bare {venstre} Venstre',		//google
+	add_shipping_insurance: 'Legg til fraktforsikring ({price})',		//google
+	only_left: 'Bare {left} Venstre',		//google
 	set_default_address: 'Angi som standard leveringsadresse',		//google
 	save: 'Lagre',
 	cancel: 'Avbryt',
@@ -128,5 +128,9 @@ export default{
 	note:'Merk',
 	the_site_has_so_many:"Dette nettstedet har så mange må-ha. Sjekk ut de nyankomne og få opptil 50% rabatt på din første bestilling !! Du er velkommen",		//google
 	send_email:"Send e-post",
-	send_you_up:"Sender deg opptil 50% AVSLAG"		//google
+	send_you_up:"Sender deg opptil 50% AVSLAG",		//google
+
+	you_selected:'Du valgte ',
+	coupon_code:'Kupongkode',
+	use:'Bruk'
 }

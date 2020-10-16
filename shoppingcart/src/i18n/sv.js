@@ -27,8 +27,8 @@ export default{
 	full_name: 'Fullst\u00e4ndigt namn',
 	street_address: 'Gatuadress',
 	unit: 'Enhet',
-	country: 'Country / Region',   //无
-	state: 'State / Province',   //无
+	country: 'Land / region',   //google
+	state: 'Stat / provins',   //google
 	city: 'Ort',
 	zip_code: 'Postnummer',
 	phone_number: 'Telefonnummer',
@@ -40,14 +40,14 @@ export default{
 	add_shipping_insurance: 'Lägg till Frakt Försäkring',
 	apply: 'Använd',
 	to_this_order: 'p\u00e5 den h\u00e4r best\u00e4llningen',
-	credit_card_number: 'Credit card number',   //无
+	credit_card_number: 'Kreditkortsnummer',   //google
 	securit_code: 'säkerhetskod',
-	expiration_month: 'Expiration month',   //无
-	expiration_year: 'Expiration year',   //无
+	expiration_month: 'Utgångs Månad',   //google
+	expiration_year: 'Utgångsår',   //google
 	ard_holder_name: 'innehavarnamn',
 	installments: 'avbetalningar',
 	pay_now: 'BETALA NU',
-	please_wait: 'Please Wait',   //无
+	please_wait: 'Vänta',   //google
 	ivalid_tems: 'Ogiltiga artiklar',
 	clear_all: 'Ta bort allt',
 	out_of_stock: 'Slutsålt',
@@ -55,7 +55,7 @@ export default{
 	shipping_address: 'Leveransadress',
 	shopping_bag: 'Shoppingkasse',
 	default_address: 'Standardadress',
-	add_new_address: 'Add new address',	//无		Lägg till Nyheter adress
+	add_new_address: 'Lägg till ny adress',	//google
 	choose_anthor_address: 'V\u00e4lj en annan adress',
 	item: 'artikel',
 	qty: 'ANTAL.',
@@ -63,13 +63,13 @@ export default{
 	sum: 'Belopp',
 	use_now: 'Använd nu',
 	credits: 'poäng',
-	credit_msg: 'Apply {credits} Credits ({discount}) to this order',   //无
-	we_accept: 'We Accept',   //无
-	can_use_coupon: '{canUseCouponCount} Avaliable',   //无
+	credit_msg: 'Tillämpa {credits} Credits ({discount}) på den här beställningen',   //google
+	we_accept: 'Vi accepterar',   //google
+	can_use_coupon: '{canUseCouponCount} Tillgängligt',   //google
 	shipping_time: 'Leveranstid',
-	add_shipping_insurance: 'Add shipping insurance ({price})',  //无
-	only_left: 'Only {left} Left',   //无
-	set_default_address: 'Set as default shipping address',   //无
+	add_shipping_insurance: 'Lägg till fraktförsäkring ({price})',  //google
+	only_left: 'Endast {left} kvar',   //google
+	set_default_address: 'Ange som standard leveransadress',   //google
 	save: 'Spara',
 	cancel: 'Avbryt',
 	select_coupon: 'Välj kupong',
@@ -83,21 +83,21 @@ export default{
 	sold_out: 'Slutsåld',
 	additional_payment: 'Ytterligare betalningss\u00e4kerhet med:',
 	guarantee: 'Din kortinformation \u00e4r garanterat s\u00e4ker och s\u00e4kerhetskoden kommer INTE att sparas.',
-	card_information: 'Credit And Debit Card Information',  //无
-	back_to_cart: 'Back to shopping cart',  //无
+	card_information: 'Kredit- och betalkortsinformation',  //google
+	back_to_cart: 'Tillbaka till kundvagnen',  //google
 	select_all: 'Välj allt',
-	sure_delete_item: 'Are you sure you want to delete this product?',   //无
+	sure_delete_item: 'Är du säker på att du vill ta bort den här produkten?',   //google
 	yes: 'Ja',
 	no: 'Nej',
 	please_confirm_address: 'Bekr\u00e4fta din leveransadress',
 	please_select_paymethod: 'V\u00e4lj betalningsmetod',
-	proceed_checkout: 'Proceed to Checkout',   //无
+	proceed_checkout: 'Fortsätt till utcheckningen',   //google
 	thanks_for_shopping: 'Tack f\u00f6r att du shoppar',
 	check_order: 'Kontrollera best\u00e4llning',
 	order_no: 'Beställningsnr.',
 	set_password: 'Ange lösenord',
-	placeholder_street_address: 'Street name and street number, company name.',   //无
-	placeholder_unit: 'Apartment, Suite, Building, and floor number.',   //无
+	placeholder_street_address: 'Gatunamn och gatunummer, företagsnamn.',   //google
+	placeholder_unit: 'Lägenhet, svit, byggnad och våningsnummer.',   //google
 	selected: 'Vald',
 	add: 'Lägg till',
 	you_may_also_like: 'Du kanske också gillar',
@@ -106,15 +106,15 @@ export default{
 	change_email: 'Byta mejladress',
 	credit_card: 'Kreditkort',
 	continue_shopping: 'Forts\u00e4tt shoppa',
-	facebook_check: 'If you check this, we will send you logistics tracking status and order information in Messenger',   //无
+	facebook_check: 'Om du markerar detta skickar vi logistikspårningsstatus och orderinformation i Messenger',   //google
 	email: 'Mejl',
 	sign_me_up_for: 'Registrera mig f\u00f6r {siteName} mejl (du kan n\u00e4r som helst avsluta prenumerationen).',
 	already_has_account: 'Har du redan ett konto',
 	login: 'Logga in',
 
 	
-	share_up_to:'SHARE UP TO 50% OFF , GET $10',   //无
-	share_luckly_draw:'Share lucky draw with your friends who will get UP TO 50% OFF discount. And you\'ll get $10 when they make a purchase.',   //无
+	share_up_to:'SHARE UP TO 50% OFF , GET $10',   //google
+	share_luckly_draw:'Dela lyckad dragning med dina vänner som får upp till 50% rabatt. Och du får $ 10 när de gör ett köp.',   //google
 	facebook:"Facebook",
 	messenger:"Messenger",
 	copy:'Kopiera',
@@ -122,11 +122,15 @@ export default{
 	invitation_link:"Inbjudningslänk",
 	share_via_email:"Dela via mejl",
 	to:"Till",
-	friend_email:'Friend\'s Email',   //无
+	friend_email:'Friend\'s Email',   //google
 	invite_more:"+ Bjud in fler",
 	subject:"Ämne",
 	note:'OBS',
-	the_site_has_so_many:"This site has so many must-haves. Check out their new arrivals and get up to 50% OFF for your first order!! You’re welcome",   //无
+	the_site_has_so_many:"Denna webbplats har så många måste-haves. Kolla in deras nyanlända och få upp till 50% rabatt för din första beställning !! Varsågod",   //google
 	send_email:"Skicka ett mejl",
-	send_you_up:"Sending you up to 50% OFF"   //无
+	send_you_up:"Skickar upp till 50% rabatt",   //google
+
+	you_selected:'Du valde ',
+	coupon_code:'Kupongkod',
+	use:'Anv\u00e4nd'
 }

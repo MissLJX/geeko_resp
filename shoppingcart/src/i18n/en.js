@@ -126,5 +126,9 @@ export default{
 	note:'Note',
 	the_site_has_so_many:"This site has so many must-haves. Check out their new arrivals and get up to 50% OFF for your first order!! You’re welcome",
 	send_email:"Send Email",
-	send_you_up:"Sending you up to 50% OFF"
+	send_you_up:"Sending you up to 50% OFF",
+
+	you_selected:'You selected ',
+	coupon_code:'Coupon Code',
+	use:'use'
 }
