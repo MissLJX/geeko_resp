@@ -7,7 +7,7 @@ import es from 'react-intl/locale-data/es'
 import pt from 'react-intl/locale-data/pt'
 import sv from 'react-intl/locale-data/sv'
 import da from 'react-intl/locale-data/da'
-import no from 'react-intl/locale-data/no'
+import nb from 'react-intl/locale-data/nb'
 import is from 'react-intl/locale-data/is'
 import fi from 'react-intl/locale-data/fi'
 
@@ -18,11 +18,11 @@ import pt_L from '../i18n/pt'
 import en_L from '../i18n/en'
 import sv_L from '../i18n/sv'
 import da_L from '../i18n/da'
-import no_L from '../i18n/no'
+import nb_L from '../i18n/nb'
 import is_L from '../i18n/is'
 import fi_L from '../i18n/fi'
 
-addLocaleData([...en, ...fr, ...de, ...pt, ...es, ...sv, ...da, ...no, ...is, ...fi])
+addLocaleData([...en, ...fr, ...de, ...pt, ...es, ...sv, ...da, ...nb, ...is, ...fi])
 
 const _messages = {}
 
@@ -36,7 +36,7 @@ _messages['pt'] = pt_L
 
 _messages['sv'] = sv_L
 _messages['da'] = da_L
-_messages['no'] = no_L
+_messages['nb'] = nb_L
 _messages['is'] = is_L
 _messages['fi'] = fi_L
 
@@ -48,7 +48,7 @@ const __supports = [
   'pt',
   'sv',
   'da',
-  'no',
+  'nb',
   'is',
   'fi'
 ]
