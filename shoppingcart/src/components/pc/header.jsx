@@ -14,15 +14,25 @@ const __Language_Map__ = {
 	'es': 'Español',
 	'de': 'Deutsch',
 	'fr': 'Français',
-	'pt': 'Português'
+	'pt': 'Português',
+	'sv': 'Svenska',
+	'da': 'Dansk',
+	'nb': 'Norsk',
+	'is': 'Íslenska',
+	'fi': 'Suomalainen'
 }
 
 const __Support_Languages__ = [
-	'en_US',
-	'es_ES',
-	'de_DE',
-	'fr_FR',
-	'pt_BR'
+	'en',
+	'es',
+	'de',
+	'fr',
+	'pt',
+	'sv',
+	'da',
+	'nb',
+	'is',
+	'fi'
 ]
 
 const getLangLabel = lang => __Language_Map__[lang.substring(0, 2)]
@@ -196,7 +206,7 @@ const Header = ({intl, lang, currency, currencies, changeLang, hideTools}) => (
 	  				<LinkImage title="home" src={getLogo()} href={`${window.ctx}/`}/>
 	  			</span>
 	  		</div>
-	  		<div className="x-cell" style={{width: 230}}>
+	  		<div className="x-cell">
 	  			<span className="__hr">|</span>
 		        <span className="x-uppercase __secure">
 		  	  		<Icon style={{fontSize: 26, marginRight: 5}}>&#xe745;</Icon>

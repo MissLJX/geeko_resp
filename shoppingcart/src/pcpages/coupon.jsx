@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import {injectIntl} from 'react-intl'
+import {FormattedMessage, injectIntl} from 'react-intl'
 import { connect } from 'react-redux'
 
 import {refreshCart} from '../store/actions.js'
@@ -179,14 +179,14 @@ const CouponWindow = class extends React.Component {
 
 				<CouponCode>
 					<div className="__input">
-						<input placeholder="Coupon code" value={this.state.code} onChange={ (evt) => { this.setState({code: evt.target.value }) }}/>
+						<input placeholder={intl.formatMessage({id: 'coupon_code'})} value={this.state.code} onChange={ (evt) => { this.setState({code: evt.target.value }) }}/>
 					</div>
 
 					{
 						this.state.using ? <div className="__use" style={{backgroundColor: '#cacaca', cursor: 'default'}}>
-            USE
+            			<FormattedMessage id="use"/>
 						</div> : <div className="__use" onClick={ this.codeUse.bind(this) }>
-            USE
+						<FormattedMessage id="use"/>
 						</div>
 					}
 

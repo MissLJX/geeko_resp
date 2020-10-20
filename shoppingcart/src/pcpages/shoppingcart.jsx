@@ -461,11 +461,8 @@ const ShoppingCart = class extends React.Component {
 			]
 		}
 
-		let locale = null
 
-		if (cart) {
-			locale = cart.locale || 'en_US'
-		}
+		let locale = cart && cart.locale && cart.locale !=='nb_NO' && cart.locale !== 'is_IS' ? cart.locale : 'en_US'
 
 
 		if (c) {

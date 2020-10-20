@@ -188,7 +188,7 @@ export default class extends React.Component {
 						</BLOCKS>
 
 						{
-							<TIP>{`You selected ${selectedVariant.color}${selectedProduct.theme?`-${selectedProduct.theme}`:''}`}</TIP>
+							<TIP><FormattedMessage id="you_selected"/> {` ${selectedVariant.color}${selectedProduct.theme?`-${selectedProduct.theme}`:''}`}</TIP>
 						}
 					</div>
 				</LINE>

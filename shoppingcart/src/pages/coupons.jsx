@@ -8,6 +8,7 @@ import { getcoupons, usecoupon, unusecoupon, usecouponcode } from '../api'
 import { injectIntl } from 'react-intl'
 import { __route_root__ } from '../utils/utils.js'
 import TypeMessage from '../components/type-message.jsx'
+import { FormattedMessage } from 'react-intl'
 
 
 const CouponCode = styled.div`
@@ -133,14 +134,14 @@ const Coupon = class extends React.Component {
 			<div style={{ paddingLeft: 10, paddingRight: 10 }}>
 				<CouponCode>
 					<div className="__input">
-						<input placeholder="Coupon code" value={this.state.code} onChange={(evt) => { this.setState({ code: evt.target.value }) }} />
+						<input placeholder={intl.formatMessage({ id: 'coupon_code' })} value={this.state.code} onChange={(evt) => { this.setState({ code: evt.target.value }) }} />
 					</div>
 
 					{
 						this.state.using ? <div className="__use" style={{ backgroundColor: '#cacaca', cursor: 'default' }}>
-							USE
+							<FormattedMessage id="use"/>
 						</div> : <div className="__use" onClick={this.codeUse.bind(this)}>
-								USE
+							<FormattedMessage id="use"/>
 						</div>
 					}
 

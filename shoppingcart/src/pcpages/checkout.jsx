@@ -353,7 +353,7 @@ const Checkout = class extends React.Component {
 
 		const { checkout } = self.props
 
-		let locale = checkout && checkout.locale ? checkout.locale : 'en_US'
+		let locale = checkout && checkout.locale && checkout.locale !=='nb_NO'&& checkout.locale !== 'is_IS' ? checkout.locale : 'en_US'
 
 		if (c && (!c.children || c.children.length < 1)) {
 			/*global paypal b:true*/

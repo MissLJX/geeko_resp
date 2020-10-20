@@ -4,18 +4,28 @@ import _ from 'lodash'
 
 import {addLocaleData, IntlProvider, FormattedMessage} from 'react-intl'
 import en from 'react-intl/locale-data/en'
-import zh from 'react-intl/locale-data/zh'
 import de from 'react-intl/locale-data/de'
 import fr from 'react-intl/locale-data/fr'
 import es from 'react-intl/locale-data/es'
 import pt from 'react-intl/locale-data/pt'
+import sv from 'react-intl/locale-data/sv'
+import da from 'react-intl/locale-data/da'
+import nb from 'react-intl/locale-data/nb'
+import is from 'react-intl/locale-data/is'
+import fi from 'react-intl/locale-data/fi'
 
-import zh_L from './i18n/zh'
 import de_L from './i18n/de'
 import fr_L from './i18n/fr'
 import es_L from './i18n/es'
 import pt_L from './i18n/pt'
 import en_L from './i18n/en'
+import sv_L from './i18n/sv'
+import da_L from './i18n/da'
+import nb_L from './i18n/nb'
+import is_L from './i18n/is'
+import fi_L from './i18n/fi'
+
+
 
 
 import axios from 'axios'
@@ -393,21 +403,25 @@ class ShippingFilter extends React.Component {
 
 
 
-
-addLocaleData([...en, ...zh, ...fr, ...de, ...pt, ...es])
+addLocaleData([...en, ...fr, ...de, ...pt, ...es, ...sv, ...da, ...nb, ...is, ...fi])
 
 const messages = {}
 
 const lang = (window.lang || 'en').substring(0, 2)
 
 messages['en'] = en_L
-messages['zh'] = zh_L
 
 messages['de'] = de_L
 messages['fr'] = fr_L
 
 messages['es'] = es_L
 messages['pt'] = pt_L
+
+messages['sv'] = sv_L
+messages['da'] = da_L
+messages['nb'] = nb_L
+messages['is'] = is_L
+messages['fi'] = fi_L
 
 const IntlFilter = () => {
     return <IntlProvider locale={lang} messages={messages[lang]}>
