@@ -22,7 +22,8 @@
                 </tr>
 
                 <tr v-for="(item,key) in objName">
-                    <td v-if="objName[key]!=='unit' && objName[key]!=='unidad' && objName[key]!=='Einheit' && objName[key]!=='unité' && objName[key]!=='unidade'">{{objName[key]}}</td>
+                    <td v-if="objName[key]!=='unit' && objName[key]!=='unidad' && objName[key]!=='Einheit' && objName[key]!=='Unité' && objName[key]!=='unidade' 
+                    && objName[key]!=='enhet' && objName[key]!=='enhed' && objName[key]!=='enhet' && objName[key]!=='eining' && objName[key]!=='yksikkö'">{{objName[key]}}</td>
                     
                     <td v-for="(item,index) in getDataArr">
                         {{item[1][key]}}
@@ -302,7 +303,8 @@
                     // console.log("this.result[index][2][0]",this.result[index][2]);
                     var i = 0;
                     for(var item in this.result[index][2][0]){
-                        if(item === 'unit' || item==='unidad' || item==='Einheit' || item==='unité' || item==='unidade'){
+                        if(item === 'unit' || item==='unidad' || item==='Einheit' || item==='Unité' || item==='unidade' || item==='enhet' 
+                        || item==='enhed' || item==='enhet' || item==='eining' || item==='yksikkö'){
                             continue;
                         }
                         this.objName[i] = item;
@@ -332,7 +334,7 @@
                 for(let i = 0; i< this.result.length;i++){
                     let obj=[];
                     for(let j in this.getLabel){
-                        if(j!=='unit' && j!=='unidad' && j!=='Einheit' && j!=='unité' && j!=='unidade'){
+                        if(j!=='unit' && j!=='unidad' && j!=='Einheit' && j!=='Unité' && j!=='unidade' && j!=='enhet' && j!=='enhed' && j!=='enhet' && j!=='eining' && j!=='yksikkö'){
                             if(this.result[i][2]){
                                 let currVal = this.result[i][2][this.picked];
                                 if(currVal[j]){
