@@ -9,8 +9,8 @@
         </div>
 
         <div class="st-cell st-v-m st-t-r">
-            <btn @click.native="useHandle" class="el-coupon-use" v-if="coupon.isAvailable">Use</btn>
-            <btn class="el-coupon-use dis" v-else>Use</btn>
+            <btn @click.native="useHandle" class="el-coupon-use" v-if="coupon.isAvailable">{{$t('label.use')}}</btn>
+            <btn class="el-coupon-use dis" v-else>{{$t('label.use')}}</btn>
         </div>
     </div>
 </template>

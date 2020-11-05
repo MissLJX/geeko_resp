@@ -56,6 +56,7 @@ export default {
         remove_credit_card:'Haluatko varmasti poistaa tämän luottokortin?',     //google
         yes: 'Kyllä',
 	    no: 'Ei',
-        cancel:'Peruuta'
+        cancel:'Peruuta',
+        use:'K\u00e4yt\u00e4'
     }
 }

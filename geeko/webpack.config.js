@@ -83,7 +83,7 @@ module.exports = {
     }),
     new ExtractTextPlugin({ filename: '[name].css' }),
     new webpack.DefinePlugin({
-      'site':JSON.stringify("bellewholesale")
+      'site':JSON.stringify("chicme")
     })
   ],
 

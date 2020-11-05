@@ -56,6 +56,7 @@ export default {
         remove_credit_card:'Er du sikker på at du vil fjerne dette kredittkortet?', //google
         yes: 'Ja',
 	    no: 'Nei',
-        cancel:'Avbryt'
+        cancel:'Avbryt',
+        use:'Bruk'
     }
 }
