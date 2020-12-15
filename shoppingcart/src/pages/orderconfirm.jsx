@@ -625,8 +625,7 @@ const OrderConfirm = class extends React.Component {
 					<Box>
 						<BoxHead title={intl.formatMessage({ id: 'you_may_also_like' })} />
 						<BoxBody>
-							<Products products={this.state.products} />
-							<div style={{ fontSize: 12, textAlign: 'center', marginTop: 5 }}><Grey>Loading...</Grey></div>
+							<Products products={this.state.products} type="often_bought_with"/>
 						</BoxBody>
 					</Box>
 

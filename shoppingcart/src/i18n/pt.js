@@ -99,7 +99,7 @@ export default{
 	placeholder_unit: 'Apartamento, Suíte, Edifício e número do andar',
 	selected: 'Selecionado',
 	add: 'adicionar',
-	you_may_also_like: 'você pode gostar',
+	you_may_also_like: 'Frequentemente comprado com',
 	recently_viewed: 'visto recentemente',
 	account: 'Conta',
 	change_email: 'Mude o e-mail',

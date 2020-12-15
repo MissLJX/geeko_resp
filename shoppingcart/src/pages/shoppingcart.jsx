@@ -34,7 +34,10 @@ import {
 	payDLocal, useMercadocard, mercadopay, usePoint, useInsurance, creditpay, normalpaypal, quickpaypal, usecreditcard, movetooverseas, getMessage, placepaypal, givingCoupon, atmPay, ticketPay, getSafeCharge, getApacPay, apacPay, useMercadoCoupon, placeorder,
 	getJwt,
 	getLookup,
-	oceanpay3d
+	oceanpay3d,
+	placeOrderAll,
+	openSafeChargeOrder,
+	setSafeChargeStatus
 } from '../api'
 import { __route_root__, storage, producturl, unitprice } from '../utils/utils.js'
 import { submit } from '../utils/common-pay.js'
@@ -1055,9 +1058,76 @@ const ShoppingCart = class extends React.Component {
 
 
 
+		}else if(this.props.payMethod === '18'){
+			placeOrderAll(this.props.payMethod).then(data => data.result).then(result => {
+				const { orderId } = result
+
+				openSafeChargeOrder(orderId).then(data => data.result).then(result => {
+					this.authenticate3d(result, orderId)
+				}).catch(data => {
+					alert(data.result)
+					this.setState({
+						checking: false
+					})
+				})
+
+			}).catch(data => {
+				alert(data.result)
+				this.setState({
+					checking: false
+				})
+			})
+			
 		} else {
 			this.payCredit({ payCpf: cpf, payInstallments: installments })
 		}
+	}
+
+
+	authenticate3d(result, orderId){
+		const response = result.openOrderResponse
+		const self = this
+
+        // Instantiate Safecharge API
+        const sfc = SafeCharge({
+            env: window.safechargeEnv || 'prod', // the environment you’re running on, prod for production
+            merchantId: response.merchantId, //as asigned by SafeCharge
+            merchantSiteId: response.merchantSiteId // your merchantsite id provided by Safecharge
+        })
+
+
+        sfc.createPayment({
+            "sessionToken": response.sessionToken, //recieved form opeOrder API
+            "merchantId": response.merchantId, //as asigned by SafeCharge
+            "merchantSiteId": response.merchantSiteId, //as asigned by SafeCharge
+            "userTokenId": response.userTokenId,
+            "clientUniqueId": response.clientUniqueId, // optional
+            "paymentOption": {
+                "userPaymentOptionId": result.userPaymentOptionId,
+            }
+        }, function (res) {
+			setSafeChargeStatus(response.sessionToken).then(data => data.result).then(result => {
+				if(res.result === "APPROVED"){
+					window.location.href = `${window.ctx || ''}/order-confirm/${response.clientUniqueId}`
+				}else if(res.errorDescription){
+					alert(res.errorDescription)
+					self.setState({
+						checking: false
+					})
+
+					if (orderId && window.__is_login__) {
+						self.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
+					}
+
+
+				}
+			}).catch(data => {
+				alert(data.result)
+				self.setState({
+					checking: false
+				})
+			})
+        })
 	}
 
 	triggerOcean() {
@@ -1673,7 +1743,11 @@ const ShoppingCart = class extends React.Component {
 									{cart.coupon ? (
 										<span><strong>{cart.coupon.couponName}</strong> {cart.coupon.name}</span>
 									) : (
-											<span>Available <Red>{cart.canUseCouponCount}</Red></span>
+											<span>
+												<FormattedMessage id="can_use_coupon" values={{
+													canUseCouponCount: <Red>{cart.canUseCouponCount}</Red>
+												}}/>
+											</span>
 										)}
 								</Link>
 							</BoxClickHead>

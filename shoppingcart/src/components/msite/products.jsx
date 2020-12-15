@@ -16,11 +16,11 @@ const PRODUCTS = styled.ul`
 	}
 `
 
-export default ({products}) => {
+export default ({products, type}) => {
   return <PRODUCTS>{
     products.map(product => (
       <li key={product.id}>
-      	<Product product={product}/>
+      	<Product product={product} type={type}/>
       </li>
     ))
   }</PRODUCTS>

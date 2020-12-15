@@ -103,6 +103,8 @@ const SizeColorRow = styled.div`
 const SizeColor = styled.div`
 	border-top: 1px solid #e5e5e5;
 	padding-top: 10px;
+	max-height: 300px;
+	overflow: auto;
 	& > div{
 		margin-top: 20px;
 	}

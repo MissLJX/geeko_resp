@@ -99,7 +99,7 @@ export default{
 	placeholder_unit: 'Appartement,Immeuble,Unité,Bâtiment,Étage,etc',
 	selected: 'Sélectionné',
 	add: 'ajouter',
-	you_may_also_like: 'Tu pourrais aussi aimer',
+	you_may_also_like: 'Souvent acheter avec',
 	recently_viewed: 'vu récemment',
 	account: 'Compte',
 	change_email: 'Changer l\'e-mail',

@@ -27,6 +27,7 @@ const StyledBoxHead = styled.div`
 	& .__title{
 		font-size: 15px;
 		color: #222;
+		font-weight: bold;
 	}
 `
 

@@ -717,8 +717,7 @@ const OrderConfirm = class extends React.Component {
 							<Carousel options={{ margin: 10, displays: 5, count: this.state.products.length, parentWidth: 1150 }}>
 								{
 									this.state.products.map(product => <div key={product.id}>
-										<Product product={product} />
-
+										<Product type="often_bought_with" product={product} />
 									</div>)
 								}
 							</Carousel>

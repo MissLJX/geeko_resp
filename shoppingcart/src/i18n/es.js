@@ -99,7 +99,7 @@ export default{
 	placeholder_unit: 'Apartamento, Suite, Unidad,Edificio, Piso, etc',
 	selected: 'Seleccionado',
 	add: 'añadir',
-	you_may_also_like: 'También te puede interesar',
+	you_may_also_like: 'Comprado a menudo con',
 	recently_viewed: 'visto recientemente',
 	account: 'Cuenta',
 	change_email: 'Cambiar e-mail',

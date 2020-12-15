@@ -18,7 +18,9 @@ import {
 	checkout_computop,
 	getJwt,
 	getLookup,
-	oceanpay3d
+	oceanpay3d,
+	openSafeChargeOrder,
+	setSafeChargeStatus
 } from '../api'
 
 import {
@@ -777,11 +779,62 @@ const Checkout = class extends React.Component {
 			}
 
 
+		}else if(checkout.payMethod === '18'){
+			
+			openSafeChargeOrder(checkout.orderId).then(data => data.result).then(result => {
+				this.authenticate3d(result)
+			}).catch(data => {
+				alert(data.result)
+				this.setState({
+					checking: false
+				})
+			})
+			
 		}else{
 			this.payCredit(params)
 		}
 
 		
+	}
+
+	authenticate3d(result){
+		const response = result.openOrderResponse
+		const self = this
+
+        // Instantiate Safecharge API
+        const sfc = SafeCharge({
+            env: window.safechargeEnv || 'prod', // the environment you’re running on, prod for production
+            merchantId: response.merchantId, //as asigned by SafeCharge
+            merchantSiteId: response.merchantSiteId // your merchantsite id provided by Safecharge
+        })
+
+
+        sfc.createPayment({
+            "sessionToken": response.sessionToken, //recieved form opeOrder API
+            "merchantId": response.merchantId, //as asigned by SafeCharge
+            "merchantSiteId": response.merchantSiteId, //as asigned by SafeCharge
+            "userTokenId": response.userTokenId,
+            "clientUniqueId": response.clientUniqueId, // optional
+            "paymentOption": {
+                "userPaymentOptionId": result.userPaymentOptionId,
+            }
+        }, function (res) {
+			setSafeChargeStatus(response.sessionToken).then(data => data.result).then(result => {
+				if(res.result === "APPROVED"){
+					window.location.href = `${window.ctx || ''}/order-confirm/${response.clientUniqueId}`
+				}else if(res.errorDescription){
+					alert(res.errorDescription)
+					self.setState({
+						checking: false
+					})
+				}
+			}).catch(data => {
+				alert(data.result)
+				self.setState({
+					checking: false
+				})
+			})
+        })
 	}
 
 	triggerOcean(){

@@ -100,7 +100,7 @@ export default{
 	placeholder_unit: 'Lägenhet, svit, byggnad och våningsnummer.',   //google
 	selected: 'Vald',
 	add: 'Lägg till',
-	you_may_also_like: 'Du kanske också gillar',
+	you_may_also_like: 'Ofta köpt med',
 	recently_viewed: 'Nyligen visad',
 	account: 'konto',
 	change_email: 'Byta mejladress',

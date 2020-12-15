@@ -99,7 +99,7 @@ export default{
 	placeholder_unit: 'Wohnung,Villa,Unit,Gebäude,Stock,u.s.w.',
 	selected: 'Ausgewählt',
 	add: 'hinzufügen',
-	you_may_also_like: 'Sie können auch mögen',
+	you_may_also_like: 'Oft Kaufen Mit',
 	recently_viewed: 'zuletzt angesehen',
 	account: 'Konto',
 	change_email: 'Ändern Sie die E-Mail',

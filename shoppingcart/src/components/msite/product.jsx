@@ -36,10 +36,10 @@ const PRODUCT = styled.figure`
 	}
 `
 
-const Product = ({product}) => {
+const Product = ({product, type}) => {
 	const lower = getlowerprice(product), higher = gethigherprice(product)
 	return <div>
-  	<a href={producturl(product)} style={{textDecoration: 'none', color: '#222'}}>
+  	<a className="amazon-event" EVENT="PRODUCT_LIST_CLICK" relatedId={product.id} type={type} href={producturl(product)} style={{textDecoration: 'none', color: '#222'}}>
   	  <PRODUCT>
   	  	<div className="__image">
   	  		<img src={`https://dgzfssf1la12s.cloudfront.net/medium/${product.pcMainImage}`}/>

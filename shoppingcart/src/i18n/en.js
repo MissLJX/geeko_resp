@@ -98,7 +98,7 @@ export default{
 	placeholder_unit: 'Apartment, Suite, Building, and floor number.',
 	selected: 'Selected',
 	add: 'Add',
-	you_may_also_like: 'you may also like',
+	you_may_also_like: 'Often Bought With',
 	recently_viewed: 'recently viewed',
 	account: 'Account',
 	change_email: 'Change Email',

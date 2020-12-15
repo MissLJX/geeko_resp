@@ -100,7 +100,7 @@ export default{
 	placeholder_unit: 'Íbúð, svíta, bygging og hæðarnúmer.',		//google
 	selected: 'Valið',
 	add: 'Bæta við',
-	you_may_also_like: 'Þér gæti einnig líkað við',
+	you_may_also_like: 'Oft keypt með',
 	recently_viewed: 'Nýlega skoðað',
 	account: 'Reikning',
 	change_email: 'Breyta netfangi',

@@ -100,7 +100,7 @@ export default{
 	placeholder_unit: 'Leilighet, suite, bygning og etasjenummer.',		//google
 	selected: 'Valgt',
 	add: 'Legg til',
-	you_may_also_like: 'Kanskje liker du også',
+	you_may_also_like: 'Ofte kjøpt med',
 	recently_viewed: 'Nylig sett',
 	account: 'Konto',
 	change_email: 'Endre e-postadresse',

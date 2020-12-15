@@ -84,6 +84,9 @@ export const atmPay = (paymentMethodId) => axios.post(`${VPATH}/money-transfer/p
 export const ticketPay = (paymentMethodId) => axios.post(`${VPATH}/cash/pay`, {paymentMethodId})
 
 export const getSafeCharge = (payMethod) => axios.get(`${VPATH}/safe-charge/get-pay-params`, {payMethod, _: new Date().getTime()})
+export const openSafeChargeOrder = orderId => axios.get(`${VPATH}/safe-charge/open-order`, {orderId, _: new Date().getTime()})
+export const setSafeChargeStatus = sessionToken => axios.get(`${VPATH}/safe-charge/set-payment-status`, {sessionToken, _: new Date().getTime()})
+
 
 export const getMultiMethodCards = (payMethods) => {
 	if(window.__is_login__){
@@ -142,6 +145,7 @@ export const getLeaveImage = () => axios.get(`${VPATH}/coupon/anon/get-shopping-
 export const getRecentlyProducts = () => axios.get(`${VPATH}/product/anon/get-browsing-history`)
 export const clientcall = (transationId) => axios.get(`${VPATH}/pay/client-call/${transationId}/true`)
 
+export const placeOrderAll = payMethod => axios.get(`${VPATH}/pay/place-order`, {payMethod, _: new Date().getTime()})
 
 //new pay
 export const placeorder = () => axios.get(`${VPATH}/oceanpayment/place-order`, {_: new Date().getTime()})

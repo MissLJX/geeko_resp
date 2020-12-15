@@ -100,7 +100,7 @@ export default{
 	placeholder_unit: 'Asunto, Sviitti, Rakennus ja kerroksen numero.',   //google
 	selected: 'Valittu',
 	add: 'Lisää',
-	you_may_also_like: 'Saatat pitää myös',
+	you_may_also_like: 'Usein ostettu',
 	recently_viewed: 'Äskettäin katsottu',
 	account: 'Tili',
 	change_email: 'Vaihda sähköposti',

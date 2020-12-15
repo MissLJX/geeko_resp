@@ -32,10 +32,10 @@ const PRODUCT = styled.figure`
 	}
 `
 
-export default ({product}) => {
+export default ({product, type}) => {
 	const lower = getlowerprice(product), higher = gethigherprice(product)
 	return <PRODUCT>
-  	<a href={producturl(product)} style={{textDecoration: 'none', color: '#222'}}>
+  	<a className="amazon-event" EVENT="PRODUCT_LIST_CLICK" relatedId={product.id} type={type} href={producturl(product)} style={{textDecoration: 'none', color: '#222'}}>
 	    <div className="__image">
 	  		<img src={`https://dgzfssf1la12s.cloudfront.net/medium/${product.pcMainImage}`}/>
 	  	</div>
