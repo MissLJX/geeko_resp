@@ -55,5 +55,7 @@ export default {
         remove_credit_card:'Êtes-vous sûr de vouloir supprimer cette carte de crédit?',
         yes:'Oui',
         no:'NON',
+        cancel:'Annuler',
+        use:'Utiliser'
     }
 }

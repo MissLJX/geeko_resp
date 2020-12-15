@@ -1,7 +1,7 @@
 <template>
     <div class="el-coupons-body">
         <page-header>
-            <span>Coupons</span>
+            <span>{{$t('label.coupons')}}</span>
         </page-header>
         <coupon-list :coupons="coupons"/>
     </div>

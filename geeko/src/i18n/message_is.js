@@ -56,6 +56,7 @@ export default {
         remove_credit_card:'Ertu viss um að þú viljir fjarlægja þetta kreditkort?', //google
         yes: 'J\u00e1',
 	    no: 'Nei',
-        cancel:'Hætta við'
+        cancel:'Hætta við',
+        use:'Nota'
     }
 }
