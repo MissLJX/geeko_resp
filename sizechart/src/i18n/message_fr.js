@@ -30,6 +30,13 @@ export default {
         waist:"taille",
         hip:"hanche",
         length:"longueur",
-        size_chart:"Tableau des tailles"
+        size_chart:"Tableau des tailles",
+
+        model:"Modèle",
+        height:"Hauteur",
+        hips:"Hanche",
+        size_guide:"Guide des tailles",
+
+        model_stature:"Statut du modèle"
     }
 }

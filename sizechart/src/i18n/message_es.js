@@ -15,7 +15,7 @@ export default {
     },
     label: {
         itemmeasurements: 'medidas del artículo:',
-        pleasenote: 'tenga en cuenta:',
+        pleasenote: 'tenga en cuenta',
         disclaimer: 'RENUNCIA',
         inches:'Pulgadas',
         centimeters:'Centímetros',
@@ -30,6 +30,13 @@ export default {
         waist:"cintura",
         hip:"cadera",
         length:"longitud",
-        size_chart:"Carta del tamaño"
+        size_chart:"Carta del tamaño",
+
+        model:"Modelo",
+        height:"Altura",
+        hips:"Cadera",
+        size_guide:"Guía de talles",
+
+        model_stature:"Estatura de modelo"
     }
 }

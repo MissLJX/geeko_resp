@@ -59,6 +59,8 @@ export const getData = async productId => {
     let imgSrc = [];
     let result = [];
     let pMethod = [];
+    // m-size
+    // let modelStature = {};
 
 
 
@@ -80,26 +82,59 @@ export const getData = async productId => {
     const changeArr = [];
 
     let product = _.uniqBy(productVO.product.variants,'size')
-    for(let i= 0 ; i <product.length;i++ ){
-        const valArr = [];
-        valArr.push(product[i].size);
-        labelArr.push(sizeData['sizedata'][pmethod].find((n)=>n["value"]===product[i].size2)["label"]);
-        sizeArr.push(sizeData['sizedata'][pmethod].find((n)=>n["value"]===product[i].size2)["sizeMap"]);
-        if(product[i].descriptionMaps){
-            const thisArr = [];
-            for(let j=0;j<2;j++){
-                thisArr.push(product[i].descriptionMaps[j])
+
+    if(pmethod === "size"){
+        for(let i= 0 ; i <product.length;i++ ){
+            if(product[i].size2 === "S" || product[i].size2 === "M" || product[i].size2 === "L" 
+            || product[i].size2 === "XL" || product[i].size2 === "2XL" || product[i].size2 === "3XL"){
+                const valArr = [];
+                valArr.push(product[i].size);
+                labelArr.push(sizeData['sizedata'][pmethod].find((n)=>n["value"]===product[i].size2)["label"]);
+                sizeArr.push(sizeData['sizedata'][pmethod].find((n)=>n["value"]===product[i].size2)["sizeMap"]);
+                if(product[i].descriptionMaps){
+                    const thisArr = [];
+                    for(let j=0;j<2;j++){
+                        thisArr.push(product[i].descriptionMaps[j])
+                    }
+                    changeArr.push(...[thisArr])
+                }else {
+                    changeArr.push('');
+                }
+                result.push([labelArr[i],sizeArr[i],changeArr[i]]);
+            }else{
+                continue;
             }
-            changeArr.push(...[thisArr])
-        }else {
-            changeArr.push('');
         }
-        result.push([labelArr[i],sizeArr[i],changeArr[i]]);
+    }else{
+        for(let i= 0 ; i <product.length;i++ ){
+            const valArr = [];
+            valArr.push(product[i].size);
+            labelArr.push(sizeData['sizedata'][pmethod].find((n)=>n["value"]===product[i].size2)["label"]);
+            sizeArr.push(sizeData['sizedata'][pmethod].find((n)=>n["value"]===product[i].size2)["sizeMap"]);
+            if(product[i].descriptionMaps){
+                const thisArr = [];
+                for(let j=0;j<2;j++){
+                    thisArr.push(product[i].descriptionMaps[j])
+                }
+                changeArr.push(...[thisArr])
+            }else {
+                changeArr.push('');
+            }
+            result.push([labelArr[i],sizeArr[i],changeArr[i]]);
+        }
     }
+    
+    // m-size
+    // if(!!productVO.product.modelStature && productVO.product.modelStature != null){
+    //     modelStature = productVO.product.modelStature;
+    // }
+
     return {
         result,
         imgSrc,
-        pMethod
+        pMethod,
+        // m-size
+        // modelStature
     }
 
 

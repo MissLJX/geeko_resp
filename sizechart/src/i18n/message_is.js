@@ -32,6 +32,13 @@ export default {
         waist:"Mittismál",
         hip:"Mjaðmamál",
         length:"lengd",   //google
-        size_chart:"Listi yfir stærðir"
+        size_chart:"Listi yfir stærðir",
+
+        model:"Módel",
+        height:"Hæð",
+        hips:"Mjaðmamál",
+        size_guide:"Stærðatafla",
+
+        model_stature:"Stærðir fyrirsætu"
     }
 }

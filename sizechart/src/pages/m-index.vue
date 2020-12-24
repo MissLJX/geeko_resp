@@ -1,85 +1,107 @@
 <template>
     <div class="mainArea">
-        <div class="selectArea" v-show="!ifShoe">
-            <div v-bind:class="{ active: isActive }" @click="changeMethod(0)">{{$t('label.inches')}}</div>
-            <div v-bind:class="{ active: !isActive }" @click="changeMethod(1)">{{$t('label.centimeters')}}</div>
-            <select v-model="selected">
-                <option v-for="(option,label) in getSizeMethod">
-                    {{label}}
-                </option>
-            </select>
+        <div class="model-fixed">
+            <div class="swiper-top">
+                <div :class="{ active : modelActive }" v-if="modelActive" data-name="model">{{$t('label.model_stature')}}</div>
+                <div :class="{ active : !modelActive }" :data-name="modelActive ? 'size' : ''" v-if="sizeshow">{{$t('label.size_chart')}}</div>
+            </div>
         </div>
-        <div class="tableArea">
-            <table class="chartable" v-show="!ifShoe">
-                <tbody>
-                <tr>
-                    <td>{{$t('label.size')}}</td>
-                    <td v-for="item in getDataArr">{{item[0][0]}}</td>
-                </tr>
-                <tr>
-                    <td>{{$t('label.size')}} ({{selected}})</td>
-                    <td v-for="item in getDataArr">{{item[0][1][selected]}}</td>
-                </tr>
+        
 
-                <tr v-for="(item,key) in objName">
-                    <td v-if="objName[key]!=='unit' && objName[key]!=='unidad' && objName[key]!=='Einheit' && objName[key]!=='Unité' && objName[key]!=='unidade' 
-                    && objName[key]!=='enhet' && objName[key]!=='enhed' && objName[key]!=='enhet' && objName[key]!=='eining' && objName[key]!=='yksikkö'">{{objName[key]}}</td>
-                    
-                    <td v-for="(item,index) in getDataArr">
-                        {{item[1][key]}}
-                    </td>
-                    
-                </tr>
-                </tbody>
-            </table>
-            <table class="chartable" v-show="ifShoe">
-                <tbody>
-                <tr>
-                    <th colspan="2" v-for="(key,val) in getShoeLabel" v-bind:class="{currLocal:val===getLang }">
-                        <span>{{val}}</span>
-                    </th>
-                </tr>
-                <tr v-for="item in getShoeSize">
-                    <td colspan="2" v-for="(k,v) in item[1]" v-bind:class="{currLocal:v===getLang }">
-                        {{k}}
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
+        <!-- <h4 style="text-align:center" v-if="!!model">Model Stature</h4> -->
 
-        <div class="tipArea">
-            <div class="tit_">{{$t('label.itemmeasurements')}}</div>
-            <div class="con_">{{$t('message.measurements')}}</div>
+        <div class="total">
+            <div class="model stature" v-show="modelActive">
+                <model-stature :model="model"></model-stature>
+            </div>
 
-            <div class="_img">
-                <div style="margin: 25px 0px; width: 100%; text-align: center;">
-                    <img v-bind:src="imgSrc[0]" style="width: 237px;">
+            <div class="line" v-if="modelActive && sizeshow"></div>
+
+            <!-- <h4 style="text-align:center">Size Chart</h4> -->
+
+            <div class="model" v-if="sizeshow">
+                <div class="selectArea" v-show="!ifShoe">
+                    <div v-bind:class="{ active: isActive }" @click="changeMethod(0)">{{$t('label.inches')}}</div>
+                    <div v-bind:class="{ active: !isActive }" @click="changeMethod(1)">{{$t('label.centimeters')}}</div>
+                    <select v-model="selected">
+                        <option v-for="(option,label) in getSizeMethod">
+                            {{label}}
+                        </option>
+                    </select>
                 </div>
-            </div>
+                <div class="tableArea">
+                    <table class="chartable" v-show="!ifShoe">
+                        <tbody>
+                        <tr>
+                            <td>{{$t('label.size')}}</td>
+                            <td v-for="item in getDataArr">{{item[0][0]}}</td>
+                        </tr>
+                        <tr>
+                            <td>{{$t('label.size')}} ({{selected}})</td>
+                            <td v-for="item in getDataArr">{{item[0][1][selected]}}</td>
+                        </tr>
 
-            <div class="tit_">{{$t('label.pleasenote')}}</div>
-            <div class="con_ conicon">
-                {{$t('message.note1')}}
-            </div>
-            <div class="con_ conicon">
-                {{$t('message.note2')}}
-            </div>
-            <div class="con_">
-                <span class="_t">{{$t('label.inelastic')}}</span>
-                {{$t('message.inelastic_message')}}
-            </div>
-             <div class="con_">
-                <span class="_t">{{$t('label.micro')}}</span>
-                {{$t('message.micro_message')}}
-            </div>
-            <div class="con_">
-                <span class="_t">{{$t('label.stretchy')}}</span>
-                {{$t('message.stretchy_message')}}
-            </div>
-            <div class="con_">
-                <span class="_t">{{$t('label.high')}}</span>
-                {{$t('message.high_message')}}
+                        <tr v-for="(item,key) in objName">
+                            <td v-if="objName[key]!=='unit' && objName[key]!=='unidad' && objName[key]!=='Einheit' && objName[key]!=='Unité' && objName[key]!=='unidade' 
+                            && objName[key]!=='enhet' && objName[key]!=='enhed' && objName[key]!=='enhet' && objName[key]!=='eining' && objName[key]!=='yksikkö'">{{objName[key]}}</td>
+                            
+                            <td v-for="(item,index) in getDataArr">
+                                {{item[1][key]}}
+                            </td>
+                            
+                        </tr>
+                        </tbody>
+                    </table>
+                    <table class="chartable" v-show="ifShoe">
+                        <tbody>
+                        <tr>
+                            <th colspan="2" v-for="(key,val) in getShoeLabel" v-bind:class="{currLocal:val===getLang }">
+                                <span>{{val}}</span>
+                            </th>
+                        </tr>
+                        <tr v-for="item in getShoeSize">
+                            <td colspan="2" v-for="(k,v) in item[1]" v-bind:class="{currLocal:v===getLang }">
+                                {{k}}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="tipArea">
+                    <div class="tit_">{{$t('label.itemmeasurements')}}</div>
+                    <div class="con_">{{$t('message.measurements')}}</div>
+
+                    <div class="_img">
+                        <div style="margin: 25px 0px; width: 100%; text-align: center;">
+                            <img v-bind:src="imgSrc[0]" style="width: 237px;">
+                        </div>
+                    </div>
+
+                    <div class="tit_">{{$t('label.pleasenote')}}</div>
+                    <div class="con_ conicon">
+                        {{$t('message.note1')}}
+                    </div>
+                    <div class="con_ conicon">
+                        {{$t('message.note2')}}
+                    </div>
+                    <div class="con_">
+                        <span class="_t">{{$t('label.inelastic')}}</span>
+                        {{$t('message.inelastic_message')}}
+                    </div>
+                    <div class="con_">
+                        <span class="_t">{{$t('label.micro')}}</span>
+                        {{$t('message.micro_message')}}
+                    </div>
+                    <div class="con_">
+                        <span class="_t">{{$t('label.stretchy')}}</span>
+                        {{$t('message.stretchy_message')}}
+                    </div>
+                    <div class="con_">
+                        <span class="_t">{{$t('label.high')}}</span>
+                        {{$t('message.high_message')}}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -88,7 +110,53 @@
 <style scoped lang="scss">
     .mainArea{
         width: 100%;
-        padding-top: 15px;
+
+        .line{
+            height: 8px;
+            background-color: #f7f7f7;
+            margin: 20px 0px;
+        }
+
+        .model{
+            padding: 8px;
+        }
+
+        .swiper-top{
+            display: flex;
+            justify-content: center;
+            margin-bottom: 5px;
+            padding: 0px 50px;
+            justify-content: space-around;
+            margin-top: 10px;
+            & > div{
+                font-family: SlatePro-Medium;
+	            font-size: 14px;
+                color: #222222;
+                height: 25px;
+                cursor: pointer;
+            }
+
+            & > div:last-child{
+                margin-left: 5px;
+            }
+
+            & .active{
+                border-bottom: 2px solid #000000;
+                border-radius: 1px;
+            }
+        }
+
+        .model-fixed{
+            position: fixed;
+            width: 100%;
+            left: 0px;
+            top: 0px;
+            background-color: white;
+        }
+
+        .total{
+            margin-top: 40px;
+        }
     }
     .selectArea{
         margin-bottom: 12px;
@@ -200,7 +268,7 @@
     }
 
     .tit_ {
-        font-size: 14px;
+        font-size: 16px;
         color: #222;
         line-height: 19px;
         margin-bottom: 6px;
@@ -209,7 +277,7 @@
     }
 
     .con_ {
-        font-size: 12px;
+        font-size: 14px;
         color: #666;
         line-height: 20px;
     }
@@ -233,13 +301,15 @@
 
     import WarmPrompt from '../components/warm-prompt.vue'
     import PictureShow from '../components/picture-show.vue'
+    import ModelStature from '../components/model-stature.vue'
 
 
     export default {
         name: 'mIndex',
         components: {
             WarmPrompt,
-            PictureShow
+            PictureShow,
+            "model-stature":ModelStature
         },
         data(){
             return {
@@ -254,7 +324,12 @@
                 picked:'1',
                 isActive:false,
                 pmethod:[],
-                objName:[]
+                objName:[],
+                model:{},
+                scrollActive:true,
+                modelActive:true,
+                sizename:"size",
+                sizeshow:true
             }
         },
         computed: {
@@ -381,7 +456,19 @@
                     if(dataMap){
                         this.result = dataMap['result']
                         this.pmethod = dataMap['pMethod']
-                   
+                        if(Object.keys(dataMap['modelStature']).length > 0){
+                            this.model = dataMap['modelStature']
+                            this.modelActive = true;
+                        }else{
+                            this.modelActive = false;
+                        }
+
+                        if(dataMap['result'].length > 1){
+                            this.sizeshow = true;
+                        }else{
+                            this.sizeshow = false;
+                        }
+
                         this.imgSrc = dataMap['imgSrc'];
                     }else{
                         return;
@@ -396,6 +483,13 @@
             changeMethod(method){
                 this.picked = method;
                 this.isActive = !this.isActive;
+            },
+            scorllTo:function(scroll){
+                if(scroll === "model"){
+                    this.scrollActive = true;
+                }else{
+                    this.scrollActive = false;
+                }
             }
         }
     };

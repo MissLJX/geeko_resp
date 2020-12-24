@@ -32,6 +32,13 @@ export default {
         waist:"Vyötärö",
         hip:"Lanteet",
         length:"pituus",   //google
-        size_chart:"Kokotaulukko"
+        size_chart:"Kokotaulukko",
+
+        model:"Malli",
+        height:"Korkeus",
+        hips:"Lanteet",
+        size_guide:"Koko-opas",
+
+        model_stature:"Mallin koko"
     }
 }

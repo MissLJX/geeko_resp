@@ -15,7 +15,7 @@ export default {
     },
     label: {
         itemmeasurements: 'Artikelmaße:',
-        pleasenote: 'bitte beachten Sie:',
+        pleasenote: 'bitte beachten Sie',
         disclaimer: 'HAFTUNGSAUSSCHLUSS',
         inches:'Zoll',
         centimeters:'Zentimeter',
@@ -30,6 +30,13 @@ export default {
         waist:"Taille",
         hip:"Hüfte",
         length:"Länge",
-        size_chart:"Größentabelle"
+        size_chart:"Größentabelle",
+
+        model:"Modell",
+        height:"Körpergröße",
+        hips:"Hüfte",
+        size_guide:"Größenanleitung",
+
+        model_stature:"Modell-Statur"
     }
 }

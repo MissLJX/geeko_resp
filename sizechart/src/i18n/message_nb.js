@@ -32,6 +32,13 @@ export default {
         waist:"Midje",
         hip:"Hofte",
         length:"lengde",   //google
-        size_chart:"Størrelsestabell"
+        size_chart:"Størrelsestabell",
+
+        model:"Modell",
+        height:"Høyde",
+        hips:"Hofte",
+        size_guide:"Størrelsesguide",
+
+        model_stature:"Utstillingsdukke"
     }
 }

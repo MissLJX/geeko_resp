@@ -15,7 +15,7 @@ export default {
     },
     label: {
         itemmeasurements: 'medições de itens:',
-        pleasenote: 'Observe:',
+        pleasenote: 'Observe',
         disclaimer: 'AVISO LEGAL',
         inches:'polegadas',
         centimeters:'Centímetros',
@@ -30,6 +30,13 @@ export default {
         waist:"cintura",
         hip:"quadril",
         length:"comprimento",
-        size_chart:"Tabela de tamanhos"
+        size_chart:"Tabela de tamanhos",
+
+        model:"Modelo",
+        height:"Altura",
+        hips:"Quadris",
+        size_guide:"Tabela de tamanhos",
+
+        model_stature:"Altura da modelo"
     }
 }

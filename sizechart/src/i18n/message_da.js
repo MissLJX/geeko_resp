@@ -32,6 +32,13 @@ export default {
         waist:"Talje",
         hip:"Hofter",
         length:"længde",   //google
-        size_chart:"Størrelsesskema"
+        size_chart:"Størrelsesskema",
+
+        model:"Model",
+        height:"H\u00F8jde",
+        hips:"Hofter",
+        size_guide:"St\u00F8rrelsesvejledning",
+
+        model_stature:"Modelstatur"
     }
 }

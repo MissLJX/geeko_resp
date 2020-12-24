@@ -7,7 +7,7 @@ const instance = axios.create({
     headers: {
         appVersion: '3.5.7',
         /*countryCode: 'US',*/
-        wid: '1234567u8i9956789456',
+        wid: '645bbd10-9a5a-41c8-9400-add5633a9031',
         deviceType: 'pc',
         xtoken: window.secret || ''
     }

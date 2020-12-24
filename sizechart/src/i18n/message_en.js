@@ -30,6 +30,13 @@ export default {
         waist:"waist",
         hip:"hip",
         length:"length",
-        size_chart:"Size Chart"
+        size_chart:"Size Chart",
+
+        model:"Model",
+        height:"Height",
+        hips:"Hips",
+        size_guide:"Size Guide",
+
+        model_stature:"Model Stature"
     }
 }

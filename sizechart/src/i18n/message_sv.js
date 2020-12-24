@@ -32,6 +32,13 @@ export default {
         waist:"Midja",
         hip:"H\u00f6fter",
         length:"längd",   //google
-        size_chart:"Storlekstabell"
+        size_chart:"Storlekstabell",
+
+        model:"Modell",
+        height:"Höjd",
+        hips:"Höfter",
+        size_guide:"Storleksguide",
+
+        model_stature:"Modell kroppsstorlek"
     }
 }
