@@ -31,6 +31,44 @@
                 </div>
             </div>
 
+            <div id="review-measure-area">
+                <p>Your Measurements (Optional) </p>
+                <table>
+                    <tr>
+                        <td>
+                            <span class="_title">Height:</span>
+                            <input class="_input" type="text" v-model="comment.height"/>
+                            <span class="_size">cm/ in</span>
+                        </td>
+                        <td>
+                            <span class="_title">Weight:</span>
+                            <input class="_input" type="text" v-model="comment.weight"/>
+                            <span class="_size">kg/ lbs</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="_title">Bust:</span>
+                            <input class="_input" type="text" v-model="comment.bust"/>
+                            <span class="_size">cm/ in</span>
+                        </td>
+                        <td>
+                            <span class="_title">Hips:</span>
+                            <input class="_input" type="text" v-model="comment.hips"/>
+                            <span class="_size">cm/ in</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="_title">Waist:</span>
+                            <input class="_input" type="text" v-model="comment.waist"/>
+                            <span class="_size">cm/ in</span>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+
             <div class="commet-area">
                 <span class="remnant">{{remnant1}}/1000</span>
                 <div class="t-area">
@@ -85,9 +123,9 @@
                 /*remnant1:0,*/
                 isloding:false,
                 fits: [
-                    {label: 'Too Small', value: '3'},
-                    {label: 'Good Fit', value: '2'},
-                    {label: 'Too Large', value: '1'}
+                    {label: "Small", value: '3'},
+                    {label: "True to size", value: '2'},
+                    {label: "Large", value: '1'}
                 ],
                 isconfirm:false,
                 isissatisfy:true,
@@ -187,14 +225,40 @@
                         let _files = results.map(result => result.file);
                         var formData = new FormData();
                         formData.append('content', this.comment.content);
-                        formData.append('id', this.comment.id);
-                        formData.append('productId', this.$route.query.productid);
+                        if(!!this.comment.id && this.comment.id != null){
+                            formData.append('id', this.comment.id);
+                        }else{
+                            formData.append('variantId', this.$route.query.variantId);
+                        }
+
+                        
+                        // formData.append('productId', this.$route.query.productid);
                         formData.append('score', this.comment.score);
                         formData.append('sizingRecommendation', this.comment.sizingRecommendation);
+
+                        if(!!_this.$route.query.orderid){
+                            formData.append('orderId',this.$route.query.orderid);
+                        }
 
                         _files.forEach((file,index) => {
                             formData.append("imageFiles",  new File([file], files[index].name));
                         });
+
+                        if(_this.comment.height && _this.comment.height != null){
+                            formData.append('height', this.comment.height);
+                        }
+                        if(_this.comment.weight && _this.comment.weight != null){
+                            formData.append('weight', this.comment.weight);
+                        }
+                        if(_this.comment.bust && _this.comment.bust != null){
+                            formData.append('bust', this.comment.bust);
+                        }
+                        if(_this.comment.hips && _this.comment.hips != null){
+                            formData.append('hips', this.comment.hips);
+                        }
+                        if(_this.comment.waist && _this.comment.waist != null){
+                            formData.append('waist', this.comment.waist);
+                        }
 
                         if(!!!_this.comment.productId)
                             _this.comment.productId = this.orderpro.productId
@@ -223,6 +287,9 @@
                     var src = window.navigator.userAgent.indexOf("Chrome") >= 1 || window.navigator.userAgent.indexOf("Safari") >= 1 ? window.webkitURL.createObjectURL(file) : window.URL.createObjectURL(file);
                     this.uploadedImages.push(src)
                 })
+
+                console.log("this.uploadedImages",this.uploadedImages);
+
                 if (this.uploadedImages.length > 5) {
                     this.uploadedImages.splice(5, this.uploadedImages.length - 5);
                     this.files.splice(5, this.files.length - 5)
@@ -352,6 +419,41 @@
             input[type="radio"]:checked+.radio-beauty {
                 @extend %common;
             }
+        }
+    }
+
+    #review-measure-area{
+        padding-bottom: 15px;
+        & > table{
+            width: 50%;
+            & > tr{
+                & > td{
+                    vertical-align: middle;
+                    padding: 10px;
+
+                    ._title{
+                        font-size: 14px;
+                        color: #999999;
+                    }
+
+                    ._size{
+                        font-size: 14px;
+                        color: #222222;
+                    }
+
+                    ._input{
+                        border:none;
+                        border-bottom:1px solid #dddddd;
+                        width:calc(50% - 25px);
+                        text-align: center;
+                    }
+                }
+            }
+        }
+
+        & > p{
+            font-size: 16px;
+            padding-bottom: 5px;
         }
     }
 

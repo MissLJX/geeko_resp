@@ -13,7 +13,7 @@ const instance = axios.create({
     timeout: 50000,
     headers: {
         appVersion: '3.5.7',
-        // wid: "b1beccb8-f365-edc3-e254-72990ed36bf7",
+        // wid: "6fd3b003-507f-43d7-9f06-e3244ae34dde",
         wid:getWid(),
         accessToken: window.accessToken || '',
         deviceType: 'pc',

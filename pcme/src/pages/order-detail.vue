@@ -69,7 +69,7 @@
                     </td>
                     <td>
                         <div v-if="confirmedOrder" class="review-btn" :class="{'b-btn':confirmedOrder,'black':shippedOrder || processingOrder}">
-                            <span  @click="review(item.productId)">{{$t('review')}}</span>
+                            <span  @click="review(item.productId,item.variantId)">{{$t('review')}}</span>
                         </div>
                         <div @click="addProduct(item.variantId)" v-if="item.variantId && orderdetail.status===4" class="review-btn">
                             <span>{{$t("repurchase")}}</span>
@@ -353,8 +353,8 @@
 
         },
         methods:{
-            review(id){
-                this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/order-review', query: { orderid: this.orderdetail.id,productid: id }})
+            review(id,variantId){
+                this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/order-review', query: { orderid: this.orderdetail.id , productid: id , variantId:variantId }})
             },
             closeSelect1(){
                 this.isShowTicket = false

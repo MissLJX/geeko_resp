@@ -173,10 +173,10 @@ export const getComment = (productId) => {
     return axios.get('/comment/' + productId + '/get').then(data => data.result)
 }
 export const sendComment = (comment) => {
-    return axios.post('/comment/add2', comment, {'Content-Type': http_infos.upload_image_content_type}).then(data => data.result)
+    return axios.post('/product-comment/add', comment, {'Content-Type': http_infos.upload_image_content_type}).then(data => data.result)
 }
 export const updateComment = (comment) => {
-    return axios.post('/comment/update2', comment, {'Content-Type': http_infos.upload_image_content_type}).then(data => data.result)
+    return axios.post('/product-comment/update', comment, {'Content-Type': http_infos.upload_image_content_type}).then(data => data.result)
 }
 //tickets
 export const getTickets = (skip) => {

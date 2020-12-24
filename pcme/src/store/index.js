@@ -944,7 +944,7 @@ const actions = {
         commit(types.REVIEW_SENDING, true)
         return new Promise((resolve) => {
             let send = api.sendComment
-            if(reply.get('id') !== 'null'){
+            if(!!reply.get('id') && reply.get('id') !== null){
                 send = api.updateComment
             }
             send(reply).then((comment) => {
