@@ -297,7 +297,7 @@
     import { mapGetters } from 'vuex'
     // import DataMap from '../../data/index.js'
 
-    import { getData } from '../../data/index.js'
+    import { getData } from '../../data/msite/index.js'
 
     import WarmPrompt from '../components/warm-prompt.vue'
     import PictureShow from '../components/picture-show.vue'

@@ -685,7 +685,7 @@
 
 
     // import DataMap from '../../data/index.js'
-    import { getData } from '../../data/index.js'
+    import { getData } from '../../data/pc/index.js'
 
 
 

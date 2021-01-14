@@ -1,6 +1,6 @@
-import sizeData from './size.js'
-import imgData from './image.js'
-import axios from "../src/api/apiconfigs";
+import sizeData from '../size.js'
+import imgData from '../image.js'
+import axios from "../../src/api/apiconfigs";
 import _ from 'lodash'
 
 // let imgSrc = [];

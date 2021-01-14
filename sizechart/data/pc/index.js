@@ -1,6 +1,6 @@
-import sizeData from './size.js'
-import imgData from './image.js'
-import axios from "../src/api/apiconfigs";
+import sizeData from '../size.js'
+import imgData from '../image.js'
+import axios from "../../src/api/apiconfigs";
 import _ from 'lodash'
 
 // let imgSrc = [];
@@ -59,10 +59,6 @@ export const getData = async productId => {
     let imgSrc = [];
     let result = [];
     let pMethod = [];
-    // m-size
-    let modelStature = {};
-
-
 
     const pMethods = await getTaglia(productId)
     const productVO = await getProduct(productId)
@@ -124,17 +120,10 @@ export const getData = async productId => {
         }
     }
     
-    // m-size
-    if(!!productVO.product.modelStature && productVO.product.modelStature != null){
-        modelStature = productVO.product.modelStature;
-    }
-
     return {
         result,
         imgSrc,
         pMethod,
-        // m-size
-        modelStature
     }
 
 
