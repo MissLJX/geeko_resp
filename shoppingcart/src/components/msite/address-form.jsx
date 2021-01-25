@@ -583,7 +583,7 @@ const AdressForm = class extends React.Component {
 
 						<StyledControl>
 							<label>
-								{intl.formatMessage({id: 'city'})}
+								{intl.formatMessage({id: 'city'})}*
 							</label>
 
 
@@ -593,6 +593,7 @@ const AdressForm = class extends React.Component {
 									value={this.state.city}
 									onFocus={this.handleCityFocus.bind(this)}
 									onBlur={this.handleCityFocusout.bind(this)}
+									validations={[required]}
 									onChange={this.handleInputChange}/>
 							</SelectInput>
 
@@ -791,11 +792,12 @@ const AdressForm = class extends React.Component {
 
 						<StyledControl>
 							<label>
-								{intl.formatMessage({id: 'city'})}
+								{intl.formatMessage({id: 'city'})}*
 							</label>
 							<Input
 								name='city'
 								value={this.state.city}
+								validations={[required]}
 								onChange={this.handleInputChange}/>
 						</StyledControl>
 
@@ -1000,11 +1002,12 @@ const AdressForm = class extends React.Component {
 
 						<StyledControl>
 							<label>
-								{intl.formatMessage({id: 'city'})}
+								{intl.formatMessage({id: 'city'})}*
 							</label>
 							<Input
 								name='city'
 								value={this.state.city}
+								validations={[required]}
 								onChange={this.handleInputChange}/>
 						</StyledControl>
 

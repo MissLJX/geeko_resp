@@ -449,13 +449,20 @@ const Credit = class extends React.Component {
             "clientUniqueId": response.clientUniqueId, // optional
             "paymentOption": {
                 "userPaymentOptionId": result.userPaymentOptionId,
-            }
+			},
+			"billingAddress": {
+				"country": result.country,
+				"email": result.email
+			},
+			"deviceDetails": {
+				"ipAddress": result.ip
+			}
         }, function (res) {
 			setSafeChargeStatus(response.sessionToken).then(data => data.result).then(result => {
 				if(res.result === "APPROVED"){
 					window.location.href = `${window.ctx || ''}/order-confirm/${response.clientUniqueId}`
-				}else if(res.errorDescription){
-					alert(res.errorDescription)
+				}else{
+					alert(res.errorDescription || res.reason || 'Error')
 				}
 				self.setState({
 					checking: false
