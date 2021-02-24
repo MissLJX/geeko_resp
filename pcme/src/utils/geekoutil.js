@@ -170,3 +170,17 @@ export const STATUS_COLOR = function (value) {
 
     return color
 }
+
+export const getDYD = function(birthday){
+    let birArr = birthday.split("-");
+    let newArr = birArr.map(function(item){
+        return parseInt(item);
+    });
+
+    let obj = {
+        year:newArr[0],
+        month:newArr[1],
+        day:newArr[2]
+    };
+    return obj;
+}

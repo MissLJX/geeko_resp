@@ -61,7 +61,7 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({
       'site': JSON.stringify('chicme'),
-      'messageId': JSON.stringify('1197317563662685')
+      'messageId': JSON.stringify('804997446264798')
     })
   ]
 }

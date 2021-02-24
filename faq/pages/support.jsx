@@ -40,7 +40,7 @@ const Support = class extends React.Component {
   		<li>
         <SupportButton onClick={this.onlineClickHandle.bind(this)} href="#" color="#599386" label={intl.formatMessage({id: 'onlinehelp'})}>&#xe665;</SupportButton>
       </li>
-  		<li><SupportButton href={`https://m.me/${messageId}?isouter=1`} color="#4797b3" label={intl.formatMessage({id: 'messageus'})}>&#xe664;</SupportButton></li>
+  		<li><SupportButton href={`https://m.me/${window.messageId}?isouter=1`} color="#4797b3" label={intl.formatMessage({id: 'messageus'})}>&#xe664;</SupportButton></li>
   		<li><SupportButton href={`${window.ctx||''}/support/ticket`} color="#cc5139" label={intl.formatMessage({id: 'tickets'})}>&#xe666;</SupportButton></li>
   	</ul>
 
