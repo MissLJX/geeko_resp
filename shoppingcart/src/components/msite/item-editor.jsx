@@ -17,6 +17,7 @@ const Wrapper = styled.div`
 	bottom: 0;
 	background-color: #fff;
 	z-index: 10;
+	left: 0;
 `
 
 const HD = styled.div`

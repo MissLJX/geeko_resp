@@ -35,7 +35,8 @@ module.exports = {
 				},
 				secure: true
 			}
-		}
+		},
+		host: '0.0.0.0'
 	},
 	resolve: {
 		modules: [__dirname, 'node_modules'],

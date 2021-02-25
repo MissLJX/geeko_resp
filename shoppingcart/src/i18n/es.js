@@ -131,5 +131,7 @@ export default{
 
 	you_selected:'Usted seleccion\u00f3 ',
 	coupon_code:'Código del cupón',
-	use:'Usar'
+	use:'Usar',
+	coupon_alert: 'Discount Alert',
+	secure_payment: 'Secure Payment'
 }

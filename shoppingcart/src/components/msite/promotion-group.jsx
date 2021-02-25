@@ -19,14 +19,13 @@ const Tip = styled.div`
 `
 
 const PROMOTIONHEAD = styled.div`
-	height: 45px;
 	padding-left: 10px;
+	height: 40px;
+	background-color: #fff1f1;
 	
-	border-top: 1px solid #e6e6e6;
 	& > .__hd{
 		height:100%;
 		width:100%;
-		border-bottom: 1px solid #e6e6e6;
 		padding-right: 10px;
 	}
 
@@ -39,18 +38,45 @@ const PROMOTIONHEAD = styled.div`
 	}
 `
 
+const ADD = styled.span`
+	width: 18px;
+	height: 18px;
+	border: dashed 1px #e64545;
+	color: #e64545;
+	border-radius: 50%;
+	display: inline-block;
+	cursor: pointer;
+	text-align: center;
+    line-height: 14px;
+    font-size: 16px;
+`
+
+const GROUPS = styled.div`
+	background-color: #f6f6f6;
+	& > div{
+		margin-top: 8px;
+		border-radius: 2px;
+		background-color: #fff;
+		&:first-child{
+			margin-top:0;
+		}
+	}
+`
+
 const PromotionHead = ({promotion, selected, selectHandle}) => <PROMOTIONHEAD>
 	<div className="x-table __hd __vm">
-		<div className="x-cell">
+		{/* <div className="x-cell">
 			<CheckBox onClick={ () => { selectHandle(!selected) } } className={selected ? 'selected' : ''}/>
-		</div>
+		</div> */}
 		<div className="x-cell">
-			<GiftIcon label={promotion.title}/>
+			{/* <GiftIcon label={promotion.title}/> */}
+			<span dangerouslySetInnerHTML={{__html: promotion.title}}/>
 		</div>
 		<div className="x-cell __right">
 			<a className="__href" href={getLink(promotion.deepLink)}>
-				<FormattedMessage id="add"/>
-				<Icon style={{fontSize: 16, marginLeft: 5}}>&#xe694;</Icon>
+				<ADD>+</ADD>
+				{/* <FormattedMessage id="add"/>
+				<Icon style={{fontSize: 16, marginLeft: 5}}>&#xe694;</Icon> */}
 			</a>
 		</div>
 	</div>
@@ -59,9 +85,9 @@ const PromotionHead = ({promotion, selected, selectHandle}) => <PROMOTIONHEAD>
 
 const BirdHead = ({promotion, selected, selectHandle, askClick}) => <PROMOTIONHEAD style={{height:'auto'}}>
 	<div className="x-table __hd __vm" style={{paddingTop:10, borderBottom:'none'}}>
-		<div className="x-cell" style={{width:30}}>
+		{/* <div className="x-cell" style={{width:30}}>
 			<CheckBox onClick={ () => { selectHandle(!selected) } } className={selected ? 'selected' : ''}/>
-		</div>
+		</div> */}
 		<div className="x-cell">
 			<div>{promotion.title} <Ask style={{ marginLeft: 4 }} onClick={ evt => { askClick(promotion.description) } }/></div>
 		</div>
@@ -220,20 +246,19 @@ export default class extends React.Component {
 
 		const { deliveryItems, shippingPrice } = group
 
-		const hideHead = deliveryItems && deliveryItems.length === 1 && deliveryItems[0].combinatorialPromotion && !isShippingHead
+		// const hideHead = deliveryItems && deliveryItems.length === 1 && deliveryItems[0].combinatorialPromotion && !isShippingHead
 
-		return <div>
+		return <GROUPS>
 
 
-			{!hideHead && <OverSeasHouseHead count={count} groupClick={this.groupClick} shippingMethod={shippingMethod} isShippingHead={isShippingHead} selected={this.selected()}/>}
+			{/* {!hideHead && <OverSeasHouseHead count={count} groupClick={this.groupClick} shippingMethod={shippingMethod} isShippingHead={isShippingHead} selected={this.selected()}/>} */}
 
 			
-			{
+			{/* {
 				shippingMsg && <Tip>
 					<span dangerouslySetInnerHTML={{__html: shippingMsg}}/>
-
 				</Tip>
-			}
+			} */}
 
 			{
 				deliveryItems.map((delivery, i) => <div key={i}>
@@ -247,6 +272,6 @@ export default class extends React.Component {
 				</div>)
 			}
 
-		</div>
+		</GROUPS>
 	}
 }

@@ -132,5 +132,7 @@ export default{
 
 	you_selected:'Du valgte ',
 	coupon_code:'Kuponkode',
-	use:'Brug'
+	use:'Brug',
+	coupon_alert: 'Discount Alert',
+	secure_payment: 'Secure Payment'
 }

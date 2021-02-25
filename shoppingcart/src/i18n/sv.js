@@ -132,5 +132,7 @@ export default{
 
 	you_selected:'Du valde ',
 	coupon_code:'Kupongkod',
-	use:'Anv\u00e4nd'
+	use:'Anv\u00e4nd',
+	coupon_alert: 'Discount Alert',
+	secure_payment: 'Secure Payment'
 }

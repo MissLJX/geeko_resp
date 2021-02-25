@@ -15,10 +15,10 @@ const QInput = styled.input`
   box-shadow: none;
   outline: none;
   -webkit-appearance: none;
-  width: 40px;
+  width: 30px;
   text-align: center;
-  margin-left:10px;
-  margin-right:10px;
+  margin-left:5px;
+  margin-right:5px;
   &::-webkit-outer-spin-button, &::-webkit-inner-spin-button{                
     -webkit-appearance: none !important;
     -moz-appearance:textfield;

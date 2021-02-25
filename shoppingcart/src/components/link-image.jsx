@@ -10,6 +10,6 @@ const LinkImage = styled.a`
 
 export default (props) => (
   <LinkImage style={props.style} href={props.href} title={props.title}>
-    <img src={props.src} alt={props.alt}/>
+    <img src={props.src} className={props.imageClass} alt={props.alt}/>
   </LinkImage>
 )

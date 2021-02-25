@@ -132,5 +132,7 @@ export default{
 
 	you_selected:'\u00de\u00fa valdir ',
 	coupon_code:'Kóði fyrir afsláttarmiða',
-	use:'Nota'
+	use:'Nota',
+	coupon_alert: 'Discount Alert',
+	secure_payment: 'Secure Payment'
 }

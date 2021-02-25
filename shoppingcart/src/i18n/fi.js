@@ -132,5 +132,7 @@ export default{
 
 	you_selected:'Valitsit ',
 	coupon_code:'Kuponkikoodi',
-	use:'K\u00e4yt\u00e4'
+	use:'K\u00e4yt\u00e4',
+	coupon_alert: 'Discount Alert',
+	secure_payment: 'Secure Payment'
 }

@@ -69,7 +69,7 @@ const ProductEditor = Loadable({
 
 
 const OrderSummary = styled.div`
-	padding: 5px 10px;
+	padding: 0 10px 10px 10px;
 	& > div.__summary{
 		padding-top: 5px;
 		padding-bottom: 5px;
@@ -94,6 +94,7 @@ const Checkout = styled.div`
 	position: fixed;
 	width: 100%;
 	bottom: 0;
+	left: 0;
 	background-color: #fff;
 	z-index:5;
 `
@@ -108,6 +109,7 @@ const Tip = styled.div`
 		width: 100%;
 		z-index: 1;
 		top: ${window.headerHeight || 0}px;
+		left: 0;
 	}
 	a{
 		text-decoration: underline;
@@ -178,6 +180,79 @@ const DashedLine = styled.div`
 		bottom:0;
 		left:0;
 `
+
+
+const IconMessage = styled.div`
+	padding: 13px 12px;
+	display: talbe;
+	width: 100%;
+	& > div{
+		display: table-cell;
+		vertical-align: middle;
+		&:first-child{
+			width: 27px;
+		}
+		&:last-child{
+			width: 50px;
+		}
+	}
+`
+
+
+
+const COUPONALERT = styled.div`
+	position: fixed;
+	left: 8px;
+	bottom: 148px;
+	width: 270px;
+	height: 42px;
+	background-color: rgba(255, 133, 51, 0.96);
+	border-radius: 21px;
+	padding: 2px;
+	transition: all .3s;
+	display: flex;
+	align-items: center;
+	overflow: hidden;
+	& > .__icon{
+		width: 38px;
+		height: 38px;
+		background-color: #fdf3e9;
+		border-radius: 50%;
+		text-align: center;
+		line-height: 38px;
+		transition: all .3s;
+		flex-shrink: 0;
+	}
+
+	& > .__bd{
+		overflow: hidden;
+		color: #fff;
+		padding-left:10px;
+		padding-right: 10px;
+	}
+
+	&.closed{
+		width: 42px;
+		& > .__icon{
+			transform: rotate(-45deg);
+		}
+	}
+`
+
+
+const CouponAlert = props => {
+	return <COUPONALERT {...props}>
+		<div className="__icon">
+			<span className="iconfont" style={{color:'#ff822f'}}>&#xe7b4;</span>
+		</div>
+		<div className="__bd">
+			<div style={{whiteSpace: 'nowrap', fontSize: 16}}><FormattedMessage id="coupon_alert"/></div>
+			<div style={{whiteSpace: 'nowrap', fontSize: 13}}>
+				<span dangerouslySetInnerHTML={{__html: props.couponMsg}}/>
+			</div>
+		</div>
+	</COUPONALERT>
+}
 
 
 const mapStateToProps = (state) => {
@@ -307,6 +382,7 @@ const ShoppingCart = class extends React.Component {
 		}
 		this.processCallBack = this.processCallBack.bind(this)
 		this.processErrorBack = this.processErrorBack.bind(this)
+		this.scrollTop=0
 	}
 
 	showSuccessTip(tip) {
@@ -367,11 +443,12 @@ const ShoppingCart = class extends React.Component {
 	}
 
 	scrollhandle(evt) {
-		// let [scrollTop, documentHeight, windowHeight] = [
-		//   document.documentElement.scrollTop || document.body.scrollTop,
-		//   document.body.clientHeight,
-		//   window.screen.height
-		// ]
+		
+		let [scrollTop, documentHeight, windowHeight] = [
+		  document.documentElement.scrollTop || document.body.scrollTop,
+		  document.body.clientHeight,
+		  window.screen.height
+		]
 
 		const headerHeight = window.headerHeight || 0
 
@@ -385,6 +462,26 @@ const ShoppingCart = class extends React.Component {
 				this.fixedTip.classList.remove('__fixed')
 			}
 		}
+
+		if(scrollTop > this.scrollTop){
+			if(this.couponAlert){
+				this.couponAlert.classList.add('closed')
+			}
+		}else{
+			if(this.couponAlert){
+				this.couponAlert.classList.remove('closed')
+			}
+		}
+
+
+		this.scrollTop = scrollTop
+
+
+
+
+
+		
+
 	}
 
 	mercadoref(c) {
@@ -1573,7 +1670,7 @@ const ShoppingCart = class extends React.Component {
 
 		return loading ? <Loading /> : (empty ? <Empty /> : (
 			cart && (
-				<div style={{ opacity: this.props.refreshing ? 0.9 : 1 }}>
+				<div style={{ opacity: this.props.refreshing ? 0.9 : 1, padding: 8 }}>
 					{(this.props.refreshing || this.state.refreshing) && <Refreshing />}
 
 					{
@@ -1638,6 +1735,22 @@ const ShoppingCart = class extends React.Component {
 						}
 
 						{
+							cart.messages && cart.messages.shippingMsg && <Box>
+								<IconMessage>
+									<div>
+										<span className="iconfont">&#xe765;</span>
+									</div>
+									<div>
+										<span dangerouslySetInnerHTML={{__html: cart.messages.shippingMsg}}/>
+									</div>
+									<div></div>
+								</IconMessage>
+							</Box>
+						}
+
+						
+
+						{
 							hasLocalItems && formatedData.domesticDeliveryCases.map(domestic => (
 								<Box key={domestic.countryCode}>
 									<GroupLocalItems
@@ -1685,7 +1798,7 @@ const ShoppingCart = class extends React.Component {
 									itemSelect={this.itemSelect}
 									shippingMethod={cart.shippingMethod}
 									serverTime={cart.serverTime}
-									shippingMsg={cart.messages ? cart.messages.shippingMsg : null} />
+									 />
 							</Box>
 						}
 
@@ -1758,11 +1871,11 @@ const ShoppingCart = class extends React.Component {
 								</Link>
 							</BoxClickHead>
 
-							{
+							{/* {
 								cart.messages && cart.messages.couponMsg && <Tip>
 									<span dangerouslySetInnerHTML={{ __html: cart.messages.couponMsg }} />
 								</Tip>
-							}
+							} */}
 
 							<LineBox style={{ paddingLeft: 10, paddingRight: 10 }}>
 								{
@@ -1791,7 +1904,7 @@ const ShoppingCart = class extends React.Component {
 						{
 							isprogresspage && (
 								<Box innerRef={c => { this.$paylistdom = c }}>
-									<BoxHead title={intl.formatMessage({ id: 'payment_method' })} />
+									<BoxHead single title={intl.formatMessage({ id: 'payment_method' })} />
 									<div style={{ paddingLeft: 10, paddingRight: 10 }}>
 										<PayMethodList
 											cpfClickHandle={this.cpfClickHandle.bind(this)}
@@ -1830,7 +1943,7 @@ const ShoppingCart = class extends React.Component {
 						}
 
 						<Box>
-							<BoxHead title={intl.formatMessage({ id: 'order_summary' })} />
+							<BoxHead single title={intl.formatMessage({ id: 'order_summary' })} />
 							<OrderSummary>
 
 								{
@@ -1854,10 +1967,15 @@ const ShoppingCart = class extends React.Component {
 							</OrderSummary>
 						</Box>
 
+						<Box style={{backgroundColor:'#f6f6f6', paddingTop:15, paddingBottom: 15}}>
+							<div style={{color:'#999'}}><FormattedMessage id="secure_payment"/></div>
+							<img style={{width: 140, marginTop:10}} src="https://dgzfssf1la12s.cloudfront.net/upgrade/20210225/sp.png"/>
+						</Box>
+
 						{
 							isprogresspage ? (
 								<Box>
-									<div style={{ height: (sitename === 'bellewholesale' ? 140 : 90) }}>
+									<div style={{ height: (sitename === 'bellewholesale' ? 140 : 90), backgroundColor:'#f6f6f6' }}>
 
 										{
 											cart.canCheckout ? <Checkout>
@@ -1978,6 +2096,8 @@ const ShoppingCart = class extends React.Component {
 										)
 								)
 						}
+
+					
 
 					</Boxs>
 
@@ -2100,6 +2220,12 @@ const ShoppingCart = class extends React.Component {
 							{this.state.successTip}
 						</SUCCESSTIP>
 					}
+
+					{
+						cart.messages && cart.messages.couponMsg && <CouponAlert innerRef={c => this.couponAlert = c} coupon={cart.coupon} couponMsg={cart.messages ? cart.messages.couponMsg: null}/>
+					}
+
+					
 
 				</div>)
 		))

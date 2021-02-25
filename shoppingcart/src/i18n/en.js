@@ -130,5 +130,7 @@ export default{
 
 	you_selected:'You selected ',
 	coupon_code:'Coupon Code',
-	use:'use'
+	use:'use',
+	coupon_alert: 'Discount Alert',
+	secure_payment: 'Secure Payment'
 }

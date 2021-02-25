@@ -130,5 +130,7 @@ export default{
 
 	you_selected:'Sie w\u00e4hlten ',
 	coupon_code:'Gutschriftcode',
-	use:'Nutzen'
+	use:'Nutzen',
+	coupon_alert: 'Discount Alert',
+	secure_payment: 'Secure Payment'
 }
