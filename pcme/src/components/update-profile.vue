@@ -7,21 +7,24 @@
             <div class="imgarea">
                 <!--<img :src="imgDataUrl">-->
                 <div class="el-me-headerImage" :style="{'background-image': 'url('+headerImage+'),url('+baseHeaderUrl+')' }"></div>
-                <div class="img-upload">
-                    <p @click="toggleShow">{{$t('uploadphoto')}}</p>
-                    <my-upload field="imageFile"
-                               @crop-success="cropSuccess"
-                               @crop-upload-success="cropUploadSuccess"
-                               @crop-upload-fail="cropUploadFail"
-                               v-model="show"
-                               :width="300"
-                               :height="300"
-                               url="/v9/customer/upload-icon"
-                               :headers="headers"
-                               img-format="png"
-                               langType="en"
-                    ></my-upload>
+                <div>
+                    <div class="img-upload">
+                        <p @click="toggleShow">{{$t('uploadphoto')}}</p>
+                        <my-upload field="imageFile"
+                                @crop-success="cropSuccess"
+                                @crop-upload-success="cropUploadSuccess"
+                                @crop-upload-fail="cropUploadFail"
+                                v-model="show"
+                                :width="300"
+                                :height="300"
+                                url="/v9/customer/upload-icon"
+                                :headers="headers"
+                                img-format="png"
+                                langType="en"
+                        ></my-upload>
+                    </div>
                 </div>
+                
 
             </div>
             <div class="namearea">
@@ -36,6 +39,10 @@
                     </div>
                 </div>
 
+                <div class="birthday">
+                    <select-birthday :yearSon="birthday.year" :monthSon="birthday.month" :daySon="birthday.day" @getChildDate="getChildDate"></select-birthday>
+                </div>
+
                 <div class="v-btn" @click="infoSaveHandle">{{$t('submit')}}</div>
             </div>
         </div>
@@ -48,6 +55,8 @@
     import * as utils from '../utils/geekoutil';
     import loding from './loding.vue';
     import myUpload from 'vue-image-crop-upload';
+    
+    import selectBirthday from './select-birthday.vue'
 
     export default {
         data() {
@@ -62,17 +71,29 @@
                     smail: '*_~'
                 },
                 headerImage:'',
+                birthday:{
+                    year:0,
+                    month:0,
+                    day:0
+                }
             };
         },
         components: {
             'loding':loding,
-            'my-upload': myUpload
+            'my-upload': myUpload,
+            'select-birthday':selectBirthday
         },
         computed:{
             ...mapGetters(['me']),
             baseHeaderUrl() {
                 return 'https://dgzfssf1la12s.cloudfront.net/site/pc/icon35.png';
             },
+            getConfireValue:function(){
+                if(!!this.birthday.month && !!this.birthday.day && this.birthday.month > 0 && this.birthday.day > 0){
+                    return this.birthday.year + "-" + this.pZone(this.birthday.month) + "-" + this.pZone(this.birthday.day);
+                }
+                return null;
+            }
             /*headerImage(){
                 if(this.me.id){
                     return
@@ -87,13 +108,18 @@
             formData.append('imageFile', this.imgfile);
             this.$store.dispatch('setHeaderImage', formData)
             */
+            getChildDate:function(value){
+                console.log(value);
+                this.birthday = value;
+            },
             infoSaveHandle(){
+                console.log("getConfireValue",this.getConfireValue)
                 let postData = {
                     'id': this.me.id,
                     'name.firstName': this.firstname,
                     'name.lastName': this.lastname,
                     'gender':this.me.gender,
-                    'birthday':this.me.birthday
+                    'birthday':this.getConfireValue
                 }
                 if(!this.firstname){
                     alert('First Name is required.')
@@ -154,6 +180,9 @@
                 console.log('-------- upload fail --------');
                 console.log(status);
                 console.log('field: ' + field);
+            },
+            pZone:function(value){
+                return value < 10 ? '0' + value : value;
             }
         },
         created(){
@@ -161,6 +190,15 @@
                 this.firstname = this.me.name.firstName
                 this.lastname = this.me.name.lastName
                 this.headerImage = utils.imageutil.getHeaderImg(this.me.id)
+                // this.me.birthday = "2020-04-04";
+                if(!!this.me.birthday && this.me.birthday != null){
+                    let obj = utils.getDYD(this.me.birthday);
+                    this.birthday.year = obj.year;
+                    this.birthday.month = obj.month;
+                    this.birthday.day = obj.day;
+                }else{
+                    this.birthday.year = 1;
+                }
             })
         },
     }
@@ -250,11 +288,11 @@
     .p-bd{
         margin-top: 40px;
         .imgarea{
-            float: left;
-            padding: 10px;
+            padding: 10px 10px 10px 0px;
+            display: table;
             .el-me-headerImage {
-                width: 140px;
-                height: 140px;
+                width: 100px;
+                height: 100px;
                 background: no-repeat center/cover;
                 border-radius: 50%;
                 border: 1px solid #cdcdcd;
@@ -262,17 +300,19 @@
                 margin-left: 14px;
             }
             .img-upload{
-                margin-top: 34px;
-                width: 168px;
-                height: 40px;
-                line-height: 40px;
+                width: 120px;
+	            height: 36px;
+                line-height: 36px;
                 border-radius: 2px;
-                border: solid 1px #222222;
+                border: none;
                 text-align: center;
                 position: relative;
+                background-color: #fff1f4;
+                font-size: 15px;
+                color: #e64545;
                 p{
-                    height: 40px;
-                    line-height: 40px;
+                    height: 36px;
+                    line-height: 36px;
                     cursor: pointer;
                 }
                 input{
@@ -283,23 +323,31 @@
                     cursor: pointer;
                 }
             }
+
+            & > div{
+                display: table-cell;
+                vertical-align: middle;
+            }
+
+            & > div:last-child{
+                padding-left: 20px;
+            }
         }
         .namearea{
-            float: left;
-            margin-left: 110px;
+            margin-top: 20px;
             .firstname,.lastname{
-                margin-bottom: 40px;
+                margin-bottom: 25px;
                 label{
-                    font-size: 16px;
+                    font-size: 15px;
                     color: #222;
                     display: block;
-                    margin-bottom: 16px;
+                    margin-bottom: 10px;
                 }
                 input{
                     width: 520px;
                     height: 40px;
                     padding-left: 10px;
-
+                    border: solid 1px #cccccc;
                 }
             }
             .v-btn{
@@ -311,6 +359,10 @@
                 line-height: 40px;
                 color: #fff;
                 cursor: pointer;
+            }
+
+            .birthday{
+                margin-bottom: 25px;
             }
         }
     }
