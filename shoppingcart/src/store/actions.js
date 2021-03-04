@@ -18,7 +18,7 @@ import {get,
 	getMessage,
 	getaddresses,
 	selectPayMethod,
-	checkout} from '../api'
+	checkout, addToWishList} from '../api'
  
 export const SET_LANG = 'SET_LANG'
 export const LOADING = 'LOADING'
@@ -287,10 +287,10 @@ export const selectItem = (params) => {
 	}
 }
 
-export const selectAllItems = () => {
+export const selectAllItems = (selected) => {
 	return dispatch => {
 		dispatch(refresing())
-		return selectAll().then(data => data.result).then(cart => dispatch(refreshCart(cart)))
+		return selectAll(selected).then(data => data.result).then(cart => dispatch(refreshCart(cart)))
 	}
 }
 
@@ -327,6 +327,16 @@ export const deleteItems = (itemIds) => {
 	return dispatch => {
 		dispatch(refresing())
 		return deleteitems(itemIds).then(data => data.result).then(cart => {
+			dispatch(refreshCart(cart))
+			return cart
+		})
+	}
+}
+
+export const wishItem = (productIds, variantIds) => {
+	return dispatch => {
+		dispatch(refresing())
+		return addToWishList(productIds, variantIds).then(data => data.result).then(cart => {
 			dispatch(refreshCart(cart))
 			return cart
 		})

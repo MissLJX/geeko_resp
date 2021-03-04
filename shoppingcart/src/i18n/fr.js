@@ -132,5 +132,6 @@ export default{
 	coupon_code:'Code promo',
 	use:'Utiliser',
 	coupon_alert: 'Discount Alert',
-	secure_payment: 'Secure Payment'
+	secure_payment: 'Secure Payment',
+	move_to_wish_list: 'Move To Wishlist'
 }

@@ -33,12 +33,15 @@ export default class extends React.Component {
 		return <div>
 			<LocalHouseHead count={count} shippingPrice={domestic.domesticDeliveryShippingPrice} icon={icon} title={title} groupClick={this.groupClick} selected={this.selected()}/>
 			<Items serverTime={this.props.serverTime}
+			isEditingItem={this.props.isEditingItem}
+			selectedItems={this.props.selectedItems}
 				overseasHandle={this.props.overseasHandle}
 				localitem="true"
 				disabledFunc={this.disabledFunc}
 				quantityChange={this.props.quantityChange}
 				itemEdit={this.props.itemEdit}
 				itemDelete={this.props.itemDelete}
+				itemWish={this.props.itemWish}
 				itemSelect={(variantId, selected) => { this.props.itemSelect(variantId, selected) }}
 				items={items}/>
 		</div>

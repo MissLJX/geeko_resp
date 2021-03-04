@@ -50,6 +50,7 @@ export default class extends React.Component {
         quantityChange={this.props.quantityChange}
         itemEdit={this.props.itemEdit}
         itemDelete={this.props.itemDelete}
+        itemWish={this.props.itemWish}
         itemSelect={(variantId, selected) => { this.props.itemSelect(variantId, selected) }}
         items={items}/>
     </div>

@@ -28,7 +28,7 @@ const styleLimitedTip = {
 
 const ItemWrapper = styled.div`
 
-  &.disabled{
+  &.disabled img{
     -webkit-filter: grayscale(100%);
     -moz-filter: grayscale(100%);
     -ms-filter: grayscale(100%);
@@ -163,6 +163,10 @@ const SIZECOLOR = styled.span`
   font-size: 14px;
   position: relative;
   cursor: pointer;
+  max-width: 112px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   &::after{
     display: inline-block;
     position: absolute;
@@ -171,6 +175,10 @@ const SIZECOLOR = styled.span`
     font-family: iconfont;
     font-size: 12px;
     margin-top: 1px;
+  }
+
+  &.disabled{
+    color: #cacaca;
   }
 `
 
@@ -201,6 +209,16 @@ const ITEMSWIPER = styled.div`
       transform: translatex(-65px);
     }
   }
+`
+
+const REDICON = styled.span`
+  padding: 4px 10px;
+  font-size: 14px;
+  color: #e64545;
+  display: inline-block;
+  border: 1px solid #e64545;
+  cursor: pointer;
+  border-radius: 2px;
 `
 
 
@@ -242,7 +260,7 @@ const ItemSwiper = class extends React.Component {
 const SizeColor = props => {
   const { size, color } = props
   const sizeColor = [color, size].filter(s => !!s).join(' / ')
-  return <SIZECOLOR {...props}>{sizeColor}</SIZECOLOR>
+  return <SIZECOLOR  {...props}>{sizeColor}</SIZECOLOR>
 }
 
 const Item = class extends React.Component {
@@ -259,9 +277,14 @@ const Item = class extends React.Component {
     this.props.itemDelete(item)
   }
 
+  itemWish(item) {
+    this.props.itemWish(item)
+  }
+
   render() {
     const props = this.props
-    const { intl, serverTime } = props
+    const { intl, serverTime, disabledFunc, item } = props
+    const isInvalid = disabledFunc(item)
     return (
       <React.Fragment>
 
@@ -276,8 +299,8 @@ const Item = class extends React.Component {
         }
 
         <ItemSwiper item={props.item} deleteHandle={this.itemDelete.bind(this)}>
-          <ItemWrapper className={`${props.disabledFunc(props.item) ? 'disabled' : ''}`}>
-            <div>
+          <ItemWrapper className={`${isInvalid ? 'disabled' : ''}`}>
+            <div style={{ width: props.ivalidItem ? 0 : 30 }}>
               {!props.ivalidItem && <CheckBox className={props.item.selected ? 'selected' : ''} onClick={(evt) => { props.itemSelect(props.item.variantId, !props.item.selected) }} />}
             </div>
             <div>
@@ -298,25 +321,32 @@ const Item = class extends React.Component {
                 <Ellipsis style={{ maxWidth: 198 }}><Grey>{props.item.productName}</Grey></Ellipsis>
 
 
-                <div style={{ height: '30px', paddingTop: 10 }}>
+                <div style={{ height: '30px', paddingTop: 10, position: 'relative' }}>
 
                   {
                     props.item.itemPrice.amount - props.item.realPrice.amount > 0 ? <Red style={{ fontSize: '18px', fontFamily: 'SlatePro-Medium' }}>
                       <Money money={props.item.realPrice} />
                     </Red> : <span style={{ fontSize: '18px', fontFamily: 'SlatePro-Medium' }}><Money money={props.item.realPrice} /></span>
                   }
-
-
+                  {
+                    !props.ivalidItem && <span onClick={evt => { this.itemWish(item) }} className="iconfont" style={{ position: 'absolute', right: 0, top: 14, cursor: 'pointer' }}>&#xe7b5;</span>
+                  }
                 </div>
               </div>
 
 
               {!props.item.isDomesticDeliveryEnabled && props.localitem ? <div>
                 <CanShipTip onClick={() => { props.overseasHandle(props.item.variantId) }} className="__right">Can ship from overseas?</CanShipTip>
-              </div> : <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <SizeColor onClick={(evt) => { this.itemEdit(props.item) }} size={props.item.size} color={props.item.color} />
-                  {!props.ivalidItem ? <Quantity quantity={props.item.quantity} onChange={(quantity, isRemove) => { props.quantityChange(props.item.variantId, quantity, isRemove) }} /> : <Grey>{intl.formatMessage({ id: 'out_of_stock' })}</Grey>}
-                </div>}
+              </div> : (!props.ivalidItem && <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <SizeColor onClick={(evt) => { this.itemEdit(props.item) }} size={props.item.size} color={props.item.color} />
+                {!props.ivalidItem ? <Quantity quantity={props.item.quantity} onChange={(quantity, isRemove) => { props.quantityChange(props.item.variantId, quantity, isRemove) }} /> : <Grey>{intl.formatMessage({ id: 'out_of_stock' })}</Grey>}
+              </div>)}
+
+
+
+              {
+                props.ivalidItem && <div><REDICON>Find Simialrs</REDICON></div>
+              }
 
 
             </div>
@@ -336,3 +366,51 @@ const Item = class extends React.Component {
 }
 
 export default injectIntl(Item)
+
+export const EditItem = class extends React.Component {
+  constructor(props) {
+    super(props)
+  }
+  render() {
+    const props = this.props
+    const { disabledFunc, item } = props
+    const isInvalid = disabledFunc(item)
+    return <ItemWrapper className={`${isInvalid ? 'disabled' : ''}`}>
+      <div>
+        <CheckBox className={props.selected ? 'selected' : ''} onClick={(evt) => { props.itemSelect(props.item, !props.selected) }} />
+      </div>
+      <div>
+        <ImageContainer>
+          <a style={{ display: 'block' }} href={producturl({ id: props.item.productId, name: props.item.productName, parentSku: props.item.parentSku })} >
+            <img className="__image" src={props.item.imageUrl} />
+          </a>
+        </ImageContainer>
+      </div>
+
+      <div className="x-flex __column __between">
+
+        <div>
+          <Ellipsis style={{ maxWidth: 198 }}><Grey>{props.item.productName}</Grey></Ellipsis>
+
+          <div style={{ height: '30px', paddingTop: 10, position: 'relative' }}>
+            {
+              props.item.itemPrice.amount - props.item.realPrice.amount > 0 ? <Red style={{ fontSize: '18px', fontFamily: 'SlatePro-Medium' }}>
+                <Money money={props.item.realPrice} />
+              </Red> : <span style={{ fontSize: '18px', fontFamily: 'SlatePro-Medium' }}><Money money={props.item.realPrice} /></span>
+            }
+          </div>
+        </div>
+
+
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <SizeColor className="disabled" size={props.item.size} color={props.item.color} />
+          <Quantity disabled quantity={props.item.quantity} onChange={() => {}}/>
+        </div>
+
+
+      </div>
+
+
+    </ItemWrapper>
+  }
+}

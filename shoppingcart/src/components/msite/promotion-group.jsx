@@ -94,6 +94,12 @@ const BirdHead = ({promotion, selected, selectHandle, askClick}) => <PROMOTIONHE
 	</div>
 </PROMOTIONHEAD>
 
+const NormalHead = props => {
+	return <div style={{padding: '12px 12px 0 12px', fontSize: 16}}>
+		{props.title}
+	</div>
+}
+
 const Promotion = class extends React.Component {
 	constructor (props) {
 		super(props)
@@ -158,7 +164,7 @@ const Promotion = class extends React.Component {
 					return PromotionHead
 				}
 			}
-			return null
+			return NormalHead
 		}
 
 
@@ -166,15 +172,19 @@ const Promotion = class extends React.Component {
 
 
 		return <div>
-			{ PHead && <PHead askClick={this.askClick.bind(this)} selectHandle={ this.groupClick } selected={this.selected()} promotion={delivery.combinatorialPromotion}/> }
+			{ PHead && <PHead title="Item(s)" askClick={this.askClick.bind(this)} selectHandle={ this.groupClick } selected={this.selected()} promotion={delivery.combinatorialPromotion}/> }
 			<Items serverTime={this.props.serverTime}
 				disabledFunc={this.disabledFunc}
 				quantityChange={this.props.quantityChange}
 				itemEdit={this.props.itemEdit}
 				itemDelete={this.props.itemDelete}
+				itemWish={this.props.itemWish}
 				itemSelect={(variantId, selected) => { this.props.itemSelect(variantId, selected) }}
 				combinatorialPromotionTitle = {delivery.combinatorialPromotion ? delivery.combinatorialPromotion.title : null}
-				items={delivery.shoppingCartProducts}/>
+				items={delivery.shoppingCartProducts}
+				isEditingItem={this.props.isEditingItem}
+				selectedItems={this.props.selectedItems}
+				/>
 
 
 			{
@@ -266,8 +276,11 @@ export default class extends React.Component {
 						quantityChange={this.props.quantityChange}
 						itemEdit={this.props.itemEdit}
 						itemDelete={this.props.itemDelete}
+						itemWish={this.props.itemWish}
 						itemSelect={(variantId, selected) => { this.props.itemSelect(variantId, selected) }}
 						delivery={delivery}
+						isEditingItem={this.props.isEditingItem}
+						selectedItems={this.props.selectedItems}
 						groupClick={this.props.groupClick}/>
 				</div>)
 			}

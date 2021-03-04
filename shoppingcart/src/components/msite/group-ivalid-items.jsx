@@ -8,13 +8,16 @@ const InvalidItems = class extends React.Component {
   }
 
   render () {
-    const {icon, title, items} = this.props
+    const {icon, title, items, isEditingItem} = this.props
     return <div>
-		  <IvalidItemsHead clearall={this.props.clearall}/>
+		  <IvalidItemsHead isEditingItem={isEditingItem} clearall={this.props.clearall}/>
 		  <Items
         disabledFunc={() => true}
         itemDelete={this.props.itemDelete}
+        itemSelect={(item, selected) => { this.props.itemSelect(item, selected) }}
         ivalidItem={true}
+        isEditingItem={isEditingItem}
+        selectedItems={this.props.selectedItems}
         items={items}/>
     </div>
   }

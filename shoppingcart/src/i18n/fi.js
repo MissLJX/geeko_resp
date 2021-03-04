@@ -134,5 +134,6 @@ export default{
 	coupon_code:'Kuponkikoodi',
 	use:'K\u00e4yt\u00e4',
 	coupon_alert: 'Discount Alert',
-	secure_payment: 'Secure Payment'
+	secure_payment: 'Secure Payment',
+	move_to_wish_list: 'Move To Wishlist'
 }

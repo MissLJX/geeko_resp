@@ -182,3 +182,6 @@ export const selectGift = variantId => axios.post(`${VPATH}/shopping-cart/update
 
 //  Handler.ajaxLoaddingHandler(ctx + '/' + VERSION + '','POST', paylod, function(data){
  export const toShareEmail = (paylod) => axios.post(`${VPATH}/customer/send-share-via-emails`,paylod);
+
+
+ export const addToWishList = (productIds, variantIds) => axios.get(`${VPATH}/shopping-cart/move-to-wish-list`, {productIds, variantIds})

@@ -2,12 +2,14 @@ import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import Loading from '../components/msite/loading.jsx'
+import CheckBox from '../components/checkbox.jsx'
 import Empty from '../components/msite/empty.jsx'
 import Refreshing from '../components/msite/refreshing.jsx'
 import Ask from '../components/ask.jsx'
 import Ellipsis from '../components/ellipsis.jsx'
 import FixedMessage from '../components/msite/fixed-message.jsx'
 import { Boxs, Box, BoxClickHead, BoxBody, LineBox, BoxHead } from '../components/msite/layout.jsx'
+import { ConfirmAlter } from '../components/msite/alter.jsx'
 // import GroupOverseasItems from '../components/msite/group-overseas-items.jsx'
 
 import PromotionGroup from '../components/msite/promotion-group.jsx'
@@ -24,7 +26,7 @@ import {
 	edited, editItem, selectPay, CPF, EMAIL, getCreditCards,
 	getMercadoCards, toggleCredit, setSecurityCode, setInstallments, fetchCoupons, deleteItem, deleteItems,
 	setMercadoInstallments, toggleCreditStatus, setAtmMethod, setTicketMethod, getDLocalCards, setDocument,
-	setCashout
+	setCashout, wishItem, selectAllItems
 } from '../store/actions.js'
 import Mask from '../components/mask.jsx'
 import _ from 'lodash'
@@ -37,7 +39,8 @@ import {
 	oceanpay3d,
 	placeOrderAll,
 	openSafeChargeOrder,
-	setSafeChargeStatus
+	setSafeChargeStatus,
+
 } from '../api'
 import { __route_root__, storage, producturl, unitprice } from '../utils/utils.js'
 import { submit } from '../utils/common-pay.js'
@@ -48,6 +51,8 @@ import Icon from '../components/icon.jsx'
 import SUCCESSTIP from '../components/pc/successtip.jsx'
 
 import Loadable from 'react-loadable'
+
+
 
 
 const CreditCard = Loadable({
@@ -83,20 +88,23 @@ const Checkout = styled.div`
 	&>div{
 		&.__total{
 			font-size: 18px;
-			height: 25px;
+			display: flex;
+			padding: 0 20px 12px 20px;
+			justify-content: space-between;
 		}
 		&.__btn{
 			margin-top: 2px;
 		}
 	}
 	padding: 10px;
-	box-shadow: 0 -1px 4.5px rgba(136, 136, 136, 0.5);
+	border-top: solid 1px #e6e6e6;
 	position: fixed;
 	width: 100%;
 	bottom: 0;
 	left: 0;
 	background-color: #fff;
 	z-index:5;
+	height: 118px;
 `
 
 const Tip = styled.div`
@@ -108,7 +116,7 @@ const Tip = styled.div`
 		position: fixed;
 		width: 100%;
 		z-index: 1;
-		top: ${window.headerHeight || 0}px;
+		top: 44px;
 		left: 0;
 	}
 	a{
@@ -155,7 +163,7 @@ const DISCOUNTTIP = styled.span`
 	font-size: 12px;
 	position: absolute;
 	right: 10px;
-	top: 8px;
+	top: -25px;
 	&::before{
 		content:'';
 		border-left: 1px solid #fd8585;
@@ -203,7 +211,7 @@ const IconMessage = styled.div`
 const COUPONALERT = styled.div`
 	position: fixed;
 	left: 8px;
-	bottom: 148px;
+	bottom: 138px;
 	width: 270px;
 	height: 42px;
 	background-color: rgba(255, 133, 51, 0.96);
@@ -243,16 +251,122 @@ const COUPONALERT = styled.div`
 const CouponAlert = props => {
 	return <COUPONALERT {...props}>
 		<div className="__icon">
-			<span className="iconfont" style={{color:'#ff822f'}}>&#xe7b4;</span>
+			<span className="iconfont" style={{ color: '#ff822f' }}>&#xe7b4;</span>
 		</div>
 		<div className="__bd">
-			<div style={{whiteSpace: 'nowrap', fontSize: 16}}><FormattedMessage id="coupon_alert"/></div>
-			<div style={{whiteSpace: 'nowrap', fontSize: 13}}>
-				<span dangerouslySetInnerHTML={{__html: props.couponMsg}}/>
+			<div style={{ whiteSpace: 'nowrap', fontSize: 16 }}><FormattedMessage id="coupon_alert" /></div>
+			<div style={{ whiteSpace: 'nowrap', fontSize: 13 }}>
+				<span dangerouslySetInnerHTML={{ __html: props.couponMsg }} />
 			</div>
 		</div>
 	</COUPONALERT>
 }
+
+
+const ShoppingBody = styled.div`
+	& > .__hd{
+		height: 44px;
+		width: 100%;
+		position: fixed;
+		top: 0;
+		left: 0;
+		background-color: #fff;
+		z-index: 1;
+	}
+	& > .__bd{
+		padding-top: 44px;
+	}
+
+	& > .__fd{
+		height: 60px;
+		background-color: #fff;
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		padding-left: 20px;
+		padding-right: 20px;
+		align-items: center;
+		border-top: solid 1px #e6e6e6;
+	}
+`
+
+const ShoppingHead = styled.div`
+	position: relative;
+	text-align: center;
+	line-height: 44px;
+	height: 44px;
+	.__title{
+		font-family: SlatePro-Medium;
+		font-size: 17px;
+		color: #222;
+	}
+
+	.__back, .__tools{
+		position: absolute;
+		top: 0;
+	}
+
+	.__back{
+		left: 12px;
+		font-family: iconfont;
+		cursor: pointer;
+		font-size: 18px;
+		transform: rotate(180deg);
+	}
+
+	.__tools{
+		right: 12px;
+		display: inline-block;
+
+		.__edit, .__wish{
+			font-family: iconfont;
+			cursor: pointer;
+			font-size: 18px;
+			cursor: pointer;
+		}
+
+		.__wish{
+			margin-left: 12px;
+		}
+	}
+
+`
+
+const EditingHead = styled.div`
+	position: relative;
+	text-align: center;
+	line-height: 44px;
+	height: 44px;
+	.__title{
+		font-family: SlatePro-Medium;
+		font-size: 17px;
+		color: #222;
+	}
+
+	.__done{
+		cursor: pointer;
+		font-size: 14px;
+		color: #666;
+		position: absolute;
+		right: 12px;
+	}
+`
+
+const EditButton = styled.div`
+	display: inline-block;
+	border-radius: 14px;
+	height: 28px;
+	border: solid 1px #cacaca;
+	padding-left: 15px;
+	padding-right: 15px;
+	line-height: 26px;
+	font-size: 14px;
+	color: #222;
+	cursor: pointer;
+`
 
 
 const mapStateToProps = (state) => {
@@ -271,6 +385,9 @@ const mapDispatchToProps = (dispatch) => {
 		},
 		SELECT: (params) => {
 			dispatch(selectItem(params))
+		},
+		SELECTALL: (selected) => {
+			dispatch(selectAllItems(selected))
 		},
 		EDITING: (item) => {
 			dispatch(editing(item))
@@ -324,6 +441,9 @@ const mapDispatchToProps = (dispatch) => {
 		DELETEITEM: (itemId) => {
 			dispatch(deleteItem(itemId))
 		},
+		WISHITEM: (productIds, variantIds) => {
+			dispatch(wishItem(productIds, variantIds))
+		},
 		DELETEITEMS: (itemIds) => {
 			dispatch(deleteItems(itemIds))
 		},
@@ -358,6 +478,7 @@ const ShoppingCart = class extends React.Component {
 	constructor(props) {
 		super(props)
 		this.itemSelect = this.itemSelect.bind(this)
+		this.itemEditSelect = this.itemEditSelect.bind(this)
 		this.groupClick = this.groupClick.bind(this)
 		this.itemEdit = this.itemEdit.bind(this)
 		this.itemConfirmHandle = this.itemConfirmHandle.bind(this)
@@ -365,6 +486,7 @@ const ShoppingCart = class extends React.Component {
 		this.sdkResponseHandler = this.sdkResponseHandler.bind(this)
 		this.scrollhandle = this.scrollhandle.bind(this)
 		this.itemDelete = this.itemDelete.bind(this)
+		this.itemWish = this.itemWish.bind(this)
 		this.clearall = this.clearall.bind(this)
 		this.state = {
 			creditstatus: 0,
@@ -378,11 +500,29 @@ const ShoppingCart = class extends React.Component {
 			ticketMethods: [],
 			atmMethods: [],
 			successTip: null,
-			dlocalerror: null
+			dlocalerror: null,
+			confirm: {
+				open: false,
+				content: '',
+			},
+			managing: false,
+			selectedItems: [],
+			editSelectAll: false
 		}
 		this.processCallBack = this.processCallBack.bind(this)
 		this.processErrorBack = this.processErrorBack.bind(this)
-		this.scrollTop=0
+		this.scrollTop = 0
+
+	}
+
+
+	allEditHandle(selected) {
+		const { cart } = this.props
+		const allItems = selected ? this.getAllItems(cart) : []
+		this.setState({
+			selectedItems: allItems,
+			editSelectAll: selected
+		})
 	}
 
 	showSuccessTip(tip) {
@@ -443,16 +583,16 @@ const ShoppingCart = class extends React.Component {
 	}
 
 	scrollhandle(evt) {
-		
+
 		let [scrollTop, documentHeight, windowHeight] = [
-		  document.documentElement.scrollTop || document.body.scrollTop,
-		  document.body.clientHeight,
-		  window.screen.height
+			document.documentElement.scrollTop || document.body.scrollTop,
+			document.body.clientHeight,
+			window.screen.height
 		]
 
 		const headerHeight = window.headerHeight || 0
 
-		if (this.fixedTip && this.fixedTipWrapper && sitename !== 'bellewholesale') {
+		if (this.fixedTip && this.fixedTipWrapper) {
 			const { clientHeight } = this.fixedTip
 			this.fixedTipWrapper.style.height = clientHeight + 'px'
 			const rect = this.fixedTipWrapper.getBoundingClientRect()
@@ -463,12 +603,12 @@ const ShoppingCart = class extends React.Component {
 			}
 		}
 
-		if(scrollTop > this.scrollTop){
-			if(this.couponAlert){
+		if (scrollTop > this.scrollTop) {
+			if (this.couponAlert) {
 				this.couponAlert.classList.add('closed')
 			}
-		}else{
-			if(this.couponAlert){
+		} else {
+			if (this.couponAlert && documentHeight - scrollTop > windowHeight) {
 				this.couponAlert.classList.remove('closed')
 			}
 		}
@@ -480,7 +620,7 @@ const ShoppingCart = class extends React.Component {
 
 
 
-		
+
 
 	}
 
@@ -1013,16 +1153,191 @@ const ShoppingCart = class extends React.Component {
 		this.props.EDITING(item)
 	}
 
-	itemDelete(item) {
-		if (window.confirm('Are you sure delete this item?')) {
-			this.props.DELETEITEM(item.variantId)
+	deleteAllItems(evt) {
+		const selectedItems = this.state.selectedItems
+
+		if (selectedItems && selectedItems.length > 0) {
+			const variantIds = selectedItems.map(item => item.variantId).join(',')
+
+			this.setState({
+				confirm: {
+					open: true,
+					content: 'Are you sure delete these items?',
+					yesBack: () => {
+
+						this.props.DELETEITEMS(variantIds)
+						this.setState({
+							confirm: {
+								open: false,
+								content: '',
+								yesBack: null,
+								noBack: null
+							},
+							managing: false
+						})
+
+
+
+					},
+					noBack: () => {
+						this.setState({
+							confirm: {
+								open: false,
+								content: '',
+								yesBack: null,
+								noBack: null
+							}
+						})
+					}
+				}
+			})
 		}
 	}
 
-	itemIdDelete(itemId) {
-		if (window.confirm('Are you sure delete this item?')) {
-			this.props.DELETEITEM(itemId)
+	addAllToWish(evt) {
+		const selectedItems = this.state.selectedItems
+
+		if (selectedItems && selectedItems.length > 0) {
+			const [productIds, variantIds] = [
+				selectedItems.map(item => item.productId).join(','),
+				selectedItems.map(item => item.variantId).join(',')
+			]
+
+			this.setState({
+				confirm: {
+					open: true,
+					content: 'Are you sure moving these products to wishlist from shopping bag?',
+					yesBack: () => {
+
+						if (!window.__is_login__) {
+							window.location.href = `/login?redirectUrl=${encodeURIComponent(window.location.href)}`
+						} else {
+							this.props.WISHITEM(productIds, variantIds)
+							this.setState({
+								confirm: {
+									open: false,
+									content: '',
+									yesBack: null,
+									noBack: null
+								},
+								managing: false
+							})
+						}
+
+
+
+					},
+					noBack: () => {
+						this.setState({
+							confirm: {
+								open: false,
+								content: '',
+								yesBack: null,
+								noBack: null
+							}
+						})
+					}
+				}
+			})
 		}
+
+
+	}
+
+	itemWish(item) {
+		this.setState({
+			confirm: {
+				open: true,
+				content: 'Are you sure moving the product to wishlist from shopping bag?',
+				yesBack: () => {
+					if (!window.__is_login__) {
+						window.location.href = `/login?redirectUrl=${encodeURIComponent(window.location.href)}`
+					} else {
+						this.props.WISHITEM(item.productId, item.variantId)
+						this.setState({
+							confirm: {
+								open: false,
+								content: '',
+								yesBack: null,
+								noBack: null
+							}
+						})
+					}
+
+				},
+				noBack: () => {
+					this.setState({
+						confirm: {
+							open: false,
+							content: '',
+							yesBack: null,
+							noBack: null
+						}
+					})
+				}
+			}
+		})
+	}
+
+	itemDelete(item) {
+
+		this.setState({
+			confirm: {
+				open: true,
+				content: 'Are you sure delete this item?',
+				yesBack: () => {
+					this.props.DELETEITEM(item.variantId)
+					this.setState({
+						confirm: {
+							open: false,
+							content: '',
+							yesBack: null,
+							noBack: null
+						}
+					})
+				},
+				noBack: () => {
+					this.setState({
+						confirm: {
+							open: false,
+							content: '',
+							yesBack: null,
+							noBack: null
+						}
+					})
+				}
+			}
+		})
+	}
+
+	itemIdDelete(itemId) {
+		this.setState({
+			confirm: {
+				open: true,
+				content: 'Are you sure delete this item?',
+				yesBack: () => {
+					this.props.DELETEITEM(itemId)
+					this.setState({
+						confirm: {
+							open: false,
+							content: '',
+							yesBack: null,
+							noBack: null
+						}
+					})
+				},
+				noBack: () => {
+					this.setState({
+						confirm: {
+							open: false,
+							content: '',
+							yesBack: null,
+							noBack: null
+						}
+					})
+				}
+			}
+		})
 	}
 
 	clearall() {
@@ -1038,6 +1353,34 @@ const ShoppingCart = class extends React.Component {
 			variantIds: variantId,
 			select: selected
 		})
+	}
+
+	itemAllSelect(selected) {
+		this.props.SELECTALL(selected)
+	}
+
+	itemEditSelect(item, selected) {
+		const { cart } = this.props
+
+
+		if (selected) {
+			const selectedItems = [item, ...this.state.selectedItems]
+			const allSelected = this.countSCart(cart.overseasDelivery, cart.domesticDeliveryCases) === selectedItems.length
+			this.setState({
+				selectedItems: selectedItems,
+				editSelectAll: allSelected
+			})
+		} else {
+			this.setState({
+				selectedItems: (this.state.selectedItems.filter(i => i.variantId != item.variantId) || []),
+				editSelectAll: false
+			})
+		}
+
+
+
+
+
 	}
 
 	groupClick(variantIds, selected) {
@@ -1155,7 +1498,7 @@ const ShoppingCart = class extends React.Component {
 
 
 
-		}else if(this.props.payMethod === '18'){
+		} else if (this.props.payMethod === '18') {
 			placeOrderAll(this.props.payMethod).then(data => data.result).then(result => {
 				const { orderId } = result
 
@@ -1175,33 +1518,33 @@ const ShoppingCart = class extends React.Component {
 					checking: false
 				})
 			})
-			
+
 		} else {
 			this.payCredit({ payCpf: cpf, payInstallments: installments })
 		}
 	}
 
 
-	authenticate3d(result, orderId){
+	authenticate3d(result, orderId) {
 		const response = result.openOrderResponse
 		const self = this
 
-        // Instantiate Safecharge API
-        const sfc = SafeCharge({
-            env: window.safechargeEnv || 'prod', // the environment you’re running on, prod for production
-            merchantId: response.merchantId, //as asigned by SafeCharge
-            merchantSiteId: response.merchantSiteId // your merchantsite id provided by Safecharge
-        })
+		// Instantiate Safecharge API
+		const sfc = SafeCharge({
+			env: window.safechargeEnv || 'prod', // the environment you’re running on, prod for production
+			merchantId: response.merchantId, //as asigned by SafeCharge
+			merchantSiteId: response.merchantSiteId // your merchantsite id provided by Safecharge
+		})
 
 
-        sfc.createPayment({
-            "sessionToken": response.sessionToken, //recieved form opeOrder API
-            "merchantId": response.merchantId, //as asigned by SafeCharge
-            "merchantSiteId": response.merchantSiteId, //as asigned by SafeCharge
-            "userTokenId": response.userTokenId,
-            "clientUniqueId": response.clientUniqueId, // optional
-            "paymentOption": {
-                "userPaymentOptionId": result.userPaymentOptionId,
+		sfc.createPayment({
+			"sessionToken": response.sessionToken, //recieved form opeOrder API
+			"merchantId": response.merchantId, //as asigned by SafeCharge
+			"merchantSiteId": response.merchantSiteId, //as asigned by SafeCharge
+			"userTokenId": response.userTokenId,
+			"clientUniqueId": response.clientUniqueId, // optional
+			"paymentOption": {
+				"userPaymentOptionId": result.userPaymentOptionId,
 			},
 			"billingAddress": {
 				"country": result.country,
@@ -1210,11 +1553,11 @@ const ShoppingCart = class extends React.Component {
 			"deviceDetails": {
 				"ipAddress": result.ip
 			}
-        }, function (res) {
+		}, function (res) {
 			setSafeChargeStatus(response.sessionToken).then(data => data.result).then(result => {
-				if(res.result === "APPROVED"){
+				if (res.result === "APPROVED") {
 					window.location.href = `${window.ctx || ''}/order-confirm/${response.clientUniqueId}`
-				}else{
+				} else {
 					alert(res.errorDescription || res.reason || 'Error')
 					self.setState({
 						checking: false
@@ -1230,7 +1573,7 @@ const ShoppingCart = class extends React.Component {
 					checking: false
 				})
 			})
-        })
+		})
 	}
 
 	triggerOcean() {
@@ -1515,9 +1858,14 @@ const ShoppingCart = class extends React.Component {
 		return items && !!items.find(item => item.selected)
 	}
 
-	formatOverseasDelivery(overseasDelivery) {
+	formatOverseasDelivery(o) {
+
+		const overseasDelivery = _.cloneDeep(o)
+
+
 		const deliveryItems = overseasDelivery ? overseasDelivery.deliveryItems : null
 		let hasSelectedItem = false
+		let allSelected = true
 
 		if (deliveryItems && deliveryItems.length) {
 			deliveryItems.forEach(deliveryItem => {
@@ -1526,27 +1874,40 @@ const ShoppingCart = class extends React.Component {
 
 				if (!hasSelectedItem) hasSelectedItem = this.hasSelectedItem(items)
 
+				if (allSelected) {
+					allSelected = !(items || []).some(item => !item.selected)
+				}
 			})
 		}
 
 		return {
 			overseasDelivery,
-			hasSelectedItem
+			hasSelectedItem,
+			allSelected
 		}
 	}
 
-	formatDomesticDeliveryCases(domesticDeliveryCases) {
+	formatDomesticDeliveryCases(d) {
+		const domesticDeliveryCases = _.cloneDeep(d)
 		let hasSelectedItem = false
+		let allSelected = true
 		if (domesticDeliveryCases && domesticDeliveryCases.length) {
 			domesticDeliveryCases.forEach(domestic => {
 				let items = this.getValidItems(domestic.shoppingCartProducts)
 				domestic.shoppingCartProducts = items || []
 				if (!hasSelectedItem) hasSelectedItem = this.hasSelectedItem(items)
+
+				if (allSelected) {
+					allSelected = !(items || []).some(item => !item.selected)
+				}
+
+
 			})
 		}
 		return {
 			domesticDeliveryCases,
-			hasSelectedItem
+			hasSelectedItem,
+			allSelected
 		}
 	}
 
@@ -1560,7 +1921,8 @@ const ShoppingCart = class extends React.Component {
 			invalidItems,
 			overseasDelivery: data1.overseasDelivery,
 			domesticDeliveryCases: data2.domesticDeliveryCases,
-			hasSelectedItem: data1.hasSelectedItem || data2.hasSelectedItem
+			hasSelectedItem: data1.hasSelectedItem || data2.hasSelectedItem,
+			allSelected: data1.allSelected && data2.allSelected && (data1.hasSelectedItem || data2.hasSelectedItem)
 		}
 	}
 
@@ -1596,19 +1958,83 @@ const ShoppingCart = class extends React.Component {
 
 	}
 
+	countSCart(overseasDelivery, domesticDeliveryCases) {
+		let count = 0
+
+		const deliveryItems = overseasDelivery ? overseasDelivery.deliveryItems : null
+
+		if (deliveryItems && deliveryItems.length) {
+			deliveryItems.forEach(deliveryItem => {
+				let items = deliveryItem.shoppingCartProducts
+				if (items && items.length) {
+					items.forEach(item => {
+						count += 1
+					})
+				}
+			})
+		}
+
+
+		if (domesticDeliveryCases && domesticDeliveryCases.length) {
+			domesticDeliveryCases.forEach(domestic => {
+				let items = domestic.shoppingCartProducts
+				if (items && items.length) {
+					items.forEach(item => {
+						count += 1
+					})
+				}
+			})
+		}
+
+		return count
+
+	}
+
+	getAllItems(cart) {
+		let allItems = []
+		const { overseasDelivery, domesticDeliveryCases } = cart
+
+		const deliveryItems = overseasDelivery ? overseasDelivery.deliveryItems : null
+
+		if (deliveryItems && deliveryItems.length) {
+			deliveryItems.forEach(deliveryItem => {
+				let items = deliveryItem.shoppingCartProducts
+				if (items && items.length) {
+					allItems = [...items, ...allItems]
+				}
+			})
+		}
+
+
+		if (domesticDeliveryCases && domesticDeliveryCases.length) {
+			domesticDeliveryCases.forEach(domestic => {
+				let items = domestic.shoppingCartProducts
+				if (items && items.length) {
+					allItems = [...items, ...allItems]
+				}
+			})
+		}
+
+		return allItems
+	}
+
 
 	render() {
 		const { cart, loading, empty, editing, isCreditShow, mercadocards, creditcards, intl } = this.props
+		const { managing } = this.state
 		let tcMethod
 
 
 		let isprogresspage, country, formatedData, invalidItems, cancheckout, hasLocalItems, sendCouponMessage, couponcountdown, totalCount = 0, hasOverseas, hasQuickPay
 		let gifts
+		let allSelected
 		if (cart) {
+
 			isprogresspage = !window.token && (window.__is_login__ || (cart && cart.shippingDetail) || (this.props.location.pathname && this.props.location.pathname.indexOf('/cart/checkout') >= 0))
 
 			formatedData = this.formatData(cart)
 			invalidItems = formatedData.invalidItems
+			allSelected = formatedData.allSelected
 			sendCouponMessage = cart.sendCouponMessage
 			couponcountdown = this.getCountdown(cart)
 			cancheckout = formatedData.hasSelectedItem
@@ -1625,610 +2051,709 @@ const ShoppingCart = class extends React.Component {
 		}
 
 
-		// const formatedData = cart ? this.formatData(cart) : null
-
-		// const invalidItems = formatedData.invalidItems
-
-		// const {sendCouponMessage} = cart || {sendCouponMessage: null}
-		// let couponcountdown = this.getCountdown(cart)
-
-		// let cancheckout = formatedData.hasSelectedItem
-		// let hasLocalItems = false
-		// let totalCount = 0
-		// if (cart) {
-		//   let cancheckout1 = cart.shoppingCartProductsByOverseas && cart.shoppingCartProductsByOverseas.find(item => item.selected)
-		//   let cancheckout2 = false
-		//   if (cart.domesticDeliveryCases) {
-		//     _.each(cart.domesticDeliveryCases, demestic => {
-		//       _.each(demestic.shoppingCartProducts, item => {
-		//         if (item.selected) {
-		//           cancheckout2 = true
-		//           totalCount+=item.quantity
-		//         }
-		//         if (!this.isOutStock(item)) {
-		//           hasLocalItems = true
-		//         }
-		//       })
-		//     })
-		//   }
-
-		//   cancheckout = cancheckout1 || cancheckout2
-		// }
-
-		// const shoppingCartProductsByOverseas = cart ? this.getValidItems(cart.shoppingCartProductsByOverseas) : []
-
-		// if(shoppingCartProductsByOverseas && shoppingCartProductsByOverseas.length){
-		//   _.each(shoppingCartProductsByOverseas, item => {
-		//     if (item.selected){
-		//       totalCount+=item.quantity
-		//     }
-		//   })
-		// }
-
-		const TipModal = sitename === 'bellewholesale' ? BottomTip : Tip
 
 
-		return loading ? <Loading /> : (empty ? <Empty /> : (
-			cart && (
-				<div style={{ opacity: this.props.refreshing ? 0.9 : 1, padding: 8 }}>
-					{(this.props.refreshing || this.state.refreshing) && <Refreshing />}
+		const TipModal = Tip
 
-					{
-						(couponcountdown > 1000 || cart.messages && cart.messages.orderSummaryMsg) && (
-							<div ref={wrapper => { this.fixedTipWrapper = wrapper }}>
-								{
-									couponcountdown > 1000 ? (
-										<TipModal innerRef={tip => { this.fixedTip = tip }}>
-											<div className="x-table __fixed x-fw __vm">
-												<div className="x-cell" style={{ width: 75 }}>
-													<CountDownBlock offset={couponcountdown} />
-												</div>
-												<div className="x-cell">
-													<span dangerouslySetInnerHTML={{ __html: sendCouponMessage.message }} />
-												</div>
-											</div>
-										</TipModal>
-									) : (
-											<React.Fragment>
-												{cart.messages && cart.messages.orderSummaryMsg && <TipModal className={this.state.tipFixed ? '__fixed' : ''} innerRef={tip => { this.fixedTip = tip }}>
-													<span dangerouslySetInnerHTML={{ __html: cart.messages.orderSummaryMsg }} />
-												</TipModal>}
-											</React.Fragment>
-										)
-								}
-							</div>
-						)
-					}
 
-					<Boxs>
+		return <React.Fragment>
+			{
+				!managing ? <ShoppingBody>
+					<div className="__hd">
+						<ShoppingHead>
+							<span className="__title"><FormattedMessage id="shopping_bag" /></span>
+							<span className="__back">&#xe690;</span>
+							<span className="__tools">
+								<span onClick={evt => { this.setState({ managing: true }) }} className="__edit">&#xe7b6;</span>
+								<span className="__wish">&#xe6a2;</span>
+							</span>
+						</ShoppingHead>
+					</div>
+					<div className="__bd">
 						{
-							cart.shippingDetail ? (
-								(isprogresspage || window.token) && <Box style={{ position: 'relative' }}>
-									<BoxBody>
-										<div className="x-fw x-table __vm">
-											<div className="x-cell">
-												<Address address={cart.shippingDetail} />
-											</div>
-											<div className="x-cell __right" style={{ width: 30 }}>
-												<Grey>
-													<Link style={{ color: '#222', textDecoration: 'none' }} to={`${window.ctx || ''}${__route_root__}/address`}>
-														<Icon>&#xe694;</Icon>
+							loading ? <Loading /> : (empty ? <Empty /> : (
+								cart && (
+									<div style={{ opacity: this.props.refreshing ? 0.9 : 1, padding: 8 }}>
+										{(this.props.refreshing || this.state.refreshing) && <Refreshing />}
+
+										{
+											(couponcountdown > 1000 || cart.messages && cart.messages.orderSummaryMsg) && (
+												<div ref={wrapper => { this.fixedTipWrapper = wrapper }}>
+													{
+														couponcountdown > 1000 ? (
+															<TipModal innerRef={tip => { this.fixedTip = tip }}>
+																<div className="x-table __fixed x-fw __vm">
+																	<div className="x-cell" style={{ width: 75 }}>
+																		<CountDownBlock offset={couponcountdown} />
+																	</div>
+																	<div className="x-cell">
+																		<span dangerouslySetInnerHTML={{ __html: sendCouponMessage.message }} />
+																	</div>
+																</div>
+															</TipModal>
+														) : (
+																<React.Fragment>
+																	{cart.messages && cart.messages.orderSummaryMsg && <TipModal className={this.state.tipFixed ? '__fixed' : ''} innerRef={tip => { this.fixedTip = tip }}>
+																		<span dangerouslySetInnerHTML={{ __html: cart.messages.orderSummaryMsg }} />
+																	</TipModal>}
+																</React.Fragment>
+															)
+													}
+												</div>
+											)
+										}
+
+										<Boxs>
+											{
+												cart.shippingDetail ? (
+													(isprogresspage || window.token) && <Box style={{ position: 'relative' }}>
+														<BoxBody>
+															<div className="x-fw x-table __vm">
+																<div className="x-cell">
+																	<Address address={cart.shippingDetail} />
+																</div>
+																<div className="x-cell __right" style={{ width: 30 }}>
+																	<Grey>
+																		<Link style={{ color: '#222', textDecoration: 'none' }} to={`${window.ctx || ''}${__route_root__}/address`}>
+																			<Icon>&#xe694;</Icon>
+																		</Link>
+																	</Grey>
+																</div>
+															</div>
+														</BoxBody>
+														<DashedLine />
+													</Box>
+												) : (
+														isprogresspage && <Box style={{ position: 'relative' }}>
+															<BoxClickHead title={intl.formatMessage({ id: 'address' })} single={true}>
+																<Grey>
+																	<Link style={{ color: '#222', textDecoration: 'none' }} to={`${window.ctx || ''}${__route_root__}/address`}>
+																		Add
 													</Link>
-												</Grey>
-											</div>
-										</div>
-									</BoxBody>
-									<DashedLine />
-								</Box>
-							) : (
-									isprogresspage && <Box style={{ position: 'relative' }}>
-										<BoxClickHead title={intl.formatMessage({ id: 'address' })} single={true}>
-											<Grey>
-												<Link style={{ color: '#222', textDecoration: 'none' }} to={`${window.ctx || ''}${__route_root__}/address`}>
-													Add
-											</Link>
-											</Grey>
-										</BoxClickHead>
-										<DashedLine />
-									</Box>
-								)
-						}
+																</Grey>
+															</BoxClickHead>
+															<DashedLine />
+														</Box>
+													)
+											}
 
-						{
-							cart.messages && cart.messages.shippingMsg && <Box>
-								<IconMessage>
-									<div>
-										<span className="iconfont">&#xe765;</span>
-									</div>
-									<div>
-										<span dangerouslySetInnerHTML={{__html: cart.messages.shippingMsg}}/>
-									</div>
-									<div></div>
-								</IconMessage>
-							</Box>
-						}
+											{
+												cart.messages && cart.messages.shippingMsg && <Box>
+													<IconMessage>
+														<div>
+															<span className="iconfont">&#xe765;</span>
+														</div>
+														<div>
+															<span dangerouslySetInnerHTML={{ __html: cart.messages.shippingMsg }} />
+														</div>
+														<div></div>
+													</IconMessage>
+												</Box>
+											}
 
-						
 
-						{
-							hasLocalItems && formatedData.domesticDeliveryCases.map(domestic => (
-								<Box key={domestic.countryCode}>
-									<GroupLocalItems
-										icon={domestic.icon}
-										title={domestic.title}
-										quantityChange={this.quantityChange.bind(this)}
-										itemEdit={this.itemEdit}
-										itemDelete={this.itemDelete}
-										groupClick={this.groupClick}
-										itemSelect={this.itemSelect}
-										overseasHandle={this.overseasHandle.bind(this)}
-										serverTime={cart.serverTime}
-										domestic={domestic}
-										items={domestic.shoppingCartProducts} />
-								</Box>
+
+
+											{/*{
+									shoppingCartProductsByOverseas && shoppingCartProductsByOverseas.length > 0 && (
+										<Box>
+											<GroupOverseasItems
+												group= {cart.}
+												quantityChange={ this.quantityChange.bind(this)}
+												itemEdit={this.itemEdit}
+												itemDelete={this.itemDelete}
+												groupClick={this.groupClick}
+												itemSelect={this.itemSelect}
+												items={shoppingCartProductsByOverseas}
+												shippingMethod={cart.shippingMethod}
+												serverTime={cart.serverTime}
+												shippingMsg={cart.messages ? cart.messages.shippingMsg : null}/>
+										</Box>
+									)
+								}*/}
+
+											{
+												hasOverseas && formatedData.overseasDelivery && <Box>
+													<PromotionGroup
+														isShippingHead={!!cart.shippingDetail && (isprogresspage || window.token)}
+														group={formatedData.overseasDelivery}
+														quantityChange={this.quantityChange.bind(this)}
+														itemEdit={this.itemEdit}
+														itemDelete={this.itemDelete}
+														itemWish={this.itemWish}
+														groupClick={this.groupClick}
+														itemSelect={this.itemSelect}
+														shippingMethod={cart.shippingMethod}
+														serverTime={cart.serverTime}
+													/>
+												</Box>
+											}
+
+
+											{
+												hasLocalItems && formatedData.domesticDeliveryCases.map(domestic => (
+													<Box key={domestic.countryCode}>
+														<GroupLocalItems
+															icon={domestic.icon}
+															title={domestic.title}
+															quantityChange={this.quantityChange.bind(this)}
+															itemEdit={this.itemEdit}
+															itemDelete={this.itemDelete}
+															itemWish={this.itemWish}
+															groupClick={this.groupClick}
+															itemSelect={this.itemSelect}
+															overseasHandle={this.overseasHandle.bind(this)}
+															serverTime={cart.serverTime}
+															domestic={domestic}
+															items={domestic.shoppingCartProducts} />
+													</Box>
+												))
+											}
+
+
+
+											{
+												gifts && gifts.length > 0 && <Box>
+													<div style={{ padding: 10 }}>
+														<div>
+															<span className="iconfont" style={{ color: '#ff8454', fontSize: 30, verticalAlign: 'middle' }}>&#xec45;</span>
+															<span style={{ fontWeight: 'bold', verticalAlign: 'middle' }}>Free Gift</span>
+														</div>
+														<div className="x-table" style={{ width: '100%', tableLayout: 'fixed', marginTop: 10 }}>
+															<div className="x-cell" style={{ width: 40, verticalAlign: 'middle' }}>
+																<a style={{ textDecoration: 'none' }} href={producturl({ id: gifts[0].productId, name: gifts[0].productName, parentSku: gifts[0].parentSku })}>
+																	<img style={{ display: 'inline-block', width: '100%' }} src={gifts[0].imageUrl} />
+																</a>
+
+															</div>
+															<div className="x-cell" style={{ paddingLeft: 10, verticalAlign: 'middle' }}>
+																<Ellipsis>
+																	<span style={{ display: 'inline-block', lineHeight: '14px', fontSize: 12, color: '#e64545', border: '1px solid #e64545', paddingLeft: 5, paddingRight: 5 }}>
+																		Gift
+													</span>
+																	<span style={{ lineHeight: '14px', fontSize: 12, marginLeft: 10 }}>
+																		{gifts[0].productName}
+																	</span>
+																</Ellipsis>
+																<div style={{ marginTop: 10 }}>
+																	<Red>{unitprice(gifts[0].realPrice)}</Red>
+																	<Link style={{ float: 'right', color: '#e64545' }} to={`${__route_root__}/gifts`}>View gift </Link>
+																</div>
+
+															</div>
+														</div>
+													</div>
+
+												</Box>
+											}
+
+											{
+												cart.giftWarnMsg && <Box>
+													<div style={{ padding: 10 }}>
+														<span className="iconfont" style={{ color: '#ff8454', fontSize: 30, verticalAlign: 'middle' }}>&#xec45;</span>
+														<span style={{ verticalAlign: 'middle' }} dangerouslySetInnerHTML={{ __html: cart.giftWarnMsg }}></span>
+													</div>
+												</Box>
+											}
+
+											{
+												invalidItems && invalidItems.length > 0 && <Box>
+													<GroupInvalidItems serverTime={cart.serverTime}
+														items={this.getInvalidItems(cart)}
+														clearall={this.clearall}
+														itemDelete={this.itemDelete} />
+												</Box>
+											}
+
+											<Box>
+												<BoxClickHead className="x-small" title={intl.formatMessage({ id: 'coupon' })}>
+													<Link style={{ textDecoration: 'none', color: '#222' }} to={`${window.ctx || ''}${__route_root__}/coupons`}>
+
+														{cart.coupon ? (
+															<span><strong>{cart.coupon.couponName}</strong> {cart.coupon.name}</span>
+														) : (
+																<span>
+																	<FormattedMessage id="can_use_coupon" values={{
+																		canUseCouponCount: <Red>{cart.canUseCouponCount}</Red>
+																	}} />
+																</span>
+															)}
+													</Link>
+												</BoxClickHead>
+
+												{/* {
+										cart.messages && cart.messages.couponMsg && <Tip>
+											<span dangerouslySetInnerHTML={{ __html: cart.messages.couponMsg }} />
+										</Tip>
+									} */}
+
+												<LineBox style={{ paddingLeft: 10, paddingRight: 10 }}>
+													{
+														cart.shippingInsurancePrice2 && cart.shippingDetail && (isprogresspage || window.token) && (
+															<TurnTool ignoreButton={cart.isShippingInsuranceMust} open={this.openInsurance.bind(this)} turnAcitve={cart.insurance}>
+																<span style={{ fontSize: 15 }}>
+																	<FormattedMessage id="add_shipping_insurance" values={{ price: <Red><Money money={cart.shippingInsurancePrice2} /></Red> }} />
+																</span>
+																<Ask style={{ marginLeft: 4 }} onClick={this.insuranceClickHandle.bind(this)} />
+															</TurnTool>
+														)
+													}
+
+
+
+
+
+													{
+														!!cart.shippingDetail && (isprogresspage || window.token) && <div>
+															{/* //TODO */}
+														</div>
+													}
+
+
+													{
+														cart.expectedPoints > 0 && (
+															<TurnTool open={this.openPoints.bind(this)} turnAcitve={cart.openPointUse}>
+
+																<FormattedMessage style={{ fontSize: 15 }} id="credit_msg" values={{ credits: cart.expectedPoints, discount: <Red><Money money={cart.expectedPointDiscount} /></Red> }} />
+																<Ask style={{ marginLeft: 4 }} onClick={this.creditClickHandle.bind(this)} />
+															</TurnTool>
+														)
+													}
+												</LineBox>
+											</Box>
+
+											{
+												isprogresspage && (
+													<Box innerRef={c => { this.$paylistdom = c }}>
+														<BoxHead single title={intl.formatMessage({ id: 'payment_method' })} />
+														<div style={{ paddingLeft: 10, paddingRight: 10 }}>
+															<PayMethodList
+																cpfClickHandle={this.cpfClickHandle.bind(this)}
+																boletoForm={(c) => this.boletoForm = c}
+																boleto={(c) => { this.boleto = c }}
+																cpf={this.props.cpf}
+																email={this.props.email}
+																handleInputChange={this.handleInputChange}
+																selectedPayId={this.props.payMethod}
+																selectPayHandle={this.selectPayHandle.bind(this)}
+																methods={this.props.cart.payMethodList}
+																ticketMethods={this.state.ticketMethods}
+																atmClickHandle={this.atmClickHandle.bind(this)}
+																ticketClickHandle={this.ticketClickHandle.bind(this)}
+																atmMethod={this.props.atmMethod}
+																ticketMethod={this.props.ticketMethod}
+																atmMethods={this.state.atmMethods}
+																apac={c => this.apac = c}
+																apacBB={c => this.apacBB = c}
+																paypalDiscountMessage={cart.paypalDiscountMessage}
+																showMercadopagoCouponField={cart.showMercadopagoCouponField}
+																setCouponHandle={this.useMercadoCoupon.bind(this)}
+																couponCode={this.props.couponCode}
+																mercadoCouponClickHandle={this.mercadoCouponClickHandle.bind(this)}
+																tcClickHandle={this.tcClickHandle.bind(this)}
+																tcMethod={tcMethod}
+
+																documentForm={c => this.documentForm = c}
+																documentRef={c => this.documentRef = c}
+																document={this.props.document}
+																initCashmethod={this.initCashmethod.bind(this)}
+															/>
+														</div>
+													</Box>
+												)
+											}
+
+											<Box>
+												<BoxHead single title={intl.formatMessage({ id: 'order_summary' })} />
+												<OrderSummary>
+
+													{
+														cart.orderSummary.display.map(display => (
+															<div key={display.label} className="x-flex __between __summary">
+																<span>
+																	<span dangerouslySetInnerHTML={{ __html: display.label }} />
+																	{
+																		display.asker && <Ask style={{ marginLeft: 4 }} onClick={(evt) => { this.displayAskClickHandle(evt, display.asker) }} />
+																	}
+																</span>
+
+																<span dangerouslySetInnerHTML={{ __html: display.value }} />
+															</div>
+														))
+													}
+
+
+
+
+												</OrderSummary>
+											</Box>
+
+											<Box style={{ backgroundColor: '#f6f6f6', paddingTop: 15, paddingBottom: 15 }}>
+												<div style={{ color: '#999' }}><FormattedMessage id="secure_payment" /></div>
+												<img style={{ width: 140, marginTop: 10 }} src="https://dgzfssf1la12s.cloudfront.net/upgrade/20210225/sp.png" />
+											</Box>
+
+											{
+												isprogresspage ? (
+													<Box>
+														<div style={{ height: 158, backgroundColor: '#f6f6f6' }}>
+
+															{
+																cart.canCheckout ? <Checkout>
+																	<div className="__total">
+																		<div>
+																			<CheckBox style={{ verticalAlign: 'middle' }} onClick={(evt) => { this.itemAllSelect(!allSelected) }} className={allSelected ? 'selected' : ''} />
+																			<span style={{ verticalAlign: 'middle', marginLeft: 7 }}><FormattedMessage id="all" /></span>
+																		</div>
+																		<div>
+																			<span>{intl.formatMessage({ id: 'total' })}: </span>
+																			<span style={{ fontSize: 24, fontFamily: 'SlatePro-Medium' }}><Money money={cart.orderSummary.orderTotal} /></span>
+																			{
+																				this.props.payMethod === '22' && <Red style={{ fontWeight: 'normal', marginLeft: 5, fontSize: 14 }}>(Em até 3x s/ juros)</Red>
+																			}
+																		</div>
+
+																	</div>
+																	{
+																		cancheckout ? (
+																			!this.state.checking ? <BigButton onClick={this.checkout.bind(this)} className="__btn" height={47} bgColor="#222">
+																				{intl.formatMessage({ id: 'check_out' })} ({totalCount})
+																</BigButton> : <BigButton className="__btn" height={47} bgColor="#999">
+																					{intl.formatMessage({ id: 'please_wait' })}...
+																</BigButton>
+																		) : (
+																				<BigButton className="__btn" height={47} bgColor="#999">
+																					{intl.formatMessage({ id: 'check_out' })} ({totalCount})
+																				</BigButton>
+																			)
+																	}
+																</Checkout> : <Checkout>
+																		<div className="__total">
+																			<div></div>
+																			<div>
+																				<span>{intl.formatMessage({ id: 'total' })}: </span>
+																				<span style={{ fontSize: 24, fontFamily: 'SlatePro-Medium' }}><Money money={cart.orderSummary.orderTotal} /></span>
+																			</div>
+																		</div>
+																		<div>
+																			<BigButton className="__btn" height={47} bgColor="#999">
+																				{intl.formatMessage({ id: 'check_out' })} ({totalCount})
+															</BigButton>
+																		</div>
+																	</Checkout>
+															}
+
+														</div>
+													</Box>
+												) : (
+														window.token ? (
+															<Box>
+																<div style={{ height: 158 }}>
+																	<Checkout>
+																		<div className="__total">
+																			<div></div>
+																			<div>
+																				<span>{intl.formatMessage({ id: 'total' })}: </span>
+																				<span style={{ fontSize: 24, fontFamily: 'SlatePro-Medium' }}><Money money={cart.orderSummary.orderTotal} /></span>
+																			</div>
+																		</div>
+																		{
+																			cancheckout ? (
+																				<BigButton onClick={this.quickPlace.bind(this)} className="__btn" height={47} bgColor="#222">
+																					Place Order
+																				</BigButton>
+																			) : (
+																					<BigButton className="__btn" height={47} bgColor="#ddd">
+																						{intl.formatMessage({ id: 'check_out' })}
+																					</BigButton>
+																				)
+																		}
+																	</Checkout>
+																</div>
+															</Box>
+														) : (
+																<Box>
+																	<div style={{ height: 158 }}>
+																	</div>
+
+
+																	{
+																		cart.canCheckout ? <Checkout>
+																			<div className="__total">
+																				<div></div>
+																				<div>
+																					<span>{intl.formatMessage({ id: 'total' })}: </span>
+																					<span style={{ fontSize: 24, fontFamily: 'SlatePro-Medium' }}><Money money={cart.orderSummary.orderTotal} /></span>
+																				</div>
+																				{cart.paypalDiscountMessage && <DISCOUNTTIP dangerouslySetInnerHTML={{ __html: cart.paypalDiscountMessage }} />}
+
+																			</div>
+
+
+
+																			{
+																				hasQuickPay ? <DoubleBtn className="x-flex __between">
+																					<div>
+																						<BigButton onClick={() => {
+																							this.props.history.push(`${window.ctx || ''}${__route_root__}/address`)
+																						}} className="__btn" height={47} bgColor="#222">
+																							{intl.formatMessage({ id: 'check_out' })} ({totalCount})
+																	</BigButton>
+																					</div>
+																					<div>
+																						<PaypalBtn onClick={this.quickPaypal.bind(this)}><img src={cart.paypalButtonImage} /></PaypalBtn>
+																					</div>
+																				</DoubleBtn> : <div>
+																						<BigButton onClick={() => { this.props.history.push(`${window.ctx || ''}${__route_root__}/address`) }} className="__btn" height={47} bgColor="#222">
+																							{intl.formatMessage({ id: 'check_out' })} ({totalCount})
+																</BigButton>
+																					</div>
+																			}
+
+
+
+
+																		</Checkout> : <Checkout>
+																				<div className="__total">
+																					<div></div>
+																					<div>
+																						<span>{intl.formatMessage({ id: 'total' })}: </span>
+																						<span style={{ fontSize: 24, fontFamily: 'SlatePro-Medium' }}><Money money={cart.orderSummary.orderTotal} /></span>
+																					</div>
+																				</div>
+																				<div>
+																					<BigButton className="__btn" height={47} bgColor="#999">
+																						{intl.formatMessage({ id: 'check_out' })} ({totalCount})
+															</BigButton>
+																				</div>
+																			</Checkout>
+																	}
+
+
+																</Box>
+															)
+													)
+											}
+
+
+
+										</Boxs>
+
+										{
+											editing.isEditing && (
+												<React.Fragment>
+													<Mask />
+													<ProductEditor onClose={() => { this.props.EDITED() }}
+														itemConfirmHandle={this.itemConfirmHandle}
+														item={editing.item} />
+												</React.Fragment>
+											)
+										}
+
+										{
+											isCreditShow && this.props.payMethod === '19' && mercadocards && mercadocards.length && (
+												<React.Fragment>
+													<Mask />
+													<CreditCard
+														count={totalCount}
+														payMethod={this.props.payMethod}
+														securityCode={this.props.securityCode}
+														handleMercado={this.checkmercado.bind(this)}
+														mercadoref={this.mercadoref.bind(this)}
+														handleInputChange={this.handleInputChange}
+														creditClose={this.creditClose.bind(this)}
+														cardSelect={this.cardSelect.bind(this)}
+														cards={mercadocards}
+														addCard={this.addMercadoCard.bind(this)}
+														status={this.props.creditstatus}
+														orderTotal={cart.orderSummary.orderTotal}
+														installments={this.props.mercadoinstallments}
+														checking={this.state.checking}
+														toggleBack={() => {
+															this.props.TOGGLECREDITSTATUS(this.props.creditstatus === 0 ? 1 : 0)
+														}}
+
+													/>
+												</React.Fragment>
+											)
+										}
+
+										{
+											isCreditShow && (this.props.payMethod === '3' || this.props.payMethod === '17' || this.props.payMethod === '18' || this.props.payMethod === '22' || this.props.payType === '12') && creditcards && creditcards.length && (
+												<React.Fragment>
+													<Mask />
+													<CreditCard
+														count={totalCount}
+														cards={creditcards}
+														payMethod={this.props.payMethod}
+														orderTotal={cart.orderSummary.orderTotal}
+														cpf={this.props.cpf}
+														cpfClickHandle={this.cpfClickHandle.bind(this)}
+														handleCredit={this.handleCredit.bind(this)}
+														brazilref={(c) => { this.brazilref = c }}
+														brazilForm={c => this.brazilForm = c}
+														handleInputChange={this.handleInputChange}
+														creditClose={this.creditClose.bind(this)}
+														installmentoptions={this.props.cart.payInstalmentsByOceanpaymentBRACreditCard || []}
+														installments={this.props.installments}
+														addCard={this.addCreditCard.bind(this)}
+														cardSelect={this.cardSelect.bind(this)}
+														status={this.props.creditstatus}
+														checking={this.state.checking}
+														toggleBack={() => {
+															this.props.TOGGLECREDITSTATUS(this.props.creditstatus === 0 ? 1 : 0)
+														}}
+														country={country}
+														document={this.props.document}
+														dlocalref={c => this.dlocalref = c}
+														dlocalbtn={c => this.dlocalbtn = c}
+														cvvRef={this.cvvRef.bind(this)}
+														dlocalerror={this.state.dlocalerror}
+													/>
+												</React.Fragment>
+											)
+										}
+
+										{
+											this.state.showAsk && this.state.askMessage && (
+												<React.Fragment>
+													<Mask />
+													<FixedMessage onClose={() => { this.setState({ showAsk: false, askMessage: null }) }}>
+														<p dangerouslySetInnerHTML={{ __html: this.state.askMessage }} />
+													</FixedMessage>
+												</React.Fragment>
+											)
+										}
+
+										{
+											this.state.paypaling && <React.Fragment>
+												<Mask />
+												<div className="paypal-loading-wrap">
+													<div className="paypal-back"></div>
+													<div className="paypal-loading">
+													</div>
+												</div>
+											</React.Fragment>
+										}
+
+										{
+											this.state.showPayMsgOcean && cart.cancelOceanpaymentPayMsg && <Confirm title={
+												/*global sitename b:true */
+												/*eslint no-undef: "error"*/
+												window.siteName
+											}
+												no={() => {
+													this.setState({ showPayMsgOcean: false })
+													this.props.TOGGLECREDIT(false)
+												}}
+												close={() => { this.setState({ showPayMsgOcean: false }) }}
+												yes={() => { this.setState({ showPayMsgOcean: false }) }}
+												yesLabel="Continue" noLabel="No, Thanks">
+												<span dangerouslySetInnerHTML={{ __html: cart.cancelOceanpaymentPayMsg }} />
+											</Confirm>
+										}
+
+										{
+											this.state.successTip && <SUCCESSTIP>
+												{this.state.successTip}
+											</SUCCESSTIP>
+										}
+
+										{
+											cart.messages && cart.messages.couponMsg && <CouponAlert innerRef={c => this.couponAlert = c} coupon={cart.coupon} couponMsg={cart.messages ? cart.messages.couponMsg : null} />
+										}
+
+
+
+									</div>)
 							))
 						}
-						{/*{
-							shoppingCartProductsByOverseas && shoppingCartProductsByOverseas.length > 0 && (
-								<Box>
-									<GroupOverseasItems
-										group= {cart.}
-										quantityChange={ this.quantityChange.bind(this)}
-										itemEdit={this.itemEdit}
-										itemDelete={this.itemDelete}
-										groupClick={this.groupClick}
-										itemSelect={this.itemSelect}
-										items={shoppingCartProductsByOverseas}
-										shippingMethod={cart.shippingMethod}
-										serverTime={cart.serverTime}
-										shippingMsg={cart.messages ? cart.messages.shippingMsg : null}/>
-								</Box>
-							)
-						}*/}
+					</div>
 
-						{
-							hasOverseas && formatedData.overseasDelivery && <Box>
-								<PromotionGroup
-									isShippingHead={!!cart.shippingDetail && (isprogresspage || window.token)}
-									group={formatedData.overseasDelivery}
-									quantityChange={this.quantityChange.bind(this)}
-									itemEdit={this.itemEdit}
-									itemDelete={this.itemDelete}
-									groupClick={this.groupClick}
-									itemSelect={this.itemSelect}
-									shippingMethod={cart.shippingMethod}
-									serverTime={cart.serverTime}
-									 />
-							</Box>
-						}
 
-						{
-							gifts && gifts.length > 0 && <Box>
-								<div style={{ padding: 10 }}>
-									<div>
-										<span className="iconfont" style={{ color: '#ff8454', fontSize: 30, verticalAlign: 'middle' }}>&#xec45;</span>
-										<span style={{ fontWeight: 'bold', verticalAlign: 'middle' }}>Free Gift</span>
-									</div>
-									<div className="x-table" style={{ width: '100%', tableLayout: 'fixed', marginTop: 10 }}>
-										<div className="x-cell" style={{ width: 40, verticalAlign: 'middle' }}>
-											<a style={{textDecoration:'none'}} href={producturl({ id: gifts[0].productId, name: gifts[0].productName, parentSku: gifts[0].parentSku })}>
-												<img style={{ display: 'inline-block', width: '100%' }}  src={gifts[0].imageUrl} />
-											</a>
-											
-										</div>
-										<div className="x-cell" style={{ paddingLeft: 10, verticalAlign: 'middle' }}>
-											<Ellipsis>
-												<span style={{ display: 'inline-block', lineHeight: '14px', fontSize: 12, color: '#e64545', border: '1px solid #e64545', paddingLeft: 5, paddingRight: 5 }}>
-													Gift
-											</span>
-												<span style={{ lineHeight: '14px', fontSize: 12, marginLeft: 10 }}>
-													{gifts[0].productName}
-												</span>
-											</Ellipsis>
-											<div style={{marginTop:10}}>
-												<Red>{unitprice(gifts[0].realPrice)}</Red>
-												<Link style={{float:'right', color:'#e64545'}} to={`${__route_root__}/gifts`}>View gift </Link>
-											</div>
 
-										</div>
-									</div>
-								</div>
 
-							</Box>
-						}
+				</ShoppingBody> : <ShoppingBody>
+						<div className="__hd">
+							<EditingHead>
+								<span className="__title"><FormattedMessage id="shopping_bag" /></span>
+								<span className="__done" onClick={evt => { this.setState({ managing: false }) }}>Done</span>
+							</EditingHead>
+						</div>
+						<div className="__bd" style={{ paddingBottom: 60 }}>
 
-						{
-							cart.giftWarnMsg && <Box>
-								<div style={{ padding: 10 }}>
-									<span className="iconfont" style={{ color: '#ff8454', fontSize: 30, verticalAlign: 'middle' }}>&#xec45;</span>
-									<span style={{verticalAlign: 'middle'}} dangerouslySetInnerHTML={{__html: cart.giftWarnMsg}}></span>
-								</div>
-							</Box>
-						}
-
-						{
-							invalidItems && invalidItems.length > 0 && <Box>
-								<GroupInvalidItems serverTime={cart.serverTime}
-									items={this.getInvalidItems(cart)}
-									clearall={this.clearall}
-									itemDelete={this.itemDelete} />
-							</Box>
-						}
-
-						<Box>
-							<BoxClickHead className="x-small" title={intl.formatMessage({ id: 'coupon' })}>
-								<Link style={{ textDecoration: 'none', color: '#222' }} to={`${window.ctx || ''}${__route_root__}/coupons`}>
-
-									{cart.coupon ? (
-										<span><strong>{cart.coupon.couponName}</strong> {cart.coupon.name}</span>
-									) : (
-											<span>
-												<FormattedMessage id="can_use_coupon" values={{
-													canUseCouponCount: <Red>{cart.canUseCouponCount}</Red>
-												}}/>
-											</span>
-										)}
-								</Link>
-							</BoxClickHead>
-
-							{/* {
-								cart.messages && cart.messages.couponMsg && <Tip>
-									<span dangerouslySetInnerHTML={{ __html: cart.messages.couponMsg }} />
-								</Tip>
-							} */}
-
-							<LineBox style={{ paddingLeft: 10, paddingRight: 10 }}>
+							<Boxs style={{ backgroundColor: '#f6f6f6', padding: 8 }}>
 								{
-									cart.shippingInsurancePrice2 && cart.shippingDetail && (isprogresspage || window.token) && (
-										<TurnTool ignoreButton={cart.isShippingInsuranceMust} open={this.openInsurance.bind(this)} turnAcitve={cart.insurance}>
-											<span style={{ fontSize: 15 }}>
-												<FormattedMessage id="add_shipping_insurance" values={{ price: <Red><Money money={cart.shippingInsurancePrice2} /></Red> }} />
-											</span>
-											<Ask style={{ marginLeft: 4 }} onClick={this.insuranceClickHandle.bind(this)} />
-										</TurnTool>
-									)
-								}
-
-								{
-									cart.expectedPoints > 0 && (
-										<TurnTool open={this.openPoints.bind(this)} turnAcitve={cart.openPointUse}>
-
-											<FormattedMessage style={{ fontSize: 15 }} id="credit_msg" values={{ credits: cart.expectedPoints, discount: <Red><Money money={cart.expectedPointDiscount} /></Red> }} />
-											<Ask style={{ marginLeft: 4 }} onClick={this.creditClickHandle.bind(this)} />
-										</TurnTool>
-									)
-								}
-							</LineBox>
-						</Box>
-
-						{
-							isprogresspage && (
-								<Box innerRef={c => { this.$paylistdom = c }}>
-									<BoxHead single title={intl.formatMessage({ id: 'payment_method' })} />
-									<div style={{ paddingLeft: 10, paddingRight: 10 }}>
-										<PayMethodList
-											cpfClickHandle={this.cpfClickHandle.bind(this)}
-											boletoForm={(c) => this.boletoForm = c}
-											boleto={(c) => { this.boleto = c }}
-											cpf={this.props.cpf}
-											email={this.props.email}
-											handleInputChange={this.handleInputChange}
-											selectedPayId={this.props.payMethod}
-											selectPayHandle={this.selectPayHandle.bind(this)}
-											methods={this.props.cart.payMethodList}
-											ticketMethods={this.state.ticketMethods}
-											atmClickHandle={this.atmClickHandle.bind(this)}
-											ticketClickHandle={this.ticketClickHandle.bind(this)}
-											atmMethod={this.props.atmMethod}
-											ticketMethod={this.props.ticketMethod}
-											atmMethods={this.state.atmMethods}
-											apac={c => this.apac = c}
-											apacBB={c => this.apacBB = c}
-											paypalDiscountMessage={cart.paypalDiscountMessage}
-											showMercadopagoCouponField={cart.showMercadopagoCouponField}
-											setCouponHandle={this.useMercadoCoupon.bind(this)}
-											couponCode={this.props.couponCode}
-											mercadoCouponClickHandle={this.mercadoCouponClickHandle.bind(this)}
-											tcClickHandle={this.tcClickHandle.bind(this)}
-											tcMethod={tcMethod}
-
-											documentForm={c => this.documentForm = c}
-											documentRef={c => this.documentRef = c}
-											document={this.props.document}
-											initCashmethod={this.initCashmethod.bind(this)}
+									hasOverseas && formatedData.overseasDelivery && <Box>
+										<PromotionGroup
+											group={formatedData.overseasDelivery}
+											itemSelect={this.itemEditSelect}
+											shippingMethod={cart.shippingMethod}
+											serverTime={cart.serverTime}
+											selectedItems={this.state.selectedItems}
+											ignoreItemSelected
+											isEditingItem
 										/>
-									</div>
-								</Box>
-							)
-						}
+									</Box>
+								}
 
-						<Box>
-							<BoxHead single title={intl.formatMessage({ id: 'order_summary' })} />
-							<OrderSummary>
 
 								{
-									cart.orderSummary.display.map(display => (
-										<div key={display.label} className="x-flex __between __summary">
-											<span>
-												<span dangerouslySetInnerHTML={{ __html: display.label }} />
-												{
-													display.asker && <Ask style={{ marginLeft: 4 }} onClick={(evt) => { this.displayAskClickHandle(evt, display.asker) }} />
-												}
-											</span>
-
-											<span dangerouslySetInnerHTML={{ __html: display.value }} />
-										</div>
+									hasLocalItems && formatedData.domesticDeliveryCases.map(domestic => (
+										<Box key={domestic.countryCode}>
+											<GroupLocalItems
+												icon={domestic.icon}
+												title={domestic.title}
+												itemSelect={this.itemEditSelect}
+												serverTime={cart.serverTime}
+												domestic={domestic}
+												items={domestic.shoppingCartProducts}
+												selectedItems={this.state.selectedItems}
+												isEditingItem
+												ignoreItemSelected />
+										</Box>
 									))
 								}
 
+								{
+									invalidItems && invalidItems.length > 0 && <Box>
+										<GroupInvalidItems serverTime={cart.serverTime}
+											items={this.getInvalidItems(cart)}
+											itemSelect={this.itemEditSelect}
+											selectedItems={this.state.selectedItems}
+											ignoreItemSelected
+											isEditingItem
+										/>
+									</Box>
+								}
+							</Boxs>
 
 
+						</div>
 
-							</OrderSummary>
-						</Box>
+						<div className="__fd">
+							<div>
+								<span style={{ display: 'inline-block' }}>
+									<CheckBox style={{ verticalAlign: 'middle' }} onClick={(evt) => { this.allEditHandle(!this.state.editSelectAll) }} className={this.state.editSelectAll ? 'selected' : ''} />
+									<span style={{ verticalAlign: 'middle', marginLeft: 7 }}><FormattedMessage id="all" /></span>
+								</span>
 
-						<Box style={{backgroundColor:'#f6f6f6', paddingTop:15, paddingBottom: 15}}>
-							<div style={{color:'#999'}}><FormattedMessage id="secure_payment"/></div>
-							<img style={{width: 140, marginTop:10}} src="https://dgzfssf1la12s.cloudfront.net/upgrade/20210225/sp.png"/>
-						</Box>
-
-						{
-							isprogresspage ? (
-								<Box>
-									<div style={{ height: (sitename === 'bellewholesale' ? 140 : 90), backgroundColor:'#f6f6f6' }}>
-
-										{
-											cart.canCheckout ? <Checkout>
-												<div className="__total">
-													<span>{intl.formatMessage({ id: 'total' })}: </span>
-													<Red><Money money={cart.orderSummary.orderTotal} /></Red>
-													{
-														this.props.payMethod === '22' && <Red style={{ fontWeight: 'normal', marginLeft: 5, fontSize: 14 }}>(Em até 3x s/ juros)</Red>
-													}
-												</div>
-												{
-													cancheckout ? (
-														!this.state.checking ? <BigButton onClick={this.checkout.bind(this)} className="__btn" height={47} bgColor="#222">
-															{intl.formatMessage({ id: 'check_out' })} ({totalCount})
-														</BigButton> : <BigButton className="__btn" height={47} bgColor="#999">
-																{intl.formatMessage({ id: 'please_wait' })}...
-														</BigButton>
-													) : (
-															<BigButton className="__btn" height={47} bgColor="#999">
-																{intl.formatMessage({ id: 'check_out' })} ({totalCount})
-															</BigButton>
-														)
-												}
-											</Checkout> : <Checkout>
-													<div className="__total">
-														<span>{intl.formatMessage({ id: 'total' })}: </span>
-														<Red><Money money={cart.orderSummary.orderTotal} /></Red>
-													</div>
-													<div>
-														<BigButton className="__btn" height={47} bgColor="#999">
-															{intl.formatMessage({ id: 'check_out' })} ({totalCount})
-													</BigButton>
-													</div>
-												</Checkout>
-										}
-
-									</div>
-								</Box>
-							) : (
-									window.token ? (
-										<Box>
-											<div style={{ height: (sitename === 'bellewholesale' ? 140 : 90) }}>
-												<Checkout>
-													<div className="__total">
-														<span>{intl.formatMessage({ id: 'total' })}: </span>
-														<Red><Money money={cart.orderSummary.orderTotal} /></Red>
-													</div>
-													{
-														cancheckout ? (
-															<BigButton onClick={this.quickPlace.bind(this)} className="__btn" height={47} bgColor="#222">
-																Place Order
-															</BigButton>
-														) : (
-																<BigButton className="__btn" height={47} bgColor="#ddd">
-																	{intl.formatMessage({ id: 'check_out' })}
-																</BigButton>
-															)
-													}
-												</Checkout>
-											</div>
-										</Box>
-									) : (
-											<Box>
-												<div style={{ height: (sitename === 'bellewholesale' ? 140 : 90) }}>
-												</div>
-
-
-												{
-													cart.canCheckout ? <Checkout>
-														<div className="__total">
-															<span>{intl.formatMessage({ id: 'total' })}: </span>
-															<Red><Money money={cart.orderSummary.orderTotal} /></Red>
-
-
-															{cart.paypalDiscountMessage && <DISCOUNTTIP dangerouslySetInnerHTML={{ __html: cart.paypalDiscountMessage }} />}
-
-														</div>
-
-
-
-														{
-															hasQuickPay ? <DoubleBtn className="x-flex __between">
-																<div>
-																	<BigButton onClick={() => {
-																		this.props.history.push(`${window.ctx || ''}${__route_root__}/address`)
-																	}} className="__btn" height={47} bgColor="#222">
-																		{intl.formatMessage({ id: 'check_out' })} ({totalCount})
-															</BigButton>
-																</div>
-																<div>
-																	<PaypalBtn onClick={this.quickPaypal.bind(this)}><img src={cart.paypalButtonImage} /></PaypalBtn>
-																</div>
-															</DoubleBtn> : <div>
-																	<BigButton onClick={() => { this.props.history.push(`${window.ctx || ''}${__route_root__}/address`) }} className="__btn" height={47} bgColor="#222">
-																		{intl.formatMessage({ id: 'check_out' })} ({totalCount})
-														</BigButton>
-																</div>
-														}
-
-
-
-
-													</Checkout> : <Checkout>
-															<div className="__total">
-																<span>{intl.formatMessage({ id: 'total' })}: </span>
-																<Red><Money money={cart.orderSummary.orderTotal} /></Red>
-															</div>
-															<div>
-																<BigButton className="__btn" height={47} bgColor="#999">
-																	{intl.formatMessage({ id: 'check_out' })} ({totalCount})
-													</BigButton>
-															</div>
-														</Checkout>
-												}
-
-
-											</Box>
-										)
-								)
-						}
-
-					
-
-					</Boxs>
-
-					{
-						editing.isEditing && (
-							<React.Fragment>
-								<Mask />
-								<ProductEditor onClose={() => { this.props.EDITED() }}
-									itemConfirmHandle={this.itemConfirmHandle}
-									item={editing.item} />
-							</React.Fragment>
-						)
-					}
-
-					{
-						isCreditShow && this.props.payMethod === '19' && mercadocards && mercadocards.length && (
-							<React.Fragment>
-								<Mask />
-								<CreditCard
-									count={totalCount}
-									payMethod={this.props.payMethod}
-									securityCode={this.props.securityCode}
-									handleMercado={this.checkmercado.bind(this)}
-									mercadoref={this.mercadoref.bind(this)}
-									handleInputChange={this.handleInputChange}
-									creditClose={this.creditClose.bind(this)}
-									cardSelect={this.cardSelect.bind(this)}
-									cards={mercadocards}
-									addCard={this.addMercadoCard.bind(this)}
-									status={this.props.creditstatus}
-									orderTotal={cart.orderSummary.orderTotal}
-									installments={this.props.mercadoinstallments}
-									checking={this.state.checking}
-									toggleBack={() => {
-										this.props.TOGGLECREDITSTATUS(this.props.creditstatus === 0 ? 1 : 0)
-									}}
-
-								/>
-							</React.Fragment>
-						)
-					}
-
-					{
-						isCreditShow && (this.props.payMethod === '3' || this.props.payMethod === '17' || this.props.payMethod === '18' || this.props.payMethod === '22' || this.props.payType === '12') && creditcards && creditcards.length && (
-							<React.Fragment>
-								<Mask />
-								<CreditCard
-									count={totalCount}
-									cards={creditcards}
-									payMethod={this.props.payMethod}
-									orderTotal={cart.orderSummary.orderTotal}
-									cpf={this.props.cpf}
-									cpfClickHandle={this.cpfClickHandle.bind(this)}
-									handleCredit={this.handleCredit.bind(this)}
-									brazilref={(c) => { this.brazilref = c }}
-									brazilForm={c => this.brazilForm = c}
-									handleInputChange={this.handleInputChange}
-									creditClose={this.creditClose.bind(this)}
-									installmentoptions={this.props.cart.payInstalmentsByOceanpaymentBRACreditCard || []}
-									installments={this.props.installments}
-									addCard={this.addCreditCard.bind(this)}
-									cardSelect={this.cardSelect.bind(this)}
-									status={this.props.creditstatus}
-									checking={this.state.checking}
-									toggleBack={() => {
-										this.props.TOGGLECREDITSTATUS(this.props.creditstatus === 0 ? 1 : 0)
-									}}
-									country={country}
-									document={this.props.document}
-									dlocalref={c => this.dlocalref = c}
-									dlocalbtn={c => this.dlocalbtn = c}
-									cvvRef={this.cvvRef.bind(this)}
-									dlocalerror={this.state.dlocalerror}
-								/>
-							</React.Fragment>
-						)
-					}
-
-					{
-						this.state.showAsk && this.state.askMessage && (
-							<React.Fragment>
-								<Mask />
-								<FixedMessage onClose={() => { this.setState({ showAsk: false, askMessage: null }) }}>
-									<p dangerouslySetInnerHTML={{ __html: this.state.askMessage }} />
-								</FixedMessage>
-							</React.Fragment>
-						)
-					}
-
-					{
-						this.state.paypaling && <React.Fragment>
-							<Mask />
-							<div className="paypal-loading-wrap">
-								<div className="paypal-back"></div>
-								<div className="paypal-loading">
-								</div>
 							</div>
-						</React.Fragment>
-					}
+							<div>
+								<EditButton onClick={this.addAllToWish.bind(this)}><FormattedMessage id="move_to_wish_list" /></EditButton>
+								<EditButton onClick={this.deleteAllItems.bind(this)} style={{ marginLeft: 10 }}><FormattedMessage id="delete" /></EditButton>
+							</div>
+						</div>
+					</ShoppingBody>
+			}
 
-					{
-						this.state.showPayMsgOcean && cart.cancelOceanpaymentPayMsg && <Confirm title={
-							/*global sitename b:true */
-							/*eslint no-undef: "error"*/
-							window.siteName
-						}
-							no={() => {
-								this.setState({ showPayMsgOcean: false })
-								this.props.TOGGLECREDIT(false)
-							}}
-							close={() => { this.setState({ showPayMsgOcean: false }) }}
-							yes={() => { this.setState({ showPayMsgOcean: false }) }}
-							yesLabel="Continue" noLabel="No, Thanks">
-							<span dangerouslySetInnerHTML={{ __html: cart.cancelOceanpaymentPayMsg }} />
-						</Confirm>
-					}
 
-					{
-						this.state.successTip && <SUCCESSTIP>
-							{this.state.successTip}
-						</SUCCESSTIP>
-					}
 
-					{
-						cart.messages && cart.messages.couponMsg && <CouponAlert innerRef={c => this.couponAlert = c} coupon={cart.coupon} couponMsg={cart.messages ? cart.messages.couponMsg: null}/>
-					}
+			{
+				this.state.confirm.open && <ConfirmAlter content={this.state.confirm.content} yesBack={this.state.confirm.yesBack} noBack={this.state.confirm.noBack} />
+			}
 
-					
-
-				</div>)
-		))
+		</React.Fragment>
 	}
 }
 
