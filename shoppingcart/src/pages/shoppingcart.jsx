@@ -52,6 +52,8 @@ import SUCCESSTIP from '../components/pc/successtip.jsx'
 
 import Loadable from 'react-loadable'
 
+import ShippingMethodHead from '../components/msite/shipping-method-head.jsx'
+
 
 
 
@@ -199,9 +201,6 @@ const IconMessage = styled.div`
 		vertical-align: middle;
 		&:first-child{
 			width: 27px;
-		}
-		&:last-child{
-			width: 50px;
 		}
 	}
 `
@@ -1210,7 +1209,11 @@ const ShoppingCart = class extends React.Component {
 					yesBack: () => {
 
 						if (!window.__is_login__) {
-							window.location.href = `/login?redirectUrl=${encodeURIComponent(window.location.href)}`
+							window.location.href = `${window.ctx}/${
+								/*global siteType b:true*/
+								/*eslint no-undef: "error"*/
+								siteType === 'new' ? 'page' : 'i'
+								}/login?redirectUrl=${encodeURIComponent(window.location.href)}&loginPage=1`
 						} else {
 							this.props.WISHITEM(productIds, variantIds)
 							this.setState({
@@ -1251,7 +1254,11 @@ const ShoppingCart = class extends React.Component {
 				content: 'Are you sure moving the product to wishlist from shopping bag?',
 				yesBack: () => {
 					if (!window.__is_login__) {
-						window.location.href = `/login?redirectUrl=${encodeURIComponent(window.location.href)}`
+						window.location.href = `${window.ctx}/${
+							/*global siteType b:true*/
+							/*eslint no-undef: "error"*/
+							siteType === 'new' ? 'page' : 'i'
+							}/login?redirectUrl=${encodeURIComponent(window.location.href)}&loginPage=1`
 					} else {
 						this.props.WISHITEM(item.productId, item.variantId)
 						this.setState({
@@ -2065,7 +2072,7 @@ const ShoppingCart = class extends React.Component {
 							<span className="__back">&#xe690;</span>
 							<span className="__tools">
 								<span onClick={evt => { this.setState({ managing: true }) }} className="__edit">&#xe7b6;</span>
-								<span className="__wish">&#xe6a2;</span>
+								<span onClick={evt => { window.location.href = `${window.ctx || ''}/me/m/wishlist` }} className="__wish">&#xe6a2;</span>
 							</span>
 						</ShoppingHead>
 					</div>
@@ -2128,8 +2135,8 @@ const ShoppingCart = class extends React.Component {
 															<BoxClickHead title={intl.formatMessage({ id: 'address' })} single={true}>
 																<Grey>
 																	<Link style={{ color: '#222', textDecoration: 'none' }} to={`${window.ctx || ''}${__route_root__}/address`}>
-																		Add
-													</Link>
+																		<FormattedMessage id="add" />
+																	</Link>
 																</Grey>
 															</BoxClickHead>
 															<DashedLine />
@@ -2146,7 +2153,9 @@ const ShoppingCart = class extends React.Component {
 														<div>
 															<span dangerouslySetInnerHTML={{ __html: cart.messages.shippingMsg }} />
 														</div>
-														<div></div>
+														{/* <div>
+															<span style={{ fontFamily: 'SlatePro-Medium', fontSize: 13 }}><FormattedMessage id="add" /> {'>'}</span>
+														</div> */}
 													</IconMessage>
 												</Box>
 											}
@@ -2265,62 +2274,6 @@ const ShoppingCart = class extends React.Component {
 												</Box>
 											}
 
-											<Box>
-												<BoxClickHead className="x-small" title={intl.formatMessage({ id: 'coupon' })}>
-													<Link style={{ textDecoration: 'none', color: '#222' }} to={`${window.ctx || ''}${__route_root__}/coupons`}>
-
-														{cart.coupon ? (
-															<span><strong>{cart.coupon.couponName}</strong> {cart.coupon.name}</span>
-														) : (
-																<span>
-																	<FormattedMessage id="can_use_coupon" values={{
-																		canUseCouponCount: <Red>{cart.canUseCouponCount}</Red>
-																	}} />
-																</span>
-															)}
-													</Link>
-												</BoxClickHead>
-
-												{/* {
-										cart.messages && cart.messages.couponMsg && <Tip>
-											<span dangerouslySetInnerHTML={{ __html: cart.messages.couponMsg }} />
-										</Tip>
-									} */}
-
-												<LineBox style={{ paddingLeft: 10, paddingRight: 10 }}>
-													{
-														cart.shippingInsurancePrice2 && cart.shippingDetail && (isprogresspage || window.token) && (
-															<TurnTool ignoreButton={cart.isShippingInsuranceMust} open={this.openInsurance.bind(this)} turnAcitve={cart.insurance}>
-																<span style={{ fontSize: 15 }}>
-																	<FormattedMessage id="add_shipping_insurance" values={{ price: <Red><Money money={cart.shippingInsurancePrice2} /></Red> }} />
-																</span>
-																<Ask style={{ marginLeft: 4 }} onClick={this.insuranceClickHandle.bind(this)} />
-															</TurnTool>
-														)
-													}
-
-
-
-
-
-													{
-														!!cart.shippingDetail && (isprogresspage || window.token) && <div>
-															{/* //TODO */}
-														</div>
-													}
-
-
-													{
-														cart.expectedPoints > 0 && (
-															<TurnTool open={this.openPoints.bind(this)} turnAcitve={cart.openPointUse}>
-
-																<FormattedMessage style={{ fontSize: 15 }} id="credit_msg" values={{ credits: cart.expectedPoints, discount: <Red><Money money={cart.expectedPointDiscount} /></Red> }} />
-																<Ask style={{ marginLeft: 4 }} onClick={this.creditClickHandle.bind(this)} />
-															</TurnTool>
-														)
-													}
-												</LineBox>
-											</Box>
 
 											{
 												isprogresspage && (
@@ -2362,6 +2315,83 @@ const ShoppingCart = class extends React.Component {
 													</Box>
 												)
 											}
+
+
+
+
+											<Box>
+												<LineBox style={{ paddingLeft: 10, paddingRight: 10 }}>
+
+
+
+
+													{
+														cart.shippingMethod && !!cart.shippingDetail && (isprogresspage || window.token) && <ShippingMethodHead onClick={evt => { this.props.history.push(`${window.ctx || ''}${__route_root__}/shipping-methods`) }} shippingMethod={cart.shippingMethod} />
+													}
+
+													{
+														cart.shippingInsurancePrice2 && cart.shippingDetail && (isprogresspage || window.token) && (
+															<TurnTool ignoreButton={cart.isShippingInsuranceMust} open={this.openInsurance.bind(this)} turnAcitve={cart.insurance}>
+																<span style={{ fontSize: 15 }}>
+																	<FormattedMessage id="add_shipping_insurance" values={{ price: <Red><Money money={cart.shippingInsurancePrice2} /></Red> }} />
+																</span>
+																<Ask style={{ marginLeft: 4 }} onClick={this.insuranceClickHandle.bind(this)} />
+															</TurnTool>
+														)
+													}
+
+
+												</LineBox>
+											</Box>
+
+
+
+											<Box>
+												<BoxClickHead className="x-small" title={intl.formatMessage({ id: 'coupon' })}>
+													<Link style={{ textDecoration: 'none', color: '#222' }} to={`${window.ctx || ''}${__route_root__}/coupons`}>
+
+														{cart.coupon ? (
+															<span><strong>{cart.coupon.couponName}</strong> {cart.coupon.name}</span>
+														) : (
+																<span>
+																	<FormattedMessage id="can_use_coupon" values={{
+																		canUseCouponCount: <Red>{cart.canUseCouponCount}</Red>
+																	}} />
+																</span>
+															)}
+													</Link>
+												</BoxClickHead>
+
+												{/* {
+										cart.messages && cart.messages.couponMsg && <Tip>
+											<span dangerouslySetInnerHTML={{ __html: cart.messages.couponMsg }} />
+										</Tip>
+									} */}
+
+
+
+
+
+
+												<LineBox style={{ paddingLeft: 10, paddingRight: 10 }}>
+
+
+
+
+
+													{
+														cart.expectedPoints > 0 && (
+															<TurnTool open={this.openPoints.bind(this)} turnAcitve={cart.openPointUse}>
+
+																<FormattedMessage style={{ fontSize: 15 }} id="credit_msg" values={{ credits: cart.expectedPoints, discount: <Red><Money money={cart.expectedPointDiscount} /></Red> }} />
+																<Ask style={{ marginLeft: 4 }} onClick={this.creditClickHandle.bind(this)} />
+															</TurnTool>
+														)
+													}
+												</LineBox>
+											</Box>
+
+
 
 											<Box>
 												<BoxHead single title={intl.formatMessage({ id: 'order_summary' })} />
@@ -2448,7 +2478,7 @@ const ShoppingCart = class extends React.Component {
 												) : (
 														window.token ? (
 															<Box>
-																<div style={{ height: 158 }}>
+																<div style={{ height: 158, backgroundColor: '#f6f6f6' }}>
 																	<Checkout>
 																		<div className="__total">
 																			<div></div>
@@ -2473,7 +2503,7 @@ const ShoppingCart = class extends React.Component {
 															</Box>
 														) : (
 																<Box>
-																	<div style={{ height: 158 }}>
+																	<div style={{ height: 158, backgroundColor: '#f6f6f6' }}>
 																	</div>
 
 

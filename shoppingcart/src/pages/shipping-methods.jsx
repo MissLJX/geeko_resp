@@ -30,8 +30,8 @@ const Method = styled.li`
 	cursor: pointer;
 	&.selected{
 		&::after{
-			content: '\\e638';
-			color: #e5004f;
+			content: '\\e73b';
+			color: #000000;
 			font-size: 20px;
 			font-family: iconfont;
 			font-style:normal;
@@ -42,11 +42,17 @@ const Method = styled.li`
   			top: calc(50% - 10px);
 		}
 	}
+
+	.price{
+		font-family: SlatePro-Medium;
+		font-size: 16px;
+	}
 ` 
 
 const Methods = styled.ul`
-	padding-left: 10px;
-	padding-right: 10px;
+	padding-left: 20px;
+	padding-right: 20px;
+	border-top: 8px solid #f6f6f6;
 	& > li{
 		border-top: 1px solid #e5e5e5;
 		&:first-child{
@@ -81,7 +87,7 @@ const ShippingMethods = class extends React.Component {
 					methods && methods.map(method => (
 						<Method onClick={(evt) => { this.clickHandle(evt, method.id) }} className={method.id === selectedMethod.id ? 'selected' : ''}>
 							<div>
-								{method.title}: <Money money={method.price} />
+								{method.title}: <span className="price"><Money money={method.price} /></span>
 							</div>
 
 							<div style={{ marginTop: 6 }}>
@@ -92,10 +98,15 @@ const ShippingMethods = class extends React.Component {
 				}
 			</Methods>
 
-			<p style={{ fontSize: 12, padding: '12px 10px', borderTop: '1px dashed #666' }}><Grey>{intl.formatMessage({ id: 'shipping_tip' })}</Grey></p>
-			<div style={{ padding: '12px 10px' }}>
-				<img style={{ width: '100%' }} src="https://dgzfssf1la12s.cloudfront.net/site/ninimour/msite/icon17.png" />
+			<div style={{padding: '0 20px 20px 20px'}}>
+
+				<p style={{ fontSize: 12, borderTop: '1px dashed #666', paddingTop: 10 }}><Grey>{intl.formatMessage({ id: 'shipping_tip' })}</Grey></p>
+				<div style={{ marginTop: 10 }}>
+					<img style={{width:188}} src="https://dgzfssf1la12s.cloudfront.net/upgrade/20210304/shippingmethod.png"/>
+				</div>
 			</div>
+
+			
 		</FullFixed>
 	}
 }
