@@ -400,11 +400,12 @@ const Checkout = class extends React.Component {
 				
 				},
 				onError: function (err) {
-					if(err){
-						if(err.result){
-							alert(err.result)
-						}else{
-							alert(err)
+					if (err) {
+						const msg = err.stack
+						if (msg.indexOf('free') >= 0) {
+							console.log('free order')
+						} else {
+							alert(msg.substring(0, msg.indexOf('\n')))
 						}
 					}
 				}

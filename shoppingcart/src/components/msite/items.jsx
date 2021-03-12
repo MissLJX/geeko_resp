@@ -3,7 +3,7 @@ import Item, { EditItem } from './item.jsx'
 import styled from 'styled-components'
 
 const ItemUL = styled.ul`
-	padding: 10px 0;
+	padding: 0 0 10px 0;
 	& > li{
 		padding: 10px 12px;
     position: relative;

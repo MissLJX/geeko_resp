@@ -172,7 +172,10 @@ const Promotion = class extends React.Component {
 
 
 		return <div>
-			{ PHead && <PHead title="Item(s)" askClick={this.askClick.bind(this)} selectHandle={ this.groupClick } selected={this.selected()} promotion={delivery.combinatorialPromotion}/> }
+			
+				
+			
+			{ PHead && <div className="fuck" style={{padding: '12px 12px 0 12px'}}><PHead title="Item(s)" askClick={this.askClick.bind(this)} selectHandle={ this.groupClick } selected={this.selected()} promotion={delivery.combinatorialPromotion}/></div> }
 			<Items serverTime={this.props.serverTime}
 				disabledFunc={this.disabledFunc}
 				quantityChange={this.props.quantityChange}

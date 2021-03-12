@@ -2069,7 +2069,7 @@ const ShoppingCart = class extends React.Component {
 					<div className="__hd">
 						<ShoppingHead>
 							<span className="__title"><FormattedMessage id="shopping_bag" /></span>
-							<span className="__back">&#xe690;</span>
+							<span onClick={evt => { this.props.history.goBack() }} className="__back">&#xe690;</span>
 							<span className="__tools">
 								<span onClick={evt => { this.setState({ managing: true }) }} className="__edit">&#xe7b6;</span>
 								<span onClick={evt => { window.location.href = `${window.ctx || ''}/me/m/wishlist` }} className="__wish">&#xe6a2;</span>

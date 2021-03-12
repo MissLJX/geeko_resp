@@ -435,9 +435,9 @@ const ShoppingCart = class extends React.Component {
 
 	paypalcheck(method) {
 		if ('quick' === method) {
-			return quickpaypal()
+			return paypal_check_out
 		} else {
-			return normalpaypal()
+			return paypal_pay
 		}
 	}
 
@@ -580,15 +580,20 @@ const ShoppingCart = class extends React.Component {
 				},
 
 				createOrder: function (data, actions) {
-					// This function sets up the details of the transaction, including the amount and line item details.
-					if(method === 'quick'){
-						return paypal_check_out({ payMethod: 1 }).then(data => data.result).then(payResult => payResult.payPalOrder).then(order => order.id)
-					}else{
-						return paypal_pay({payMethod: 1}).then(data => data.result).then(payResult => {
-							self.orderId = payResult.orderId
-							return payResult.payPalOrder
-						}).then(order => order.id)
-					}
+					const createPaypal = self.paypalcheck(method)
+					return createPaypal({ payMethod: 1 }).then(data => {
+						const payResult = data.result
+						const { payPalOrder, isFree, transactionId, orderId, success } = payResult
+						self.orderId = orderId
+
+						if (isFree && transactionId && orderId) {
+							window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
+							throw new Error('free')
+						}
+						return payPalOrder.id
+					}).catch(data => {
+						throw new Error(data.result)
+					})
 				},
 				onApprove: function (data, actions) {
 					// This function captures the funds from the transaction.
@@ -598,16 +603,13 @@ const ShoppingCart = class extends React.Component {
 						paypal_get_shipping_details(orderID).then(() => {
 							window.location.href = `${window.ctx || ''}/cart?token=${orderID}`
 						}).catch(data => {
-							if(data && data.result){
+							if (data && data.result) {
 								alert(data.result)
-							}else{
+							} else {
 								alert(data)
 							}
 						})
 
-
-
-						
 					} else {
 						paypal_capture(orderID).then(data => data.result).then(result => {
 							window.location.href = `${window.ctx || ''}/order-confirm/${result}`
@@ -622,21 +624,39 @@ const ShoppingCart = class extends React.Component {
 						})
 					}
 				},
+				onClick: function () {
+					const { cart, history } = self.getProps()
+					if (!cart.shippingDetail && method !== 'quick') {
+						alert(__confirm_address__)
+						self.$addressdom.scrollIntoView()
+						return false
+					}
+
+					if (cart.shippingDetail && !cart.shippingDetail.phoneNumber && method !== 'quick') {
+						const path = {
+							pathname: isCheckout ? `${window.ctx || ''}${__route_root__}/checkout/address` : `${window.ctx || ''}${__route_root__}/address`,
+							state: {
+								validate: true
+							}
+						}
+						this.props.history.push(path)
+						return false
+					}
+				},
 				onCancel: function (data, actions) {
 					if (method === 'normal') {
-						console.log(data)
 						window.location.href = `${window.ctx || ''}/checkout/${self.orderId}`
 					}
 				},
 				onError: function (err) {
-					if(err){
-						if(err.result){
-							alert(err.result)
-						}else{
-							alert(err)
+					if (err) {
+						const msg = err.stack
+						if (msg.indexOf('free') >= 0) {
+							console.log('free order')
+						} else {
+							alert(msg.substring(0, msg.indexOf('\n')))
 						}
 					}
-					
 				}
 
 			}).render(c);

@@ -19,7 +19,7 @@ const SHIPPINGMETHODHEAD = sytled.div`
     & > div{
         &:last-child{
             flex-shrink: 0;
-            width: 136px;
+            width: 140px;
             text-align: right;
         }
     }

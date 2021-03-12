@@ -318,15 +318,15 @@ const Item = class extends React.Component {
             <div className="x-flex __column __between">
 
               <div>
-                <Ellipsis style={{ maxWidth: 198 }}><Grey>{props.item.productName}</Grey></Ellipsis>
+                <Ellipsis style={{ maxWidth: 178 }}><Grey>{props.item.productName}</Grey></Ellipsis>
 
 
                 <div style={{ height: '30px', paddingTop: 10, position: 'relative' }}>
 
                   {
-                    props.item.itemPrice.amount - props.item.realPrice.amount > 0 ? <Red style={{ fontSize: '18px', fontFamily: 'SlatePro-Medium' }}>
+                    props.item.itemPrice.amount - props.item.realPrice.amount > 0 ? <React.Fragment><Red style={{ fontSize: '18px', fontFamily: 'SlatePro-Medium' }}>
                       <Money money={props.item.realPrice} />
-                    </Red> : <span style={{ fontSize: '18px', fontFamily: 'SlatePro-Medium' }}><Money money={props.item.realPrice} /></span>
+                    </Red> <del style={{fontSize:12, marginLeft: 5}}><Money money={props.item.itemPrice} /></del></React.Fragment> : <span style={{ fontSize: '18px', fontFamily: 'SlatePro-Medium' }}><Money money={props.item.realPrice} /></span>
                   }
                   {
                     !props.ivalidItem && <span onClick={evt => { this.itemWish(item) }} className="iconfont" style={{ position: 'absolute', right: 0, top: 14, cursor: 'pointer' }}>&#xe7b5;</span>
@@ -345,7 +345,7 @@ const Item = class extends React.Component {
 
 
               {
-                props.ivalidItem && <div><REDICON>Find Simialrs</REDICON></div>
+                props.ivalidItem && <div><REDICON onClick={evt => {window.location.href = `${window.ctx || ''}/i/simialrs?productId=${item.productId}`}}>Find Simialrs</REDICON></div>
               }
 
 
