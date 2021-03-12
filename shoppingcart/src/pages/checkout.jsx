@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { injectIntl } from 'react-intl'
+import { injectIntl, FormattedMessage } from 'react-intl'
 import PayMethodList from '../components/msite/paymethod-list.jsx'
 import Refreshing from '../components/msite/refreshing.jsx'
 import Ask from '../components/ask.jsx'
@@ -142,16 +142,89 @@ const FixedCheck = styled.div`
 	position: fixed;
 	width: 100%;
 	bottom: 0;
+	left: 0;
 	background-color: #fff;
 	z-index:5;
+`
+
+const ShoppingBody = styled.div`
+	& > .__hd{
+		height: 44px;
+		width: 100%;
+		position: fixed;
+		top: 0;
+		left: 0;
+		background-color: #fff;
+		z-index: 1;
+	}
+	& > .__bd{
+		padding-top: 44px;
+	}
+
+	& > .__fd{
+		height: 60px;
+		background-color: #fff;
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		padding-left: 20px;
+		padding-right: 20px;
+		align-items: center;
+		border-top: solid 1px #e6e6e6;
+	}
+`
+
+const ShoppingHead = styled.div`
+	position: relative;
+	text-align: center;
+	line-height: 44px;
+	height: 44px;
+	.__title{
+		font-family: SlatePro-Medium;
+		font-size: 17px;
+		color: #222;
+	}
+
+	.__back, .__tools{
+		position: absolute;
+		top: 0;
+	}
+
+	.__back{
+		left: 12px;
+		font-family: iconfont;
+		cursor: pointer;
+		font-size: 18px;
+		transform: rotate(180deg);
+	}
+
+	.__tools{
+		right: 12px;
+		display: inline-block;
+
+		.__edit, .__wish{
+			font-family: iconfont;
+			cursor: pointer;
+			font-size: 18px;
+			cursor: pointer;
+		}
+
+		.__wish{
+			margin-left: 12px;
+		}
+	}
+
 `
 
 const mapStateToProps = (state) => {
 	return {
 		...state
-	} 
+	}
 }
- 
+
 const mapDispatchToProps = (dispatch) => {
 	return {
 		GETME: () => {
@@ -284,20 +357,20 @@ const Checkout = class extends React.Component {
 		const value = target.type === 'checkbox' ? target.checked : target.value
 		const name = target.name
 		switch (name) {
-		case 'securityCode':
-			this.props.SETSECURITYCODE(value)
-			break
-		case 'installments':
-			this.props.SETINSTALLMENTS(value)
-			break
-		case 'mercado-installments':
-			this.props.SETMERCADOINTALLMENTS(value)
-			break
-		case 'document':
-			this.props.SETDOCUMENT(value)
-			break
-		default:
-			break
+			case 'securityCode':
+				this.props.SETSECURITYCODE(value)
+				break
+			case 'installments':
+				this.props.SETINSTALLMENTS(value)
+				break
+			case 'mercado-installments':
+				this.props.SETMERCADOINTALLMENTS(value)
+				break
+			case 'document':
+				this.props.SETDOCUMENT(value)
+				break
+			default:
+				break
 		}
 	}
 
@@ -322,7 +395,7 @@ const Checkout = class extends React.Component {
 	tcClickHandle(method) {
 		const { payMethod } = this.props.checkout
 		let _c = storage.get('cashoutMethod') || {}
-		let cashoutMethod = {..._c, [payMethod]: method}
+		let cashoutMethod = { ..._c, [payMethod]: method }
 		this.props.SETCASHOUT(cashoutMethod)
 		storage.add('cashoutMethod', cashoutMethod, 365 * 24 * 60 * 60)
 	}
@@ -332,15 +405,15 @@ const Checkout = class extends React.Component {
 		return (this.props.cashoutMethod || {})[payMethod]
 	}
 
-	initCashmethod(payMethod, method){
+	initCashmethod(payMethod, method) {
 		let _c = storage.get('cashoutMethod') || {}
 
-		if(!_c[payMethod]){
-			let cashoutMethod = {..._c, [payMethod]: method.id}
+		if (!_c[payMethod]) {
+			let cashoutMethod = { ..._c, [payMethod]: method.id }
 			this.props.SETCASHOUT(cashoutMethod)
 			storage.add('cashoutMethod', cashoutMethod, 365 * 24 * 60 * 60)
 		}
-		
+
 	}
 
 	atmClickHandle(method) {
@@ -482,254 +555,254 @@ const Checkout = class extends React.Component {
 			if (payMethod) {
 
 				switch (payMethod.type) {
-				case '1':
-					this.setState({
-						paypaling: true,
-						checking: true
-					})
-					checkout_paypal({ orderId }).then(data => data.result).then(({ TOKEN, success, transactionId, ACK, L_LONGMESSAGE0 }) => {
-						if (success && transactionId && !TOKEN) {
-							window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-							return
-						}
-						if (ACK === 'Failure') {
-							alert(L_LONGMESSAGE0)
+					case '1':
+						this.setState({
+							paypaling: true,
+							checking: true
+						})
+						checkout_paypal({ orderId }).then(data => data.result).then(({ TOKEN, success, transactionId, ACK, L_LONGMESSAGE0 }) => {
+							if (success && transactionId && !TOKEN) {
+								window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
+								return
+							}
+							if (ACK === 'Failure') {
+								alert(L_LONGMESSAGE0)
+								this.setState({
+									paypaling: false,
+									checking: false
+								})
+								return
+							}
+
+							if (TOKEN && paypal) {
+								window.location.href = paypal + TOKEN
+							}
+						}).catch(({ result }) => {
 							this.setState({
 								paypaling: false,
 								checking: false
 							})
-							return
-						}
-
-						if (TOKEN && paypal) {
-							window.location.href = paypal + TOKEN
-						}
-					}).catch(({ result }) => {
-						this.setState({
-							paypaling: false,
-							checking: false
+							alert(result)
 						})
-						alert(result)
-					})
-					break
-				case '2':
-					this.setState({
-						checking: true
-					})
-					this.props.GETCREDITCARDS(payMethod.id).then(cards => {
-						if (!cards || cards.length < 1) {
-							this.props.history.push(`${this.props.match.url}/ocean/credit`)
-							this.setState({
-								checking: false
-							})
-						} else {
-							this.setState({
-								checking: false
-							})
-							this.props.TOGGLECREDIT(true)
-						}
-					})
-					break
-
-				case '3':
-					this.setState({
-						checking: true
-					})
-					this.checkcomputop({ orderId }).catch((data) => {
+						break
+					case '2':
 						this.setState({
-							checking: false
+							checking: true
 						})
-						if (data) {
-							alert(data.result)
-						}
-					})
-					break
-				case '5':
-				case '26':
-					this.setState({
-						checking: true
-					})
-					this.checkparams({ orderId }).catch(() => {
-						this.setState({
-							checking: false
-						})
-					})
-					break
-				case '6':
-					break
-				case '7':
-					this.setState({
-						checking: true
-					})
-					this.props.GETMERCADOCARDS().then((cards) => {
-						if (!cards || cards.length < 1) {
-							this.props.history.push(`${this.props.match.url}/mercado/credit`)
-						} else {
-							this.props.TOGGLECREDIT(true)
-						}
-						this.setState({
-							checking: false
-						})
-					}).catch(() => {
-						this.setState({
-							checking: false
-						})
-					})
-					break
-				case '8':
-					this.setState({
-						checking: true
-					})
-					this.props.GETCREDITCARDS(payMethod.id).then(cards => {
-						if (!cards || cards.length < 1) {
-							this.checkparams({
-								orderId
-							}).catch(() => {
+						this.props.GETCREDITCARDS(payMethod.id).then(cards => {
+							if (!cards || cards.length < 1) {
+								this.props.history.push(`${this.props.match.url}/ocean/credit`)
 								this.setState({
 									checking: false
 								})
-							})
-						} else {
+							} else {
+								this.setState({
+									checking: false
+								})
+								this.props.TOGGLECREDIT(true)
+							}
+						})
+						break
+
+					case '3':
+						this.setState({
+							checking: true
+						})
+						this.checkcomputop({ orderId }).catch((data) => {
 							this.setState({
 								checking: false
 							})
-							this.props.TOGGLECREDIT(true)
-						}
-					})
-					break
-				case '9':
-					if (!this.props.atmMethod) {
-						alert('Please select a pay method!')
-						this.$paylistdom.scrollIntoView()
-						return
-					}
-					this.setState({
-						checking: true
-					})
-					this.checkpay({
-						orderId,
-						paymentMethodId: this.props.atmMethod
-					}).catch(() => {
+							if (data) {
+								alert(data.result)
+							}
+						})
+						break
+					case '5':
+					case '26':
 						this.setState({
 							checking: true
 						})
-					})
-					break
-				case '10':
-					this.setState({
-						checking: true
-					})
-					this.checkpay({
-						orderId,
-						paymentMethodId: 'oxxo'
-					}).catch(() => {
+						this.checkparams({ orderId }).catch(() => {
+							this.setState({
+								checking: false
+							})
+						})
+						break
+					case '6':
+						break
+					case '7':
 						this.setState({
 							checking: true
 						})
-					})
-					break
-				case '11':
-					this.setState({
-						checking: true
-					})
-					if (payMethod.id === '23') {
-						this.checkpay({
-							orderId
+						this.props.GETMERCADOCARDS().then((cards) => {
+							if (!cards || cards.length < 1) {
+								this.props.history.push(`${this.props.match.url}/mercado/credit`)
+							} else {
+								this.props.TOGGLECREDIT(true)
+							}
+							this.setState({
+								checking: false
+							})
 						}).catch(() => {
 							this.setState({
-								checking: true
+								checking: false
 							})
 						})
-					} else if (payMethod.id === '22') {
-						this.checkparams({
-							orderId
-						}).catch(() => {
-							this.setState({
-								checking: true
-							})
-						})
-					}
-					break
-
-				case '12':
-					this.setState({
-						checking: true
-					})
-
-					this.props.TOGGLECREDIT(true)
-					this.props.GETDLOCALCARDS(payMethod.id).then(cards => {
-						if (!cards || cards.length < 1) {
-							this.props.history.push(`${this.props.match.url}/dlocal/credit`)
-						}
+						break
+					case '8':
 						this.setState({
-							checking: false
+							checking: true
 						})
-					}).catch(({ result }) => {
-						alert(result)
-						this.setState({
-							checking: false
+						this.props.GETCREDITCARDS(payMethod.id).then(cards => {
+							if (!cards || cards.length < 1) {
+								this.checkparams({
+									orderId
+								}).catch(() => {
+									this.setState({
+										checking: false
+									})
+								})
+							} else {
+								this.setState({
+									checking: false
+								})
+								this.props.TOGGLECREDIT(true)
+							}
 						})
-					})
-
-					break
-
-				case '13':
-					this.checkpay({
-						orderId,
-						payMethod: payMethod.id,
-						paymentMethodId: 'BL'
-					}).catch(({ result }) => {
-						alert(result)
-						this.setState({
-							checking: false
-						})
-					})
-					break
-				case '14':
-				case '15':
-				case '16':
-				case '17':
-				case '18':
-				case '19':
-				case '20':
-				case '21':
-				case '22':
-				case '23':
-				case '24':
-				case '25':
-					{
-						if (payMethod.type !== '14') {
-							this.documentForm.validateAll()
-						}
-							
-	
-						const paymentMethodId = this.getTcMethod()
-						let document = this.props.document
-	
-						if (!paymentMethodId) {
+						break
+					case '9':
+						if (!this.props.atmMethod) {
 							alert('Please select a pay method!')
 							this.$paylistdom.scrollIntoView()
 							return
 						}
-	
-						if (this.props.document || payMethod.type === '14') {
+						this.setState({
+							checking: true
+						})
+						this.checkpay({
+							orderId,
+							paymentMethodId: this.props.atmMethod
+						}).catch(() => {
 							this.setState({
 								checking: true
 							})
+						})
+						break
+					case '10':
+						this.setState({
+							checking: true
+						})
+						this.checkpay({
+							orderId,
+							paymentMethodId: 'oxxo'
+						}).catch(() => {
+							this.setState({
+								checking: true
+							})
+						})
+						break
+					case '11':
+						this.setState({
+							checking: true
+						})
+						if (payMethod.id === '23') {
 							this.checkpay({
-								orderId,
-								payMethod: payMethod.id,
-								paymentMethodId,
-								document
-							}).catch(({ result }) => {
-								alert(result)
+								orderId
+							}).catch(() => {
 								this.setState({
-									checking: false
+									checking: true
+								})
+							})
+						} else if (payMethod.id === '22') {
+							this.checkparams({
+								orderId
+							}).catch(() => {
+								this.setState({
+									checking: true
 								})
 							})
 						}
-					}
-					break
+						break
+
+					case '12':
+						this.setState({
+							checking: true
+						})
+
+						this.props.TOGGLECREDIT(true)
+						this.props.GETDLOCALCARDS(payMethod.id).then(cards => {
+							if (!cards || cards.length < 1) {
+								this.props.history.push(`${this.props.match.url}/dlocal/credit`)
+							}
+							this.setState({
+								checking: false
+							})
+						}).catch(({ result }) => {
+							alert(result)
+							this.setState({
+								checking: false
+							})
+						})
+
+						break
+
+					case '13':
+						this.checkpay({
+							orderId,
+							payMethod: payMethod.id,
+							paymentMethodId: 'BL'
+						}).catch(({ result }) => {
+							alert(result)
+							this.setState({
+								checking: false
+							})
+						})
+						break
+					case '14':
+					case '15':
+					case '16':
+					case '17':
+					case '18':
+					case '19':
+					case '20':
+					case '21':
+					case '22':
+					case '23':
+					case '24':
+					case '25':
+						{
+							if (payMethod.type !== '14') {
+								this.documentForm.validateAll()
+							}
+
+
+							const paymentMethodId = this.getTcMethod()
+							let document = this.props.document
+
+							if (!paymentMethodId) {
+								alert('Please select a pay method!')
+								this.$paylistdom.scrollIntoView()
+								return
+							}
+
+							if (this.props.document || payMethod.type === '14') {
+								this.setState({
+									checking: true
+								})
+								this.checkpay({
+									orderId,
+									payMethod: payMethod.id,
+									paymentMethodId,
+									document
+								}).catch(({ result }) => {
+									alert(result)
+									this.setState({
+										checking: false
+									})
+								})
+							}
+						}
+						break
 
 				}
 
@@ -764,9 +837,9 @@ const Checkout = class extends React.Component {
 
 
 
-			if(window.__dlocal){
+			if (window.__dlocal) {
 				window.__dlocal.createToken(this.cvvField).then(result => {
-					this.payCredit({...params, token: result.token})
+					this.payCredit({ ...params, token: result.token })
 				}).catch(result => {
 					if (result.error) {
 						// Inform the customer that there was an error.
@@ -779,8 +852,8 @@ const Checkout = class extends React.Component {
 			}
 
 
-		}else if(checkout.payMethod === '18'){
-			
+		} else if (checkout.payMethod === '18') {
+
 			openSafeChargeOrder(checkout.orderId).then(data => data.result).then(result => {
 				this.authenticate3d(result)
 			}).catch(data => {
@@ -789,34 +862,34 @@ const Checkout = class extends React.Component {
 					checking: false
 				})
 			})
-			
-		}else{
+
+		} else {
 			this.payCredit(params)
 		}
 
-		
+
 	}
 
-	authenticate3d(result){
+	authenticate3d(result) {
 		const response = result.openOrderResponse
 		const self = this
 
-        // Instantiate Safecharge API
-        const sfc = SafeCharge({
-            env: window.safechargeEnv || 'prod', // the environment you’re running on, prod for production
-            merchantId: response.merchantId, //as asigned by SafeCharge
-            merchantSiteId: response.merchantSiteId // your merchantsite id provided by Safecharge
-        })
+		// Instantiate Safecharge API
+		const sfc = SafeCharge({
+			env: window.safechargeEnv || 'prod', // the environment you’re running on, prod for production
+			merchantId: response.merchantId, //as asigned by SafeCharge
+			merchantSiteId: response.merchantSiteId // your merchantsite id provided by Safecharge
+		})
 
 
-        sfc.createPayment({
-            "sessionToken": response.sessionToken, //recieved form opeOrder API
-            "merchantId": response.merchantId, //as asigned by SafeCharge
-            "merchantSiteId": response.merchantSiteId, //as asigned by SafeCharge
-            "userTokenId": response.userTokenId,
-            "clientUniqueId": response.clientUniqueId, // optional
-            "paymentOption": {
-                "userPaymentOptionId": result.userPaymentOptionId,
+		sfc.createPayment({
+			"sessionToken": response.sessionToken, //recieved form opeOrder API
+			"merchantId": response.merchantId, //as asigned by SafeCharge
+			"merchantSiteId": response.merchantSiteId, //as asigned by SafeCharge
+			"userTokenId": response.userTokenId,
+			"clientUniqueId": response.clientUniqueId, // optional
+			"paymentOption": {
+				"userPaymentOptionId": result.userPaymentOptionId,
 			},
 			"billingAddress": {
 				"country": result.country,
@@ -825,11 +898,11 @@ const Checkout = class extends React.Component {
 			"deviceDetails": {
 				"ipAddress": result.ip
 			}
-        }, function (res) {
+		}, function (res) {
 			setSafeChargeStatus(response.sessionToken).then(data => data.result).then(result => {
-				if(res.result === "APPROVED"){
+				if (res.result === "APPROVED") {
 					window.location.href = `${window.ctx || ''}/order-confirm/${response.clientUniqueId}`
-				}else{
+				} else {
 					alert(res.errorDescription || res.reason || 'Error')
 					self.setState({
 						checking: false
@@ -841,15 +914,15 @@ const Checkout = class extends React.Component {
 					checking: false
 				})
 			})
-        })
+		})
 	}
 
-	triggerOcean(){
-		const {orderId} = this.props.checkout
-		getJwt(orderId).then(({result}) => {
-			const {jwt, bin} = result
+	triggerOcean() {
+		const { orderId } = this.props.checkout
+		getJwt(orderId).then(({ result }) => {
+			const { jwt, bin } = result
 			this.listenOcean3D(orderId, jwt, bin)
-		}).catch(({result}) => {
+		}).catch(({ result }) => {
 			alert(result)
 			this.setState({
 				checking: false
@@ -857,7 +930,7 @@ const Checkout = class extends React.Component {
 		})
 	}
 
-	listenOcean3D(orderId, jwt, bin){
+	listenOcean3D(orderId, jwt, bin) {
 
 		var self = this
 
@@ -869,28 +942,28 @@ const Checkout = class extends React.Component {
 
 
 		Cardinal.trigger('bin.process', bin)
-		
+
 		Cardinal.off('payments.setupComplete')
 		Cardinal.off('payments.validated')
 
-		Cardinal.on('payments.setupComplete', function(setupCompleteData) {
+		Cardinal.on('payments.setupComplete', function (setupCompleteData) {
 			const referenceId = setupCompleteData.sessionId
-			getLookup(referenceId, orderId).then(({result: lookup}) => {
-				if(lookup && lookup.lookupUrl){
+			getLookup(referenceId, orderId).then(({ result: lookup }) => {
+				if (lookup && lookup.lookupUrl) {
 					Cardinal.continue('cca', {
 						'AcsUrl': lookup.lookupUrl,
 						'Payload': lookup.lookupLoad
-					},{
+					}, {
 						'OrderDetails': {
 							'TransactionId': lookup.transactionId
 						}
 					},
-					jwt
+						jwt
 					)
-				}else{
+				} else {
 					self.payOcean3D(orderId)
 				}
-			}).catch(({result}) => {
+			}).catch(({ result }) => {
 				alert(result)
 				this.setState({
 					checking: false
@@ -899,26 +972,26 @@ const Checkout = class extends React.Component {
 
 
 		})
-		
-		Cardinal.on('payments.validated', function(data, jwt) {
+
+		Cardinal.on('payments.validated', function (data, jwt) {
 			var cavv = data.Payment.ExtendedData.CAVV
 			var eci = data.Payment.ExtendedData.ECIFlag
 			var xid = data.Payment.ProcessorTransactionId
 			// var status = data.Payment.ExtendedData.PAResStatus
 			// var transactionId = data.Payment.ProcessorTransactionId
-			
+
 			//请求支付
 			self.payOcean3D(orderId, eci, cavv, xid)
 
 		})
 	}
 
-	payOcean3D(orderId, eci, cavv, xid){
-		oceanpay3d({orderId, cardEci: eci, cardCavv: cavv, cardXid:xid}).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
+	payOcean3D(orderId, eci, cavv, xid) {
+		oceanpay3d({ orderId, cardEci: eci, cardCavv: cavv, cardXid: xid }).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
 	}
 
 
-	processCallBack({ success, transactionId, details, orderId, solutions = '' }){
+	processCallBack({ success, transactionId, details, orderId, solutions = '' }) {
 		if (success) {
 			window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
 		} else {
@@ -929,7 +1002,7 @@ const Checkout = class extends React.Component {
 		}
 	}
 
-	processErrorBack({ result }){
+	processErrorBack({ result }) {
 		alert(result)
 		this.setState({
 			checking: false
@@ -1072,9 +1145,16 @@ const Checkout = class extends React.Component {
 			tcMethod = this.getTcMethod()
 		}
 
-		return <div>
+		return <ShoppingBody>
+			<div className="__hd">
+				<ShoppingHead>
+					<span className="__title"><FormattedMessage id="check_out" /></span>
+					<span onClick={evt => { this.props.history.goBack() }} className="__back">&#xe690;</span>
+					
+				</ShoppingHead>
+			</div>
 			{
-				checkout && <div>
+				checkout && <div className="__bd" style={{paddingLeft: 8, paddingRight: 8, paddingTop: 52}}>
 					{this.state.refreshing && <Refreshing />}
 					<Boxs>
 						<Box style={{ position: 'relative' }}>
@@ -1145,7 +1225,7 @@ const Checkout = class extends React.Component {
 									documentForm={c => this.documentForm = c}
 									documentRef={c => this.documentRef = c}
 									document={this.props.document}
-									initCashmethod = {this.initCashmethod.bind(this)}
+									initCashmethod={this.initCashmethod.bind(this)}
 								/>
 							</div>
 						</Box>
@@ -1187,7 +1267,7 @@ const Checkout = class extends React.Component {
 										!this.state.checking ? <BigButton onClick={this.checkout.bind(this)} className="__btn" height={47} bgColor="#222">
 											{intl.formatMessage({ id: 'check_out' })} ({totalCount})
 										</BigButton> : <BigButton className="__btn" height={47} bgColor="#999">
-											{intl.formatMessage({ id: 'please_wait' })}...
+												{intl.formatMessage({ id: 'please_wait' })}...
 										</BigButton>
 
 									}
@@ -1222,8 +1302,8 @@ const Checkout = class extends React.Component {
 									document={this.props.document}
 									dlocalref={c => this.dlocalref = c}
 									dlocalbtn={c => this.dlocalbtn = c}
-									cvvRef = { this.cvvRef.bind(this) }
-									dlocalerror = {this.state.dlocalerror}
+									cvvRef={this.cvvRef.bind(this)}
+									dlocalerror={this.state.dlocalerror}
 								/>
 							</React.Fragment>
 						)
@@ -1313,7 +1393,7 @@ const Checkout = class extends React.Component {
 
 				</div>
 			}
-		</div>
+		</ShoppingBody>
 	}
 }
 
