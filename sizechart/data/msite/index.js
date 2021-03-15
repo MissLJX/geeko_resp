@@ -2,6 +2,7 @@ import sizeData from '../size.js'
 import imgData from '../image.js'
 import axios from "../../src/api/apiconfigs";
 import _ from 'lodash'
+import getRightSize from '../../src/util/utils.js'
 
 // let imgSrc = [];
 // let result = [];
@@ -84,44 +85,24 @@ export const getData = async productId => {
     let product = _.uniqBy(productVO.product.variants,'size')
 
     if(pmethod === "size"){
-        for(let i= 0 ; i <product.length;i++ ){
-            if(product[i].size2 === "S" || product[i].size2 === "M" || product[i].size2 === "L" 
-            || product[i].size2 === "XL" || product[i].size2 === "2XL" || product[i].size2 === "3XL"){
-                const valArr = [];
-                valArr.push(product[i].size);
-                labelArr.push(sizeData['sizedata'][pmethod].find((n)=>n["value"]===product[i].size2)["label"]);
-                sizeArr.push(sizeData['sizedata'][pmethod].find((n)=>n["value"]===product[i].size2)["sizeMap"]);
-                if(product[i].descriptionMaps){
-                    const thisArr = [];
-                    for(let j=0;j<2;j++){
-                        thisArr.push(product[i].descriptionMaps[j])
-                    }
-                    changeArr.push(...[thisArr])
-                }else {
-                    changeArr.push('');
-                }
-                result.push([labelArr[i],sizeArr[i],changeArr[i]]);
-            }else{
-                continue;
+        product = getRightSize(product);
+    }
+
+    for(let i= 0 ; i <product.length;i++ ){
+        const valArr = [];
+        valArr.push(product[i].size);
+        labelArr.push(sizeData['sizedata'][pmethod].find((n)=>n["value"]===product[i].size2)["label"]);
+        sizeArr.push(sizeData['sizedata'][pmethod].find((n)=>n["value"]===product[i].size2)["sizeMap"]);
+        if(product[i].descriptionMaps){
+            const thisArr = [];
+            for(let j=0;j<2;j++){
+                thisArr.push(product[i].descriptionMaps[j])
             }
+            changeArr.push(...[thisArr])
+        }else {
+            changeArr.push('');
         }
-    }else{
-        for(let i= 0 ; i <product.length;i++ ){
-            const valArr = [];
-            valArr.push(product[i].size);
-            labelArr.push(sizeData['sizedata'][pmethod].find((n)=>n["value"]===product[i].size2)["label"]);
-            sizeArr.push(sizeData['sizedata'][pmethod].find((n)=>n["value"]===product[i].size2)["sizeMap"]);
-            if(product[i].descriptionMaps){
-                const thisArr = [];
-                for(let j=0;j<2;j++){
-                    thisArr.push(product[i].descriptionMaps[j])
-                }
-                changeArr.push(...[thisArr])
-            }else {
-                changeArr.push('');
-            }
-            result.push([labelArr[i],sizeArr[i],changeArr[i]]);
-        }
+        result.push([labelArr[i],sizeArr[i],changeArr[i]]);
     }
     
     // m-size
