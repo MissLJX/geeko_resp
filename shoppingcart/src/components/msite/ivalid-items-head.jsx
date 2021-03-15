@@ -5,40 +5,31 @@ import Ellipsis from '../ellipsis.jsx'
 import {injectIntl} from 'react-intl'
 
 const StyledHead = styled.div`
-	height: 60px;
-	padding: 0 10px;
-	img,span{
-		vertical-align: middle;
+	padding: 12px 10px 0 10px;
+	.__title{
+		font-size: 16px;
 	}
-	img{
-		margin-right: 10px;
-		height: 25px;
+
+	.__del{
+		text-decoration: underline;
+		font-size: 12px;
+		color: #666;
 	}
 
 	& > div{
-		height: 100%;
-	    border-bottom: 1px solid #e5e5e5;
-
-	    & > div:first-child{
-	      width: 30px;
-	    }
-
-	    & > div:nth-child(2){
-	      width: 40px;
-	    }
-
 	    & > div:last-child{
 	      text-align: right;
 	    }
 	}
 `
-const IvalidItemsHead = ({clearall, intl}) => <StyledHead >
+const IvalidItemsHead = ({clearall, intl, isEditingItem}) => <StyledHead >
   <div className="x-table __vm x-fw x-fh __fixed">
     <div className="x-cell">
-      {intl.formatMessage({id: 'ivalid_tems'})}
+      <span className="__title">{intl.formatMessage({id: 'ivalid_tems'})}</span>
     </div>
   	<div className="x-cell __right">
-  		<span style={{cursor: 'pointer'}} onClick={clearall}>{intl.formatMessage({id: 'clear_all'})}</span>
+		  {!isEditingItem && <span className="__del" onClick={clearall}>{intl.formatMessage({id: 'clear_all'})}</span>}
+  		
     </div>
   </div>
 </StyledHead>

@@ -67,6 +67,20 @@ export const paypalpay = (method) => axios.get(`${VPATH}/webpaypal/anon/pay`, {m
 export const quickpaypal = () => axios.get(`${VPATH}/webpaypal/anon/quickpay`)
 export const normalpaypal = () => axios.get(`${VPATH}/paypal2/pay`)
 
+
+export const paypal_check_out = () => axios.get(`${VPATH}/paypal3/checkout`)
+
+export const paypal_pay = (params) => axios.get(`${VPATH}/paypal3/pay`, params)
+export const paypal_capture = (paypalOrderId) => axios.get(`${VPATH}/paypal3/capture`, {paypalOrderId})
+export const paypal_quick_pay = params => axios.get(`${VPATH}/paypal3/quickpay`, params)
+export const paypal_get_shipping_details = paypalOrderId => axios.get(`${VPATH}/paypal3/get-shipping-details`, {paypalOrderId})
+export const paypal_set_shipping_details = shippingDetail => axios.get(`${VPATH}/paypal3/anon/shipping-details-save`, shippingDetail)
+
+export const paypal_pay_order = params => axios.get(`${VPATH}/paypal3/pay-by-order`, params)
+
+
+
+
 export const getcoupons = () => axios.get(`${VPATH}/coupon/anon/get-coupon-selections?_=${new Date().getTime()}`)
 export const usecoupon = (id) => axios.get(`${VPATH}/shopping-cart/anon/use-coupon/${id}`)
 export const unusecoupon = () => axios.get(`${VPATH}/shopping-cart/anon/unuse-coupon?_=${new Date().getTime()}`)
@@ -182,3 +196,6 @@ export const selectGift = variantId => axios.post(`${VPATH}/shopping-cart/update
 
 //  Handler.ajaxLoaddingHandler(ctx + '/' + VERSION + '','POST', paylod, function(data){
  export const toShareEmail = (paylod) => axios.post(`${VPATH}/customer/send-share-via-emails`,paylod);
+
+
+ export const addToWishList = (productIds, variantIds) => axios.get(`${VPATH}/shopping-cart/move-to-wish-list`, {productIds, variantIds})

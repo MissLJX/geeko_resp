@@ -96,7 +96,13 @@ import {
 	useMercadoCoupon,
 	payDLocal,
 	quickpaypal,
-	normalpaypal
+	normalpaypal,
+	paypal_pay,
+	paypal_quick_pay,
+	paypal_capture,
+	paypal_check_out,
+	paypal_get_shipping_details,
+	paypal_set_shipping_details
 } from '../api'
 
 export const __address_token__ = window.token
@@ -429,9 +435,9 @@ const ShoppingCart = class extends React.Component {
 
 	paypalcheck(method) {
 		if ('quick' === method) {
-			return quickpaypal()
+			return paypal_check_out
 		} else {
-			return normalpaypal()
+			return paypal_pay
 		}
 	}
 
@@ -462,28 +468,162 @@ const ShoppingCart = class extends React.Component {
 		}
 
 
-		let locale = cart && cart.locale && cart.locale !=='nb_NO' && cart.locale !== 'is_IS' ? cart.locale : 'en_US'
+		let locale = cart && cart.locale && cart.locale !== 'nb_NO' && cart.locale !== 'is_IS' ? cart.locale : 'en_US'
 
 
 		if (c) {
 
-			let cs = c.children
-
-			if (cs && cs.length) {
-
-				let _c
-				for (let i = 0, len = cs.length; i < len; i++) {
-					_c = cs[i]
-					_c.parentNode.removeChild(_c)
-				}
-			}
+			c.innerHTML = ''
 
 			/*global paypal b:true*/
 			/*eslint no-undef: "error"*/
-			paypal.Button.render({
+			// paypal.Button.render({
+			// 	env: window.paypalEnv,
+			// 	commit: isprogresspage,
+			// 	locale: locale,
+			// 	onClick: function () {
+			// 		const { cart, history } = self.getProps()
+			// 		if (!cart.shippingDetail && method !== 'quick') {
+			// 			alert(__confirm_address__)
+			// 			self.$addressdom.scrollIntoView()
+			// 			return false
+			// 		}
+
+			// 		if (cart.shippingDetail && !cart.shippingDetail.phoneNumber && method !== 'quick') {
+			// 			const path = {
+			// 				pathname: isCheckout ? `${window.ctx || ''}${__route_root__}/checkout/address` : `${window.ctx || ''}${__route_root__}/address`,
+			// 				state: {
+			// 					validate: true
+			// 				}
+			// 			}
+			// 			this.props.history.push(path)
+			// 			return false
+			// 		}
+			// 	},
+
+			// 	validate: function (actions) {
+			// 		if (method !== 'quick') {
+			// 			self.togglePaypalButton(actions)
+			// 			self.actions = actions
+			// 		}
+
+			// 	},
+
+			// 	payment: function () {
+			// 		return self.paypalcheck(method).then(data => data.result).then(({ TOKEN, success, tokenSuccess, transactionId, orderId, ACK, L_LONGMESSAGE0, method }) => {
+
+
+			// 			if (success && transactionId && !TOKEN || method === 'DoReferenceTransaction' && tokenSuccess) {
+			// 				window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
+			// 				throw new Error('free')
+			// 			}
+			// 			if (ACK === 'Failure') {
+			// 				throw new Error(L_LONGMESSAGE0)
+			// 			}
+
+			// 			if (method == 'normal') {
+			// 				storage.add('temp-order', orderId, 1 * 60 * 60)
+			// 			}
+
+			// 			return TOKEN
+			// 		}).catch((err) => {
+			// 			if (err.result) {
+			// 				throw new Error(err.result)
+			// 			} else {
+			// 				throw new Error(err)
+			// 			}
+
+			// 		})
+			// 	},
+			// 	onAuthorize: function (data, actions) {
+			// 		console.log(data)
+			// 		return actions.redirect()
+			// 	},
+
+			// 	onCancel: function (data, actions) {
+			// 		return actions.redirect()
+			// 	},
+
+			// 	onError: function (err) {
+			// 		var msg = err.stack
+			// 		if (msg.indexOf('free') >= 0) {
+			// 			console.log('free order')
+			// 		} else {
+			// 			alert(msg.substring(0, msg.indexOf('\n')))
+			// 		}
+			// 	},
+			// 	style: {
+			// 		label: isprogresspage ? 'pay' : 'checkout',
+			// 		shape: 'rect',
+			// 		size: 'responsive',
+			// 		tagline: false,
+			// 		layout: 'vertical'
+			// 	},
+			// 	funding: {
+			// 		allowed: alloweds
+			// 	}
+			// }, '#ip-paypal-pay')
+
+
+
+			paypal.Buttons({
 				env: window.paypalEnv,
 				commit: isprogresspage,
 				locale: locale,
+				// intent: isprogresspage? 'capture': 'authorize',
+				style: {
+					label: isprogresspage ? 'pay' : 'checkout',
+					shape: 'rect',
+					size: 'responsive',
+					tagline: false,
+					layout: 'vertical'
+				},
+
+				createOrder: function (data, actions) {
+					const createPaypal = self.paypalcheck(method)
+					return createPaypal({ payMethod: 1 }).then(data => {
+						const payResult = data.result
+						const { payPalOrder, isFree, transactionId, orderId, success } = payResult
+						self.orderId = orderId
+
+						if (isFree && transactionId && orderId) {
+							window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
+							throw new Error('free')
+						}
+						return payPalOrder.id
+					}).catch(data => {
+						throw new Error(data.result)
+					})
+				},
+				onApprove: function (data, actions) {
+					// This function captures the funds from the transaction.
+					const { orderID } = data
+					if (method === 'quick') {
+
+						paypal_get_shipping_details(orderID).then(() => {
+							window.location.href = `${window.ctx || ''}/cart?token=${orderID}`
+						}).catch(data => {
+							if (data && data.result) {
+								alert(data.result)
+							} else {
+								alert(data)
+							}
+						})
+
+					} else {
+						paypal_capture(orderID).then(data => data.result).then(result => {
+							window.location.href = `${window.ctx || ''}/order-confirm/${result}`
+						}).catch(data => {
+							if (data) {
+								if (data.result) {
+									alert(data.result)
+								} else {
+									alert(data)
+								}
+							}
+						})
+					}
+				},
 				onClick: function () {
 					const { cart, history } = self.getProps()
 					if (!cart.shippingDetail && method !== 'quick') {
@@ -503,70 +643,27 @@ const ShoppingCart = class extends React.Component {
 						return false
 					}
 				},
-
-				validate: function (actions) {
-					if (method !== 'quick') {
-						self.togglePaypalButton(actions)
-						self.actions = actions
-					}
-
-				},
-
-				payment: function () {
-					return self.paypalcheck(method).then(data => data.result).then(({ TOKEN, success, tokenSuccess, transactionId, orderId, ACK, L_LONGMESSAGE0, method }) => {
-
-
-						if (success && transactionId && !TOKEN || method === 'DoReferenceTransaction' && tokenSuccess) {
-							window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-							throw new Error('free')
-						}
-						if (ACK === 'Failure') {
-							throw new Error(L_LONGMESSAGE0)
-						}
-
-						if (method == 'normal') {
-							storage.add('temp-order', orderId, 1 * 60 * 60)
-						}
-
-						return TOKEN
-					}).catch((err) => {
-						if (err.result) {
-							throw new Error(err.result)
-						} else {
-							throw new Error(err)
-						}
-
-					})
-				},
-				onAuthorize: function (data, actions) {
-					console.log(data)
-					return actions.redirect()
-				},
-
 				onCancel: function (data, actions) {
-					return actions.redirect()
-				},
-
-				onError: function (err) {
-					var msg = err.stack
-					if (msg.indexOf('free') >= 0) {
-						console.log('free order')
-					} else {
-						alert(msg.substring(0, msg.indexOf('\n')))
+					if (method === 'normal') {
+						window.location.href = `${window.ctx || ''}/checkout/${self.orderId}`
 					}
 				},
-				style: {
-					label: isprogresspage ? 'pay' : 'checkout',
-					shape: 'rect',
-					size: 'responsive',
-					tagline: false,
-					layout: 'vertical'
-				},
-				funding: {
-					allowed: alloweds
+				onError: function (err) {
+					if (err) {
+						const msg = err.stack
+						if (msg.indexOf('free') >= 0) {
+							console.log('free order')
+						} else {
+							alert(msg.substring(0, msg.indexOf('\n')))
+						}
+					}
 				}
-			}, '#ip-paypal-pay')
+
+			}).render(c);
+
 		}
+
+
 	}
 
 	componentWillUnmount() {
@@ -832,7 +929,7 @@ const ShoppingCart = class extends React.Component {
 			paypaling: true
 		})
 
-		placepaypal().then(({ result }) => {
+		paypal_quick_pay({ payMethod: 1, paypalOrderId: window.token }).then(({ result }) => {
 			window.location.href = `${window.ctx || ''}/order-confirm/${result}`
 		}).catch(({ result }) => {
 			this.setState({
@@ -1104,7 +1201,7 @@ const ShoppingCart = class extends React.Component {
 		const { cart } = this.props
 		this.props.UPDATINGADDRESS(true)
 		if (__address_token__ && cart.shippingDetail) {
-			paypalAddress({ ...address, id: cart.shippingDetail.id, token: __address_token__ }).then(() => {
+			paypal_set_shipping_details({ ...address, id: cart.shippingDetail.id, token: __address_token__ }).then(() => {
 				this.props.UPDATINGADDRESS(false)
 				this.setState({
 					paypalAddressConfirmed: true
@@ -1615,8 +1712,8 @@ const ShoppingCart = class extends React.Component {
 									</div>
 									<div className="x-table" style={{ width: '100%', tableLayout: 'fixed', marginTop: 10 }}>
 										<div className="x-cell" style={{ width: 40, verticalAlign: 'middle' }}>
-										<a style={{textDecoration:'none'}} href={producturl({ id: gifts[0].productId, name: gifts[0].productName, parentSku: gifts[0].parentSku })}>
-												<img style={{ display: 'inline-block', width: '100%' }}  src={gifts[0].imageUrl} />
+											<a style={{ textDecoration: 'none' }} href={producturl({ id: gifts[0].productId, name: gifts[0].productName, parentSku: gifts[0].parentSku })}>
+												<img style={{ display: 'inline-block', width: '100%' }} src={gifts[0].imageUrl} />
 											</a>
 										</div>
 										<div className="x-cell" style={{ paddingLeft: 10, verticalAlign: 'middle' }}>
@@ -1630,7 +1727,7 @@ const ShoppingCart = class extends React.Component {
 											</Ellipsis>
 											<div style={{ marginTop: 10 }}>
 												<Red>{unitprice(gifts[0].realPrice)}</Red>
-												<Link style={{ float: 'right', color: '#e64545', fontSize:16 }} to={`${__route_root__}/gifts`}>View gift </Link>
+												<Link style={{ float: 'right', color: '#e64545', fontSize: 16 }} to={`${__route_root__}/gifts`}>View gift </Link>
 											</div>
 
 										</div>
@@ -1639,12 +1736,12 @@ const ShoppingCart = class extends React.Component {
 							}
 
 
-						{
-							cart.giftWarnMsg && <div style={{ padding: 14, backgroundColor: '#fafafa' }}>
+							{
+								cart.giftWarnMsg && <div style={{ padding: 14, backgroundColor: '#fafafa' }}>
 									<span className="iconfont" style={{ color: '#ff8454', fontSize: 30, verticalAlign: 'middle' }}>&#xec45;</span>
-									<span style={{verticalAlign: 'middle'}} dangerouslySetInnerHTML={{__html: cart.giftWarnMsg}}></span>
+									<span style={{ verticalAlign: 'middle' }} dangerouslySetInnerHTML={{ __html: cart.giftWarnMsg }}></span>
 								</div>
-						}
+							}
 
 							<div ref={c => this.fixedCartWrapper = c}>
 								<FixedTop style={{ width: 726 }} innerRef={c => this.fixedCart = c}>

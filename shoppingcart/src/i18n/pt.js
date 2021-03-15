@@ -129,5 +129,8 @@ export default{
 
 	you_selected:'Voc\u00ea selecionou ',
 	coupon_code:'Código de cupom',
-	use:'Usar'
+	use:'Usar',
+	coupon_alert: 'Discount Alert',
+	secure_payment: 'Secure Payment',
+	move_to_wish_list: 'Move To Wishlist'
 }

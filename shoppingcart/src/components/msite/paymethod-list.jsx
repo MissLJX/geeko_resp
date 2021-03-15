@@ -437,7 +437,6 @@ const Method = class extends React.Component {
 
 const MethodUL = styled.ul`
 	& > li{
-		border-top: 1px solid #e5e5e5;
 		&:first-child{
 			border-top: none;
 		}

@@ -27,15 +27,17 @@ module.exports = {
 		progress: true,
 		proxy: {
 			'/api': {
-				target: 'http://localhost',
+				target: 'https://www.chicme.com',
 				pathRewrite: { '^/api': '' },
 				cookieDomainRewrite: 'localhost',
 				cookiePathRewrite: {
 					'/wanna': '/',
 				},
-				secure: true
+				secure: true,
+				changeOrigin: true
 			}
-		}
+		},
+		host: '0.0.0.0'
 	},
 	resolve: {
 		modules: [__dirname, 'node_modules'],

@@ -26,7 +26,9 @@ import {
 	checkout_getparams,
 	checkout_pay,
 	checkout_paypal,
-	checkout_computop
+	checkout_computop,
+	paypal_capture,
+	paypal_pay_order
 } from '../api'
 
 import {
@@ -358,62 +360,57 @@ const Checkout = class extends React.Component {
 		if (c && (!c.children || c.children.length < 1)) {
 			/*global paypal b:true*/
 			/*eslint no-undef: "error"*/
-			paypal.Button.render({
+			paypal.Buttons({
 				env: window.paypalEnv,
-				commit: window.__is_login__,
+				// commit: isprogresspage,
+				// intent: isprogresspage? 'capture': 'authorize',
 				locale: locale,
-				payment: function () {
-					return checkout_paypal({ orderId: checkout.orderId }).then(data => data.result).then(({TOKEN, success, transactionId, ACK, L_LONGMESSAGE0}) => {
-						if (success && transactionId && !TOKEN) {
-							window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-							throw new Error('free')
-						}
-						if (ACK === 'Failure') {
-							throw new Error(L_LONGMESSAGE0)
-						}
-						return TOKEN
-					}).catch((err) => {
-						if (err.result) {
-							throw new Error(err.result)
-						} else {
-							throw new Error(err)
-						}
-					})
-				},
-				onAuthorize: function (data, actions) {
-					return actions.redirect()
-				},
-
-				onCancel: function (data, actions) {
-					return actions.redirect()
-				},
-
-				onError: function (err) {
-					var msg = err.stack
-					if (msg.indexOf('free') >= 0) {
-						console.log('free order')
-					} else {
-						alert(msg.substring(0, msg.indexOf('\n')))
-					}
-				},
 				style: {
-					label: window.__is_login__ ? 'pay' : 'checkout',
+					label: 'pay',
 					shape: 'rect',
 					size: 'responsive',
 					tagline: false,
-					layout: 'vertical' 
+					layout: 'vertical'
 				},
-				funding: {     
-					allowed: [       
-						paypal.FUNDING.BANCONTACT,       
-						paypal.FUNDING.EPS,       
-						paypal.FUNDING.GIROPAY,       
-						paypal.FUNDING.IDEAL,       
-						paypal.FUNDING.MYBANK,       
-						paypal.FUNDING.SOFORT     
-					]
-				}	 
-			}, '#ip-paypal-pay')
+
+				createOrder: function (data, actions) {
+					// This function sets up the details of the transaction, including the amount and line item details.
+					return paypal_pay_order({payMethod: 1, orderId: checkout.orderId}).then(data => data.result).then(payResult => {
+						self.orderId = payResult.orderId
+						return payResult.payPalOrder
+					}).then(order => order.id)
+					
+				},
+				onApprove: function (data, actions) {
+						const { orderID } = data
+						paypal_capture(orderID).then(data => data.result).then(result => {
+							window.location.href = `${window.ctx || ''}/order-confirm/${result}`
+						}).catch(data => {
+							if (data) {
+								if (data.result) {
+									alert(data.result)
+								} else {
+									alert(data)
+								}
+							}
+						})
+					
+				},
+				onCancel: function (data, actions) {
+				
+				},
+				onError: function (err) {
+					if (err) {
+						const msg = err.stack
+						if (msg.indexOf('free') >= 0) {
+							console.log('free order')
+						} else {
+							alert(msg.substring(0, msg.indexOf('\n')))
+						}
+					}
+				}
+
+			}).render(c);
 		}
 	}
 

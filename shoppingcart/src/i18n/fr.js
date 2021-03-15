@@ -130,5 +130,8 @@ export default{
 
 	you_selected:'Vous avez s\u00e9lectionn\u00e9 ',
 	coupon_code:'Code promo',
-	use:'Utiliser'
+	use:'Utiliser',
+	coupon_alert: 'Discount Alert',
+	secure_payment: 'Secure Payment',
+	move_to_wish_list: 'Move To Wishlist'
 }

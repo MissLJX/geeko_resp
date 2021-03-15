@@ -15,15 +15,19 @@ const QInput = styled.input`
   box-shadow: none;
   outline: none;
   -webkit-appearance: none;
-  width: 40px;
+  width: 30px;
   text-align: center;
-  margin-left:10px;
-  margin-right:10px;
+  margin-left:5px;
+  margin-right:5px;
   &::-webkit-outer-spin-button, &::-webkit-inner-spin-button{                
     -webkit-appearance: none !important;
     -moz-appearance:textfield;
   } 
   -moz-appearance: textfield;
+
+  &.disabled{
+	  color: #cacaca;
+  }
 `
 
 export default class extends React.Component {
@@ -58,6 +62,9 @@ export default class extends React.Component {
 	}
 
 	addQuantity (evt) {
+		if(this.props.disabled) return;
+
+
 		let newQ = Math.floor(this.state.quantity + 1)
 		this.setState({
 			quantity: newQ
@@ -66,6 +73,10 @@ export default class extends React.Component {
 	}
 
 	reduceQuantity (evt) {
+
+		if(this.props.disabled) return;
+
+
 		if (this.state.quantity > 1) {
 			let newQ = Math.floor(this.state.quantity - 1) > 1 ? Math.floor(this.state.quantity - 1) : 1
 			this.setState({
@@ -87,9 +98,9 @@ export default class extends React.Component {
 
 	render () {
 		return <QWrapper>
-			<Icon style={{cursor: 'pointer', fontSize: 14, fontWeight: 'bold', color: this.state.quantity === 1 ? '#cacaca' : '#222'}} onClick={this.reduceQuantity.bind(this)}>&#xe6ba;</Icon>
-			<QInput type="number" onChange={this.onChange} value={this.state.quantity}/>
-			<Icon style={{cursor: 'pointer', fontSize: 14, fontWeight: 'bold', color: '#222'}} onClick={this.addQuantity.bind(this)}>&#xe6b9;</Icon>
+			<Icon style={{cursor: 'pointer', fontSize: 14, fontWeight: 'bold', color: (this.state.quantity === 1 || this.props.disabled) ? '#cacaca' : '#222'}} onClick={this.reduceQuantity.bind(this)}>&#xe6ba;</Icon>
+			<QInput className={this.props.disabled ? 'disabled':''} type="number" onChange={this.onChange} value={this.state.quantity}/>
+			<Icon style={{cursor: 'pointer', fontSize: 14, fontWeight: 'bold', color: this.props.disabled?'#cacaca' :'#222'}} onClick={this.addQuantity.bind(this)}>&#xe6b9;</Icon>
 		</QWrapper>
 	}
 }

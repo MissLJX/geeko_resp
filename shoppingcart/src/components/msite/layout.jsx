@@ -5,6 +5,7 @@ import Icon from '../icon.jsx'
 export const Boxs = styled.div`
 	& > div{
 		margin-top: 8px;
+		border-radius: 2px;
 		&:first-child{
 			margin-top: 0;
 		}
@@ -27,7 +28,7 @@ const StyledBoxHead = styled.div`
 	& .__title{
 		font-size: 15px;
 		color: #222;
-		font-weight: bold;
+		font-family: SlatePro-Medium;
 	}
 `
 
@@ -35,7 +36,7 @@ export const BoxClickHead = (props) => (
   <StyledBoxHead {...props}>
     <div className="x-table __vm">
       <div className="x-cell">
-        <span className="__title">{props.title}</span>
+        <span style={{fontSize: 15}}>{props.title}</span>
       </div>
       <div className="x-cell __right">
         <span style={{verticalAlign: 'middle'}}>{props.children}</span>
@@ -46,7 +47,7 @@ export const BoxClickHead = (props) => (
 )
 
 export const BoxHead = (props) => (
-  <StyledBoxHead>
+  <StyledBoxHead single={!!props.single}>
     <div className="x-table __vm">
       <div className="x-cell">
         <span className="__title">{props.title}</span>

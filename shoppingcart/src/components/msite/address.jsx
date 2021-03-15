@@ -11,19 +11,27 @@ const getLabel = ({value, label}) => {
 }
 
 const Address = styled.address`
-	line-height: 22px;
   font-style: normal;
+  padding-bottom: 5px;
+`
+
+const Name = styled.div`
+  font-family: SlatePro-Medium;
+  line-height: 16px;
 `
 
 export default ({address}) => <Address>
-  <div>
-    <strong>{address.name}</strong>
+  <Name>
+    <span>{address.name}</span>
     <span>({address.phoneNumber})</span>
+  </Name>
+  <div style={{marginTop:10, color: '#666', fontSize:13}}>
+    <div>
+      <span>{concatstr(address.streetAddress1, address.unit)}</span>
+    </div>
+    <div style={{marginTop:6}}>
+      <span>{concatstr(address.zipCode, address.city, getLabel(address.state), getLabel(address.country))}</span>
+    </div>
   </div>
-  <div>
-    <span>{concatstr(address.streetAddress1, address.unit)}</span>
-  </div>
-  <div>
-    <span>{concatstr(address.zipCode, address.city, getLabel(address.state), getLabel(address.country))}</span>
-  </div>
+  
 </Address>
