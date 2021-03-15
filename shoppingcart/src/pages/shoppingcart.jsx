@@ -2420,7 +2420,7 @@ const ShoppingCart = class extends React.Component {
 
 											<Box style={{ backgroundColor: '#f6f6f6', paddingTop: 15, paddingBottom: 15 }}>
 												<div style={{ color: '#999' }}><FormattedMessage id="secure_payment" /></div>
-												<img style={{ width: 140, marginTop: 10 }} src="https://dgzfssf1la12s.cloudfront.net/upgrade/20210225/sp.png" />
+												<img style={{ width: 140, marginTop: 10 }} src="https://image.geeko.ltd/upgrade/20210225/sp.png" />
 											</Box>
 
 											{

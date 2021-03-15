@@ -800,12 +800,12 @@ const Credit = class extends React.Component {
 
 									{
 										payType === '7' ? <div style={{width: 500, paddingTop: 10}}>
-											<img style={{display: 'block', marginBottom: 10}} src="https://dgzfssf1la12s.cloudfront.net/shoppingcart/maxicocard.png"/>
+											<img style={{display: 'block', marginBottom: 10}} src="https://image.geeko.ltd/shoppingcart/maxicocard.png"/>
 											<MercadoBinding orderTotal={cart.orderSummary.orderTotal} pay={this.payMercado.bind(this)} email={this.props.me ? this.props.me.email : ''}/>
 										</div> : <div style={{position: 'relative'}}>
 											{
 												this.state.frameLoading && <div style={{textAlign: 'center', paddingTop: 40}} className="__loading">
-													<img alt="loading" src="https://dgzfssf1la12s.cloudfront.net/site/upgrade/20180316/loading.gif"/>
+													<img alt="loading" src="https://image.geeko.ltd/site/upgrade/20180316/loading.gif"/>
 												</div>
 											}
 											<iframe onLoad={ this.frameLoadHandle.bind(this) } style={{height: __Frame.height, width: '100%'}} src={`${__Frame.url}&_=${this.state.frameSuffix}`}/>
@@ -858,7 +858,7 @@ const Credit = class extends React.Component {
 							<div style={{borderTop: 'solid 1px #e6e6e6', marginTop: 25, paddingTop: 25}}>
 								<div>{intl.formatMessage({id: 'additional_payment'})}</div>
 								<div style={{textAlign: 'center', padding: '15px 0', marginTop: 10}}>
-									<img src="https://dgzfssf1la12s.cloudfront.net/upgrade/20180831/payment.jpg"/>
+									<img src="https://image.geeko.ltd/upgrade/20180831/payment.jpg"/>
 								</div>
 							</div>
 						</Box>
@@ -875,7 +875,7 @@ const Credit = class extends React.Component {
 
 						{
 							this.state.frameLoading && <div className="__loading">
-								<img alt="loading" src="https://dgzfssf1la12s.cloudfront.net/site/upgrade/20180316/loading.gif"/>
+								<img alt="loading" src="https://image.geeko.ltd/site/upgrade/20180316/loading.gif"/>
 							</div>
 						}
 					</CREDITMODAL>
@@ -887,7 +887,7 @@ const Credit = class extends React.Component {
 					<MERCADOMODAL>
 						<div className="__title">Tarjeta de crédito o débito</div>
 						<div style={{marginTop: 20, marginBottom: 15}}>
-							<img src="https://dgzfssf1la12s.cloudfront.net/shoppingcart/maxicocard.png"/>
+							<img src="https://image.geeko.ltd/shoppingcart/maxicocard.png"/>
 						</div>
 						<div>
 							<MercadoBinding orderTotal={cart.orderSummary.orderTotal} pay={this.payMercado.bind(this)} email={this.props.me ? this.props.me.email : ''}/>

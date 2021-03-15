@@ -86,7 +86,7 @@
         computed:{
             ...mapGetters(['me']),
             baseHeaderUrl() {
-                return 'https://dgzfssf1la12s.cloudfront.net/site/pc/icon35.png';
+                return 'https://image.geeko.ltd/site/pc/icon35.png';
             },
             getConfireValue:function(){
                 if(!!this.birthday.month && !!this.birthday.day && this.birthday.month > 0 && this.birthday.day > 0){

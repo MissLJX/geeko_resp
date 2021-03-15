@@ -191,7 +191,7 @@ const Currency = class extends React.Component {
   	const {currency, index} = this.props
   	const position = getIconPosition(index)
 	  return <CURRENCY onClick={ () => { this.changeCurrency(currency.value) }}>
-	    <span className="__icon" style={{backgroundImage: `url(https://dgzfssf1la12s.cloudfront.net/site/ninimour/flags/flag-${currency.value}.png)`}}></span>
+	    <span className="__icon" style={{backgroundImage: `url(https://image.geeko.ltd/site/ninimour/flags/flag-${currency.value}.png)`}}></span>
 	    <span className="__label">{currency.value}</span>
 	  </CURRENCY>
 	}

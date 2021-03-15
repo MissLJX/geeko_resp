@@ -37,7 +37,7 @@ export default ({product, type}) => {
 	return <PRODUCT>
   	<a className="amazon-event" EVENT="PRODUCT_LIST_CLICK" relatedId={product.id} type={type} href={producturl(product)} style={{textDecoration: 'none', color: '#222'}}>
 	    <div className="__image">
-	  		<img src={`https://dgzfssf1la12s.cloudfront.net/medium/${product.pcMainImage}`}/>
+	  		<img src={`https://image.geeko.ltd/medium/${product.pcMainImage}`}/>
 	  	</div>
 	  	<figcaption>
 	  		<div className="__prices">

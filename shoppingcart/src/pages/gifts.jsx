@@ -103,7 +103,7 @@ const GifItem = ({ item, selectedId, itemSelect }) => {
   return <ITEM>
     <div>
 
-      <LinkImage href={producturl(item)} src={`https://dgzfssf1la12s.cloudfront.net/medium/${item.pcMainImage}`} />
+      <LinkImage href={producturl(item)} src={`https://image.geeko.ltd/medium/${item.pcMainImage}`} />
     </div>
     <div>
       <div>

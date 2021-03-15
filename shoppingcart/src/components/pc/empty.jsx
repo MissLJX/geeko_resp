@@ -34,7 +34,7 @@ const EmptyButton = styled.a`
 `
 
 export default () => <Empty>
-  <EmptyImage src="https://dgzfssf1la12s.cloudfront.net/site/pc/e18.png" alt="EmptyCart"/>
+  <EmptyImage src="https://image.geeko.ltd/site/pc/e18.png" alt="EmptyCart"/>
   <Grey style={{marginBottom: 20, marginTop: 10, display: 'inline-block', color: '#999', fontSize: 16}}>
     <FormattedMessage id="empty_cart_description"/>
   </Grey>

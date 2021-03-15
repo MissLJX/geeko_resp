@@ -153,7 +153,7 @@ export const ImageLoader = styled.div`
       height: 30px;
       border-radius: 3px;
       border: 1px solid #d6d6d6;
-      background: url(https://dgzfssf1la12s.cloudfront.net/site/pc/icon61.png) center/60% no-repeat;
+      background: url(https://image.geeko.ltd/site/pc/icon61.png) center/60% no-repeat;
 
       & > input{
         width: 40px;

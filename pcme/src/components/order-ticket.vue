@@ -129,7 +129,7 @@
         computed: {
             ...mapGetters(['ticket','ticket_con','ticketid','ticket_sub']),
             baseHeaderUrl() {
-                return 'https://dgzfssf1la12s.cloudfront.net/site/pc/icon35.png';
+                return 'https://image.geeko.ltd/site/pc/icon35.png';
             },
             headerImage(){
                 if(this.ticket_con.customerId){
@@ -137,7 +137,7 @@
                 }
             },
             sellerheaderImage(){
-                return 'https://dgzfssf1la12s.cloudfront.net/icon/support.jpg'
+                return 'https://image.geeko.ltd/icon/support.jpg'
             },
             canBeRated(){
                 if(this.ticket_con && this.ticket_con.subject){
@@ -224,7 +224,7 @@
                 })
             },
             imgUrl(url){
-                return 'https://dgzfssf1la12s.cloudfront.net/ticket/'+url
+                return 'https://image.geeko.ltd/ticket/'+url
             },
             starClickHandle(data){
                 this.rateData.rate = data;
@@ -445,7 +445,7 @@
                 border-style: solid;
                 border-color: rgb(214, 214, 214);
                 border-image: initial;
-                background: url(https://dgzfssf1la12s.cloudfront.net/site/pc/icon61.png) center center / 60% no-repeat;
+                background: url(https://image.geeko.ltd/site/pc/icon61.png) center center / 60% no-repeat;
                 float: left;
                 input{
                     width: 40px;

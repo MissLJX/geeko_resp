@@ -3,7 +3,7 @@
         <notification-list v-if="!empty" :notifications="notifications" @listing="listingHandle" :loading="loading"
                            :finished="finished"/>
         <div v-if="empty" class="el-notification-empty">
-            <img src="https://dgzfssf1la12s.cloudfront.net/me/msite/empty-notification-dark-1.png">
+            <img src="https://image.geeko.ltd/me/msite/empty-notification-dark-1.png">
             <p>You have no notification</p>
         </div>
     </div>

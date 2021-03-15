@@ -9,7 +9,7 @@ const question1 = {
 			</header>
 			<section>
 				<p>Il existe deux types de comptes que vous pouvez avoir ici dans ${window.sitename}, un compte enregistré et un compte facebook. S'il vous plaît assurez-vous que vous avez connecté le bon compte. Une fois que vous l'avez fait, vous pouvez accéder à votre commande.</p>
-				<img src="https://dgzfssf1la12s.cloudfront.net/chicme/20210107c/chiquedoll-faq.jpg">
+				<img src="https://image.geeko.ltd/chicme/20210107c/chiquedoll-faq.jpg">
 			</section>
 		</article>
 	`

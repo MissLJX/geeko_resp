@@ -247,7 +247,7 @@ const ProductEditor = class extends React.Component {
 					<INFO className="x-table __fixed x-fw">
 						<div className="x-cell">
 							<ImageWrapper>
-								<img src={`https://dgzfssf1la12s.cloudfront.net/small/${selectedVariant.image}`}/>
+								<img src={`https://image.geeko.ltd/small/${selectedVariant.image}`}/>
 							</ImageWrapper>
 						</div>
 						<div className="x-cell">

@@ -56,7 +56,7 @@ export const getWid = () => {
 
 
 //image util
-export const IMAGE_PREFIX = 'https://dgzfssf1la12s.cloudfront.net'
+export const IMAGE_PREFIX = 'https://image.geeko.ltd'
 export const IMAGE_SMALL = 'small'
 export const IMAGE_MEDIUM = 'medium'
 export const IMAGE_LARGE = 'large'

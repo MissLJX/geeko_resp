@@ -35,7 +35,7 @@ const ShippingMethodHead = props => {
             <div style={{marginTop: 5}}><span className="__time">{shippingMethod.shippingTime}</span></div>
         </div>
         <div>
-            <span><img style={{width:110}} src="https://dgzfssf1la12s.cloudfront.net/upgrade/20210304/shippingmethod.png"/></span>
+            <span><img style={{width:110}} src="https://image.geeko.ltd/upgrade/20210304/shippingmethod.png"/></span>
             <span style={{marginLeft: 10}} className="iconfont">&#xe694;</span>
         </div>
     </SHIPPINGMETHODHEAD>

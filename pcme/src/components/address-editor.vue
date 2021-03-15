@@ -351,7 +351,7 @@
                     appearance: none;
                     -moz-appearance: none;
                     -webkit-appearance: none;
-                    background: url(https://dgzfssf1la12s.cloudfront.net/site/pc/icon137.png) no-repeat scroll calc(100% - 10px) center transparent;
+                    background: url(https://image.geeko.ltd/site/pc/icon137.png) no-repeat scroll calc(100% - 10px) center transparent;
                     padding-right: 14px;
                     padding-left: 5px;
                     box-shadow: none;

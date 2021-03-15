@@ -108,10 +108,10 @@
                     <div>
                         <div class="white top-line">
                             <h2>Atenção</h2>
-                            <img src="https://dgzfssf1la12s.cloudfront.net/upgrade/20180529/001.png">
+                            <img src="https://image.geeko.ltd/upgrade/20180529/001.png">
                         </div>
                         <div class="middle-line">
-                            <img src="https://dgzfssf1la12s.cloudfront.net/upgrade/20180529/002.png">
+                            <img src="https://image.geeko.ltd/upgrade/20180529/002.png">
                         </div>
                         <div class="white bottom-line">
                             <p>O cupom de <span class="fc-r">15%</span> de desconto será enviado para sua conta após o pagamento. Não perca</p>
@@ -128,10 +128,10 @@
                     <div>
                         <div class="white top-line">
                             <h2>Atención</h2>
-                            <img src="https://dgzfssf1la12s.cloudfront.net/upgrade/20180529/001.png">
+                            <img src="https://image.geeko.ltd/upgrade/20180529/001.png">
                         </div>
                         <div class="middle-line">
-                            <img src="https://dgzfssf1la12s.cloudfront.net/upgrade/20180529/002.png">
+                            <img src="https://image.geeko.ltd/upgrade/20180529/002.png">
                         </div>
                         <div class="white bottom-line">
                             <p>Después de realizar el pago, recibirás un cupón de regalo con un <span class="fc-r">15%</span> de descuento para tu siguiente compra.</p>

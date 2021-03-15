@@ -116,7 +116,7 @@ const Mercado = class extends React.Component {
 				this.props.checkout && <Boxs style={{ backgroundColor: '#e5e5e5' }}>
 					<Box style={{ paddingBottom: 20 }}>
 						<CardInfos>
-							<img src="https://dgzfssf1la12s.cloudfront.net/shoppingcart/maxicocard.png" />
+							<img src="https://image.geeko.ltd/shoppingcart/maxicocard.png" />
 						</CardInfos>
 						<MercadoBinding orderId={this.props.checkout.orderId} orderTotal={this.props.checkout.orderTotal} email={this.props.me ? this.props.me.email : ''} addcardback={this.addcardback.bind(this)} exsiting={exsiting} />
 					</Box>

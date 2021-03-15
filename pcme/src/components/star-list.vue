@@ -10,7 +10,7 @@
         margin-left: 4px;
         width: 16px;
         height: 14px;
-        background: url(https://dgzfssf1la12s.cloudfront.net/site/icon/icon-153.png) center/100% no-repeat;
+        background: url(https://image.geeko.ltd/site/icon/icon-153.png) center/100% no-repeat;
         cursor: pointer;
     }
 
@@ -19,7 +19,7 @@
     }
 
     .star-list > li.active {
-        background-image: url(https://dgzfssf1la12s.cloudfront.net/site/icon/icon-158.png);
+        background-image: url(https://image.geeko.ltd/site/icon/icon-158.png);
     }
 </style>
 
