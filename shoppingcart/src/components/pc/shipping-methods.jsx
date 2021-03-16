@@ -8,11 +8,11 @@ import {Grey} from '../text.jsx'
 const StyledMethod = styled.li`
 	& > div{
 		&:nth-child(1){
-			width: 225px;
+			width: 200px;
 		}
 
 		&:nth-child(2){
-			width: 105px;
+			width: 165px;
 		}
 	}
 `
@@ -26,6 +26,12 @@ const Method = ({shippingMethod, selected, onSelect, ignoreCheck}) => <StyledMet
 
   <div className="x-cell">
     <Money money={ shippingMethod.price }/>
+	{
+		shippingMethod.originalPrice && <del style={{marginLeft: 10, color: '#999', fontSize: 12}}>
+			<Money money={ shippingMethod.originalPrice }/>
+		</del>
+	}
+	
   </div>
 
   <div className="x-cell">

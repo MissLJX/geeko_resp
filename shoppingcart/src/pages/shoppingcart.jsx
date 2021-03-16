@@ -91,7 +91,7 @@ const Checkout = styled.div`
 		&.__total{
 			font-size: 18px;
 			display: flex;
-			padding: 0 20px 12px 20px;
+			padding: 0 10px 12px 10px;
 			justify-content: space-between;
 		}
 		&.__btn{
@@ -254,7 +254,7 @@ const CouponAlert = props => {
 		</div>
 		<div className="__bd">
 			<div style={{ whiteSpace: 'nowrap', fontSize: 16 }}><FormattedMessage id="coupon_alert" /></div>
-			<div style={{ whiteSpace: 'nowrap', fontSize: 13 }}>
+			<div style={{ whiteSpace: 'nowrap', fontSize: 12 }}>
 				<span dangerouslySetInnerHTML={{ __html: props.couponMsg }} />
 			</div>
 		</div>
@@ -537,6 +537,16 @@ const ShoppingCart = class extends React.Component {
 
 	cvvRef(c) {
 		this.cvvField = c
+	}
+
+	componentDidUpdate(prevProps){
+		const {cart} = prevProps
+		const {cart: oldCart} = this.props
+
+		if(!_.isEqual(cart, oldCart)){
+			this.loadKlarna()
+		}
+		
 	}
 
 	componentDidMount() {
@@ -926,6 +936,61 @@ const ShoppingCart = class extends React.Component {
 			})
 
 			payDLocal({ payMethod, paymentMethodId, document: this.props.document }).then(data => data.result).then(this.processCallBack).catch(this.processErrorBack)
+		} else if (payType === '27') {
+			const self = this
+			this.setState({
+				checking: true
+			})
+
+			// Klarna.Payments.authorize({
+			// 	payment_method_category: "pay_later"
+			//   }, {
+			// 	purchase_country: "GB",
+			// 	purchase_currency: "GBP",
+			// 	locale: "en-GB",
+			// 	billing_address: {
+			// 	  // given_name: "Testperson-no",
+			// 	  // family_name: "Denied",
+			// 	  // email: "youremail+denied@email.com",
+			// 	  // title: "Mr",
+			// 	  // street_address: "Sæffleberggate 56",
+			// 	  // street_address2: "Apt 214",
+			// 	  // postal_code: "0563",
+			// 	  // city: "Oslo",
+			// 	  // region: "",
+			// 	  // phone: "40123456",
+			// 	  // country: "GB"
+			// 	  given_name: "John",
+			// 	  family_name: "Doe",
+			// 	  email: "john@doe.com",
+			// 	  title: "Mr",
+			// 	  street_address: "13 New Burlington St",
+			// 	  street_address2: "Apt 214",
+			// 	  postal_code: "W13 3BG",
+			// 	  city: "London",
+			// 	  phone: "01895808221",
+			// 	  country: "GB"
+			// 	},
+			// 	shipping_address:{
+			// 	  given_name: "John",
+			// 	  family_name: "Doe",
+			// 	  email: "john@doe.com",
+			// 	  title: "Mr",
+			// 	  street_address: "13 New Burlington St",
+			// 	  street_address2: "Apt 214",
+			// 	  postal_code: "W13 3BG",
+			// 	  city: "London",
+			// 	  phone: "1",
+			// 	  country: "GB"
+			// 	}
+
+			//   }, function(res) {
+			// 	console.debug(res);
+			// 	self.setState({checking: false})
+			//   })
+
+
+
 		}
 
 
@@ -1124,6 +1189,40 @@ const ShoppingCart = class extends React.Component {
 		}
 	}
 
+	createKlarnaSession(){
+		return new Promise((resolve, reject) => {
+			resolve('eyJhbGciOiJSUzI1NiIsImtpZCI6IjgyMzA1ZWJjLWI4MTEtMzYzNy1hYTRjLTY2ZWNhMTg3NGYzZCJ9.eyJzZXNzaW9uX2lkIjoiNjhhMjdkMTctZTA5My0yMGM2LTg2ZTItNjk0ZTA5OTRlMzRiIiwiYmFzZV91cmwiOiJodHRwczovL2pzLnBsYXlncm91bmQua2xhcm5hLmNvbS9ldS9rcC9sZWdhY3kvcGF5bWVudHMiLCJkZXNpZ24iOiJrbGFybmEiLCJsYW5ndWFnZSI6ImVuIiwicHVyY2hhc2VfY291bnRyeSI6IkdCIiwiZW52aXJvbm1lbnQiOiJwbGF5Z3JvdW5kIiwibWVyY2hhbnRfbmFtZSI6IllvdXIgYnVzaW5lc3MgbmFtZSIsInNlc3Npb25fdHlwZSI6IlBBWU1FTlRTIiwiY2xpZW50X2V2ZW50X2Jhc2VfdXJsIjoiaHR0cHM6Ly9ldS5wbGF5Z3JvdW5kLmtsYXJuYWV2dC5jb20iLCJleHBlcmltZW50cyI6W3sibmFtZSI6ImluLWFwcC1zZGstbmV3LWludGVybmFsLWJyb3dzZXIiLCJwYXJhbWV0ZXJzIjp7InZhcmlhdGVfaWQiOiJuZXctaW50ZXJuYWwtYnJvd3Nlci1lbmFibGUifX1dfQ.S964jLybs4BEOZi8mZz0Lnj-To3Ge1MvknzwzDdrz5fop3K8lv-_5Tzn06kkzU6fLeFqzGNUsrPYhFxF--9FwtDGGH9Kzf9zXv2aGci9JuHMvndvzZZ4apzHflc7wPrIRmEWMuZdfD-lh43R932DIY4ArC8SOLSalnXxFumdmk0ivLjJql40F5f4IpGfS5L9Ttf5KR0zXWE6_LW7OTEcH6tB8d6SHNU9uBTmp1siEX0h8VFi57tP8Q2jWaaD1xq76Q2ycPamzj6348k1BKqvxcfD3KGLgiuSFtCDb0QeW5Okh-bny41KyEcLuK-lFcwcDtUQ_-86VH6PCUJkMQCvjQ')
+		})
+	}
+
+	initKlarna() {
+		// if(!this.state.klarnaInited){
+		// 	this.setState({
+		// 		klarnaInited: true
+		// 	})
+
+		// 	return this.createKlarnaSession().then(client_token => {
+		// 		Klarna.Payments.init({
+		// 			client_token
+		// 		})
+		// 		return client_token
+		// 	})
+			
+		// }
+		// return Promise.resolve()
+	}
+
+	loadKlarna() {
+		// this.initKlarna().then(() => {
+		// 	Klarna.Payments.load({
+		// 		container: '#klarna-payments-container',
+		// 		payment_method_category: 'pay_later'
+		// 	}, function (res) {
+		// 		console.debug(res)
+		// 	})
+		// })
+	}
+
 	selectPayHandle(paymethod) {
 		this.props.SELECTPAY(paymethod).then((cart) => {
 			if (cart && cart.changeCurrencyMsg) {
@@ -1132,6 +1231,14 @@ const ShoppingCart = class extends React.Component {
 		})
 		// storage.add('payMethod', paymethod.id, 365 * 24 * 60 * 60)
 		// storage.add('payType', paymethod.type, 365 * 24 * 60 * 60)
+		try {
+			if (paymethod.id === '51') {
+				this.loadKlarna()
+			}
+
+		} catch (e) {
+			console.log(e)
+		}
 	}
 
 	atmClickHandle(method) {
@@ -2069,7 +2176,14 @@ const ShoppingCart = class extends React.Component {
 					<div className="__hd">
 						<ShoppingHead>
 							<span className="__title"><FormattedMessage id="shopping_bag" /></span>
-							<span onClick={evt => { this.props.history.goBack() }} className="__back">&#xe690;</span>
+							<span onClick={evt => { 
+								const referrer = document.referrer || ''
+								if(referrer.indexOf('/product_detail') > 0 || referrer.indexOf('/product') > 0 || referrer.indexOf('/collection') > 0 || referrer.indexOf('/category') > 0){
+									window.history.back()
+								}else{
+									window.location.href = '/'
+								}
+							}} className="__back">&#xe690;</span>
 							<span className="__tools">
 								<span onClick={evt => { this.setState({ managing: true }) }} className="__edit">&#xe7b6;</span>
 								<span onClick={evt => { window.location.href = `${window.ctx || ''}/me/m/wishlist` }} className="__wish">&#xe6a2;</span>
@@ -2281,6 +2395,7 @@ const ShoppingCart = class extends React.Component {
 														<BoxHead single title={intl.formatMessage({ id: 'payment_method' })} />
 														<div style={{ paddingLeft: 10, paddingRight: 10 }}>
 															<PayMethodList
+
 																cpfClickHandle={this.cpfClickHandle.bind(this)}
 																boletoForm={(c) => this.boletoForm = c}
 																boleto={(c) => { this.boleto = c }}

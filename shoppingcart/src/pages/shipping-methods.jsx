@@ -87,7 +87,11 @@ const ShippingMethods = class extends React.Component {
 					methods && methods.map(method => (
 						<Method onClick={(evt) => { this.clickHandle(evt, method.id) }} className={method.id === selectedMethod.id ? 'selected' : ''}>
 							<div>
-								{method.title}: <span className="price"><Money money={method.price} /></span>
+								{method.title}: <span className="price"><Money money={method.price} /></span> {
+									method.originalPrice && <del style={{marginLeft: 5, color: '#999', fontSize: 12}}>
+										<Money money={ method.originalPrice }/>
+									</del>
+								}
 							</div>
 
 							<div style={{ marginTop: 6 }}>

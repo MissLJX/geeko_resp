@@ -95,7 +95,7 @@ const BirdHead = ({promotion, selected, selectHandle, askClick}) => <PROMOTIONHE
 </PROMOTIONHEAD>
 
 const NormalHead = props => {
-	return <div style={{padding: '12px 12px 0 12px', fontSize: 16}}>
+	return <div style={{padding: '0 12px 0 0', fontSize: 16}}>
 		{props.title}
 	</div>
 }

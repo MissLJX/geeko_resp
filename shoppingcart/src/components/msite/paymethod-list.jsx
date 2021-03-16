@@ -397,7 +397,7 @@ const DISCOUNTTIP = styled.span`
 	}
 `
 
-const Method = class extends React.Component {
+const Method = class extends React.PureComponent {
 	constructor (props) {
 		super(props)
 	}
@@ -431,6 +431,7 @@ const Method = class extends React.Component {
 			{children && selected && <BD>
 				{children}
 			</BD>}
+			{payMethod.id === '51' && <div id="klarna-payments-container" style={{display: `${selected? 'block': 'none'}`}}/>}
 		</StyledMethod>
 	}
 }

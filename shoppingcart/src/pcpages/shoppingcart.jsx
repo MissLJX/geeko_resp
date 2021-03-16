@@ -644,7 +644,7 @@ const ShoppingCart = class extends React.Component {
 					}
 				},
 				onCancel: function (data, actions) {
-					if (method === 'normal') {
+					if (method === 'normal' && window.__is_login__) {
 						window.location.href = `${window.ctx || ''}/checkout/${self.orderId}`
 					}
 				},
@@ -1026,9 +1026,16 @@ const ShoppingCart = class extends React.Component {
 
 
 			__refreshCart.then(() => {
+
 				this.setState({
 					showAddresses: false
 				})
+
+				const {cart} = this.props
+
+				if(cart.currency !== window.__currency__){
+					window.location.reload()
+				}
 			})
 		}).catch(() => {
 			this.setState({
@@ -1094,7 +1101,7 @@ const ShoppingCart = class extends React.Component {
 
 		if (this.fixedSummary && this.fixedSummaryWrapper) {
 			this.fixedSmall.classList.remove('__fixed')
-			const { clientHeight } = this.fixedSummary
+			const { clientHeight } = document.getElementById('fixedSummary')
 			if (window.innerHeight > clientHeight) {
 				this.fixedSummaryWrapper.style.height = clientHeight + 'px'
 				const rect = this.fixedSummaryWrapper.getBoundingClientRect()
@@ -1156,6 +1163,7 @@ const ShoppingCart = class extends React.Component {
 		this.props.SELECTPAY(paymethod).then((cart) => {
 			if (cart && cart.changeCurrencyMsg) {
 				alert(cart.changeCurrencyMsg)
+				window.location.reload()
 			}
 		})
 
@@ -1240,6 +1248,12 @@ const ShoppingCart = class extends React.Component {
 					this.props.UPDATINGADDRESS(false)
 					if (this.actions) {
 						this.togglePaypalButton(this.actions)
+					}
+
+					const {cart} = this.props
+
+					if(cart.currency !== window.__currency__){
+						window.location.reload()
 					}
 				}).catch(() => {
 					this.props.UPDATINGADDRESS(false)
@@ -1807,7 +1821,7 @@ const ShoppingCart = class extends React.Component {
 				<div className="__right">
 					<div style={{ height: 32 }}></div>
 					<div ref={c => this.fixedSummaryWrapper = c}>
-						<FixedTop style={{ paddingTop: 20, width: 314 }} innerRef={c => this.fixedSummary = c}>
+						<FixedTop style={{ paddingTop: 20, width: 314 }} id="fixedSummary" innerRef={c => this.fixedSummary = c}>
 							<SecondBox>
 								<div className="__hd">
 									{intl.formatMessage({ id: 'coupon' })}
