@@ -73,7 +73,7 @@ const Support = class extends React.Component {
 			width: 100%;
 			height: 100%;
 			z-index: -1;
-			background: url(https://dgzfssf1la12s.cloudfront.net/faq/faqback.jpg) no-repeat;
+			background: url(https://image.geeko.ltd/faq/faqback.jpg) no-repeat;
 			background-size: 100%;
   		}
 

@@ -99,13 +99,13 @@
                 if(this.model.image && this.model.image.indexOf('http') >= 0){
                     return this.model.image
                 }
-                return "https://dgzfssf1la12s.cloudfront.net" + this.model.image
+                return "https://image.geeko.ltd" + this.model.image
             }
         },
         methods:{
             imgurl(imgage){
                 if(imgage){
-                    return "https://dgzfssf1la12s.cloudfront.net"+imgage
+                    return "https://image.geeko.ltd"+imgage
                 }
             }
         },

@@ -105,7 +105,7 @@
         methods:{
             imgurl(imgage){
                 if(imgage){
-                    return "https://dgzfssf1la12s.cloudfront.net"+imgage
+                    return "https://image.geeko.ltd"+imgage
                 }
             }
         },

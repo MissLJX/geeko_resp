@@ -256,7 +256,7 @@ const ProductEditor = class extends React.Component {
 					<INFO className="x-table __fixed x-fw">
 						<div className="x-cell">
 							<ImageWrapper>
-								<img src={`https://dgzfssf1la12s.cloudfront.net/small/${selectedVariant.image}`}/>
+								<img src={`https://image.geeko.ltd/small/${selectedVariant.image}`}/>
 							</ImageWrapper>
 						</div>
 						<div className="x-cell">
@@ -288,7 +288,7 @@ const ProductEditor = class extends React.Component {
 									{
 										products.map((product, index) => <div className="__block" key={index}>
 											<COLOR onClick={ () => { this.setProductHandle(product) }} className={ selectedProduct.id === product.id && this.existVariant(product, selectedVariant.id) ? '__selected' : '' }>
-												<img src={`https://dgzfssf1la12s.cloudfront.net/small/${product.mainImage}`}/>
+												<img src={`https://image.geeko.ltd/small/${product.mainImage}`}/>
 											</COLOR>
 										</div>)
 									}

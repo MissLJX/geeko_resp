@@ -9,7 +9,7 @@ const question1 = {
 			</header>
 			<section>
 				<p>Es gibt zwei Arten von Konten, die Sie hier in ${window.sitename}, einem registrierten Konto und einem Facebook-Konto haben können. Bitte stellen Sie sicher, dass Sie das richtige Konto angemeldet haben. Sobald Sie dies getan haben, können Sie auf Ihre Bestellung zugreifen.</p>
-				<img src="https://dgzfssf1la12s.cloudfront.net/chicme/20210107c/chiquedoll-faq.jpg">
+				<img src="https://image.geeko.ltd/chicme/20210107c/chiquedoll-faq.jpg">
 			</section>
 		</article>
 	`

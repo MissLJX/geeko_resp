@@ -19,7 +19,7 @@
         },
         computed:{
             image(){
-                return `https://dgzfssf1la12s.cloudfront.net/medium/${this.product.pcMainImage}`;
+                return `https://image.geeko.ltd/medium/${this.product.pcMainImage}`;
             },
             price(){
                 return this.product.price.unit + this.product.price.amount;

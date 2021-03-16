@@ -364,7 +364,7 @@ const OrderConfirm = class extends React.Component {
 	// facebook
 	faceShare = () => {
 		if (this.state.faceurl) {
-			window.shareBack(this.state.faceurl, 'SHARE UP TO 50% OFF , GET $10', 'https://dgzfssf1la12s.cloudfront.net/upgrade/20180920/gift-pc.png', 'Share lucky draw with your friends, and get up to 50% off together. And you\'ll get $10 when they make a purchase', function (response) {
+			window.shareBack(this.state.faceurl, 'SHARE UP TO 50% OFF , GET $10', 'https://image.geeko.ltd/upgrade/20180920/gift-pc.png', 'Share lucky draw with your friends, and get up to 50% off together. And you\'ll get $10 when they make a purchase', function (response) {
 				if (response && !response.error_message) {
 					window.mobileAnalyticsClient.recordEvent('REGISTER_SHARE', {
 						'customerId': window.gobalCustomerId ? gobalCustomerId : '',
@@ -570,7 +570,7 @@ const OrderConfirm = class extends React.Component {
 
 							<div className="share-body">
 								<div>
-									<img src="https://dgzfssf1la12s.cloudfront.net/upgrade/20180920/gift.png" />
+									<img src="https://image.geeko.ltd/upgrade/20180920/gift.png" />
 								</div>
 								<div style={{ fontWeight: 'bold', fontSize: '15px', marginTop: '15px' }}>
 									<FormattedMessage id="share_up_to" />

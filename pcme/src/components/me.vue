@@ -15,7 +15,7 @@
         <div class="referfriend">
             <h3>{{$t('refer')}}</h3>
             <div class="refer-con">
-                <img src="https://dgzfssf1la12s.cloudfront.net/upgrade/20180920/gift.png">
+                <img src="https://image.geeko.ltd/upgrade/20180920/gift.png">
                 <p>
                     <span class="refer-info">{{$t('share_get')}}</span><br/>
                     <span class="refer-info-1">{{$t('share_lucky')}}</span>
@@ -23,16 +23,16 @@
                 <div class="bgline"></div>
                 <div class="refer-method">
                     <div id="face-share">
-                        <img src="https://dgzfssf1la12s.cloudfront.net/upgrade/20180920/Facebook.png"><br/><span>Facebook</span>
+                        <img src="https://image.geeko.ltd/upgrade/20180920/Facebook.png"><br/><span>Facebook</span>
                     </div>
                     <div id="face-messenger" v-if="showShare">
                         <img src="https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/chicme/20200824/messenger-1.png"><br/><span>Messenger</span>
                     </div>
                     <div @click="showEmail">
-                        <img src="https://dgzfssf1la12s.cloudfront.net/upgrade/20180920/email.png"><br/><span>{{$t('email')}}</span>
+                        <img src="https://image.geeko.ltd/upgrade/20180920/email.png"><br/><span>{{$t('email')}}</span>
                     </div>
                     <div @click="showCopy">
-                        <img src="https://dgzfssf1la12s.cloudfront.net/upgrade/20180920/copy.png"/><br/><span>Copy</span>
+                        <img src="https://image.geeko.ltd/upgrade/20180920/copy.png"/><br/><span>Copy</span>
                     </div>
                 </div>
             </div>
@@ -130,7 +130,7 @@
         computed:{
             ...mapGetters(['me','sharekey','copylink']),
             baseHeaderUrl() {
-                return 'https://dgzfssf1la12s.cloudfront.net/site/pc/icon35.png';
+                return 'https://image.geeko.ltd/site/pc/icon35.png';
             },
             headerImage(){
                 if(this.me.id){

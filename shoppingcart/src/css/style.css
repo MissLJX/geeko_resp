@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'SlatePro';
-  src: url('https://d2py3dbi6pvb43.cloudfront.net/fonts/SlatePro.ttf');
+  src: url('https://s3.geeko.ltd/fonts/SlatePro.ttf');
 }
 
 @font-face {
   font-family: 'SlatePro-Medium';
-  src: url('https://d2py3dbi6pvb43.cloudfront.net/fonts/SlatePro-Medium.ttf');
+  src: url('https://s3.geeko.ltd/fonts/SlatePro-Medium.ttf');
 }
 
 
@@ -116,7 +116,7 @@ a{
   appearance: none;
   -moz-appearance: none;
   -webkit-appearance: none;
-  background: url(https://dgzfssf1la12s.cloudfront.net/site/pc/icon137.png) no-repeat scroll calc(100% - 10px) center transparent;
+  background: url(https://image.geeko.ltd/site/pc/icon137.png) no-repeat scroll calc(100% - 10px) center transparent;
   padding-right: 14px;
   padding-left: 5px;
   box-shadow: none;
@@ -205,7 +205,7 @@ a{
   position:absolute;
   top:25px;
   left:25px;
-  background-image:url(https://dgzfssf1la12s.cloudfront.net/site/pc/icon322.png);
+  background-image:url(https://image.geeko.ltd/site/pc/icon322.png);
 }
 
 @keyframes rotation{

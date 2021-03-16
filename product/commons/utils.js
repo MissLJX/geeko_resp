@@ -1,2 +1,2 @@
-export const productImageUrl = (size, suffix) => `https://dgzfssf1la12s.cloudfront.net/${size}/${suffix}`
+export const productImageUrl = (size, suffix) => `https://image.geeko.ltd/${size}/${suffix}`
 

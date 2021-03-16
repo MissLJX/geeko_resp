@@ -52,7 +52,7 @@ export const ColoredButton = styled.button`
 `
 
 export const GeekoSelect = styled.select`
-	background: url("https://dgzfssf1la12s.cloudfront.net/site/pc/icon137.png") no-repeat scroll calc(100% - 10px) center transparent;
+	background: url("https://image.geeko.ltd/site/pc/icon137.png") no-repeat scroll calc(100% - 10px) center transparent;
 	position: relative;
 	-webkit-appearance: none; /*for chrome*/
 	border: 1px solid #999;

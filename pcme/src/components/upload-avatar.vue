@@ -29,7 +29,7 @@
                 headers: {
                     smail: '*_~'
                 },
-                imgDataUrl: 'https://dgzfssf1la12s.cloudfront.net/site/pc/icon35.png' // the datebase64 url of created image
+                imgDataUrl: 'https://image.geeko.ltd/site/pc/icon35.png' // the datebase64 url of created image
             }
 
         },

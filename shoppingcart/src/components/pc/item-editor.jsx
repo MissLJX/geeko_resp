@@ -182,7 +182,7 @@ export default class extends React.Component {
 						<BLOCKS>
 							{
 								products.map((product, index) => <div className="__block" key={index}>
-									<IMAGE onClick={ () => { this.setProductHandle(product) }} className={ selectedProduct.id === product.id && this.existVariant(product, selectedVariant.id) ? '__selected' : '' } style={{backgroundImage: `url(https://dgzfssf1la12s.cloudfront.net/medium/${product.variants[0].image})`}}/>
+									<IMAGE onClick={ () => { this.setProductHandle(product) }} className={ selectedProduct.id === product.id && this.existVariant(product, selectedVariant.id) ? '__selected' : '' } style={{backgroundImage: `url(https://image.geeko.ltd/medium/${product.variants[0].image})`}}/>
 								</div>)
 							}
 						</BLOCKS>

@@ -12,7 +12,7 @@ const instance = axios.create({
     baseURL: typeof window.ctx == 'undefined' ? '/api': window.ctx,
     timeout: 50000,
     headers: {
-        // accessToken: 'a88df6de-af03-490a-8126-7912f615ee4f',
+        // accessToken: 'b4ee7064-5d69-4cc9-baf3-410f8f0a4420',
         appVersion: utils.APP_VERSION,
         /*countryCode: utils.getCountry(),*/
         countryCode: utils.getCountry(),

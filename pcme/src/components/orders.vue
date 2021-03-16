@@ -564,7 +564,7 @@
                                 width: 23px;
                                 height: 5px;
                                 margin-top: 48px;
-                                background-image: url("https://dgzfssf1la12s.cloudfront.net/site/ivrose/icon48.png");
+                                background-image: url("https://image.geeko.ltd/site/ivrose/icon48.png");
                                 display: inline-block;
                                 position: relative;
                             }

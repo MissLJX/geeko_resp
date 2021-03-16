@@ -371,11 +371,11 @@
             },
             baseHeaderUrl() {
                 if (window.name === 'chicme') {
-                    return 'https://dgzfssf1la12s.cloudfront.net/site/pc/icon35.png';
+                    return 'https://image.geeko.ltd/site/pc/icon35.png';
                 } else if (window.name === 'ivrose') {
-                    return 'https://dgzfssf1la12s.cloudfront.net/site/ivrose/icon47.png';
+                    return 'https://image.geeko.ltd/site/ivrose/icon47.png';
                 } else {
-                    return 'https://dgzfssf1la12s.cloudfront.net/site/bouti/logo02.png';
+                    return 'https://image.geeko.ltd/site/bouti/logo02.png';
                 }
             },
             isConfirmEmail(){

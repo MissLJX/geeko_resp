@@ -440,6 +440,7 @@ const actions = {
 
             } else {
                 if (skip === 0) {
+                    state.wishProducts = [];
                     return {empty: true, finished: true}
                 }
                 return {finished: true}

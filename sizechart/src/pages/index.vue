@@ -745,6 +745,7 @@
                 for (let i=0;i<this.result.length;i++){
                     if(typeof this.result[i][2] === 'object'){
                         let count = 0;
+                        // 遍历表头有几个属性记录
                         for(let j in this.result[i][2][0]){
                             count++
                         }
@@ -754,6 +755,7 @@
                         }
                     }
                 }
+                // 最少有一个尺码
                 if(this.result[index]){
                     var i = 0;
                     for(var item in this.result[index][2][0]){

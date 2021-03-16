@@ -106,7 +106,7 @@ const ShippingMethods = class extends React.Component {
 
 				<p style={{ fontSize: 12, borderTop: '1px dashed #666', paddingTop: 10 }}><Grey>{intl.formatMessage({ id: 'shipping_tip' })}</Grey></p>
 				<div style={{ marginTop: 10 }}>
-					<img style={{width:188}} src="https://dgzfssf1la12s.cloudfront.net/upgrade/20210304/shippingmethod.png"/>
+					<img style={{width:188}} src="https://image.geeko.ltd/upgrade/20210304/shippingmethod.png"/>
 				</div>
 			</div>
 

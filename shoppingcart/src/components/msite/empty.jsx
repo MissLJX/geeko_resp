@@ -31,7 +31,7 @@ const EmptyButton = styled.a`
 `
 
 export default () => <Empty>
-  <EmptyImage src="https://dgzfssf1la12s.cloudfront.net/site/pc/e18.png" alt="EmptyCart"/>
+  <EmptyImage src="https://image.geeko.ltd/site/pc/e18.png" alt="EmptyCart"/>
   <Grey style={{marginBottom: 5, display: 'inline-block'}}>No More Data</Grey>
   	<EmptyButton href={`${window.ctx}/`}>Shop Now</EmptyButton>
 </Empty>

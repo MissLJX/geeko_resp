@@ -250,7 +250,7 @@ const Ticket = class extends React.Component {
       if (url.indexOf('blob') >= 0 || url.indexOf('http') >= 0) {
         return url
       }
-      return `https://dgzfssf1la12s.cloudfront.net/ticket/${url}`
+      return `https://image.geeko.ltd/ticket/${url}`
     }
 
     const ReplyTip = (props) => {
@@ -280,7 +280,7 @@ const Ticket = class extends React.Component {
 
     const HeaderImage = ({image, sender}) => {
       return <div style={{
-        backgroundImage: sender === 'buyers' ? `url(https://dgzfssf1la12s.cloudfront.net/icon/${image}) ,url(https://dgzfssf1la12s.cloudfront.net/site/pc/icon35.png)` : 'url(https://dgzfssf1la12s.cloudfront.net/icon/support.jpg)',
+        backgroundImage: sender === 'buyers' ? `url(https://image.geeko.ltd/icon/${image}) ,url(https://image.geeko.ltd/site/pc/icon35.png)` : 'url(https://image.geeko.ltd/icon/support.jpg)',
         backgroundSize: 'cover',
         display: 'inline-block',
         width: '50px',
