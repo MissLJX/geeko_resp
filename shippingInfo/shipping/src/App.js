@@ -220,26 +220,35 @@ class ShippingTable extends React.Component {
 
         const infos = this.props.infos
 
+        const desc = infos[0].standard ? infos[0].standard.desc : '';
         const hasStandard = _.find(this.props.infos, info => !!info.standard)
         const hasExpedited = _.find(this.props.infos, info => !!info.expedited)
         const hasExpress = _.find(this.props.infos, info => !!info.express)
 
         return (
-            <table className="x-shipping-table" style={{width:'100%'}}>
-                <tbody>
-                <tr>
-                        <td><FormattedMessage id="shipping_method"/></td>
-                        <td><FormattedMessage id="shipping_time"/></td>
-                        <td><FormattedMessage id="costs"/></td>
-                    </tr>
+            <div>
+                <div className={ desc ? 'x-shipping-desc' : '' } dangerouslySetInnerHTML={{__html:desc}}>
+                    {/* <span>{ desc }</span> */}
+                </div>
 
-                <ShippingRows hasStandard={hasStandard} hasExpedited={hasExpedited} hasExpress={hasExpress} infos={infos} />
+                <div>
+                    <table className="x-shipping-table" style={{width:'100%'}}>
+                        <tbody>
+                        <tr>
+                                <td><FormattedMessage id="shipping_method"/></td>
+                                <td><FormattedMessage id="shipping_time"/></td>
+                                <td><FormattedMessage id="costs"/></td>
+                            </tr>
 
-                </tbody>
-                   
+                        <ShippingRows hasStandard={hasStandard} hasExpedited={hasExpedited} hasExpress={hasExpress} infos={infos} />
 
-            </table>
+                        </tbody>
+                        
 
+                    </table>
+                </div>
+                
+            </div>
 
 
         )
