@@ -431,7 +431,7 @@ const Method = class extends React.PureComponent {
 			{children && selected && <BD>
 				{children}
 			</BD>}
-			{payMethod.id === '51' && <div id="klarna-payments-container" style={{display: `${selected? 'block': 'none'}`}}/>}
+			{payMethod.type === '27' && <div id={`klarna-payments-container-${payMethod.id}`} style={{display: `${selected? 'block': 'none'}`}}/>}
 		</StyledMethod>
 	}
 }
@@ -497,10 +497,24 @@ const PayMethodList = class extends React.Component {
 		super(props)
 	}
 	render () {
-		const {methods, selectPayHandle, selectedPayId, paypalDiscountMessage} = this.props
+		const {methods, selectPayHandle, selectedPayId, paypalDiscountMessage, payment_method_categories} = this.props
+
+		const smethods = (methods || []).map(m => {
+			if(m.type === '27'){
+				const selectedCategory = (payment_method_categories||[]).find(c => c.identifier === m.description)
+				if(selectedCategory){
+					return {...m, name: selectedCategory.name, icon: selectedCategory.asset_urls.standard}
+				}
+				return m
+			}else{
+				return m
+			}
+		})
+
+
 		return <MethodUL>
 			{
-				methods && methods.map(payMethod => (
+				smethods && smethods.map(payMethod => (
 					<li key={payMethod.id}>
 						<Method paypalDiscountMessage={paypalDiscountMessage} selected={payMethod.id === selectedPayId} selectPayHandle={selectPayHandle} payMethod={payMethod}>
 							{getMethodBody({method: payMethod, ...this.props})}

@@ -1,15 +1,15 @@
 import React from 'react'
 import styled from 'styled-components'
-import {injectIntl, FormattedMessage} from 'react-intl'
-import {__route_root__, storage} from '../utils/utils.js'
-import {Route} from 'react-router-dom'
-import {submit} from '../utils/common-pay.js'
+import { injectIntl, FormattedMessage } from 'react-intl'
+import { __route_root__, storage } from '../utils/utils.js'
+import { Route } from 'react-router-dom'
+import { submit } from '../utils/common-pay.js'
 import { connect } from 'react-redux'
 import Loadable from 'react-loadable'
-import {Red} from '../components/text.jsx'
+import { Red } from '../components/text.jsx'
 
 import Address from '../components/pc/address.jsx'
-import {Boxs, Box} from '../components/pc/layouts.jsx'
+import { Boxs, Box } from '../components/pc/layouts.jsx'
 import PayMethods from '../components/pc/pay-methods.jsx'
 
 import ItemTableHead from '../components/pc/item-table-head.jsx'
@@ -20,7 +20,7 @@ import { BigButton } from '../components/msite/buttons.jsx'
 
 import Loading from '../components/msite/loading.jsx'
 import ShippingMethods from '../components/pc/shipping-methods.jsx'
- 
+
 import {
 	checkout_updatepaymethod,
 	checkout_getparams,
@@ -28,7 +28,10 @@ import {
 	checkout_paypal,
 	checkout_computop,
 	paypal_capture,
-	paypal_pay_order
+	paypal_pay_order,
+	klarna_order_create_session,
+	klarna_order_get_params,
+	klarna_order_place_order
 } from '../api'
 
 import {
@@ -57,23 +60,23 @@ const CheckoutAddress = Loadable({
 
 
 const getPayImage = country => {
-	switch(country){
-	case 'BR':
-		return 'https://s3-us-west-2.amazonaws.com/wanna/pt_BR.png'
-	case 'DE':
-		return 'https://s3-us-west-2.amazonaws.com/wanna/de_DE.png'
-	case 'MX':
-		return 'https://s3-us-west-2.amazonaws.com/wanna/es_ES.png'
-	case 'AR':
-		return 'https://s3-us-west-2.amazonaws.com/wanna/es_AR.png'
-	case 'CO':
-		return 'https://s3-us-west-2.amazonaws.com/wanna/es_CO.png'
-	case 'CL':
-		return 'https://s3-us-west-2.amazonaws.com/wanna/es_CL.png'
-	case 'UY':
-		return 'https://s3-us-west-2.amazonaws.com/wanna/es_UY.png'
-	default:
-		return 'https://s3-us-west-2.amazonaws.com/wanna/pc_default.png'
+	switch (country) {
+		case 'BR':
+			return 'https://s3-us-west-2.amazonaws.com/wanna/pt_BR.png'
+		case 'DE':
+			return 'https://s3-us-west-2.amazonaws.com/wanna/de_DE.png'
+		case 'MX':
+			return 'https://s3-us-west-2.amazonaws.com/wanna/es_ES.png'
+		case 'AR':
+			return 'https://s3-us-west-2.amazonaws.com/wanna/es_AR.png'
+		case 'CO':
+			return 'https://s3-us-west-2.amazonaws.com/wanna/es_CO.png'
+		case 'CL':
+			return 'https://s3-us-west-2.amazonaws.com/wanna/es_CL.png'
+		case 'UY':
+			return 'https://s3-us-west-2.amazonaws.com/wanna/es_UY.png'
+		default:
+			return 'https://s3-us-west-2.amazonaws.com/wanna/pc_default.png'
 	}
 }
 
@@ -179,7 +182,7 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 const Checkout = class extends React.Component {
-	constructor (props) {
+	constructor(props) {
 		super(props)
 		this.handleInputChange = this.handleInputChange.bind(this)
 		this.sdkResponseHandler = this.sdkResponseHandler.bind(this)
@@ -189,13 +192,16 @@ const Checkout = class extends React.Component {
 			ticketMethods: [],
 			atmMethods: [],
 			paypaling: false,
-			checking: false
+			checking: false,
+			klarnaInited: null,
+			klarnaSession: null,
+			klarnaParams: {}
 		}
 	}
 
-	scrollhandle (evt) {
+	scrollhandle(evt) {
 		if (this.fixedCart && this.fixedCartWrapper) {
-			const {clientHeight} = this.fixedCart
+			const { clientHeight } = this.fixedCart
 			this.fixedCartWrapper.style.height = clientHeight + 'px'
 			const rect = this.fixedCartWrapper.getBoundingClientRect()
 			if (rect.top <= 0) {
@@ -208,7 +214,7 @@ const Checkout = class extends React.Component {
 
 		if (this.fixedSummary && this.fixedSummaryWrapper) {
 			this.fixedSmall.classList.remove('__fixed')
-			const {clientHeight} = this.fixedSummary
+			const { clientHeight } = document.getElementById('fixedSummary')
 			if (window.innerHeight > clientHeight) {
 				this.fixedSummaryWrapper.style.height = clientHeight + 'px'
 				const rect = this.fixedSummaryWrapper.getBoundingClientRect()
@@ -223,7 +229,7 @@ const Checkout = class extends React.Component {
 				this.fixedSmall.classList.remove('__fixed')
 				const { clientHeight } = this.fixedSmall
 
-				if(clientHeight < window.innerHeight - 40){
+				if (clientHeight < window.innerHeight - 40) {
 					this.fixedSmallWrapper.style.height = clientHeight + 'px'
 					const rect = this.fixedSmallWrapper.getBoundingClientRect()
 					if (rect.top <= 0) {
@@ -237,25 +243,37 @@ const Checkout = class extends React.Component {
 		}
 	}
 
-	componentWillUnmount () {
+	componentDidUpdate(prevProps) {
+		const { checkout: oldCheckout } = prevProps
+		const { checkout } = this.props
+		if (!_.isEqual(checkout, oldCheckout) && checkout) {
+			const { payMethod, payMethods } = checkout
+			const selectedPayMethod = payMethods.find(p => p.id === payMethod)
+			if (selectedPayMethod && selectedPayMethod.type === '27') {
+				this.loadKlarna(selectedPayMethod)
+			}
+		}
+	}
+
+	componentWillUnmount() {
 		window.removeEventListener('scroll', this.scrollhandle, false)
 		window.removeEventListener('resize', this.scrollhandle, false)
 	}
 
-	componentWillMount () {
+	componentDidMount() {
 		const { orderId } = this.props.match.params
 
 		this.props.GETCHECKOUT(orderId).catch((error) => {
-			if(error.result){
+			if (error.result) {
 				alert(error.result)
-			}else{
+			} else {
 				alert(error)
 			}
-			
+
 			window.location.href = `${window.ctx || ''}/me/m/order/detail/${orderId}`
 		})
 		this.props.GETPAYPAL()
-		this.props.GETME().then( ({document}) => this.props.SETDOCUMENT(document))
+		this.props.GETME().then(({ document }) => this.props.SETDOCUMENT(document))
 
 		window.addEventListener('scroll', this.scrollhandle, false)
 		window.addEventListener('resize', this.scrollhandle, false)
@@ -285,43 +303,96 @@ const Checkout = class extends React.Component {
 		}
 	}
 
-	handleInputChange (event) {
+	handleInputChange(event) {
 		const target = event.target
 		const value = target.type === 'checkbox' ? target.checked : target.value
 		const name = target.name
 		switch (name) {
-		case 'securityCode':
-			this.props.SETSECURITYCODE(value)
-			break
-		case 'installments':
-			this.props.SETINSTALLMENTS(value)
-			break
-		case 'mercado-installments':
-			this.props.SETMERCADOINTALLMENTS(value)
-			break
-		case 'document':
-			this.props.SETDOCUMENT(value)
-			break
-		default:
-			break
+			case 'securityCode':
+				this.props.SETSECURITYCODE(value)
+				break
+			case 'installments':
+				this.props.SETINSTALLMENTS(value)
+				break
+			case 'mercado-installments':
+				this.props.SETMERCADOINTALLMENTS(value)
+				break
+			case 'document':
+				this.props.SETDOCUMENT(value)
+				break
+			default:
+				break
 		}
 	}
 
-	selectPayHandle (paymethod) {
+	createKlarnaSession(orderId, payMethod) {
+		return klarna_order_create_session({ orderId, payMethod }).then(data => data.result)
+	}
+
+	initKlarna(orderId, payMethod) {
+		if (!this.state.klarnaInited) {
+			this.setState({
+				klarnaInited: true
+			})
+
+			return this.createKlarnaSession(orderId, payMethod).then(res => {
+				const { client_token } = res
+				Klarna.Payments.init({
+					client_token
+				})
+				this.setState({
+					klarnaSession: res
+				})
+				return client_token
+			})
+
+		}
+		return Promise.resolve()
+	}
+
+	loadKlarna(paymethod) {
+
+		const { checkout } = this.props
+		const { orderId } = checkout
+
+		this.initKlarna(orderId, paymethod.id).then(() => {
+			klarna_order_get_params({ orderId, payMethod: paymethod.id }).then(data => data.result).then(params => {
+
+				this.setState({
+					klarnaParams: params
+				})
+
+				Klarna.Payments.load({
+					container: `#klarna-payments-container-${paymethod.id}`,
+					payment_method_category: paymethod.description
+				}, {
+					"locale": params.locale,
+					"purchase_country": params.purchase_country,
+					"purchase_currency": params.purchase_currency,
+					"order_amount": params.order_amount,
+					"order_lines": params.order_lines
+				}, function (res) {
+					console.debug(res)
+				})
+			})
+		})
+	}
+
+	selectPayHandle(paymethod) {
 		const { orderId } = this.props.match.params
-		checkout_updatepaymethod(orderId, paymethod.id).then(({result}) => {
+		checkout_updatepaymethod(orderId, paymethod.id).then(({ result }) => {
 			this.props.SETCHECKOUT(result)
-		}).catch(({result}) => {
+		}).catch(({ result }) => {
 			alert(result)
 		})
 	}
 
-	atmClickHandle (method) {
+	atmClickHandle(method) {
 		this.props.SETATMMETHOD(method.id)
 		storage.add('atmMethod', method.id, 365 * 24 * 60 * 60)
 	}
 
-	ticketClickHandle (method) {
+	ticketClickHandle(method) {
 		this.props.SETTICKETMETHOD(method.id)
 		storage.add('ticketMethod', method.id, 365 * 24 * 60 * 60)
 	}
@@ -329,7 +400,7 @@ const Checkout = class extends React.Component {
 	tcClickHandle(method) {
 		const { payMethod } = this.props.checkout
 		let _c = storage.get('cashoutMethod') || {}
-		let cashoutMethod = {..._c, [payMethod]: method}
+		let cashoutMethod = { ..._c, [payMethod]: method }
 		this.props.SETCASHOUT(cashoutMethod)
 		storage.add('cashoutMethod', cashoutMethod, 365 * 24 * 60 * 60)
 	}
@@ -339,23 +410,23 @@ const Checkout = class extends React.Component {
 		return (this.props.cashoutMethod || {})[payMethod]
 	}
 
-	initCashmethod(payMethod, method){
+	initCashmethod(payMethod, method) {
 		let _c = storage.get('cashoutMethod') || {}
 
-		if(!_c[payMethod]){
-			let cashoutMethod = {..._c, [payMethod]: method.id}
+		if (!_c[payMethod]) {
+			let cashoutMethod = { ..._c, [payMethod]: method.id }
 			this.props.SETCASHOUT(cashoutMethod)
 			storage.add('cashoutMethod', cashoutMethod, 365 * 24 * 60 * 60)
 		}
-		
+
 	}
 
-	paypalRender (c, method) {
+	paypalRender(c, method) {
 		const self = this
 
 		const { checkout } = self.props
 
-		let locale = checkout && checkout.locale && checkout.locale !=='nb_NO'&& checkout.locale !== 'is_IS' ? checkout.locale : 'en_US'
+		let locale = checkout && checkout.locale && checkout.locale !== 'nb_NO' && checkout.locale !== 'is_IS' ? checkout.locale : 'en_US'
 
 		if (c && (!c.children || c.children.length < 1)) {
 			/*global paypal b:true*/
@@ -375,29 +446,29 @@ const Checkout = class extends React.Component {
 
 				createOrder: function (data, actions) {
 					// This function sets up the details of the transaction, including the amount and line item details.
-					return paypal_pay_order({payMethod: 1, orderId: checkout.orderId}).then(data => data.result).then(payResult => {
+					return paypal_pay_order({ payMethod: 1, orderId: checkout.orderId }).then(data => data.result).then(payResult => {
 						self.orderId = payResult.orderId
 						return payResult.payPalOrder
 					}).then(order => order.id)
-					
+
 				},
 				onApprove: function (data, actions) {
-						const { orderID } = data
-						paypal_capture(orderID).then(data => data.result).then(result => {
-							window.location.href = `${window.ctx || ''}/order-confirm/${result}`
-						}).catch(data => {
-							if (data) {
-								if (data.result) {
-									alert(data.result)
-								} else {
-									alert(data)
-								}
+					const { orderID } = data
+					paypal_capture(orderID).then(data => data.result).then(result => {
+						window.location.href = `${window.ctx || ''}/order-confirm/${result}`
+					}).catch(data => {
+						if (data) {
+							if (data.result) {
+								alert(data.result)
+							} else {
+								alert(data)
 							}
-						})
-					
+						}
+					})
+
 				},
 				onCancel: function (data, actions) {
-				
+
 				},
 				onError: function (err) {
 					if (err) {
@@ -414,23 +485,23 @@ const Checkout = class extends React.Component {
 		}
 	}
 
-	checkparams(params){
-		return checkout_getparams(params).then( ({result}) => {
-			const {isFree, transactionId} = result
+	checkparams(params) {
+		return checkout_getparams(params).then(({ result }) => {
+			const { isFree, transactionId } = result
 			if (isFree) {
 				window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-			} else{
+			} else {
 				submit(result)
 			}
-		} )
+		})
 	}
 
-	checkcomputop(params){
-		return checkout_computop(params).then( ({result}) => {
-			const {isFree, transactionId} = result
+	checkcomputop(params) {
+		return checkout_computop(params).then(({ result }) => {
+			const { isFree, transactionId } = result
 			if (isFree) {
 				window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-			} else{
+			} else {
 
 				result = {
 					payURL: result.URL,
@@ -443,12 +514,12 @@ const Checkout = class extends React.Component {
 
 				submit(result)
 			}
-		} )
+		})
 	}
 
-	checkpay (params) {
-		return checkout_pay(params).then(({result}) => {
-			const {transactionId, success, details} = result
+	checkpay(params) {
+		return checkout_pay(params).then(({ result }) => {
+			const { transactionId, success, details } = result
 			if (success) {
 				window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
 			} else {
@@ -460,12 +531,12 @@ const Checkout = class extends React.Component {
 		})
 	}
 
-	checkout (event) {
+	checkout(event) {
 		const { checkout, paypal } = this.props
 
 		if (checkout) {
 			const payMethod = checkout.payMethods.find(m => m.id === checkout.payMethod) || checkout.payMethods[0]
-			const {orderId, shippingDetail} = checkout
+			const { orderId, shippingDetail } = checkout
 
 			if (shippingDetail.country && shippingDetail.country.value === 'BR' && !shippingDetail.cpf) {
 				const path = {
@@ -480,215 +551,265 @@ const Checkout = class extends React.Component {
 
 			if (payMethod) {
 				switch (payMethod.type) {
-				case '1':
-					this.setState({
-						paypaling: true,
-						checking: true
-					})
-					checkout_paypal({orderId}).then(data => data.result).then(({TOKEN, success, transactionId, ACK, L_LONGMESSAGE0}) => {
-						if (success && transactionId && !TOKEN) {
-							window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-							return
-						}
-						if (ACK === 'Failure') {
-							alert(L_LONGMESSAGE0)
+					case '1':
+						this.setState({
+							paypaling: true,
+							checking: true
+						})
+						checkout_paypal({ orderId }).then(data => data.result).then(({ TOKEN, success, transactionId, ACK, L_LONGMESSAGE0 }) => {
+							if (success && transactionId && !TOKEN) {
+								window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
+								return
+							}
+							if (ACK === 'Failure') {
+								alert(L_LONGMESSAGE0)
+								this.setState({
+									paypaling: false,
+									checking: false
+								})
+								return
+							}
+
+							if (TOKEN && paypal) {
+								window.location.href = paypal + TOKEN
+							}
+						}).catch(({ result }) => {
 							this.setState({
 								paypaling: false,
 								checking: false
 							})
-							return
-						}
-
-						if (TOKEN && paypal) {
-							window.location.href = paypal + TOKEN
-						}
-					}).catch(({result}) => {
-						this.setState({
-							paypaling: false,
-							checking: false
+							alert(result)
 						})
-						alert(result)
-					})
-					break
-				case '2':
-					this.props.history.push(`${this.props.match.url}/credit`)
-					break
-				case '3':
-					this.setState({
-						checking: true
-					})
-					this.checkcomputop({orderId}).catch((data) => {
+						break
+					case '2':
+						this.props.history.push(`${this.props.match.url}/credit`)
+						break
+					case '3':
 						this.setState({
-							checking: false
+							checking: true
 						})
-						if(data){
-							alert(data.result)
-						}
-					})
-					break
-				case '5':
-				case '26':
-					this.setState({
-						checking: true
-					})
-					this.checkparams({orderId}).catch(() => {
-						this.setState({
-							checking: false
-						})
-					})
-					break
-				case '6':
-					break
-				case '7':
-					this.props.history.push(`${this.props.match.url}/credit`)
-					break
-				case '8':
-					this.setState({
-						checking: true
-					})
-					this.props.GETCREDITCARDS(payMethod.id).then(cards => {
-						if (!cards || cards.length < 1) {
-							this.checkparams({
-								orderId
-							}).catch(() => {
-								this.setState({
-									checking: false
-								})
-							})
-						} else {
+						this.checkcomputop({ orderId }).catch((data) => {
 							this.setState({
 								checking: false
 							})
-							this.props.history.push(`${this.props.match.url}/credit`)
-						}
-					})
-					break
-				case '9':
-					if (!this.props.atmMethod) {
-						alert('Please select a pay method!')
-						this.$paylistdom.scrollIntoView()
-						return
-					}
-					this.setState({
-						checking: true
-					})
-					this.checkpay({
-						orderId,
-						paymentMethodId: this.props.atmMethod
-					}).catch(() => {
-						this.setState({
-							checking: true
-						})
-					})
-					break
-				case '10':
-					this.setState({
-						checking: true
-					})
-					this.checkpay({
-						orderId,
-						paymentMethodId: 'oxxo'
-					}).catch(() => {
-						this.setState({
-							checking: true
-						})
-					})
-					break
-				case '11':
-					this.setState({
-						checking: true
-					})
-					if (payMethod.id === '23') {
-						this.checkpay({
-							orderId
-						}).catch(() => {
-							this.setState({
-								checking: true
-							})
-						})
-					} else if (payMethod.id === '22') {
-						this.checkparams({
-							orderId
-						}).catch(() => {
-							this.setState({
-								checking: true
-							})
-						})
-					}
-					break
-				case '12':
-					this.props.GETDLOCALCARDS(payMethod.id).then( cards => {
-						this.props.history.push(`${this.props.match.url}/credit`)
-					} )
-					break
-				case '13':
-					this.checkpay({
-						orderId,
-						payMethod: payMethod.id,
-						paymentMethodId: 'BL'
-					}).catch(({result}) => {
-						alert(result)
-						this.setState({
-							checking: false
-						})
-					})
-					break
-				case '14':
-				case '15':
-				case '16':
-				case '17':
-				case '18':
-				case '19':
-				case '20':
-				case '21':
-				case '22':
-				case '23':
-				case '24':
-				case '25':
-					{
-						if(payMethod.type !== '14') {
-							this.documentForm.validateAll()
-							if(this.documentRef.context && this.documentRef.context._errors && this.documentRef.context._errors.length > 0){
-								return
+							if (data) {
+								alert(data.result)
 							}
-						}
-	
-						const paymentMethodId = this.getTcMethod()
-						const document = this.props.document
-	
-						if(!paymentMethodId){
+						})
+						break
+					case '5':
+					case '26':
+						this.setState({
+							checking: true
+						})
+						this.checkparams({ orderId }).catch(() => {
+							this.setState({
+								checking: false
+							})
+						})
+						break
+					case '6':
+						break
+					case '7':
+						this.props.history.push(`${this.props.match.url}/credit`)
+						break
+					case '8':
+						this.setState({
+							checking: true
+						})
+						this.props.GETCREDITCARDS(payMethod.id).then(cards => {
+							if (!cards || cards.length < 1) {
+								this.checkparams({
+									orderId
+								}).catch(() => {
+									this.setState({
+										checking: false
+									})
+								})
+							} else {
+								this.setState({
+									checking: false
+								})
+								this.props.history.push(`${this.props.match.url}/credit`)
+							}
+						})
+						break
+					case '9':
+						if (!this.props.atmMethod) {
 							alert('Please select a pay method!')
 							this.$paylistdom.scrollIntoView()
 							return
 						}
-	
-						if(this.props.document || payMethod.type === '14'){
+						this.setState({
+							checking: true
+						})
+						this.checkpay({
+							orderId,
+							paymentMethodId: this.props.atmMethod
+						}).catch(() => {
 							this.setState({
 								checking: true
 							})
+						})
+						break
+					case '10':
+						this.setState({
+							checking: true
+						})
+						this.checkpay({
+							orderId,
+							paymentMethodId: 'oxxo'
+						}).catch(() => {
+							this.setState({
+								checking: true
+							})
+						})
+						break
+					case '11':
+						this.setState({
+							checking: true
+						})
+						if (payMethod.id === '23') {
 							this.checkpay({
-								orderId,
-								payMethod: payMethod.id,
-								paymentMethodId,
-								document
-							}).catch(({result}) => {
-								alert(result)
+								orderId
+							}).catch(() => {
 								this.setState({
-									checking: false
+									checking: true
+								})
+							})
+						} else if (payMethod.id === '22') {
+							this.checkparams({
+								orderId
+							}).catch(() => {
+								this.setState({
+									checking: true
 								})
 							})
 						}
-					}
-					
-					break
+						break
+					case '12':
+						this.props.GETDLOCALCARDS(payMethod.id).then(cards => {
+							this.props.history.push(`${this.props.match.url}/credit`)
+						})
+						break
+					case '13':
+						this.checkpay({
+							orderId,
+							payMethod: payMethod.id,
+							paymentMethodId: 'BL'
+						}).catch(({ result }) => {
+							alert(result)
+							this.setState({
+								checking: false
+							})
+						})
+						break
+					case '14':
+					case '15':
+					case '16':
+					case '17':
+					case '18':
+					case '19':
+					case '20':
+					case '21':
+					case '22':
+					case '23':
+					case '24':
+					case '25':
+						{
+							if (payMethod.type !== '14') {
+								this.documentForm.validateAll()
+								if (this.documentRef.context && this.documentRef.context._errors && this.documentRef.context._errors.length > 0) {
+									return
+								}
+							}
+
+							const paymentMethodId = this.getTcMethod()
+							const document = this.props.document
+
+							if (!paymentMethodId) {
+								alert('Please select a pay method!')
+								this.$paylistdom.scrollIntoView()
+								return
+							}
+
+							if (this.props.document || payMethod.type === '14') {
+								this.setState({
+									checking: true
+								})
+								this.checkpay({
+									orderId,
+									payMethod: payMethod.id,
+									paymentMethodId,
+									document
+								}).catch(({ result }) => {
+									alert(result)
+									this.setState({
+										checking: false
+									})
+								})
+							}
+						}
+						break
+					case '27':
+
+						const self = this
+						this.setState({
+							checking: true
+						})
+
+						Klarna.Payments.authorize({
+							payment_method_category: payMethod.description
+						}, {
+							"shipping_address": this.state.klarnaParams.shipping_address,
+							"billing_address": this.state.klarnaParams.shipping_address
+						}, function (res) {
+
+							const {
+								authorization_token,
+								approved,
+								show_form
+							} = res
+
+							if (approved && authorization_token) {
+								klarna_order_place_order({ authorizationToken: authorization_token, payMethod: payMethod.id, orderId }).then(data => data.result).then(response => {
+
+									const {
+										order_id,
+										redirect_url,
+										fraud_status,
+										authorized_payment_method,
+										correlation_id,
+										error_code,
+										error_messages
+									} = response
+
+									if (error_code) {
+										alert(error_messages)
+									} else if (fraud_status === "ACCEPTED") {
+										window.location.href = redirect_url
+									}
+
+									self.setState({ checking: false })
+								}).catch(data => {
+									alert(data.result)
+									self.setState({ checking: false })
+								})
+							}
+
+
+
+						})
+
+						break
 				}
 			}
 		}
 	}
 
 
-	sdkResponseHandler (status, response) {
-		const {orderId} = this.props.checkout
+	sdkResponseHandler(status, response) {
+		const { orderId } = this.props.checkout
 		if (status != 200 && status != 201) {
 			alert('verify filled data')
 		} else {
@@ -700,7 +821,7 @@ const Checkout = class extends React.Component {
 				orderId,
 				token: response.id,
 				installments: this.props.mercadoinstallments
-			}).catch(({result}) => {
+			}).catch(({ result }) => {
 				alert(result)
 				this.setState({
 					checking: false
@@ -709,8 +830,8 @@ const Checkout = class extends React.Component {
 		}
 	}
 
-	render () {
-		const { checkout,  intl } = this.props
+	render() {
+		const { checkout, intl } = this.props
 
 
 
@@ -734,33 +855,40 @@ const Checkout = class extends React.Component {
 			country = checkout.shippingDetail && checkout.shippingDetail.country ? checkout.shippingDetail.country.value : window.__country
 		}
 
+		const { klarnaSession } = this.state
+		let payment_method_categories
+		if (klarnaSession) {
+			payment_method_categories = klarnaSession.payment_method_categories
+		}
+
 		return <div>
-			{this.props.refreshing && <Refreshing/>}
+			{this.props.refreshing && <Refreshing />}
 			{
 				checkout && <SHOPPINGBODY>
 					<div className="__left">
 						<Boxs>
-							<Box title={intl.formatMessage({id: 'shipping_address'})}>
-								<div className="x-table x-fw __fixed __vm" style={{paddingTop: 15}}>
-									<div className="x-cell" style={{width: 362}}>
-										<Address onEdit={ () => { this.props.history.push(`${this.props.match.url}/address`) } } address={checkout.shippingDetail}/>
+							<Box title={intl.formatMessage({ id: 'shipping_address' })}>
+								<div className="x-table x-fw __fixed __vm" style={{ paddingTop: 15 }}>
+									<div className="x-cell" style={{ width: 362 }}>
+										<Address onEdit={() => { this.props.history.push(`${this.props.match.url}/address`) }} address={checkout.shippingDetail} />
 									</div>
 								</div>
 							</Box>
 							{
-								checkout.shippingMethod && <Box title={intl.formatMessage({id: 'shipping_method'})}>
-									<ShippingMethods ignoreCheck={true} shippingMethodList={ [checkout.shippingMethod] } selectedShippingMethod={ checkout.shippingMethod }/>
+								checkout.shippingMethod && <Box title={intl.formatMessage({ id: 'shipping_method' })}>
+									<ShippingMethods ignoreCheck={true} shippingMethodList={[checkout.shippingMethod]} selectedShippingMethod={checkout.shippingMethod} />
 								</Box>
 							}
-						
 
-						
-							<div ref={ c => this.$paylistdom = c}>
-								<Box title={intl.formatMessage({id: 'payment_method'})}>
-									<div style={{paddingTop: 20}}>
+
+
+							<div ref={c => this.$paylistdom = c}>
+								<Box title={intl.formatMessage({ id: 'payment_method' })}>
+									<div style={{ paddingTop: 20 }}>
 										<PayMethods
-											payMethodList={ checkout.payMethods }
-											selectedPayId={ checkout.payMethod }
+											payment_method_categories={payment_method_categories}
+											payMethodList={checkout.payMethods}
+											selectedPayId={checkout.payMethod}
 											selectPayHandle={this.selectPayHandle.bind(this)}
 											ticketMethods={this.state.ticketMethods}
 											atmClickHandle={this.atmClickHandle.bind(this)}
@@ -777,25 +905,25 @@ const Checkout = class extends React.Component {
 											boleto={(c) => { this.boleto = c }}
 											apac={c => this.apac = c}
 											apacBB={c => this.apacBB = c}
-											brazilOceanForm={ c => this.brazilOceanForm = c }
-											brazilOcean={ c => this.brazilOcean = c }
+											brazilOceanForm={c => this.brazilOceanForm = c}
+											brazilOcean={c => this.brazilOcean = c}
 
 											tcClickHandle={this.tcClickHandle.bind(this)}
 											tcMethod={tcMethod}
 
-											documentForm = { c => this.documentForm = c}
-											documentRef = { c => this.documentRef = c}
-											document = { this.props.document }
-											initCashmethod = {this.initCashmethod.bind(this)}
+											documentForm={c => this.documentForm = c}
+											documentRef={c => this.documentRef = c}
+											document={this.props.document}
+											initCashmethod={this.initCashmethod.bind(this)}
 										/>
 									</div>
 								</Box>
 							</div>
 
-							<Box title={`${intl.formatMessage({id: 'shopping_bag'})} (${totalCount})`}>
+							<Box title={`${intl.formatMessage({ id: 'shopping_bag' })} (${totalCount})`}>
 								<div ref={c => this.fixedCartWrapper = c}>
-									<FixedTop style={{width: 726}} innerRef={c => this.fixedCart = c}>
-										<ItemTableHead/>
+									<FixedTop style={{ width: 726 }} innerRef={c => this.fixedCart = c}>
+										<ItemTableHead />
 									</FixedTop>
 								</div>
 								<ItemUL>
@@ -811,37 +939,37 @@ const Checkout = class extends React.Component {
 					</div>
 
 					<div className="__right">
-						<div ref={ c => this.fixedSummaryWrapper = c}>
-							<FixedTop style={{paddingTop: 20, width: 314}} innerRef={c => this.fixedSummary = c}>
-								<div ref={ c => this.fixedSmallWrapper = c }>
-									<FixedTop style={{paddingTop: 40, width: 314}} innerRef={c => this.fixedSmall = c}>
+						<div ref={c => this.fixedSummaryWrapper = c}>
+							<FixedTop style={{ paddingTop: 20, width: 314 }} id="fixedSummary" innerRef={c => this.fixedSummary = c}>
+								<div ref={c => this.fixedSmallWrapper = c}>
+									<FixedTop style={{ paddingTop: 40, width: 314 }} innerRef={c => this.fixedSmall = c}>
 										<Boxs>
-											<Box title={intl.formatMessage({id: 'order_summary'})}>
+											<Box title={intl.formatMessage({ id: 'order_summary' })}>
 
-												<OrderSummary style={{marginTop: 20}} display={checkout.display}/>
+												<OrderSummary style={{ marginTop: 20 }} display={checkout.display} />
 												{
-													payMethod && payMethod.id === '22' && <div style={{marginTop: 5, textAlign: 'right'}}>
-														<Red style={{fontWeight: 'normal', marginLeft: 5, fontSize: 14}}>(Em até 3x s/ juros)</Red>
+													payMethod && payMethod.id === '22' && <div style={{ marginTop: 5, textAlign: 'right' }}>
+														<Red style={{ fontWeight: 'normal', marginLeft: 5, fontSize: 14 }}>(Em até 3x s/ juros)</Red>
 													</div>
 												}
 
 												<div>
 													{
-														payMethod && payMethod.id === '1' ? <div id='ip-paypal-pay' style={{marginTop: 30}} ref={ (c) => this.paypalRender(c, 'normal') }/> : (!this.state.checking ? <BigButton onClick={this.checkout.bind(this)} bgColor="#222" style={{marginTop: 30, height: 45, lineHeight: '45px', textTransform: 'uppercase', fontSize: 18}}>
-															{intl.formatMessage({id: 'check_out'})}
-														</BigButton> : <BigButton bgColor="#999" style={{marginTop: 30, height: 45, lineHeight: '45px'}}>
-															{intl.formatMessage({id: 'please_wait'})}...
+														payMethod && payMethod.id === '1' ? <div id='ip-paypal-pay' style={{ marginTop: 30 }} ref={(c) => this.paypalRender(c, 'normal')} /> : (!this.state.checking ? <BigButton onClick={this.checkout.bind(this)} bgColor="#222" style={{ marginTop: 30, height: 45, lineHeight: '45px', textTransform: 'uppercase', fontSize: 18 }}>
+															{intl.formatMessage({ id: 'check_out' })}
+														</BigButton> : <BigButton bgColor="#999" style={{ marginTop: 30, height: 45, lineHeight: '45px' }}>
+																{intl.formatMessage({ id: 'please_wait' })}...
 														</BigButton>)
 													}
 
 												</div>
 
-												<div style={{marginTop: 40}}>
+												<div style={{ marginTop: 40 }}>
 													<div>
-														{intl.formatMessage({id: 'we_accept'})}
+														{intl.formatMessage({ id: 'we_accept' })}
 													</div>
-													<div style={{marginTop: 10}}>
-														<img style={{width: '100%'}} src={getPayImage(country)}/>
+													<div style={{ marginTop: 10 }}>
+														<img style={{ width: '100%' }} src={getPayImage(country)} />
 													</div>
 												</div>
 
@@ -858,7 +986,7 @@ const Checkout = class extends React.Component {
 
 				</SHOPPINGBODY>
 			}
-			<Route path={`${this.props.match.path}/address`}  component={CheckoutAddress}/>
+			<Route path={`${this.props.match.path}/address`} component={CheckoutAddress} />
 		</div>
 	}
 }

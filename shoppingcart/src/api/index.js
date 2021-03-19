@@ -199,3 +199,17 @@ export const selectGift = variantId => axios.post(`${VPATH}/shopping-cart/update
 
 
  export const addToWishList = (productIds, variantIds) => axios.get(`${VPATH}/shopping-cart/move-to-wish-list`, {productIds, variantIds})
+
+
+
+
+
+ export const klarna_create_session = params => axios.get(`${VPATH}/klarna/create-session`,params)
+ export const klarna_get_params = params => axios.get(`${VPATH}/klarna/get-order-details`,params)
+ export const klarna_place_order = params => axios.post(`${VPATH}/klarna/authorizations-order`,params)
+
+
+
+ export const klarna_order_create_session = params => axios.get(`${VPATH}/klarna/create-session-by-order`,params)
+ export const klarna_order_get_params = params => axios.get(`${VPATH}/klarna/get-order-details-by-order`,params)
+ export const klarna_order_place_order = params => axios.post(`${VPATH}/klarna/authorizations-by-order`,params)

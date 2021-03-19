@@ -102,7 +102,10 @@ import {
 	paypal_capture,
 	paypal_check_out,
 	paypal_get_shipping_details,
-	paypal_set_shipping_details
+	paypal_set_shipping_details,
+	klarna_get_params,
+	klarna_create_session,
+	klarna_place_order
 } from '../api'
 
 export const __address_token__ = window.token
@@ -314,7 +317,10 @@ const ShoppingCart = class extends React.Component {
 			leaveImage: '',
 			successTip: null,
 			showDeleteConfirm: false,
-			itemDelete: null
+			itemDelete: null,
+			klarnaInited: null,
+			klarnaSession: null,
+			klarnaParams: {}
 		}
 
 
@@ -354,6 +360,16 @@ const ShoppingCart = class extends React.Component {
 				successTip: null
 			})
 		}, 2000)
+	}
+
+	componentDidUpdate(prevProps) {
+		const { cart: oldCart } = prevProps
+		const { cart } = this.props
+
+		if (!_.isEqual(cart, oldCart) && cart) {
+			this.loadKlarna(cart.selectedPayMethod)
+		}
+
 	}
 
 	componentDidMount() {
@@ -409,6 +425,55 @@ const ShoppingCart = class extends React.Component {
 				}
 			})
 		}
+	}
+
+	createKlarnaSession(paymethod) {
+		return klarna_create_session({payMethod: paymethod.id}).then(data => data.result)
+	}
+
+	initKlarna(paymethod) {
+		if (!this.state.klarnaInited) {
+			this.setState({
+				klarnaInited: true
+			})
+
+			return this.createKlarnaSession(paymethod).then(res => {
+				const { client_token } = res
+				Klarna.Payments.init({
+					client_token
+				})
+				this.setState({
+					klarnaSession: res
+				})
+				return client_token
+			})
+
+		}
+		return Promise.resolve()
+	}
+
+	loadKlarna(paymethod) {
+		this.initKlarna(paymethod).then(() => {
+			klarna_get_params({payMethod: paymethod.id}).then(data => data.result).then(params => {
+
+				this.setState({
+					klarnaParams: params
+				})
+
+				Klarna.Payments.load({
+					container: `#klarna-payments-container-${paymethod.id}`,
+					payment_method_category: paymethod.description
+				}, {
+					"locale": params.locale,
+					"purchase_country": params.purchase_country,
+					"purchase_currency": params.purchase_currency,
+					"order_amount": params.order_amount,
+					"order_lines":params.order_lines
+				}, function (res) {
+					console.debug(res)
+				})
+			})
+		})
 	}
 
 	overseasHandle(variantId) {
@@ -683,6 +748,8 @@ const ShoppingCart = class extends React.Component {
 
 		let isCheckout = this.props.location.pathname && this.props.location.pathname.indexOf('/cart/checkout') >= 0
 
+		const {selectedPayMethod} = cart
+
 		if (!payType) {
 			alert(__confirm_paymethod__)
 			this.$paylistdom.scrollIntoView()
@@ -879,6 +946,57 @@ const ShoppingCart = class extends React.Component {
 			}
 
 			this.dLocalPay({ payMethod, paymentMethodId, document: this.props.document })
+		}else if (payType === '27') {
+			const self = this
+			this.setState({
+				checking: true
+			})
+
+			Klarna.Payments.authorize({
+				payment_method_category: selectedPayMethod.description
+			},{
+				"shipping_address": this.state.klarnaParams.shipping_address,
+				"billing_address": this.state.klarnaParams.shipping_address
+			}, function (res) {
+				
+				const {
+					authorization_token,
+					approved,
+					show_form
+				} = res
+
+				if(approved && authorization_token){
+					klarna_place_order({authorizationToken:authorization_token, payMethod}).then(data => data.result).then(response => {
+
+						const {
+							order_id,
+    						redirect_url,
+    						fraud_status,
+    						authorized_payment_method,
+							correlation_id,
+							error_code,
+							error_messages
+						} = response
+
+						if(error_code){
+							alert(error_messages)
+						}else if(fraud_status === "ACCEPTED"){
+							window.location.href = redirect_url
+						}
+
+						self.setState({ checking: false })
+					}).catch(data => {
+						alert(data.result)
+						self.setState({ checking: false })
+					})
+				}
+
+
+				
+			})
+
+
+
 		}
 
 		if (this.getCountdown(this.props.cart) > 0) {
@@ -1166,6 +1284,15 @@ const ShoppingCart = class extends React.Component {
 				window.location.reload()
 			}
 		})
+
+		try {
+			if (paymethod.id === '51') {
+				this.loadKlarna()
+			}
+
+		} catch (e) {
+			console.log(e)
+		}
 
 		// storage.add('payMethod', paymethod.id, 365 * 24 * 60 * 60)
 		// storage.add('payType', paymethod.type, 365 * 24 * 60 * 60)
@@ -1565,6 +1692,12 @@ const ShoppingCart = class extends React.Component {
 			gifts = cart.gifts
 		}
 
+		const { klarnaSession } = this.state
+		let payment_method_categories
+		if (klarnaSession) {
+			payment_method_categories = klarnaSession.payment_method_categories
+		}
+
 
 
 
@@ -1655,6 +1788,7 @@ const ShoppingCart = class extends React.Component {
 								<Box title={intl.formatMessage({ id: 'payment_method' })}>
 									<div style={{ paddingTop: 20 }}>
 										<PayMethods
+											payment_method_categories={payment_method_categories}
 											couponCode={this.props.couponCode}
 											cpf={this.props.cpf}
 											email={this.props.email}

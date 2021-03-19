@@ -40,6 +40,9 @@ import {
 	placeOrderAll,
 	openSafeChargeOrder,
 	setSafeChargeStatus,
+	klarna_get_params,
+	klarna_create_session,
+	klarna_place_order
 
 } from '../api'
 import { __route_root__, storage, producturl, unitprice } from '../utils/utils.js'
@@ -506,7 +509,10 @@ const ShoppingCart = class extends React.Component {
 			},
 			managing: false,
 			selectedItems: [],
-			editSelectAll: false
+			editSelectAll: false,
+			klarnaInited: null,
+			klarnaSession: null,
+			klarnaParams: {}
 		}
 		this.processCallBack = this.processCallBack.bind(this)
 		this.processErrorBack = this.processErrorBack.bind(this)
@@ -539,14 +545,14 @@ const ShoppingCart = class extends React.Component {
 		this.cvvField = c
 	}
 
-	componentDidUpdate(prevProps){
-		const {cart} = prevProps
-		const {cart: oldCart} = this.props
+	componentDidUpdate(prevProps) {
+		const { cart: oldCart } = prevProps
+		const { cart } = this.props
 
-		if(!_.isEqual(cart, oldCart)){
-			this.loadKlarna()
+		if (!_.isEqual(cart, oldCart) && cart) {
+			this.loadKlarna(cart.selectedPayMethod)
 		}
-		
+
 	}
 
 	componentDidMount() {
@@ -667,7 +673,7 @@ const ShoppingCart = class extends React.Component {
 		const { payMethod, cart, paypal, payType } = this.props
 		const { shippingDetail } = cart
 		const isRequireEmail = !window.__is_login__ && !window.token && this.props.location.pathname && this.props.location.pathname.indexOf('/cart/checkout') >= 0
-
+		const {selectedPayMethod} = cart
 
 		if (!cart.shippingDetail) {
 			this.props.history.push(`${window.ctx || ''}${__route_root__}/address`)
@@ -942,55 +948,48 @@ const ShoppingCart = class extends React.Component {
 				checking: true
 			})
 
-			// Klarna.Payments.authorize({
-			// 	payment_method_category: "pay_later"
-			//   }, {
-			// 	purchase_country: "GB",
-			// 	purchase_currency: "GBP",
-			// 	locale: "en-GB",
-			// 	billing_address: {
-			// 	  // given_name: "Testperson-no",
-			// 	  // family_name: "Denied",
-			// 	  // email: "youremail+denied@email.com",
-			// 	  // title: "Mr",
-			// 	  // street_address: "Sæffleberggate 56",
-			// 	  // street_address2: "Apt 214",
-			// 	  // postal_code: "0563",
-			// 	  // city: "Oslo",
-			// 	  // region: "",
-			// 	  // phone: "40123456",
-			// 	  // country: "GB"
-			// 	  given_name: "John",
-			// 	  family_name: "Doe",
-			// 	  email: "john@doe.com",
-			// 	  title: "Mr",
-			// 	  street_address: "13 New Burlington St",
-			// 	  street_address2: "Apt 214",
-			// 	  postal_code: "W13 3BG",
-			// 	  city: "London",
-			// 	  phone: "01895808221",
-			// 	  country: "GB"
-			// 	},
-			// 	shipping_address:{
-			// 	  given_name: "John",
-			// 	  family_name: "Doe",
-			// 	  email: "john@doe.com",
-			// 	  title: "Mr",
-			// 	  street_address: "13 New Burlington St",
-			// 	  street_address2: "Apt 214",
-			// 	  postal_code: "W13 3BG",
-			// 	  city: "London",
-			// 	  phone: "1",
-			// 	  country: "GB"
-			// 	}
+			Klarna.Payments.authorize({
+				payment_method_category: selectedPayMethod.description
+			},{
+				"shipping_address": this.state.klarnaParams.shipping_address,
+				"billing_address": this.state.klarnaParams.shipping_address
+			}, function (res) {
+				
+				const {
+					authorization_token,
+					approved,
+					show_form
+				} = res
 
-			//   }, function(res) {
-			// 	console.debug(res);
-			// 	self.setState({checking: false})
-			//   })
+				if(approved && authorization_token){
+					klarna_place_order({authorizationToken:authorization_token, payMethod}).then(data => data.result).then(response => {
+
+						const {
+							order_id,
+    						redirect_url,
+    						fraud_status,
+    						authorized_payment_method,
+							correlation_id,
+							error_code,
+							error_messages
+						} = response
+
+						if(error_code){
+							alert(error_messages)
+						}else if(fraud_status === "ACCEPTED"){
+							window.location.href = redirect_url
+						}
+
+						self.setState({ checking: false })
+					}).catch(data => {
+						alert(data.result)
+						self.setState({ checking: false })
+					})
+				}
 
 
-
+				
+			})
 		}
 
 
@@ -1189,38 +1188,53 @@ const ShoppingCart = class extends React.Component {
 		}
 	}
 
-	createKlarnaSession(){
-		return new Promise((resolve, reject) => {
-			resolve('eyJhbGciOiJSUzI1NiIsImtpZCI6IjgyMzA1ZWJjLWI4MTEtMzYzNy1hYTRjLTY2ZWNhMTg3NGYzZCJ9.eyJzZXNzaW9uX2lkIjoiNjhhMjdkMTctZTA5My0yMGM2LTg2ZTItNjk0ZTA5OTRlMzRiIiwiYmFzZV91cmwiOiJodHRwczovL2pzLnBsYXlncm91bmQua2xhcm5hLmNvbS9ldS9rcC9sZWdhY3kvcGF5bWVudHMiLCJkZXNpZ24iOiJrbGFybmEiLCJsYW5ndWFnZSI6ImVuIiwicHVyY2hhc2VfY291bnRyeSI6IkdCIiwiZW52aXJvbm1lbnQiOiJwbGF5Z3JvdW5kIiwibWVyY2hhbnRfbmFtZSI6IllvdXIgYnVzaW5lc3MgbmFtZSIsInNlc3Npb25fdHlwZSI6IlBBWU1FTlRTIiwiY2xpZW50X2V2ZW50X2Jhc2VfdXJsIjoiaHR0cHM6Ly9ldS5wbGF5Z3JvdW5kLmtsYXJuYWV2dC5jb20iLCJleHBlcmltZW50cyI6W3sibmFtZSI6ImluLWFwcC1zZGstbmV3LWludGVybmFsLWJyb3dzZXIiLCJwYXJhbWV0ZXJzIjp7InZhcmlhdGVfaWQiOiJuZXctaW50ZXJuYWwtYnJvd3Nlci1lbmFibGUifX1dfQ.S964jLybs4BEOZi8mZz0Lnj-To3Ge1MvknzwzDdrz5fop3K8lv-_5Tzn06kkzU6fLeFqzGNUsrPYhFxF--9FwtDGGH9Kzf9zXv2aGci9JuHMvndvzZZ4apzHflc7wPrIRmEWMuZdfD-lh43R932DIY4ArC8SOLSalnXxFumdmk0ivLjJql40F5f4IpGfS5L9Ttf5KR0zXWE6_LW7OTEcH6tB8d6SHNU9uBTmp1siEX0h8VFi57tP8Q2jWaaD1xq76Q2ycPamzj6348k1BKqvxcfD3KGLgiuSFtCDb0QeW5Okh-bny41KyEcLuK-lFcwcDtUQ_-86VH6PCUJkMQCvjQ')
+	createKlarnaSession(paymethod) {
+		return klarna_create_session({payMethod: paymethod.id}).then(data => data.result)
+	}
+
+	initKlarna(paymethod) {
+		if (!this.state.klarnaInited) {
+			this.setState({
+				klarnaInited: true
+			})
+
+			return this.createKlarnaSession(paymethod).then(res => {
+				const { client_token } = res
+				Klarna.Payments.init({
+					client_token
+				})
+				this.setState({
+					klarnaSession: res
+				})
+				return client_token
+			})
+
+		}
+		return Promise.resolve()
+	}
+
+	loadKlarna(paymethod) {
+		this.initKlarna(paymethod).then(() => {
+			klarna_get_params({payMethod: paymethod.id}).then(data => data.result).then(params => {
+
+				this.setState({
+					klarnaParams: params
+				})
+
+				Klarna.Payments.load({
+					container: `#klarna-payments-container-${paymethod.id}`,
+					payment_method_category: paymethod.description
+				}, {
+					"locale": params.locale,
+					"purchase_country": params.purchase_country,
+					"purchase_currency": params.purchase_currency,
+					"order_amount": params.order_amount,
+					"order_lines":params.order_lines
+				}, function (res) {
+					console.debug(res)
+				})
+			})
 		})
-	}
-
-	initKlarna() {
-		// if(!this.state.klarnaInited){
-		// 	this.setState({
-		// 		klarnaInited: true
-		// 	})
-
-		// 	return this.createKlarnaSession().then(client_token => {
-		// 		Klarna.Payments.init({
-		// 			client_token
-		// 		})
-		// 		return client_token
-		// 	})
-			
-		// }
-		// return Promise.resolve()
-	}
-
-	loadKlarna() {
-		// this.initKlarna().then(() => {
-		// 	Klarna.Payments.load({
-		// 		container: '#klarna-payments-container',
-		// 		payment_method_category: 'pay_later'
-		// 	}, function (res) {
-		// 		console.debug(res)
-		// 	})
-		// })
 	}
 
 	selectPayHandle(paymethod) {
@@ -1232,9 +1246,9 @@ const ShoppingCart = class extends React.Component {
 		// storage.add('payMethod', paymethod.id, 365 * 24 * 60 * 60)
 		// storage.add('payType', paymethod.type, 365 * 24 * 60 * 60)
 		try {
-			if (paymethod.id === '51') {
-				this.loadKlarna()
-			}
+			// if (paymethod.type === '27') {
+			// 	this.loadKlarna(paymethod)
+			// }
 
 		} catch (e) {
 			console.log(e)
@@ -2164,6 +2178,12 @@ const ShoppingCart = class extends React.Component {
 			gifts = cart.gifts
 		}
 
+		const { klarnaSession } = this.state
+		let payment_method_categories
+		if (klarnaSession) {
+			payment_method_categories = klarnaSession.payment_method_categories
+		}
+
 
 
 
@@ -2176,11 +2196,11 @@ const ShoppingCart = class extends React.Component {
 					<div className="__hd">
 						<ShoppingHead>
 							<span className="__title"><FormattedMessage id="shopping_bag" /></span>
-							<span onClick={evt => { 
+							<span onClick={evt => {
 								const referrer = document.referrer || ''
-								if(referrer.indexOf('/product_detail') > 0 || referrer.indexOf('/product') > 0 || referrer.indexOf('/collection') > 0 || referrer.indexOf('/category') > 0){
+								if (referrer.indexOf('/product_detail') > 0 || referrer.indexOf('/product') > 0 || referrer.indexOf('/collection') > 0 || referrer.indexOf('/category') > 0) {
 									window.history.back()
-								}else{
+								} else {
 									window.location.href = '/'
 								}
 							}} className="__back">&#xe690;</span>
@@ -2395,7 +2415,7 @@ const ShoppingCart = class extends React.Component {
 														<BoxHead single title={intl.formatMessage({ id: 'payment_method' })} />
 														<div style={{ paddingLeft: 10, paddingRight: 10 }}>
 															<PayMethodList
-
+																payment_method_categories={payment_method_categories}
 																cpfClickHandle={this.cpfClickHandle.bind(this)}
 																boletoForm={(c) => this.boletoForm = c}
 																boleto={(c) => { this.boleto = c }}
