@@ -971,11 +971,13 @@ const ShoppingCart = class extends React.Component {
     						authorized_payment_method,
 							correlation_id,
 							error_code,
-							error_messages
+							error_messages,
+							orderId
 						} = response
 
 						if(error_code){
 							alert(error_messages)
+							self.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
 						}else if(fraud_status === "ACCEPTED"){
 							window.location.href = redirect_url
 						}
@@ -984,7 +986,10 @@ const ShoppingCart = class extends React.Component {
 					}).catch(data => {
 						alert(data.result)
 						self.setState({ checking: false })
+						
 					})
+				}else{
+					self.setState({ checking: false })
 				}
 
 
@@ -1188,8 +1193,8 @@ const ShoppingCart = class extends React.Component {
 		}
 	}
 
-	createKlarnaSession(paymethod) {
-		return klarna_create_session({payMethod: paymethod.id}).then(data => data.result)
+	createKlarnaSession() {
+		return klarna_create_session({}).then(data => data.result)
 	}
 
 	initKlarna(paymethod) {
@@ -1204,8 +1209,10 @@ const ShoppingCart = class extends React.Component {
 					client_token
 				})
 				this.setState({
-					klarnaSession: res
+					klarnaSession: res,
+					klarnaInited: !!client_token
 				})
+
 				return client_token
 			})
 

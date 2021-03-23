@@ -415,17 +415,19 @@ const PayMethods = class extends React.Component {
 		const { payMethodList, payment_method_categories } = this.props
 
 
-		const smethods = (payMethodList || []).map(m => {
+		const smethods = payment_method_categories && payment_method_categories.length ?(payMethodList || []).map(m => {
 			if(m.type === '27'){
 				const selectedCategory = (payment_method_categories||[]).find(c => c.identifier === m.description)
 				if(selectedCategory){
 					return {...m, name: selectedCategory.name, icon: selectedCategory.asset_urls.standard}
+				}else{
+					return {...m, klarnaFailed: true}
 				}
-				return m
+				
 			}else{
 				return m
 			}
-		})
+		}).filter(p => !!!p.klarnaFailed): payMethodList.filter(p => p.type !== '27')
 
 
 		return <METHODS>

@@ -326,7 +326,7 @@ const Checkout = class extends React.Component {
 	}
 
 	createKlarnaSession(orderId, payMethod) {
-		return klarna_order_create_session({ orderId, payMethod }).then(data => data.result)
+		return klarna_order_create_session({ orderId }).then(data => data.result)
 	}
 
 	initKlarna(orderId, payMethod) {
@@ -341,7 +341,8 @@ const Checkout = class extends React.Component {
 					client_token
 				})
 				this.setState({
-					klarnaSession: res
+					klarnaSession: res,
+					klarnaInited: !!client_token
 				})
 				return client_token
 			})
@@ -795,6 +796,8 @@ const Checkout = class extends React.Component {
 									alert(data.result)
 									self.setState({ checking: false })
 								})
+							}else{
+								self.setState({ checking: false })
 							}
 
 
