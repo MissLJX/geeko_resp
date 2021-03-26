@@ -497,26 +497,11 @@ const PayMethodList = class extends React.Component {
 		super(props)
 	}
 	render () {
-		const {methods, selectPayHandle, selectedPayId, paypalDiscountMessage, payment_method_categories} = this.props
-
-		const smethods = payment_method_categories && payment_method_categories.length ?(methods || []).map(m => {
-			if(m.type === '27'){
-				const selectedCategory = (payment_method_categories||[]).find(c => c.identifier === m.description)
-				if(selectedCategory){
-					return {...m, name: selectedCategory.name, icon: selectedCategory.asset_urls.standard}
-				}else{
-					return {...m, klarnaFailed: true}
-				}
-				
-			}else{
-				return m
-			}
-		}).filter(p => !!!p.klarnaFailed): methods.filter(p => p.type !== '27')
-
+		const {methods, selectPayHandle, selectedPayId, paypalDiscountMessage} = this.props
 
 		return <MethodUL>
 			{
-				smethods && smethods.map(payMethod => (
+				methods && methods.map(payMethod => (
 					<li key={payMethod.id}>
 						<Method paypalDiscountMessage={paypalDiscountMessage} selected={payMethod.id === selectedPayId} selectPayHandle={selectPayHandle} payMethod={payMethod}>
 							{getMethodBody({method: payMethod, ...this.props})}

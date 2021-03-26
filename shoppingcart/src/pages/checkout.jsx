@@ -302,8 +302,6 @@ const Checkout = class extends React.Component {
 			paypaling: false,
 			checking: false,
 			dlocalerror: null,
-			klarnaInited: null,
-			klarnaSession: null,
 			klarnaParams: {}
 		}
 		this.processCallBack = this.processCallBack.bind(this)
@@ -395,29 +393,17 @@ const Checkout = class extends React.Component {
 	}
 
 	createKlarnaSession(orderId, payMethod) {
-		return klarna_order_create_session({orderId}).then(data => data.result)
+		return klarna_order_create_session({orderId, payMethod}).then(data => data.result)
 	}
 
 	initKlarna(orderId, payMethod) {
-		if (!this.state.klarnaInited) {
-			this.setState({
-				klarnaInited: true
+		return this.createKlarnaSession(orderId, payMethod).then(res => {
+			const { client_token } = res
+			Klarna.Payments.init({
+				client_token
 			})
-
-			return this.createKlarnaSession(orderId, payMethod).then(res => {
-				const { client_token } = res
-				Klarna.Payments.init({
-					client_token
-				})
-				this.setState({
-					klarnaSession: res,
-					klarnaInited: !!client_token
-				})
-				return client_token
-			})
-
-		}
-		return Promise.resolve()
+			return client_token
+		})
 	}
 
 	loadKlarna(paymethod) {
@@ -1268,11 +1254,6 @@ const Checkout = class extends React.Component {
 			tcMethod = this.getTcMethod()
 		}
 
-		const { klarnaSession } = this.state
-		let payment_method_categories
-		if (klarnaSession) {
-			payment_method_categories = klarnaSession.payment_method_categories
-		}
 
 		return <ShoppingBody>
 			<div className="__hd">
@@ -1336,7 +1317,7 @@ const Checkout = class extends React.Component {
 							<BoxHead title={intl.formatMessage({ id: 'payment_method' })} />
 							<div style={{ paddingLeft: 10, paddingRight: 10 }}>
 								<PayMethodList
-									payment_method_categories={payment_method_categories}
+									
 									boletoForm={(c) => this.boletoForm = c}
 									boleto={(c) => { this.boleto = c }}
 									handleInputChange={this.handleInputChange}
