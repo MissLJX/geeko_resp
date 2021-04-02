@@ -412,25 +412,13 @@ const PayMethods = class extends React.Component {
 	}
 
 	render () {
-		const { payMethodList, payment_method_categories } = this.props
+		const { payMethodList } = this.props
 
-
-		const smethods = (payMethodList || []).map(m => {
-			if(m.type === '27'){
-				const selectedCategory = (payment_method_categories||[]).find(c => c.identifier === m.description)
-				if(selectedCategory){
-					return {...m, name: selectedCategory.name, icon: selectedCategory.asset_urls.standard}
-				}
-				return m
-			}else{
-				return m
-			}
-		})
 
 
 		return <METHODS>
 			{
-				smethods && smethods.length > 0 && smethods.map(method => <li key={method.id}>
+				payMethodList && payMethodList.length > 0 && payMethodList.map(method => <li key={method.id}>
 					<PayMethod method={method} {...this.props}>
 						{getPlugin({method, ...this.props})}
 					</PayMethod>

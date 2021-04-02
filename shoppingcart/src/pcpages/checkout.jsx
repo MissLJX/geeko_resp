@@ -193,8 +193,6 @@ const Checkout = class extends React.Component {
 			atmMethods: [],
 			paypaling: false,
 			checking: false,
-			klarnaInited: null,
-			klarnaSession: null,
 			klarnaParams: {}
 		}
 	}
@@ -330,24 +328,13 @@ const Checkout = class extends React.Component {
 	}
 
 	initKlarna(orderId, payMethod) {
-		if (!this.state.klarnaInited) {
-			this.setState({
-				klarnaInited: true
+		return this.createKlarnaSession(orderId, payMethod).then(res => {
+			const { client_token } = res
+			Klarna.Payments.init({
+				client_token
 			})
-
-			return this.createKlarnaSession(orderId, payMethod).then(res => {
-				const { client_token } = res
-				Klarna.Payments.init({
-					client_token
-				})
-				this.setState({
-					klarnaSession: res
-				})
-				return client_token
-			})
-
-		}
-		return Promise.resolve()
+			return client_token
+		})
 	}
 
 	loadKlarna(paymethod) {
@@ -795,6 +782,8 @@ const Checkout = class extends React.Component {
 									alert(data.result)
 									self.setState({ checking: false })
 								})
+							}else{
+								self.setState({ checking: false })
 							}
 
 
@@ -855,11 +844,6 @@ const Checkout = class extends React.Component {
 			country = checkout.shippingDetail && checkout.shippingDetail.country ? checkout.shippingDetail.country.value : window.__country
 		}
 
-		const { klarnaSession } = this.state
-		let payment_method_categories
-		if (klarnaSession) {
-			payment_method_categories = klarnaSession.payment_method_categories
-		}
 
 		return <div>
 			{this.props.refreshing && <Refreshing />}
@@ -886,7 +870,7 @@ const Checkout = class extends React.Component {
 								<Box title={intl.formatMessage({ id: 'payment_method' })}>
 									<div style={{ paddingTop: 20 }}>
 										<PayMethods
-											payment_method_categories={payment_method_categories}
+											
 											payMethodList={checkout.payMethods}
 											selectedPayId={checkout.payMethod}
 											selectPayHandle={this.selectPayHandle.bind(this)}

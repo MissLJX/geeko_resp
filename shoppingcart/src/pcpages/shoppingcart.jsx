@@ -318,8 +318,6 @@ const ShoppingCart = class extends React.Component {
 			successTip: null,
 			showDeleteConfirm: false,
 			itemDelete: null,
-			klarnaInited: null,
-			klarnaSession: null,
 			klarnaParams: {}
 		}
 
@@ -367,7 +365,9 @@ const ShoppingCart = class extends React.Component {
 		const { cart } = this.props
 
 		if (!_.isEqual(cart, oldCart) && cart) {
-			this.loadKlarna(cart.selectedPayMethod)
+			if (cart.selectedPayMethod && cart.selectedPayMethod.type === '27') {
+				this.loadKlarna(cart.selectedPayMethod)
+			}
 		}
 
 	}
@@ -432,24 +432,13 @@ const ShoppingCart = class extends React.Component {
 	}
 
 	initKlarna(paymethod) {
-		if (!this.state.klarnaInited) {
-			this.setState({
-				klarnaInited: true
+		return this.createKlarnaSession(paymethod).then(res => {
+			const { client_token } = res
+			Klarna.Payments.init({
+				client_token
 			})
-
-			return this.createKlarnaSession(paymethod).then(res => {
-				const { client_token } = res
-				Klarna.Payments.init({
-					client_token
-				})
-				this.setState({
-					klarnaSession: res
-				})
-				return client_token
-			})
-
-		}
-		return Promise.resolve()
+			return client_token
+		})
 	}
 
 	loadKlarna(paymethod) {
@@ -980,6 +969,7 @@ const ShoppingCart = class extends React.Component {
 
 						if(error_code){
 							alert(error_messages)
+							self.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
 						}else if(fraud_status === "ACCEPTED"){
 							window.location.href = redirect_url
 						}
@@ -989,6 +979,8 @@ const ShoppingCart = class extends React.Component {
 						alert(data.result)
 						self.setState({ checking: false })
 					})
+				}else{
+					self.setState({ checking: false })
 				}
 
 
@@ -1284,15 +1276,6 @@ const ShoppingCart = class extends React.Component {
 				window.location.reload()
 			}
 		})
-
-		try {
-			if (paymethod.id === '51') {
-				this.loadKlarna()
-			}
-
-		} catch (e) {
-			console.log(e)
-		}
 
 		// storage.add('payMethod', paymethod.id, 365 * 24 * 60 * 60)
 		// storage.add('payType', paymethod.type, 365 * 24 * 60 * 60)
@@ -1692,14 +1675,6 @@ const ShoppingCart = class extends React.Component {
 			gifts = cart.gifts
 		}
 
-		const { klarnaSession } = this.state
-		let payment_method_categories
-		if (klarnaSession) {
-			payment_method_categories = klarnaSession.payment_method_categories
-		}
-
-
-
 
 		const Address1 = cart && <Box title={intl.formatMessage({ id: 'shipping_address' })}>
 			<div style={{ position: 'relative' }}>
@@ -1788,7 +1763,7 @@ const ShoppingCart = class extends React.Component {
 								<Box title={intl.formatMessage({ id: 'payment_method' })}>
 									<div style={{ paddingTop: 20 }}>
 										<PayMethods
-											payment_method_categories={payment_method_categories}
+											
 											couponCode={this.props.couponCode}
 											cpf={this.props.cpf}
 											email={this.props.email}

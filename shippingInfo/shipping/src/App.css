@@ -187,6 +187,12 @@
   font-size: 18px;
 }
 
+.x-shipping-desc{
+  text-align: center;
+  color: #E64545;
+  margin-top: 10px;
+}
+
 @media screen and (max-width:460px) {
 	.x-country-filter{
     font-size: 14px;
