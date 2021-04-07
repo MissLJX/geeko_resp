@@ -133,5 +133,7 @@ export default{
 	use:'Nutzen',
 	coupon_alert: 'Discount Alert',
 	secure_payment: 'Secure Payment',
-	move_to_wish_list: 'Move To Wishlist'
+	move_to_wish_list: 'Move To Wishlist',
+	required: 'Erforderlich',
+	valid_email: '{email} ist keine gültige E-Mail Adresse'
 }

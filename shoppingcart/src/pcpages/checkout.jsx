@@ -782,7 +782,7 @@ const Checkout = class extends React.Component {
 									alert(data.result)
 									self.setState({ checking: false })
 								})
-							}else{
+							} else {
 								self.setState({ checking: false })
 							}
 
@@ -790,6 +790,35 @@ const Checkout = class extends React.Component {
 
 						})
 
+						break
+					case '28':
+						this.setState({
+							checking: true
+						})
+						checkout_pay({ payMethod: payMethod.id, orderId }).then(data => {
+							const payResult = data.result
+							if (payResult.success) {
+								if (payResult.isFree) {
+									window.location.href = ctx + '/order-confirm/' + result.transactionId
+								} else {
+									window.location.href = payResult.redirectCheckoutUrl
+								}
+							} else {
+								alert(payResult.details)
+							}
+							this.setState({
+								checking: false
+							})
+						}).catch(data => {
+							if (data.result) {
+								alert(data.result)
+							} else {
+								alert(data)
+							}
+							this.setState({
+								checking: false
+							})
+						})
 						break
 				}
 			}
@@ -870,7 +899,7 @@ const Checkout = class extends React.Component {
 								<Box title={intl.formatMessage({ id: 'payment_method' })}>
 									<div style={{ paddingTop: 20 }}>
 										<PayMethods
-											
+
 											payMethodList={checkout.payMethods}
 											selectedPayId={checkout.payMethod}
 											selectPayHandle={this.selectPayHandle.bind(this)}
@@ -942,7 +971,7 @@ const Checkout = class extends React.Component {
 														payMethod && payMethod.id === '1' ? <div id='ip-paypal-pay' style={{ marginTop: 30 }} ref={(c) => this.paypalRender(c, 'normal')} /> : (!this.state.checking ? <BigButton onClick={this.checkout.bind(this)} bgColor="#222" style={{ marginTop: 30, height: 45, lineHeight: '45px', textTransform: 'uppercase', fontSize: 18 }}>
 															{intl.formatMessage({ id: 'check_out' })}
 														</BigButton> : <BigButton bgColor="#999" style={{ marginTop: 30, height: 45, lineHeight: '45px' }}>
-																{intl.formatMessage({ id: 'please_wait' })}...
+															{intl.formatMessage({ id: 'please_wait' })}...
 														</BigButton>)
 													}
 

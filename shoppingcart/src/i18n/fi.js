@@ -135,5 +135,7 @@ export default{
 	use:'K\u00e4yt\u00e4',
 	coupon_alert: 'Discount Alert',
 	secure_payment: 'Secure Payment',
-	move_to_wish_list: 'Move To Wishlist'
+	move_to_wish_list: 'Move To Wishlist',
+	required: 'Vaaditaan',
+	valid_email: '{email} ei ole kelvollinen sähköpostiosoite'
 }

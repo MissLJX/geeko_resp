@@ -135,6 +135,7 @@ export const getDInstallments = (params) => axios.post(`${VPATH}/dlocal/get-inst
 export const getDPaymethods = (payMethod) => axios.get(`${VPATH}/dlocal/get-payment-methods`, {payMethod})
 
 export const payCredit = (params) => axios.post(`${VPATH}/pay/quickpay`, {...params, _: new Date().getTime()})
+export const pay = params => axios.post(`${VPATH}/pay/pay`, params)
 
 // checkout
 export const checkout = (orderId) => axios.get(`${VPATH}/order/checkout?_=${new Date().getTime()}`, {orderId})

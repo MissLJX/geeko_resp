@@ -135,5 +135,7 @@ export default{
 	use:'Anv\u00e4nd',
 	coupon_alert: 'Discount Alert',
 	secure_payment: 'Secure Payment',
-	move_to_wish_list: 'Move To Wishlist'
+	move_to_wish_list: 'Move To Wishlist',
+	required: 'Nödvändig',
+	valid_email: '{email} är inte ett giltigt e-postmeddelande'
 }

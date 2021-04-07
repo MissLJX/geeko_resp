@@ -105,7 +105,8 @@ import {
 	paypal_set_shipping_details,
 	klarna_get_params,
 	klarna_create_session,
-	klarna_place_order
+	klarna_place_order,
+	pay
 } from '../api'
 
 export const __address_token__ = window.token
@@ -989,6 +990,37 @@ const ShoppingCart = class extends React.Component {
 
 
 
+		}else if(payType === '28'){
+			this.setState({
+				checking: true
+			})
+			pay({payMethod: selectedPayMethod.id}).then(data => {
+				const payResult = data.result
+				if(payResult.success){
+					if(payResult.isFree){
+						window.location.href = ctx + '/order-confirm/' + result.transactionId
+					}else{
+						window.location.href = payResult.redirectCheckoutUrl
+					}
+				}else {
+					alert(payResult.details)
+					this.props.history.push(`${window.ctx || ''}/checkout/${payResult.orderId}`)
+				}
+				this.setState({
+					checking: false
+				})
+
+			}).catch(data => {
+				if(data.result){
+					alert(data.result)
+				}else{
+					alert(data)
+				}
+				this.setState({
+					checking: false
+				})
+
+			})
 		}
 
 		if (this.getCountdown(this.props.cart) > 0) {

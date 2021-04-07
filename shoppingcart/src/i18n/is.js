@@ -135,5 +135,7 @@ export default{
 	use:'Nota',
 	coupon_alert: 'Discount Alert',
 	secure_payment: 'Secure Payment',
-	move_to_wish_list: 'Move To Wishlist'
+	move_to_wish_list: 'Move To Wishlist',
+	required: 'Nauðsynlegt',
+	valid_email: '{email} er ekki gilt netfang'
 }

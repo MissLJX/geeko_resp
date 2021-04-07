@@ -331,9 +331,9 @@ const Checkout = class extends React.Component {
 		const { checkout: oldCheckout } = prevProps
 		const { checkout } = this.props
 		if (!_.isEqual(checkout, oldCheckout) && checkout) {
-			const {payMethod, payMethods} = checkout
+			const { payMethod, payMethods } = checkout
 			const selectedPayMethod = payMethods.find(p => p.id === payMethod)
-			if(selectedPayMethod && selectedPayMethod.type === '27'){
+			if (selectedPayMethod && selectedPayMethod.type === '27') {
 				this.loadKlarna(selectedPayMethod)
 			}
 		}
@@ -393,7 +393,7 @@ const Checkout = class extends React.Component {
 	}
 
 	createKlarnaSession(orderId, payMethod) {
-		return klarna_order_create_session({orderId, payMethod}).then(data => data.result)
+		return klarna_order_create_session({ orderId, payMethod }).then(data => data.result)
 	}
 
 	initKlarna(orderId, payMethod) {
@@ -407,10 +407,10 @@ const Checkout = class extends React.Component {
 	}
 
 	loadKlarna(paymethod) {
-		const {checkout} = this.props
-		const {orderId} = checkout
+		const { checkout } = this.props
+		const { orderId } = checkout
 		this.initKlarna(orderId, paymethod.id).then(() => {
-			klarna_order_get_params({orderId, payMethod: paymethod.id}).then(data => data.result).then(params => {
+			klarna_order_get_params({ orderId, payMethod: paymethod.id }).then(data => data.result).then(params => {
 
 				this.setState({
 					klarnaParams: params
@@ -424,7 +424,7 @@ const Checkout = class extends React.Component {
 					"purchase_country": params.purchase_country,
 					"purchase_currency": params.purchase_currency,
 					"order_amount": params.order_amount,
-					"order_lines":params.order_lines
+					"order_lines": params.order_lines
 				}, function (res) {
 					console.debug(res)
 				})
@@ -869,19 +869,19 @@ const Checkout = class extends React.Component {
 
 						Klarna.Payments.authorize({
 							payment_method_category: payMethod.description
-						},{
+						}, {
 							"shipping_address": this.state.klarnaParams.shipping_address,
 							"billing_address": this.state.klarnaParams.shipping_address
 						}, function (res) {
-							
+
 							const {
 								authorization_token,
 								approved,
 								show_form
 							} = res
 
-							if(approved && authorization_token){
-								klarna_order_place_order({authorizationToken:authorization_token, payMethod:payMethod.id, orderId}).then(data => data.result).then(response => {
+							if (approved && authorization_token) {
+								klarna_order_place_order({ authorizationToken: authorization_token, payMethod: payMethod.id, orderId }).then(data => data.result).then(response => {
 
 									const {
 										order_id,
@@ -893,9 +893,9 @@ const Checkout = class extends React.Component {
 										error_messages
 									} = response
 
-									if(error_code){
+									if (error_code) {
 										alert(error_messages)
-									}else if(fraud_status === "ACCEPTED"){
+									} else if (fraud_status === "ACCEPTED") {
 										window.location.href = redirect_url
 									}
 
@@ -904,15 +904,43 @@ const Checkout = class extends React.Component {
 									alert(data.result)
 									self.setState({ checking: false })
 								})
-							}else{
+							} else {
 								self.setState({ checking: false })
 							}
 
 
-							
+
 						})
 						break
-
+					case '28':
+						this.setState({
+							checking: true
+						})
+						checkout_pay({ payMethod: payMethod.id, orderId }).then(data => {
+							const payResult = data.result
+							if (payResult.success) {
+								if (payResult.isFree) {
+									window.location.href = ctx + '/order-confirm/' + result.transactionId
+								} else {
+									window.location.href = payResult.redirectCheckoutUrl
+								}
+							} else {
+								alert(payResult.details)
+							}
+							this.setState({
+								checking: false
+							})
+						}).catch(data => {
+							if (data.result) {
+								alert(data.result)
+							} else {
+								alert(data)
+							}
+							this.setState({
+								checking: false
+							})
+						})
+						break
 				}
 
 			}
@@ -1259,19 +1287,19 @@ const Checkout = class extends React.Component {
 			<div className="__hd">
 				<ShoppingHead>
 					<span className="__title"><FormattedMessage id="check_out" /></span>
-					<span onClick={evt => { 
+					<span onClick={evt => {
 						const referrer = document.referrer || ''
-						if(referrer.indexOf('/order') > 0){
+						if (referrer.indexOf('/order') > 0) {
 							window.history.back()
-						}else{
+						} else {
 							window.location.href = '/'
 						}
-					 }} className="__back">&#xe690;</span>
-					
+					}} className="__back">&#xe690;</span>
+
 				</ShoppingHead>
 			</div>
 			{
-				checkout && <div className="__bd" style={{paddingLeft: 8, paddingRight: 8, paddingTop: 52}}>
+				checkout && <div className="__bd" style={{ paddingLeft: 8, paddingRight: 8, paddingTop: 52 }}>
 					{this.state.refreshing && <Refreshing />}
 					<Boxs>
 						<Box style={{ position: 'relative' }}>
@@ -1317,7 +1345,7 @@ const Checkout = class extends React.Component {
 							<BoxHead title={intl.formatMessage({ id: 'payment_method' })} />
 							<div style={{ paddingLeft: 10, paddingRight: 10 }}>
 								<PayMethodList
-									
+
 									boletoForm={(c) => this.boletoForm = c}
 									boleto={(c) => { this.boleto = c }}
 									handleInputChange={this.handleInputChange}
@@ -1385,7 +1413,7 @@ const Checkout = class extends React.Component {
 										!this.state.checking ? <BigButton onClick={this.checkout.bind(this)} className="__btn" height={47} bgColor="#222">
 											{intl.formatMessage({ id: 'check_out' })} ({totalCount})
 										</BigButton> : <BigButton className="__btn" height={47} bgColor="#999">
-												{intl.formatMessage({ id: 'please_wait' })}...
+											{intl.formatMessage({ id: 'please_wait' })}...
 										</BigButton>
 
 									}
