@@ -136,6 +136,7 @@ export const getDPaymethods = (payMethod) => axios.get(`${VPATH}/dlocal/get-paym
 
 export const payCredit = (params) => axios.post(`${VPATH}/pay/quickpay`, {...params, _: new Date().getTime()})
 export const pay = params => axios.post(`${VPATH}/pay/pay`, params)
+export const get_pay_params = params => axios.post(`${VPATH}/pay/get-pay-params`, params)
 
 // checkout
 export const checkout = (orderId) => axios.get(`${VPATH}/order/checkout?_=${new Date().getTime()}`, {orderId})
@@ -214,3 +215,11 @@ export const selectGift = variantId => axios.post(`${VPATH}/shopping-cart/update
  export const klarna_order_create_session = params => axios.get(`${VPATH}/klarna/create-session-by-order`,params)
  export const klarna_order_get_params = params => axios.get(`${VPATH}/klarna/get-order-details-by-order`,params)
  export const klarna_order_place_order = params => axios.post(`${VPATH}/klarna/authorizations-by-order`,params)
+
+
+
+
+ //you can catch with
+ export const product_get_catch_with = params => axios.get(`${VPATH}/shopping-cart/get-shopping-cart-recommended-products`, params)
+
+ export const addProduct = params => axios.post(`${VPATH}/shopping-cart/add-product`, params)

@@ -820,6 +820,24 @@ const Checkout = class extends React.Component {
 							})
 						})
 						break
+					case '29':
+						this.setState({
+							checking: true
+						})
+						checkout_getparams({ payMethod: payMethod.id, orderId }).then(({ result }) => {
+							const { isFree, payURL, params, transactionId, orderId } = result
+							if (isFree) {
+								window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
+							} else {
+								submit(result)
+							}
+						}).catch(({ result }) => {
+							alert(result)
+							this.setState({
+								checking: false
+							})
+						})
+						break
 				}
 			}
 		}

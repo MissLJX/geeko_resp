@@ -18,7 +18,8 @@ import {get,
 	getMessage,
 	getaddresses,
 	selectPayMethod,
-	checkout, addToWishList} from '../api'
+	checkout, addToWishList, addProduct} from '../api'
+import quantity from '../components/quantity'
  
 export const SET_LANG = 'SET_LANG'
 export const LOADING = 'LOADING'
@@ -309,6 +310,15 @@ export const editItem = (oldId, newId, quantity) => {
 		return editProduct(oldId, newId, quantity).then(data => data.result).then(cart => {
 			dispatch(refreshCart(cart))
 			dispatch(edited())
+		})
+	}
+}
+
+export const addItem = (variantId, quantity) => {
+	return dispatch => {
+		dispatch(refresing())
+		return addProduct(variantId, quantity).then(() => {
+			dispatch(refreshCart(null))
 		})
 	}
 }

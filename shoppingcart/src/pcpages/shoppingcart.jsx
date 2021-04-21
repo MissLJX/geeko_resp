@@ -106,7 +106,8 @@ import {
 	klarna_get_params,
 	klarna_create_session,
 	klarna_place_order,
-	pay
+	pay,
+	get_pay_params
 } from '../api'
 
 export const __address_token__ = window.token
@@ -319,7 +320,8 @@ const ShoppingCart = class extends React.Component {
 			successTip: null,
 			showDeleteConfirm: false,
 			itemDelete: null,
-			klarnaParams: {}
+			klarnaParams: {},
+			payImages: []
 		}
 
 
@@ -364,9 +366,10 @@ const ShoppingCart = class extends React.Component {
 	componentDidUpdate(prevProps) {
 		const { cart: oldCart } = prevProps
 		const { cart } = this.props
+		const oldServerTime = oldCart ? oldCart.serverTime : 0
 
-		if (!_.isEqual(cart, oldCart) && cart) {
-			if (cart.selectedPayMethod && cart.selectedPayMethod.type === '27') {
+		if (cart && cart.serverTime !== oldServerTime) {
+			if (cart.selectedPayMethod && cart.selectedPayMethod.type === '27' && cart.payMethodList.some(p => p.id === cart.selectedPayMethod.id)) {
 				this.loadKlarna(cart.selectedPayMethod)
 			}
 		}
@@ -401,6 +404,21 @@ const ShoppingCart = class extends React.Component {
 				pointMessage: result.message,
 				cpfMessage: 'CPF (Cadastro de Pessoa Física), utilizado para tributação, é necessário para todos os produtos enviados ao Brasil, independentemente de encomendas expressas ou contêineres logísticos.Quando preenchemos o conhecimento de embarque e fatura, por favor, não esqueça de preencher o número de contribuinte do destinatário.Na maioria dos casos, sua forma é o número digital como abaixo, XXX.XXX.XXX-XX'
 			})
+		})
+
+		getMessage('M1142').then(({ result }) => {
+
+			try{
+				var m1142 = JSON.parse(result.message)
+				if(m1142){
+					this.setState({
+						payImages: m1142.result,
+					})
+				}
+			}catch(e){
+
+			}
+			
 		})
 
 		if (window.Mercadopago) {
@@ -970,7 +988,9 @@ const ShoppingCart = class extends React.Component {
 
 						if(error_code){
 							alert(error_messages)
-							self.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
+							if(orderId && window.__is_login__){
+								self.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
+							}
 						}else if(fraud_status === "ACCEPTED"){
 							window.location.href = redirect_url
 						}
@@ -1004,7 +1024,10 @@ const ShoppingCart = class extends React.Component {
 					}
 				}else {
 					alert(payResult.details)
-					this.props.history.push(`${window.ctx || ''}/checkout/${payResult.orderId}`)
+							
+					if(payResult.orderId && window.__is_login__){
+						this.props.history.push(`${window.ctx || ''}/checkout/${payResult.orderId}`)
+					}
 				}
 				this.setState({
 					checking: false
@@ -1020,6 +1043,24 @@ const ShoppingCart = class extends React.Component {
 					checking: false
 				})
 
+			})
+		}else if(payType === '29'){
+			this.setState({
+				checking: true
+			})
+			get_pay_params({payMethod: selectedPayMethod.id}).then(({ result }) => {
+				const { isFree, payURL, params, transactionId, orderId } = result
+				if (isFree) {
+					window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
+				} else {
+					storage.add('temp-order', orderId, 1 * 60 * 60)
+					submit(result)
+				}
+			}).catch(({ result }) => {
+				alert(result)
+				this.setState({
+					checking: false
+				})
 			})
 		}
 
@@ -2113,7 +2154,7 @@ const ShoppingCart = class extends React.Component {
 													{intl.formatMessage({ id: 'we_accept' })}
 												</div>
 												<div style={{ marginTop: 10 }}>
-													<img style={{ width: '100%' }} src={getPayImage(country)} />
+													<img style={{ width: '100%' }} src={((this.state.payImages||[]).find(i => i.lang === country) || (this.state.payImages||[]).find(i => i.lang === 'other') || {}).imageUrl} />
 												</div>
 											</div>
 

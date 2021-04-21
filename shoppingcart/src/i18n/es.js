@@ -136,5 +136,7 @@ export default{
 	secure_payment: 'Secure Payment',
 	move_to_wish_list: 'Move To Wishlist',
 	required: 'Requerido',
-	valid_email: '{email} no es un correo electrónico válido'
+	valid_email: '{email} no es un correo electrónico válido',
+	you_can_match_width: 'te gustaría llenarlo con',
+	addtocart: 'Agregar al carrito'
 }

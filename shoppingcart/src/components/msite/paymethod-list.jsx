@@ -362,7 +362,7 @@ const BD = styled.div`
 `
 
 const HD = styled.div`
-	height: 50px;
+	height: 44px;
 	cursor: pointer;
 	img{
 		height: 22px;
@@ -443,7 +443,7 @@ const MethodUL = styled.ul`
 		}
 		&:last-child{
 			& > div:last-child{
-				padding-bottom: 10px;
+				padding-bottom: 5px;
 			}
 		}
 	}

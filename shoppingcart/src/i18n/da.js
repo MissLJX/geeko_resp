@@ -137,5 +137,7 @@ export default{
 	secure_payment: 'Secure Payment',
 	move_to_wish_list: 'Move To Wishlist',
 	required: 'Påkrævet',
-	valid_email: '{email} er ikke en gyldig e-mail'
+	valid_email: '{email} er ikke en gyldig e-mail',
+	you_can_match_width: 'du kan godt lide at fylde det med',
+	addtocart: 'Føj til kurv'
 }

@@ -137,5 +137,8 @@ export default{
 	secure_payment: 'Secure Payment',
 	move_to_wish_list: 'Move To Wishlist',
 	required: 'Vaaditaan',
-	valid_email: '{email} ei ole kelvollinen sähköpostiosoite'
+	valid_email: '{email} ei ole kelvollinen sähköpostiosoite',
+	you_can_match_width: 'haluat ehkä täyttää sen',
+	addtocart: 'Lisää ostoskoriin'
+	
 }

@@ -137,5 +137,7 @@ export default{
 	secure_payment: 'Secure Payment',
 	move_to_wish_list: 'Move To Wishlist',
 	required: 'Nödvändig',
-	valid_email: '{email} är inte ett giltigt e-postmeddelande'
+	valid_email: '{email} är inte ett giltigt e-postmeddelande',
+	you_can_match_width: 'du kanske vill fylla den med',
+	addtocart: 'Lägg i korgen'
 }
