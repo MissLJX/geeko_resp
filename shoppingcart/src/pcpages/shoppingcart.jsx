@@ -102,7 +102,12 @@ import {
 	paypal_capture,
 	paypal_check_out,
 	paypal_get_shipping_details,
-	paypal_set_shipping_details
+	paypal_set_shipping_details,
+	klarna_get_params,
+	klarna_create_session,
+	klarna_place_order,
+	pay,
+	get_pay_params
 } from '../api'
 
 export const __address_token__ = window.token
@@ -314,7 +319,9 @@ const ShoppingCart = class extends React.Component {
 			leaveImage: '',
 			successTip: null,
 			showDeleteConfirm: false,
-			itemDelete: null
+			itemDelete: null,
+			klarnaParams: {},
+			payImages: []
 		}
 
 
@@ -356,6 +363,19 @@ const ShoppingCart = class extends React.Component {
 		}, 2000)
 	}
 
+	componentDidUpdate(prevProps) {
+		const { cart: oldCart } = prevProps
+		const { cart } = this.props
+		const oldServerTime = oldCart ? oldCart.serverTime : 0
+
+		if (cart && cart.serverTime !== oldServerTime) {
+			if (cart.selectedPayMethod && cart.selectedPayMethod.type === '27' && cart.payMethodList.some(p => p.id === cart.selectedPayMethod.id)) {
+				this.loadKlarna(cart.selectedPayMethod)
+			}
+		}
+
+	}
+
 	componentDidMount() {
 		if (!this.props.cart) {
 			this.props.INIT().then(() => {
@@ -386,6 +406,21 @@ const ShoppingCart = class extends React.Component {
 			})
 		})
 
+		getMessage('M1142').then(({ result }) => {
+
+			try{
+				var m1142 = JSON.parse(result.message)
+				if(m1142){
+					this.setState({
+						payImages: m1142.result,
+					})
+				}
+			}catch(e){
+
+			}
+			
+		})
+
 		if (window.Mercadopago) {
 			/*global Mercadopago b:true*/
 			/*eslint no-undef: "error"*/
@@ -409,6 +444,44 @@ const ShoppingCart = class extends React.Component {
 				}
 			})
 		}
+	}
+
+	createKlarnaSession(paymethod) {
+		return klarna_create_session({payMethod: paymethod.id}).then(data => data.result)
+	}
+
+	initKlarna(paymethod) {
+		return this.createKlarnaSession(paymethod).then(res => {
+			const { client_token } = res
+			Klarna.Payments.init({
+				client_token
+			})
+			return client_token
+		})
+	}
+
+	loadKlarna(paymethod) {
+		this.initKlarna(paymethod).then(() => {
+			klarna_get_params({payMethod: paymethod.id}).then(data => data.result).then(params => {
+
+				this.setState({
+					klarnaParams: params
+				})
+
+				Klarna.Payments.load({
+					container: `#klarna-payments-container-${paymethod.id}`,
+					payment_method_category: paymethod.description
+				}, {
+					"locale": params.locale,
+					"purchase_country": params.purchase_country,
+					"purchase_currency": params.purchase_currency,
+					"order_amount": params.order_amount,
+					"order_lines":params.order_lines
+				}, function (res) {
+					console.debug(res)
+				})
+			})
+		})
 	}
 
 	overseasHandle(variantId) {
@@ -683,6 +756,8 @@ const ShoppingCart = class extends React.Component {
 
 		let isCheckout = this.props.location.pathname && this.props.location.pathname.indexOf('/cart/checkout') >= 0
 
+		const {selectedPayMethod} = cart
+
 		if (!payType) {
 			alert(__confirm_paymethod__)
 			this.$paylistdom.scrollIntoView()
@@ -879,6 +954,114 @@ const ShoppingCart = class extends React.Component {
 			}
 
 			this.dLocalPay({ payMethod, paymentMethodId, document: this.props.document })
+		}else if (payType === '27') {
+			const self = this
+			this.setState({
+				checking: true
+			})
+
+			Klarna.Payments.authorize({
+				payment_method_category: selectedPayMethod.description
+			},{
+				"shipping_address": this.state.klarnaParams.shipping_address,
+				"billing_address": this.state.klarnaParams.shipping_address
+			}, function (res) {
+				
+				const {
+					authorization_token,
+					approved,
+					show_form
+				} = res
+
+				if(approved && authorization_token){
+					klarna_place_order({authorizationToken:authorization_token, payMethod}).then(data => data.result).then(response => {
+
+						const {
+							order_id,
+    						redirect_url,
+    						fraud_status,
+    						authorized_payment_method,
+							correlation_id,
+							error_code,
+							error_messages
+						} = response
+
+						if(error_code){
+							alert(error_messages)
+							if(orderId && window.__is_login__){
+								self.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
+							}
+						}else if(fraud_status === "ACCEPTED"){
+							window.location.href = redirect_url
+						}
+
+						self.setState({ checking: false })
+					}).catch(data => {
+						alert(data.result)
+						self.setState({ checking: false })
+					})
+				}else{
+					self.setState({ checking: false })
+				}
+
+
+				
+			})
+
+
+
+		}else if(payType === '28'){
+			this.setState({
+				checking: true
+			})
+			pay({payMethod: selectedPayMethod.id}).then(data => {
+				const payResult = data.result
+				if(payResult.success){
+					if(payResult.isFree){
+						window.location.href = ctx + '/order-confirm/' + result.transactionId
+					}else{
+						window.location.href = payResult.redirectCheckoutUrl
+					}
+				}else {
+					alert(payResult.details)
+							
+					if(payResult.orderId && window.__is_login__){
+						this.props.history.push(`${window.ctx || ''}/checkout/${payResult.orderId}`)
+					}
+				}
+				this.setState({
+					checking: false
+				})
+
+			}).catch(data => {
+				if(data.result){
+					alert(data.result)
+				}else{
+					alert(data)
+				}
+				this.setState({
+					checking: false
+				})
+
+			})
+		}else if(payType === '29'){
+			this.setState({
+				checking: true
+			})
+			get_pay_params({payMethod: selectedPayMethod.id}).then(({ result }) => {
+				const { isFree, payURL, params, transactionId, orderId } = result
+				if (isFree) {
+					window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
+				} else {
+					storage.add('temp-order', orderId, 1 * 60 * 60)
+					submit(result)
+				}
+			}).catch(({ result }) => {
+				alert(result)
+				this.setState({
+					checking: false
+				})
+			})
 		}
 
 		if (this.getCountdown(this.props.cart) > 0) {
@@ -1566,8 +1749,6 @@ const ShoppingCart = class extends React.Component {
 		}
 
 
-
-
 		const Address1 = cart && <Box title={intl.formatMessage({ id: 'shipping_address' })}>
 			<div style={{ position: 'relative' }}>
 
@@ -1655,6 +1836,7 @@ const ShoppingCart = class extends React.Component {
 								<Box title={intl.formatMessage({ id: 'payment_method' })}>
 									<div style={{ paddingTop: 20 }}>
 										<PayMethods
+											
 											couponCode={this.props.couponCode}
 											cpf={this.props.cpf}
 											email={this.props.email}
@@ -1972,7 +2154,7 @@ const ShoppingCart = class extends React.Component {
 													{intl.formatMessage({ id: 'we_accept' })}
 												</div>
 												<div style={{ marginTop: 10 }}>
-													<img style={{ width: '100%' }} src={getPayImage(country)} />
+													<img style={{ width: '100%' }} src={((this.state.payImages||[]).find(i => i.lang === country) || (this.state.payImages||[]).find(i => i.lang === 'other') || {}).imageUrl} />
 												</div>
 											</div>
 

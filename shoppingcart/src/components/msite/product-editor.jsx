@@ -11,6 +11,7 @@ import Quantity from '../quantity.jsx'
 import {BigButton} from './buttons.jsx'
 import {injectIntl} from 'react-intl'
 
+
 const Wrapper = styled.div`
 	position: fixed;
 	width: 100%;
@@ -249,6 +250,7 @@ const ProductEditor = class extends React.Component {
 							<ImageWrapper>
 								<img src={`https://image.geeko.ltd/small/${selectedVariant.image}`}/>
 							</ImageWrapper>
+
 						</div>
 						<div className="x-cell">
 							<Ellipsis>{product.name}</Ellipsis>

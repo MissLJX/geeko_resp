@@ -135,5 +135,9 @@ export default{
 	use:'Bruk',
 	coupon_alert: 'Discount Alert',
 	secure_payment: 'Secure Payment',
-	move_to_wish_list: 'Move To Wishlist'
+	move_to_wish_list: 'Move To Wishlist',
+	required: 'Påkrevd',
+	valid_email: '{email} er ikke en gyldig e-postadresse',
+	you_can_match_width: 'kanskje du vil fylle den med',
+	addtocart: 'Legg i handlevogn'
 }

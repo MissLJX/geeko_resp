@@ -5,6 +5,7 @@ import PayMethodList from '../components/msite/paymethod-list.jsx'
 import Refreshing from '../components/msite/refreshing.jsx'
 import Ask from '../components/ask.jsx'
 import FixedMessage from '../components/msite/fixed-message.jsx'
+import _ from 'lodash'
 import {
 	paypalpay,
 	checkout_updatepaymethod,
@@ -20,8 +21,12 @@ import {
 	getLookup,
 	oceanpay3d,
 	openSafeChargeOrder,
-	setSafeChargeStatus
+	setSafeChargeStatus,
+	klarna_order_create_session,
+	klarna_order_get_params,
+	klarna_order_place_order
 } from '../api'
+
 
 import {
 	setSecurityCode,
@@ -296,7 +301,8 @@ const Checkout = class extends React.Component {
 			atmMethods: [],
 			paypaling: false,
 			checking: false,
-			dlocalerror: null
+			dlocalerror: null,
+			klarnaParams: {}
 		}
 		this.processCallBack = this.processCallBack.bind(this)
 		this.processErrorBack = this.processErrorBack.bind(this)
@@ -321,7 +327,19 @@ const Checkout = class extends React.Component {
 		this.cvvField = c
 	}
 
-	componentWillMount() {
+	componentDidUpdate(prevProps) {
+		const { checkout: oldCheckout } = prevProps
+		const { checkout } = this.props
+		if (!_.isEqual(checkout, oldCheckout) && checkout) {
+			const { payMethod, payMethods } = checkout
+			const selectedPayMethod = payMethods.find(p => p.id === payMethod)
+			if (selectedPayMethod && selectedPayMethod.type === '27') {
+				this.loadKlarna(selectedPayMethod)
+			}
+		}
+	}
+
+	componentDidMount() {
 		const { orderId } = this.props.match.params
 		this.refreshCheckout(orderId)
 		this.props.GETPAYPAL()
@@ -372,6 +390,46 @@ const Checkout = class extends React.Component {
 			default:
 				break
 		}
+	}
+
+	createKlarnaSession(orderId, payMethod) {
+		return klarna_order_create_session({ orderId, payMethod }).then(data => data.result)
+	}
+
+	initKlarna(orderId, payMethod) {
+		return this.createKlarnaSession(orderId, payMethod).then(res => {
+			const { client_token } = res
+			Klarna.Payments.init({
+				client_token
+			})
+			return client_token
+		})
+	}
+
+	loadKlarna(paymethod) {
+		const { checkout } = this.props
+		const { orderId } = checkout
+		this.initKlarna(orderId, paymethod.id).then(() => {
+			klarna_order_get_params({ orderId, payMethod: paymethod.id }).then(data => data.result).then(params => {
+
+				this.setState({
+					klarnaParams: params
+				})
+
+				Klarna.Payments.load({
+					container: `#klarna-payments-container-${paymethod.id}`,
+					payment_method_category: paymethod.description
+				}, {
+					"locale": params.locale,
+					"purchase_country": params.purchase_country,
+					"purchase_currency": params.purchase_currency,
+					"order_amount": params.order_amount,
+					"order_lines": params.order_lines
+				}, function (res) {
+					console.debug(res)
+				})
+			})
+		})
 	}
 
 	selectPayHandle(paymethod) {
@@ -803,7 +861,104 @@ const Checkout = class extends React.Component {
 							}
 						}
 						break
+					case '27':
+						const self = this
+						this.setState({
+							checking: true
+						})
 
+						Klarna.Payments.authorize({
+							payment_method_category: payMethod.description
+						}, {
+							"shipping_address": this.state.klarnaParams.shipping_address,
+							"billing_address": this.state.klarnaParams.shipping_address
+						}, function (res) {
+
+							const {
+								authorization_token,
+								approved,
+								show_form
+							} = res
+
+							if (approved && authorization_token) {
+								klarna_order_place_order({ authorizationToken: authorization_token, payMethod: payMethod.id, orderId }).then(data => data.result).then(response => {
+
+									const {
+										order_id,
+										redirect_url,
+										fraud_status,
+										authorized_payment_method,
+										correlation_id,
+										error_code,
+										error_messages
+									} = response
+
+									if (error_code) {
+										alert(error_messages)
+									} else if (fraud_status === "ACCEPTED") {
+										window.location.href = redirect_url
+									}
+
+									self.setState({ checking: false })
+								}).catch(data => {
+									alert(data.result)
+									self.setState({ checking: false })
+								})
+							} else {
+								self.setState({ checking: false })
+							}
+
+
+
+						})
+						break
+					case '28':
+						this.setState({
+							checking: true
+						})
+						checkout_pay({ payMethod: payMethod.id, orderId }).then(data => {
+							const payResult = data.result
+							if (payResult.success) {
+								if (payResult.isFree) {
+									window.location.href = ctx + '/order-confirm/' + result.transactionId
+								} else {
+									window.location.href = payResult.redirectCheckoutUrl
+								}
+							} else {
+								alert(payResult.details)
+							}
+							this.setState({
+								checking: false
+							})
+						}).catch(data => {
+							if (data.result) {
+								alert(data.result)
+							} else {
+								alert(data)
+							}
+							this.setState({
+								checking: false
+							})
+						})
+						break
+					case '29':
+						this.setState({
+							checking: true
+						})
+						checkout_getparams({ payMethod: payMethod.id, orderId }).then(({ result }) => {
+							const { isFree, payURL, params, transactionId, orderId } = result
+							if (isFree) {
+								window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
+							} else {
+								submit(result)
+							}
+						}).catch(({ result }) => {
+							alert(result)
+							this.setState({
+								checking: false
+							})
+						})
+						break
 				}
 
 			}
@@ -1145,16 +1300,24 @@ const Checkout = class extends React.Component {
 			tcMethod = this.getTcMethod()
 		}
 
+
 		return <ShoppingBody>
 			<div className="__hd">
 				<ShoppingHead>
 					<span className="__title"><FormattedMessage id="check_out" /></span>
-					<span onClick={evt => { this.props.history.goBack() }} className="__back">&#xe690;</span>
-					
+					<span onClick={evt => {
+						const referrer = document.referrer || ''
+						if (referrer.indexOf('/order') > 0) {
+							window.history.back()
+						} else {
+							window.location.href = '/'
+						}
+					}} className="__back">&#xe690;</span>
+
 				</ShoppingHead>
 			</div>
 			{
-				checkout && <div className="__bd" style={{paddingLeft: 8, paddingRight: 8, paddingTop: 52}}>
+				checkout && <div className="__bd" style={{ paddingLeft: 8, paddingRight: 8, paddingTop: 52 }}>
 					{this.state.refreshing && <Refreshing />}
 					<Boxs>
 						<Box style={{ position: 'relative' }}>
@@ -1200,6 +1363,7 @@ const Checkout = class extends React.Component {
 							<BoxHead title={intl.formatMessage({ id: 'payment_method' })} />
 							<div style={{ paddingLeft: 10, paddingRight: 10 }}>
 								<PayMethodList
+
 									boletoForm={(c) => this.boletoForm = c}
 									boleto={(c) => { this.boleto = c }}
 									handleInputChange={this.handleInputChange}
@@ -1267,7 +1431,7 @@ const Checkout = class extends React.Component {
 										!this.state.checking ? <BigButton onClick={this.checkout.bind(this)} className="__btn" height={47} bgColor="#222">
 											{intl.formatMessage({ id: 'check_out' })} ({totalCount})
 										</BigButton> : <BigButton className="__btn" height={47} bgColor="#999">
-												{intl.formatMessage({ id: 'please_wait' })}...
+											{intl.formatMessage({ id: 'please_wait' })}...
 										</BigButton>
 
 									}

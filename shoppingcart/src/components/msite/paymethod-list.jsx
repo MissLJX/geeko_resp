@@ -362,7 +362,7 @@ const BD = styled.div`
 `
 
 const HD = styled.div`
-	height: 50px;
+	height: 44px;
 	cursor: pointer;
 	img{
 		height: 22px;
@@ -431,7 +431,7 @@ const Method = class extends React.PureComponent {
 			{children && selected && <BD>
 				{children}
 			</BD>}
-			{payMethod.id === '51' && <div id="klarna-payments-container" style={{display: `${selected? 'block': 'none'}`}}/>}
+			{payMethod.type === '27' && <div id={`klarna-payments-container-${payMethod.id}`} style={{display: `${selected? 'block': 'none'}`}}/>}
 		</StyledMethod>
 	}
 }
@@ -443,7 +443,7 @@ const MethodUL = styled.ul`
 		}
 		&:last-child{
 			& > div:last-child{
-				padding-bottom: 10px;
+				padding-bottom: 5px;
 			}
 		}
 	}
@@ -498,6 +498,7 @@ const PayMethodList = class extends React.Component {
 	}
 	render () {
 		const {methods, selectPayHandle, selectedPayId, paypalDiscountMessage} = this.props
+
 		return <MethodUL>
 			{
 				methods && methods.map(payMethod => (

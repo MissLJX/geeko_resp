@@ -133,5 +133,9 @@ export default{
 	use:'use',
 	coupon_alert: 'Discount Alert',
 	secure_payment: 'Secure Payment',
-	move_to_wish_list: 'Move To Wishlist'
+	move_to_wish_list: 'Move To Wishlist',
+	required: 'Required',
+	valid_email: '{email} is not a valid email',
+	you_can_match_width: 'You Might Like to Fill it With',
+	addtocart: 'Add To Cart'
 }

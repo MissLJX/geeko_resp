@@ -1,0 +1,1 @@
+export const IMAGE_PREFIX = 'https://image.geeko.ltd'

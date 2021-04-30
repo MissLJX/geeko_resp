@@ -132,5 +132,9 @@ export default{
 	use:'Usar',
 	coupon_alert: 'Discount Alert',
 	secure_payment: 'Secure Payment',
-	move_to_wish_list: 'Move To Wishlist'
+	move_to_wish_list: 'Move To Wishlist',
+	required: 'Necessário',
+	valid_email: '{email} não é um e-mail válido',
+	you_can_match_width: 'você pode gostar de preenchê-lo com',
+	addtocart: 'Adicionar ao carrinho'
 }

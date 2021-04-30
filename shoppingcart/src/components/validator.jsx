@@ -1,5 +1,6 @@
 import React from 'react'
 import validator from 'validator'
+import {FormattedMessage} from 'react-intl'
 
 export const __reg_zip_us__ = /^(([0-9]{5})|([0-9]{5}-[0-9]{4}))$/
 export const __reg_zip_uk__ = /^([a-z]|[A-Z]){1,2}\w{1,2}\s{0,1}[0-9]{1}([a-z]|[A-Z]){2}$/
@@ -81,7 +82,7 @@ export const cpfcheck = (value) => {
 
 export const required = (value) => {
 	if (!value || !value.toString().trim().length) {
-		return 'required'
+		return <FormattedMessage id="required"/>
 	}
 }
 
@@ -94,7 +95,7 @@ export const number = (value) => {
 export const email = (value) => {
 	const trimedEmail = value ? value.trim(): value
 	if (!validator.isEmail(trimedEmail)) {
-		return <p>{value} is not a valid email</p>
+		return <FormattedMessage id="valid_email" values={{email: value}}/>
 	}
 }
 

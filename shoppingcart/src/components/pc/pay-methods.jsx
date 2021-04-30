@@ -400,7 +400,9 @@ const PayMethod = (props) => {
 			selected && children && <METHODPLUGIN>
 				{children}
 			</METHODPLUGIN>
+			
 		}
+		{method.type === '27' && <div id={`klarna-payments-container-${method.id}`} style={{display: `${selected? 'block': 'none'}`}}/>}
 	</METHODCONTAINER>
 }
 
@@ -411,6 +413,9 @@ const PayMethods = class extends React.Component {
 
 	render () {
 		const { payMethodList } = this.props
+
+
+
 		return <METHODS>
 			{
 				payMethodList && payMethodList.length > 0 && payMethodList.map(method => <li key={method.id}>

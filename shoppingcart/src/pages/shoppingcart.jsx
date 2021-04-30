@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import Loading from '../components/msite/loading.jsx'
@@ -26,7 +26,8 @@ import {
 	edited, editItem, selectPay, CPF, EMAIL, getCreditCards,
 	getMercadoCards, toggleCredit, setSecurityCode, setInstallments, fetchCoupons, deleteItem, deleteItems,
 	setMercadoInstallments, toggleCreditStatus, setAtmMethod, setTicketMethod, getDLocalCards, setDocument,
-	setCashout, wishItem, selectAllItems
+	setCashout, wishItem, selectAllItems,
+	addItem
 } from '../store/actions.js'
 import Mask from '../components/mask.jsx'
 import _ from 'lodash'
@@ -40,6 +41,12 @@ import {
 	placeOrderAll,
 	openSafeChargeOrder,
 	setSafeChargeStatus,
+	klarna_get_params,
+	klarna_create_session,
+	klarna_place_order,
+	pay,
+	product_get_catch_with,
+	get_pay_params
 
 } from '../api'
 import { __route_root__, storage, producturl, unitprice } from '../utils/utils.js'
@@ -53,6 +60,7 @@ import SUCCESSTIP from '../components/pc/successtip.jsx'
 import Loadable from 'react-loadable'
 
 import ShippingMethodHead from '../components/msite/shipping-method-head.jsx'
+import { SwiperNormalProducts } from '../components/msite/product-items.jsx'
 
 
 
@@ -220,6 +228,8 @@ const COUPONALERT = styled.div`
 	display: flex;
 	align-items: center;
 	overflow: hidden;
+	z-index: 2;
+	cursor: pointer;
 	& > .__icon{
 		width: 38px;
 		height: 38px;
@@ -244,6 +254,21 @@ const COUPONALERT = styled.div`
 			transform: rotate(-45deg);
 		}
 	}
+`
+
+const ALSOLIKES = styled.div`
+	& > .__hd{
+		height: 42px;
+		line-height: 42px;
+		font-family: SlatePro-Medium;
+		font-size: 15px;
+		color: #121314;
+	}
+
+	& > .__bd{
+		padding-bottom: 12px;
+	}
+	padding-left: 12px;
 `
 
 
@@ -440,6 +465,9 @@ const mapDispatchToProps = (dispatch) => {
 		DELETEITEM: (itemId) => {
 			dispatch(deleteItem(itemId))
 		},
+		ADDITEM: (params) => {
+			return dispatch(addItem(params))
+		},
 		WISHITEM: (productIds, variantIds) => {
 			dispatch(wishItem(productIds, variantIds))
 		},
@@ -481,6 +509,7 @@ const ShoppingCart = class extends React.Component {
 		this.groupClick = this.groupClick.bind(this)
 		this.itemEdit = this.itemEdit.bind(this)
 		this.itemConfirmHandle = this.itemConfirmHandle.bind(this)
+		this.viewConfirm = this.viewConfirm.bind(this)
 		this.handleInputChange = this.handleInputChange.bind(this)
 		this.sdkResponseHandler = this.sdkResponseHandler.bind(this)
 		this.scrollhandle = this.scrollhandle.bind(this)
@@ -506,7 +535,12 @@ const ShoppingCart = class extends React.Component {
 			},
 			managing: false,
 			selectedItems: [],
-			editSelectAll: false
+			editSelectAll: false,
+			klarnaSession: null,
+			klarnaParams: {},
+			alsolikes: null,
+			viewing: false,
+			viewingItem: null
 		}
 		this.processCallBack = this.processCallBack.bind(this)
 		this.processErrorBack = this.processErrorBack.bind(this)
@@ -539,14 +573,17 @@ const ShoppingCart = class extends React.Component {
 		this.cvvField = c
 	}
 
-	componentDidUpdate(prevProps){
-		const {cart} = prevProps
-		const {cart: oldCart} = this.props
+	componentDidUpdate(prevProps) {
+		const { cart: oldCart } = prevProps
+		const { cart } = this.props
+		const oldServerTime = oldCart ? oldCart.serverTime : 0
 
-		if(!_.isEqual(cart, oldCart)){
-			this.loadKlarna()
+		if (cart && cart.serverTime !== oldServerTime) {
+			if (cart.selectedPayMethod && cart.selectedPayMethod.type === '27' && cart.payMethodList.some(p => p.id === cart.selectedPayMethod.id)) {
+				this.loadKlarna(cart.selectedPayMethod)
+			}
 		}
-		
+
 	}
 
 	componentDidMount() {
@@ -560,7 +597,12 @@ const ShoppingCart = class extends React.Component {
 		})
 		this.props.FETCHCOUPONS()
 		window.addEventListener('scroll', this.scrollhandle, false)
-
+		
+		product_get_catch_with({}).then(data => {
+			this.setState({
+				alsolikes: data.result
+			})
+		})
 
 		if (window.Mercadopago) {
 			/*global Mercadopago b:true*/
@@ -667,7 +709,7 @@ const ShoppingCart = class extends React.Component {
 		const { payMethod, cart, paypal, payType } = this.props
 		const { shippingDetail } = cart
 		const isRequireEmail = !window.__is_login__ && !window.token && this.props.location.pathname && this.props.location.pathname.indexOf('/cart/checkout') >= 0
-
+		const { selectedPayMethod } = cart
 
 		if (!cart.shippingDetail) {
 			this.props.history.push(`${window.ctx || ''}${__route_root__}/address`)
@@ -942,55 +984,106 @@ const ShoppingCart = class extends React.Component {
 				checking: true
 			})
 
-			// Klarna.Payments.authorize({
-			// 	payment_method_category: "pay_later"
-			//   }, {
-			// 	purchase_country: "GB",
-			// 	purchase_currency: "GBP",
-			// 	locale: "en-GB",
-			// 	billing_address: {
-			// 	  // given_name: "Testperson-no",
-			// 	  // family_name: "Denied",
-			// 	  // email: "youremail+denied@email.com",
-			// 	  // title: "Mr",
-			// 	  // street_address: "Sæffleberggate 56",
-			// 	  // street_address2: "Apt 214",
-			// 	  // postal_code: "0563",
-			// 	  // city: "Oslo",
-			// 	  // region: "",
-			// 	  // phone: "40123456",
-			// 	  // country: "GB"
-			// 	  given_name: "John",
-			// 	  family_name: "Doe",
-			// 	  email: "john@doe.com",
-			// 	  title: "Mr",
-			// 	  street_address: "13 New Burlington St",
-			// 	  street_address2: "Apt 214",
-			// 	  postal_code: "W13 3BG",
-			// 	  city: "London",
-			// 	  phone: "01895808221",
-			// 	  country: "GB"
-			// 	},
-			// 	shipping_address:{
-			// 	  given_name: "John",
-			// 	  family_name: "Doe",
-			// 	  email: "john@doe.com",
-			// 	  title: "Mr",
-			// 	  street_address: "13 New Burlington St",
-			// 	  street_address2: "Apt 214",
-			// 	  postal_code: "W13 3BG",
-			// 	  city: "London",
-			// 	  phone: "1",
-			// 	  country: "GB"
-			// 	}
+			Klarna.Payments.authorize({
+				payment_method_category: selectedPayMethod.description
+			}, {
+				"shipping_address": this.state.klarnaParams.shipping_address,
+				"billing_address": this.state.klarnaParams.shipping_address
+			}, function (res) {
 
-			//   }, function(res) {
-			// 	console.debug(res);
-			// 	self.setState({checking: false})
-			//   })
+				const {
+					authorization_token,
+					approved,
+					show_form
+				} = res
 
+				if (approved && authorization_token) {
+					klarna_place_order({ authorizationToken: authorization_token, payMethod }).then(data => data.result).then(response => {
+
+						const {
+							order_id,
+							redirect_url,
+							fraud_status,
+							authorized_payment_method,
+							correlation_id,
+							error_code,
+							error_messages,
+							orderId
+						} = response
+
+						if (error_code) {
+							alert(error_messages)
+							if(orderId && window.__is_login__){
+								self.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
+							}
+						} else if (fraud_status === "ACCEPTED") {
+							window.location.href = redirect_url
+						}
+
+						self.setState({ checking: false })
+					}).catch(data => {
+						alert(data.result)
+						self.setState({ checking: false })
+
+					})
+				} else {
+					self.setState({ checking: false })
+				}
 
 
+
+			})
+		} else if (payType === '28') {
+			this.setState({
+				checking: true
+			})
+			pay({ payMethod: selectedPayMethod.id }).then(data => {
+				const payResult = data.result
+				if (payResult.success) {
+					if (payResult.isFree) {
+						window.location.href = ctx + '/order-confirm/' + result.transactionId
+					} else {
+						window.location.href = payResult.redirectCheckoutUrl
+					}
+				} else {
+					alert(payResult.details)
+					if(payResult.orderId && window.__is_login__){
+						this.props.history.push(`${window.ctx || ''}/checkout/${payResult.orderId}`)
+					}
+				}
+				this.setState({
+					checking: false
+				})
+
+			}).catch(data => {
+				if (data.result) {
+					alert(data.result)
+				} else {
+					alert(data)
+				}
+				this.setState({
+					checking: false
+				})
+
+			})
+		}else if(payType === '29'){
+			this.setState({
+				checking: true
+			})
+			get_pay_params({payMethod: selectedPayMethod.id}).then(({ result }) => {
+				const { isFree, payURL, params, transactionId, orderId } = result
+				if (isFree) {
+					window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
+				} else {
+					storage.add('temp-order', orderId, 1 * 60 * 60)
+					submit(result)
+				}
+			}).catch(({ result }) => {
+				alert(result)
+				this.setState({
+					checking: false
+				})
+			})
 		}
 
 
@@ -1189,38 +1282,42 @@ const ShoppingCart = class extends React.Component {
 		}
 	}
 
-	createKlarnaSession(){
-		return new Promise((resolve, reject) => {
-			resolve('eyJhbGciOiJSUzI1NiIsImtpZCI6IjgyMzA1ZWJjLWI4MTEtMzYzNy1hYTRjLTY2ZWNhMTg3NGYzZCJ9.eyJzZXNzaW9uX2lkIjoiNjhhMjdkMTctZTA5My0yMGM2LTg2ZTItNjk0ZTA5OTRlMzRiIiwiYmFzZV91cmwiOiJodHRwczovL2pzLnBsYXlncm91bmQua2xhcm5hLmNvbS9ldS9rcC9sZWdhY3kvcGF5bWVudHMiLCJkZXNpZ24iOiJrbGFybmEiLCJsYW5ndWFnZSI6ImVuIiwicHVyY2hhc2VfY291bnRyeSI6IkdCIiwiZW52aXJvbm1lbnQiOiJwbGF5Z3JvdW5kIiwibWVyY2hhbnRfbmFtZSI6IllvdXIgYnVzaW5lc3MgbmFtZSIsInNlc3Npb25fdHlwZSI6IlBBWU1FTlRTIiwiY2xpZW50X2V2ZW50X2Jhc2VfdXJsIjoiaHR0cHM6Ly9ldS5wbGF5Z3JvdW5kLmtsYXJuYWV2dC5jb20iLCJleHBlcmltZW50cyI6W3sibmFtZSI6ImluLWFwcC1zZGstbmV3LWludGVybmFsLWJyb3dzZXIiLCJwYXJhbWV0ZXJzIjp7InZhcmlhdGVfaWQiOiJuZXctaW50ZXJuYWwtYnJvd3Nlci1lbmFibGUifX1dfQ.S964jLybs4BEOZi8mZz0Lnj-To3Ge1MvknzwzDdrz5fop3K8lv-_5Tzn06kkzU6fLeFqzGNUsrPYhFxF--9FwtDGGH9Kzf9zXv2aGci9JuHMvndvzZZ4apzHflc7wPrIRmEWMuZdfD-lh43R932DIY4ArC8SOLSalnXxFumdmk0ivLjJql40F5f4IpGfS5L9Ttf5KR0zXWE6_LW7OTEcH6tB8d6SHNU9uBTmp1siEX0h8VFi57tP8Q2jWaaD1xq76Q2ycPamzj6348k1BKqvxcfD3KGLgiuSFtCDb0QeW5Okh-bny41KyEcLuK-lFcwcDtUQ_-86VH6PCUJkMQCvjQ')
+	createKlarnaSession(paymethod) {
+		return klarna_create_session({ payMethod: paymethod.id }).then(data => data.result)
+	}
+
+	initKlarna(paymethod) {
+		return this.createKlarnaSession(paymethod).then(res => {
+			const { client_token } = res
+			Klarna.Payments.init({
+				client_token
+			})
+			return client_token
 		})
 	}
 
-	initKlarna() {
-		// if(!this.state.klarnaInited){
-		// 	this.setState({
-		// 		klarnaInited: true
-		// 	})
+	loadKlarna(paymethod) {
+		this.initKlarna(paymethod).then(() => {
+			klarna_get_params({ payMethod: paymethod.id }).then(data => data.result).then(params => {
 
-		// 	return this.createKlarnaSession().then(client_token => {
-		// 		Klarna.Payments.init({
-		// 			client_token
-		// 		})
-		// 		return client_token
-		// 	})
-			
-		// }
-		// return Promise.resolve()
-	}
+				this.setState({
+					klarnaParams: params
+				})
 
-	loadKlarna() {
-		// this.initKlarna().then(() => {
-		// 	Klarna.Payments.load({
-		// 		container: '#klarna-payments-container',
-		// 		payment_method_category: 'pay_later'
-		// 	}, function (res) {
-		// 		console.debug(res)
-		// 	})
-		// })
+				Klarna.Payments.load({
+					container: `#klarna-payments-container-${paymethod.id}`,
+					payment_method_category: paymethod.description
+				}, {
+					"locale": params.locale,
+					"purchase_country": params.purchase_country,
+					"purchase_currency": params.purchase_currency,
+					"order_amount": params.order_amount,
+					"order_lines": params.order_lines
+				}, function (res) {
+					console.debug(res)
+				})
+			})
+		})
 	}
 
 	selectPayHandle(paymethod) {
@@ -1231,14 +1328,6 @@ const ShoppingCart = class extends React.Component {
 		})
 		// storage.add('payMethod', paymethod.id, 365 * 24 * 60 * 60)
 		// storage.add('payType', paymethod.type, 365 * 24 * 60 * 60)
-		try {
-			if (paymethod.id === '51') {
-				this.loadKlarna()
-			}
-
-		} catch (e) {
-			console.log(e)
-		}
 	}
 
 	atmClickHandle(method) {
@@ -1253,6 +1342,17 @@ const ShoppingCart = class extends React.Component {
 
 	itemConfirmHandle(oldId, newId, quantity) {
 		this.props.EDITITEM(oldId, newId, quantity)
+	}
+
+	viewConfirm(oldId, newId, quantity) {
+		this.props.ADDITEM({variantId: newId, quantity}).then(() => {
+			this.setState({
+				viewing: false,
+				viewingItem: null
+			})
+		}).catch(data => {
+			alert(data.result || data)
+		})
 	}
 
 	itemEdit(item) {
@@ -2132,6 +2232,13 @@ const ShoppingCart = class extends React.Component {
 		return allItems
 	}
 
+	alsoRef(c){
+		if(window.sourceObserver && c && !this.alsolink){
+			window.sourceObserver.observe(c)
+			this.alsolink = c
+		}
+	}
+
 
 	render() {
 		const { cart, loading, empty, editing, isCreditShow, mercadocards, creditcards, intl } = this.props
@@ -2164,9 +2271,6 @@ const ShoppingCart = class extends React.Component {
 			gifts = cart.gifts
 		}
 
-
-
-
 		const TipModal = Tip
 
 
@@ -2176,11 +2280,11 @@ const ShoppingCart = class extends React.Component {
 					<div className="__hd">
 						<ShoppingHead>
 							<span className="__title"><FormattedMessage id="shopping_bag" /></span>
-							<span onClick={evt => { 
+							<span onClick={evt => {
 								const referrer = document.referrer || ''
-								if(referrer.indexOf('/product_detail') > 0 || referrer.indexOf('/product') > 0 || referrer.indexOf('/collection') > 0 || referrer.indexOf('/category') > 0){
+								if (referrer.indexOf('/product_detail') > 0 || referrer.indexOf('/product') > 0 || referrer.indexOf('/collection') > 0 || referrer.indexOf('/category') > 0) {
 									window.history.back()
-								}else{
+								} else {
 									window.location.href = '/'
 								}
 							}} className="__back">&#xe690;</span>
@@ -2213,12 +2317,12 @@ const ShoppingCart = class extends React.Component {
 																</div>
 															</TipModal>
 														) : (
-																<React.Fragment>
-																	{cart.messages && cart.messages.orderSummaryMsg && <TipModal className={this.state.tipFixed ? '__fixed' : ''} innerRef={tip => { this.fixedTip = tip }}>
-																		<span dangerouslySetInnerHTML={{ __html: cart.messages.orderSummaryMsg }} />
-																	</TipModal>}
-																</React.Fragment>
-															)
+															<React.Fragment>
+																{cart.messages && cart.messages.orderSummaryMsg && <TipModal className={this.state.tipFixed ? '__fixed' : ''} innerRef={tip => { this.fixedTip = tip }}>
+																	<span dangerouslySetInnerHTML={{ __html: cart.messages.orderSummaryMsg }} />
+																</TipModal>}
+															</React.Fragment>
+														)
 													}
 												</div>
 											)
@@ -2245,17 +2349,17 @@ const ShoppingCart = class extends React.Component {
 														<DashedLine />
 													</Box>
 												) : (
-														isprogresspage && <Box style={{ position: 'relative' }}>
-															<BoxClickHead title={intl.formatMessage({ id: 'address' })} single={true}>
-																<Grey>
-																	<Link style={{ color: '#222', textDecoration: 'none' }} to={`${window.ctx || ''}${__route_root__}/address`}>
-																		<FormattedMessage id="add" />
-																	</Link>
-																</Grey>
-															</BoxClickHead>
-															<DashedLine />
-														</Box>
-													)
+													isprogresspage && <Box style={{ position: 'relative' }}>
+														<BoxClickHead title={intl.formatMessage({ id: 'address' })} single={true}>
+															<Grey>
+																<Link style={{ color: '#222', textDecoration: 'none' }} to={`${window.ctx || ''}${__route_root__}/address`}>
+																	<FormattedMessage id="add" />
+																</Link>
+															</Grey>
+														</BoxClickHead>
+														<DashedLine />
+													</Box>
+												)
 											}
 
 											{
@@ -2393,9 +2497,8 @@ const ShoppingCart = class extends React.Component {
 												isprogresspage && (
 													<Box innerRef={c => { this.$paylistdom = c }}>
 														<BoxHead single title={intl.formatMessage({ id: 'payment_method' })} />
-														<div style={{ paddingLeft: 10, paddingRight: 10 }}>
+														<div style={{ paddingLeft: 10, paddingRight: 10, marginTop: -10 }}>
 															<PayMethodList
-
 																cpfClickHandle={this.cpfClickHandle.bind(this)}
 																boletoForm={(c) => this.boletoForm = c}
 																boleto={(c) => { this.boleto = c }}
@@ -2462,18 +2565,18 @@ const ShoppingCart = class extends React.Component {
 
 
 											<Box>
-												<BoxClickHead className="x-small" title={intl.formatMessage({ id: 'coupon' })}>
+												<BoxClickHead single={cart.expectedPoints <=0 } className="x-small" title={intl.formatMessage({ id: 'coupon' })}>
 													<Link style={{ textDecoration: 'none', color: '#222' }} to={`${window.ctx || ''}${__route_root__}/coupons`}>
 
 														{cart.coupon ? (
 															<span><strong>{cart.coupon.couponName}</strong> {cart.coupon.name}</span>
 														) : (
-																<span>
-																	<FormattedMessage id="can_use_coupon" values={{
-																		canUseCouponCount: <Red>{cart.canUseCouponCount}</Red>
-																	}} />
-																</span>
-															)}
+															<span>
+																<FormattedMessage id="can_use_coupon" values={{
+																	canUseCouponCount: <Red>{cart.canUseCouponCount}</Red>
+																}} />
+															</span>
+														)}
 													</Link>
 												</BoxClickHead>
 
@@ -2533,6 +2636,28 @@ const ShoppingCart = class extends React.Component {
 												</OrderSummary>
 											</Box>
 
+											{
+											this.state.alsolikes && this.state.alsolikes.length > 0  && <Box>
+												<ALSOLIKES innerRef={this.alsoRef.bind(this)} data-source type="shopping_cart_match_with" data-column="shopping_cart_match_with" data-title="shoppingcart" data-type="shopping_cart_match_with" data-content="You Might Like to Fill it With" data-position="2">
+													<div className="__hd">
+														<FormattedMessage id="you_can_match_width"/>
+													</div>
+													<div className="__bd">
+														<SwiperNormalProducts onSelect={(vairant, product) => {this.setState({
+															viewingItem: {
+																productId: product.id,
+																variantId: vairant.id,
+																quantity: 1
+															},
+															viewing: true
+														})}}  products={this.state.alsolikes}/>
+													</div>
+												</ALSOLIKES>
+												
+											</Box>
+											}
+											
+
 											<Box style={{ backgroundColor: '#f6f6f6', paddingTop: 15, paddingBottom: 15 }}>
 												<div style={{ color: '#999' }}><FormattedMessage id="secure_payment" /></div>
 												<img style={{ width: 140, marginTop: 10 }} src="https://image.geeko.ltd/upgrade/20210225/sp.png" />
@@ -2541,7 +2666,7 @@ const ShoppingCart = class extends React.Component {
 											{
 												isprogresspage ? (
 													<Box>
-														<div style={{ height: 158, backgroundColor: '#f6f6f6' }}>
+														<div style={{ height: cart.messages && cart.messages.couponMsg ? 138 : 100, backgroundColor: '#f6f6f6' }}>
 
 															{
 																cart.canCheckout ? <Checkout>
@@ -2564,120 +2689,120 @@ const ShoppingCart = class extends React.Component {
 																			!this.state.checking ? <BigButton onClick={this.checkout.bind(this)} className="__btn" height={47} bgColor="#222">
 																				{intl.formatMessage({ id: 'check_out' })} ({totalCount})
 																</BigButton> : <BigButton className="__btn" height={47} bgColor="#999">
-																					{intl.formatMessage({ id: 'please_wait' })}...
+																				{intl.formatMessage({ id: 'please_wait' })}...
 																</BigButton>
 																		) : (
-																				<BigButton className="__btn" height={47} bgColor="#999">
-																					{intl.formatMessage({ id: 'check_out' })} ({totalCount})
-																				</BigButton>
-																			)
-																	}
-																</Checkout> : <Checkout>
-																		<div className="__total">
-																			<div></div>
-																			<div>
-																				<span>{intl.formatMessage({ id: 'total' })}: </span>
-																				<span style={{ fontSize: 24, fontFamily: 'SlatePro-Medium' }}><Money money={cart.orderSummary.orderTotal} /></span>
-																			</div>
-																		</div>
-																		<div>
 																			<BigButton className="__btn" height={47} bgColor="#999">
 																				{intl.formatMessage({ id: 'check_out' })} ({totalCount})
-															</BigButton>
+																			</BigButton>
+																		)
+																	}
+																</Checkout> : <Checkout>
+																	<div className="__total">
+																		<div></div>
+																		<div>
+																			<span>{intl.formatMessage({ id: 'total' })}: </span>
+																			<span style={{ fontSize: 24, fontFamily: 'SlatePro-Medium' }}><Money money={cart.orderSummary.orderTotal} /></span>
 																		</div>
-																	</Checkout>
+																	</div>
+																	<div>
+																		<BigButton className="__btn" height={47} bgColor="#999">
+																			{intl.formatMessage({ id: 'check_out' })} ({totalCount})
+															</BigButton>
+																	</div>
+																</Checkout>
 															}
 
 														</div>
 													</Box>
 												) : (
-														window.token ? (
-															<Box>
-																<div style={{ height: 158, backgroundColor: '#f6f6f6' }}>
-																	<Checkout>
-																		<div className="__total">
-																			<div></div>
-																			<div>
-																				<span>{intl.formatMessage({ id: 'total' })}: </span>
-																				<span style={{ fontSize: 24, fontFamily: 'SlatePro-Medium' }}><Money money={cart.orderSummary.orderTotal} /></span>
-																			</div>
+													window.token ? (
+														<Box>
+															<div style={{ height: 138, backgroundColor: '#f6f6f6' }}>
+																<Checkout>
+																	<div className="__total">
+																		<div></div>
+																		<div>
+																			<span>{intl.formatMessage({ id: 'total' })}: </span>
+																			<span style={{ fontSize: 24, fontFamily: 'SlatePro-Medium' }}><Money money={cart.orderSummary.orderTotal} /></span>
 																		</div>
-																		{
-																			cancheckout ? (
-																				<BigButton onClick={this.quickPlace.bind(this)} className="__btn" height={47} bgColor="#222">
-																					Place Order
-																				</BigButton>
-																			) : (
-																					<BigButton className="__btn" height={47} bgColor="#ddd">
-																						{intl.formatMessage({ id: 'check_out' })}
-																					</BigButton>
-																				)
-																		}
-																	</Checkout>
-																</div>
-															</Box>
-														) : (
-																<Box>
-																	<div style={{ height: 158, backgroundColor: '#f6f6f6' }}>
+																	</div>
+																	{
+																		cancheckout ? (
+																			<BigButton onClick={this.quickPlace.bind(this)} className="__btn" height={47} bgColor="#222">
+																				Place Order
+																			</BigButton>
+																		) : (
+																			<BigButton className="__btn" height={47} bgColor="#ddd">
+																				{intl.formatMessage({ id: 'check_out' })}
+																			</BigButton>
+																		)
+																	}
+																</Checkout>
+															</div>
+														</Box>
+													) : (
+														<Box>
+															<div style={{ height: 138, backgroundColor: '#f6f6f6' }}>
+															</div>
+
+
+															{
+																cart.canCheckout ? <Checkout>
+																	<div className="__total">
+																		<div></div>
+																		<div>
+																			<span>{intl.formatMessage({ id: 'total' })}: </span>
+																			<span style={{ fontSize: 24, fontFamily: 'SlatePro-Medium' }}><Money money={cart.orderSummary.orderTotal} /></span>
+																		</div>
+																		{cart.paypalDiscountMessage && <DISCOUNTTIP dangerouslySetInnerHTML={{ __html: cart.paypalDiscountMessage }} />}
+
 																	</div>
 
 
+
 																	{
-																		cart.canCheckout ? <Checkout>
-																			<div className="__total">
-																				<div></div>
-																				<div>
-																					<span>{intl.formatMessage({ id: 'total' })}: </span>
-																					<span style={{ fontSize: 24, fontFamily: 'SlatePro-Medium' }}><Money money={cart.orderSummary.orderTotal} /></span>
-																				</div>
-																				{cart.paypalDiscountMessage && <DISCOUNTTIP dangerouslySetInnerHTML={{ __html: cart.paypalDiscountMessage }} />}
-
-																			</div>
-
-
-
-																			{
-																				hasQuickPay ? <DoubleBtn className="x-flex __between">
-																					<div>
-																						<BigButton onClick={() => {
-																							this.props.history.push(`${window.ctx || ''}${__route_root__}/address`)
-																						}} className="__btn" height={47} bgColor="#222">
-																							{intl.formatMessage({ id: 'check_out' })} ({totalCount})
+																		hasQuickPay ? <DoubleBtn className="x-flex __between">
+																			<div>
+																				<BigButton onClick={() => {
+																					this.props.history.push(`${window.ctx || ''}${__route_root__}/address`)
+																				}} className="__btn" height={47} bgColor="#222">
+																					{intl.formatMessage({ id: 'check_out' })} ({totalCount})
 																	</BigButton>
-																					</div>
-																					<div>
-																						<PaypalBtn onClick={this.quickPaypal.bind(this)}><img src={cart.paypalButtonImage} /></PaypalBtn>
-																					</div>
-																				</DoubleBtn> : <div>
-																						<BigButton onClick={() => { this.props.history.push(`${window.ctx || ''}${__route_root__}/address`) }} className="__btn" height={47} bgColor="#222">
-																							{intl.formatMessage({ id: 'check_out' })} ({totalCount})
+																			</div>
+																			<div>
+																				<PaypalBtn onClick={this.quickPaypal.bind(this)}><img src={cart.paypalButtonImage} /></PaypalBtn>
+																			</div>
+																		</DoubleBtn> : <div>
+																			<BigButton onClick={() => { this.props.history.push(`${window.ctx || ''}${__route_root__}/address`) }} className="__btn" height={47} bgColor="#222">
+																				{intl.formatMessage({ id: 'check_out' })} ({totalCount})
 																</BigButton>
-																					</div>
-																			}
-
-
-
-
-																		</Checkout> : <Checkout>
-																				<div className="__total">
-																					<div></div>
-																					<div>
-																						<span>{intl.formatMessage({ id: 'total' })}: </span>
-																						<span style={{ fontSize: 24, fontFamily: 'SlatePro-Medium' }}><Money money={cart.orderSummary.orderTotal} /></span>
-																					</div>
-																				</div>
-																				<div>
-																					<BigButton className="__btn" height={47} bgColor="#999">
-																						{intl.formatMessage({ id: 'check_out' })} ({totalCount})
-															</BigButton>
-																				</div>
-																			</Checkout>
+																		</div>
 																	}
 
 
-																</Box>
-															)
+
+
+																</Checkout> : <Checkout>
+																	<div className="__total">
+																		<div></div>
+																		<div>
+																			<span>{intl.formatMessage({ id: 'total' })}: </span>
+																			<span style={{ fontSize: 24, fontFamily: 'SlatePro-Medium' }}><Money money={cart.orderSummary.orderTotal} /></span>
+																		</div>
+																	</div>
+																	<div>
+																		<BigButton className="__btn" height={47} bgColor="#999">
+																			{intl.formatMessage({ id: 'check_out' })} ({totalCount})
+															</BigButton>
+																	</div>
+																</Checkout>
+															}
+
+
+														</Box>
 													)
+												)
 											}
 
 
@@ -2685,9 +2810,21 @@ const ShoppingCart = class extends React.Component {
 										</Boxs>
 
 										{
+											this.state.viewing && (
+												<React.Fragment>
+													<Mask onClick={() => { this.setState({viewing: false}) }}/>
+													<ProductEditor onClose={() => { this.setState({viewing: false}) }}
+														itemConfirmHandle={this.viewConfirm}
+														btnMessage={<FormattedMessage id="addtocart"/>}
+														item={this.state.viewingItem} />
+												</React.Fragment>
+											)
+										}
+
+										{
 											editing.isEditing && (
 												<React.Fragment>
-													<Mask />
+													<Mask onClick={() => { this.props.EDITED() }}/>
 													<ProductEditor onClose={() => { this.props.EDITED() }}
 														itemConfirmHandle={this.itemConfirmHandle}
 														item={editing.item} />
@@ -2805,7 +2942,7 @@ const ShoppingCart = class extends React.Component {
 										}
 
 										{
-											cart.messages && cart.messages.couponMsg && <CouponAlert innerRef={c => this.couponAlert = c} coupon={cart.coupon} couponMsg={cart.messages ? cart.messages.couponMsg : null} />
+											cart.messages && cart.messages.couponMsg && <CouponAlert onClick={() => {this.props.history.push(`${window.ctx || ''}${__route_root__}/coupons`)}} innerRef={c => this.couponAlert = c} coupon={cart.coupon} couponMsg={cart.messages ? cart.messages.couponMsg : null} />
 										}
 
 
@@ -2819,77 +2956,77 @@ const ShoppingCart = class extends React.Component {
 
 
 				</ShoppingBody> : <ShoppingBody>
-						<div className="__hd">
-							<EditingHead>
-								<span className="__title"><FormattedMessage id="shopping_bag" /></span>
-								<span className="__done" onClick={evt => { this.setState({ managing: false }) }}>Done</span>
-							</EditingHead>
-						</div>
-						<div className="__bd" style={{ paddingBottom: 60 }}>
+					<div className="__hd">
+						<EditingHead>
+							<span className="__title"><FormattedMessage id="shopping_bag" /></span>
+							<span className="__done" onClick={evt => { this.setState({ managing: false }) }}>Done</span>
+						</EditingHead>
+					</div>
+					<div className="__bd" style={{ paddingBottom: 60 }}>
 
-							<Boxs style={{ backgroundColor: '#f6f6f6', padding: 8 }}>
-								{
-									hasOverseas && formatedData.overseasDelivery && <Box>
-										<PromotionGroup
-											group={formatedData.overseasDelivery}
+						<Boxs style={{ backgroundColor: '#f6f6f6', padding: 8 }}>
+							{
+								hasOverseas && formatedData.overseasDelivery && <Box>
+									<PromotionGroup
+										group={formatedData.overseasDelivery}
+										itemSelect={this.itemEditSelect}
+										shippingMethod={cart.shippingMethod}
+										serverTime={cart.serverTime}
+										selectedItems={this.state.selectedItems}
+										ignoreItemSelected
+										isEditingItem
+									/>
+								</Box>
+							}
+
+
+							{
+								hasLocalItems && formatedData.domesticDeliveryCases.map(domestic => (
+									<Box key={domestic.countryCode}>
+										<GroupLocalItems
+											icon={domestic.icon}
+											title={domestic.title}
 											itemSelect={this.itemEditSelect}
-											shippingMethod={cart.shippingMethod}
 											serverTime={cart.serverTime}
+											domestic={domestic}
+											items={domestic.shoppingCartProducts}
 											selectedItems={this.state.selectedItems}
-											ignoreItemSelected
 											isEditingItem
-										/>
+											ignoreItemSelected />
 									</Box>
-								}
+								))
+							}
+
+							{
+								invalidItems && invalidItems.length > 0 && <Box>
+									<GroupInvalidItems serverTime={cart.serverTime}
+										items={this.getInvalidItems(cart)}
+										itemSelect={this.itemEditSelect}
+										selectedItems={this.state.selectedItems}
+										ignoreItemSelected
+										isEditingItem
+									/>
+								</Box>
+							}
+						</Boxs>
 
 
-								{
-									hasLocalItems && formatedData.domesticDeliveryCases.map(domestic => (
-										<Box key={domestic.countryCode}>
-											<GroupLocalItems
-												icon={domestic.icon}
-												title={domestic.title}
-												itemSelect={this.itemEditSelect}
-												serverTime={cart.serverTime}
-												domestic={domestic}
-												items={domestic.shoppingCartProducts}
-												selectedItems={this.state.selectedItems}
-												isEditingItem
-												ignoreItemSelected />
-										</Box>
-									))
-								}
+					</div>
 
-								{
-									invalidItems && invalidItems.length > 0 && <Box>
-										<GroupInvalidItems serverTime={cart.serverTime}
-											items={this.getInvalidItems(cart)}
-											itemSelect={this.itemEditSelect}
-											selectedItems={this.state.selectedItems}
-											ignoreItemSelected
-											isEditingItem
-										/>
-									</Box>
-								}
-							</Boxs>
-
+					<div className="__fd">
+						<div>
+							<span style={{ display: 'inline-block' }}>
+								<CheckBox style={{ verticalAlign: 'middle' }} onClick={(evt) => { this.allEditHandle(!this.state.editSelectAll) }} className={this.state.editSelectAll ? 'selected' : ''} />
+								<span style={{ verticalAlign: 'middle', marginLeft: 7 }}><FormattedMessage id="all" /></span>
+							</span>
 
 						</div>
-
-						<div className="__fd">
-							<div>
-								<span style={{ display: 'inline-block' }}>
-									<CheckBox style={{ verticalAlign: 'middle' }} onClick={(evt) => { this.allEditHandle(!this.state.editSelectAll) }} className={this.state.editSelectAll ? 'selected' : ''} />
-									<span style={{ verticalAlign: 'middle', marginLeft: 7 }}><FormattedMessage id="all" /></span>
-								</span>
-
-							</div>
-							<div>
-								<EditButton onClick={this.addAllToWish.bind(this)}><FormattedMessage id="move_to_wish_list" /></EditButton>
-								<EditButton onClick={this.deleteAllItems.bind(this)} style={{ marginLeft: 10 }}><FormattedMessage id="delete" /></EditButton>
-							</div>
+						<div>
+							<EditButton onClick={this.addAllToWish.bind(this)}><FormattedMessage id="move_to_wish_list" /></EditButton>
+							<EditButton onClick={this.deleteAllItems.bind(this)} style={{ marginLeft: 10 }}><FormattedMessage id="delete" /></EditButton>
 						</div>
-					</ShoppingBody>
+					</div>
+				</ShoppingBody>
 			}
 
 

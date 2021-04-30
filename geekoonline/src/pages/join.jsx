@@ -227,6 +227,11 @@ export default class extends React.Component{
             </Link>
           </BLOCKER1>
         </RES1>
+
+        <BLOCKER>
+          
+          <video style={{width: '100%'}} src="https://image.geeko.ltd/upgrade/20210402/geeko.mp4" preload autoplay="autoplay" controls/>
+        </BLOCKER>
   
         <RES1 width1={537} width2={663} style={{marginTop: 60}}>
           <BLOCKER className="__1">
