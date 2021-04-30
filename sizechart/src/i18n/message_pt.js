@@ -9,9 +9,17 @@ export default {
         stretchy_message:"：adicione 0,5-1 cm da medida do vestuário à medida do corpo.",
         high_message:"：adicione 0-0,5 cm da medida do vestuário à medida do corpo.",
         bust_note: "Meça debaixo dos braços em volta da parte mais larga do seu busto. Certifique-se de manter o nível da fita!",
-                waist_note: "Make sure the measuring tape fits comfortably as you measure around the narrowest part of your natural waist.",
-                hip_note: "Fique em pé com os pés juntos e meça em torno da parte mais larga dos quadris.",
-                length_note: "Para medir o comprimento do pé, sente-se em uma cadeira e coloque-o sobre um pedaço de papel. Trace o pé segurando um lápis na vertical e descrevendo o pé. Usando uma régua, meça a distância da base do calcanhar até a ponta do dedo mais longo. Registre o resultado em polegadas e centímetros e use essas medidas para encontrar o seu tamanho no gráfico."
+        waist_note: "Make sure the measuring tape fits comfortably as you measure around the narrowest part of your natural waist.",
+        hip_note: "Fique em pé com os pés juntos e meça em torno da parte mais larga dos quadris.",
+        length_note: "Para medir o comprimento do pé, sente-se em uma cadeira e coloque-o sobre um pedaço de papel. Trace o pé segurando um lápis na vertical e descrevendo o pé. Usando uma régua, meça a distância da base do calcanhar até a ponta do dedo mais longo. Registre o resultado em polegadas e centímetros e use essas medidas para encontrar o seu tamanho no gráfico.",
+
+        product_measurements_message:"* Estes dados foram obtidos medindo manualmente o produto, ele pode estar errado por 1-2 CM.",
+        measure_product_size:"Como medir o tamanho do produto?",
+        body_measurements_message:"* Dependendo do seu tipo de corpo e hábitos de vestir, os tamanhos acima são apenas para referência.",
+        measure_body_size:"Como medir seu corpo?",
+        measure_body_size_bust:"Meça a circunferência sobre a parte mais cheia do seu peito.",
+        measure_body_size_waist:"Meça sua cintura no lugar mais fino.",
+        measure_body_size_hip:"Meça toda a parte de seus quadris."
     },
     label: {
         itemmeasurements: 'medições de itens:',
@@ -37,6 +45,23 @@ export default {
         hips:"Quadris",
         size_guide:"Tabela de tamanhos",
 
-        model_stature:"Altura da modelo"
+        model_stature:"Altura da modelo",
+
+        fit_type:"Tipo de ajuste",
+        skinny:"Magro",
+        regular:"Regular",
+        oversized:"Superdimensionado",
+        stretch:"Alongamento",
+        non:"Não",
+        slight:"Pouco",
+        medium:"Médio",
+        high:"Alto",
+        product_measurements:"Medições de produto",
+        body_measurements:"Medidas do corpo",
+        waist_size:"Tamanho da cintura",
+        hip_size:"Tamanho do quadril",
+        your_bust:"Seu busto",
+        your_waist:"Sua cintura",
+        your_hips:"Seus quadris"
     }
 }

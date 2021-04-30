@@ -2,7 +2,7 @@ import sizeData from '../size.js'
 import imgData from '../image.js'
 import axios from "../../src/api/apiconfigs";
 import _ from 'lodash'
-import getRightSize from '../../src/util/utils.js'
+import { getRightSize , getShoesSize } from '../../src/util/utils.js'
 
 // let imgSrc = [];
 // let result = [];
@@ -61,12 +61,16 @@ export const getData = async productId => {
     let result = [];
     let pMethod = [];
     // m-size
-    let modelStature = {};
+    // let modelStature = {};
+    let fitStr = {};
 
 
 
     const pMethods = await getTaglia(productId)
     const productVO = await getProduct(productId)
+
+    fitStr['fitType'] = productVO.product.fitType;
+    fitStr['stretch'] = productVO.product.stretch;
 
     pMethod.push(pMethods)
     imgSrc.push(imgData['imgData'][pMethods]);
@@ -86,6 +90,8 @@ export const getData = async productId => {
 
     if(pmethod === "size"){
         product = getRightSize(product);
+    }else{
+        product = getShoesSize(product);
     }
 
     for(let i= 0 ; i <product.length;i++ ){
@@ -106,16 +112,17 @@ export const getData = async productId => {
     }
     
     // m-size
-    if(!!productVO.product.modelStature && productVO.product.modelStature != null){
-        modelStature = productVO.product.modelStature;
-    }
+    // if(!!productVO.product.modelStature && productVO.product.modelStature != null){
+    //     modelStature = productVO.product.modelStature;
+    // }
 
     return {
         result,
         imgSrc,
         pMethod,
         // m-size
-        modelStature
+        // modelStature
+        fitStr
     }
 
 

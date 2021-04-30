@@ -11,9 +11,15 @@
     }
 </script>
 
-<style scoped type="scss">
-img{
-    width: 100%;
-    height: auto;
-}
+<style scoped lang="scss">
+    .picture-show{
+        margin: 25px 0px; 
+        width: 100%; 
+        text-align: center;
+        img{
+            display: block;
+            width: 135px;
+            margin-right: 38px;
+        }
+    }
 </style>

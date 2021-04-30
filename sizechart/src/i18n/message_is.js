@@ -13,7 +13,16 @@ export default {
         bust_note: "Mældu undir handleggjunum um allan hluta brjóstmyndarinnar. Gakktu úr skugga um að halda límbandi!",   //google
         waist_note: "Gakktu úr skugga um að mælaborðið passi þægilega þegar þú mælir um þrengsta hluta náttúrulega mittisins.",   //google
         hip_note: "Stattu með fæturna saman og mæltu um breiðasta hluta mjöðmanna.",   //google
-        length_note: "Til að mæla fótalengdina skaltu setjast niður á stól og setja fótinn flatt á pappír. Rakið fótinn með því að halda á blýanti lóðrétt og útlínur fótinn. Notaðu reglustiku til að mæla fjarlægðina frá botni hælsins að oddi lengstu táar. Skráðu niðurstöðuna bæði tommur og sentimetra og notaðu þessar mælingar til að finna stærð þína á töflunni."   //google
+        length_note: "Til að mæla fótalengdina skaltu setjast niður á stól og setja fótinn flatt á pappír. Rakið fótinn með því að halda á blýanti lóðrétt og útlínur fótinn. Notaðu reglustiku til að mæla fjarlægðina frá botni hælsins að oddi lengstu táar. Skráðu niðurstöðuna bæði tommur og sentimetra og notaðu þessar mælingar til að finna stærð þína á töflunni.",   //google
+
+
+        product_measurements_message:"* This data was obtained from manually measuring the product, it may be off by 1-2 CM.",
+        measure_product_size:"How to Measure the Product's Size?",
+        body_measurements_message:"* Depending on your body type and dressing habits, the above sizes are for reference only.",
+        measure_body_size:"How to Measure your Body?",
+        measure_body_size_bust:"Measure the circumference over the fullest part of your breast.",
+        measure_body_size_waist:"Measure your waist at the thinnest place.",
+        measure_body_size_hip:"Measure the fullest part of your hips."
     },
     label: {
         itemmeasurements: 'hlutamælingar',   //google
@@ -39,6 +48,23 @@ export default {
         hips:"Mjaðmamál",
         size_guide:"Stærðatafla",
 
-        model_stature:"Stærðir fyrirsætu"
+        model_stature:"Stærðir fyrirsætu",
+
+        fit_type:"Fit Type",
+        skinny:"Skinny",
+        regular:"Regular",
+        oversized:"Oversized",
+        stretch:"Stretch",
+        non:"Non",
+        slight:"Slight",
+        medium:"Medium",
+        high:"High",
+        product_measurements:"Product Measurements",
+        body_measurements:"Body Measurements",
+        waist_size:"Waist Size",
+        hip_size:"Hip Size",
+        your_bust:"Your bust",
+        your_waist:"Your waist",
+        your_hips:"Your hips"
     }
 }
