@@ -540,7 +540,8 @@ const ShoppingCart = class extends React.Component {
 			klarnaParams: {},
 			alsolikes: null,
 			viewing: false,
-			viewingItem: null
+			viewingItem: null,
+			couponBanner: null
 		}
 		this.processCallBack = this.processCallBack.bind(this)
 		this.processErrorBack = this.processErrorBack.bind(this)
@@ -627,6 +628,13 @@ const ShoppingCart = class extends React.Component {
 				}
 			})
 		}
+
+		getMessage('M1390').then(({ result }) => {
+			this.setState({
+				couponBanner: result
+			})
+		})
+		
 	}
 
 	componentWillUnmount() {
@@ -2378,6 +2386,22 @@ const ShoppingCart = class extends React.Component {
 												</Box>
 											}
 
+											{
+												cart.messages && cart.messages.couponMsg && this.state.couponBanner && this.state.couponBanner.enable && <Box>
+												<div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 12px'}}>
+													<div>
+														<div style={{fontFamily: 'SlatePro-Medium', fontSize: 16}}><FormattedMessage id="addonitems"/></div>
+														<div style={{marginTop: 4}} dangerouslySetInnerHTML={{__html: cart.messages.couponMsg}}/>
+													</div>
+													<div>
+														<a href={this.state.couponBanner ? this.state.couponBanner.message: '#'} style={{textDecoration:'none', color: '#222', fontFamily: 'SlatePro-Medium', fontSize: 13}}><FormattedMessage id="add"/> &gt;</a>
+													</div>
+												</div>
+											</Box>
+											}
+
+											
+
 
 
 
@@ -2942,7 +2966,7 @@ const ShoppingCart = class extends React.Component {
 										}
 
 										{
-											cart.messages && cart.messages.couponMsg && <CouponAlert onClick={() => {this.props.history.push(`${window.ctx || ''}${__route_root__}/coupons`)}} innerRef={c => this.couponAlert = c} coupon={cart.coupon} couponMsg={cart.messages ? cart.messages.couponMsg : null} />
+											(!this.state.couponBanner || !this.state.couponBanner.enable) && cart.messages && cart.messages.couponMsg && <CouponAlert onClick={() => {this.props.history.push(`${window.ctx || ''}${__route_root__}/coupons`)}} innerRef={c => this.couponAlert = c} coupon={cart.coupon} couponMsg={cart.messages ? cart.messages.couponMsg : null} />
 										}
 
 

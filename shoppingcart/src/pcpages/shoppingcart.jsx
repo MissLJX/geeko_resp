@@ -1261,7 +1261,7 @@ const ShoppingCart = class extends React.Component {
 
 	leavehandle(evt) {
 		const scrollTop = document.documentElement.scrollTop || document.body.scrollTop
-		if (evt.pageY - scrollTop <= 0 && !storage.get('leaveImageShowed')) {
+		if (evt.pageY - scrollTop <= 0 && !storage.get('leaveImageShowed') && this.state.leaveImage) {
 			this.setState({
 				showLeaveImage: true
 			})

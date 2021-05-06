@@ -137,5 +137,7 @@ export default{
 	required: 'Required',
 	valid_email: '{email} is not a valid email',
 	you_can_match_width: 'You Might Like to Fill it With',
-	addtocart: 'Add To Cart'
+	addtocart: 'Add To Cart',
+	addonitems: 'Add-on items',
+	
 }
