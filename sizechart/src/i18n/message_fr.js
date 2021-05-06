@@ -11,7 +11,15 @@ export default {
         bust_note: "Mesurez sous vos bras autour de la partie la plus complète de votre buste. Assurez-vous de garder le niveau de la bande!",
         waist_note: "Assurez-vous que le ruban à mesurer s'adapte confortablement lorsque vous mesurez autour de la partie la plus étroite de votre taille naturelle.",
         hip_note: "Tenez-vous debout avec vos pieds ensemble et mesurez autour de la partie la plus large de vos hanches.",
-        length_note: "Pour mesurer la longueur de votre pied, asseyez-vous sur une chaise et placez le pied à plat sur un morceau de papier. Tracez le pied en tenant un crayon verticalement et en décrivant le pied. À l'aide d'une règle, mesurez la distance entre le bas du talon et la pointe du plus long orteil. Enregistrez le résultat en pouces et en centimètres et utilisez ces mesures pour trouver votre taille dans le tableau."
+        length_note: "Pour mesurer la longueur de votre pied, asseyez-vous sur une chaise et placez le pied à plat sur un morceau de papier. Tracez le pied en tenant un crayon verticalement et en décrivant le pied. À l'aide d'une règle, mesurez la distance entre le bas du talon et la pointe du plus long orteil. Enregistrez le résultat en pouces et en centimètres et utilisez ces mesures pour trouver votre taille dans le tableau.",
+
+        product_measurements_message:"* Ces données ont été obtenues en mesurant manuellement le produit, elles peuvent être éteintes de 1 à 2 cm.",
+        measure_product_size:"Comment mesurer la taille du produit?",
+        body_measurements_message:"* En fonction de votre type de corps et de vos habitudes vestimentaires, les tailles ci-dessus sont données à titre indicatif uniquement.",
+        measure_body_size:"Comment mesurer votre corps?",
+        measure_body_size_bust:"Mesurez la circonférence sur la partie la plus complète de votre sein.",
+        measure_body_size_waist:"Mesurez votre tour de taille à l'endroit le plus fin.",
+        measure_body_size_hip:"Mesurez la partie la plus complète de vos hanches."
     },
     label: {
         itemmeasurements: 'mesures de l\'article:',
@@ -37,6 +45,23 @@ export default {
         hips:"Hanche",
         size_guide:"Guide des tailles",
 
-        model_stature:"Statut du modèle"
+        model_stature:"Statut du modèle",
+
+        fit_type:"Type d'ajustement",
+        skinny:"Mince",
+        regular:"Ordinaire",
+        oversized:"Énorme",
+        stretch:"S'étirer",
+        non:"Non",
+        slight:"Léger",
+        medium:"Moyen",
+        high:"Haute",
+        product_measurements:"Mesures du produit",
+        body_measurements:"Mesures du corps",
+        waist_size:"Tour de taille",
+        hip_size:"Tour de hanches",
+        your_bust:"Votre buste",
+        your_waist:"Ta taille",
+        your_hips:"Vos hanches"
     }
 }

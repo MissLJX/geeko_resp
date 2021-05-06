@@ -13,7 +13,15 @@ export default {
         bust_note: "Mittaa käsivarsien alla rintakehän koko osan ympärillä. Pidä nauha vaakasuorassa!",   //google
         waist_note: "Varmista, että mittanauha mahtuu mukavasti, kun mitat luonnollisen vyötärön kapeinta osaa.",   //google
         hip_note: "Seiso jalat yhdessä ja mittaa lantion leveimmän osan ympärillä.",   //google
-        length_note: "Mittaa jalkasi pituus istumalla tuolille ja asettamalla jalka tasaiselle paperille. Seuraa jalkaa pitämällä kynää pystysuunnassa ja hahmottelemalla jalkaa. Mittaa viivaimella etäisyys kantapään pohjasta pisimmän varpaan kärkeen. Kirjaa tulos sekä tuumina että senttimetreinä ja löydä nämä mitat löytääksesi koon taulukosta."   //google
+        length_note: "Mittaa jalkasi pituus istumalla tuolille ja asettamalla jalka tasaiselle paperille. Seuraa jalkaa pitämällä kynää pystysuunnassa ja hahmottelemalla jalkaa. Mittaa viivaimella etäisyys kantapään pohjasta pisimmän varpaan kärkeen. Kirjaa tulos sekä tuumina että senttimetreinä ja löydä nämä mitat löytääksesi koon taulukosta.",   //google
+
+        product_measurements_message:"* This data was obtained from manually measuring the product, it may be off by 1-2 CM.",
+        measure_product_size:"How to Measure the Product's Size?",
+        body_measurements_message:"* Depending on your body type and dressing habits, the above sizes are for reference only.",
+        measure_body_size:"How to Measure your Body?",
+        measure_body_size_bust:"Measure the circumference over the fullest part of your breast.",
+        measure_body_size_waist:"Measure your waist at the thinnest place.",
+        measure_body_size_hip:"Measure the fullest part of your hips."
     },
     label: {
         itemmeasurements: 'kohteen mitat',   //google
@@ -39,6 +47,23 @@ export default {
         hips:"Lanteet",
         size_guide:"Koko-opas",
 
-        model_stature:"Mallin koko"
+        model_stature:"Mallin koko",
+
+        fit_type:"Fit Type",
+        skinny:"Skinny",
+        regular:"Regular",
+        oversized:"Oversized",
+        stretch:"Stretch",
+        non:"Non",
+        slight:"Slight",
+        medium:"Medium",
+        high:"High",
+        product_measurements:"Product Measurements",
+        body_measurements:"Body Measurements",
+        waist_size:"Waist Size",
+        hip_size:"Hip Size",
+        your_bust:"Your bust",
+        your_waist:"Your waist",
+        your_hips:"Your hips"
     }
 }

@@ -13,7 +13,15 @@ export default {
         bust_note: "Mät under dina armar runt hela bystens del. Se till att hålla tejpen jämn!",   //google
         waist_note: "Se till att måttbandet sitter bekvämt när du mäter runt den smalaste delen av din naturliga midja.",   //google
         hip_note: "Stå med fötterna tillsammans och mät runt den bredaste delen av höfterna.",   //google
-        length_note: "För att mäta din fotlängd sätter du dig ner på en stol och placerar foten platt på ett papper. Spåra foten genom att hålla en penna vertikalt och skissera foten. Använd en linjal för att mäta avståndet från hälen ned till spetsen på den längsta tån. Registrera resultatet i både tum och centimeter och använd dessa mått för att hitta din storlek i diagrammet."   //google
+        length_note: "För att mäta din fotlängd sätter du dig ner på en stol och placerar foten platt på ett papper. Spåra foten genom att hålla en penna vertikalt och skissera foten. Använd en linjal för att mäta avståndet från hälen ned till spetsen på den längsta tån. Registrera resultatet i både tum och centimeter och använd dessa mått för att hitta din storlek i diagrammet.",   //google
+
+        product_measurements_message:"* This data was obtained from manually measuring the product, it may be off by 1-2 CM.",
+        measure_product_size:"How to Measure the Product's Size?",
+        body_measurements_message:"* Depending on your body type and dressing habits, the above sizes are for reference only.",
+        measure_body_size:"How to Measure your Body?",
+        measure_body_size_bust:"Measure the circumference over the fullest part of your breast.",
+        measure_body_size_waist:"Measure your waist at the thinnest place.",
+        measure_body_size_hip:"Measure the fullest part of your hips."
     },
     label: {
         itemmeasurements: 'ARTIKELMÄTNINGAR',   //google
@@ -39,6 +47,23 @@ export default {
         hips:"Höfter",
         size_guide:"Storleksguide",
 
-        model_stature:"Modell kroppsstorlek"
+        model_stature:"Modell kroppsstorlek",
+
+        fit_type:"Fit Type",
+        skinny:"Skinny",
+        regular:"Regular",
+        oversized:"Oversized",
+        stretch:"Stretch",
+        non:"Non",
+        slight:"Slight",
+        medium:"Medium",
+        high:"High",
+        product_measurements:"Product Measurements",
+        body_measurements:"Body Measurements",
+        waist_size:"Waist Size",
+        hip_size:"Hip Size",
+        your_bust:"Your bust",
+        your_waist:"Your waist",
+        your_hips:"Your hips"
     }
 }

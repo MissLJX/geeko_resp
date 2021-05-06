@@ -681,17 +681,17 @@
 </style>
 
 <script type="es6">
-    import store from '../store'
+    import store from '../../store'
 
 
     // import DataMap from '../../data/index.js'
-    import { getData } from '../../data/pc/index.js'
+    import { getData } from '../../../data/pc/index.js'
 
 
 
-    import WarmPrompt from '../components/warm-prompt.vue'
-    import PictureShow from '../components/picture-show.vue'
-    import ImageDATA from '../../data/image.js'
+    import WarmPrompt from '../../components/warm-prompt.vue'
+    import PictureShow from '../../components/picture-show.vue'
+    import ImageDATA from '../../../data/image.js'
 
 
     export default {

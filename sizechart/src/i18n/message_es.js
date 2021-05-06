@@ -11,7 +11,15 @@ export default {
         bust_note: "Mida debajo de sus brazos alrededor de la parte más completa de su busto. ¡Asegúrese de mantener el nivel de la cinta!",
         waist_note: "Asegúrese de que la cinta métrica se ajuste cómodamente mientras mide alrededor de la parte más estrecha de su cintura natural.",
         hip_note: "Párate con los pies juntos y mide alrededor de la parte más ancha de las caderas..",
-        length_note: "Para medir la longitud del pie, siéntese en una silla y coloque el pie plano sobre una hoja de papel. Traza el pie sosteniendo un lápiz verticalmente y delineando el pie. Usando una regla, mida la distancia desde la parte inferior del talón hasta la punta del dedo más largo. Registre el resultado en pulgadas y centímetros y use estas medidas para encontrar su tamaño en la tabla."
+        length_note: "Para medir la longitud del pie, siéntese en una silla y coloque el pie plano sobre una hoja de papel. Traza el pie sosteniendo un lápiz verticalmente y delineando el pie. Usando una regla, mida la distancia desde la parte inferior del talón hasta la punta del dedo más largo. Registre el resultado en pulgadas y centímetros y use estas medidas para encontrar su tamaño en la tabla.",
+
+        product_measurements_message:"* Estos datos se obtuvieron midiendo manualmente el producto, puede estar desviado en 1-2 CM.",
+        measure_product_size:"¿Cómo medir el tamaño del producto?",
+        body_measurements_message:"* Dependiendo de su tipo de cuerpo y hábitos de vestimenta, los tamaños anteriores son solo para referencia.",
+        measure_body_size:"¿Cómo medir tu cuerpo?",
+        measure_body_size_bust:"Mide la circunferencia sobre la parte más ancha de tu pecho.",
+        measure_body_size_waist:"Mide tu cintura en el lugar más delgado.",
+        measure_body_size_hip:"Mide la parte más ancha de tus caderas."
     },
     label: {
         itemmeasurements: 'medidas del artículo:',
@@ -37,6 +45,23 @@ export default {
         hips:"Cadera",
         size_guide:"Guía de talles",
 
-        model_stature:"Estatura de modelo"
+        model_stature:"Estatura de modelo",
+
+        fit_type:"Tipo de ajuste",
+        skinny:"Delgado",
+        regular:"Regular",
+        oversized:"De gran tamaño",
+        stretch:"Estirarse",
+        non:"No",
+        slight:"Leve",
+        medium:"Medio",
+        high:"Elevado",
+        product_measurements:"Medidas del producto",
+        body_measurements:"Medidas corporales",
+        waist_size:"Tamaño de la cintura",
+        hip_size:"Tamaño de la cadera",
+        your_bust:"Tu busto",
+        your_waist:"Tu cintura",
+        your_hips:"Tus caderas"
     }
 }

@@ -11,7 +11,16 @@ export default {
         bust_note: "Messen Sie unter Ihren Armen den größten Teil Ihrer Brust. Stellen Sie sicher, dass das Band gerade ist!",
         waist_note: "Stellen Sie sicher, dass das Maßband bequem sitzt, wenn Sie an der schmalsten Stelle Ihrer natürlichen Taille messen.",
         hip_note: "Stellen Sie sich mit den Füßen zusammen und messen Sie an der breitesten Stelle Ihrer Hüften.",
-        length_note: "Um Ihre Fußlänge zu messen, setzen Sie sich auf einen Stuhl und legen Sie den Fuß flach auf ein Stück Papier. Verfolgen Sie den Fuß, indem Sie einen Bleistift senkrecht halten und den Fuß zeichnen. Messen Sie mit einem Lineal den Abstand von der Unterseite der Ferse bis zur Spitze des längsten Zehs. Notieren Sie das Ergebnis in Zoll und Zentimetern und verwenden Sie diese Messungen, um Ihre Größe in der Tabelle zu finden."
+        length_note: "Um Ihre Fußlänge zu messen, setzen Sie sich auf einen Stuhl und legen Sie den Fuß flach auf ein Stück Papier. Verfolgen Sie den Fuß, indem Sie einen Bleistift senkrecht halten und den Fuß zeichnen. Messen Sie mit einem Lineal den Abstand von der Unterseite der Ferse bis zur Spitze des längsten Zehs. Notieren Sie das Ergebnis in Zoll und Zentimetern und verwenden Sie diese Messungen, um Ihre Größe in der Tabelle zu finden.",
+
+
+        product_measurements_message:"* Diese Daten wurden durch manuelle Messung des Produkts ermittelt und können um 1-2 CM abweichen.",
+        measure_product_size:"Wie misst man die Größe des Produkts?",
+        body_measurements_message:"* Abhängig von Ihrem Körperbau und Ihren Kleidungsgewohnheiten sind die oben genannten Größen nur Richtwerte.",
+        measure_body_size:"Wie messen Sie Ihren Körper?",
+        measure_body_size_bust:"MMessen Sie den Umfang über der vollsten Stelle Ihrer Brust.",
+        measure_body_size_waist:"Messen Sie Ihre Taille an der dünnsten Stelle.",
+        measure_body_size_hip:"Messen Sie die vollste Stelle Ihrer Hüfte."
     },
     label: {
         itemmeasurements: 'Artikelmaße:',
@@ -37,6 +46,23 @@ export default {
         hips:"Hüfte",
         size_guide:"Größenanleitung",
 
-        model_stature:"Modell-Statur"
+        model_stature:"Modell-Statur",
+
+        fit_type:"Passform Typ",
+        skinny:"Skinny",
+        regular:"Regulär",
+        oversized:"Überdimensioniert",
+        stretch:"Stretch",
+        non:"Nicht",
+        slight:"Leicht",
+        medium:"Mittel",
+        high:"Hoch",
+        product_measurements:"Produktabmessungen",
+        body_measurements:"Körpermaße",
+        waist_size:"Taillenumfang",
+        hip_size:"Hüftumfang",
+        your_bust:"Ihr Busen",
+        your_waist:"Ihre Taille",
+        your_hips:"Ihre Hüften"
     }
 }
