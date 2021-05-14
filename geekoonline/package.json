@@ -7,7 +7,7 @@
     "@babel/preset-env": "^7.4.3",
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.4.0",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "express": "^4.16.4",
     "ignore-styles": "^5.0.1",
     "multer": "^1.4.1",
