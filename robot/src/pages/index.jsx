@@ -181,6 +181,7 @@ const THEME_LEVEL = styled.span`
 	border: solid 1px #e6e6e6;
     padding: 5px 6px;
     color: #666;
+    display: inline-block;
 `
 
 const ANSWER = styled.div`
@@ -336,7 +337,7 @@ const Sender = props => {
             show && <SUGGESTER>
             {
                 questions?.map(question => <li key={question.id}>
-                    <span onClick={ () => {
+                    <span style={{cursor:'pointer'}} onClick={ () => {
                         props.questionSelect?.(question.question)
                         setShow(false)
                     }} dangerouslySetInnerHTML={{__html: question.highlight}}/>
@@ -461,6 +462,20 @@ export default props => {
                     })
                 }
                 
+            } else if(guess.is_manual_service) {
+                _data = {
+                    ...data, guesses: data.guesses.map(g => {
+                        if (g.id === guess.id) {
+                            return {
+                                ...g, reply: {
+                                    ...g.reply,
+                                    is_matched: false
+                                }
+                            }
+                        }
+                        return g
+                    })
+                }
             } else if (guess.question) {
                 const { result: response } = await matchQuestion(guess.question).catch(data => (
                     {
@@ -566,11 +581,12 @@ export default props => {
         const guess = {
             id: guessId,
             guessItem: question,
+            is_manual_service: question.toLowerCase().indexOf('manual service') >= 0,
             reply: {
                 id: new Date().getTime(),
                 chatId: "13123",
                 answer: "please wait...",
-                is_matched: true
+                is_matched: true,
             }
         }
         setData({

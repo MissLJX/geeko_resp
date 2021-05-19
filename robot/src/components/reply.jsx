@@ -8,6 +8,10 @@ const ROBOTREPLY = styled.div`
     padding-left: 12px;
     padding-right: 52px;
 
+    img{
+        max-width: 100%;
+    }
+
     .__reply_bd{
         background-color: #fff;
 	    border-radius: 4px;
