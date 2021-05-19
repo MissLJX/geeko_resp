@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { injectIntl, FormattedMessage } from 'react-intl'
 import Icon from '../components/icon.jsx'
 import { fetchTransactionPage } from '../store/actions.js'
-import { gettransactionrelatedproducts, getRecentlyProducts, clientcall } from '../api'
+import { gettransactionrelatedproducts, getRecentlyProducts, clientcall, getCountryMessage } from '../api'
 import { Btn, BigButton } from '../components/msite/buttons.jsx'
 import Barcode from 'react-barcode'
 import Clipboard from 'react-clipboard.js'
@@ -191,6 +191,7 @@ const OrderConfirm = class extends React.Component {
 			successTip: null,
 			tabIndex: 0,
 			faceurl: "",
+			confirmBanner: null
 		}
 	}
 
@@ -228,7 +229,7 @@ const OrderConfirm = class extends React.Component {
 
 		// });
 
-		if(window.__is_login__){
+		if (window.__is_login__) {
 			// faceUrl
 			getFaceBookUrl().then(data => {
 				console.log("getFaceBookUrl", data, window.siteUrl);
@@ -238,7 +239,13 @@ const OrderConfirm = class extends React.Component {
 
 			});
 		}
-		
+
+		getCountryMessage('M1396').then(({ result }) => {
+			this.setState({
+				confirmBanner: result
+			})
+		})
+
 
 	}
 
@@ -698,6 +705,14 @@ const OrderConfirm = class extends React.Component {
 						</div>
 					</div>
 				)
+			}
+
+			{
+				this.state.confirmBanner && <div>
+					<a href={this.state.confirmBanner.href} className="" data-source data-source-click data-title="shoppingcart" data-type={'Shopping Cart Banner'} data-content={this.state.confirmBanner.refId} data-position={1}>
+						<img style={{ display: 'block', width: '100%' }} src={this.state.confirmBanner.src} />
+					</a>
+				</div>
 			}
 
 

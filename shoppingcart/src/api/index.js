@@ -1,6 +1,7 @@
 import axios from './apiconfigs'
 const VPATH = '/v9'
 export const getMessage = (code) => axios.get(`${VPATH}/message/get/${code}`)
+export const getCountryMessage = code => axios.get(`${VPATH}/message/anon/country-message/${code}`)
 export const get = () => axios.get(`${VPATH}/shopping-cart/show?_=${new Date().getTime()}&payMethod=${window.token ? '1' : ''}`)
 export const selectAll = (select) => axios.get(`${VPATH}/shopping-cart/select-all?_=${new Date().getTime()}`, {select})
 export const select = (params) => axios.post(`${VPATH}/shopping-cart/select?_=${new Date().getTime()}`, params)

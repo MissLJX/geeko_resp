@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import Loading from '../components/msite/loading.jsx'
@@ -34,7 +34,7 @@ import _ from 'lodash'
 import PayMethodList from '../components/msite/paymethod-list.jsx'
 import { BigButton } from '../components/msite/buttons.jsx'
 import {
-	payDLocal, useMercadocard, mercadopay, usePoint, useInsurance, creditpay, normalpaypal, quickpaypal, usecreditcard, movetooverseas, getMessage, placepaypal, givingCoupon, atmPay, ticketPay, getSafeCharge, getApacPay, apacPay, useMercadoCoupon, placeorder,
+	payDLocal, useMercadocard, mercadopay, usePoint, useInsurance, creditpay, normalpaypal, quickpaypal, usecreditcard, movetooverseas, getMessage,getCountryMessage, placepaypal, givingCoupon, atmPay, ticketPay, getSafeCharge, getApacPay, apacPay, useMercadoCoupon, placeorder,
 	getJwt,
 	getLookup,
 	oceanpay3d,
@@ -541,7 +541,8 @@ const ShoppingCart = class extends React.Component {
 			alsolikes: null,
 			viewing: false,
 			viewingItem: null,
-			couponBanner: null
+			couponBanner: null,
+			cartBanner: null
 		}
 		this.processCallBack = this.processCallBack.bind(this)
 		this.processErrorBack = this.processErrorBack.bind(this)
@@ -598,7 +599,7 @@ const ShoppingCart = class extends React.Component {
 		})
 		this.props.FETCHCOUPONS()
 		window.addEventListener('scroll', this.scrollhandle, false)
-		
+
 		product_get_catch_with({}).then(data => {
 			this.setState({
 				alsolikes: data.result
@@ -634,7 +635,13 @@ const ShoppingCart = class extends React.Component {
 				couponBanner: result
 			})
 		})
-		
+
+		getCountryMessage('M1392').then(({result}) => {
+			this.setState({
+				cartBanner: result
+			})
+		})
+
 	}
 
 	componentWillUnmount() {
@@ -1021,7 +1028,7 @@ const ShoppingCart = class extends React.Component {
 
 						if (error_code) {
 							alert(error_messages)
-							if(orderId && window.__is_login__){
+							if (orderId && window.__is_login__) {
 								self.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
 							}
 						} else if (fraud_status === "ACCEPTED") {
@@ -1055,7 +1062,7 @@ const ShoppingCart = class extends React.Component {
 					}
 				} else {
 					alert(payResult.details)
-					if(payResult.orderId && window.__is_login__){
+					if (payResult.orderId && window.__is_login__) {
 						this.props.history.push(`${window.ctx || ''}/checkout/${payResult.orderId}`)
 					}
 				}
@@ -1074,11 +1081,11 @@ const ShoppingCart = class extends React.Component {
 				})
 
 			})
-		}else if(payType === '29'){
+		} else if (payType === '29') {
 			this.setState({
 				checking: true
 			})
-			get_pay_params({payMethod: selectedPayMethod.id}).then(({ result }) => {
+			get_pay_params({ payMethod: selectedPayMethod.id }).then(({ result }) => {
 				const { isFree, payURL, params, transactionId, orderId } = result
 				if (isFree) {
 					window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
@@ -1353,7 +1360,7 @@ const ShoppingCart = class extends React.Component {
 	}
 
 	viewConfirm(oldId, newId, quantity) {
-		this.props.ADDITEM({variantId: newId, quantity}).then(() => {
+		this.props.ADDITEM({ variantId: newId, quantity }).then(() => {
 			this.setState({
 				viewing: false,
 				viewingItem: null
@@ -2240,8 +2247,8 @@ const ShoppingCart = class extends React.Component {
 		return allItems
 	}
 
-	alsoRef(c){
-		if(window.sourceObserver && c && !this.alsolink){
+	alsoRef(c) {
+		if (window.sourceObserver && c && !this.alsolink) {
 			window.sourceObserver.observe(c)
 			this.alsolink = c
 		}
@@ -2304,7 +2311,44 @@ const ShoppingCart = class extends React.Component {
 					</div>
 					<div className="__bd">
 						{
-							loading ? <Loading /> : (empty ? <Empty /> : (
+							loading ? <Loading /> : (empty ? <div style={{minHeight:'100vh', backgroundColor:'#fff'}}>
+								<Empty />
+
+								{
+									this.state.cartBanner && <div style={{borderTop: '8px solid #f7f7f7'}}>
+										<a href={this.state.cartBanner.href} className="" data-source data-source-click data-title="shoppingcart" data-type={'Shopping Cart Banner'} data-content={this.state.cartBanner.refId} data-position={1}>
+											<img style={{display:'block', width:'100%'}} src={this.state.cartBanner.src}/>
+										</a>
+									</div>
+								}
+
+
+								{
+									this.state.alsolikes && this.state.alsolikes.length > 0 &&  <Box style={{borderTop: '8px solid #f7f7f7'}}>
+										<ALSOLIKES innerRef={this.alsoRef.bind(this)} data-source type="shopping_cart_match_with" data-column="shopping_cart_match_with" data-title="shoppingcart" data-type="shopping_cart_match_with" data-content="You Might Like to Fill it With" data-position="2">
+											<div className="__hd">
+												<FormattedMessage id="you_can_match_width" />
+											</div>
+											<div className="__bd">
+												<SwiperNormalProducts onSelect={(vairant, product) => {
+													this.setState({
+														viewingItem: {
+															productId: product.id,
+															variantId: vairant.id,
+															quantity: 1
+														},
+														viewing: true
+													})
+												}} products={this.state.alsolikes} />
+											</div>
+										</ALSOLIKES>
+
+									</Box>
+								}
+								
+								
+
+							</div> : (
 								cart && (
 									<div style={{ opacity: this.props.refreshing ? 0.9 : 1, padding: 8 }}>
 										{(this.props.refreshing || this.state.refreshing) && <Refreshing />}
@@ -2388,19 +2432,19 @@ const ShoppingCart = class extends React.Component {
 
 											{
 												cart.messages && cart.messages.couponMsg && this.state.couponBanner && this.state.couponBanner.enable && <Box>
-												<div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 12px'}}>
-													<div>
-														<div style={{fontFamily: 'SlatePro-Medium', fontSize: 16}}><FormattedMessage id="addonitems"/></div>
-														<div style={{marginTop: 4}} dangerouslySetInnerHTML={{__html: cart.messages.couponMsg}}/>
+													<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 12px' }}>
+														<div>
+															<div style={{ fontFamily: 'SlatePro-Medium', fontSize: 16 }}><FormattedMessage id="addonitems" /></div>
+															<div style={{ marginTop: 4 }} dangerouslySetInnerHTML={{ __html: cart.messages.couponMsg }} />
+														</div>
+														<div>
+															<a href={this.state.couponBanner ? this.state.couponBanner.message : '#'} style={{ textDecoration: 'none', color: '#222', fontFamily: 'SlatePro-Medium', fontSize: 13 }}><FormattedMessage id="add" /> &gt;</a>
+														</div>
 													</div>
-													<div>
-														<a href={this.state.couponBanner ? this.state.couponBanner.message: '#'} style={{textDecoration:'none', color: '#222', fontFamily: 'SlatePro-Medium', fontSize: 13}}><FormattedMessage id="add"/> &gt;</a>
-													</div>
-												</div>
-											</Box>
+												</Box>
 											}
 
-											
+
 
 
 
@@ -2589,7 +2633,7 @@ const ShoppingCart = class extends React.Component {
 
 
 											<Box>
-												<BoxClickHead single={cart.expectedPoints <=0 } className="x-small" title={intl.formatMessage({ id: 'coupon' })}>
+												<BoxClickHead single={cart.expectedPoints <= 0} className="x-small" title={intl.formatMessage({ id: 'coupon' })}>
 													<Link style={{ textDecoration: 'none', color: '#222' }} to={`${window.ctx || ''}${__route_root__}/coupons`}>
 
 														{cart.coupon ? (
@@ -2661,26 +2705,28 @@ const ShoppingCart = class extends React.Component {
 											</Box>
 
 											{
-											this.state.alsolikes && this.state.alsolikes.length > 0  && <Box>
-												<ALSOLIKES innerRef={this.alsoRef.bind(this)} data-source type="shopping_cart_match_with" data-column="shopping_cart_match_with" data-title="shoppingcart" data-type="shopping_cart_match_with" data-content="You Might Like to Fill it With" data-position="2">
-													<div className="__hd">
-														<FormattedMessage id="you_can_match_width"/>
-													</div>
-													<div className="__bd">
-														<SwiperNormalProducts onSelect={(vairant, product) => {this.setState({
-															viewingItem: {
-																productId: product.id,
-																variantId: vairant.id,
-																quantity: 1
-															},
-															viewing: true
-														})}}  products={this.state.alsolikes}/>
-													</div>
-												</ALSOLIKES>
-												
-											</Box>
+												this.state.alsolikes && this.state.alsolikes.length > 0 && <Box>
+													<ALSOLIKES innerRef={this.alsoRef.bind(this)} data-source type="shopping_cart_match_with" data-column="shopping_cart_match_with" data-title="shoppingcart" data-type="shopping_cart_match_with" data-content="You Might Like to Fill it With" data-position="2">
+														<div className="__hd">
+															<FormattedMessage id="you_can_match_width" />
+														</div>
+														<div className="__bd">
+															<SwiperNormalProducts onSelect={(vairant, product) => {
+																this.setState({
+																	viewingItem: {
+																		productId: product.id,
+																		variantId: vairant.id,
+																		quantity: 1
+																	},
+																	viewing: true
+																})
+															}} products={this.state.alsolikes} />
+														</div>
+													</ALSOLIKES>
+
+												</Box>
 											}
-											
+
 
 											<Box style={{ backgroundColor: '#f6f6f6', paddingTop: 15, paddingBottom: 15 }}>
 												<div style={{ color: '#999' }}><FormattedMessage id="secure_payment" /></div>
@@ -2836,10 +2882,10 @@ const ShoppingCart = class extends React.Component {
 										{
 											this.state.viewing && (
 												<React.Fragment>
-													<Mask onClick={() => { this.setState({viewing: false}) }}/>
-													<ProductEditor onClose={() => { this.setState({viewing: false}) }}
+													<Mask onClick={() => { this.setState({ viewing: false }) }} />
+													<ProductEditor onClose={() => { this.setState({ viewing: false }) }}
 														itemConfirmHandle={this.viewConfirm}
-														btnMessage={<FormattedMessage id="addtocart"/>}
+														btnMessage={<FormattedMessage id="addtocart" />}
 														item={this.state.viewingItem} />
 												</React.Fragment>
 											)
@@ -2848,7 +2894,7 @@ const ShoppingCart = class extends React.Component {
 										{
 											editing.isEditing && (
 												<React.Fragment>
-													<Mask onClick={() => { this.props.EDITED() }}/>
+													<Mask onClick={() => { this.props.EDITED() }} />
 													<ProductEditor onClose={() => { this.props.EDITED() }}
 														itemConfirmHandle={this.itemConfirmHandle}
 														item={editing.item} />
@@ -2966,7 +3012,7 @@ const ShoppingCart = class extends React.Component {
 										}
 
 										{
-											(!this.state.couponBanner || !this.state.couponBanner.enable) && cart.messages && cart.messages.couponMsg && <CouponAlert onClick={() => {this.props.history.push(`${window.ctx || ''}${__route_root__}/coupons`)}} innerRef={c => this.couponAlert = c} coupon={cart.coupon} couponMsg={cart.messages ? cart.messages.couponMsg : null} />
+											(!this.state.couponBanner || !this.state.couponBanner.enable) && cart.messages && cart.messages.couponMsg && <CouponAlert onClick={() => { this.props.history.push(`${window.ctx || ''}${__route_root__}/coupons`) }} innerRef={c => this.couponAlert = c} coupon={cart.coupon} couponMsg={cart.messages ? cart.messages.couponMsg : null} />
 										}
 
 

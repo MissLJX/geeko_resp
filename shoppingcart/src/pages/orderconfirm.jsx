@@ -6,7 +6,7 @@ import { Boxs, Box, BoxBody, BoxHead } from '../components/msite/layout.jsx'
 import { Grey, Red, UpperCase, Blue } from '../components/text.jsx'
 import Address from '../components/msite/address.jsx'
 import { Btn, BigButton } from '../components/msite/buttons.jsx'
-import { gettransactionrelatedproducts, clientcall } from '../api'
+import { gettransactionrelatedproducts, clientcall, getCountryMessage } from '../api'
 import Order from '../components/msite/order.jsx'
 import { fetchTransactionPage } from '../store/actions.js'
 import { Link } from 'react-router-dom'
@@ -169,7 +169,8 @@ const OrderConfirm = class extends React.Component {
 		this.state = {
 			products: [],
 			faceurl: "",
-			inputValue: ""
+			inputValue: "",
+			confirmBanner: null
 		}
 	}
 
@@ -213,6 +214,12 @@ const OrderConfirm = class extends React.Component {
 				});
 			});
 		}
+
+		getCountryMessage('M1396').then(({ result }) => {
+			this.setState({
+				confirmBanner: result
+			})
+		})
 
 	}
 
@@ -619,13 +626,21 @@ const OrderConfirm = class extends React.Component {
 					)
 				}
 
+				{
+					this.state.confirmBanner && <div>
+						<a href={this.state.confirmBanner.href} className="" data-source data-source-click data-title="shoppingcart" data-type={'Shopping Cart Banner'} data-content={this.state.confirmBanner.refId} data-position={1}>
+							<img style={{ display: 'block', width: '100%' }} src={this.state.confirmBanner.src} />
+						</a>
+					</div>
+				}
 
 
-				<Boxs style={{ marginTop: 20 }}>
+				<Boxs>
+
 					<Box>
 						<BoxHead title={intl.formatMessage({ id: 'you_may_also_like' })} />
 						<BoxBody>
-							<Products products={this.state.products} type="often_bought_with"/>
+							<Products products={this.state.products} type="often_bought_with" />
 						</BoxBody>
 					</Box>
 
