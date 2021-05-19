@@ -391,7 +391,7 @@ const MANUALSERVICE = styled.div`
 const ManualService = props => {
     return <MANUALSERVICE>
         <div className="__text">
-            <FormattedMessage id="Need more support? Please click the button below" />
+            <FormattedMessage id="Need more support" />
         </div>
         <div style={{ marginTop: 14 }}>
             <button className="zenDesk"><FormattedMessage id="Manual Service" /></button>
@@ -413,6 +413,12 @@ export default props => {
 
     const listRef = React.useRef()
 
+    const eventTrack = (event, opts) => {
+        window.GeekoSensors?.Track(event, opts)
+        console.log(event)
+        console.log(opts)
+    }
+
     useEffect(async () => {
         const [data1, data2, data3] = await Promise.all([
             fetchHotQuestions().then(data => data.result),
@@ -429,34 +435,49 @@ export default props => {
     useEffect(async () => {
         if (guess) {
             let _data = data
+            
             if (guess.theme) {
                 const { result: themes } = await fetchThemesByParentId(guess.theme.id)
                 _data = {
                     ...data, guesses: data.guesses.map(g => {
                         if (g.id === guess.id) {
-                            return {
+                            let _guess = {
                                 ...g, reply: {
                                     ...g.reply,
                                     answer: 'Next, please select your question type',
                                     themes
                                 }
                             }
+                            eventTrack('ibot_qa', {
+                                users_question: guess.theme.name,
+                                ibot_answer: _guess.reply.answer,
+                                themes: themes?.map(t => t.name)
+                            })
+                            return _guess
                         }
                         return g
                     })
                 }
             } else if (guess.leafTheme) {
-                const { relation_repository } = guess.leafTheme
+                const { relation_repository, name } = guess.leafTheme
                 _data = {
                     ...data, guesses: data.guesses.map(g => {
                         if (g.id === guess.id) {
-                            return {
+
+                            let _guess = {
                                 ...g, reply: {
                                     ...g.reply,
                                     answer: 'Are these questions? If not, please type your question directly',
                                     intelligent_answers: relation_repository
                                 }
                             }
+                            eventTrack('ibot_qa', {
+                                users_question: name,
+                                ibot_answer: _guess.reply.answer,
+                                intelligent_answers: relation_repository?.map(r => r.question)
+                            })
+
+                            return _guess
                         }
                         return g
                     })
@@ -466,12 +487,19 @@ export default props => {
                 _data = {
                     ...data, guesses: data.guesses.map(g => {
                         if (g.id === guess.id) {
-                            return {
+
+                            let _guess = {
                                 ...g, reply: {
                                     ...g.reply,
                                     is_matched: false
                                 }
                             }
+                            eventTrack('ibot_qa', {
+                                users_question: 'Manual Service',
+                                ibot_answer: 'Manual Service'
+                            })
+
+                            return _guess
                         }
                         return g
                     })
@@ -487,16 +515,31 @@ export default props => {
                 _data = {
                     ...data, guesses: data.guesses.map(g => {
                         if (g.id === guess.id) {
-                            return {
+
+
+                            let _guess = {
                                 ...g, reply: {
                                     ...g.reply,
                                     answer: response?.answer,
                                     intelligent_answers: response?.intelligent_answers,
                                     relation_question_title: response?.relation_question_title,
                                     relation_repository: response?.relation_repository,
+                                    st_question: response?.st_question,
                                     is_matched: !!response?.is_matched
                                 }
                             }
+
+                            eventTrack('ibot_qa', {
+                                users_question: guess.question,
+                                ibot_answer: response?.answer,
+                                st_question: response?.st_question,
+                                intelligent_answers: response?.intelligent_answers?.map(r => r.question),
+                                relation_repository: response?.relation_repository?.map(r => r.question),
+                                is_matched: !!response?.is_matched
+                            })
+
+
+                            return _guess
                         }
                         return g
                     })
