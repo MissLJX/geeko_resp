@@ -6,6 +6,7 @@ const HEADER = styled.div`
     line-height: 44px;
     background-color: #fff;
     text-align: center;
+    position: relative;
 `
 
 const BACK = styled.span`
@@ -26,7 +27,7 @@ const TITLE = styled.span`
 
 export default props => {
     return <HEADER>
-        <BACK className="iconfont" onBack={props?.onBack}>&#xe78a;</BACK>
+        <BACK className="iconfont" onClick={props?.onBack}>&#xe78a;</BACK>
         <TITLE>{props.text}</TITLE>
     </HEADER>
 }

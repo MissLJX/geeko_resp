@@ -158,5 +158,6 @@ export default {
     trackingDetailInfo:'Información detallada de seguimiento',
     returnlabel:"Etiqueta de devolución",
     share_get:"COMPARTE HASTA 50% DE DESCUENTO, OBTÉN $ 10",
-    share_lucky:"Comparta el sorteo con sus amigos y obtenga hasta un 50% de descuento juntos. Y obtendrás $ 10 cuando tus amigos realicen una compra."
+    share_lucky:"Comparta el sorteo con sus amigos y obtenga hasta un 50% de descuento juntos. Y obtendrás $ 10 cuando tus amigos realicen una compra.",
+    required: 'Requerido'
 }

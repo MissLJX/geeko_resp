@@ -171,5 +171,6 @@ export default {
     prmotion:"Kampanj",
     returnlabel:"Retursedel",
     share_get:"DELA UPP TILL 50% RABATT, FÅ 10 USD",   //google
-    share_lucky:"Dela lyckad dragning med dina vänner och få upp till 50% rabatt tillsammans. Och du får $ 10 när de gör ett köp."   //google
+    share_lucky:"Dela lyckad dragning med dina vänner och få upp till 50% rabatt tillsammans. Och du får $ 10 när de gör ett köp.",   //google
+    required: 'Required'
 }

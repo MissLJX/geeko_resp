@@ -171,5 +171,6 @@ export default {
     prmotion:"Kampanja",
     returnlabel:"Palautustarra",
     share_get:"JAA Jopa 50% ALENNUSTA, SAA 10 dollaria",  //google
-    share_lucky:"Jaa onnen arvonta ystävillesi ja saat jopa 50% alennuksen yhdessä. Ja saat 10 dollaria, kun he tekevät ostoksen."  //google
+    share_lucky:"Jaa onnen arvonta ystävillesi ja saat jopa 50% alennuksen yhdessä. Ja saat 10 dollaria, kun he tekevät ostoksen.",  //google
+    required: 'Required'
 }

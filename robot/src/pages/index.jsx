@@ -149,10 +149,31 @@ const initialData = {
     ]
 }
 
+
+const Storage = {
+    add: (key, value, exp) => {
+        window.localStorage.setItem(key, JSON.stringify({
+            time: new Date().getTime() + exp,
+            data: value
+        }))
+    },
+    get: (key) => {
+        const stringData = window.localStorage.getItem(key)
+        if(!stringData) return null
+        const data = JSON.parse(stringData)
+        if(data.time - new Date().getTime() > 0){
+            return data.data
+        }else{
+            window.localStorage.removeItem(key)
+            return null
+        }
+    }
+}
+
 const MAIN = styled.div`
     padding-top: 12px;
-    // height: calc(100vh - 174px);
-    height: calc(100vh - 124px);
+    height: calc(100% - 174px);
+    // height: calc(100vh - 124px);
     overflow: auto;
     -webkit-overflow-scrolling: touch;
     padding-bottom: 20px;
@@ -199,8 +220,8 @@ const FOOTER = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    // height: 130px;
-    height: 80px;
+    height: 130px;
+    // height: 80px;
 `
 
 const SENDER = styled.div`
@@ -321,7 +342,7 @@ const Sender = props => {
 
     const suggestQuestions = question => {
         suggest(question).then(data => data.result).then(questions => {
-            if(questions && questions.length > 0){
+            if (questions && questions.length > 0) {
                 setQuestions(questions)
             }
         })
@@ -330,24 +351,24 @@ const Sender = props => {
 
     const [debouncedSuggest] = useState(() => _.debounce(suggestQuestions, 300));
 
-    
 
-    return <div style={{position: 'relative'}}>
+
+    return <div style={{ position: 'relative' }}>
         {
             show && <SUGGESTER>
-            {
-                questions?.map(question => <li key={question.id}>
-                    <span style={{cursor:'pointer'}} onClick={ () => {
-                        props.questionSelect?.(question.question)
-                        setShow(false)
-                    }} dangerouslySetInnerHTML={{__html: question.highlight}}/>
-                </li>)
-            }
-        </SUGGESTER>
+                {
+                    questions?.map(question => <li key={question.id}>
+                        <span style={{ cursor: 'pointer' }} onClick={() => {
+                            props.questionSelect?.(question.question)
+                            setShow(false)
+                        }} dangerouslySetInnerHTML={{ __html: question.highlight }} />
+                    </li>)
+                }
+            </SUGGESTER>
         }
         <SENDER>
 
-            
+
             <input
                 placeholder="Type a message here..."
                 onKeyUp={(evt) => {
@@ -358,7 +379,7 @@ const Sender = props => {
                     }
                 }} value={message} onChange={e => {
                     setMessage(e.target.value);
-                    if(e.target.value){
+                    if (e.target.value) {
                         debouncedSuggest(e.target.value)
                     }
                 }} />
@@ -403,7 +424,7 @@ const ManualService = props => {
 
 export default props => {
 
-    
+
 
     const [count, setCount] = useState(0)
 
@@ -426,7 +447,8 @@ export default props => {
             getUser().then(data => data.result).catch(data => null)
         ])
 
-        const initData = JSON.parse(window.localStorage.getItem(`robotData_${data3?.id || window.wid}`)) || {}
+        // const initData = JSON.parse(window.localStorage.getItem(`robotData_${data3?.id || window.wid}`)) || {}
+        const initData = Storage.get(`robotData_${data3?.id || window.wid}`) || {}
 
         setData({ ...data, ...initData, recomandQuestions: data1, themes: data2, customer: data3, customerId: data3?.id })
 
@@ -435,7 +457,7 @@ export default props => {
     useEffect(async () => {
         if (guess) {
             let _data = data
-            
+
             if (guess.theme) {
                 const { result: themes } = await fetchThemesByParentId(guess.theme.id)
                 _data = {
@@ -482,8 +504,8 @@ export default props => {
                         return g
                     })
                 }
-                
-            } else if(guess.is_manual_service) {
+
+            } else if (guess.is_manual_service) {
                 _data = {
                     ...data, guesses: data.guesses.map(g => {
                         if (g.id === guess.id) {
@@ -544,12 +566,26 @@ export default props => {
                         return g
                     })
                 }
+
+                if(response?.answer?.indexOf('contact') >= 0 || response?.answer?.indexOf('customer service') >= 0){
+                    _data.guesses.push({
+                        id: new Date().getTime(),
+                        reply: {
+                            guessItem:'',
+                            is_manual_service: true
+                        }
+                    })
+                }
                 
             }
 
             setData(_data)
+
+
+
             setCount(count + 1)
-            window.localStorage.setItem(`robotData_${data.customerId || window.wid}`, JSON.stringify(_data))
+            // window.localStorage.setItem(`robotData_${data.customerId || window.wid}`, JSON.stringify(_data))
+            Storage.add(`robotData_${data.customerId || window.wid}`, _data, 1000*60*5)
         }
 
     }, [guess])
@@ -575,7 +611,7 @@ export default props => {
             return <RecomandLevelThemes onLeafTheme={onLeafTheme} guess={guess} />
         } else if (guess.reply.intelligent_answers && guess.reply.intelligent_answers.length > 0) {
             return <GuessQuestions questionSelect={questionSelect} guess={guess} />
-        } else if(guess.reply.is_matched) {
+        } else if (guess.reply.is_matched) {
             return <AnswerRelation questionSelect={questionSelect} guess={guess} />
         }
 
@@ -619,7 +655,7 @@ export default props => {
     }
 
     const questionSelect = question => {
-        if(!question) return
+        if (!question) return
         const guessId = new Date().getTime()
         const guess = {
             id: guessId,
@@ -639,9 +675,22 @@ export default props => {
     }
 
 
+    const keywordSelect = keyword => {
+        if (!keyword) return
+        if (keyword.id === 'question_type') {
+            setData({
+                ...data, guesses: [...data.guesses, {id: new Date().getTime(), themes: data.themes}]
+            })
+        }else{
+            questionSelect(keyword.name)
+        }
+    }
 
-    return <div>
-        <Header text={<FormattedMessage id="Chat with us" />} />
+    return <div style={{maxWidth:800, margin:'auto', backgroundColor:'#f1f1f1', height: '100%'}}>
+        {
+         <Header text={<FormattedMessage id="Chat with us" />} onBack={() => {window.history.back()}}/>
+        }
+        
         <MAIN ref={listRef}>
             <Themes themes={data?.themes} onTheme={onTheme} />
             <RobotReply>
@@ -650,35 +699,48 @@ export default props => {
             {
                 data?.guesses?.map(guess => {
                     return <React.Fragment key={guess.id}>
-                        {guess.guessItem && <UserReply user={data?.customer}>{guess.guessItem}</UserReply>}
-                        <RobotReply>
-                            {getGuessReply(guess)}
-                        </RobotReply>
+
+                        {guess.themes ? <Themes themes={data?.themes} onTheme={onTheme} /> : (
+                            <React.Fragment>
+                                {guess.guessItem && <UserReply user={data?.customer}>{guess.guessItem}</UserReply>}
+                                <RobotReply>
+                                    {getGuessReply(guess)}
+                                </RobotReply>
+                            </React.Fragment>
+                        )}
+
+
                     </React.Fragment>
                 })
             }
+
         </MAIN>
         <FOOTER>
-            {/* <div style={{ paddingLeft: 12, paddingTop: 10 }}>
+            <div style={{ paddingLeft: 12, paddingTop: 10 }}>
                 <KeyWords keywords={[
                     {
+                        id: 'question_type',
+                        name: 'Question Type'
+                    },
+                    {
                         id: '123',
-                        name: 'Change address'
+                        name: 'Tracking'
                     },
                     {
                         id: '234',
-                        name: 'Exchange'
+                        name: 'Modify Shipping Address'
                     },
                     {
                         id: '345',
-                        name: 'Track logistics'
+                        name: 'Cancel Order',
+                        ali: 'Track Order'
                     },
-                    {
-                        id: '456',
-                        name: 'Cancel Goods'
-                    },
-                ]} />
-            </div> */}
+                ]}
+                    onSelect={(keyword) => {
+                        keywordSelect(keyword)
+                    }}
+                />
+            </div>
             <div>
                 <Sender questionSelect={questionSelect} onSent={(message) => { questionSelect(message) }} />
             </div>

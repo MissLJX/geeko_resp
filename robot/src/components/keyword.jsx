@@ -12,17 +12,18 @@ const KEYWORD = styled.span`
     font-size: 12px;
     display: inline-block;
     line-height: 26px;
+    cursor: pointer;
 `
 
 const KeyWord = props => {
     const { keyword } = props
-    return <KEYWORD onClick={props.onKeyWord?.(keyword)}>
+    return <KEYWORD onClick={() => props.onKeyWord?.(keyword)}>
         {keyword.name}
     </KEYWORD>
 }
 
 export const KeyWords = props => {
-    const { keywords } = props
+    const { keywords, onSelect } = props
 
     const initialOpts = {
         slidesPerView: 'auto',
@@ -32,7 +33,7 @@ export const KeyWords = props => {
     return <Swiper {...initialOpts}>
     {
         keywords?.map(keyword => <SwiperSlide style={{width: 'auto'}} key={keyword.id}>
-            <KeyWord keyword={keyword}/>
+            <KeyWord onKeyWord={onSelect} keyword={keyword}/>
         </SwiperSlide>)
     }
     </Swiper>
