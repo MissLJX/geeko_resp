@@ -1,20 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
-     <link rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="/manifest.json">
     <title>Shopping Cart</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
     <script type="text/javascript">
-        window.siteName='Boutiquefeel'
+        window.siteName = 'Boutiquefeel'
         window.accessToken = 'f95f0eca-4248-406c-8908-c3b1caf79e0b'
-        window.wid = '0d8454d6-5a89-4093-9f03-60525201d7f7'
+        window.wid = 'f62f0f2b-8271-49ec-933d-ce4226d1a707'
         window.secret = 'A2RHUmDn9Y1jLtaGrqDGhVtM1D1mX6V7xkPySRII2Ve9nM0+7EhSXK/gn6uS6mEVWDX7F6xCPNk='
-    	window.lang = 'en'
-    	window.__is_login__ = true
+        window.lang = 'en'
+        window.__is_login__ = false
         window.__isnew = false
         // window.paypalEnv= 'sandbox'
-        window.paypalEnv= 'sandbox'
+        window.paypalEnv = 'sandbox'
         window.__currency__ = 'USD'
         // window.token = 1
         window.safechargeEnv = 'test'
@@ -32,7 +33,7 @@
 
         window.siteUrl = "http://localhost:8080/wanna";
 
-        window.showShare ="123";
+        window.showShare = "123";
 
         // https://s3-us-west-2.amazonaws.com/wanna/pt_BR.png
 
@@ -41,60 +42,135 @@
             communicationEmail: 'shaolei@163.com'
         }
 
-        if(window.localStorage){
+        if (window.localStorage) {
             var dataStr = localStorage.getItem('temp-order')
             localStorage.removeItem('temp-order');
-            if(dataStr != null){
+            if (dataStr != null) {
                 var data = JSON.parse(dataStr)
                 window.location.href = 'https://www.chicme.xyz/me/m/order/detail/' + data.data
             }
         }
 
 
-        
+
 
 
     </script>
+
+
+<script>
+    // ensure this function is defined before loading afterpay.js
+    function initAfterpay() {
+        AfterPay.initializeForPopup({
+            countryCode: 'US',
+            onCommenceCheckout: function (actions) {
+                /* retrieve afterpay token from your server */
+                /* then call `actions.resolve(token)` */
+            },
+            onComplete: function (data) {
+                /* handle success/failure of checkout */
+            },
+            target: '#afterpay-express-button',
+            shippingOptionRequired: false,
+        })
+    }
+</script>
+<script
+    src="https://portal.sandbox.afterpay.com/afterpay.js?
+merchant_key=789a8ae797d61ce571e665a480f064cd56721c1b044630d2b3f74943ffd34d13c18db1a787cb1e176d395349afb23927edccaf72c2efc8627dfe0a8e8bd1d599"
+    async onload="initAfterpay()">
+    </script>
+
+
 </head>
-<body>
+
+<body >
+
 
     <div id="root">
 
     </div>
+
+
     <!-- <button style="display: none;" id="addtohome">Add to home page</button> -->
-<body>
 
-<script type="text/javascript">
-    
+    <script type="text/javascript">
+
      // window.addEventListener('mouseleave', function(){console.log('xxx')}, false)
-</script>
-
-<script src="https://s3.geeko.ltd/js/songbird.js"></script>
+    </script>
 
 
-<script src="https://cdn.safecharge.com/safecharge_resources/v1/websdk/safecharge.js"></script>
+    <script>
+        window.renderKlarna = function () {
+            if (!window.klarnaRendered) {
 
-<script src="https://www.paypal.com/sdk/js?client-id=Aclcpbaca2DWJk_Mib43P1-n8jel44b5nCSSfWUon4OCliG0ypwhry1EFohlWs6siEfRVLq4m-I6EDSN&components=buttons,funding-eligibility&buyer-country=US&commit=false"></script>
-
-
-<script src="https://secure.mlstatic.com/sdk/javascript/v1/mercadopago.js"></script>
-
-<script type="text/javascript">
-	Mercadopago.setPublishableKey('APP_USR-a33040db-a987-4742-a2ce-499fd071c7cc')
-</script>
-
+                window.klarnaExpressButtonAsyncCallback = function () {
+                    Klarna.ExpressButton.on('user-authenticated', function (callbackData) {
+                        window.saveKlarnaAddress(callbackData)
+                    })
+                }
 
 
-<script type="text/javascript">
+                window.klarnaRendered = true
+                var klarna_script = document.createElement('script')
+                klarna_script.setAttribute('src', 'https://x.klarnacdn.net/express-button/v1/lib.js')
+                klarna_script.setAttribute('data-id', 'PN04100')
+                klarna_script.setAttribute('data-environment', 'playground')
+                klarna_script.setAttribute('async', 'true')
+                document.body.appendChild(klarna_script)
+            }
+        }
+
+        window.renderAfterpay = function () {
+            // if (!window.afterpayRendered) {
+
+            //     window.initAfterpay = function () {
+            //         alert(window.AfterPay)
+            //         window.notifyAfterpay()
+            //     }
+
+            //     window.afterpayRendered = true
+            //     var afterpay_script = document.createElement('script')
+            //     afterpay_script.setAttribute('src', 'https://portal.sandbox.afterpay.com/afterpay.js?merchant_key=789a8ae797d61ce571e665a480f064cd56721c1b044630d2b3f74943ffd34d13c18db1a787cb1e176d395349afb23927edccaf72c2efc8627dfe0a8e8bd1d599')
+            //     afterpay_script.setAttribute('async', true)
+            //     afterpay_script.onload = window.initAfterpay;
+            //     document.body.appendChild(afterpay_script)
+            // }
+        }
+
+
+
+
+    </script>
+
     
-    window.sendEvent = function(data){
-        console.log(data)
-    }
-</script>
+    <script src="https://s3.geeko.ltd/js/songbird.js"></script>
 
-<!-- <script src="https://js-sandbox.dlocal.com"></script> -->
 
-<!-- <script type="text/javascript">
+    <script src="https://cdn.safecharge.com/safecharge_resources/v1/websdk/safecharge.js"></script>
+
+    <script
+        src="https://www.paypal.com/sdk/js?client-id=Aclcpbaca2DWJk_Mib43P1-n8jel44b5nCSSfWUon4OCliG0ypwhry1EFohlWs6siEfRVLq4m-I6EDSN&components=buttons,funding-eligibility&buyer-country=US&commit=false"></script>
+
+
+    <script src="https://secure.mlstatic.com/sdk/javascript/v1/mercadopago.js"></script>
+
+    <script type="text/javascript">
+        Mercadopago.setPublishableKey('APP_USR-a33040db-a987-4742-a2ce-499fd071c7cc')
+    </script>
+
+
+
+    <script type="text/javascript">
+
+        window.sendEvent = function (data) {
+            console.log(data)
+        }
+    </script>
+
+    <!-- <script src="https://js-sandbox.dlocal.com"></script> -->
+
+    <!-- <script type="text/javascript">
     window.__dlocal = dlocal('8bba6985-ddc9-4882-a5b1-28c522a85d71');
 
 
@@ -102,104 +178,105 @@
 
 
 
-<script type="text/javascript">
-    /**
-     * Created by shao_ on 2017/9/30.
-     */
+    <script type="text/javascript">
+            /**
+             * Created by shao_ on 2017/9/30.
+             */
 
-    (function () {
+            (function () {
 
-        function registerServiceWorker() {
-            return navigator.serviceWorker.register('/sw2.js',{
-                 scope: '.'
-            }).then(function (registration) {
-                console.log('Service worker successfully registered.')
-                return registration
-            }).catch(function (err) {
-                console.error('Unable to register service worker.', err)
-            })
-        }
+                function registerServiceWorker() {
+                    return navigator.serviceWorker.register('/sw2.js', {
+                        scope: '.'
+                    }).then(function (registration) {
+                        console.log('Service worker successfully registered.')
+                        return registration
+                    }).catch(function (err) {
+                        console.error('Unable to register service worker.', err)
+                    })
+                }
 
 
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function () {
-                registerServiceWorker().then(function(registration){
-                    // alert('sw2')
-                    console.log(registration);
-                });
-            })
-        }
-    })();
+                if ('serviceWorker' in navigator) {
+                    window.addEventListener('load', function () {
+                        registerServiceWorker().then(function (registration) {
+                            // alert('sw2')
+                            console.log(registration);
+                        });
+                    })
+                }
+            })();
 
-        
-    var deferredPrompt, btnAdd = document.getElementById("addtohome");
 
-    window.addEventListener('beforeinstallprompt', (e) => {
-         // alert('fuck2');
-      // Prevent Chrome 67 and earlier from automatically showing the prompt
-      e.preventDefault();
-      // Stash the event so it can be triggered later.
-      deferredPrompt = e;
-      // Update UI notify the user they can add to home screen
-      btnAdd.style.display = 'block';
-     
-    });
-    
-    
-    btnAdd.addEventListener('click', (e) => {
-      // hide our user interface that shows our A2HS button
-      btnAdd.style.display = 'none';
-      // Show the prompt
-      deferredPrompt.prompt();
-      // Wait for the user to respond to the prompt
-      deferredPrompt.userChoice
-        .then((choiceResult) => {
-          if (choiceResult.outcome === 'accepted') {
-            console.log('User accepted the A2HS prompt');
-          } else {
-            console.log('User dismissed the A2HS prompt');
-          }
-          deferredPrompt = null;
+        var deferredPrompt, btnAdd = document.getElementById("addtohome");
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // alert('fuck2');
+            // Prevent Chrome 67 and earlier from automatically showing the prompt
+            e.preventDefault();
+            // Stash the event so it can be triggered later.
+            deferredPrompt = e;
+            // Update UI notify the user they can add to home screen
+            btnAdd.style.display = 'block';
+
         });
-    });
-    
-    window.addEventListener('appinstalled', (evt) => {
-         alert('Installed');
-         app.logEvent('a2hs', 'installed');
-    });
-    
-    
-</script>
-
-<script>
-    window.fbAsyncInit = function() {
-     FB.init({
-       appId            : '628197333983380',
-       autoLogAppEvents : true,
-       xfbml            : true,
-       version          : 'v3.1'
-     });
-
-    
-   };
-
- 
-   (function(d, s, id){
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) {return;}
-      js = d.createElement(s); js.id = id;
-      js.src = "https://connect.facebook.net/en_US/sdk.js";
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
 
 
-    
-  
-     
- </script>
+        btnAdd.addEventListener('click', (e) => {
+            // hide our user interface that shows our A2HS button
+            btnAdd.style.display = 'none';
+            // Show the prompt
+            deferredPrompt.prompt();
+            // Wait for the user to respond to the prompt
+            deferredPrompt.userChoice
+                .then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the A2HS prompt');
+                    } else {
+                        console.log('User dismissed the A2HS prompt');
+                    }
+                    deferredPrompt = null;
+                });
+        });
 
- <script src="https://x.klarnacdn.net/kp/lib/v1/api.js"></script>
+        window.addEventListener('appinstalled', (evt) => {
+            alert('Installed');
+            app.logEvent('a2hs', 'installed');
+        });
+
+
+    </script>
+
+    <script>
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: '628197333983380',
+                autoLogAppEvents: true,
+                xfbml: true,
+                version: 'v3.1'
+            });
+
+
+        };
+
+
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) { return; }
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
+
+
+
+
+    </script>
+
+    <script src="https://x.klarnacdn.net/kp/lib/v1/api.js"></script>
 
 
 </body>
+
 </html>

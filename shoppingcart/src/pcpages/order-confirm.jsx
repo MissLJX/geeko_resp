@@ -708,7 +708,7 @@ const OrderConfirm = class extends React.Component {
 			}
 
 			{
-				this.state.confirmBanner && <div>
+				this.state.confirmBanner && <div style={{marginTop: 40}}>
 					<a href={this.state.confirmBanner.href} className="" data-source data-source-click data-title="shoppingcart" data-type={'Shopping Cart Banner'} data-content={this.state.confirmBanner.refId} data-position={1}>
 						<img style={{ display: 'block', width: '100%' }} src={this.state.confirmBanner.src} />
 					</a>

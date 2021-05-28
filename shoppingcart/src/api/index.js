@@ -223,4 +223,8 @@ export const selectGift = variantId => axios.post(`${VPATH}/shopping-cart/update
  //you can catch with
  export const product_get_catch_with = params => axios.get(`${VPATH}/shopping-cart/get-shopping-cart-recommended-products`, params)
 
+// export const product_get_catch_with = params => axios.get(`${VPATH}/product/anon/0/20/1/APP0050/list-by-menu`, params)
+
+
+ 
  export const addProduct = params => axios.post(`${VPATH}/shopping-cart/add-product`, params)

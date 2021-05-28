@@ -19,10 +19,6 @@ const Tip = styled.div`
 `
 
 const PROMOTIONHEAD = styled.div`
-	padding-left: 10px;
-	height: 40px;
-	background-color: #fff1f1;
-	
 	& > .__hd{
 		height:100%;
 		width:100%;
@@ -84,7 +80,7 @@ const PromotionHead = ({promotion, selected, selectHandle}) => <PROMOTIONHEAD>
 
 
 const BirdHead = ({promotion, selected, selectHandle, askClick}) => <PROMOTIONHEAD style={{height:'auto'}}>
-	<div className="x-table __hd __vm" style={{paddingTop:10, borderBottom:'none'}}>
+	<div className="x-table __hd __vm" style={{borderBottom:'none'}}>
 		{/* <div className="x-cell" style={{width:30}}>
 			<CheckBox onClick={ () => { selectHandle(!selected) } } className={selected ? 'selected' : ''}/>
 		</div> */}

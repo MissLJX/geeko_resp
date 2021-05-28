@@ -408,17 +408,17 @@ const ShoppingCart = class extends React.Component {
 
 		getMessage('M1142').then(({ result }) => {
 
-			try{
+			try {
 				var m1142 = JSON.parse(result.message)
-				if(m1142){
+				if (m1142) {
 					this.setState({
 						payImages: m1142.result,
 					})
 				}
-			}catch(e){
+			} catch (e) {
 
 			}
-			
+
 		})
 
 		if (window.Mercadopago) {
@@ -444,10 +444,51 @@ const ShoppingCart = class extends React.Component {
 				}
 			})
 		}
+
+		window.saveKlarnaAddress = callbackData => {
+			this.selectPayHandle({ id: 51 })
+			if (callbackData && callbackData.address) {
+				this.editAddress(
+					{
+						city: callbackData.address.city,
+						country: callbackData.address.country,
+						email: callbackData.email,
+						isDefaultAddress: true,
+						name: `${callbackData.first_name} ${callbackData.last_name}`,
+						phoneNumber: callbackData.phone,
+						state: callbackData.address.region,
+						streetAddress1: callbackData.address.street_address,
+						unit: callbackData.address.street_address2,
+						zipCode: callbackData.address.postal_code
+					}
+				)
+			}
+		}
+
+
+		window.notifyAfterpay = () => {
+			if (window.AfterPay) {
+				AfterPay.initializeForPopup({
+					countryCode: window.__country,
+					onCommenceCheckout: function (actions) {
+						/* retrieve afterpay token from your server */
+						/* then call `actions.resolve(token)` */
+						pay({ payMethod: '83' }).then(data => data.result).then(({ token }) => {
+							actions.resolve(token)
+						})
+					},
+					onComplete: function (data) {
+						/* handle success/failure of checkout */
+					},
+					target: '#afterpay-express-button',
+					shippingOptionRequired: false,
+				})
+			}
+		}
 	}
 
 	createKlarnaSession(paymethod) {
-		return klarna_create_session({payMethod: paymethod.id}).then(data => data.result)
+		return klarna_create_session({ payMethod: paymethod.id }).then(data => data.result)
 	}
 
 	initKlarna(paymethod) {
@@ -462,7 +503,7 @@ const ShoppingCart = class extends React.Component {
 
 	loadKlarna(paymethod) {
 		this.initKlarna(paymethod).then(() => {
-			klarna_get_params({payMethod: paymethod.id}).then(data => data.result).then(params => {
+			klarna_get_params({ payMethod: paymethod.id }).then(data => data.result).then(params => {
 
 				this.setState({
 					klarnaParams: params
@@ -476,7 +517,7 @@ const ShoppingCart = class extends React.Component {
 					"purchase_country": params.purchase_country,
 					"purchase_currency": params.purchase_currency,
 					"order_amount": params.order_amount,
-					"order_lines":params.order_lines
+					"order_lines": params.order_lines
 				}, function (res) {
 					console.debug(res)
 				})
@@ -756,7 +797,7 @@ const ShoppingCart = class extends React.Component {
 
 		let isCheckout = this.props.location.pathname && this.props.location.pathname.indexOf('/cart/checkout') >= 0
 
-		const {selectedPayMethod} = cart
+		const { selectedPayMethod } = cart
 
 		if (!payType) {
 			alert(__confirm_paymethod__)
@@ -954,7 +995,7 @@ const ShoppingCart = class extends React.Component {
 			}
 
 			this.dLocalPay({ payMethod, paymentMethodId, document: this.props.document })
-		}else if (payType === '27') {
+		} else if (payType === '27') {
 			const self = this
 			this.setState({
 				checking: true
@@ -962,36 +1003,36 @@ const ShoppingCart = class extends React.Component {
 
 			Klarna.Payments.authorize({
 				payment_method_category: selectedPayMethod.description
-			},{
+			}, {
 				"shipping_address": this.state.klarnaParams.shipping_address,
 				"billing_address": this.state.klarnaParams.shipping_address
 			}, function (res) {
-				
+
 				const {
 					authorization_token,
 					approved,
 					show_form
 				} = res
 
-				if(approved && authorization_token){
-					klarna_place_order({authorizationToken:authorization_token, payMethod}).then(data => data.result).then(response => {
+				if (approved && authorization_token) {
+					klarna_place_order({ authorizationToken: authorization_token, payMethod }).then(data => data.result).then(response => {
 
 						const {
 							order_id,
-    						redirect_url,
-    						fraud_status,
-    						authorized_payment_method,
+							redirect_url,
+							fraud_status,
+							authorized_payment_method,
 							correlation_id,
 							error_code,
 							error_messages
 						} = response
 
-						if(error_code){
+						if (error_code) {
 							alert(error_messages)
-							if(orderId && window.__is_login__){
+							if (orderId && window.__is_login__) {
 								self.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
 							}
-						}else if(fraud_status === "ACCEPTED"){
+						} else if (fraud_status === "ACCEPTED") {
 							window.location.href = redirect_url
 						}
 
@@ -1000,32 +1041,32 @@ const ShoppingCart = class extends React.Component {
 						alert(data.result)
 						self.setState({ checking: false })
 					})
-				}else{
+				} else {
 					self.setState({ checking: false })
 				}
 
 
-				
+
 			})
 
 
 
-		}else if(payType === '28'){
+		} else if (payType === '28') {
 			this.setState({
 				checking: true
 			})
-			pay({payMethod: selectedPayMethod.id}).then(data => {
+			pay({ payMethod: selectedPayMethod.id }).then(data => {
 				const payResult = data.result
-				if(payResult.success){
-					if(payResult.isFree){
+				if (payResult.success) {
+					if (payResult.isFree) {
 						window.location.href = ctx + '/order-confirm/' + result.transactionId
-					}else{
+					} else {
 						window.location.href = payResult.redirectCheckoutUrl
 					}
-				}else {
+				} else {
 					alert(payResult.details)
-							
-					if(payResult.orderId && window.__is_login__){
+
+					if (payResult.orderId && window.__is_login__) {
 						this.props.history.push(`${window.ctx || ''}/checkout/${payResult.orderId}`)
 					}
 				}
@@ -1034,9 +1075,9 @@ const ShoppingCart = class extends React.Component {
 				})
 
 			}).catch(data => {
-				if(data.result){
+				if (data.result) {
 					alert(data.result)
-				}else{
+				} else {
 					alert(data)
 				}
 				this.setState({
@@ -1044,11 +1085,11 @@ const ShoppingCart = class extends React.Component {
 				})
 
 			})
-		}else if(payType === '29'){
+		} else if (payType === '29') {
 			this.setState({
 				checking: true
 			})
-			get_pay_params({payMethod: selectedPayMethod.id}).then(({ result }) => {
+			get_pay_params({ payMethod: selectedPayMethod.id }).then(({ result }) => {
 				const { isFree, payURL, params, transactionId, orderId } = result
 				if (isFree) {
 					window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
@@ -1214,9 +1255,9 @@ const ShoppingCart = class extends React.Component {
 					showAddresses: false
 				})
 
-				const {cart} = this.props
+				const { cart } = this.props
 
-				if(cart.currency !== window.__currency__){
+				if (cart.currency !== window.__currency__) {
 					window.location.reload()
 				}
 			})
@@ -1433,9 +1474,9 @@ const ShoppingCart = class extends React.Component {
 						this.togglePaypalButton(this.actions)
 					}
 
-					const {cart} = this.props
+					const { cart } = this.props
 
-					if(cart.currency !== window.__currency__){
+					if (cart.currency !== window.__currency__) {
 						window.location.reload()
 					}
 				}).catch(() => {
@@ -1761,20 +1802,20 @@ const ShoppingCart = class extends React.Component {
 
 					) : (
 
-							<div className="x-table x-fw __fixed __vm" style={{ paddingTop: 15 }}>
-								<div className="x-cell" style={{ width: 362 }}>
-									<Address onEdit={this.addressEditHandle1.bind(this)} address={cart.shippingDetail} />
-								</div>
-								{
-									!window.token && window.__is_login__ && <div className="x-cell">
-										<AddressBTN onClick={this.chooseAnthorAddresHandle.bind(this)} style={{ marginBottom: 10 }}>{intl.formatMessage({ id: 'choose_anthor_address' })}</AddressBTN>
-										<AddressBTN onClick={() => { this.props.history.push(`${window.ctx || ''}${__route_root__}/address/add`) }} >+ {intl.formatMessage({ id: 'add_new_address' })}</AddressBTN>
-									</div>
-								}
-
+						<div className="x-table x-fw __fixed __vm" style={{ paddingTop: 15 }}>
+							<div className="x-cell" style={{ width: 362 }}>
+								<Address onEdit={this.addressEditHandle1.bind(this)} address={cart.shippingDetail} />
 							</div>
+							{
+								!window.token && window.__is_login__ && <div className="x-cell">
+									<AddressBTN onClick={this.chooseAnthorAddresHandle.bind(this)} style={{ marginBottom: 10 }}>{intl.formatMessage({ id: 'choose_anthor_address' })}</AddressBTN>
+									<AddressBTN onClick={() => { this.props.history.push(`${window.ctx || ''}${__route_root__}/address/add`) }} >+ {intl.formatMessage({ id: 'add_new_address' })}</AddressBTN>
+								</div>
+							}
 
-						)
+						</div>
+
+					)
 				}
 
 			</div>
@@ -1836,7 +1877,7 @@ const ShoppingCart = class extends React.Component {
 								<Box title={intl.formatMessage({ id: 'payment_method' })}>
 									<div style={{ paddingTop: 20 }}>
 										<PayMethods
-											
+
 											couponCode={this.props.couponCode}
 											cpf={this.props.cpf}
 											email={this.props.email}
@@ -2069,60 +2110,83 @@ const ShoppingCart = class extends React.Component {
 															this.props.payMethod === '1' ? <div id='ip-paypal-pay' style={{ marginTop: 30 }} ref={(c) => this.paypalRender(c, 'normal')} /> : (!this.state.checking ? <BigButton onClick={this.checkout.bind(this)} bgColor="#222" style={{ marginTop: 30, height: 45, lineHeight: '45px', textTransform: 'uppercase', fontSize: 18 }}>
 																{intl.formatMessage({ id: 'check_out' })}
 															</BigButton> : <BigButton bgColor="#999" style={{ marginTop: 30, height: 45, lineHeight: '45px' }}>
-																	{intl.formatMessage({ id: 'please_wait' })}...
+																{intl.formatMessage({ id: 'please_wait' })}...
 															</BigButton>)
 														}
 
 													</div> : (
-															window.token ? <div>
-																<BigButton onClick={this.quickPlace.bind(this)} bgColor="#e5004f" style={{ marginTop: 30, height: 45, lineHeight: '45px', textTransform: 'uppercase', fontSize: 18 }}>
-																	{intl.formatMessage({ id: 'place_order' })}
-																</BigButton>
-															</div> : <div>
+														window.token ? <div>
+															<BigButton onClick={this.quickPlace.bind(this)} bgColor="#e5004f" style={{ marginTop: 30, height: 45, lineHeight: '45px', textTransform: 'uppercase', fontSize: 18 }}>
+																{intl.formatMessage({ id: 'place_order' })}
+															</BigButton>
+														</div> : <div>
 
 
 
 
-																	<BigButton onClick={
-																		() => {
-																			this.props.history.push(`${window.ctx || ''}${__route_root__}/checkout`)
-																		}
-																	} bgColor="#222" style={{ marginTop: 30, height: 45, lineHeight: '45px', textTransform: 'uppercase', fontSize: 18 }}>
-																		{intl.formatMessage({ id: 'proceed_checkout' })}
-																	</BigButton>
+															<BigButton onClick={
+																() => {
+																	this.props.history.push(`${window.ctx || ''}${__route_root__}/checkout`)
+																}
+															} bgColor="#222" style={{ marginTop: 30, height: 45, lineHeight: '45px', textTransform: 'uppercase', fontSize: 18 }}>
+																{intl.formatMessage({ id: 'proceed_checkout' })}
+															</BigButton>
+
+															{
+																hasQuickPay && <React.Fragment>
+
+																	<div style={{ color: '#999', textAlign: 'center', height: 30, lineHeight: '30px', textTransform: 'uppercase' }}>
+																		{intl.formatMessage({ id: 'or' })}
+																	</div>
 
 																	{
-																		hasQuickPay && <React.Fragment>
-
-																			<div style={{ color: '#999', textAlign: 'center', height: 30, lineHeight: '30px', textTransform: 'uppercase' }}>
-																				{intl.formatMessage({ id: 'or' })}
-																			</div>
-
-																			{
-																				cart.paypalDiscountMessage && <DISCOUNTTIP style={{ marginBottom: 10, display: 'inline-block' }}>
-																					<span dangerouslySetInnerHTML={{ __html: cart.paypalDiscountMessage }} />
-																				</DISCOUNTTIP>
-																			}
-
-																			<div id='ip-paypal-pay' ref={(c) => this.paypalRender(c, 'quick')} />
-
-
-
-
-
-																		</React.Fragment>
-
+																		cart.paypalDiscountMessage && <DISCOUNTTIP style={{ marginBottom: 10, display: 'inline-block' }}>
+																			<span dangerouslySetInnerHTML={{ __html: cart.paypalDiscountMessage }} />
+																		</DISCOUNTTIP>
 																	}
 
-																</div>
+																	<div id='ip-paypal-pay' ref={(c) => this.paypalRender(c, 'quick')} />
 
-														)
+
+
+
+
+																</React.Fragment>
+
+															}
+
+															<div style={{ color: '#999', textAlign: 'center', height: 30, lineHeight: '30px', textTransform: 'uppercase' }}>
+																{intl.formatMessage({ id: 'or' })}
+															</div>
+
+															<klarna-express-button
+																ref={c => {
+																	window.renderKlarna()
+																}}
+																data-locale="en-US"
+																data-theme="default"
+															/>
+
+															<button 
+																ref={ c => {
+																		window.renderAfterpay()
+																	} 
+																}
+																id="afterpay-express-button"
+																data-afterpay-entry-point="cart"
+																data-afterpay-checkout-button-label="Checkout using Afterpay Express">
+																Checkout using Afterpay Express
+															</button>
+
+														</div>
+
+													)
 
 												) : (
-														<BigButton bgColor="#999" style={{ marginTop: 30, cursor: 'not-allowed', height: 45, lineHeight: '45px', textTransform: 'uppercase', fontSize: 18 }}>
-															{intl.formatMessage({ id: 'check_out' })}
-														</BigButton>
-													)
+													<BigButton bgColor="#999" style={{ marginTop: 30, cursor: 'not-allowed', height: 45, lineHeight: '45px', textTransform: 'uppercase', fontSize: 18 }}>
+														{intl.formatMessage({ id: 'check_out' })}
+													</BigButton>
+												)
 											}
 
 
@@ -2141,11 +2205,11 @@ const ShoppingCart = class extends React.Component {
 														</div>
 													</div>
 												</MessageTip> : (
-														cart.messages && cart.messages.orderSummaryMsg && <MessageTip style={{ marginTop: 20 }}>
-															<span dangerouslySetInnerHTML={{ __html: cart.messages.orderSummaryMsg }} />
-														</MessageTip>
+													cart.messages && cart.messages.orderSummaryMsg && <MessageTip style={{ marginTop: 20 }}>
+														<span dangerouslySetInnerHTML={{ __html: cart.messages.orderSummaryMsg }} />
+													</MessageTip>
 
-													)
+												)
 											}
 
 
@@ -2154,7 +2218,7 @@ const ShoppingCart = class extends React.Component {
 													{intl.formatMessage({ id: 'we_accept' })}
 												</div>
 												<div style={{ marginTop: 10 }}>
-													<img style={{ width: '100%' }} src={((this.state.payImages||[]).find(i => i.lang === country) || (this.state.payImages||[]).find(i => i.lang === 'other') || {}).imageUrl} />
+													<img style={{ width: '100%' }} src={((this.state.payImages || []).find(i => i.lang === country) || (this.state.payImages || []).find(i => i.lang === 'other') || {}).imageUrl} />
 												</div>
 											</div>
 
