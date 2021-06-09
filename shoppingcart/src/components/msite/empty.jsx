@@ -49,7 +49,11 @@ export default () => <Empty>
 	  window.__is_login__ ? <div>
 			<EmptyButton href={`${window.ctx}/`}>Shop Now</EmptyButton>
 	  </div>: <div>
-	  		<EmptyButton href={`${window.ctx}/i/login`}>Sign in / Register</EmptyButton>
+	  		<EmptyButton href={`${window.ctx}/${
+									/*global siteType b:true*/
+									/*eslint no-undef: "error"*/
+									siteType === 'new' ? 'page' : 'i'
+								}/login?redirectUrl=${encodeURIComponent(window.location.href)}&loginPage=1`}>Sign in / Register</EmptyButton>
 			<EmptyButton style={{marginTop: 12}} className="outlined" href={`${window.ctx}/`}>Shop Now</EmptyButton>
 	  </div>
   }

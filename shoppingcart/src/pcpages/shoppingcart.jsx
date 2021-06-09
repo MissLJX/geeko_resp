@@ -558,6 +558,9 @@ const ShoppingCart = class extends React.Component {
 	paypalRender(c, method) {
 		const self = this
 
+		if(!window.paypal)
+			return
+
 
 
 		const __confirm_address__ = this.props.intl.formatMessage({ id: 'please_confirm_address' })
@@ -2155,9 +2158,6 @@ const ShoppingCart = class extends React.Component {
 
 															}
 
-															<div style={{ color: '#999', textAlign: 'center', height: 30, lineHeight: '30px', textTransform: 'uppercase' }}>
-																{intl.formatMessage({ id: 'or' })}
-															</div>
 
 															<klarna-express-button
 																ref={c => {
@@ -2167,7 +2167,7 @@ const ShoppingCart = class extends React.Component {
 																data-theme="default"
 															/>
 
-															<button 
+															{/* <button 
 																ref={ c => {
 																		window.renderAfterpay()
 																	} 
@@ -2176,7 +2176,7 @@ const ShoppingCart = class extends React.Component {
 																data-afterpay-entry-point="cart"
 																data-afterpay-checkout-button-label="Checkout using Afterpay Express">
 																Checkout using Afterpay Express
-															</button>
+															</button> */}
 
 														</div>
 
