@@ -467,23 +467,23 @@ const ShoppingCart = class extends React.Component {
 
 
 		window.notifyAfterpay = () => {
-			if (window.AfterPay) {
-				AfterPay.initializeForPopup({
-					countryCode: window.__country,
-					onCommenceCheckout: function (actions) {
-						/* retrieve afterpay token from your server */
-						/* then call `actions.resolve(token)` */
-						pay({ payMethod: '83' }).then(data => data.result).then(({ token }) => {
-							actions.resolve(token)
-						})
-					},
-					onComplete: function (data) {
-						/* handle success/failure of checkout */
-					},
-					target: '#afterpay-express-button',
-					shippingOptionRequired: false,
-				})
-			}
+			// if (window.AfterPay) {
+			// 	AfterPay.initializeForPopup({
+			// 		countryCode: window.__country,
+			// 		onCommenceCheckout: function (actions) {
+			// 			/* retrieve afterpay token from your server */
+			// 			/* then call `actions.resolve(token)` */
+			// 			pay({ payMethod: '83' }).then(data => data.result).then(({ token }) => {
+			// 				actions.resolve(token)
+			// 			})
+			// 		},
+			// 		onComplete: function (data) {
+			// 			/* handle success/failure of checkout */
+			// 		},
+			// 		target: '#afterpay-express-button',
+			// 		shippingOptionRequired: false,
+			// 	})
+			// }
 		}
 	}
 

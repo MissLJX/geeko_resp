@@ -9,7 +9,7 @@
     <script type="text/javascript">
         window.siteName = 'Boutiquefeel'
         window.accessToken = 'f95f0eca-4248-406c-8908-c3b1caf79e0b'
-        window.wid = 'f62f0f2b-8271-49ec-933d-ce4226d1a707'
+        window.wid = '2f40a9fd-6231-4962-93a3-c17037d9a139'
         window.secret = 'A2RHUmDn9Y1jLtaGrqDGhVtM1D1mX6V7xkPySRII2Ve9nM0+7EhSXK/gn6uS6mEVWDX7F6xCPNk='
         window.lang = 'en'
         window.__is_login__ = false
@@ -122,20 +122,20 @@ merchant_key=789a8ae797d61ce571e665a480f064cd56721c1b044630d2b3f74943ffd34d13c18
         }
 
         window.renderAfterpay = function () {
-            // if (!window.afterpayRendered) {
+            if (!window.afterpayRendered) {
 
-            //     window.initAfterpay = function () {
-            //         alert(window.AfterPay)
-            //         window.notifyAfterpay()
-            //     }
+                window.initAfterpay = function () {
+                    alert(window.AfterPay)
+                    window.notifyAfterpay()
+                }
 
-            //     window.afterpayRendered = true
-            //     var afterpay_script = document.createElement('script')
-            //     afterpay_script.setAttribute('src', 'https://portal.sandbox.afterpay.com/afterpay.js?merchant_key=789a8ae797d61ce571e665a480f064cd56721c1b044630d2b3f74943ffd34d13c18db1a787cb1e176d395349afb23927edccaf72c2efc8627dfe0a8e8bd1d599')
-            //     afterpay_script.setAttribute('async', true)
-            //     afterpay_script.onload = window.initAfterpay;
-            //     document.body.appendChild(afterpay_script)
-            // }
+                window.afterpayRendered = true
+                var afterpay_script = document.createElement('script')
+                afterpay_script.setAttribute('src', 'https://portal.sandbox.afterpay.com/afterpay.js?merchant_key=chicmekeyglobal')
+                afterpay_script.setAttribute('async', true)
+                afterpay_script.onload = window.initAfterpay;
+                document.body.appendChild(afterpay_script)
+            }
         }
 
 
