@@ -685,15 +685,15 @@ const ShoppingCart = class extends React.Component {
 			}
 		}
 
-		if (scrollTop > this.scrollTop) {
-			if (this.couponAlert) {
-				this.couponAlert.classList.add('closed')
-			}
-		} else {
-			if (this.couponAlert && documentHeight - scrollTop > windowHeight) {
-				this.couponAlert.classList.remove('closed')
-			}
-		}
+		// if (scrollTop > this.scrollTop) {
+		// 	if (this.couponAlert) {
+		// 		this.couponAlert.classList.add('closed')
+		// 	}
+		// } else {
+		// 	if (this.couponAlert && documentHeight - scrollTop > windowHeight) {
+		// 		this.couponAlert.classList.remove('closed')
+		// 	}
+		// }
 
 
 		this.scrollTop = scrollTop
@@ -3114,9 +3114,9 @@ const ShoppingCart = class extends React.Component {
 											</SUCCESSTIP>
 										}
 
-										{
+										{/* {
 											(!this.state.couponBanner || !this.state.couponBanner.enable) && cart.messages && cart.messages.couponMsg && <CouponAlert onClick={() => { this.props.history.push(`${window.ctx || ''}${__route_root__}/coupons`) }} innerRef={c => this.couponAlert = c} coupon={cart.coupon} couponMsg={cart.messages ? cart.messages.couponMsg : null} />
-										}
+										} */}
 
 
 
