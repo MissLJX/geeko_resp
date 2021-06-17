@@ -189,6 +189,8 @@ export const saveTempAddress = (address) => axios.post(`${VPATH}/pay/save-addres
 export const getGifts = collectionId => axios.get(`${VPATH}/product/0/20/${collectionId}/c/show`)
 export const getGiftId = () => axios.get(`/context/anon/get-gift-collection-id`)
 export const selectGift = variantId => axios.post(`${VPATH}/shopping-cart/update-gift`, {variantId})
+export const removeGift = variantId => axios.post(`${VPATH}/shopping-cart/remove-gift`, {variantId})
+
 
 /**
  分享页面添加接口

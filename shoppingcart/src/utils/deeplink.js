@@ -9,6 +9,13 @@ const PAGE_TRENDING = isNew? '/page/trending-now': '/i/trending-now'
 const PAGE_CATEGORY = isNew? '/page/category/products?id=': '/i/category/products?categoryId='
 
 export default ( deepLink ) => {
+	if(!deepLink) return '#'
+
+	if(typeof deepLink === 'string'){
+		deepLink = JSON.parse(deepLink)
+	}
+
+
 	const { type, params } = deepLink
 	let _url
 	switch (type) {

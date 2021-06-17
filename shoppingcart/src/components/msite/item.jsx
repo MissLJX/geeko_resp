@@ -221,6 +221,18 @@ const REDICON = styled.span`
   border-radius: 2px;
 `
 
+const GIFT = styled.span`
+    background-color: #fff0f0;
+    border: solid 1px #e64545;
+    display: inline-block;
+    text-align: center;
+    padding: 0 2px;
+    font-size: 12px;
+    color: #e64545;
+    text-transform: uppercase;
+    margin-right: 2px;
+`
+
 
 const ItemSwiper = class extends React.Component {
   constructor(props) {
@@ -283,7 +295,7 @@ const Item = class extends React.Component {
 
   render() {
     const props = this.props
-    const { intl, serverTime, disabledFunc, item } = props
+    const { intl, serverTime, disabledFunc, item, isGift } = props
     const isInvalid = disabledFunc(item)
     return (
       <React.Fragment>
@@ -301,7 +313,7 @@ const Item = class extends React.Component {
         <ItemSwiper item={props.item} deleteHandle={this.itemDelete.bind(this)}>
           <ItemWrapper className={`${isInvalid ? 'disabled' : ''}`}>
             <div style={{ width: props.ivalidItem ? 0 : 30 }}>
-              {!props.ivalidItem && <CheckBox className={props.item.selected ? 'selected' : ''} onClick={(evt) => { props.itemSelect(props.item.variantId, !props.item.selected) }} />}
+              {!props.ivalidItem && !!!isGift && <CheckBox className={props.item.selected ? 'selected' : ''} onClick={(evt) => { props.itemSelect(props.item.variantId, !props.item.selected) }} />}
             </div>
             <div>
               <ImageContainer>
@@ -318,7 +330,12 @@ const Item = class extends React.Component {
             <div className="x-flex __column __between">
 
               <div>
-                <Ellipsis style={{ maxWidth: 178 }}><Grey>{props.item.productName}</Grey></Ellipsis>
+                <Ellipsis style={{ maxWidth: 178 }}>
+                  {
+                    isGift&& <GIFT>Gift</GIFT>
+                  }
+                  <Grey>{props.item.productName}</Grey>
+                </Ellipsis>
 
 
                 <div style={{ height: '30px', paddingTop: 10, position: 'relative' }}>
@@ -329,7 +346,11 @@ const Item = class extends React.Component {
                     </Red> <del style={{fontSize:12, marginLeft: 5}}><Money money={props.item.itemPrice} /></del></React.Fragment> : <span style={{ fontSize: '18px', fontFamily: 'SlatePro-Medium' }}><Money money={props.item.realPrice} /></span>
                   }
                   {
-                    !props.ivalidItem && <span onClick={evt => { this.itemWish(item) }} className="iconfont" style={{ position: 'absolute', right: 0, top: 14, cursor: 'pointer' }}>&#xe7b5;</span>
+                    !props.ivalidItem && !isGift && <span onClick={evt => { this.itemWish(item) }} className="iconfont" style={{ position: 'absolute', right: 0, top: 14, cursor: 'pointer' }}>&#xe7b5;</span>
+                  }
+
+                  {
+                    isGift && <span onClick={evt => { this.itemDelete(item) }} className="iconfont" style={{ position: 'absolute', right: 0, top: 14, cursor: 'pointer' }}>&#xe750;</span>
                   }
                 </div>
               </div>
@@ -339,7 +360,7 @@ const Item = class extends React.Component {
                 <CanShipTip onClick={() => { props.overseasHandle(props.item.variantId) }} className="__right">Can ship from overseas?</CanShipTip>
               </div> : (!props.ivalidItem && <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <SizeColor onClick={(evt) => { this.itemEdit(props.item) }} size={props.item.size} color={props.item.color} />
-                {!props.ivalidItem ? <Quantity quantity={props.item.quantity} onChange={(quantity, isRemove) => { props.quantityChange(props.item.variantId, quantity, isRemove) }} /> : <Grey>{intl.formatMessage({ id: 'out_of_stock' })}</Grey>}
+                {!props.ivalidItem ? (!!!isGift && <Quantity quantity={props.item.quantity} onChange={(quantity, isRemove) => { props.quantityChange(props.item.variantId, quantity, isRemove) }} />) : <Grey>{intl.formatMessage({ id: 'out_of_stock' })}</Grey>}
               </div>)}
 
 

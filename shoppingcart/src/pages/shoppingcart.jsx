@@ -34,7 +34,7 @@ import _ from 'lodash'
 import PayMethodList from '../components/msite/paymethod-list.jsx'
 import { BigButton } from '../components/msite/buttons.jsx'
 import {
-	payDLocal, useMercadocard, mercadopay, usePoint, useInsurance, creditpay, normalpaypal, quickpaypal, usecreditcard, movetooverseas, getMessage,getCountryMessage, placepaypal, givingCoupon, atmPay, ticketPay, getSafeCharge, getApacPay, apacPay, useMercadoCoupon, placeorder,
+	payDLocal, useMercadocard, mercadopay, usePoint, useInsurance, creditpay, normalpaypal, quickpaypal, usecreditcard, movetooverseas, getMessage, getCountryMessage, placepaypal, givingCoupon, atmPay, ticketPay, getSafeCharge, getApacPay, apacPay, useMercadoCoupon, placeorder,
 	getJwt,
 	getLookup,
 	oceanpay3d,
@@ -46,7 +46,9 @@ import {
 	klarna_place_order,
 	pay,
 	product_get_catch_with,
-	get_pay_params
+	get_pay_params,
+	selectGift,
+	removeGift
 
 } from '../api'
 import { __route_root__, storage, producturl, unitprice } from '../utils/utils.js'
@@ -61,6 +63,9 @@ import Loadable from 'react-loadable'
 
 import ShippingMethodHead from '../components/msite/shipping-method-head.jsx'
 import { SwiperNormalProducts } from '../components/msite/product-items.jsx'
+import SwiperGifts from '../components/msite/gifts.jsx'
+import Items from '../components/msite/items.jsx'
+import depplink from '../utils/deeplink'
 
 
 
@@ -122,10 +127,11 @@ const Tip = styled.div`
 	padding: 10px;
 	line-height: 18px;
 	font-size: 12px;
+
 	&.__fixed{
 		position: fixed;
 		width: 100%;
-		z-index: 1;
+		z-index: 5;
 		top: 44px;
 		left: 0;
 	}
@@ -202,13 +208,21 @@ const DashedLine = styled.div`
 
 const IconMessage = styled.div`
 	padding: 13px 12px;
-	display: talbe;
+	display: flex;
 	width: 100%;
+	align-items: center;
 	& > div{
-		display: table-cell;
-		vertical-align: middle;
+		
 		&:first-child{
-			width: 27px;
+			width: 30px;
+		}
+
+		&:nth-child(2){
+			flex: 1;
+		}
+
+		&:nth-child(3){
+			text-align: right;
 		}
 	}
 `
@@ -295,7 +309,7 @@ const ShoppingBody = styled.div`
 		top: 0;
 		left: 0;
 		background-color: #fff;
-		z-index: 1;
+		z-index: 5;
 	}
 	& > .__bd{
 		padding-top: 44px;
@@ -510,6 +524,8 @@ const ShoppingCart = class extends React.Component {
 		this.itemEdit = this.itemEdit.bind(this)
 		this.itemConfirmHandle = this.itemConfirmHandle.bind(this)
 		this.viewConfirm = this.viewConfirm.bind(this)
+		this.giftConfirm = this.giftConfirm.bind(this)
+		this.giftRemove = this.giftRemove.bind(this)
 		this.handleInputChange = this.handleInputChange.bind(this)
 		this.sdkResponseHandler = this.sdkResponseHandler.bind(this)
 		this.scrollhandle = this.scrollhandle.bind(this)
@@ -636,7 +652,7 @@ const ShoppingCart = class extends React.Component {
 			})
 		})
 
-		getCountryMessage('M1392').then(({result}) => {
+		getCountryMessage('M1392').then(({ result }) => {
 			this.setState({
 				cartBanner: result
 			})
@@ -1367,6 +1383,56 @@ const ShoppingCart = class extends React.Component {
 			})
 		}).catch(data => {
 			alert(data.result || data)
+		})
+	}
+
+	giftConfirm(oldId, newId, quantity) {
+		this.setState({
+			loading: true
+		})
+		selectGift(newId).then(data => data.result).then(cart => {
+			this.setState({
+				viewing: false,
+				viewingItem: null
+			})
+			this.props.REFRESHCART(cart).then(cart => {
+				this.setState({
+					loading: false
+				})
+			}).catch(() => {
+				this.setState({
+					loading: false
+				})
+			
+			})
+		}).catch(() => {
+			this.setState({
+				loading: false
+			})
+			
+		})
+	}
+
+	giftRemove(variantId){
+		this.setState({
+			loading: true
+		})
+		removeGift(variantId).then(data => data.result).then(cart => {
+			this.props.REFRESHCART(cart).then(cart => {
+				this.setState({
+					loading: false
+				})
+			}).catch(() => {
+				this.setState({
+					loading: false
+				})
+				
+			})
+		}).catch(() => {
+			this.setState({
+				loading: false
+			})
+			
 		})
 	}
 
@@ -2264,6 +2330,8 @@ const ShoppingCart = class extends React.Component {
 		let isprogresspage, country, formatedData, invalidItems, cancheckout, hasLocalItems, sendCouponMessage, couponcountdown, totalCount = 0, hasOverseas, hasQuickPay
 		let gifts
 		let allSelected
+		let giftList
+
 		if (cart) {
 
 			isprogresspage = !window.token && (window.__is_login__ || (cart && cart.shippingDetail) || (this.props.location.pathname && this.props.location.pathname.indexOf('/cart/checkout') >= 0))
@@ -2284,6 +2352,12 @@ const ShoppingCart = class extends React.Component {
 			country = this.props.cart.shippingDetail && this.props.cart.shippingDetail.country ? this.props.cart.shippingDetail.country.value : window.__country
 			tcMethod = this.getTcMethod()
 			gifts = cart.gifts
+			giftList = cart.giftList
+			// giftList = [
+			// 	{id: '51b9af3e-e588-454e-bafc-9b2b4a331e6b',pcMainImage: '1l6T0V2D5e7j5X645e9s4O336m-14921', name: 'Give me a reason to prove me wrong', price: {amount: '0', unit: '$'}, msrp: {amount: '10', unit: '$'}},
+			// 	{id: '5fd3c997-4d17-43d5-bf2e-0f26fabff1db',pcMainImage: '5fd3c997-4d17-43d5-bf2e-0f26fabff1db-54534-pc-sec', name: 'Give me a reason to prove me wrong', price: {amount: '0', unit: '$'}, msrp: {amount: '20', unit: '$'}},
+			// 	{id: '191f7188-5578-4427-a700-326ddbc3f08f',pcMainImage: '191f7188-5578-4427-a700-326ddbc3f08f-53915-pc', name: 'Give me a reason to prove me wrong', price: {amount: '0', unit: '$'}, msrp: {amount: '30', unit: '$'}}
+			// ]
 		}
 
 		const TipModal = Tip
@@ -2311,20 +2385,20 @@ const ShoppingCart = class extends React.Component {
 					</div>
 					<div className="__bd">
 						{
-							loading ? <Loading /> : (empty ? <div style={{minHeight:'100vh', backgroundColor:'#fff'}}>
+							loading ? <Loading /> : (empty ? <div style={{ minHeight: '100vh', backgroundColor: '#fff' }}>
 								<Empty />
 
 								{
-									this.state.cartBanner && <div style={{borderTop: '8px solid #f7f7f7'}}>
+									this.state.cartBanner && <div style={{ borderTop: '8px solid #f7f7f7' }}>
 										<a href={this.state.cartBanner.href} className="" data-source data-source-click data-title="shoppingcart" data-type={'Shopping Cart Banner'} data-content={this.state.cartBanner.refId} data-position={1}>
-											<img style={{display:'block', width:'100%'}} src={this.state.cartBanner.src}/>
+											<img style={{ display: 'block', width: '100%' }} src={this.state.cartBanner.src} />
 										</a>
 									</div>
 								}
 
 
 								{
-									this.state.alsolikes && this.state.alsolikes.length > 0 &&  <Box style={{borderTop: '8px solid #f7f7f7'}}>
+									this.state.alsolikes && this.state.alsolikes.length > 0 && <Box style={{ borderTop: '8px solid #f7f7f7' }}>
 										<ALSOLIKES innerRef={this.alsoRef.bind(this)} data-source type="shopping_cart_match_with" data-column="shopping_cart_match_with" data-title="shoppingcart" data-type="shopping_cart_match_with" data-content="You Might Like to Fill it With" data-position="2">
 											<div className="__hd">
 												<FormattedMessage id="you_can_match_width" />
@@ -2345,8 +2419,8 @@ const ShoppingCart = class extends React.Component {
 
 									</Box>
 								}
-								
-								
+
+
 
 							</div> : (
 								cart && (
@@ -2423,24 +2497,84 @@ const ShoppingCart = class extends React.Component {
 														<div>
 															<span dangerouslySetInnerHTML={{ __html: cart.messages.shippingMsg }} />
 														</div>
-														{/* <div>
-															<span style={{ fontFamily: 'SlatePro-Medium', fontSize: 13 }}><FormattedMessage id="add" /> {'>'}</span>
-														</div> */}
+														<div>
+															<a href={depplink(cart.messages.shippingMsgLink)} style={{ fontFamily: 'SlatePro-Medium', fontSize: 13, textDecoration:'none', color: '#222' }}><FormattedMessage id="add" /> {'>'}</a>
+														</div>
 													</IconMessage>
 												</Box>
 											}
 
 											{
-												cart.messages && cart.messages.couponMsg && this.state.couponBanner && this.state.couponBanner.enable && <Box>
+												cart.messages && cart.messages.couponMsg && <Box>
+													<IconMessage>
+														<div>
+															<span style={{position:'relative', top: 2}} className="iconfont">&#xe6c2;</span>
+														</div>
+														<div>
+															<span dangerouslySetInnerHTML={{ __html: cart.messages.couponMsg }} />
+														</div>
+														<div>
+															<a href={depplink(cart.messages.couponMsgLink)} style={{ fontFamily: 'SlatePro-Medium', fontSize: 13, textDecoration:'none', color: '#222' }}><FormattedMessage id="add" /> {'>'}</a>
+														</div>
+													</IconMessage>
+												</Box>
+											}
+
+											{/* {
+												cart.messages && cart.messages.couponMsg && <Box>
 													<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 12px' }}>
 														<div>
 															<div style={{ fontFamily: 'SlatePro-Medium', fontSize: 16 }}><FormattedMessage id="addonitems" /></div>
 															<div style={{ marginTop: 4 }} dangerouslySetInnerHTML={{ __html: cart.messages.couponMsg }} />
 														</div>
 														<div>
-															<a href={this.state.couponBanner ? this.state.couponBanner.message : '#'} style={{ textDecoration: 'none', color: '#222', fontFamily: 'SlatePro-Medium', fontSize: 13 }}><FormattedMessage id="add" /> &gt;</a>
+															<a href={'#'} style={{ textDecoration: 'none', color: '#222', fontFamily: 'SlatePro-Medium', fontSize: 13 }}><FormattedMessage id="add" /> &gt;</a>
 														</div>
 													</div>
+												</Box>
+											} */}
+
+
+											{
+												giftList && giftList.length > 0 && <Box>
+													<SwiperGifts onSelect={(vairant, product) => {
+
+														this.setState({
+															viewingItem: {
+																productId: product.id,
+																variantId: vairant.id,
+																quantity: 1,
+																isGift: true
+															},
+															viewing: true
+														})
+													}} products={giftList} giftWarnMsg={cart.giftWarnMsg} canBuyGift={cart.canBuyGift}/>
+												</Box>
+											}
+
+											{
+												gifts && gifts.length > 0 && <Box>
+													<Items serverTime={this.props.serverTime}
+														disabledFunc={() => {}}
+														quantityChange={() => {}}
+														itemEdit={item => {
+															this.setState({
+																viewingItem: {
+																	productId: item.productId,
+																	variantId: item.variantId,
+																	quantity: 1,
+																	isGift: true
+																},
+																viewing: true
+															})
+														}}
+														itemDelete={(item) => {
+															this.giftRemove(item.variantId)
+														}}
+														itemSelect={(variantId, selected) => {  }}
+														items={gifts}
+														isGift={true}
+														/>
 												</Box>
 											}
 
@@ -2505,42 +2639,11 @@ const ShoppingCart = class extends React.Component {
 												))
 											}
 
+											
 
 
-											{
-												gifts && gifts.length > 0 && <Box>
-													<div style={{ padding: 10 }}>
-														<div>
-															<span className="iconfont" style={{ color: '#ff8454', fontSize: 30, verticalAlign: 'middle' }}>&#xec45;</span>
-															<span style={{ fontWeight: 'bold', verticalAlign: 'middle' }}>Free Gift</span>
-														</div>
-														<div className="x-table" style={{ width: '100%', tableLayout: 'fixed', marginTop: 10 }}>
-															<div className="x-cell" style={{ width: 40, verticalAlign: 'middle' }}>
-																<a style={{ textDecoration: 'none' }} href={producturl({ id: gifts[0].productId, name: gifts[0].productName, parentSku: gifts[0].parentSku })}>
-																	<img style={{ display: 'inline-block', width: '100%' }} src={gifts[0].imageUrl} />
-																</a>
 
-															</div>
-															<div className="x-cell" style={{ paddingLeft: 10, verticalAlign: 'middle' }}>
-																<Ellipsis>
-																	<span style={{ display: 'inline-block', lineHeight: '14px', fontSize: 12, color: '#e64545', border: '1px solid #e64545', paddingLeft: 5, paddingRight: 5 }}>
-																		Gift
-													</span>
-																	<span style={{ lineHeight: '14px', fontSize: 12, marginLeft: 10 }}>
-																		{gifts[0].productName}
-																	</span>
-																</Ellipsis>
-																<div style={{ marginTop: 10 }}>
-																	<Red>{unitprice(gifts[0].realPrice)}</Red>
-																	<Link style={{ float: 'right', color: '#e64545' }} to={`${__route_root__}/gifts`}>View gift </Link>
-																</div>
-
-															</div>
-														</div>
-													</div>
-
-												</Box>
-											}
+											
 
 											{
 												cart.giftWarnMsg && <Box>
@@ -2884,7 +2987,7 @@ const ShoppingCart = class extends React.Component {
 												<React.Fragment>
 													<Mask onClick={() => { this.setState({ viewing: false }) }} />
 													<ProductEditor onClose={() => { this.setState({ viewing: false }) }}
-														itemConfirmHandle={this.viewConfirm}
+														itemConfirmHandle={!!this.state.viewingItem && !!this.state.viewingItem.isGift ? this.giftConfirm : this.viewConfirm}
 														btnMessage={<FormattedMessage id="addtocart" />}
 														item={this.state.viewingItem} />
 												</React.Fragment>

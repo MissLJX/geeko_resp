@@ -11,7 +11,6 @@ import Loading from './components/msite/refreshing.jsx'
 import Loading1 from './components/msite/loading.jsx'
 
 import { connect } from 'react-redux'
-import 'swiper/swiper.scss'
 
 const AddressModal = Loadable({
 	loader: () => import(/* webpackChunkName: "page--address-modal" */ './pages/address-modal.jsx'),

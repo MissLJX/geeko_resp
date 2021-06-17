@@ -1,9 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import {Modal} from './modal.jsx'
+import { Modal } from './modal.jsx'
 
-import {FormattedMessage} from 'react-intl'
+import { FormattedMessage } from 'react-intl'
 
 import { BigButton } from '../msite/buttons.jsx'
 
@@ -105,7 +105,7 @@ const OPBTN = styled.span`
 `
 
 export default class extends React.Component {
-	constructor (props) {
+	constructor(props) {
 		super(props)
 		this.state = {
 			selectedProduct: null,
@@ -114,11 +114,11 @@ export default class extends React.Component {
 		}
 	}
 
-	existVariant (product, variantId) {
+	existVariant(product, variantId) {
 		return product.variants && product.variants.find(v => v.id === variantId)
 	}
 
-	componentWillMount () {
+	componentWillMount() {
 		// 预处理
 		const { products, productId, variantId } = this.props
 
@@ -138,21 +138,21 @@ export default class extends React.Component {
 		})
 	}
 
-	setProductHandle (product) {
+	setProductHandle(product) {
 		this.setState({
 			selectedProduct: product,
 			selectedVariant: product.variants[0]
 		})
 	}
 
-	editHandle () {
+	editHandle() {
 		const newVaraintId = this.state.selectedVariant.id
 		const newQuantity = this.state.selectedQuantity
 
 		this.props.editHandle(this.props.variantId, newVaraintId, newQuantity)
 	}
 
-	changeQuantity (op) {
+	changeQuantity(op) {
 		if (op === '+') {
 			this.setState({
 				selectedQuantity: this.state.selectedQuantity + 1
@@ -166,78 +166,82 @@ export default class extends React.Component {
 		}
 	}
 
-	render () {
-		const { products } = this.props
-		const { selectedVariant, selectedProduct, selectedQuantity} = this.state
+	render() {
+		const { products, isGift } = this.props
+		const { selectedVariant, selectedProduct, selectedQuantity } = this.state
 
 
 		return <Modal onClose={this.props.onClose}>
 			<EDITOR>
 				<LINE className="x-table x-fw __vt __fixed">
-					<div className="x-cell" style={{paddingTop: 15}}>
-						<LABEL><FormattedMessage id="color"/></LABEL>
+					<div className="x-cell" style={{ paddingTop: 15 }}>
+						<LABEL><FormattedMessage id="color" /></LABEL>
 					</div>
 
 					<div className="x-cell">
 						<BLOCKS>
 							{
 								products.map((product, index) => <div className="__block" key={index}>
-									<IMAGE onClick={ () => { this.setProductHandle(product) }} className={ selectedProduct.id === product.id && this.existVariant(product, selectedVariant.id) ? '__selected' : '' } style={{backgroundImage: `url(https://image.geeko.ltd/medium/${product.variants[0].image})`}}/>
+									<IMAGE onClick={() => { this.setProductHandle(product) }} className={selectedProduct.id === product.id && this.existVariant(product, selectedVariant.id) ? '__selected' : ''} style={{ backgroundImage: `url(https://image.geeko.ltd/medium/${product.variants[0].image})` }} />
 								</div>)
 							}
 						</BLOCKS>
 
 						{
-							<TIP><FormattedMessage id="you_selected"/> {` ${selectedVariant.color}${selectedProduct.theme?`-${selectedProduct.theme}`:''}`}</TIP>
+							<TIP><FormattedMessage id="you_selected" /> {` ${selectedVariant.color}${selectedProduct.theme ? `-${selectedProduct.theme}` : ''}`}</TIP>
 						}
 					</div>
 				</LINE>
 
 				{
-					(!selectedProduct.variants.length === 1 || selectedProduct.variants[0].size) && <LINE style={{marginTop: 25}} className="x-table x-fw __vt __fixed">
-						<div className="x-cell" style={{paddingTop: 2}}>
-							<LABEL><FormattedMessage id="size"/></LABEL>
+					(!selectedProduct.variants.length === 1 || selectedProduct.variants[0].size) && <LINE style={{ marginTop: 25 }} className="x-table x-fw __vt __fixed">
+						<div className="x-cell" style={{ paddingTop: 2 }}>
+							<LABEL><FormattedMessage id="size" /></LABEL>
 						</div>
 						<div className="x-cell">
 							<BLOCKS>
 								{
 									selectedProduct.variants.map(variant => <div key={variant.id} className="__block">
-										<SIZE onClick={ () => { this.setState({selectedVariant: variant}) } } className={ selectedVariant.id === variant.id ? '__selected' : '' }>{variant.size}</SIZE>
+										<SIZE onClick={() => { this.setState({ selectedVariant: variant }) }} className={selectedVariant.id === variant.id ? '__selected' : ''}>{variant.size}</SIZE>
 									</div>)
 								}
 							</BLOCKS>
 
 							{
-								selectedVariant && selectedVariant.description && <TIP>{ selectedVariant.description }</TIP>
+								selectedVariant && selectedVariant.description && <TIP>{selectedVariant.description}</TIP>
 							}
 						</div>
 					</LINE>
 				}
 
-				<LINE className="x-table x-fw __vt __fixed" style={{marginTop: 25}}>
-					<div className="x-cell" style={{paddingTop: 2}}>
-						<LABEL><FormattedMessage id="qty"/></LABEL>
-					</div>
-					<div className="x-cell">
+				{
+					!isGift && <LINE className="x-table x-fw __vt __fixed" style={{ marginTop: 25 }}>
+						<div className="x-cell" style={{ paddingTop: 2 }}>
+							<LABEL><FormattedMessage id="qty" /></LABEL>
+						</div>
+						<div className="x-cell">
 
-						<QUANITTY>
-							<OPBTN onClick={ (evt) => { this.changeQuantity('-') } }><Icon>&#xe6ba;</Icon></OPBTN>
-							<QInput type="number" value={selectedQuantity} onChange={ (evt) => { this.setState({selectedQuantity: evt.target.value >= 1 ? Math.floor(evt.target.value) : 1 }) } }/>
-							<OPBTN onClick={ (evt) => { this.changeQuantity('+') } } ><Icon>&#xe6b9;</Icon></OPBTN>
-						</QUANITTY>
-					</div>
-				</LINE>
+							<QUANITTY>
+								<OPBTN onClick={(evt) => { this.changeQuantity('-') }}><Icon>&#xe6ba;</Icon></OPBTN>
+								<QInput type="number" value={selectedQuantity} onChange={(evt) => { this.setState({ selectedQuantity: evt.target.value >= 1 ? Math.floor(evt.target.value) : 1 }) }} />
+								<OPBTN onClick={(evt) => { this.changeQuantity('+') }} ><Icon>&#xe6b9;</Icon></OPBTN>
+							</QUANITTY>
+						</div>
+					</LINE>
+				}
 
-				<div style={{marginTop: 30}}>
+
+
+				<div style={{ marginTop: 30 }}>
 					{
 						selectedVariant && selectedVariant.status === '1' && (selectedVariant.inventory > 0 || selectedProduct.isAutoInventory) ? (
-							<BigButton bgColor="#222" style={{width: 240, height: 40}} onClick={ this.editHandle.bind(this) }>
-								<FormattedMessage id="submit"/>
+							<BigButton bgColor="#222" style={{ width: 240, height: 40 }} onClick={this.editHandle.bind(this)}>
+								<FormattedMessage id="submit" />
 							</BigButton>
 
 						) : (
-							<BigButton bgColor="#999" style={{width: 240, height: 40, cursor: 'not-allowed'}}>
-								<FormattedMessage id="sold_out"/>
+							<BigButton bgColor="#999" style={{ width: 240, height: 40, cursor: 'not-allowed' }}>
+								<FormattedMessage id="sold_out" />
 							</BigButton>
 						)
 					}

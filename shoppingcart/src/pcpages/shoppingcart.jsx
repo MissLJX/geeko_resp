@@ -30,13 +30,15 @@ import {
 	fetchAddresses,
 	getCreditCards,
 	deleteItem,
+	deleteGift,
 	deleteItems,
 	updateAddress,
 	setCouponCode,
 	changeLang,
 	getDLocalCards,
 	setCashout,
-	setDocument
+	setDocument,
+	editGift
 } from '../store/actions.js'
 
 import Loading from '../components/msite/loading.jsx'
@@ -70,6 +72,8 @@ import Cookie from 'js-cookie'
 
 import Ellipsis from '../components/ellipsis.jsx'
 import { Link } from 'react-router-dom'
+import SwiperGifts from '../components/pc/gifts.jsx'
+import Items from '../components/pc/items.jsx'
 
 
 import {
@@ -109,6 +113,7 @@ import {
 	pay,
 	get_pay_params
 } from '../api'
+import deeplink from '../utils/deeplink.js'
 
 export const __address_token__ = window.token
 
@@ -226,8 +231,14 @@ const mapDispatchToProps = (dispatch) => {
 		EDITITEM: (oldId, newId, quantity) => {
 			dispatch(editItem(oldId, newId, quantity))
 		},
+		EDITGIFT: variantId => {
+			dispatch(editGift(variantId))
+		},
 		DELETEITEM: (itemId) => {
 			return dispatch(deleteItem(itemId))
+		},
+		DELETEGIFT: itemId => {
+			return dispatch(deleteGift(itemId))
 		},
 		DELETEITEMS: (itemIds) => {
 			return dispatch(deleteItems(itemIds))
@@ -558,7 +569,7 @@ const ShoppingCart = class extends React.Component {
 	paypalRender(c, method) {
 		const self = this
 
-		if(!window.paypal)
+		if (!window.paypal)
 			return
 
 
@@ -1583,6 +1594,10 @@ const ShoppingCart = class extends React.Component {
 
 	}
 
+	giftDelete(item) {
+		this.props.DELETEGIFT(item.variantId)
+	}
+
 	itemIdDelete(itemId) {
 		this.setState({
 			showDeleteConfirm: true,
@@ -1609,7 +1624,8 @@ const ShoppingCart = class extends React.Component {
 					quantity: item.quantity,
 					products: result.products,
 					variantId: item.variantId,
-					productId: result.selectedProductId
+					productId: result.selectedProductId,
+					isGift: item.isGift
 				}
 			})
 		})
@@ -1629,6 +1645,11 @@ const ShoppingCart = class extends React.Component {
 
 	editHandle(oldId, newId, quantity) {
 		this.props.EDITITEM(oldId, newId, quantity)
+		this.itemEditClose()
+	}
+
+	editGiftHandle(oldId, newId, quantity) {
+		this.props.EDITGIFT(newId)
 		this.itemEditClose()
 	}
 
@@ -1769,6 +1790,7 @@ const ShoppingCart = class extends React.Component {
 		let formatedData, invalidItems, cancheckout, hasLocalItems, sendCouponMessage, couponcountdown, totalCount = 0, hasOverseas
 		let hasOverseasHead, fullSelected, cancheckout1, hasQuickPay, tcMethod
 		let gifts
+		let giftList
 		if (cart) {
 			isprogresspage = window.__is_login__ || (!window.token && cart.shippingDetail) || (this.props.location.pathname && this.props.location.pathname.indexOf('/cart/checkout') >= 0)
 			formatedData = this.formatData(cart)
@@ -1790,6 +1812,7 @@ const ShoppingCart = class extends React.Component {
 
 			tcMethod = this.getTcMethod()
 			gifts = cart.gifts
+			giftList = cart.giftList
 		}
 
 
@@ -1943,45 +1966,28 @@ const ShoppingCart = class extends React.Component {
 
 						<Box title={`${intl.formatMessage({ id: 'shopping_bag' })} (${totalCount})`} ignoreLine={true}>
 
-
 							{
-								gifts && gifts.length > 0 && <div style={{ padding: 14, backgroundColor: '#fafafa' }}>
-									<div>
-										<span className="iconfont" style={{ color: '#ff8454', fontSize: 30, verticalAlign: 'middle' }}>&#xec45;</span>
-										<span style={{ fontWeight: 'bold', verticalAlign: 'middle', fontSize: 18 }}>Free Gift</span>
-									</div>
-									<div className="x-table" style={{ width: '100%', tableLayout: 'fixed', marginTop: 10 }}>
-										<div className="x-cell" style={{ width: 40, verticalAlign: 'middle' }}>
-											<a style={{ textDecoration: 'none' }} href={producturl({ id: gifts[0].productId, name: gifts[0].productName, parentSku: gifts[0].parentSku })}>
-												<img style={{ display: 'inline-block', width: '100%' }} src={gifts[0].imageUrl} />
-											</a>
-										</div>
-										<div className="x-cell" style={{ paddingLeft: 10, verticalAlign: 'middle' }}>
-											<Ellipsis>
-												<span style={{ display: 'inline-block', lineHeight: '14px', fontSize: 12, color: '#e64545', border: '1px solid #e64545', paddingLeft: 5, paddingRight: 5 }}>
-													Gift
-										</span>
-												<span style={{ lineHeight: '14px', fontSize: 12, marginLeft: 10 }}>
-													{gifts[0].productName}
-												</span>
-											</Ellipsis>
-											<div style={{ marginTop: 10 }}>
-												<Red>{unitprice(gifts[0].realPrice)}</Red>
-												<Link style={{ float: 'right', color: '#e64545', fontSize: 16 }} to={`${__route_root__}/gifts`}>View gift </Link>
-											</div>
-
-										</div>
-									</div>
-								</div>
+								giftList && giftList.length > 0 && <SwiperGifts onSelect={(vairant, product) => {
+									this.itemEdit({
+										productId: product.id,
+										variantId: vairant.id,
+										quantity: 1,
+										isGift: true
+									})
+								}} products={giftList} giftWarnMsg={cart.giftWarnMsg} canBuyGift={cart.canBuyGift} />
 							}
 
 
-							{
+
+
+
+
+							{/* {
 								cart.giftWarnMsg && <div style={{ padding: 14, backgroundColor: '#fafafa' }}>
 									<span className="iconfont" style={{ color: '#ff8454', fontSize: 30, verticalAlign: 'middle' }}>&#xec45;</span>
 									<span style={{ verticalAlign: 'middle' }} dangerouslySetInnerHTML={{ __html: cart.giftWarnMsg }}></span>
 								</div>
-							}
+							} */}
 
 							<div ref={c => this.fixedCartWrapper = c}>
 								<FixedTop style={{ width: 726 }} innerRef={c => this.fixedCart = c}>
@@ -1992,7 +1998,9 @@ const ShoppingCart = class extends React.Component {
 												<span style={{ marginLeft: 10, verticalAlign: 'middle' }}>{intl.formatMessage({ id: 'select_all' })}</span>
 											</div>
 											<div className="x-cell __right">
-												{cart.messages && cart.messages.shippingMsg && <strong dangerouslySetInnerHTML={{ __html: cart.messages.shippingMsg }} />}
+												{cart.messages && cart.messages.shippingMsg && <span><span dangerouslySetInnerHTML={{ __html: cart.messages.shippingMsg }} /> <a style={{color: '#222'}} href={deeplink(cart.messages.shippingMsgLink)}>
+													<FormattedMessage id="add" /> {'>'}
+												</a></span>}
 											</div>
 										</div>
 									</SelectLine>
@@ -2000,6 +2008,21 @@ const ShoppingCart = class extends React.Component {
 								</FixedTop>
 							</div>
 
+							{
+								gifts && gifts.length > 0 && <Items
+									disabledFunc={() => { }}
+									quantityChange={() => { }}
+									itemEdit={item => {
+										this.itemEdit({
+											...item,
+											isGift: true
+										})
+									}}
+									itemDelete={item => { this.giftDelete(item) }}
+									items={gifts}
+									isGift={true}
+								/>
+							}
 
 
 							{
@@ -2056,7 +2079,10 @@ const ShoppingCart = class extends React.Component {
 									<CouponSelect unSelectCoupon={this.unSelectCoupon.bind(this)} selectCoupon={() => { this.props.history.push(`${window.ctx || ''}${__route_root__}/coupons`) }} coupon={cart.coupon} canUseCouponCount={cart.canUseCouponCount} />
 									{
 										cart.messages && cart.messages.couponMsg && <MessageTip style={{ marginTop: 20 }}>
-											<span dangerouslySetInnerHTML={{ __html: cart.messages.couponMsg }} />
+											<span dangerouslySetInnerHTML={{ __html: cart.messages.couponMsg }} /> {'  '}
+											<a style={{color: '#222'}} href={deeplink(cart.messages.couponMsgLink)}>
+												<FormattedMessage id="add" /> {'>'}
+											</a>
 										</MessageTip>
 									}
 
@@ -2236,7 +2262,7 @@ const ShoppingCart = class extends React.Component {
 			</SHOPPINGBODY>
 
 			{
-				this.state.editing && <ItemEditor editHandle={this.editHandle.bind(this)} onClose={this.itemEditClose.bind(this)} {...this.state.editing} />
+				this.state.editing && <ItemEditor editHandle={this.state.editing.isGift ? this.editGiftHandle.bind(this) : this.editHandle.bind(this)} onClose={this.itemEditClose.bind(this)} {...this.state.editing} />
 			}
 
 			{

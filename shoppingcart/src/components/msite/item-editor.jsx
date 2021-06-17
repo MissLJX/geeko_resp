@@ -271,7 +271,8 @@ const ProductEditor = class extends React.Component {
 			selectedProduct: null,
 			selectedVariant: null,
 			selectedQuantity: 1,
-			products: null
+			products: null,
+			isGift: false
 		}
 	}
 
@@ -299,7 +300,8 @@ const ProductEditor = class extends React.Component {
 				selectedVariant: selectedVariant,
 				selectedProduct: selectedProduct,
 				selectedQuantity: item.quantity,
-				products: products
+				products: products,
+				isGift: item.isGift
 			})
 		})
 	}
@@ -314,6 +316,7 @@ const ProductEditor = class extends React.Component {
 	editHandle() {
 		const newVaraintId = this.state.selectedVariant.id
 		const newQuantity = this.state.selectedQuantity
+		
 
 		this.props.itemConfirmHandle(this.props.item.variantId, newVaraintId, newQuantity)
 	}
@@ -336,9 +339,14 @@ const ProductEditor = class extends React.Component {
 		const { intl, btnMessage } = this.props
 
 		const { products, selectedVariant, selectedProduct, selectedQuantity } = this.state
-		const high = selectedVariant ? higher(selectedVariant) : null
-		const low = selectedVariant ? lower(selectedVariant) : null
+		let high = selectedVariant ? higher(selectedVariant) : null
+		let low = selectedVariant ? lower(selectedVariant) : null
 		// const high = {amount:'50', unit: '$', currency: 'USD'}
+
+		if(this.state.isGift){
+			low = selectedProduct.giftPrice
+			high = selectedVariant.msrp || selectedVariant.price
+		}
 
 
 		return products ? (
@@ -354,12 +362,15 @@ const ProductEditor = class extends React.Component {
 						</NAME>
 						
 						<Price>
-							<Money style={{fontSize: 16,fontFamily: 'SlatePro-Medium'}} money={low} />
+							<Money style={{fontSize: 16,fontFamily: 'SlatePro-Medium', color:this.state.isGift? '#e64545':'#222' }} money={low} />
 							{
 								high && (
 									<React.Fragment>
 										<Grey><del><Money money={high} /></del></Grey>
-										<OFF>-{percent(high, low)}</OFF>
+										{
+											!this.state.isGift && <OFF>-{percent(high, low)}</OFF>
+										}
+										
 									</React.Fragment>
 								)
 							}

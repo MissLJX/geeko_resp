@@ -5,6 +5,8 @@ import {get,
 	me,
 	changeShippingMethod,
 	editProduct,
+	selectGift,
+	removeGift,
 	mercadocards,
 	creditcards,
 	getDCards,
@@ -314,6 +316,16 @@ export const editItem = (oldId, newId, quantity) => {
 	}
 }
 
+export const editGift = variantId => {
+	return dispatch => {
+		dispatch(refresing())
+		return selectGift(variantId).then(() => {
+			dispatch(refreshCart(null))
+			dispatch(edited())
+		})
+	}
+}
+
 export const addItem = (variantId, quantity) => {
 	return dispatch => {
 		dispatch(refresing())
@@ -329,6 +341,16 @@ export const deleteItem = (itemId) => {
 		return deleteitem(itemId).then(data => data.result).then(cart => {
 			dispatch(refreshCart(cart))
 			return cart
+		})
+	}
+}
+
+export const deleteGift = itemId => {
+	return dispatch => {
+		dispatch(refresing())
+		return removeGift(itemId).then(() => {
+			dispatch(refreshCart(null))
+			return null
 		})
 	}
 }
