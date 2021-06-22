@@ -99,7 +99,7 @@ const GiftProduct = class extends React.Component {
             off = Math.round((Number(higher.amount) - Number(lower.amount)) * 100 / Number(higher.amount))
         }
 
-        return <GIFTPRODUCT ref={this.productRef.bind(this)} data-column="gifts" data-product-list-source data-title="shoppingcart" data-type="gifts" data-content="Gifts" data-product-position={position}>
+        return <GIFTPRODUCT innerRef={this.productRef.bind(this)} data-column="gifts" data-product-list-source data-title="shoppingcart" data-type="gifts" data-content="Gifts" data-product-position={position}>
             <div className="__image">
                 <img src={`${IMAGE_PREFIX}/medium/${product.pcMainImage}`} />
             </div>
