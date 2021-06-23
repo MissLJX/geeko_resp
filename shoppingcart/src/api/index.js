@@ -83,7 +83,7 @@ export const paypal_pay_order = params => axios.get(`${VPATH}/paypal3/pay-by-ord
 
 
 export const getcoupons = () => axios.get(`${VPATH}/coupon/anon/get-coupon-selections?_=${new Date().getTime()}`)
-export const usecoupon = (id) => axios.get(`${VPATH}/shopping-cart/anon/use-coupon/${id}`)
+export const usecoupon = (id) => axios.get(`${VPATH}/shopping-cart/anon/use-coupon/${id}?_=${new Date().getTime()}`)
 export const unusecoupon = () => axios.get(`${VPATH}/shopping-cart/anon/unuse-coupon?_=${new Date().getTime()}`)
 export const usecouponcode = (code) => axios.post(`${VPATH}/coupon/anon/use-coupon-by-code`, {code})
 
