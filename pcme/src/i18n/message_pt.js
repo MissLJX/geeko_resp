@@ -159,5 +159,7 @@ export default {
     trackingDetailInfo:'Informações detalhadas de rastreamento',
     returnlabel:"Etiqueta de devolução",
     share_get:"COMPARTILHE ATÉ 50% DE DESCONTO, GANHA $ 10",
-    share_lucky:"Compartilhe  presentes com seus amigos e ganhe até 50% de desconto juntos. E você receberá $ 10 quando eles fizerem uma compra."
+    share_lucky:"Compartilhe  presentes com seus amigos e ganhe até 50% de desconto juntos. E você receberá $ 10 quando eles fizerem uma compra.",
+    required: 'Necessário'
+
 }

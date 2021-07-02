@@ -14,13 +14,10 @@ ul, li{
 }
 
 @font-face {
-  font-family: 'iconfont';  /* project id 384296 */
-  src: url('//at.alicdn.com/t/font_384296_6b2cr73q5us.eot');
-  src: url('//at.alicdn.com/t/font_384296_6b2cr73q5us.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_384296_6b2cr73q5us.woff2') format('woff2'),
-  url('//at.alicdn.com/t/font_384296_6b2cr73q5us.woff') format('woff'),
-  url('//at.alicdn.com/t/font_384296_6b2cr73q5us.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_384296_6b2cr73q5us.svg#iconfont') format('svg');
+  font-family: 'iconfont';  /* Project id 384296 */
+  src: url('//at.alicdn.com/t/font_384296_elcxypbr1mt.woff2?t=1623912452214') format('woff2'),
+       url('//at.alicdn.com/t/font_384296_elcxypbr1mt.woff?t=1623912452214') format('woff'),
+       url('//at.alicdn.com/t/font_384296_elcxypbr1mt.ttf?t=1623912452214') format('truetype');
 }
 .iconfont {
   font-family:"iconfont" !important;
@@ -239,3 +236,6 @@ a{
     font-size: 13px;
   }
 }
+
+
+

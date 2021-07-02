@@ -158,5 +158,6 @@ export default {
     trackingDetailInfo:'Tracking-Detailinformationen',
     returnlabel:"Rücksendeetikett",
     share_get:"TEILEN SIE BIS ZU 50% RABATT, ERHALTEN SIE 10 USD",
-    share_lucky:"Teilen Sie die Glücksziehung mit Ihren Freunden und erhalten Sie bis zu 50% Rabatt zusammen. Und Sie werden $10 erhalten, wenn sie einen EinKauf tätigen."
+    share_lucky:"Teilen Sie die Glücksziehung mit Ihren Freunden und erhalten Sie bis zu 50% Rabatt zusammen. Und Sie werden $10 erhalten, wenn sie einen EinKauf tätigen.",
+    required: 'Erforderlich'
 }

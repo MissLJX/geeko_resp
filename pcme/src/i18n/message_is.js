@@ -171,5 +171,6 @@ export default {
     prmotion:"Kynning",
     returnlabel:"Endursendingarmiði",
     share_get:"DEILDU AÐ 50% AFSLÁTTU, FÁÐU $ 10",  //google
-    share_lucky:"Deildu happdrætti með vinum þínum og fáðu allt að 50% afslátt saman. Og þú færð $ 10 þegar þeir kaupa."  //google
+    share_lucky:"Deildu happdrætti með vinum þínum og fáðu allt að 50% afslátt saman. Og þú færð $ 10 þegar þeir kaupa.",  //google
+    required: 'Required'
 }

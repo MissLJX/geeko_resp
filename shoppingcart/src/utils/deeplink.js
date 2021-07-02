@@ -9,49 +9,56 @@ const PAGE_TRENDING = isNew? '/page/trending-now': '/i/trending-now'
 const PAGE_CATEGORY = isNew? '/page/category/products?id=': '/i/category/products?categoryId='
 
 export default ( deepLink ) => {
+	if(!deepLink) return '#'
+
+	if(typeof deepLink === 'string'){
+		deepLink = JSON.parse(deepLink)
+	}
+
+
 	const { type, params } = deepLink
 	let _url
 	switch (type) {
-	case '1':
+	case 1:
 		_url = PAGE_COLLECTION_URL + params[0]
 		break
-	case '2':
+	case 2:
 		_url = PAGE_PRODUCT_URL + params[0]
 		break
-	case '3':
+	case 3:
 		_url = '/me/m/coupons'
 		break
-	case '7':
+	case 7:
 		_url = '/me/m/credits'
 		break
-	case '8':
+	case 8:
 		_url = '/me/m/order/detail/' + params[0]
 		break
-	case '9':
+	case 9:
 		_url = '/me/m/order/ticket/' + params[0]
 		break
-	case '10':
+	case 10:
 		_url = '/i/lottery'
 		break
-	case '11':
+	case 11:
 		_url = PAGE_EARLY_BIRD
 		break
-	case '12':
+	case 12:
 		_url = PAGE_FLASH
 		break
-	case '13':
+	case 13:
 		_url = PAGE_NEW
 		break
-	case '14':
+	case 14:
 		_url = PAGE_TRENDING
 		break
-	case '15':
+	case 15:
 		_url = PAGE_CATEGORY + params[0]
 		break
-	case '16':
+	case 16:
 		_url = params[0]
 		break
-	case '17':
+	case 17:
 		_url = '/shoppingcart/show'
 		break
 	default:

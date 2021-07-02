@@ -171,5 +171,6 @@ export default {
     prmotion:"Kampagne",
     returnlabel:"Returetiket",
     share_get:"DEL OP TIL 50% RABAT, FÅ $ 10",  //google
-    share_lucky:"Del heldig lodtrækning med dine venner, og få op til 50% rabat sammen. Og du får $ 10, når de foretager et køb."  //google
+    share_lucky:"Del heldig lodtrækning med dine venner, og få op til 50% rabat sammen. Og du får $ 10, når de foretager et køb.",  //google,
+    required: 'Required'
 }

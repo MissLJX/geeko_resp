@@ -993,7 +993,7 @@ const Checkout = class extends React.Component {
 
 
 			if (window.__dlocal) {
-				window.__dlocal.createToken(this.cvvField).then(result => {
+				window.__dlocal.createToken(this.cvvField, {}).then(result => {
 					this.payCredit({ ...params, token: result.token })
 				}).catch(result => {
 					if (result.error) {

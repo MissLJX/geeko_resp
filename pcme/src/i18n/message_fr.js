@@ -158,5 +158,6 @@ export default {
     trackingDetailInfo:'Informations de suivi',
     returnlabel:"Étiquette de retour",
     share_get:"PARTAGER POUR OBTENIR JUSQU'À 50% DE REDUCTION, OBTENIR 10 $",
-    share_lucky:"Partagez le tirage au sort avec vos amis et obtenez jusqu'à 50% de réduction ensemble. Et vous recevrez 10 $ lorsqu'ils feront un achat."
+    share_lucky:"Partagez le tirage au sort avec vos amis et obtenez jusqu'à 50% de réduction ensemble. Et vous recevrez 10 $ lorsqu'ils feront un achat.",
+    required: 'Obligatoire'
 }

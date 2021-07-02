@@ -411,6 +411,8 @@ const Checkout = class extends React.Component {
 	paypalRender(c, method) {
 		const self = this
 
+		if(!window.paypal) return
+
 		const { checkout } = self.props
 
 		let locale = checkout && checkout.locale && checkout.locale !== 'nb_NO' && checkout.locale !== 'is_IS' ? checkout.locale : 'en_US'

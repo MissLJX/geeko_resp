@@ -139,5 +139,6 @@ export default{
 	required: 'Nauðsynlegt',
 	valid_email: '{email} er ekki gilt netfang',
 	you_can_match_width: 'þú gætir viljað fylla það með',
-	addtocart: 'Bætt við körfu'
+	addtocart: 'Bætt við körfu',
+	addonitems: 'Viðbótaratriði'
 }

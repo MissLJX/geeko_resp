@@ -11,7 +11,7 @@ import Index from './src/index.jsx'
 // import Index from './src/pc-index.jsx'
 // import Index from './src/pc-order-confirm.jsx'
 // import Index from './src/order-confirm.jsx'
-
+import "swiper/swiper.min.css"
 import './src/css/reset.css'
 import './src/css/style.css'
 

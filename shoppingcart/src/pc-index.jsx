@@ -19,7 +19,6 @@ import { changeLang } from './store/actions.js'
 
 
 
-
 const ShoppingCart = Loadable({
 	loader: () => import(/* webpackChunkName: "page--pc-shoppingcart" */ './pcpages/shoppingcart.jsx'),
 	loading: Loading1

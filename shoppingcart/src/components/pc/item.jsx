@@ -1,17 +1,17 @@
-import React, {Component, Fragment} from 'react'
+import React, { Component, Fragment } from 'react'
 import styled from 'styled-components'
 
 import CheckBox from '../checkbox.jsx'
 import LinkImage from '../link-image.jsx'
 import Ellipsis from '../ellipsis.jsx'
-import {Grey, Red} from '../text.jsx'
+import { Grey, Red } from '../text.jsx'
 import Money from '../money.jsx'
 import Quantity from '../quantity.jsx'
 import Icon from '../icon.jsx'
-import {producturl, quantityMoney, strconcat} from '../../utils/utils.js'
-import {injectIntl, FormattedMessage} from 'react-intl'
+import { producturl, quantityMoney, strconcat } from '../../utils/utils.js'
+import { injectIntl, FormattedMessage } from 'react-intl'
 import { Btn } from '../msite/buttons.jsx'
-import {CountDown} from '../msite/countdowns.jsx'
+import { CountDown } from '../msite/countdowns.jsx'
 
 const ITEMCONTAINER = styled.div`
   padding: 25px 0 15px 0;
@@ -141,13 +141,25 @@ const LABELICON = styled.span`
   }
 `
 
+const GIFT = styled.span`
+    background-color: #fff0f0;
+    border: solid 1px #e64545;
+    display: inline-block;
+    text-align: center;
+    padding: 0 2px;
+    font-size: 12px;
+    color: #e64545;
+    text-transform: uppercase;
+    margin-right: 2px;
+`
+
 const Item = class extends Component {
-	constructor (props) {
+	constructor(props) {
 		super(props)
 	}
 
-	render () {
-  	const {item, intl, serverTime, invalidItem} = this.props
+	render() {
+		const { item, intl, serverTime, invalidItem, isGift } = this.props
 
 		const isEabled = !this.props.disabledFunc(item)
 		const isOverseas = !item.isDomesticDelivery
@@ -155,17 +167,17 @@ const Item = class extends Component {
 		const showLeftBtn = !isEabled && !isOverseas && !item.isDomesticDeliveryEnabled && item.inventory > 0
 		const showShipFromBtn = !isEabled && !isOverseas && !item.isDomesticDeliveryEnabled && item.inventory < 1
 
-  	return <ITEMCONTAINER>
-  		<div style={{paddingLeft: 28}}>
+		return <ITEMCONTAINER>
+			<div style={{ paddingLeft: 28 }}>
 				{
 					isEabled && item.endLimitedTimePurchaseTime && item.limitedTimePurchasePromotionPrice && <LIMITTIP>
-						<span className="__label">{intl.formatMessage({id: 'limited_time'})}</span>
-						<Icon style={{fontSize: 14, marginLeft: 20, verticalAlign: 'middle'}}>&#xe655;</Icon>
-						<CountDown className="__time" offset={item.endLimitedTimePurchaseTime - serverTime}/>
+						<span className="__label">{intl.formatMessage({ id: 'limited_time' })}</span>
+						<Icon style={{ fontSize: 14, marginLeft: 20, verticalAlign: 'middle' }}>&#xe655;</Icon>
+						<CountDown className="__time" offset={item.endLimitedTimePurchaseTime - serverTime} />
 					</LIMITTIP>
 				}
 			</div>
-			<div style={{position: 'relative'}} >
+			<div style={{ position: 'relative' }} >
 				{
 					item.isUsedCombinatorialPromotion && this.props.combinatorialPromotionTitle && <div style={{
 						position: 'absolute',
@@ -179,82 +191,87 @@ const Item = class extends Component {
 						paddingRight: 10,
 						lineHeight: '22px'
 					}}>
-						<Red>{ this.props.combinatorialPromotionTitle }</Red>
+						<Red>{this.props.combinatorialPromotionTitle}</Red>
 					</div>
 				}
 
-    		<ITEM className={`x-table __vm __fixed x-fw ${!isEabled && !invalidItem ? 'disabled' : ''} ${invalidItem ? 'invalid' : ''}`}>
+				<ITEM className={`x-table __vm __fixed x-fw ${!isEabled && !invalidItem ? 'disabled' : ''} ${invalidItem ? 'invalid' : ''}`}>
 
 					<div className="x-cell">
-						{ isEabled && <CheckBox onClick={(evt) => { this.props.itemSelect(item.variantId, !item.selected) }} className={item.selected ? 'selected' : ''}/>}
-    			</div>
-    			<div className="x-cell">
-						<div style={{width: 96}}>
-							<LinkImage href={producturl({id: item.productId, name: item.productName, parentSku: item.parentSku})} src={item.imageUrl}/>
+						{(isEabled && !isGift) && <CheckBox onClick={(evt) => { this.props.itemSelect(item.variantId, !item.selected) }} className={item.selected ? 'selected' : ''} />}
+					</div>
+					<div className="x-cell">
+						<div style={{ width: 96 }}>
+							<LinkImage href={producturl({ id: item.productId, name: item.productName, parentSku: item.parentSku })} src={item.imageUrl} />
 						</div>
-    			</div>
-    			<div className="x-cell">
-    				<div>
-    					<Ellipsis>{item.productName}</Ellipsis>
-    				</div>
-    				<div>
-            	<Grey>{strconcat(item.color, item.size)}</Grey>
-          	</div>
+					</div>
+					<div className="x-cell">
+						<div>
+
+							<Ellipsis>
+								{
+								isGift && <GIFT>Gift</GIFT>
+								}
+								{item.productName}</Ellipsis>
+						</div>
+						<div>
+							<Grey>{strconcat(item.color, item.size)}</Grey>
+						</div>
 
 						<div>
 
 							{
-								isEabled && !invalidItem && <LABELICON style={{marginRight: 20}} onClick={(evt) => { this.props.itemEdit(item) }} className={`${invalidItem ? 'disabled' : ''}`}>
+								isEabled && !invalidItem && <LABELICON style={{ marginRight: 20 }} onClick={(evt) => { this.props.itemEdit(item) }} className={`${invalidItem ? 'disabled' : ''}`}>
 									<Icon>&#xe61f;</Icon>
-									<span><FormattedMessage id="edit"/></span>
+									<span><FormattedMessage id="edit" /></span>
 								</LABELICON>
 							}
 
 							<LABELICON onClick={(evt) => { this.props.itemDelete(item) }}>
 								<Icon>&#xe629;</Icon>
-								<span><FormattedMessage id="delete"/></span>
+								<span><FormattedMessage id="delete" /></span>
 							</LABELICON>
 						</div>
-    			</div>
-    			<div className="x-cell __center">
+					</div>
+					<div className="x-cell __center">
 
 						{
-    				  !isEabled ? <Grey>{item.quantity}</Grey> : <Quantity quantity={item.quantity} onChange={(quantity, isRemove) => { this.props.quantityChange(item.variantId, quantity, isRemove) }}/>
+							!isEabled || isGift ? <Grey>{item.quantity}</Grey> : <Quantity quantity={item.quantity} onChange={(quantity, isRemove) => { this.props.quantityChange(item.variantId, quantity, isRemove) }} />
 						}
-    			</div>
-    			<div className="x-cell __center">
-    				
-  		          {
-  		            item.itemPrice.amount - item.realPrice.amount > 0 && (
-                    	<Fragment>
-  	                    <div>
-  	                      <del><Grey style={{fontSize: '13px'}}><Money money={item.itemPrice} /> </Grey></del>
-  	                    </div>
-  	                    
-  		             </Fragment>
-  		            )
-  		          }
+					</div>
+					<div className="x-cell __center">
+
+						{
+							item.itemPrice.amount - item.realPrice.amount > 0 && (
+								<Fragment>
+									<div>
+										<del><Grey style={{ fontSize: '13px' }}><Money money={item.itemPrice} /> </Grey></del>
+									</div>
+
+								</Fragment>
+							)
+						}
 						<div><Red><Money money={item.realPrice} /></Red></div>
 
 						{
-							item.itemPrice.amount - item.realPrice.amount > 0 &&  <div>
-								<span dangerouslySetInnerHTML={{__html: item.discountDescription}} />
+							item.itemPrice.amount - item.realPrice.amount > 0 && <div>
+								<span dangerouslySetInnerHTML={{ __html: item.discountDescription }} />
 							</div>
 						}
-						 
-    			</div>
-    			<div className="x-cell __center">
-    				<Money money={quantityMoney(item.realPrice, item.quantity)}/>
-    			</div>
-    		</ITEM>
+
+					</div>
+					<div className="x-cell __center">
+						<Money money={quantityMoney(item.realPrice, item.quantity)} />
+					</div>
+				</ITEM>
 			</div>
-  		<div style={{marginTop: 10, textAlign: 'right'}}>
+			<div style={{ marginTop: 10, textAlign: 'right' }}>
 				{
-					showShipFromBtn && !invalidItem && <Btn style={{padding: '8px 18px'}} onClick={ () => { this.props.overseasHandle(this.props.item.variantId) }}> Ships From Overseas WareHouse</Btn>
+					showShipFromBtn && !invalidItem && <Btn style={{ padding: '8px 18px' }} onClick={() => { this.props.overseasHandle(this.props.item.variantId) }}> Ships From Overseas WareHouse</Btn>
 				}
 
 				{
-					showLeftBtn && !invalidItem && <Btn style={{padding: '8px 18px'}} onClick={ () => { this.props.setQuantity(item.variantId, item.inventory) }}>
+					showLeftBtn && !invalidItem && <Btn style={{ padding: '8px 18px' }} onClick={() => { this.props.setQuantity(item.variantId, item.inventory) }}>
 						<FormattedMessage
 							id="only_left"
 							values={{
@@ -265,7 +282,7 @@ const Item = class extends Component {
 				}
 
 			</div>
-  	</ITEMCONTAINER>
+		</ITEMCONTAINER>
 	}
 }
 

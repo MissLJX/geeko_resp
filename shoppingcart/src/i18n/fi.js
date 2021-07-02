@@ -139,6 +139,7 @@ export default{
 	required: 'Vaaditaan',
 	valid_email: '{email} ei ole kelvollinen sähköpostiosoite',
 	you_can_match_width: 'haluat ehkä täyttää sen',
-	addtocart: 'Lisää ostoskoriin'
+	addtocart: 'Lisää ostoskoriin',
+	addonitems: 'Lisäosat'
 	
 }

@@ -1,10 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 import { IMAGE_PREFIX } from '../../utils/constants'
-import { getlowerprice, producturl } from '../../utils/utils'
+import { getlowerprice, producturl, gethigherprice } from '../../utils/utils'
 import Money from '../money.jsx'
 
 const PRODUCT = styled.div`
+    position: relative;
     & > .__price{
         display: flex;
         margin-top: 8px;
@@ -41,6 +42,17 @@ const ICON = styled.span`
     color: #222;
 `
 
+const OFF = styled.span`
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: #222;
+    color: #fff;
+    padding: 1px 2px;
+    font-size: 12px;
+    display: inline-block;
+`
+
 
 export const NormalProduct = class extends React.Component {
     constructor(props) {
@@ -56,14 +68,35 @@ export const NormalProduct = class extends React.Component {
 
     render() {
         const { product, position, onSelect } = this.props
+        // product.promotion = {
+        //     enabled: true,
+        //     promotionPrice:{unit:'$', amount: '5'},
+        // }
         const lower = getlowerprice(product)
+        const higher = gethigherprice(product)
+        const isPromotion = product.promotion && product.promotion.enabled && product.promotion.promotionPrice
+
+        let off
+        if(lower && higher && Number(higher.amount) > Number(lower.amount) && isPromotion){
+            off = Math.round((Number(higher.amount) - Number(lower.amount))*100 / Number(higher.amount))
+        }
+
+
         return <PRODUCT>
             <a ref={this.productRef.bind(this)} href={producturl(product)} className="__image product-click" product-id={product.id} type="shopping_cart_match_with" data-column="shopping_cart_match_with" data-product-list-source data-title="shoppingcart" data-type="shopping_cart_match_with" data-content="You Might Like to Fill it With" data-product-position={position}>
                 <img src={`${IMAGE_PREFIX}/medium/${product.pcMainImage}`} />
             </a>
+
+            { off>0 && <OFF>-{off}%</OFF>}
+            
             <div className="__price">
+               
+                
                 <PRICE>
-                    <Money money={lower} />
+                    {
+                        isPromotion &&<ICON style={{color:'#e64545', fontSize: 12, marginRight: 4}}>&#xe6be;</ICON>
+                    }
+                    <Money style={{color: isPromotion?'#e64545':'#222'}} money={lower} />
                 </PRICE>
                 <ICON onClick={evt => { onSelect(product.variants[0], product) }}>&#xe6a8;</ICON>
 

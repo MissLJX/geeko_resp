@@ -1,6 +1,7 @@
 import axios from './apiconfigs'
 const VPATH = '/v9'
 export const getMessage = (code) => axios.get(`${VPATH}/message/get/${code}`)
+export const getCountryMessage = code => axios.get(`${VPATH}/message/anon/country-message/${code}`)
 export const get = () => axios.get(`${VPATH}/shopping-cart/show?_=${new Date().getTime()}&payMethod=${window.token ? '1' : ''}`)
 export const selectAll = (select) => axios.get(`${VPATH}/shopping-cart/select-all?_=${new Date().getTime()}`, {select})
 export const select = (params) => axios.post(`${VPATH}/shopping-cart/select?_=${new Date().getTime()}`, params)
@@ -82,7 +83,7 @@ export const paypal_pay_order = params => axios.get(`${VPATH}/paypal3/pay-by-ord
 
 
 export const getcoupons = () => axios.get(`${VPATH}/coupon/anon/get-coupon-selections?_=${new Date().getTime()}`)
-export const usecoupon = (id) => axios.get(`${VPATH}/shopping-cart/anon/use-coupon/${id}`)
+export const usecoupon = (id) => axios.get(`${VPATH}/shopping-cart/anon/use-coupon/${id}?_=${new Date().getTime()}`)
 export const unusecoupon = () => axios.get(`${VPATH}/shopping-cart/anon/unuse-coupon?_=${new Date().getTime()}`)
 export const usecouponcode = (code) => axios.post(`${VPATH}/coupon/anon/use-coupon-by-code`, {code})
 
@@ -188,6 +189,8 @@ export const saveTempAddress = (address) => axios.post(`${VPATH}/pay/save-addres
 export const getGifts = collectionId => axios.get(`${VPATH}/product/0/20/${collectionId}/c/show`)
 export const getGiftId = () => axios.get(`/context/anon/get-gift-collection-id`)
 export const selectGift = variantId => axios.post(`${VPATH}/shopping-cart/update-gift`, {variantId})
+export const removeGift = variantId => axios.post(`${VPATH}/shopping-cart/remove-gift`, {variantId})
+
 
 /**
  分享页面添加接口
@@ -222,4 +225,8 @@ export const selectGift = variantId => axios.post(`${VPATH}/shopping-cart/update
  //you can catch with
  export const product_get_catch_with = params => axios.get(`${VPATH}/shopping-cart/get-shopping-cart-recommended-products`, params)
 
+// export const product_get_catch_with = params => axios.get(`${VPATH}/product/anon/0/20/1/APP0050/list-by-menu`, params)
+
+
+ 
  export const addProduct = params => axios.post(`${VPATH}/shopping-cart/add-product`, params)

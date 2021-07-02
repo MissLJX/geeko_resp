@@ -31,7 +31,7 @@ export default class extends React.Component {
 	}
 
 	render() {
-		const {selectedItems} = this.props
+		const {selectedItems, isGift} = this.props
 		const selected = item => (selectedItems || []).some(i => i.variantId ===item.variantId)
 		return <ItemUL>
 			{this.props.items && this.props.items.map((item) => (
@@ -53,6 +53,7 @@ export default class extends React.Component {
 							itemDelete={this.props.itemDelete}
 							itemWish={this.props.itemWish}
 							item={item}
+							isGift={isGift}
 							combinatorialPromotionTitle={this.props.combinatorialPromotionTitle}
 							ivalidItem={this.props.ivalidItem}
 							itemSelect={this.props.itemSelect} />
