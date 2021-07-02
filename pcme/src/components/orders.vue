@@ -284,7 +284,7 @@
                 this.isShowTicket = false;
             },
             checkLogistics(orderid){
-                this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/logistics-detail', query: { orderid: orderid , method: 'orderlist' } })
+                this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/order/logistics-detail', query: { orderid: orderid , method: 'orderlist' } })
             },
             orderoffset(order){
                 if(order && order.expiredPaymentTime){

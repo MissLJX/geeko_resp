@@ -1,9 +1,15 @@
 <template>
     <div class="el-address-list">
         <list :items="addresses" @listing="listing" :loading="loading" :finished="finished">
-            <template slot="li" scope="props">
+            <template slot="li" slot-scope="props">
                 <li :key="props.item.id">
-                    <shipping-detail :address="props.item" @delete="deleteHandle" @list-address-edit="listEditHandle" @make-default="makeDefaultHandle"/>
+                    <shipping-detail 
+                        :address="props.item" 
+                        @delete="deleteHandle" 
+                        @list-address-edit="listEditHandle" 
+                        @make-default="makeDefaultHandle"
+                        :address-lodding.sync="loading"
+                    />
                 </li>
             </template>
         </list>
@@ -12,8 +18,10 @@
 
 <style scoped lang="scss">
     .el-address-list{
+        padding-bottom: 70px;
         li{
-            border-top: 1px solid #d6d6d6;
+            // border-top: 1px solid #d6d6d6;
+            padding: 10px 20px;
             &:first-child{
                 border-top: none;
             }

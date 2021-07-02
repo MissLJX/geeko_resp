@@ -21,16 +21,21 @@
 <style scoped lang="scss">
     .el-body {
         font-size: 14px;
+        padding-bottom: 51px;
     }
 
     #vue-header{
         width: 100%;
         left: 0;
+        position: relative;
     }
 
     #progress {
         height: 1px;
         width: 100%;
+        position: fixed;
+        left: 0px;
+        top: 0px;
         span {
             width: 0;
             display: block;

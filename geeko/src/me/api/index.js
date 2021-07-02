@@ -35,6 +35,11 @@ export const getCoupons = () => {
     return axios.get(VPATH + '/coupon/get-coupon-selections').then(data => data.result)
 }
 
+// 参数：status（1：已使用，2：已过期）
+export const getExpiredCoupons = (skip,status) => {
+    return axios.get(VPATH + '/coupon/'+ skip +'/20/history',{status}).then(data => data.result);
+}
+
 export const getCredits = (skip) => {
     return axios.get('/pointsHistory/' + skip + '/20/getAll', {}, {}).then((data) => {
         return data.result
@@ -159,6 +164,12 @@ export const removeWishProducts = (data) => {
 }
 export const confirmEmail = (email) => {
     return axios.cpost(VPATH + '/customer/send-confirm-email',{email:email}).then(data => data.result)
+}
+
+// track order
+// http://localhost:8080/wanna/v9/tracking/get-packages?skip=0&limit=20
+export const getTrackOrderMessage = (skip) => {
+    return axios.get(VPATH + '/tracking/get-packages',{skip,limit:"20"}).then((data) => data.result)
 }
 
 

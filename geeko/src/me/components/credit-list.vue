@@ -1,25 +1,24 @@
 <template>
     <div class="el-credits">
-        <div class="item-list" v-for="(group, index) in groups" :key="index">
-            <div class="li-tit">{{index}} <div id="triangle-down"></div></div>
-            <list :items="group">
-                <template slot="li" scope="props">
-                        <li :key="props.item.id">
-                            <credit class="el-credit" :credit="props.item"/>
-                        </li>
-                </template>
-            </list>
-        </div>
+        <list :items="groups" :finished="finished">
+            <template slot="li" slot-scope="props">
+                <li :key="props.item.id">
+                    <credit class="el-credit" :credit="props.item"/>
+                </li>
+            </template>
+        </list>
     </div>
 </template>
 
 <style scoped lang="scss">
     .el-credits {
         margin-bottom: 80px;
+        padding-top: 20px;
         li {
             height: 50px;
-            padding: 10px 10px;
-            border-top: 1px solid #dcdcdc;
+            // padding: 10px 10px;
+            // border-top: 1px solid #dcdcdc;
+            padding: 0px 20px;
             &:first-child {
                 border-top: none;
             }
@@ -67,14 +66,18 @@
                 default: false
             },
             isReceived:{
-                type: Boolean,
+                type: String,
             }
         },
         computed: {
             groups(){
+                if(this.isReceived === "0"){
+                    return this.credits;
+                }
+
                 var items = [];
                 this.credits.forEach(item1=>{
-                    if(!this.isReceived){
+                    if(this.isReceived === "2"){
                         if(item1.points<0){
                             items.push(item1);
                         }
@@ -85,15 +88,9 @@
                     }
                 })
 
-                return _.groupBy(items, (item) => {
-                    const date = new Date(item.createTime);
-                    const month = fecha.format(date, 'mediumDate').slice(0,3);
-                    if(month==='Jul'){
-                        return 'July. '+ date.getFullYear();
-                    }else{
-                        return month + '. ' + date.getFullYear();
-                    }
-                });
+                if(items && items.length <= 0) this.finished = true;
+
+                return items;
             },
         },
         components: {

@@ -368,7 +368,7 @@
                 }
             },
             checkLogistics(orderid){
-                this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/logistics-detail', query: { orderid: orderid , method: 'ordercode' } })
+                this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/order/logistics-detail', query: { orderid: orderid , method: 'ordercode' } })
             },
             checkoutUrl(id){
                 if(id){

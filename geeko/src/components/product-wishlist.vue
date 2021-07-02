@@ -12,7 +12,7 @@
             </div>
         </div>
         <list :items="products" :loading="loading" :finished="finished" :ifemit="ifemit" class="el-products" @listing="$emit('listing')">
-            <template slot="li" scope="props">
+            <template slot="li" slot-scope="props">
                 <li :key="props.item.id">
                     <product :product="props.item"/>
                 </li>
@@ -51,7 +51,7 @@
         border-top: 1px solid #e6e6e6;
         background-color: #fff;
         position: fixed;
-        bottom: 0;
+        bottom: 51px;
         z-index: 500;
         line-height: 56px;
         .c-clearAll{

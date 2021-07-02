@@ -1,9 +1,9 @@
 <template>
     <div class="el-change-pass-body">
-        <page-header>
-            <span>{{$t('label.changePassword')}}</span>
-            <span slot="oplabel" @click="changePasswordHandle">{{$t('label.save')}}</span>
-        </page-header>
+        <nav-bar>
+            <i class="iconfont el-back-font" slot="left" @click="$router.go(-1)">&#xe693;</i>
+            <span slot="center">{{$t('label.changePassword')}}</span>
+        </nav-bar>
 
         <div class="el-change-body">
             <form ref="changeDom">
@@ -37,6 +37,10 @@
                 </div>
             </form>
         </div>
+
+        <div class="sett-name-footer">
+            <div class="change-password-save"  @click="changePasswordHandle">Save</div>
+        </div>
     </div>
 </template>
 
@@ -55,22 +59,45 @@
 
     .el-change-control{
         input{
-            height: 30px;
             width: 100%;
-            background-color: #eee;
-            padding-left: 10px;
+            border: none;
+            border-bottom: 1px solid #e6e6e6;
+            outline: none;
+            box-shadow: none;
+            font-family: SlatePro;
+            color: #222222;
+            font-size: 16px;
+            padding: 8px 5px 5px 0px;
         }
         margin-top: 5px;
     }
 
     .el-change-pass-body{
         background-color: #fff;
+
+        .sett-name-footer{
+            width: 100%;
+            position: fixed;
+            bottom: 51px;
+            left: 0px;
+            right: 0px;
+            text-align: center;
+            padding: 0px 13px 20px 13px;
+
+            .change-password-save{
+                height: 42px;
+                line-height: 42px;
+                background-color: #222222;
+                font-family: SlatePro-Medium;
+                font-size: 17px;
+                color: #ffffff;
+            }
+        }
     }
 </style>
 
 <script type="text/ecmascript-6">
-
-    import PageHeader from '../components/page-header.vue'
+    import NavBar from '../components/nav-bar.vue'
 
     export default{
         data(){
@@ -80,15 +107,21 @@
                     newPassword:null,
                     confirmPassword: null
                 },
-                confirmed: true
+                confirmed: true,
+                isLoadingShow:false
             }
         },
         methods:{
             changePasswordHandle(){
                 this.$validator.validateAll().then((result) => {
-                    this.confirmed = this.info.confirmPassword === this.info.newPassword
+                    this.confirmed = this.info.confirmPassword === this.info.newPassword;
                     if (result && this.confirmed) {
+                        if(this.info.oldPassword === this.info.newPassword){
+                            alert("The old and new passwords cannot be the same.");
+                            return;
+                        }
                         this.$store.dispatch('me/changePassword', this.info).then(() => {
+                            alert("Success");
                             this.$router.go(-1)
                         }).catch(e => {
                             alert(e.result)
@@ -100,7 +133,7 @@
 
         },
         components: {
-            'page-header': PageHeader
+            NavBar
         }
     }
 </script>

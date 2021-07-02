@@ -58,7 +58,9 @@
             'product-list': ProductList
         },
         created(){
+            this.loading = true;
             store.dispatch("me/getYouLikeProducts", {skip: 0}).then(() => {
+                this.loading = false
                 store.dispatch("me/getYouLikeSkip")
             })
         }

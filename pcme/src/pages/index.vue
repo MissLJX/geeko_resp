@@ -51,6 +51,19 @@
             getUrl(suffix){
                 return PROJECT + suffix;
             }
+        },
+        beforeRouteEnter(to,from,next){
+            if(to.path && !!to.path && to.path.includes("notification")){
+                next(vm => {
+                    vm.isActive = "notification";
+                });
+            }else if(to.name && !!to.name){
+                next(vm => {
+                    vm.isActive = to.name;
+                });
+            }else{
+                next();
+            }
         }
     }
 </script>

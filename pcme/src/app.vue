@@ -18,7 +18,7 @@
 <script type="text/ecmascript-6">
     export default {
         mounted(){
-            window.closeLoading()
+            // window.closeLoading()
         }
     }
 </script>

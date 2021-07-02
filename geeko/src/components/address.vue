@@ -1,13 +1,35 @@
 <template>
-    <address class="el-address">
-        <div><strong>{{address.name}}</strong><span>({{address.phoneNumber}})</span></div>
-        <div>{{streetAddress}}</div>
-        <div>{{address.zipCode}}, {{address.city}}, {{stateCountry}}</div>
-    </address>
+    <div class="el-address">
+        <div class="__name">
+            <span>{{address.name}}</span>
+            <span>({{address.phoneNumber}})</span>
+        </div>
+        <div class="__street">{{streetAddress}}</div>
+        <div class="__address">{{address.zipCode}}, {{address.city}}, {{stateCountry}}</div>
+    </div>
 </template>
 
 <style scoped lang="scss">
+    .el-address{
+        .__name{
+            font-family: SlatePro-Medium;
+            font-size: 16px;
+            color: #222222;
+        }
+        .__street{
+            font-family: SlatePro;
+            font-size: 14px;
+            color: #666666;
+            padding-top: 10px;
+        }   
 
+        .__address{
+            font-family: SlatePro;
+            font-size: 14px;
+            color: #666666;
+            padding-bottom: 10px;
+        }
+    }
 </style>
 
 <script type="text/ecmascript-6">

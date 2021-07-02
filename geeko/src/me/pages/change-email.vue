@@ -1,22 +1,25 @@
 <template>
     <div class="el-email-body">
-        <page-header>{{$t('label.changeEmail')}}</page-header>
+        <nav-bar>
+            <i class="iconfont el-back-font" slot="left" @click="$router.go(-1)">&#xe693;</i>
+            <span slot="center">{{$t('label.changeEmail')}}</span>
+        </nav-bar>
 
         <div class="el-email-block" style="margin-top: 0">
             <div>
                 <form @submit.prevent="changeAcountHandle">
-                    <p>Your new account:</p>
+                    <p class="_title">Your new account:</p>
                     <p class="st-control el-email-control">
                         <input name="email" v-validate="'required|email'" v-model="account.email"
-                               :class="{'st-input':true, 'st-input-danger':errors.has('email')}" type="text"
-                               placeholder="Account"/>
+                               :class="{'st-input':true, 'st-input-danger':errors.has('email')}" type="text"/>
                         <span v-show="errors.has('email')" class="st-is-danger">{{errors.first('email')}}</span>
                     </p>
 
+
+                    <p class="_title">password</p>
                     <p class="st-control el-email-control">
                         <input name="password" v-validate="'required'" v-model="account.password"
-                               :class="{'st-input':true, 'st-input-danger':errors.has('password')}" type="password"
-                               placeholder="Password"/>
+                               :class="{'st-input':true, 'st-input-danger':errors.has('password')}" type="password"/>
                         <span v-show="errors.has('password')" class="st-is-danger">{{errors.first('password')}}</span>
                     </p>
 
@@ -29,15 +32,15 @@
         </div>
 
 
-        <div class="el-email-block">
+        <div class="el-email-block chan-email-padding">
             <div>
-                <p>Your contact / subscription address:</p>
+                <p class="__font">Your contact / subscription address:</p>
                 <div class="st-flex st-justify-b el-email-hor">
                     <div>
                         <p class="st-control el-email-control" style="margin-top: 0">
                             <input name="communicationEmail" v-validate="'required|email'" v-model="subEmail.email"
                                    :class="{'st-input':true, 'st-input-danger':errors.has('communicationEmail')}"
-                                   type="text"/>
+                                   type="text" class="specific-input"/>
                             <span v-show="errors.has('communicationEmail')"
                                   class="st-is-danger">{{errors.first('communicationEmail')}}</span>
                         </p>
@@ -56,31 +59,61 @@
 <style scoped lang="scss">
 
     .el-email-body {
-        background-color: #efefef;
+        // background-color: #efefef;
+
+        .chan-email-padding{
+            border-top: 8px solid #f7f7f7;
+            padding-top: 20px;
+
+            .__font{
+                font-family: SlatePro;
+                font-size: 16px;
+                color: #222222;
+            }
+        }
     }
 
     .el-email-block {
         background-color: #fff;
-        padding: 15px 10px;
+        padding: 0px 10px 15px;
         margin-top: 10px;
+
+        ._title{
+            font-family: SlatePro;
+	        font-size: 16px;
+            color: #666666;
+            margin-top: 15px;
+        }
     }
 
     .el-email-control {
         input {
-            height: 30px;
             width: 100%;
-            background-color: #eee;
-            padding-left: 10px;
+            border: none;
+            border-bottom: 1px solid #e6e6e6;
+            outline: none;
+            box-shadow: none;
+            font-family: SlatePro;
+            color: #222222;
+            font-size: 16px;
+            padding: 8px 5px 5px 0px;
         }
-        margin-top: 15px;
+        
+        .specific-input{
+            height: 42px;
+            border-radius: 2px;
+            border: solid 1px #cccccc;
+            padding: 0px 0px 0px 10px;
+        }
     }
 
     .el-email-send {
-        width: 200px;
-        height: 30px;
+        width: 100%;
+        height: 42px;
         padding: 0 !important;
-        line-height: 28px;
-        font-size: 15px;
+        line-height: 42px;
+        font-family: SlatePro-Medium;
+	    font-size: 16px;
     }
 
     .el-email-send-container {
@@ -99,7 +132,7 @@
 
     .el-email-save {
         width: 70px;
-        height: 30px;
+        height: 42px;
         padding: 0 !important;
         line-height: 28px;
         font-size: 15px;
@@ -108,7 +141,7 @@
 
 <script type="text/ecmascript-6">
 
-    import PageHeader from '../components/page-header.vue'
+    import NavBar from '../components/nav-bar.vue'
     import Btn from '../../components/btn.vue'
 
     export default{
@@ -145,8 +178,8 @@
             }
         },
         components: {
-            'page-header': PageHeader,
-            'btn': Btn
+            'btn': Btn,
+            NavBar
         },
         created(){
             this.subEmail.email = this.$store.getters['me/me'].communicationEmail

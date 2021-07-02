@@ -173,23 +173,32 @@
                 return utils.enTime(new Date(paymentTime))
             },
             imghandle(evt){
+                evt.preventDefault()
                 var files = this.files;
-                var formData = new FormData(this.$refs.imageLoader);
-                formData.append("message", '-')
-                if(this.ticket_con){
-                    formData.append("operaId",this.ticket_con.operaId)
+                var myFiles = evt.target.files;
+                console.log("myFiles",myFiles);
+                var maxSize = 10485760;
+                if(myFiles[0].size<maxSize){
+                    var formData = new FormData(this.$refs.imageLoader);
+                    formData.append("message", '-')
+                    if(this.ticket_con){
+                        formData.append("operaId",this.ticket_con.operaId)
+                    }else{
+                        formData.append("operaId",this.ticketid)
+                    }
+
+                    formData.append("subject",this.selected);
+
+                    this.$store.dispatch('addTicket', formData).then(() => {
+                        this.$store.dispatch('getTicket',this.ticketid)
+                        this.msg = ''
+                    }).catch(e => {
+                        alert(e.result)
+                    })
                 }else{
-                    formData.append("operaId",this.ticketid)
+                    alert("A single image should not exceed 10M");
                 }
-
-                formData.append("subject",this.selected);
-
-                this.$store.dispatch('addTicket', formData).then(() => {
-                    this.$store.dispatch('getTicket',this.ticketid)
-                    this.msg = ''
-                }).catch(e => {
-                    alert(e.result)
-                })
+                
             },
             close(){
                 this.$emit('closeSelect');

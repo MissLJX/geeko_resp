@@ -2,7 +2,7 @@
     <div>
         <div class="el-notifications">
             <list :items="notifications" @listing="$emit('listing')" :loading="loading" :finished="finished">
-                <template slot="li" scope="props">
+                <template slot="li" slot-scope="props">
                     <li :key="props.item.id">
                         <notification class="el-notification" :notification="props.item"/>
                     </li>

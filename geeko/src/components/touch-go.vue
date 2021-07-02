@@ -3,7 +3,10 @@
 <!--        <div class="st-cell st-v-m el-touch-icon">
             <slot class="icon" name="icon"></slot>
         </div>-->
-        <div class="st-cell st-v-m el-touch-go-label1">{{label1}}</div>
+        <div class="st-cell st-v-m el-touch-go-label1">
+            <slot name="icon"></slot>
+            <span class="_font">{{label1}}</span>
+        </div>
         <div class="st-cell st-v-m st-t-r">
             <span v-if="label2" :style="label2Style" class="el-touch-go-label2">{{label2}}</span>
             <i class="iconfont el-go">&#xe694;</i>
@@ -12,13 +15,28 @@
 </template>
 
 <style scoped lang="scss">
+    .st-table{
+        width: 100%;
+        height: 50px;
+    }
     .el-go{
-        font-size: 20px;
+        font-size: 17px;
+        color: #999999;
         vertical-align: middle;
     }
 
-    .el-touch-go-label1{
-        font-size: 14px;
+    .el-touch-go-label1{    
+        ._font{
+            font-family: SlatePro;
+            font-size: 15px;
+            color: #222222;
+            margin-left: 3px;
+        }
+
+        _icon{
+            font-size: 17px;
+            color: #121314;
+        }
     }
 
     .el-touch-go-label2{

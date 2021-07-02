@@ -1,7 +1,7 @@
 <template>
-<div>
+    <div>
         <list :items="products" :loading="loading" :finished="finished" class="el-products" @listing="$emit('listing')">
-            <template slot="li" scope="props">
+            <template slot="li" slot-scope="props">
                 <li :key="props.item.id">
                     <product :product="props.item"/>
                 </li>

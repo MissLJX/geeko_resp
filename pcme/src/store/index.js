@@ -106,7 +106,11 @@ const state = {
     otherNtFinished: false,
     notificationCount: 0,
     wannalistNum:0,
-    returnLabelPdf:null
+    returnLabelPdf:null,
+
+    logisticsCompanies:null,
+
+    returnLogistics:null
 };
 const getters = {
     me: state => state.me,
@@ -199,7 +203,11 @@ const getters = {
     promotionNotifications: state => state.promotionNotifications,
     otherNotifications: state => state.otherNotifications,
     wannalistNum: state => state.wannalistNum,
-    returnLabelPdf:state => state.returnLabelPdf
+    returnLabelPdf:state => state.returnLabelPdf,
+
+    logisticsCompanies:state => state.logisticsCompanies,
+
+    returnLogistics: state => state.returnLogistics
 };
 const mutations = {
     [types.INIT_ME](state, me){
@@ -522,6 +530,12 @@ const mutations = {
     },
     [types.GLOBAL_GET_RETURNLABEL](state,returnLabelPdf){
         state.returnLabelPdf = returnLabelPdf
+    },
+    [types.LOGISTICS_COMPANIES](state,logisticsCompanies){
+        state.logisticsCompanies = logisticsCompanies;
+    },
+    [types.GET_RETURN_LOGISTICS](state,returnLogistics){
+        state.returnLogistics = returnLogistics;
     }
 }
 const actions = {
@@ -956,6 +970,35 @@ const actions = {
             });
         });
     },
+    addReturnLogistics({commit} , logistics){
+        return new Promise((reslove,reject) => {
+            api.addReturnLogistics(logistics).then(message => {
+                console.log("message",message);
+                reslove(message);
+            });
+        });
+    },
+    getLogisticsCompanies({commit}){
+        return new Promise((reslove,reject) => {
+            api.getLogisticsCompanies().then((data) => {
+                commit(types.LOGISTICS_COMPANIES,data.result);
+            });
+        });
+    },
+    getReturnLogistics({commit},orderId){
+        return new Promise((reslove,reject) => {
+            api.getReturnLogistics(orderId).then((data) => {
+                let result = data.result;
+                if(!!result && result != null && result.length > 0 && result.length < 2){
+                    commit(types.GET_RETURN_LOGISTICS,result);
+                }else if(!!result && result != null && result.length > 1){
+                    result.splice(0,result.length - 1);
+                    commit(types.GET_RETURN_LOGISTICS,result);
+                }
+                reslove(result);
+            });
+        });
+    },
     getTickets({commit},skip){
         api.getTickets(skip).then((tickets) => {
             commit(types.GLOBAL_GET_TICKETS, tickets)
@@ -1050,6 +1093,15 @@ const actions = {
             commit(types.GLOBAL_GET_RETURNLABEL,returnLabelPdf)
         })
     },
+
+    // 上传图片通用接口
+    generalUploadImage({commit},{formData}){
+        return new Promise((reslove,reject) => {
+            api.generalUploadImage(formData).then((data) => {
+                reslove(data.result);
+            });
+        });
+    }
 }
 export default new Vuex.Store({
     state,

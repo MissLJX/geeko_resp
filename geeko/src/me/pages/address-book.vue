@@ -1,14 +1,20 @@
 <template>
     <div class="el-address-book-body">
-
-        <page-header><span>{{$t('label.addressBook')}}</span>  <span @click="addAddressHandle" slot="oplabel">{{$t('label.add')}}</span></page-header>
+        <!--   <span @click="addAddressHandle" slot="oplabel">{{$t('label.add')}}</span> -->
+        <page-header><span>{{$t('label.addressBook')}}</span></page-header>
 
         <address-list :addresses="addresses" :loading="false" @listing="listing" @delete="deleteHandle" @list-address-edit="listEditHandle" @make-default="makeDefaultHandle"/>
 
 
+        <div class="sett-address-footer">
+            <div class="add-address"  @click="addAddressHandle">Add New Address</div>
+        </div>
+
         <transition name="uper">
             <address-editor v-if="showeditor" :showLabel="true" :address="editing" @close="close"/>
         </transition>
+
+        <loadding v-show="loading"></loadding>
     </div>
 </template>
 
@@ -37,6 +43,26 @@
     .uper-leave-active , .uper-enter{
         top: 100%;
     }
+
+    .sett-address-footer{
+        width: 100%;
+        position: fixed;
+        bottom: 51px;
+        left: 0px;
+        right: 0px;
+        text-align: center;
+        padding: 0px 13px 20px 13px;
+        background-color: #fff;
+
+        .add-address{
+            height: 42px;
+            line-height: 42px;
+            background-color: #222222;
+            font-family: SlatePro-Medium;
+            font-size: 17px;
+            color: #ffffff;
+        }
+    }
 </style>
 
 <script type="text/ecmascript-6">
@@ -45,6 +71,8 @@
     import store from '../../store'
     import {mapGetters} from 'vuex'
     import PageHeader from '../components/page-header.vue'
+
+    import Loading from '../../components/loading.vue'
 
     export default{
         data(){
@@ -69,8 +97,9 @@
                 this.showeditor = false
             },
             makeDefaultHandle(id){
+                this.loading = true;
                 store.dispatch('me/makeDefault', id).then(() => {
-
+                    this.loading = false;
                 })
             },
             deleteHandle(id){
@@ -84,7 +113,8 @@
         components: {
             'address-list': AddressList,
             'address-editor': AddressEditor,
-            'page-header': PageHeader
+            'page-header': PageHeader,
+            'loadding' : Loading
         },
         beforeRouteEnter(to, from, next){
             store.dispatch('me/getAddresses').then(() => {

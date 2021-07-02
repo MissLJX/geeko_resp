@@ -97,7 +97,24 @@
                 <div class="r-btn w-btn" v-if="orderdetail.id && (orderdetail.status===2 || orderdetail.status===3) ">
                     <span  @click="checkLogistics(orderdetail.id)">{{$t('track')}}</span>
                 </div>
+
+                <div 
+                    class="r-btn black" 
+                    v-if="this.order && this.order.logistics && this.order.logistics.packages && this.order.logistics.packages.length > 1 && order.status === 3"
+                    @click="isReturnLogistics = true"
+                >
+                    <span>Return Logistics</span>
+                </div>
             </div>
+
+            <return-logistics 
+                v-if="isReturnLogistics" 
+                :orderId="orderdetail.id" 
+                @logisticsShow="logisticsShow" 
+                :loddingShow.sync="isloding"
+            >
+            </return-logistics>
+
             <select-order v-if="isShowSelect" v-on:closeSelect="closeSelect1" v-on:showTicket="showTicket"></select-order>
             <order-ticket  v-if="isShowTicket" v-on:closeSelect="closeSelect1" v-on:selectOrder="selectorder"></order-ticket>
 
@@ -184,6 +201,7 @@
     import orderTicket from '../components/order-ticket.vue';
     import CountDown from '../components/countdow.vue';
     import loding from '../components/loding.vue';
+    import ReturnLogistics from '../components/return-logistics.vue'
 
     export default {
         data(){
@@ -203,7 +221,8 @@
                 isAddProducts:false,
                 isAddProductstTip:'',
                 selected:0,
-                isRequired:false
+                isRequired:false,
+                isReturnLogistics:false
             }
         },
         components: {
@@ -211,7 +230,8 @@
             'order-ticket':orderTicket,
             'select-order':selectOrder,
             'count-down': CountDown,
-            'loding':loding
+            'loding':loding,
+            'return-logistics':ReturnLogistics
         },
         computed:{
             ...mapGetters(['orderdetail','shareurl','cancelReasons']),
@@ -430,7 +450,7 @@
                 }
             },
             checkLogistics(orderid){
-                this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/logistics-detail', query: { orderid: orderid , method: 'orderlist' } })
+                this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/order/logistics-detail', query: { orderid: orderid , method: 'orderlist' } })
             },
             checkoutUrl(id){
                 if(id){
@@ -479,11 +499,15 @@
                 return "/product/"+product.name+"/"+product.sku+"/"+product.productId+".html"
             },
             getReturnLabel(){
-                window.recordReturnLabel(this.orderdetail.id);
+                // window.recordReturnLabel(this.orderdetail.id);
                 return document.ctx + "/v9/order/report-return-label?orderId="+this.orderdetail.id ;
             },
             getUrl(suffix){
                 return utils.PROJECT + suffix;
+            },
+            logisticsShow(){
+                this.isReturnLogistics = false;
+                this.isloding = false;
             }
         },
         created(){
