@@ -7,6 +7,21 @@
   url('//at.alicdn.com/t/font_384296_23ced7plns0mgqfr.svg#iconfont') format('svg');
 }
 
+@font-face {
+	font-family: 'SlatePro';
+	src: url('https://s3.geeko.ltd/fonts/SlatePro.ttf');
+}
+
+@font-face {
+	font-family: 'SlatePro-Medium';
+	src: url('https://s3.geeko.ltd/fonts/SlatePro-Medium.ttf');
+}
+
+body{
+  margin: 0;
+  padding: 0;
+}
+
 .iconfont {
   font-family:"iconfont" !important;
   font-size:16px;
@@ -193,13 +208,94 @@
   margin-top: 10px;
 }
 
+.x-country-filter .bd .x-table-title{
+  display: none;
+}
+
 @media screen and (max-width:460px) {
-	.x-country-filter{
+  .x-country-filter{
     font-size: 14px;
-  
+    color: #999999;
+    font-family: SlatePro;
   }
 
   .x-filter-title{
     font-size: 14px;
+    display: block;
+    line-height: 20px;
+  }
+
+  .x-country-filter .x-filter-input{
+    text-align: left;
+  }
+  
+  .x-filter-select{
+    background: url("https://image.geeko.ltd/site/pc/icon-10.png") no-repeat scroll right center transparent;
+    width: 100%;
+    border: none;
+    outline: none;
+    padding-left: 0px;
+    margin-bottom: 10px;
+    padding-right: 20px;
+  }
+
+  .x-country-filter .hd{
+    border-bottom: 10px solid #f7f7f7;;
+  }
+
+  .x-country-filter .hd .x-filter-putor{
+    padding-top: 10px;
+    padding: 10px 20px 0px 20px;
+  }
+
+  .x-country-filter .bd .x-table-title{
+    font-family: SlatePro-Medium;
+    font-size: 16px;
+    color: #222222;
+    margin-top: 20px;
+    display: block;
+  }
+
+  .x-shipping-desc{
+    text-align: left;
+    color: #57b936;
+    position: relative;
+    padding-left: 20px;
+  }
+
+  .x-shipping-desc::after{
+    content: "";
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 4px;
+    background-color: #57b936;
+    border-radius: 50%;
+  }
+
+  .x-country-filter .bd > div{
+    padding: 0px 20px;
+  }
+
+  .x-shipping-table{
+    word-break: break-word;
+  }
+
+  .x-shipping-table tr td:nth-child(2){
+    font-size: 12px;
+  }
+
+  .x-shipping-table tr:first-child td{
+    font-size: 14px;
+  }
+
+  .x-shipping-table tr:first-child td:first-child{
+    width: 25%;
+  }
+
+  .x-shipping-table tr:first-child td:last-child{
+    width: 20%;
   }
 }

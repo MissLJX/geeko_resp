@@ -39,9 +39,17 @@ const instance = axios.create({
 })
 
 
-const getData = () =>  instance.get('/context/anon/get-shipping-policy-info', {}).then(res => res.data).then(data => data.result).catch((e) => {
-        console.error(e)
-})
+const getData = () => {
+    let obj = {};
+    if(window.productId){
+        obj = {params: {productId:window.productId}}
+    }
+    return instance.get('/context/anon/get-shipping-policy-info', obj).
+    then(res => res.data).
+    then(data => data.result).
+    catch((e) => {console.error(e)})
+}
+    
 
 
 // const _shipping_infos = [
@@ -227,6 +235,9 @@ class ShippingTable extends React.Component {
 
         return (
             <div>
+                <div className="x-table-title">
+                    Delivery
+                </div>
                 <div className={ desc ? 'x-shipping-desc' : '' } dangerouslySetInnerHTML={{__html:desc}}>
                     {/* <span>{ desc }</span> */}
                 </div>
@@ -278,9 +289,6 @@ class ShippingFilter extends React.Component {
 
 
     componentDidMount(){
-
-       
-
         getData().then(_infos => {
 
             _infos.push({
@@ -416,7 +424,19 @@ addLocaleData([...en, ...fr, ...de, ...pt, ...es, ...sv, ...da, ...nb, ...is, ..
 
 const messages = {}
 
-const lang = (window.lang || 'en').substring(0, 2)
+let language = "";
+
+
+if(window.lang){
+    const arr = ['en','de','fr','pt','es','sv','da','nb','is','fi'];
+    let flag = arr.includes(window.lang.substring(0, 2));
+    language = flag ? window.lang : "en";
+}else{
+    language = "en";
+}
+
+const lang = (language).substring(0, 2);
+
 
 messages['en'] = en_L
 
