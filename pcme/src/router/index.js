@@ -42,17 +42,19 @@ const routes = [
             {
                 path:'order',
                 component:Orders,
-                name:'My Orders',
+                name:'orders',
                 meta: { keepAlive: true }
             },
             {
                 path:'tickets',
                 component:Tickets,
+                name:"tickets",
                 meta: {title:'My Tickets'},
             },
             {
                 path:'notification',
                 component:Notification,
+                name:"notification",
                 meta: {title:'My Messages'},
                 children: [
                     {
@@ -78,45 +80,54 @@ const routes = [
             {
                 path:'coupons',
                 component:Coupons,
+                name:"coupons",
                 meta: {title:'My Coupons'},
             },
             {
                 path:'credits',
+                name:"credits",
                 component:Credits,
                 meta: {title:'My Credits'},
             },
             {
                 path:'cards',
+                name:"cards",
                 component:Cards,
                 meta: {title:'My Credit Cards'},
             },
             {
                 path:'wishlist',
+                name:"wishlist",
                 component:Wishlist,
                 meta: {title:'My Wishlist'},
             },
             {
                 path:'addressBook',
+                name:"addressBook",
                 component:AddressBook,
                 meta: {title:'Address Book'},
             },
             {
                 path:'change-email',
+                name:"changeEmail",
                 component:ChangeEmail,
                 meta: {title:'Change Email'},
             },
             {
                 path:'changePwd',
+                name:"changePwd",
                 component:ChangePwd,
                 meta: {title:'Change Password'},
             },
             {
                 path:'updateProfile',
+                name:"updateProfile",
                 component:UpdateProfile,
                 meta: {title:'Update Profile'},
             },
             {
                 path:'makeSug',
+                name:"makeSug",
                 component:MakeSug,
                 meta: {title:'Make Suggestion'},
             },
@@ -143,7 +154,7 @@ const routes = [
         meta: {title:'OrderReview'},
     },
     {
-        path:__Base_Path__+'/me/m/logistics-detail',
+        path:__Base_Path__+'/me/m/order/logistics-detail',
         component: LogisticsDetail,
         meta: {title:'LogisticsDetail'},
     },

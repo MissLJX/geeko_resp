@@ -29,6 +29,12 @@ const Me = [
         meta: {title: 'Change currency'}
     },
     {
+        path:ROUTER_PATH_ME + "/edit-message",
+        component:() => import('../pages/EditUserMessage.vue'),
+        name:"edit-user-message",
+        meta:{title:"Edit User Message"}
+    },
+    {
         path: ROUTER_PATH_ME + '/change-email',
         component: () => import('../pages/change-email.vue'),
         name: 'change-email',
@@ -44,7 +50,26 @@ const Me = [
         path: ROUTER_PATH_ME + '/coupons',
         component: () => import('../pages/coupons.vue'),
         name: 'coupons',
-        meta: {title: 'Coupons'}
+        meta: {title: 'Coupons' , keepAlive:true},
+        // children:[
+        //     {
+        //         path:"",
+        //         name:"UnusedCoupon",
+        //         component:() => import("../pages/coupon/UnusedCoupon.vue"),
+        //         meta: {title: 'UnusedCoupon' , keepAlive:true},
+        //     },
+        //     {
+        //         path:"unused-coupon",
+        //         component:() => import("../pages/coupon/UnusedCoupon.vue"),
+        //         meta: {title: 'UnusedCoupon' , keepAlive:true},
+        //     }, 
+        //     {
+        //         path:"expired-coupon",
+        //         name:"ExpiredCoupon",
+        //         component:() => import("../pages/coupon/ExpiredCoupon.vue"),
+        //         meta: {title: 'ExpiredCoupon' , keepAlive:true},
+        //     },
+        // ]
     },
     {
         path: ROUTER_PATH_ME + '/credits',
@@ -67,7 +92,7 @@ const Me = [
     {
         path: ROUTER_PATH_ME + '/notification',
         component: () => import('../pages/notification.vue'),
-        name: 'notification',
+        // name: 'notification',
         meta: {title: 'Notification'},
         children: [
             {
@@ -106,6 +131,12 @@ const Me = [
         component: () => import('../pages/confirm-success.vue'),
         name: 'Login Protection',
         meta: {title: 'Login Protection'}
+    },
+    {
+        path:ROUTER_PATH_ME + '/track-order',
+        component: () => import('../pages/track-order.vue'),
+        name:"track-order",
+        meta:{title:'Track Order'}
     }
 ]
 

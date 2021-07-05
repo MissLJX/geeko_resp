@@ -35,7 +35,7 @@
         }
 
         height: 50px;
-        border-bottom: 1px solid #dcdcdc;
+        // border-bottom: 1px solid #dcdcdc;
     }
 </style>
 

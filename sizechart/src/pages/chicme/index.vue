@@ -154,7 +154,7 @@
                         </div>
                         <div style="margin-bottom: 15px">
                             <div class="img_t">
-                                <span>2</span>
+                                <span>3</span>
                                 <span>{{ $t("label.hip") }}</span>
                             </div>
 

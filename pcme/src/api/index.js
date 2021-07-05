@@ -227,3 +227,23 @@ export const getReturnLabel = (id) =>{
     return axios.get(NVPATH +'/order/anon/report-return-label',{orderId:id}).then(data => data.result)
 
 }
+
+// 退货用户上传物流信息
+export const addReturnLogistics = (logistics) => {
+    return axios.post('/v9/order/add-return-logistics',JSON.stringify(logistics) , {'Content-Type':"application/json"}).then(data => data.result);
+}
+
+// 获取配置物流信息
+export const getLogisticsCompanies = () => {
+    return axios.get('/context/anon/get-logistics-companies');
+}
+
+export const getReturnLogistics  = function(orderId){
+    return axios.get("/v9/order/get-return-logistics",{orderId});
+}
+
+export const generalUploadImage = (imageFile) =>{
+    return axios.post('/context/upload',imageFile,{'Content-Type': http_infos.upload_image_content_type});
+}
+
+

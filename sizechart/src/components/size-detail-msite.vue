@@ -39,11 +39,11 @@
             <div class="l-cell _right">{{ $t("message.bust_note") }}</div>
         </div>
         <div class="l-row">
-            <div class="l-cell _left">1.{{ $t("label.waist") }}</div>
+            <div class="l-cell _left">2.{{ $t("label.waist") }}</div>
             <div class="l-cell _right">{{ $t("message.waist_note") }}</div>
         </div>
         <div class="l-row">
-            <div class="l-cell _left">1.{{ $t("label.hip") }}</div>
+            <div class="l-cell _left">3.{{ $t("label.hip") }}</div>
             <div class="l-cell _right">{{ $t("message.hip_note") }}</div>
         </div>
     </div>
@@ -54,11 +54,11 @@
             <div class="l-cell _right">{{ $t("message.bust_note") }}</div>
         </div>
         <div class="l-row">
-            <div class="l-cell _left">1.{{ $t("label.waist") }}</div>
+            <div class="l-cell _left">2.{{ $t("label.waist") }}</div>
             <div class="l-cell _right">{{ $t("message.waist_note") }}</div>
         </div>
         <div class="l-row">
-            <div class="l-cell _left">1.{{ $t("label.hip") }}</div>
+            <div class="l-cell _left">3.{{ $t("label.hip") }}</div>
             <div class="l-cell _right">{{ $t("message.hip_note") }}</div>
         </div>
     </div>
@@ -69,7 +69,7 @@
             <div class="l-cell _right">{{ $t("message.bust_note") }}</div>
         </div>
         <div class="l-row">
-            <div class="l-cell _left">1.{{ $t("label.hip") }}</div>
+            <div class="l-cell _left">2.{{ $t("label.hip") }}</div>
             <div class="l-cell _right">{{ $t("message.hip_note") }}</div>
         </div>
     </div>
@@ -80,7 +80,7 @@
             <div class="l-cell _right">{{ $t("message.waist_note") }}</div>
         </div>
         <div class="l-row">
-            <div class="l-cell _left">1.{{ $t("label.hip") }}</div>
+            <div class="l-cell _left">2.{{ $t("label.hip") }}</div>
             <div class="l-cell _right">{{ $t("message.hip_note") }}</div>
         </div>
     </div>
@@ -91,11 +91,11 @@
             <div class="l-cell _right">{{ $t("message.bust_note") }}</div>
         </div>
         <div class="l-row">
-            <div class="l-cell _left">1.{{ $t("label.waist") }}</div>
+            <div class="l-cell _left">2.{{ $t("label.waist") }}</div>
             <div class="l-cell _right">{{ $t("message.waist_note") }}</div>
         </div>
         <div class="l-row">
-            <div class="l-cell _left">1.{{ $t("label.hip") }}</div>
+            <div class="l-cell _left">3.{{ $t("label.hip") }}</div>
             <div class="l-cell _right">{{ $t("message.hip_note") }}</div>
         </div>
     </div>
@@ -106,11 +106,11 @@
             <div class="l-cell _right">{{ $t("message.bust_note") }}</div>
         </div>
         <div class="l-row">
-            <div class="l-cell _left">1.{{ $t("label.waist") }}</div>
+            <div class="l-cell _left">2.{{ $t("label.waist") }}</div>
             <div class="l-cell _right">{{ $t("message.waist_note") }}</div>
         </div>
         <div class="l-row">
-            <div class="l-cell _left">1.{{ $t("label.hip") }}</div>
+            <div class="l-cell _left">3.{{ $t("label.hip") }}</div>
             <div class="l-cell _right">{{ $t("message.hip_note") }}</div>
         </div>
     </div>
@@ -121,7 +121,7 @@
             <div class="l-cell _right">{{ $t("message.waist_note") }}</div>
         </div>
         <div class="l-row">
-            <div class="l-cell _left">1.{{ $t("label.hip") }}</div>
+            <div class="l-cell _left">2.{{ $t("label.hip") }}</div>
             <div class="l-cell _right">{{ $t("message.hip_note") }}</div>
         </div>
     </div>

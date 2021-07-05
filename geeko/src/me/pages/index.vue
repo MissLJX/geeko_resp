@@ -1,334 +1,123 @@
 <template>
-    <div class="el-me-body">
-        <div class="el-me-wall" :style="{'background':background}">
-            <div class="el-me-bg" :style="{'background':background_float}">
-                <div class="st-table el-me-header-area">
-                    <div class="st-cell st-v-m">
-                        <router-link :to="{name: 'settings'}">
-                            <span class="el-setting-icon"><i class="iconfont el-setting-font">&#xe68a;</i></span>
-                        </router-link>
-                    </div>
-                    <div class="st-cell st-v-m">
-                        <div class="el-me-headerImage">
-                            <div>
-                                <div :style="{'background-image': 'url('+headerImage+'),url('+baseHeaderUrl+')' }"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="st-cell st-v-m">
-                        <router-link :to="{name: 'notification-promotion'}"
-                                     :class="{'el-noti-count':notificationCount > 0}">
-                            <span class="el-setting-icon"><i class="iconfont el-setting-font">&#xe60b;</i></span>
-                            <span class="el-noti-num">{{notificationCount}}</span>
-                        </router-link>
-                    </div>
-                </div>
+    <div id="me">
+        <nav-bar>
+            <span slot="center">My Account</span>
+            <router-link :to="{name: 'notification-promotion'}" slot="right" :class="{'index-notification' : notificationCount > 0}">
+                <span class="iconfont" style="font-size:20px;">&#xe60b;</span>
+                <span class="el-noti-num" v-if="notificationCount > 0">{{notificationCount}}</span>
+            </router-link>
+        </nav-bar>
 
-                <div class="el-me-info">
-                    <p class="el-name">{{fullName}}</p>
-                    <p class="el-email">{{me.email}}</p>
-                </div>
+        <div class="header-portrait">
+            <div>
+                <div class="icon" :style="{'background-image': 'url('+headerImage+'),url('+baseHeaderUrl+')' }"></div>
+            </div>
+            <div>
+                <div>{{fullName}}</div>
+                <div>{{me.email}}</div>
             </div>
         </div>
 
+         <div class="me-main">
+                <ul class="el-me-tool-list">
+                    <li>
+                        <a :href="orderHref">
+                            <touch-go class="el-me-tool-list-touch" :label1="'My Order'" :label2="orderhreflabel" :label2Style="{color:'#e5004f', fontWeight:'bold'}">
+                                <span class="iconfont _icon" slot="icon">&#xe68f;</span>
+                            </touch-go>
+                        </a>
+                    </li>
 
-        <div class="el-me-order-area">
-            <div class="con-email" v-show="isConfirmEmail">
-                <router-link :to="{name: 'confirm-email'}">
-                    <email-confirm class="el-confirm-email"></email-confirm>
-                </router-link>
-            </div>
-            <div class="hd">
-                <a :href="orderHref">
-                    <touch-go class="el-me-order-touch" :label1="$t('label.order')" :label2="orderhreflabel"
-                              :label2Style="{color:'#e5004f', fontWeight:'bold'}">
-                        <i slot="icon" class="iconfont" style="font-size:18px;">&#xe600;</i>
-                    </touch-go>
-                </a>
-            </div>
-            <!--<div class="bd">
-                <div class="line">
-                    <div>
-                        <a :href="getOrderHref('processing')">
-                            <i class="iconfont">&#xe60a;</i>
-                            <span>{{$t('label.processing')}}</span>
-                            <span v-if="orderCountProcessing > 0"
-                                  class="el-me-order-count">{{orderCountProcessing}}</span>
+                    <li>
+                        <router-link :to="{name: 'track-order'}">
+                            <touch-go class="el-me-tool-list-touch" :label1="'Track Order'">
+                                <span class="iconfont _icon f-icon-17" slot="icon">&#xe69c;</span>
+                            </touch-go>
+                        </router-link>
+                    </li>
+                </ul>
+
+                <ul class="el-me-tool-list _b-top">
+                    <li>
+                        <router-link class="el-me-tool-list-item" :to="{name: 'edit-user-message'}">
+                            <touch-go class="el-me-tool-list-touch" :label1="'My Details'">
+                                <span class="iconfont _icon f-icon-18" slot="icon">&#xe6a3;</span>
+                            </touch-go>
+                        </router-link>
+                    </li>
+
+                    <li>
+                        <router-link class="el-me-tool-list-item" :to="{name: 'coupons'}">
+                            <touch-go class="el-me-tool-list-touch" :label1="'Coupons'">
+                                <span class="iconfont _icon f-icon-15" slot="icon">&#xe697;</span>
+                            </touch-go>
+                        </router-link>
+                    </li>
+
+                    <li>
+                        <router-link class="el-me-tool-list-item" :to="{name: 'credits'}">
+                            <touch-go class="el-me-tool-list-touch" :label1="'Ponits'">
+                                <span class="iconfont _icon f-icon-18" slot="icon">&#xe698;</span>
+                            </touch-go>
+                        </router-link>
+                    </li>
+
+                    <li>
+                        <router-link class="el-me-tool-list-item" :to="{name: 'creditcards'}">
+                            <touch-go class="el-me-tool-list-touch" :label1="'Wallet'">
+                                <span class="iconfont _icon f-icon-14" slot="icon">&#xe6a1;</span>
+                            </touch-go>
+                        </router-link>
+                    </li>
+                </ul>
+
+                <ul class="el-me-tool-list _b-top">
+                    <li>
+                        <router-link class="el-me-tool-list-item" :to="{name: 'wishlist'}">
+                            <touch-go class="el-me-tool-list-touch" :label1="$t('label.wishlist')">
+                                <span class="iconfont _icon" slot="icon">&#xe6a2;</span>
+                            </touch-go>
+                        </router-link>
+                    </li>
+
+                    <li>
+                        <router-link class="el-me-tool-list-item" :to="{name: 'address-book'}">
+                            <touch-go class="el-me-tool-list-touch" :label1="$t('label.addressBook')">
+                                <span class="iconfont _icon f-icon-18" slot="icon">&#xe691;</span>
+                            </touch-go>
+                        </router-link>
+                    </li>
+
+                    <li>
+                        <a class="el-me-tool-list-item" href="/share">
+                            <touch-go class="el-me-tool-list-touch" :label1="'Share & Get $15'">
+                                <span class="iconfont _icon f-icon-18" slot="icon">&#xe69b;</span>
+                            </touch-go>
                         </a>
-                    </div>
-                    <div>
-                        <a :href="getOrderHref('shipped')">
-                            <i class="iconfont">&#xe609;</i>
-                            <span>{{$t('label.shipped')}}</span>
-                            <span v-if="orderCountShipped > 0" class="el-me-order-count">{{orderCountShipped}}</span>
+                    </li>
+
+                    <li>
+                        <a href="/support">
+                            <touch-go class="el-me-tool-list-touch" :label1="'Support'">
+                                <span class="iconfont _icon" slot="icon">&#xe6a0;</span>
+                            </touch-go>
                         </a>
-                    </div>
-                </div>
-                <div class="line">
-                    <div>
-                        <a :href="getOrderHref('confirmed')">
-                            <i class="iconfont">&#xe607;</i>
-                            <span>{{$t('label.confirmed')}}</span>
-                            <span v-if="orderCountReceipt > 0" class="el-me-order-count">{{orderCountReceipt}}</span>
-                        </a>
-                    </div>
-                    <div>
-                        <a :href="getOrderHref('canceled')">
-                            <i class="iconfont">&#xe608;</i>
-                            <span>{{$t('label.canceled')}}</span>
-                            <span v-if="orderCountCanceled > 0" class="el-me-order-count">{{orderCountCanceled}}</span>
-                        </a>
-                    </div>
-                </div>
-            </div>-->
+                    </li>
+                </ul>
         </div>
 
-        <ul class="el-me-tool-list">
-            <!--<li>
-                <router-link class="el-me-tool-list-item" :to="{name: 'address-book'}">
-                    <touch-go class="el-me-tool-list-touch" :label1="$t('label.addressBook')">
-                        <i slot="icon" class="iconfont">&#xe60f;</i>
-                    </touch-go>
-                </router-link>
-            </li>-->
-
-            <li>
-                <router-link class="el-me-tool-list-item" :to="{name: 'coupons'}">
-                    <touch-go class="el-me-tool-list-touch" :label1="$t('label.coupons')">
-                        <i slot="icon" class="iconfont">&#xe616;</i>
-                    </touch-go>
-                </router-link>
-            </li>
-
-            <li>
-                <router-link class="el-me-tool-list-item" :to="{name: 'credits'}">
-                    <touch-go class="el-me-tool-list-touch" :label1="$t('label.credits')">
-                        <i slot="icon" class="iconfont">&#xe614;</i>
-                    </touch-go>
-                </router-link>
-            </li>
-
-            <li>
-                <router-link class="el-me-tool-list-item" :to="{name: 'wishlist'}">
-                    <touch-go class="el-me-tool-list-touch" :label1="$t('label.wishlist')">
-                        <i slot="icon" class="iconfont">&#xe615;</i>
-                    </touch-go>
-                </router-link>
-            </li>
-
-            <li>
-                <router-link class="el-me-tool-list-item" :to="{name: 'creditcards'}">
-                    <touch-go class="el-me-tool-list-touch" :label1="$t('label.creditcard')">
-                        <i slot="icon" class="iconfont">&#xe60f;</i>
-                    </touch-go>
-                </router-link>
-            </li>
-
-        </ul>
-
-        <you-likes class="el-me-like-area" />
-
+        <div class="me-btn" @click="logoutHandle">{{$t('label.logout')}}</div>
     </div>
 </template>
 
-<style scoped lang="scss">
-
-    .el-me-body {
-        background-color: #efefef;
-    }
-
-    .el-me-wall {
-        height: 150px;
-        background-size: cover !important;
-        position: relative;
-        .el-me-bg{
-            position: absolute;
-            width: 100%;
-            height: 150px;
-            padding: 10px;
-            background-color:rgba(0,0,0,0.66) ;
-        }
-    }
-
-    .el-me-headerImage {
-        border: 2px solid rgba(0, 0, 0, 0.2);
-        padding: 2px;
-        border-radius: 50%;
-        margin: 0 25px;
-        & > div {
-            border: 4px solid rgba(0, 0, 0, 0.2);
-            border-radius: 50%;
-            & > div {
-                width: 70px;
-                height: 70px;
-                background: no-repeat center/cover;
-                border-radius: 50%;
-            }
-        }
-    }
-
-    .el-me-header-area {
-        margin: auto;
-    }
-
-    .el-me-info {
-        text-align: center;
-
-        .el-name {
-            font-weight: bold;
-            font-size: 16px;
-            color: #fff;
-        }
-
-        .el-email {
-            font-size: 14px;
-            color: #fff;
-        }
-    }
-
-    .el-setting-icon {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background-color: rgba(0, 0, 0, 0.2);
-        text-align: center;
-        line-height: 38px;
-        display: inline-block;
-
-        & > .el-setting-font {
-            font-size: 22px;
-            color: #fff;
-        }
-    }
-
-    .el-me-order-touch {
-        width: 100%;
-        height: 50px;
-    }
-
-    .el-me-order-area {
-        background-color: #fff;
-        & > .hd {
-            padding: 0 10px;
-        }
-
-        & > .con-email {
-            padding: 0 10px;
-            background-color: #eeeeee;
-            color: #666666;
-            line-height: 26px;
-            border-bottom: 1px solid #e4e3e3;
-        }
-
-        & > .bd {
-            border-top: 1px solid #dcdcdc;
-
-            & > .line {
-                display: flex;
-                & > div {
-                    position: relative;
-                    width: 50%;
-                    text-align: center;
-                    border-left: 1px solid #dcdcdc;
-                    &:first-child {
-                        border-left: none;
-                    }
-
-                    i {
-                        display: block;
-                        font-size: 26px;
-                        color: #666;
-                    }
-
-                    span {
-                        display: block;
-                        color: #666;
-                        margin-top: 5px;
-                    }
-
-                    .el-me-order-count {
-                        position: absolute;
-                        background-color: #e5004f;
-                        color: #fff;
-                        font-size: 12px;
-                        border-radius: 15px;
-                        padding: 4px 8px;
-                        top: -16px;
-                        left: calc(50% + 5px);
-                    }
-                }
-                padding: 15px 0;
-                border-top: 1px solid #dcdcdc;
-                &:first-child {
-                    border-top: none;
-                }
-            }
-
-            a {
-                text-decoration: none;
-            }
-
-        }
-    }
-
-    .el-me-tool-list {
-        background-color: #fff;
-        padding-left: 10px;
-        & > li {
-            border-top: 1px solid #dcdcdc;
-        }
-
-        .el-me-tool-list-item {
-            text-decoration: none;
-            display: block;
-            color: #222928;
-            .el-me-tool-list-touch {
-                height: 40px;
-                width: 100%;
-                padding-right: 10px;
-            }
-        }
-    }
-
-    .el-me-like-area {
-        background-color: #fff;
-        margin-top: 15px;
-    }
-
-    .el-noti-num {
-        display: none;
-    }
-
-    .el-noti-count {
-        display: inline-block;
-        position: relative;
-        .el-noti-num {
-            display: inline-block;
-            background-color: #fff;
-            color: #e5004f;
-            border-radius: 20px;
-            position: absolute;
-            top: -9px;
-            right: -9px;
-            padding: 3px 7px;
-        }
-    }
-
-    .el-confirm-email {
-        width: 100%;
-        line-height: 18px;
-        height: 50px;
-    }
-</style>
-
 <script type="text/ecmascript-6">
-
+    import NavBar from '../components/nav-bar.vue'
     import {mapGetters, mapActions} from 'vuex';
     import store from '../../store';
     import TouchGo from '../../components/touch-go.vue';
     import YouLikes from '../../components/you-likes.vue';
     import EmailConfirm from '../../components/confirm-email.vue';
-    import * as utils from '../../utils/geekoutils';
+    import * as utils from '../../utils/geekoutils.js';
 
 
     export default {
@@ -337,12 +126,13 @@
                 'me', /*'youlikes'*/, 'feed', 'headerImage', 'notificationCount', 'orderCountProcessing', 'orderCountShipped', 'orderCountReceipt', 'orderCountCanceled', 'orderCountUnpaid'
             ]),
             fullName() {
-                return this.me.name.firstName + ' ' + this.me.name.lastName;
+                    return this.getName(this.me.name.firstName) + ' ' + this.getName(this.me.name.lastName);
             },
             orderHref() {
-                let path = '';
+                let path = 'all';
                 if (this.orderCountUnpaid > 0)
                     path = 'unpaid'
+                    // /me/m/order/
                 return utils.PROJECT + '/me/m/order/' + path;
             },
             confirmHref() {
@@ -386,12 +176,21 @@
         methods: {
             getOrderHref(path) {
                 return utils.PROJECT + '/me/m/order/' + path;
+            },
+            getName(value){
+                return value ? value : '';
+            },
+            logoutHandle:function(){
+                store.dispatch('logout').then(() => {
+                    window.location.href = "/";
+                });
             }
         },
         components: {
             'touch-go': TouchGo,
             'you-likes': YouLikes,
             'email-confirm': EmailConfirm,
+            'nav-bar':NavBar
         },
         created() {
 /*            if (!this.youlikes || !this.youlikes.length) {
@@ -412,3 +211,100 @@
         }
     };
 </script>
+
+
+<style scoped lang="scss">
+    #me{
+        padding-bottom: 30px;
+        background-color: #fff;
+        .header-portrait{
+            padding: 10px 22px 20px 22px;
+            display: table;
+            .icon{
+                width: 80px;
+                height: 80px;
+                background: no-repeat 50%/cover;
+                border-radius: 50%;
+                
+            }
+
+            & > div{
+                display: table-cell;
+            }
+
+            & > div:last-child{
+                vertical-align: middle;
+                padding-left: 15px;
+
+                & > div:first-child{
+                    font-family: SlatePro-Medium;
+	                font-size: 15px;
+                    color: #222222;
+                    margin-bottom: 8px;
+                }
+
+                & > div:last-child{
+                    font-family: SlatePro;
+                    font-size: 14px;
+                    color: #666666;
+                }
+            }
+        }
+
+        .me-main{
+            .el-me-tool-list{
+                padding-left: 10px;
+
+                &._b-top{
+                    border-top: 10px solid #f6f6f6;
+                }
+
+                & > li{
+                    border-top: 1px solid #eeeeee;
+                }
+
+                & > li:first-child{
+                    border-top: none;
+                }
+
+                .el-me-tool-list-touch{
+                    height: 50px;
+                    width: 100%;
+                    padding: 0px 10px;
+
+                    .iconfont._icon{
+                        &.f-icon-17{
+                            font-size: 17px;
+                        }
+
+                        &.f-icon-15{
+                            font-size: 15px;
+                        }
+
+                        &.f-icon-18{
+                            font-size: 18px;
+                        }
+
+                        &.f-icon-14{
+                            font-size: 14px;
+                        }
+                    }
+                }
+            }
+        }
+
+        .me-btn{
+            width: 140px;
+            height: 30px;
+            line-height: 30px;
+            background-color: #121314;
+            border-radius: 2px;
+            margin: 0 auto;
+            font-family: SlatePro-Medium;
+            font-size: 14px;
+            color: #ffffff;
+            text-align: center;
+            margin-top: 27px;
+        }
+    }
+</style>

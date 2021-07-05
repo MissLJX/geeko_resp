@@ -1,15 +1,15 @@
 <template>
     <div class="el-credit-body">
 
-        <page-header>{{$t('label.credits')}}</page-header>
+        <page-header>My Points</page-header>
 
         <div>
             <credit-header :me="me"></credit-header>
-            <received-used @showUsed="changeMethod" :received="received" :used="used"></received-used>
+            <received-used @showUsed="changeMethod"></received-used>
             <credit-list  :isReceived="isReceived" :credits="credits" @listing="listingHandle" :loading="loading" :finished="finished"/>
         </div>
 
-        <get-more></get-more>
+        <!-- <get-more></get-more> -->
     </div>
 </template>
 
@@ -42,7 +42,7 @@
                 empty: false,
                 received: 0,
                 used: 0,
-                isReceived:true
+                isReceived:"0"
             }
         },
         computed: {
@@ -77,6 +77,13 @@
 
         },
         beforeRouteEnter(to, from, next){
+            let credits = store.getters['me/credits'];
+
+            if(credits && credits.length){
+                next();
+                return;
+            }
+
             store.dispatch('me/getCredits', {skip: 0}).then(({empty, finished}) => {
                 next(vm => {
                     if(empty) vm.empty = empty

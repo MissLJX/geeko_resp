@@ -7,7 +7,7 @@
         </page-header>
         <product-list v-if="ifEdit" :products="products" :loading="loading" :finished="finished" @listing="listingHandle" />
         <product-wishlist v-if="!ifEdit" :products="products" :loading="loading" :finished="finished" @listing="listingHandle" @refresh="refreshHandle"/>
-        <loding v-if="ifloding"></loding>
+        <loading v-if="ifloding"></loading>
     </div>
 </template>
 
@@ -22,7 +22,7 @@
     import ProductList from '../../components/product-list.vue'
     import ProductWishList from '../../components/product-wishlist.vue'
     import store from '../../store'
-    import Loding from "../../components/loding.vue";
+    import Loading from "../../components/loading.vue";
     export default{
         data(){
             return{
@@ -88,7 +88,7 @@
             }
         },
         components: {
-            'loding':Loding,
+            'loading':Loading,
             'page-header': PageHeader,
             'product-list': ProductList,
             'product-wishlist':ProductWishList
@@ -97,12 +97,16 @@
             var wishproducts = store.getters['me/wishProducts']
 
             if(wishproducts && wishproducts.length){
-                next()
-                return
+                next(vm => {
+                    vm.finished = true;
+                })
+                return;
             }
-            store.dispatch("me/getWishproducts", {skip: 0} ).then(() => {
+            store.dispatch("me/getWishproducts", {skip: 0} ).then(({finished}) => {
                 store.dispatch("me/getWishskip")
-                next()
+                next(vm => {
+                    vm.finished = finished;
+                })
             })
         },
         mounted(){

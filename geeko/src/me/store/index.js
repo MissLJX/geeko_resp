@@ -10,7 +10,7 @@ import {creditcards} from '../api/index';
 const state = {
     me: null,
     addresses: null,
-    coupons: null,
+    coupons: [],
     feed: null,
 /*    allPoints:[],*/
     credits: [],
@@ -44,7 +44,11 @@ const state = {
     orderCountUnpaid: 0,
     message:[],
     creditcards:[],
-    mercadocreditcards:[]
+    mercadocreditcards:[],
+    trackOrder:[],
+    trackOrderSkip:0,
+    expiredCoupons:[],
+    expiredCouponsSkip:0
 }
 
 const getters = {
@@ -84,7 +88,12 @@ const getters = {
     orderCountUnpaid: state => state.orderCountUnpaid,
     message: state => state.message,
     creditcards: state =>state.creditcards,
-    mercadocreditcards: state => state.mercadocreditcards
+    mercadocreditcards: state => state.mercadocreditcards,
+    trackOrder: state => state.trackOrder,
+    trackOrderSkip: state => state.trackOrderSkip,
+
+    expiredCoupons:state => state.expiredCoupons,
+    expiredCouponsSkip:state => state.expiredCouponsSkip
 }
 
 const mutations = {
@@ -239,8 +248,19 @@ const mutations = {
     },
     [types.ME_REMOVE_EXPIRED_PRODUCTS](state){
 
+    },
+    [types.ME_GET_TRACK_ORDER_MESSAGE](state,track){
+        state.trackOrder = _.concat(state.trackOrder,track)
+    },
+    [types.ME_TRACK_ORDER_SKIP](state){
+        state.trackOrderSkip += 20;
+    },
+    [types.ME_GET_EXPIRED_COUPONS](state,expiredCoupons){
+        state.expiredCoupons = _.concat(state.expiredCoupons,expiredCoupons);
+    },
+    [types.ME_GET_EXPIRED_COUPONS_SKIP](){
+        state.expiredCouponsSkip += 20;
     }
-
 }
 
 const actions = {
@@ -249,7 +269,7 @@ const actions = {
             return Promise.all([
                 dispatch('getMe'),
                 dispatch('getWishlist'),
-                dispatch('getAllPoints')
+                // dispatch('getAllPoints')
             ]).then(([me, wishlist]) => {
                 commit(types.ME_GET, me)
                 commit(types.ME_GET_WISH_LIST, wishlist)
@@ -309,11 +329,29 @@ const actions = {
         return new Promise((resolve, reject) => {
             api.getCoupons().then(coupons => {
                 commit(types.ME_GET_COUPONS, coupons)
-                resolve()
+                resolve(coupons)
             }).catch(e => {
                 reject(e)
             })
         })
+    },
+
+    getExpiredCoupons({commit},{skip}){
+        return api.getExpiredCoupons(skip,"2").then((coupons) => {
+            if(coupons && coupons.length > 0){
+                commit(types.ME_GET_EXPIRED_COUPONS,coupons);
+                return {empty:true}
+            }else{
+                return {finished:true}
+            }
+            return {};
+        }).catch(error => {
+            console.log("error",error);
+        });
+    },
+
+    getExpiredCouponsSkip({commit}){
+        commit(types.ME_GET_EXPIRED_COUPONS_SKIP);
     },
 
     makeDefault({commit, state}, id){
@@ -459,7 +497,6 @@ const actions = {
                 }
                 return {finished: true}
             }
-
             return {}
         })
     },
@@ -599,6 +636,19 @@ const actions = {
     confirmEmail({commit},email){
         return api.confirmEmail(email)
     },
+    getTrackOrderMessage({commit},{skip}){
+        return api.getTrackOrderMessage(skip).then((track) => {
+            if (track && track.length) {
+                commit(types.ME_GET_TRACK_ORDER_MESSAGE,track);
+            } else {
+                return {finished: true,empty:true}
+            }
+            return {}
+        });
+    },
+    getTrackOrderSkip({commit}){
+        commit(types.ME_TRACK_ORDER_SKIP);
+    }
 }
 
 

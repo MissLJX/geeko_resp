@@ -1,7 +1,7 @@
 <template>
     <div>
         <ul class="st-clear">
-            <slot v-for="item in items" name="li" :item="item" track-by="$index"></slot>
+            <slot v-for="(item,index) in items" name="li" :item="item" track-by="$index" :index="index"></slot>
         </ul>
         <div v-show="loading" class="el-list-loading"><i class="iconfont">&#xe69f;</i></div>
         <div class="el-no-more" v-show="finished && scrollable">No more data.</div>
@@ -65,7 +65,7 @@
                 ]
 
 
-                if (scrollTop + windowHeight >= documentHeight - 100) {
+                if (scrollTop + windowHeight >= documentHeight - 171) {
                     if (!this.loading && !this.finished) {
                         this.$emit('listing')
                     }

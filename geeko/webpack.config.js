@@ -23,7 +23,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, './dist'),
      /*publicPath: '/joyshoetique/resources/vue/me/js/',*/
-      publicPath: '/resources/vue/me/js/',
+      publicPath: '/',
     filename: '[name].js',
     chunkFilename: '[name].js'
   },
@@ -67,7 +67,8 @@ module.exports = {
 
   plugins: [
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('production')
+      // 'process.env.NODE_ENV': JSON.stringify('production')
+      'process.env.NODE_ENV': JSON.stringify('development')
     }),
     new HtmlWebpackPlugin({
       title: 'index',

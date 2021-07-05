@@ -1,7 +1,7 @@
 <template>
     <div class="el-cards">
         <list :items="creditcards" :scrollable="false">
-            <template slot="li" scope="props">
+            <template slot="li" slot-scope="props">
                 <li :key="props">
                     <card :quickpayRecord="props.item.quickpayRecord" :cardStyle="props.item.style" @delete="deleteHandle"/>
                 </li>

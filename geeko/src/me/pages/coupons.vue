@@ -3,7 +3,9 @@
         <page-header>
             <span>{{$t('label.coupons')}}</span>
         </page-header>
-        <coupon-list :coupons="coupons"/>
+        <div>
+            <coupon-container></coupon-container>
+        </div>
     </div>
 </template>
 
@@ -14,31 +16,14 @@
 </style>
 
 <script type="text/ecmascript-6">
-
-    import store from '../../store'
-    import {mapGetters} from 'vuex'
-    import CouponList from '../components/coupon-list.vue'
     import PageHeader from '../components/page-header.vue'
 
+    import CouponContainer from './coupon/CouponContainer.vue'
+
     export default{
-
-        computed: {
-            ...mapGetters('me', ['coupons']),
-        },
         components: {
-            'coupon-list': CouponList,
-            'page-header': PageHeader
-        },
-
-        methods: {},
-
-        beforeRouteEnter(to, from, next){
-            store.dispatch('me/getCoupons').then(() => {
-                next()
-            }).catch((e) => {
-                console.error(e)
-                next(false)
-            })
+            'page-header': PageHeader,
+            'coupon-container':CouponContainer
         }
     }
 </script>

@@ -12,6 +12,7 @@ import VeeValidate from 'vee-validate'
 
 import './css/style.scss'
 
+
 Vue.use(VeeValidate)
 
 
