@@ -82,18 +82,17 @@ const Modal = class extends React.Component {
 		console.log(this.props.location.search)
 
 		const FormBody = styled.div`
-    	max-width: 320px;
-    	width: 80%;
+		padding-left: 12px;
+		padding-right: 12px;
     	margin-left: auto;
     	margin-right: auto;
-      padding-bottom: 100px;
-      -webkit-overflow-scrolling : touch;
+		padding-bottom: 100px;
+		-webkit-overflow-scrolling : touch;
+		border-top: 8px solid #f7f7f7;
     `
 
 		return <FullFixed onClose={this.close} title={intl.formatMessage({ id: 'address' })}>
-
 			<FormBody >
-				<p>* {intl.formatMessage({ id: 'required_tips' })}</p>
 				<AddressForm needInitValidate={this.props.location.search === '?check=1' || validate} editAddress={this.editAddress} style={{ marginTop: 15 }} address={address} />
 			</FormBody>
 

@@ -10,11 +10,8 @@ const Fixed = styled.div`
 const HD = styled.div`
 	height: 50px;
 	line-height: 50px;
-	position: absolute;
-	top: 0;
 	width: 100%;
 	background-color: #fff;
-	z-index: 10;
 `
 
 const Title = styled.h1`
@@ -32,9 +29,8 @@ const Close = styled.span`
 `
 
 const BD = styled.div`
-	height: 100vh;
+	height: calc(100vh - 50px);
 	overflow: auto;
-	padding-top: 50px;
 	-webkit-overflow-scrolling: touch;
 `
 
