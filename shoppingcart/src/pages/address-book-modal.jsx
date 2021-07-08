@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { refreshCart, changeLang } from '../store/actions.js'
 import FullFixed from '../components/msite/full-fixed.jsx'
 import AddressForm from '../components/msite/address-form.jsx'
-import { addAddress, editAddress, paypalAddress, saveTempAddress } from '../api'
+import { addAddress, editAddress} from '../api'
 import { injectIntl } from 'react-intl'
 import { __route_root__ } from '../utils/utils.js'
 import Cookie from 'js-cookie'
@@ -13,7 +13,7 @@ export const __address_token__ = window.token
 
 const mapStateToProps = (state) => {
 	return {
-		address: state.cart ? state.cart.shippingDetail : null
+		address: state.address
 	}
 }
 
@@ -37,50 +37,30 @@ const Modal = class extends React.Component {
 
 	close(evt) {
 		evt.preventDefault()
-		this.props.history.replace(`${window.ctx || ''}${__route_root__}/checkout`)
+		this.props.history.replace(`${window.ctx || ''}${__route_root__}/address-book`)
 	}
 
 	editAddress(address) {
-		if (__address_token__) {
-			paypalAddress({ ...address, id: this.props.address.id, token: __address_token__ }).then(() => {
-				this.props.REFRESH()
-				this.props.history.replace(`${window.ctx || ''}${__route_root__}/checkout`)
-			}).catch(({ result }) => {
-				alert(result)
-			})
-		} else {
-			let addressOpreator
-
-			if(window.__is_login__){
-				addressOpreator = this.props.address ? editAddress : addAddress
-			}else{
-				addressOpreator = saveTempAddress
-			}
-			
-
-			addressOpreator({ ...address, id: this.props.address ? this.props.address.id : null }).then(() => {
-				if (address.country === 'BR') {
-					Cookie.set('currency', 'BRL', { expires: 365 })
-					this.props.CHANGELANG('pt_BR')
-				} else if (address.country === 'MX') {
-					Cookie.set('currency', 'MXN', { expires: 365 })
-					this.props.CHANGELANG('es_MX')
-				} else {
-					this.props.REFRESH()
-				}
-				this.props.history.replace(`${window.ctx || ''}${__route_root__}/checkout`)
-			}).catch(({ result }) => {
-				alert(result)
-			})
-		}
+		let addressOpreator = this.props.address ? editAddress : addAddress
+        addressOpreator({ ...address, id: this.props.address ? this.props.address.id : null }).then(() => {
+            if (address.country === 'BR') {
+                Cookie.set('currency', 'BRL', { expires: 365 })
+                this.props.CHANGELANG('pt_BR')
+            } else if (address.country === 'MX') {
+                Cookie.set('currency', 'MXN', { expires: 365 })
+                this.props.CHANGELANG('es_MX')
+            } else {
+                this.props.REFRESH()
+            }
+            this.props.history.replace(`${window.ctx || ''}${__route_root__}/address-book`)
+        }).catch(({ result }) => {
+            alert(result)
+        })
 	}
 
 	render() {
 		const { address, intl } = this.props
 		const { validate } = this.props.location.state || {}
-
-		console.log(this.props.location.search)
-
 		const FormBody = styled.div`
 		padding-left: 12px;
 		padding-right: 12px;
@@ -95,7 +75,6 @@ const Modal = class extends React.Component {
 			<FormBody >
 				<AddressForm needInitValidate={this.props.location.search === '?check=1' || validate} editAddress={this.editAddress} style={{ marginTop: 15 }} address={address} />
 			</FormBody>
-
 		</FullFixed>
 	}
 }

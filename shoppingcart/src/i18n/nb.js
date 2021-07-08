@@ -140,5 +140,6 @@ export default{
 	valid_email: '{email} er ikke en gyldig e-postadresse',
 	you_can_match_width: 'kanskje du vil fylle den med',
 	addtocart: 'Legg i handlevogn',
-	addonitems: 'Tilleggsartikler'
+	addonitems: 'Tilleggsartikler',
+	addressbook: 'Address Book'
 }

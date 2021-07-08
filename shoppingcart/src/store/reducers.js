@@ -78,9 +78,9 @@ const initialState = {
 	chlieMT: storage.get('chlieMT'),
 	uyCS: storage.get('uyCS'),
 	uyMT: storage.get('uyMT'),
-
 	cashoutMethod: storage.get('cashoutMethod') || {},
-	document: null
+	document: null,
+	address: null
 }
 
 const isEmpty = cart => !cart
@@ -174,6 +174,8 @@ const refresh = (state = initialState, action) => {
 		return {...state, document: action.doc}
 	case SET_CASH_OUT:
 		return {...state, cashoutMethod: action.method}
+	case 'SET_ADDRESS':
+		return {...state, address: action.address}
 	default:
 		return state
 	}

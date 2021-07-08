@@ -9,7 +9,7 @@ const StyledAsk = styled.span`
 	cursor: pointer;
 	display: inline-block;
 	font-size: 12px;
-	line-height: ${props => (props.width - 2) || 16}px;
+	line-height: ${props => (props.width - 2) || 18}px;
 	text-align: center;
 	color: #999;
 

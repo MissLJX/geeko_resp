@@ -140,5 +140,6 @@ export default{
 	valid_email: '{email} er ekki gilt netfang',
 	you_can_match_width: 'þú gætir viljað fylla það með',
 	addtocart: 'Bætt við körfu',
-	addonitems: 'Viðbótaratriði'
+	addonitems: 'Viðbótaratriði',
+	addressbook: 'Address Book'
 }

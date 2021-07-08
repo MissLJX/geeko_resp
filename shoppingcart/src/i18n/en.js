@@ -23,8 +23,8 @@ export default{
 	check_out: 'Check Out',
 	required_tips: 'Indicates a field is required',
 	full_name: 'Full Name',
-	street_address: 'Street Address',
-	unit: 'Unit',
+	street_address: 'Address Line1',
+	unit: 'Address Line2',
 	country: 'Country / Region',
 	state: 'State / Province',
 	city: 'City',
@@ -139,5 +139,6 @@ export default{
 	you_can_match_width: 'You Might Like to Fill it With',
 	addtocart: 'Add To Cart',
 	addonitems: 'Add-on items',
+	addressbook: 'Address Book'
 	
 }

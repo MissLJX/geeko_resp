@@ -140,5 +140,6 @@ export default{
 	valid_email: '{email} är inte ett giltigt e-postmeddelande',
 	you_can_match_width: 'du kanske vill fylla den med',
 	addtocart: 'Lägg i korgen',
-	addonitems: 'Tilläggsprodukter'
+	addonitems: 'Tilläggsprodukter',
+	addressbook: 'Address Book'
 }

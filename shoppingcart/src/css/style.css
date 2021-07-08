@@ -1,11 +1,17 @@
 @font-face {
   font-family: 'SlatePro';
-  src: url('https://s3.geeko.ltd/fonts/SlatePro.ttf');
+  src: url('https://s3.geeko.ltd/fonts/acumin/Acumin-RPro.otf');
 }
 
 @font-face {
   font-family: 'SlatePro-Medium';
-  src: url('https://s3.geeko.ltd/fonts/SlatePro-Medium.ttf');
+  src: url('https://s3.geeko.ltd/fonts/acumin/Acumin-Pro-Medium.otf');
+}
+
+
+@font-face {
+  font-family: 'AcuminPro-Bold';
+  src: url('https://s3.geeko.ltd/fonts/acumin/Acumin-BdPro.otf');
 }
 
 

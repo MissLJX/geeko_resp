@@ -14,7 +14,7 @@ import Mask from '../mask.jsx'
 import { storage } from '../../utils/utils'
 import { MutiElement } from '../pc/styled-control.jsx'
 
-import { Input as GInput, Select as GSelect, GountrySelect } from './geeko-inputs.jsx'
+import { Input as GInput, Select as GSelect, GountrySelect, StreetInput } from './geeko-inputs.jsx'
 
 const getCountryCode = () => {
 	return window.__country || 'US'
@@ -445,6 +445,18 @@ const AdressForm = class extends React.Component {
 		}, 200)
 	}
 
+	// bindGoogleAuto(c){
+	// 	window.autocomplete = new google.maps.places.Autocomplete(c, {
+	// 		componentRestrictions: { country: ["US", "CA"] },
+	// 		fields: ["address_components", "geometry"],
+	// 		types: ["address"],
+	// 	});
+	// 	window.autocomplete.addListener("place_changed", function(){
+	// 		const place = window.autocomplete.getPlace();
+	// 		console.log(place)
+	// 	});
+	// }
+
 	render() {
 		const { intl } = this.props
 
@@ -501,18 +513,37 @@ const AdressForm = class extends React.Component {
 						onChange={this.handleInputChange}
 						validations={[required]} />
 
+					{/* <input ref={this.bindGoogleAuto.bind(this)}/> */}
 
-					<GInput label={`*${intl.formatMessage({ id: 'street_address' })}`}
+
+
+
+					<StreetInput label={`*${intl.formatMessage({ id: 'street_address' })}`}
 						name='streetAddress1'
 						value={this.state.streetAddress1}
 						onChange={this.handleInputChange}
 						placeholder={intl.formatMessage({ id: 'placeholder_street_address' })}
+						country={this.state.country}
+						onAuto={
+							address => {
+								this.setState({
+									...address
+								})
+							}
+						}
 						validations={[required]} />
+
+					{/* <GInput label={`*${intl.formatMessage({ id: 'street_address' })}`}
+						name='streetAddress1'
+						value={this.state.streetAddress1}
+						onChange={this.handleInputChange}
+						placeholder={intl.formatMessage({ id: 'placeholder_street_address' })}
+						
+						validations={[required]} /> */}
 
 					<GInput label={`${intl.formatMessage({ id: 'unit' })}`}
 						name='unit'
 						value={this.state.unit}
-						placeholder={intl.formatMessage({ id: 'placeholder_unit' })}
 						onChange={this.handleInputChange} />
 
 
@@ -627,205 +658,211 @@ const AdressForm = class extends React.Component {
 							textAlign: 'center',
 							outline: 'none',
 							border: 'none',
-							width: '100%'
+							width: '100%',
+							fontSize: 16,
+							fontFamily: 'AcuminPro-Bold'
 						}}>{intl.formatMessage({ id: 'submit' })}</Button>
 					</div>
 				</FormLayout>
 			</Form>
 
-			<Form style={{ ...this.props.style, display: `${this.state.country === 'BR' ? 'block' : 'none'}` }} ref={c => { this.formRef(c, 'BR') }} onSubmit={this.handleSubmit.bind(this)}>
+			<Form style={{ paddingBottom: 40, ...this.props.style, display: `${this.state.country === 'BR' ? 'block' : 'none'}` }} ref={c => { this.formRef(c, 'BR') }} onSubmit={this.handleSubmit.bind(this)}>
 				<FormLayout>
-
-
-
-
-
-
 
 					{
 						isEmailRequired && <div style={{ position: 'relative' }}>
-							<StyledControl>
-								<label>
-									{intl.formatMessage({ id: 'email' })}*
-								</label>
-								<Input
-									name='email'
-									value={this.state.email}
-									onChange={this.handleInputChange}
-									validations={[required, email]} />
-							</StyledControl>
+
+							<GInput label="*Email"
+								name='email'
+								value={this.state.email}
+								onChange={this.handleInputChange}
+								validations={[required, email]} />
+
 							<div style={{ marginTop: 5 }}>
 								<input style={{ verticalAlign: 'middle', WebkitAppearance: 'checkbox' }} type="checkbox" checked={this.state.schecked} onChange={() => { this.setState({ schecked: !this.state.schecked }) }} />
 								<span style={{ fontSize: 13, color: '#999', verticalAlign: 'middle' }}><FormattedMessage id="sign_me_up_for" values={{ siteName: window.siteName }} /></span>
 							</div>
 							<div style={{ position: 'absolute', top: 0, right: 0, fontSize: 12 }}>
-								<span style={{ fontSize: 12, color: '#999' }}>Already have an account? </span>
+								<span style={{ fontSize: 12, color: '#999' }}><FormattedMessage id="already_has_account" /> </span>
 								<a style={{ color: '#222' }} href={`${window.ctx}/${
 									/*global siteType b:true*/
 									/*eslint no-undef: "error"*/
 									siteType === 'new' ? 'page' : 'i'
-									}/login?redirectUrl=${encodeURIComponent(window.location.href)}&loginPage=1`}>Login</a>
+									}/login?redirectUrl=${encodeURIComponent(window.location.href)}&loginPage=1`}><FormattedMessage id="login" /></a>
 							</div>
 						</div>
 
 					}
 
-					<StyledControl>
-						<label>
-							{intl.formatMessage({ id: 'country' })}*
-						</label>
-						<Select
-							className="x-select"
-							value={this.state.country}
-							name='country'
-							disabled={this.props.disablecountry}
-							onChange={(evt) => { this.handleInputChange(evt); this.changeCountry(evt) }}
-							validations={[required]}>
-							<option value=''>Country</option>
+
+
+
+
+
+
+
+					<GInput label={`*${intl.formatMessage({ id: 'full_name' })}`}
+						name='name'
+						value={this.state.name}
+						onChange={this.handleInputChange}
+						validations={[required]} />
+
+					{/* <input ref={this.bindGoogleAuto.bind(this)}/> */}
+
+
+
+
+					<StreetInput label={`*${intl.formatMessage({ id: 'street_address' })}`}
+						name='streetAddress1'
+						value={this.state.streetAddress1}
+						onChange={this.handleInputChange}
+						placeholder={intl.formatMessage({ id: 'placeholder_street_address' })}
+						country={this.state.country}
+						onAuto={
+							address => {
+								this.setState({
+									...address
+								})
+							}
+						}
+						validations={[required]} />
+
+					{/* <GInput label={`*${intl.formatMessage({ id: 'street_address' })}`}
+						name='streetAddress1'
+						value={this.state.streetAddress1}
+						onChange={this.handleInputChange}
+						placeholder={intl.formatMessage({ id: 'placeholder_street_address' })}
+						
+						validations={[required]} /> */}
+
+					<GInput label={`${intl.formatMessage({ id: 'unit' })}`}
+						name='unit'
+						value={this.state.unit}
+						onChange={this.handleInputChange} />
+
+
+
+
+					<GountrySelect label={`*${intl.formatMessage({ id: 'country' })}`}
+						value={this.state.country}
+						name='country'
+						disabled={this.props.disablecountry}
+						placeholder="Country"
+						onSelect={(c, s, v, zs) => { this.changeInfo(c, s, v, zs); this.changeCountry(c); }}
+						country={this.state.country}
+						state={this.state.state}
+						city={this.state.city}
+						validations={[required]}>
+						<option value=''>Country</option>
+						{
+							this.state.countries && this.state.countries.map(country => (
+								<option key={country.value} value={country.value} >{country.label}</option>
+							))
+						}
+					</GountrySelect>
+
+					{
+						this.state.states && this.state.states.length ? (
+
+							<GountrySelect label={`*${intl.formatMessage({ id: 'state' })}`}
+								name='state'
+								value={this.state.state}
+								onChange={this.handleInputChange}
+								placeholder="State"
+								onSelect={(c, s, v, zs) => { this.changeInfo(c, s, v, zs); this.changeCountry(c); }}
+								country={this.state.country}
+								state={this.state.state}
+								city={this.state.city}
+								step={1}
+								validations={[required]}>
+								<option value=''>State</option>
+								{
+									this.state.states && this.state.states.map(state => (
+										<option key={state.value} value={state.value} >{state.label}</option>
+									))
+								}
+							</GountrySelect>
+
+						) : (
+
+							<GInput label={`*${intl.formatMessage({ id: 'state' })}`}
+								name='state'
+								value={this.state.state}
+								onChange={this.handleInputChange} />
+						)
+					}
+
+
+
+					<SelectInput selectHandle={(city) => { this.setState({ city }); this.autoZip(city) }} isActive={this.state.cityFocus} searchValue={this.state.city} listValues={listValues.map(l => l.name)}>
+						<GInput label={`${intl.formatMessage({ id: 'city' })}`}
+							name='city'
+							value={this.state.city}
+							onFocus={this.handleCityFocus.bind(this)}
+							onBlur={this.handleCityFocusout.bind(this)}
+							validations={[required]}
+							onChange={this.handleInputChange} />
+					</SelectInput>
+
+
+
+					{
+						this.state.selectedZips && this.state.selectedZips.length > 1 ? <GSelect
+							label={`*${intl.formatMessage({ id: 'zip_code' })}`}
+							name='zipCode'
+							value={this.state.zipCode}
+							onChange={this.handleInputChange}
+							validations={[required, zip]}
+						>
 							{
-								this.state.countries && this.state.countries.map(country => (
-									<option key={country.value} value={country.value} >{country.label}</option>
+								this.state.selectedZips && this.state.selectedZips.map(zc => (
+									<option key={zc} value={zc} >{zc}</option>
 								))
 							}
-
-						</Select>
-					</StyledControl>
-
-					<StyledControl>
-						<label>
-							{intl.formatMessage({ id: 'full_name' })}*
-						</label>
-						<Input
-							name='name'
-							value={this.state.name}
-							onChange={this.handleInputChange}
-							validations={[required]} />
-					</StyledControl>
-
-					<StyledControl>
-						<label>
-							{intl.formatMessage({ id: 'street_address' })}*
-						</label>
-						<Input
-							name='streetAddress1'
-							value={this.state.streetAddress1}
-							onChange={this.handleInputChange}
-							placeholder={intl.formatMessage({ id: 'placeholder_street_address' })}
-							validations={[required]} />
-					</StyledControl>
-
-					<StyledControl>
-						<label>
-							{intl.formatMessage({ id: 'unit' })}
-						</label>
-						<Input
-							name='unit'
-							value={this.state.unit}
-							placeholder={intl.formatMessage({ id: 'placeholder_unit' })}
-							onChange={this.handleInputChange} />
-					</StyledControl>
-
-					<MultiControl>
-						<StyledControl>
-							<label>
-								{intl.formatMessage({ id: 'state' })}
-							</label>
-
-							{
-								this.state.states && this.state.states.length ? (
-									<Select
-										className="x-select"
-										name='state'
-										value={this.state.state}
-										onChange={this.handleInputChange}
-										validations={[required]}>
-										<option value=''>State</option>
-										{
-											this.state.states && this.state.states.map(state => (
-												<option key={state.value} value={state.value} >{state.label}</option>
-											))
-										}
-
-									</Select>
-
-								) : (
-									<Input
-										name='state'
-										value={this.state.state}
-										onChange={this.handleInputChange} />
-								)
-							}
-
-						</StyledControl>
-
-						<StyledControl>
-							<label>
-								{intl.formatMessage({ id: 'city' })}*
-							</label>
-							<Input
-								name='city'
-								value={this.state.city}
-								validations={[required]}
-								onChange={this.handleInputChange} />
-						</StyledControl>
-
-
-					</MultiControl>
-
-
-
-
-
-					<StyledControl>
-						<label>
-							{intl.formatMessage({ id: 'zip_code' })}*
-						</label>
-						<Input
+						</GSelect> : <GInput label={`*${intl.formatMessage({ id: 'zip_code' })}`}
 							name='zipCode'
 							value={this.state.zipCode}
 							onChange={this.handleInputChange}
 							validations={[required, zip]} />
-					</StyledControl>
+					}
 
-					<StyledControl>
-						<label>
-							{intl.formatMessage({ id: 'phone_number' })}*
-						</label>
 
-						<div>
-							<span style={{ width: 59, display: 'inline-block' }}>BR +55</span>
-							<Input
-								divStyle={{ width: 55, marginRight: 10, display: 'inline-block' }}
-								style={{ paddingLeft: 0, textAlign: 'center' }}
+					<div style={{display: 'flex', justifyContent: 'space-between', alignItems:'flex-end'}}>
+						<span style={{ width: 59, display: 'inline-block' }}>BR +55</span>
+						<div style={{ width: 55, display: 'inline-block' }}>
+							<GInput
+								label="Código"
 								name="phoneArea"
-								placeholder="Código"
 								type="number"
 								maxLength={2}
 								value={this.state.phoneArea}
 								onChange={this.handleInputChange}
 								validations={[number]} />
-
-							<Input
+						</div>
+						<div style={{ width: `calc(100% - 124px)` }}>
+							<GInput
+								label={`*${intl.formatMessage({ id: 'phone_number' })}`}
 								name='phoneNumber'
-								divStyle={{ width: 'calc(100% - 124px)', display: 'inline-block', verticalAlign: 'top' }}
 								value={this.state.phoneNumber}
 								type="number"
 								onChange={this.handleInputChange}
 								validations={[required, phone]} />
 						</div>
+					</div>
 
-					</StyledControl>
 
-					<StyledControl>
-						<label>
-							CPF* <Ask style={{ marginLeft: 4 }} onClick={this.cpfClickHandle.bind(this)} />
-						</label>
-						<Input
-							name='cpf'
-							value={this.state.cpf}
-							onChange={this.handleInputChange}
-							validations={[required, cpf]} />
-					</StyledControl>
+					<GInput
+						renderLabel={() => {
+							return <div>
+								CPF* <Ask style={{ marginLeft: 4 }} onClick={this.cpfClickHandle.bind(this)} />
+							</div>
+						}}
+						name='cpf'
+						value={this.state.cpf}
+						onChange={this.handleInputChange}
+						validations={[required, cpf]} />
+
+				
 
 					<div>
 						<Button className="__submitbtn" ref={c => this.brAddressButtn = c} ingoredisable="true" style={{
@@ -852,174 +889,185 @@ const AdressForm = class extends React.Component {
 
 
 
-					{
+				{
 						isEmailRequired && <div style={{ position: 'relative' }}>
-							<StyledControl>
-								<label>
-									{intl.formatMessage({ id: 'email' })}*
-								</label>
-								<Input
-									name='email'
-									value={this.state.email}
-									onChange={this.handleInputChange}
-									validations={[required, email]} />
-							</StyledControl>
+
+							<GInput label="*Email"
+								name='email'
+								value={this.state.email}
+								onChange={this.handleInputChange}
+								validations={[required, email]} />
+
 							<div style={{ marginTop: 5 }}>
 								<input style={{ verticalAlign: 'middle', WebkitAppearance: 'checkbox' }} type="checkbox" checked={this.state.schecked} onChange={() => { this.setState({ schecked: !this.state.schecked }) }} />
 								<span style={{ fontSize: 13, color: '#999', verticalAlign: 'middle' }}><FormattedMessage id="sign_me_up_for" values={{ siteName: window.siteName }} /></span>
 							</div>
 							<div style={{ position: 'absolute', top: 0, right: 0, fontSize: 12 }}>
-								<span style={{ fontSize: 12, color: '#999' }}>Already have an account? </span>
+								<span style={{ fontSize: 12, color: '#999' }}><FormattedMessage id="already_has_account" /> </span>
 								<a style={{ color: '#222' }} href={`${window.ctx}/${
 									/*global siteType b:true*/
 									/*eslint no-undef: "error"*/
 									siteType === 'new' ? 'page' : 'i'
-									}/login?redirectUrl=${encodeURIComponent(window.location.href)}&loginPage=1`}>Login</a>
+									}/login?redirectUrl=${encodeURIComponent(window.location.href)}&loginPage=1`}><FormattedMessage id="login" /></a>
 							</div>
 						</div>
 
 					}
 
-					<StyledControl>
-						<label>
-							{intl.formatMessage({ id: 'country' })}*
-						</label>
-						<Select
-							className="x-select"
-							value={this.state.country}
-							disabled={this.props.disablecountry}
-							name='country'
-							onChange={(evt) => { this.handleInputChange(evt); this.changeCountry(evt) }}
-							validations={[required]}>
-							<option value=''>Country</option>
+
+
+
+
+
+
+
+					<GInput label={`*${intl.formatMessage({ id: 'full_name' })}`}
+						name='name'
+						value={this.state.name}
+						onChange={this.handleInputChange}
+						validations={[required]} />
+
+					{/* <input ref={this.bindGoogleAuto.bind(this)}/> */}
+
+
+
+
+					<StreetInput label={`*${intl.formatMessage({ id: 'street_address' })}`}
+						name='streetAddress1'
+						value={this.state.streetAddress1}
+						onChange={this.handleInputChange}
+						placeholder={intl.formatMessage({ id: 'placeholder_street_address' })}
+						country={this.state.country}
+						onAuto={
+							address => {
+								this.setState({
+									...address
+								})
+							}
+						}
+						validations={[required]} />
+
+					{/* <GInput label={`*${intl.formatMessage({ id: 'street_address' })}`}
+						name='streetAddress1'
+						value={this.state.streetAddress1}
+						onChange={this.handleInputChange}
+						placeholder={intl.formatMessage({ id: 'placeholder_street_address' })}
+						
+						validations={[required]} /> */}
+
+					<GInput label={`${intl.formatMessage({ id: 'unit' })}`}
+						name='unit'
+						value={this.state.unit}
+						onChange={this.handleInputChange} />
+
+
+
+
+					<GountrySelect label={`*${intl.formatMessage({ id: 'country' })}`}
+						value={this.state.country}
+						name='country'
+						disabled={this.props.disablecountry}
+						placeholder="Country"
+						onSelect={(c, s, v, zs) => { this.changeInfo(c, s, v, zs); this.changeCountry(c); }}
+						country={this.state.country}
+						state={this.state.state}
+						city={this.state.city}
+						validations={[required]}>
+						<option value=''>Country</option>
+						{
+							this.state.countries && this.state.countries.map(country => (
+								<option key={country.value} value={country.value} >{country.label}</option>
+							))
+						}
+					</GountrySelect>
+
+					{
+						this.state.states && this.state.states.length ? (
+
+							<GountrySelect label={`*${intl.formatMessage({ id: 'state' })}`}
+								name='state'
+								value={this.state.state}
+								onChange={this.handleInputChange}
+								placeholder="State"
+								onSelect={(c, s, v, zs) => { this.changeInfo(c, s, v, zs); this.changeCountry(c); }}
+								country={this.state.country}
+								state={this.state.state}
+								city={this.state.city}
+								step={1}
+								validations={[required]}>
+								<option value=''>State</option>
+								{
+									this.state.states && this.state.states.map(state => (
+										<option key={state.value} value={state.value} >{state.label}</option>
+									))
+								}
+							</GountrySelect>
+
+						) : (
+
+							<GInput label={`*${intl.formatMessage({ id: 'state' })}`}
+								name='state'
+								value={this.state.state}
+								onChange={this.handleInputChange} />
+						)
+					}
+
+
+
+					<SelectInput selectHandle={(city) => { this.setState({ city }); this.autoZip(city) }} isActive={this.state.cityFocus} searchValue={this.state.city} listValues={listValues.map(l => l.name)}>
+						<GInput label={`${intl.formatMessage({ id: 'city' })}`}
+							name='city'
+							value={this.state.city}
+							onFocus={this.handleCityFocus.bind(this)}
+							onBlur={this.handleCityFocusout.bind(this)}
+							validations={[required]}
+							onChange={this.handleInputChange} />
+					</SelectInput>
+
+
+
+					{
+						this.state.selectedZips && this.state.selectedZips.length > 1 ? <GSelect
+							label={`*${intl.formatMessage({ id: 'zip_code' })}`}
+							name='zipCode'
+							value={this.state.zipCode}
+							onChange={this.handleInputChange}
+							validations={[required, zip]}
+						>
 							{
-								this.state.countries && this.state.countries.map(country => (
-									<option key={country.value} value={country.value} >{country.label}</option>
+								this.state.selectedZips && this.state.selectedZips.map(zc => (
+									<option key={zc} value={zc} >{zc}</option>
 								))
 							}
-
-						</Select>
-					</StyledControl>
-
-					<StyledControl>
-						<label>
-							{intl.formatMessage({ id: 'full_name' })}*
-						</label>
-						<Input
-							name='name'
-							value={this.state.name}
-							onChange={this.handleInputChange}
-							validations={[required]} />
-					</StyledControl>
-
-					<StyledControl>
-						<label>
-							{intl.formatMessage({ id: 'street_address' })}*
-						</label>
-						<Input
-							name='streetAddress1'
-							value={this.state.streetAddress1}
-							onChange={this.handleInputChange}
-							placeholder={intl.formatMessage({ id: 'placeholder_street_address' })}
-							validations={[required]} />
-					</StyledControl>
-
-					<StyledControl>
-						<label>
-							{intl.formatMessage({ id: 'unit' })}
-						</label>
-						<Input
-							name='unit'
-							value={this.state.unit}
-							placeholder={intl.formatMessage({ id: 'placeholder_unit' })}
-							onChange={this.handleInputChange} />
-					</StyledControl>
-
-					<MultiControl>
-						<StyledControl>
-							<label>
-								{intl.formatMessage({ id: 'state' })}
-							</label>
-
-							{
-								this.state.states && this.state.states.length ? (
-									<Select
-										className="x-select"
-										name='state'
-										value={this.state.state}
-										onChange={this.handleInputChange}
-										validations={[required]}>
-										<option value=''>State</option>
-										{
-											this.state.states && this.state.states.map(state => (
-												<option key={state.value} value={state.value} >{state.label}</option>
-											))
-										}
-
-									</Select>
-
-								) : (
-									<Input
-										name='state'
-										value={this.state.state}
-										onChange={this.handleInputChange} />
-								)
-							}
-
-						</StyledControl>
-
-						<StyledControl>
-							<label>
-								{intl.formatMessage({ id: 'city' })}*
-							</label>
-							<Input
-								name='city'
-								value={this.state.city}
-								validations={[required]}
-								onChange={this.handleInputChange} />
-						</StyledControl>
-
-
-					</MultiControl>
-
-
-
-
-					<StyledControl>
-						<label>
-							{intl.formatMessage({ id: 'zip_code' })}*
-						</label>
-						<Input
+						</GSelect> : <GInput label={`*${intl.formatMessage({ id: 'zip_code' })}`}
 							name='zipCode'
 							value={this.state.zipCode}
 							onChange={this.handleInputChange}
 							validations={[required, zip]} />
-					</StyledControl>
+					}
 
-					<StyledControl>
-						<label>
-							{intl.formatMessage({ id: 'phone_number' })}*
-						</label>
 
-						<div>
-							{
-								this.state.country === 'AE' && <span style={{ width: 69, display: 'inline-block', paddingTop: 10 }}>UAE +971</span>
-							}
 
-							{
-								this.state.country === 'SA' && <span style={{ width: 69, display: 'inline-block', paddingTop: 10 }}>KSA +966</span>
-							}
+					<div style={{display: 'flex', justifyContent: 'space-between', alignItems:'flex-end'}}>
+						{
+							this.state.country === 'AE' && <span style={{ width: 69, display: 'inline-block', paddingTop: 10 }}>UAE +971</span>
+						}
 
-							<Input
+						{
+							this.state.country === 'SA' && <span style={{ width: 69, display: 'inline-block', paddingTop: 10 }}>KSA +966</span>
+						}
+
+						
+						<div style={{ width: `calc(100% - 79px)` }}>
+							<GInput
+								label={`*${intl.formatMessage({ id: 'phone_number' })}`}
 								name='phoneNumber'
-								divStyle={{ width: 'calc(100% - 79px)', display: 'inline-block', verticalAlign: 'top' }}
 								value={this.state.phoneNumber}
 								type="number"
 								onChange={this.handleInputChange}
 								validations={[required, phone]} />
 						</div>
-
-					</StyledControl>
+					</div>
 
 					<div>
 						<Button className="__submitbtn" ref={c => this.alAddressButtn = c} ingoredisable="true" style={{

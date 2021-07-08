@@ -137,5 +137,6 @@ export default{
 	valid_email: '{email} não é um e-mail válido',
 	you_can_match_width: 'você pode gostar de preenchê-lo com',
 	addtocart: 'Adicionar ao carrinho',
-	addonitems: 'Itens Complementares'
+	addonitems: 'Itens Complementares',
+	addressbook: 'Address Book'
 }

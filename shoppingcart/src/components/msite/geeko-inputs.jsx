@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { form, control, button } from 'react-validation'
 import { getCountries, getStates, getCites, getCityByZip } from '../../api'
 import _ from 'lodash'
+import {FormattedMessage} from 'react-intl'
 
 const InputContainer = styled.div`
     border: 0;
@@ -13,6 +14,16 @@ const InputContainer = styled.div`
     flex-direction: column;
     vertical-align: top;
     width: 100%;
+    &.select{
+        &::after{
+            content: '\\e690';
+            font-family: 'iconfont';
+            position: absolute;
+            right: 10px;
+            top: 12px;
+            pointer-events: none;
+        }
+    }
 `
 
 const Label = styled.label`
@@ -97,9 +108,10 @@ const InputWrapper = styled.div`
         appearance: none;
         -moz-appearance: none;
         -webkit-appearance: none;
-        background: url(https://image.geeko.ltd/site/pc/icon137.png) no-repeat scroll calc(100% - 10px) center transparent;
+        background: none;
         box-shadow: none;
         cursor: pointer;
+        position: relative;
     }
 `
 
@@ -177,6 +189,7 @@ const OPTIONS = styled.ul`
         line-height: 42px;
         border-bottom: 1px solid #eee;
         position: relative;
+        color: #666;
         &.selected{
             font-family: 'SlatePro-Medium';
             color: #000;
@@ -208,8 +221,9 @@ const OPTIONPICKER = styled.div`
        & > .__title{
            height: 47px;
            text-align: center;
-           font-size: 16px;
+           font-size: 14px;
            line-height: 47px;
+           font-family: AcuminPro-Bold;
        }
 
        & > .__search{
@@ -272,7 +286,13 @@ const OPTIONPICKER = styled.div`
         overflow: auto;
     }
 `
-
+const Close = styled.span`
+	display: inline-block;
+	position: absolute;
+	right: 10px;
+	top: 10px;
+	cursor: pointer;
+`
 
 
 export const Input = control(({ error, isChanged, isUsed, divStyle, ...props }) => {
@@ -281,13 +301,15 @@ export const Input = control(({ error, isChanged, isUsed, divStyle, ...props }) 
     return <InputContainer>
         <Label className={`${(focused || props.value || props.placeholder) ? 'focused' : ''} ${isChanged && isUsed && !!error && '__error'}`}>{label}</Label>
         <InputWrapper className={`${focused ? 'focused' : ''} ${isChanged && isUsed && !!error && '__error'}`}>
-            <input {...props} autoComplete="no" onFocus={(evt) => {
+            <input {...props} autoComplete="no" 
+            onFocus={(evt) => {
                 setFocused(true)
                 props.onFocus(evt)
             }} onBlur={(evt) => {
                 setFocused(false)
                 props.onBlur(evt)
-            }} />
+            }} 
+            />
         </InputWrapper>
         {isChanged && isUsed && !!error && <ERROR className="ErrorMsg">{error}</ERROR>}
     </InputContainer>
@@ -297,7 +319,7 @@ export const Input = control(({ error, isChanged, isUsed, divStyle, ...props }) 
 export const Select = control(({ error, isChanged, isUsed, divStyle, ...props }) => {
     const [focused, setFocused] = useState(false)
     const label = props.label || props.renderLabel()
-    return <InputContainer>
+    return <InputContainer className="select">
         <Label className={`${(focused || props.value || props.placeholder) ? 'focused' : ''} ${isChanged && isUsed && !!error && '__error'}`}>{label}</Label>
         <InputWrapper className={`${focused ? 'focused' : ''} ${isChanged && isUsed && !!error && '__error'}`}>
             <select {...props} onFocus={(evt) => {
@@ -312,22 +334,129 @@ export const Select = control(({ error, isChanged, isUsed, divStyle, ...props })
     </InputContainer>
 })
 
+export const StreetInput = control(({ error, isChanged, isUsed, divStyle, ...props }) => {
+    const [focused, setFocused] = useState(false)
+    const label = props.label || props.renderLabel()
+    const addressRef = useRef()
+
+
+    useEffect(() => {
+
+        if(window.autocomplete){
+            window.autocomplete.unbindAll()
+        }
+
+        window.autocomplete = new google.maps.places.Autocomplete(addressRef.current, {
+			componentRestrictions: { country: [props.country] },
+			fields: ["address_components", "geometry"],
+			types: ["address"],
+  		})
+		window.autocomplete.addListener("place_changed", function(){
+			const place = window.autocomplete.getPlace();
+            let streetAddress1 = "";
+            let zipCode = "";
+            let country = "";
+            let state = "";
+            let city= "";
+            for (const component of place.address_components) {
+                const componentType = component.types[0]
+                switch (componentType) {
+                case "street_number": {
+                    streetAddress1 = `${component.long_name} ${streetAddress1}`;
+                    break
+                }
+
+                case "route": {
+                    streetAddress1 += component.long_name;
+                    break
+                }
+
+                case "postal_code": {
+                    zipCode = `${component.long_name}${zipCode}`;
+                    break
+                }
+
+                case "postal_code_suffix": {
+                    zipCode = `${zipCode}-${component.long_name}`;
+                    break
+                }
+                
+                case "postal_town":
+                case "locality":
+                    city = component.long_name;
+                    break
+
+                case "administrative_area_level_1": {
+                     state = component.short_name;
+                    break
+                }
+                case "country":
+                   country = component.short_name;
+                    break
+                }
+            }
+            props.onAuto({
+                streetAddress1,
+                zipCode,
+                city,
+                state,
+                country
+            })
+
+		});
+
+
+        return () => {
+            if(window.autocomplete){
+                window.autocomplete.unbindAll()
+            }
+           
+        }
+    }, [props.country])
+
+
+    return <InputContainer>
+        <Label className={`${(focused || props.value || props.placeholder) ? 'focused' : ''} ${isChanged && isUsed && !!error && '__error'}`}>{label}</Label>
+        <InputWrapper className={`${focused ? 'focused' : ''} ${isChanged && isUsed && !!error && '__error'}`}>
+            <input {...props} autoComplete="no"
+            ref={addressRef}
+            onFocus={(evt) => {
+                setFocused(true)
+                props.onFocus(evt)
+            }} onBlur={(evt) => {
+                setFocused(false)
+                props.onBlur(evt)
+            }} 
+            />
+        </InputWrapper>
+        {isChanged && isUsed && !!error && <ERROR className="ErrorMsg">{error}</ERROR>}
+    </InputContainer>
+})
+
+
 
 export const GountrySelect = control(({ error, isChanged, isUsed, divStyle, ...props }) => {
     const [focused, setFocused] = useState(false)
     const [showOption, setShowOption] = useState(false)
     const label = props.label || props.renderLabel()
     return <React.Fragment>
-        <InputContainer onClick={evt => { setShowOption(true); evt.preventDefault(); }}>
+        <InputContainer className="select" onClick={evt => { setShowOption(true); evt.preventDefault(); }}>
             <Label className={`${(focused || props.value || props.placeholder) ? 'focused' : ''} ${isChanged && isUsed && !!error && '__error'}`}>{label}</Label>
             <InputWrapper className={`${focused ? 'focused' : ''} ${isChanged && isUsed && !!error && '__error'}`}>
-                <select {...props} style={{pointerEvents:'none'}} onFocus={(evt) => {
+                <select {...props} onFocus={(evt) => {
                     setFocused(true)
                     props.onFocus(evt)
                 }} disabled onBlur={(evt) => {
                     setFocused(false)
                     props.onBlur(evt)
-                }} />
+                }} 
+                style={{
+                    color: '#000',
+                    fontSize: 14,
+                    fontFamily: 'AcuminPro-Bold',
+                    pointerEvents:'none'
+                }}
+                />
             </InputWrapper>
             {isChanged && isUsed && !!error && <ERROR className="ErrorMsg">{error}</ERROR>}
         </InputContainer>
@@ -335,6 +464,7 @@ export const GountrySelect = control(({ error, isChanged, isUsed, divStyle, ...p
             showOption && <React.Fragment>
                 <MASK onClick={evt => { setShowOption(false) }} />
                 <SELECTALTER>
+                    <Close onClick={() => {setShowOption(false)}}><span style={{fontSize: 20, cursor: 'pointer', fontFamily: 'iconfont'}}>&#xe69a;</span></Close>
                     <CountryInfoPicker step={props.step || 0} onClose={() => {setShowOption(false)}} country={props.country} state={props.state} city={props.city} onSelect={props.onSelect}/>
                 </SELECTALTER>
             </React.Fragment>
@@ -535,17 +665,17 @@ const CountryInfoPicker = React.memo(props => {
             </div>
             <div className="__menu">
                 <span onClick={() => {stepClickHandle(0)}} style={{width: '50%'}}>
-                    <span style={{color: step===0?'#e64545':'#999'}}>{country?country.label:'Country'}</span>
+                    <span style={{color: step===0?'#e64545':'#999'}}>{country?country.label:<span><FormattedMessage id="country"/></span>}</span>
                 </span>
                 {
                     states && states.length > 0 && <span onClick={() => {stepClickHandle(1)}} style={{width: '50%'}}>
-                        <span style={{color: step===1?'#e64545':'#999'}}>{state?state.label:'State/Province'}</span>
+                        <span style={{color: step===1?'#e64545':'#999'}}>{state?state.label:<span><FormattedMessage id="state"/></span>}</span>
                     </span>
                 }
 
                 {
                     cities && cities.length > 0 && <span onClick={() => {stepClickHandle(2)}} style={{width: '50%'}}>
-                        <span style={{color: step===2?'#e64545':'#999'}}>{city?city.label:'City'}</span>
+                        <span style={{color: step===2?'#e64545':'#999'}}>{city?city.label:<span><FormattedMessage id="city"/></span>}</span>
                     </span>
                 }
             </div>

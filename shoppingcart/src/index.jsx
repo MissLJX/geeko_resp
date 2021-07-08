@@ -12,10 +12,24 @@ import Loading1 from './components/msite/loading.jsx'
 
 import { connect } from 'react-redux'
 
+import AddressBook from './pages/address-book.jsx'
+
 const AddressModal = Loadable({
 	loader: () => import(/* webpackChunkName: "page--address-modal" */ './pages/address-modal.jsx'),
 	loading: Loading
 })
+
+const BookAddressModal = Loadable({
+	loader: () => import(/* webpackChunkName: "page--book-address-modal" */ './pages/address-book-modal.jsx'),
+	loading: Loading
+})
+
+
+
+// const AddressBook = Loadable({
+// 	loader: () => import(/* webpackChunkName: "page--address-modal" */ './pages/address-book.jsx'),
+// 	loading: Loading
+// })
 
 const ShippingMethods = Loadable({
 	loader: () => import(/* webpackChunkName: "page--shipping-methods" */ './pages/shipping-methods.jsx'),
@@ -124,7 +138,27 @@ const Index = (props) => {
 					transform: `translateY(${styles.offset}%)`,
 					...defaultStyles
 				})}
+				path={`${window.ctx || ''}${__route_root__}/address-book`} component={AddressBook} />
+
+
+			<AnimatedRoute	{...defaultAnimations}
+				mapStyles={(styles) => ({
+					transform: `translateY(${styles.offset}%)`,
+					...defaultStyles
+				})}
 				path={`${window.ctx || ''}${__route_root__}/address`} component={AddressModal} />
+
+
+
+			<AnimatedRoute	{...defaultAnimations}
+				mapStyles={(styles) => ({
+					transform: `translateY(${styles.offset}%)`,
+					...defaultStyles
+				})}
+				path={`${window.ctx || ''}${__route_root__}/book/address`} component={BookAddressModal} />
+
+
+
 			<AnimatedRoute	{...defaultAnimations}
 				mapStyles={(styles) => ({
 					transform: `translateY(${styles.offset}%)`,

@@ -16,7 +16,7 @@ const HD = styled.div`
 
 const Title = styled.h1`
 	font-size: 18px;
-	font-weight: 400;
+	font-family: AcuminPro-Bold;
 	text-align: center;
 `
 

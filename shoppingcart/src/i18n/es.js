@@ -139,5 +139,6 @@ export default{
 	valid_email: '{email} no es un correo electrónico válido',
 	you_can_match_width: 'te gustaría llenarlo con',
 	addtocart: 'Agregar al carrito',
-	addonitems: 'Elementos complementarios'
+	addonitems: 'Elementos complementarios',
+	addressbook: 'Address Book'
 }

@@ -337,7 +337,7 @@ const ShoppingHead = styled.div`
 	line-height: 44px;
 	height: 44px;
 	.__title{
-		font-family: SlatePro-Medium;
+		font-family: AcuminPro-Bold;
 		font-size: 17px;
 		color: #222;
 	}
@@ -2465,7 +2465,7 @@ const ShoppingCart = class extends React.Component {
 																</div>
 																<div className="x-cell __right" style={{ width: 30 }}>
 																	<Grey>
-																		<Link style={{ color: '#222', textDecoration: 'none' }} to={`${window.ctx || ''}${__route_root__}/address`}>
+																		<Link style={{ color: '#222', textDecoration: 'none' }} to={`${window.ctx || ''}${__route_root__}/${window.token?'address':'address-book'}`}>
 																			<Icon>&#xe694;</Icon>
 																		</Link>
 																	</Grey>
