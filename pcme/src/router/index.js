@@ -54,7 +54,7 @@ const routes = [
             {
                 path:'notification',
                 component:Notification,
-                name:"notification",
+                // name:"notification",
                 meta: {title:'My Messages'},
                 children: [
                     {

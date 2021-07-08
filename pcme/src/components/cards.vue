@@ -45,7 +45,7 @@
                 'mercadocreditcards'
                 ]),
             getAllCards(){
-                if(this.mercadocreditcards){
+                if(this.mercadocreditcards && this.mercadocreditcards.length > 0){
                     this.cardArr =  this.creditcards.concat(this.mercadocreditcards);
                 }else{
                     this.cardArr =  this.creditcards;
