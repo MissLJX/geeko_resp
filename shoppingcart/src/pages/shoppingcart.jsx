@@ -102,7 +102,6 @@ const OrderSummary = styled.div`
 const Checkout = styled.div`
 	&>div{
 		&.__total{
-			font-size: 18px;
 			display: flex;
 			padding: 0 10px 12px 10px;
 			justify-content: space-between;
@@ -338,7 +337,7 @@ const ShoppingHead = styled.div`
 	height: 44px;
 	.__title{
 		font-family: AcuminPro-Bold;
-		font-size: 17px;
+		font-size: 16px;
 		color: #222;
 	}
 
@@ -2465,7 +2464,7 @@ const ShoppingCart = class extends React.Component {
 																</div>
 																<div className="x-cell __right" style={{ width: 30 }}>
 																	<Grey>
-																		<Link style={{ color: '#222', textDecoration: 'none' }} to={`${window.ctx || ''}${__route_root__}/${window.token?'address':'address-book'}`}>
+																		<Link style={{ color: '#222', textDecoration: 'none' }} to={`${window.ctx || ''}${__route_root__}/${(window.token || !window.__is_login__)?'address':'address-book'}`}>
 																			<Icon>&#xe694;</Icon>
 																		</Link>
 																	</Grey>
@@ -2721,7 +2720,7 @@ const ShoppingCart = class extends React.Component {
 													{
 														cart.shippingInsurancePrice2 && cart.shippingDetail && (isprogresspage || window.token) && (
 															<TurnTool ignoreButton={cart.isShippingInsuranceMust} open={this.openInsurance.bind(this)} turnAcitve={cart.insurance}>
-																<span style={{ fontSize: 15 }}>
+																<span style={{ fontSize: 14, fontFamily:'SlatePro-Medium' }}>
 																	<FormattedMessage id="add_shipping_insurance" values={{ price: <Red><Money money={cart.shippingInsurancePrice2} /></Red> }} />
 																</span>
 																<Ask style={{ marginLeft: 4 }} onClick={this.insuranceClickHandle.bind(this)} />
@@ -2850,7 +2849,7 @@ const ShoppingCart = class extends React.Component {
 																		</div>
 																		<div>
 																			<span>{intl.formatMessage({ id: 'total' })}: </span>
-																			<span style={{ fontSize: 24, fontFamily: 'SlatePro-Medium' }}><Money money={cart.orderSummary.orderTotal} /></span>
+																			<span style={{ fontSize: 18, fontFamily: 'AcuminPro-Bold' }}><Money money={cart.orderSummary.orderTotal} /></span>
 																			{
 																				this.props.payMethod === '22' && <Red style={{ fontWeight: 'normal', marginLeft: 5, fontSize: 14 }}>(Em até 3x s/ juros)</Red>
 																			}
@@ -2875,7 +2874,7 @@ const ShoppingCart = class extends React.Component {
 																		<div></div>
 																		<div>
 																			<span>{intl.formatMessage({ id: 'total' })}: </span>
-																			<span style={{ fontSize: 24, fontFamily: 'SlatePro-Medium' }}><Money money={cart.orderSummary.orderTotal} /></span>
+																			<span style={{ fontSize: 18, fontFamily: 'AcuminPro-Bold' }}><Money money={cart.orderSummary.orderTotal} /></span>
 																		</div>
 																	</div>
 																	<div>

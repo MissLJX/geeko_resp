@@ -73,7 +73,7 @@ const Modal = class extends React.Component {
 
 		return <FullFixed onClose={this.close} title={intl.formatMessage({ id: 'address' })}>
 			<FormBody >
-				<AddressForm needInitValidate={this.props.location.search === '?check=1' || validate} editAddress={this.editAddress} style={{ marginTop: 15 }} address={address} />
+				<AddressForm igonreCache needInitValidate={this.props.location.search === '?check=1' || validate} editAddress={this.editAddress} style={{ marginTop: 15 }} address={address} />
 			</FormBody>
 		</FullFixed>
 	}

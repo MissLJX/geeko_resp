@@ -341,9 +341,9 @@ const Item = class extends React.Component {
                 <div style={{ height: '30px', paddingTop: 10, position: 'relative' }}>
 
                   {
-                    props.item.itemPrice.amount - props.item.realPrice.amount > 0 ? <React.Fragment><Red style={{ fontSize: '18px', fontFamily: 'SlatePro-Medium' }}>
+                    props.item.itemPrice.amount - props.item.realPrice.amount > 0 ? <React.Fragment><Red style={{ fontSize: '16px', fontFamily: 'AcuminPro-Bold' }}>
                       <Money money={props.item.realPrice} />
-                    </Red> <del style={{fontSize:12, marginLeft: 5}}><Money money={props.item.itemPrice} /></del></React.Fragment> : <span style={{ fontSize: '18px', fontFamily: 'SlatePro-Medium' }}><Money money={props.item.realPrice} /></span>
+                    </Red> <del style={{fontSize:12, marginLeft: 5}}><Money money={props.item.itemPrice} /></del></React.Fragment> : <span style={{ fontSize: '16px', fontFamily: 'AcuminPro-Bold' }}><Money money={props.item.realPrice} /></span>
                   }
                   {
                     !props.ivalidItem && !isGift && <span onClick={evt => { this.itemWish(item) }} className="iconfont" style={{ position: 'absolute', right: 0, top: 14, cursor: 'pointer' }}>&#xe7b5;</span>

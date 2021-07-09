@@ -16,14 +16,14 @@ const Address = styled.address`
 `
 
 const Name = styled.div`
-  font-family: SlatePro-Medium;
+  font-family: AcuminPro-Bold;
   line-height: 16px;
 `
 
 export default ({address}) => <Address>
   <Name>
     <span>{address.name}</span>
-    <span>({address.phoneNumber})</span>
+    <span style={{fontFamily:'SlatePro'}}>({address.phoneNumber})</span>
   </Name>
   <div style={{marginTop:10, color: '#666', fontSize:13}}>
     <div>

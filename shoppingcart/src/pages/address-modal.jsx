@@ -79,8 +79,6 @@ const Modal = class extends React.Component {
 		const { address, intl } = this.props
 		const { validate } = this.props.location.state || {}
 
-		console.log(this.props.location.search)
-
 		const FormBody = styled.div`
 		padding-left: 12px;
 		padding-right: 12px;

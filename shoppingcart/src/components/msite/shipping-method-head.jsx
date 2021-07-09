@@ -10,7 +10,8 @@ const SHIPPINGMETHODHEAD = sytled.div`
     cursor: pointer;
 
     .__title{
-        font-size: 15px;
+        font-size: 14px;
+        font-family:'SlatePro-Medium';
     }
 
     .__time{

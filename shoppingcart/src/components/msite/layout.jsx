@@ -26,9 +26,9 @@ const StyledBoxHead = styled.div`
 	}
 
 	& .__title{
-		font-size: 15px;
+		font-size: 14px;
 		color: #222;
-		font-family: SlatePro-Medium;
+		font-family: AcuminPro-Bold;
 	}
 `
 
@@ -36,7 +36,7 @@ export const BoxClickHead = (props) => (
   <StyledBoxHead {...props}>
     <div className="x-table __vm">
       <div className="x-cell">
-        <span style={{fontSize: 15}}>{props.title}</span>
+        <span style={{fontSize: 14, fontFamily:'SlatePro-Medium'}}>{props.title}</span>
       </div>
       <div className="x-cell __right">
         <span style={{verticalAlign: 'middle'}}>{props.children}</span>

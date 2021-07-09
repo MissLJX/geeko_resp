@@ -6,11 +6,12 @@ export const BigButton = styled.div`
 	height: ${props => props.height || '40'}px;
 	border-radius: 2px;
 	line-height: ${props => props.height || '40'}px;
-	font-size: 18px;
+	font-size: 16px;
 	color: #fff;
 	background-color: ${props => props.bgColor || '#000'};
 	cursor: pointer;
 	text-align: center;
+	font-family: AcuminPro-Bold;
 	&:active{
 		opacity: .8;
 	}

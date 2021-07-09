@@ -303,11 +303,16 @@ export const Input = control(({ error, isChanged, isUsed, divStyle, ...props }) 
         <InputWrapper className={`${focused ? 'focused' : ''} ${isChanged && isUsed && !!error && '__error'}`}>
             <input {...props} autoComplete="no" 
             onFocus={(evt) => {
-                setFocused(true)
-                props.onFocus(evt)
+                setFocused(true);
+                if(props.onFocus){
+                    props.onFocus(evt)
+                }
+                
             }} onBlur={(evt) => {
                 setFocused(false)
-                props.onBlur(evt)
+                if(props.onBlur){
+                    props.onBlur(evt)
+                }
             }} 
             />
         </InputWrapper>
@@ -322,13 +327,20 @@ export const Select = control(({ error, isChanged, isUsed, divStyle, ...props })
     return <InputContainer className="select">
         <Label className={`${(focused || props.value || props.placeholder) ? 'focused' : ''} ${isChanged && isUsed && !!error && '__error'}`}>{label}</Label>
         <InputWrapper className={`${focused ? 'focused' : ''} ${isChanged && isUsed && !!error && '__error'}`}>
-            <select {...props} onFocus={(evt) => {
-                setFocused(true)
-                props.onFocus(evt)
+            <select {...props} 
+            onFocus={(evt) => {
+                setFocused(true);
+                if(props.onFocus){
+                    props.onFocus(evt)
+                }
+                
             }} onBlur={(evt) => {
                 setFocused(false)
-                props.onBlur(evt)
-            }} />
+                if(props.onBlur){
+                    props.onBlur(evt)
+                }
+            }} 
+            />
         </InputWrapper>
         {isChanged && isUsed && !!error && <ERROR className="ErrorMsg">{error}</ERROR>}
     </InputContainer>
@@ -341,18 +353,13 @@ export const StreetInput = control(({ error, isChanged, isUsed, divStyle, ...pro
 
 
     useEffect(() => {
-
-        if(window.autocomplete){
-            window.autocomplete.unbindAll()
-        }
-
-        window.autocomplete = new google.maps.places.Autocomplete(addressRef.current, {
+        const autocomplete = new google.maps.places.Autocomplete(addressRef.current, {
 			componentRestrictions: { country: [props.country] },
 			fields: ["address_components", "geometry"],
 			types: ["address"],
   		})
-		window.autocomplete.addListener("place_changed", function(){
-			const place = window.autocomplete.getPlace();
+		autocomplete.addListener("place_changed", function(){
+			const place = autocomplete.getPlace();
             let streetAddress1 = "";
             let zipCode = "";
             let country = "";
@@ -395,6 +402,8 @@ export const StreetInput = control(({ error, isChanged, isUsed, divStyle, ...pro
                     break
                 }
             }
+
+         
             props.onAuto({
                 streetAddress1,
                 zipCode,
@@ -405,12 +414,10 @@ export const StreetInput = control(({ error, isChanged, isUsed, divStyle, ...pro
 
 		});
 
-
         return () => {
-            if(window.autocomplete){
-                window.autocomplete.unbindAll()
+            if(autocomplete){
+                autocomplete.unbindAll()
             }
-           
         }
     }, [props.country])
 
@@ -421,11 +428,16 @@ export const StreetInput = control(({ error, isChanged, isUsed, divStyle, ...pro
             <input {...props} autoComplete="no"
             ref={addressRef}
             onFocus={(evt) => {
-                setFocused(true)
-                props.onFocus(evt)
+                setFocused(true);
+                if(props.onFocus){
+                    props.onFocus(evt)
+                }
+                
             }} onBlur={(evt) => {
                 setFocused(false)
-                props.onBlur(evt)
+                if(props.onBlur){
+                    props.onBlur(evt)
+                }
             }} 
             />
         </InputWrapper>
@@ -439,19 +451,30 @@ export const GountrySelect = control(({ error, isChanged, isUsed, divStyle, ...p
     const [focused, setFocused] = useState(false)
     const [showOption, setShowOption] = useState(false)
     const label = props.label || props.renderLabel()
+
     return <React.Fragment>
-        <InputContainer className="select" onClick={evt => { setShowOption(true); evt.preventDefault(); }}>
+        <InputContainer className="select" onClick={evt => { 
+            if(!!!props.disabled){
+                setShowOption(true); 
+                evt.preventDefault();
+            }
+         }}>
             <Label className={`${(focused || props.value || props.placeholder) ? 'focused' : ''} ${isChanged && isUsed && !!error && '__error'}`}>{label}</Label>
             <InputWrapper className={`${focused ? 'focused' : ''} ${isChanged && isUsed && !!error && '__error'}`}>
-                <select {...props} onFocus={(evt) => {
+                <select key={props.value} {...props} onFocus={(evt) => {
                     setFocused(true)
-                    props.onFocus(evt)
+                    if(props.onFocus){
+                        props.onFocus(evt)
+                    }
+                    
                 }} disabled onBlur={(evt) => {
                     setFocused(false)
-                    props.onBlur(evt)
+                    if(props.onBlur){
+                        props.onBlur(evt)
+                    }
                 }} 
                 style={{
-                    color: '#000',
+                    color: !!props.disabled ? '#999' :'#000',
                     fontSize: 14,
                     fontFamily: 'AcuminPro-Bold',
                     pointerEvents:'none'
@@ -476,7 +499,7 @@ export const GountrySelect = control(({ error, isChanged, isUsed, divStyle, ...p
 
 const CountryList = props => {
     const { options = [], selectedOption, onSelect, filter, step } = props
-    const groupedOptions = _.groupBy(options.filter( o=> o.label.indexOf(filter) >=0 ), c => c.label.substr(0, 1).toUpperCase())
+    const groupedOptions = _.groupBy(options.filter( o=> o.label.toUpperCase().indexOf((filter||'').toUpperCase()) >=0 ), c => c.label.substr(0, 1).toUpperCase())
     const keys = Object.keys(groupedOptions).sort()
     const [option, setOption] = useState({})
     const [key, setKey] = useState()
@@ -553,6 +576,7 @@ const CountryInfoPicker = React.memo(props => {
     const [triggeCity, setTriggeCity] = useState(false)
 
     const bdref = useRef()
+    const filterRef = useRef()
 
     useEffect(() => {
         getCountries().then(data => data.result).then(countries => {
@@ -560,6 +584,11 @@ const CountryInfoPicker = React.memo(props => {
             setCountry((countries||[]).find(c => c.value === (props.country || 'US')))
         })
     }, [])
+
+    useEffect(() => {
+        setFilter('')
+        filterRef.current.value = ''
+    }, [step])
 
     useEffect(() => {
         setCountry((countries||[]).find(c => c.value === (props.country || 'US')))
@@ -658,10 +687,10 @@ const CountryInfoPicker = React.memo(props => {
 
     return <OPTIONPICKER>
         <div className="__hd">
-            <div className="__title">Country/Region</div>
+            <div className="__title"><FormattedMessage id="country"/></div>
             <div className="__search">
                 <span className="__icon">&#xe772;</span>
-                <input className="__input" onChange={changeHandle}/>
+                <input ref={filterRef} className="__input" onChange={changeHandle}/>
             </div>
             <div className="__menu">
                 <span onClick={() => {stepClickHandle(0)}} style={{width: '50%'}}>
