@@ -648,7 +648,7 @@ const AdressForm = class extends React.Component {
 							</GountrySelect>
 
 						) : (
-							<GInput label={`*${intl.formatMessage({ id: 'state' })}`}
+							<GInput label={`${intl.formatMessage({ id: 'state' })}`}
 								name='state'
 								value={this.state.state}
 								onChange={this.handleInputChange} />
