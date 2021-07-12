@@ -122,12 +122,14 @@ const DashedLine = styled.div`
 `
 
 const OrderSummary = styled.div`
-	padding: 5px 10px;
+	padding: 0 10px 10px 10px;
+	margin-top: -8px;
 	& > div.__summary{
 		padding-top: 5px;
 		padding-bottom: 5px;
+		font-size: 14px;
 		font{
-			font-size: 16px !important;
+			font-size: 14px !important;
 		}
 	}
 `

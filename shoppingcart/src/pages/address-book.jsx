@@ -15,8 +15,8 @@ const ADDRESSBODY = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: 15px;
-    padding-bottom: 15px;
+    padding-top: 12px;
+    padding-bottom: 6px;
    
     & > div{
         &:first-child{
@@ -54,7 +54,7 @@ const AddressBlock = props => {
         </ADDRESSBODY>
         <ADDRESSFOOTER>
             <span style={{cursor:'pointer'}} onClick={evt => {props.onEdit(address)}}>
-                <span className="iconfont">&#xe62b;</span>
+                <span className="iconfont">&#xe778;</span>
                 <span style={{marginLeft: 5}}><FormattedMessage id="edit"/></span>
             </span>
         </ADDRESSFOOTER>

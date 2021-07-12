@@ -1,6 +1,7 @@
 import React from 'react'
 import sytled from 'styled-components'
 import Money from '../../components/money.jsx'
+import Icon from '../icon.jsx'
 
 const SHIPPINGMETHODHEAD = sytled.div`
     display: flex;
@@ -49,7 +50,7 @@ const ShippingMethodHead = props => {
         </div>
         <div>
             {/* <span><img style={{width:110}} src="https://dgzfssf1la12s.cloudfront.net/upgrade/20210304/shippingmethod.png"/></span> */}
-            <span style={{marginLeft: 10}} className="iconfont">&#xe694;</span>
+            <Icon style={{fontSize: 14, transform: 'rotate(180deg)', verticalAlign: 'middle', marginLeft: 10}}>&#xe690;</Icon>
         </div>
     </SHIPPINGMETHODHEAD>
 }

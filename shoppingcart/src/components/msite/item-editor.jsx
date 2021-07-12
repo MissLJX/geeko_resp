@@ -136,9 +136,14 @@ const BLOCKS = styled.div`
 
 const SIZE = styled.span`
 	display: inline-block;
-	padding: 6px 11px;
+	padding: 0 11px;
 	border: solid 1px #cacaca;
 	cursor: pointer;
+	height: 24px;
+	min-width: 56px;
+	text-align: center;
+	border-radius: 4px;
+	line-height: 22px;
 	&.__selected{
 		border: solid 1px #222222;
 	}
@@ -165,6 +170,8 @@ const ITEMIMAGE = styled.div`
 	overflow: hidden;
 	display: block;
 	background-color: #efefef;
+	border: solid 1px #ccc;
+
 	&::after{
 		display: block;
 		margin-top: 125%;
@@ -178,22 +185,15 @@ const ITEMIMAGE = styled.div`
 		top: 0;
 		left: 0;
 		z-index: 1;
+		border: 1px solid #fff;
 	}
-	&.selected::before{
-		content: '';
-		display: block;
-		position: absolute;
-		border: 1px solid #222;
-		width: 100%;
-		height: 100%;
-		top:0;
-		left: 0;
-		z-index:2;
+	&.selected{
+		border-color: #222;
 	}
 `
 
 const NAME = styled.div`
-	font-size: 14px;
+	font-size: 12px;
 	color: #999;
 	line-height: 20px;
 	margin-top: 5px;
@@ -362,7 +362,7 @@ const ProductEditor = class extends React.Component {
 						</NAME>
 						
 						<Price>
-							<Money style={{fontSize: 16,fontFamily: 'SlatePro-Medium', color:this.state.isGift? '#e64545':'#222' }} money={low} />
+							<Money style={{fontSize: 20,fontFamily: 'AcuminPro-Bold', color:this.state.isGift? '#e64545':'#222' }} money={low} />
 							{
 								high && (
 									<React.Fragment>
@@ -411,7 +411,7 @@ const ProductEditor = class extends React.Component {
 									</BLOCKS>
 
 									{
-										selectedVariant && selectedVariant.description && <span dangerouslySetInnerHTML={{__html: selectedVariant.description.replace(/:[\w|\d|\-|(|)|\.]+;/g,function(value){return '<span style="color:#999;margin-right: 5px;">'+value+' </span>'})}}/>
+										selectedVariant && selectedVariant.description && <span style={{fontSize: 12, lineHeight: '16px'}} dangerouslySetInnerHTML={{__html: selectedVariant.description.replace(/:[\w|\d|\-|(|)|\.]+;/g,function(value){return '<span style="color:#999;margin-right: 5px;">'+value+' </span>'})}}/>
 									}
 								</div>
 							</SizeColorRow>
@@ -420,7 +420,7 @@ const ProductEditor = class extends React.Component {
 							<div>
 								<span style={{fontFamily: 'SlatePro-Medium', fontSize: 14}}>{intl.formatMessage({ id: 'qty' })}</span>
 							</div>
-							<div style={{marginLeft: 12}}>
+							<div style={{marginLeft: 12, position: 'relative', top: -4}}>
 								<Quantity onChange={(quantity) => { this.setState({ selectedQuantity: quantity }) }} quantity={this.state.selectedQuantity} />
 							</div>
 						</div>

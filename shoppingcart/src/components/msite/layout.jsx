@@ -40,7 +40,7 @@ export const BoxClickHead = (props) => (
       </div>
       <div className="x-cell __right">
         <span style={{verticalAlign: 'middle'}}>{props.children}</span>
-        <Icon style={{verticalAlign: 'middle'}}>&#xe694;</Icon>
+        <Icon style={{fontSize: 14, transform: 'rotate(180deg)', verticalAlign: 'middle', marginLeft: 8}}>&#xe690;</Icon>
       </div>
     </div>
   </StyledBoxHead>

@@ -62,8 +62,7 @@ const Modal = class extends React.Component {
 		const { address, intl } = this.props
 		const { validate } = this.props.location.state || {}
 		const FormBody = styled.div`
-		padding-left: 12px;
-		padding-right: 12px;
+
     	margin-left: auto;
     	margin-right: auto;
 		-webkit-overflow-scrolling : touch;
@@ -71,9 +70,9 @@ const Modal = class extends React.Component {
 		padding-bottom: 100px;
     `
 
-		return <FullFixed onClose={this.close} title={intl.formatMessage({ id: 'address' })}>
-			<FormBody >
-				<AddressForm igonreCache needInitValidate={this.props.location.search === '?check=1' || validate} editAddress={this.editAddress} style={{ marginTop: 15 }} address={address} />
+		return <FullFixed onClose={this.close} title={ address ? intl.formatMessage({ id: 'address' }) : intl.formatMessage({id: 'add_new_address'})}>
+			<FormBody style={{backgroundColor: '#f7f7f7'}}>
+				<AddressForm igonreCache needInitValidate={this.props.location.search === '?check=1' || validate} editAddress={this.editAddress} address={address} />
 			</FormBody>
 		</FullFixed>
 	}

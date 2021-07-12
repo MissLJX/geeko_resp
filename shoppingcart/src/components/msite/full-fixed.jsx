@@ -14,8 +14,8 @@ const HD = styled.div`
 	background-color: #fff;
 `
 
-const Title = styled.h1`
-	font-size: 18px;
+const Title = styled.div`
+	font-size: 16px;
 	font-family: AcuminPro-Bold;
 	text-align: center;
 `
@@ -62,7 +62,7 @@ export default class extends React.Component {
     return <Fixed>
 		  <HD>
 		    <Title>{props.title}</Title>
-		    <Close onClick={props.onClose}><Icon style={{fontSize: 25, cursor: 'pointer'}}>&#xe69a;</Icon></Close>
+		    <Close onClick={props.onClose}><Icon style={{fontSize: 14, cursor: 'pointer', color: '#999', display: 'inline-block', width: 25}}>&#xe6af;</Icon></Close>
 		  </HD>
 
 		  <BD>

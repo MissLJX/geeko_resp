@@ -52,11 +52,10 @@ const SELECTINPUT = styled.div`
 
 	.__listing{
 		display: none;
-		box-shadow: 0 2px 2px rgb(0 0 0 / 10%);
-			border: 1px solid #f7f7f7;
-			border-top: none;
+		border-top: none;
 		&.active{
 			display: block;
+			
 			
 		}
 		position: absolute;
@@ -109,7 +108,6 @@ const SelectInput = class extends React.Component {
 						}
 					</ul>
 				}
-
 			</div>
 
 			{
@@ -532,7 +530,12 @@ const AdressForm = class extends React.Component {
 
 		return <div>
 			<Form style={{ ...this.props.style }} ref={c => { this.formRef(c) }} onSubmit={this.handleSubmit.bind(this)}>
-				<FormLayout >
+				<FormLayout  style={{
+					paddingLeft: 12,
+					paddingRight: 12,
+					backgroundColor: '#fff',
+					paddingTop: 15
+		}}>
 					{
 						isEmailRequired && <div style={{ position: 'relative' }}>
 
@@ -761,7 +764,10 @@ const AdressForm = class extends React.Component {
 						</React.Fragment>
 					}
 
-					<div>
+					
+				</FormLayout>
+
+				<div style={{marginTop: 60, paddingBottom: 60, paddingLeft: 12, paddingRight: 12}}>
 						<Button className="__submitbtn" ref={c => this.addressButtn = c} ingoredisable="true" style={{
 							display: 'block',
 							backgroundColor: '#222',
@@ -774,9 +780,8 @@ const AdressForm = class extends React.Component {
 							width: '100%',
 							fontSize: 16,
 							fontFamily: 'AcuminPro-Bold'
-						}}>{intl.formatMessage({ id: 'submit' })}</Button>
+						}}>{intl.formatMessage({ id: 'save' })}</Button>
 					</div>
-				</FormLayout>
 			</Form>
 
 

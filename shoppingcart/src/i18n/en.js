@@ -53,7 +53,7 @@ export default{
 	shipping_address: 'Shipping Address',
 	shopping_bag: 'Shopping Bag',
 	default_address: 'Default Address',
-	add_new_address: 'Add new address',
+	add_new_address: 'Add New Address',
 	choose_anthor_address: 'Choose Another Address',
 	item: 'Item',
 	qty: 'Qty.',

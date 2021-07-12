@@ -45,7 +45,7 @@ const ICON = styled.span`
 const OFF = styled.span`
     position: absolute;
     left: 0;
-    top: 0;
+    top: 4px;
     background-color: #222;
     color: #fff;
     padding: 1px 2px;
@@ -96,9 +96,9 @@ export const NormalProduct = class extends React.Component {
                     {
                         isPromotion &&<ICON style={{color:'#e64545', fontSize: 12, marginRight: 4}}>&#xe6be;</ICON>
                     }
-                    <Money style={{color: isPromotion?'#e64545':'#222'}} money={lower} />
+                    <Money style={{color: isPromotion?'#e64545':'#222', fontFamily: 'AcuminPro-Bold'}} money={lower} />
                 </PRICE>
-                <ICON onClick={evt => { onSelect(product.variants[0], product) }}>&#xe6a8;</ICON>
+                <ICON style={{fontSize: 14, fontWeight: 'bold'}} onClick={evt => { onSelect(product.variants[0], product) }}>&#xe6a8;</ICON>
 
             </div>
         </PRODUCT>

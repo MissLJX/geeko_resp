@@ -19,6 +19,10 @@ const QInput = styled.input`
   text-align: center;
   margin-left:5px;
   margin-right:5px;
+  font-size: 14px;
+  font-family: 'SlatePro-Medium';
+  position: relative;
+  top: 1px;
   &::-webkit-outer-spin-button, &::-webkit-inner-spin-button{                
     -webkit-appearance: none !important;
     -moz-appearance:textfield;
@@ -98,9 +102,9 @@ export default class extends React.Component {
 
 	render () {
 		return <QWrapper>
-			<Icon style={{cursor: 'pointer', fontSize: 14, fontWeight: 'bold', color: (this.state.quantity === 1 || this.props.disabled) ? '#cacaca' : '#222'}} onClick={this.reduceQuantity.bind(this)}>&#xe6ba;</Icon>
+			<Icon style={{cursor: 'pointer', fontSize: 12, fontWeight: 'bold', color: (this.state.quantity === 1 || this.props.disabled) ? '#cacaca' : '#222'}} onClick={this.reduceQuantity.bind(this)}>&#xe731;</Icon>
 			<QInput className={this.props.disabled ? 'disabled':''} type="number" onChange={this.onChange} value={this.state.quantity}/>
-			<Icon style={{cursor: 'pointer', fontSize: 14, fontWeight: 'bold', color: this.props.disabled?'#cacaca' :'#222'}} onClick={this.addQuantity.bind(this)}>&#xe6b9;</Icon>
+			<Icon style={{cursor: 'pointer', fontSize: 12, fontWeight: 'bold', color: this.props.disabled?'#cacaca' :'#222'}} onClick={this.addQuantity.bind(this)}>&#xe733;</Icon>
 		</QWrapper>
 	}
 }

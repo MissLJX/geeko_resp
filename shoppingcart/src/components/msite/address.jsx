@@ -13,6 +13,7 @@ const getLabel = ({value, label}) => {
 const Address = styled.address`
   font-style: normal;
   padding-bottom: 5px;
+  padding-top: 7px;
 `
 
 const Name = styled.div`
@@ -23,7 +24,7 @@ const Name = styled.div`
 export default ({address}) => <Address>
   <Name>
     <span>{address.name}</span>
-    <span style={{fontFamily:'SlatePro'}}>({address.phoneNumber})</span>
+    <span style={{fontFamily:'SlatePro', fontSize: 12}}>{'  '}({address.phoneNumber})</span>
   </Name>
   <div style={{marginTop:10, color: '#666', fontSize:13}}>
     <div>

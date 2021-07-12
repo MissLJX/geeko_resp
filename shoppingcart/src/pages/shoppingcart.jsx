@@ -90,11 +90,13 @@ const ProductEditor = Loadable({
 
 const OrderSummary = styled.div`
 	padding: 0 10px 10px 10px;
+	margin-top: -8px;
 	& > div.__summary{
 		padding-top: 5px;
 		padding-bottom: 5px;
+		font-size: 14px;
 		font{
-			font-size: 16px !important;
+			font-size: 14px !important;
 		} 
 	}
 `
@@ -273,8 +275,8 @@ const ALSOLIKES = styled.div`
 	& > .__hd{
 		height: 42px;
 		line-height: 42px;
-		font-family: SlatePro-Medium;
-		font-size: 15px;
+		font-family: AcuminPro-Bold;
+		font-size: 14px;
 		color: #121314;
 	}
 
@@ -2465,7 +2467,7 @@ const ShoppingCart = class extends React.Component {
 																<div className="x-cell __right" style={{ width: 30 }}>
 																	<Grey>
 																		<Link style={{ color: '#222', textDecoration: 'none' }} to={`${window.ctx || ''}${__route_root__}/${(window.token || !window.__is_login__)?'address':'address-book'}`}>
-																			<Icon>&#xe694;</Icon>
+																			<Icon style={{fontSize: 16, transform: 'rotate(180deg)'}}>&#xe690;</Icon>
 																		</Link>
 																	</Grey>
 																</div>
@@ -2831,7 +2833,7 @@ const ShoppingCart = class extends React.Component {
 
 
 											<Box style={{ backgroundColor: '#f6f6f6', paddingTop: 15, paddingBottom: 15 }}>
-												<div style={{ color: '#999' }}><FormattedMessage id="secure_payment" /></div>
+												<div style={{ color: '#999', fontSize: 12 }}><FormattedMessage id="secure_payment" /></div>
 												<img style={{ width: 140, marginTop: 10 }} src="https://image.geeko.ltd/upgrade/20210225/sp.png" />
 											</Box>
 
