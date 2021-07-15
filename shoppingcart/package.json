@@ -38,7 +38,7 @@
     "webpack-dev-server": "^3.1.4"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "babel-polyfill": "^6.26.0",
     "ejs-html-loader": "^3.1.0",
     "js-cookie": "^2.2.0",
