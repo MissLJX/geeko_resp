@@ -48,7 +48,8 @@ import {
 	product_get_catch_with,
 	get_pay_params,
 	selectGift,
-	removeGift
+	removeGift,
+	getRecProducts
 
 } from '../api'
 import { __route_root__, storage, producturl, unitprice } from '../utils/utils.js'
@@ -66,7 +67,8 @@ import { SwiperNormalProducts } from '../components/msite/product-items.jsx'
 import SwiperGifts from '../components/msite/gifts.jsx'
 import Items from '../components/msite/items.jsx'
 import depplink from '../utils/deeplink'
-
+import RECProducts from '../components/msite/rec-products.jsx'
+import CouponProgress from '../components/msite/coupon-progress.jsx'
 
 
 
@@ -559,11 +561,21 @@ const ShoppingCart = class extends React.Component {
 			viewing: false,
 			viewingItem: null,
 			couponBanner: null,
-			cartBanner: null
+			cartBanner: null,
+			recs: []
 		}
 		this.processCallBack = this.processCallBack.bind(this)
 		this.processErrorBack = this.processErrorBack.bind(this)
 		this.scrollTop = 0
+
+
+		const orderId = storage.get('temp-order')
+
+		storage.remvoe('temp-order')
+
+		if (orderId) {
+			props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
+		}
 
 	}
 
@@ -606,6 +618,11 @@ const ShoppingCart = class extends React.Component {
 	}
 
 	componentDidMount() {
+
+
+
+
+
 		this.props.INIT().then(() => {
 			var { cart } = this.props
 			if (cart) {
@@ -617,9 +634,16 @@ const ShoppingCart = class extends React.Component {
 		this.props.FETCHCOUPONS()
 		window.addEventListener('scroll', this.scrollhandle, false)
 
-		product_get_catch_with({}).then(data => {
+		// product_get_catch_with({}).then(data => {
+		// 	this.setState({
+		// 		alsolikes: (data.result || []).map(p => ({ ...p, geekoRequsestId: data.geekoRequsestId }))
+		// 	})
+		// })
+
+
+		getRecProducts().then(data => data.result).then(recs => {
 			this.setState({
-				alsolikes: data.result
+				recs
 			})
 		})
 
@@ -762,6 +786,30 @@ const ShoppingCart = class extends React.Component {
 				}
 			}
 			this.props.history.push(path)
+			return
+		}
+
+		if (payMethod === '18') {
+
+			this.setState({
+				checking: true
+			})
+
+			placeOrderAll(payMethod).then(data => data.result).then(result => {
+				const { orderId } = result
+				this.props.history.push(`${window.ctx || ''}${__route_root__}/credit/${orderId}`)
+				this.setState({
+					checking: false
+				})
+			}).catch(data => {
+				alert(data.result)
+				this.setState({
+					checking: false
+				})
+				if (window.__is_login__) {
+					this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
+				}
+			})
 			return
 		}
 
@@ -1404,17 +1452,17 @@ const ShoppingCart = class extends React.Component {
 				this.setState({
 					loading: false
 				})
-			
+
 			})
 		}).catch(() => {
 			this.setState({
 				loading: false
 			})
-			
+
 		})
 	}
 
-	giftRemove(variantId){
+	giftRemove(variantId) {
 		this.setState({
 			loading: true
 		})
@@ -1427,13 +1475,13 @@ const ShoppingCart = class extends React.Component {
 				this.setState({
 					loading: false
 				})
-				
+
 			})
 		}).catch(() => {
 			this.setState({
 				loading: false
 			})
-			
+
 		})
 	}
 
@@ -2398,7 +2446,7 @@ const ShoppingCart = class extends React.Component {
 								}
 
 
-								{
+								{/* {
 									this.state.alsolikes && this.state.alsolikes.length > 0 && <Box style={{ borderTop: '8px solid #f7f7f7' }}>
 										<ALSOLIKES innerRef={this.alsoRef.bind(this)} data-source type="shopping_cart_match_with" data-column="shopping_cart_match_with" data-title="shoppingcart" data-type="shopping_cart_match_with" data-content="You Might Like to Fill it With" data-position="2">
 											<div className="__hd">
@@ -2418,6 +2466,22 @@ const ShoppingCart = class extends React.Component {
 											</div>
 										</ALSOLIKES>
 
+									</Box>
+								} */}
+
+
+								{
+									this.state.recs && this.state.recs.length > 0 && <Box style={{ borderTop: '8px solid #f7f7f7' }}>
+										<RECProducts recs={this.state.recs} onSelect={(vairant, product) => {
+													this.setState({
+														viewingItem: {
+															productId: product.id,
+															variantId: vairant.id,
+															quantity: 1
+														},
+														viewing: true
+													})
+												}}/>
 									</Box>
 								}
 
@@ -2466,8 +2530,8 @@ const ShoppingCart = class extends React.Component {
 																</div>
 																<div className="x-cell __right" style={{ width: 30 }}>
 																	<Grey>
-																		<Link style={{ color: '#222', textDecoration: 'none' }} to={`${window.ctx || ''}${__route_root__}/${(window.token || !window.__is_login__)?'address':'address-book'}`}>
-																			<Icon style={{fontSize: 16, transform: 'rotate(180deg)'}}>&#xe690;</Icon>
+																		<Link style={{ color: '#222', textDecoration: 'none' }} to={`${window.ctx || ''}${__route_root__}/${(window.token || !window.__is_login__) ? 'address' : 'address-book'}`}>
+																			<Icon style={{ fontSize: 16 }}>&#xe690;</Icon>
 																		</Link>
 																	</Grey>
 																</div>
@@ -2499,7 +2563,7 @@ const ShoppingCart = class extends React.Component {
 															<span dangerouslySetInnerHTML={{ __html: cart.messages.shippingMsg }} />
 														</div>
 														<div>
-															<a href={depplink(cart.messages.shippingMsgLink)} style={{ fontFamily: 'SlatePro-Medium', fontSize: 13, textDecoration:'none', color: '#222' }}><FormattedMessage id="add" /> {'>'}</a>
+															<a href={depplink(cart.messages.shippingMsgLink)} style={{ fontFamily: 'SlatePro-Medium', fontSize: 13, textDecoration: 'none', color: '#222' }}><FormattedMessage id="add" /> {'>'}</a>
 														</div>
 													</IconMessage>
 												</Box>
@@ -2509,17 +2573,29 @@ const ShoppingCart = class extends React.Component {
 												cart.messages && cart.messages.couponMsg && <Box>
 													<IconMessage>
 														<div>
-															<span style={{position:'relative', top: 2}} className="iconfont">&#xe6c2;</span>
+															<span style={{ position: 'relative', top: 2 }} className="iconfont">&#xe6c2;</span>
 														</div>
 														<div>
 															<span dangerouslySetInnerHTML={{ __html: cart.messages.couponMsg }} />
 														</div>
 														<div>
-															<a href={depplink(cart.messages.couponMsgLink)} style={{ fontFamily: 'SlatePro-Medium', fontSize: 13, textDecoration:'none', color: '#222' }}><FormattedMessage id="add" /> {'>'}</a>
+															<a href={depplink(cart.messages.couponMsgLink)} style={{ fontFamily: 'SlatePro-Medium', fontSize: 13, textDecoration: 'none', color: '#222' }}><FormattedMessage id="add" /> {'>'}</a>
 														</div>
 													</IconMessage>
 												</Box>
 											}
+
+										
+
+
+											{
+												cart.couponProgress && <Box>
+													<CouponProgress couponMsg={cart.messages.couponMsg} couponLink={cart.messages.couponMsgLink} couponProgress={cart.couponProgress}/>
+												</Box>
+											}
+
+
+
 
 											{/* {
 												cart.messages && cart.messages.couponMsg && <Box>
@@ -2549,15 +2625,15 @@ const ShoppingCart = class extends React.Component {
 															},
 															viewing: true
 														})
-													}} products={giftList} giftWarnMsg={cart.giftWarnMsg} canBuyGift={cart.canBuyGift}/>
+													}} products={giftList} giftWarnMsg={cart.giftWarnMsg} canBuyGift={cart.canBuyGift} />
 												</Box>
 											}
 
 											{
 												gifts && gifts.length > 0 && <Box>
 													<Items serverTime={this.props.serverTime}
-														disabledFunc={() => {}}
-														quantityChange={() => {}}
+														disabledFunc={() => { }}
+														quantityChange={() => { }}
 														itemEdit={item => {
 															this.setState({
 																viewingItem: {
@@ -2572,10 +2648,10 @@ const ShoppingCart = class extends React.Component {
 														itemDelete={(item) => {
 															this.giftRemove(item.variantId)
 														}}
-														itemSelect={(variantId, selected) => {  }}
+														itemSelect={(variantId, selected) => { }}
 														items={gifts}
 														isGift={true}
-														/>
+													/>
 												</Box>
 											}
 
@@ -2640,11 +2716,11 @@ const ShoppingCart = class extends React.Component {
 												))
 											}
 
-											
 
 
 
-											
+
+
 
 											{
 												cart.giftWarnMsg && <Box>
@@ -2722,7 +2798,7 @@ const ShoppingCart = class extends React.Component {
 													{
 														cart.shippingInsurancePrice2 && cart.shippingDetail && (isprogresspage || window.token) && (
 															<TurnTool ignoreButton={cart.isShippingInsuranceMust} open={this.openInsurance.bind(this)} turnAcitve={cart.insurance}>
-																<span style={{ fontSize: 14, fontFamily:'SlatePro-Medium' }}>
+																<span style={{ fontSize: 14, fontFamily: 'SlatePro-Medium' }}>
 																	<FormattedMessage id="add_shipping_insurance" values={{ price: <Red><Money money={cart.shippingInsurancePrice2} /></Red> }} />
 																</span>
 																<Ask style={{ marginLeft: 4 }} onClick={this.insuranceClickHandle.bind(this)} />
@@ -2808,7 +2884,7 @@ const ShoppingCart = class extends React.Component {
 												</OrderSummary>
 											</Box>
 
-											{
+											{/* {
 												this.state.alsolikes && this.state.alsolikes.length > 0 && <Box>
 													<ALSOLIKES innerRef={this.alsoRef.bind(this)} data-source type="shopping_cart_match_with" data-column="shopping_cart_match_with" data-title="shoppingcart" data-type="shopping_cart_match_with" data-content="You Might Like to Fill it With" data-position="2">
 														<div className="__hd">
@@ -2828,6 +2904,21 @@ const ShoppingCart = class extends React.Component {
 														</div>
 													</ALSOLIKES>
 
+												</Box>
+											} */}
+
+											{
+												this.state.recs && this.state.recs.length > 0 && <Box>
+													<RECProducts recs={this.state.recs} onSelect={(vairant, product) => {
+														this.setState({
+															viewingItem: {
+																productId: product.id,
+																variantId: vairant.id,
+																quantity: 1
+															},
+															viewing: true
+														})
+													}} />
 												</Box>
 											}
 
@@ -2862,9 +2953,9 @@ const ShoppingCart = class extends React.Component {
 																		cancheckout ? (
 																			!this.state.checking ? <BigButton onClick={this.checkout.bind(this)} className="__btn" height={47} bgColor="#222">
 																				{intl.formatMessage({ id: 'check_out' })} ({totalCount})
-																</BigButton> : <BigButton className="__btn" height={47} bgColor="#999">
+																			</BigButton> : <BigButton className="__btn" height={47} bgColor="#999">
 																				{intl.formatMessage({ id: 'please_wait' })}...
-																</BigButton>
+																			</BigButton>
 																		) : (
 																			<BigButton className="__btn" height={47} bgColor="#999">
 																				{intl.formatMessage({ id: 'check_out' })} ({totalCount})
@@ -2882,7 +2973,7 @@ const ShoppingCart = class extends React.Component {
 																	<div>
 																		<BigButton className="__btn" height={47} bgColor="#999">
 																			{intl.formatMessage({ id: 'check_out' })} ({totalCount})
-															</BigButton>
+																		</BigButton>
 																	</div>
 																</Checkout>
 															}
@@ -2942,7 +3033,7 @@ const ShoppingCart = class extends React.Component {
 																					this.props.history.push(`${window.ctx || ''}${__route_root__}/address`)
 																				}} className="__btn" height={47} bgColor="#222">
 																					{intl.formatMessage({ id: 'check_out' })} ({totalCount})
-																	</BigButton>
+																				</BigButton>
 																			</div>
 																			<div>
 																				<PaypalBtn onClick={this.quickPaypal.bind(this)}><img src={cart.paypalButtonImage} /></PaypalBtn>
@@ -2950,7 +3041,7 @@ const ShoppingCart = class extends React.Component {
 																		</DoubleBtn> : <div>
 																			<BigButton onClick={() => { this.props.history.push(`${window.ctx || ''}${__route_root__}/address`) }} className="__btn" height={47} bgColor="#222">
 																				{intl.formatMessage({ id: 'check_out' })} ({totalCount})
-																</BigButton>
+																			</BigButton>
 																		</div>
 																	}
 
@@ -2968,7 +3059,7 @@ const ShoppingCart = class extends React.Component {
 																	<div>
 																		<BigButton className="__btn" height={47} bgColor="#999">
 																			{intl.formatMessage({ id: 'check_out' })} ({totalCount})
-															</BigButton>
+																		</BigButton>
 																	</div>
 																</Checkout>
 															}

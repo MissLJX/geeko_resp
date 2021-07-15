@@ -14,6 +14,12 @@ import { connect } from 'react-redux'
 
 import AddressBook from './pages/address-book.jsx'
 
+
+import Credit from './pages/credit.jsx'
+
+
+
+
 const AddressModal = Loadable({
 	loader: () => import(/* webpackChunkName: "page--address-modal" */ './pages/address-modal.jsx'),
 	loading: Loading
@@ -127,6 +133,7 @@ const Index = (props) => {
 			<Switch>
 				<Route path={`${window.ctx || ''}/checkout/:orderId`} component={Checkout} />
 				<Route path={`${window.ctx || ''}/order-confirm/:transactionId`} component={OrderConfirm} />
+				<Route path={`${window.ctx || ''}${__route_root__}/credit/:orderId`} component={Credit} />
 				<Route path={`${window.ctx || ''}${__route_root__}/`} component={ShoppingCart} />
 			</Switch>
 
@@ -139,6 +146,10 @@ const Index = (props) => {
 					...defaultStyles
 				})}
 				path={`${window.ctx || ''}${__route_root__}/address-book`} component={AddressBook} />
+
+
+
+				
 
 
 			<AnimatedRoute	{...defaultAnimations}

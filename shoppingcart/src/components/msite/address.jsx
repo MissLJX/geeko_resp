@@ -17,7 +17,7 @@ const Address = styled.address`
 `
 
 const Name = styled.div`
-  font-family: AcuminPro-Bold;
+  font-family: SlatePro-Medium;
   line-height: 16px;
 `
 

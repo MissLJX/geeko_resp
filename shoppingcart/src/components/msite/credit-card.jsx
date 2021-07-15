@@ -45,7 +45,7 @@ const BD = styled.div`
 
 const CREDITWRAPPER = styled.div`
 	background-color: #efefef;
-	
+	left: 0;
 	position: fixed;
 	z-index: 5;
 	bottom: 0;

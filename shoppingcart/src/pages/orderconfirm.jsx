@@ -264,7 +264,6 @@ const OrderConfirm = class extends React.Component {
 
 	handleViewOrder() {
 		const { transaction } = this.props
-
 		window.location.href = `${window.ctx || ''}/me/m/order/detail/${transaction.id}`
 	}
 

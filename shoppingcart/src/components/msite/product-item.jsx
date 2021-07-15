@@ -6,6 +6,7 @@ import Money from '../money.jsx'
 
 const PRODUCT = styled.div`
     position: relative;
+    cursor: pointer;
     & > .__price{
         display: flex;
         margin-top: 8px;
@@ -82,8 +83,8 @@ export const NormalProduct = class extends React.Component {
         }
 
 
-        return <PRODUCT>
-            <a ref={this.productRef.bind(this)} href={producturl(product)} className="__image product-click" product-id={product.id} data-product-source={product.dataSource} data-request-id={product.aliRequestId} data-experiment-id={product.aliExperimentId} type="shopping_cart_match_with" data-column="shopping_cart_match_with" data-product-list-source data-title="shoppingcart" data-type="shopping_cart_match_with" data-content="You Might Like to Fill it With" data-product-position={position}>
+        return <PRODUCT onClick={evt => { onSelect(product.variants[0], product) }}>
+            <a ref={this.productRef.bind(this)} href="javacript:void(0)"  className="__image product-click" product-id={product.id} data-product-source={product.dataSource} data-geeko-id={product.geekoRequsestId} data-request-id={product.aliRequestId} data-experiment-id={product.aliExperimentId} type="shopping_cart_match_with" data-column="shopping_cart_match_with" data-product-list-source data-title="shoppingcart" data-type="shopping_cart_match_with" data-content="You Might Like to Fill it With" data-product-position={position}>
                 <img src={`${IMAGE_PREFIX}/medium/${product.pcMainImage}`} />
             </a>
 
@@ -98,7 +99,7 @@ export const NormalProduct = class extends React.Component {
                     }
                     <Money style={{color: isPromotion?'#e64545':'#222', fontFamily: 'AcuminPro-Bold'}} money={lower} />
                 </PRICE>
-                <ICON style={{fontSize: 14, fontWeight: 'bold'}} onClick={evt => { onSelect(product.variants[0], product) }}>&#xe6a8;</ICON>
+                <ICON style={{fontSize: 14, fontWeight: 'bold'}}>&#xe6a8;</ICON>
 
             </div>
         </PRODUCT>

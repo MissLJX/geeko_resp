@@ -305,6 +305,7 @@ const Close = styled.span`
 export const Input = control(({ error, isChanged, isUsed, divStyle, ...props }) => {
     const [focused, setFocused] = useState(false)
     const label = props.label || props.renderLabel()
+
     return <InputContainer>
         <Label className={`${(focused || props.value || props.placeholder) ? 'focused' : ''} ${isChanged && isUsed && !!error && '__error'}`}>{label}</Label>
         <InputWrapper className={`${focused ? 'focused' : ''} ${isChanged && isUsed && !!error && '__error'}`}>
@@ -314,7 +315,6 @@ export const Input = control(({ error, isChanged, isUsed, divStyle, ...props }) 
                     if (props.onFocus) {
                         props.onFocus(evt)
                     }
-
                 }} onBlur={(evt) => {
                     setFocused(false)
                     if (props.onBlur) {
@@ -428,6 +428,7 @@ export const StreetInput = control(({ error, isChanged, isUsed, divStyle, ...pro
         return () => {
             if (autocomplete) {
                 autocomplete.unbindAll()
+                autocomplete=null
             }
         }
     }, [props.country])
@@ -472,7 +473,7 @@ export const GountrySelect = control(({ error, isChanged, isUsed, divStyle, ...p
         }}>
             <Label className={`${(focused || props.value || props.placeholder) ? 'focused' : ''} ${isChanged && isUsed && !!error && '__error'}`}>{label}</Label>
             <InputWrapper className={`${focused ? 'focused' : ''} ${isChanged && isUsed && !!error && '__error'}`}>
-                <select key={props.value} {...props} onFocus={(evt) => {
+                <select {...props} onFocus={(evt) => {
                     setFocused(true)
                     if (props.onFocus) {
                         props.onFocus(evt)
@@ -510,7 +511,7 @@ export const GountrySelect = control(({ error, isChanged, isUsed, divStyle, ...p
 
 const CountryList = props => {
     const { options = [], selectedOption, onSelect, filter, step } = props
-    const groupedOptions = _.groupBy(options.filter(o => o.label.toUpperCase().indexOf((filter || '').toUpperCase()) >= 0), c => c.label.substr(0, 1).toUpperCase())
+    const groupedOptions = _.groupBy(options.filter(o => o.label.toUpperCase().startsWith((filter || '').toUpperCase())), c => c.label.substr(0, 1).toUpperCase())
     const keys = Object.keys(groupedOptions).sort()
     const [option, setOption] = useState({})
     const [key, setKey] = useState()
@@ -520,7 +521,7 @@ const CountryList = props => {
     }, [selectedOption])
 
     useEffect(() => {
-        setKey()
+        setKey(selectedOption && selectedOption.label ?selectedOption.label.substr(0,1): null)
     }, [options])
 
     const refs = keys.reduce((acc, value) => {
@@ -546,13 +547,13 @@ const CountryList = props => {
         if(selectedOption && selectedOption.label){
             k = selectedOption.label.substr(0,1).toUpperCase()
             if(refs[k] && refs[k].current){
-                setKey(k)
                 refs[k].current.scrollIntoView({
                     block: 'start',
                 })
+                setKey(k)
             }
         }
-    }, [refs])
+    }, [selectedOption])
 
 
 
@@ -679,18 +680,38 @@ const CountryInfoPicker = React.memo(props => {
                 scountry = option.value
                 setTriggeCountry(true)
                 if(scountry !== option.value){
-                    setStates([])
-                    setCities([])
+                    // setStates([])
+                    // setCities([])
+                    setStep(1)
+                }else{
+                    getStates(scountry).then(data => data.result).then(sts => {
+                        if(sts && sts.length > 0){
+                            setStates(sts)
+                            setStep(1)
+                        }else{
+                            props.onClose()
+                        }
+                    })
                 }
-                setStep(1)
+                
                 break
             case 'state':
                 sstate = option.value
                 setTriggeState(true)
                 if(sstate !== option.value){
-                    setCities([])
+                    // setCities([])
+                    setStep(2)
+                }else{
+                    getCites(scountry, sstate).then(data => data.result).then(sts => {
+                        if(sts && sts.length > 0){
+                            setCities(sts.map(s => ({...s, label: s.name, value: s.name})))
+                            setStep(2)
+                        }else{
+                            props.onClose()
+                        }
+                    })
                 }
-                setStep(2)
+                
                 break
             case 'city':
                 scity = option.value

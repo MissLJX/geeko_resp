@@ -110,7 +110,7 @@ const SelectInput = class extends React.Component {
 				}
 			</div>
 
-			{
+			{/* {
 				listValues && listValues.length > 1 && <React.Fragment>
 					<span className="__selectIcon" onClick={() => { this.select.click() }}>&#xe690;</span>
 
@@ -120,8 +120,7 @@ const SelectInput = class extends React.Component {
 						}
 					</select>
 				</React.Fragment>
-			}
-
+			} */}
 
 
 
@@ -186,9 +185,9 @@ const AdressForm = class extends React.Component {
 
 	changeInfo(c, s, v, zs) {
 		this.setState({
-			country: c,
-			state: s,
-			city: v,
+			country: c || this.state.country,
+			state: s || this.state.state,
+			city: v ||  this.state.city,
 			selectedZips: zs,
 			zipCode: zs && zs.length > 0 ? zs[0] : ''
 		})
@@ -252,7 +251,7 @@ const AdressForm = class extends React.Component {
 		// 		break
 		// }
 
-		
+
 
 
 		form = this.form
@@ -377,7 +376,7 @@ const AdressForm = class extends React.Component {
 
 			// if (isStructotState(state)) {
 			this.getStates(countryValue)
-			// }
+			// }xx
 
 			const [c, s] = [countryValue, state ? state.value : '']
 
@@ -390,7 +389,7 @@ const AdressForm = class extends React.Component {
 					const selectedCity = (cities || []).find(c => c.name === city)
 					this.setState({
 						countryStateCities: newState,
-						selectedZips: selectedCity.zipCodes
+						selectedZips: selectedCity ? (selectedCity.zipCodes || []) : []
 					})
 				})
 			}
@@ -523,19 +522,19 @@ const AdressForm = class extends React.Component {
 
 		const isNormalAddress = ['BR', 'AE', 'SA'].indexOf(this.state.country) < 0
 
-		const isEmailRequired = !(window.__is_login__ || window.token)
+		const isEmailRequired = !(window.__is_login__ || window.token || this.props.ignoreEmail)
 
 		const key = `${this.state.country}#${this.state.state}`
 		const listValues = this.state.countryStateCities[key] || []
 
 		return <div>
 			<Form style={{ ...this.props.style }} ref={c => { this.formRef(c) }} onSubmit={this.handleSubmit.bind(this)}>
-				<FormLayout  style={{
+				<FormLayout style={{
 					paddingLeft: 12,
 					paddingRight: 12,
 					backgroundColor: '#fff',
 					paddingTop: 15
-		}}>
+				}}>
 					{
 						isEmailRequired && <div style={{ position: 'relative' }}>
 
@@ -561,20 +560,14 @@ const AdressForm = class extends React.Component {
 
 					}
 
-
-
-
-
-
-
-
 					<GInput label={`*${intl.formatMessage({ id: 'full_name' })}`}
 						name='name'
 						value={this.state.name}
 						onChange={this.handleInputChange}
+						onFocus={() => { }}
+						onBlur={() => { }}
 						validations={[required]} />
 
-					{/* <input ref={this.bindGoogleAuto.bind(this)}/> */}
 
 
 
@@ -590,9 +583,20 @@ const AdressForm = class extends React.Component {
 								this.setState({
 									...address
 								})
+								if (address.country, address.state) {
+									const key = `${address.country}#${address.state}`
+									getCites(address.country, address.state).then(data => data.result).then(cities => {
+										const newState = { ...this.state.countryStateCities, [key]: cities }
+										this.setState({
+											countryStateCities: newState
+										})
+									})
+								}
+
 							}
 						}
 						validations={[required]} />
+
 
 					{/* <GInput label={`*${intl.formatMessage({ id: 'street_address' })}`}
 						name='streetAddress1'
@@ -602,9 +606,13 @@ const AdressForm = class extends React.Component {
 						
 						validations={[required]} /> */}
 
+
+
 					<GInput label={`${intl.formatMessage({ id: 'unit' })}`}
 						name='unit'
 						value={this.state.unit}
+						onFocus={() => { }}
+						onBlur={() => { }}
 						onChange={this.handleInputChange} />
 
 
@@ -615,10 +623,12 @@ const AdressForm = class extends React.Component {
 						name='country'
 						disabled={this.props.disablecountry}
 						placeholder="Country"
-						onSelect={(c, s, v, zs) => { this.changeInfo(c, s, v, zs); this.changeCountry(c); }}
+						onSelect={(c, s, v, zs) => { this.changeInfo(c, s, v, zs);this.changeCountry(c); }}
 						country={this.state.country}
 						state={this.state.state}
 						city={this.state.city}
+						onFocus={() => { }}
+						onBlur={() => { }}
 						validations={[required]}>
 						<option value=''>Country</option>
 						{
@@ -628,6 +638,7 @@ const AdressForm = class extends React.Component {
 						}
 					</GountrySelect>
 
+
 					{
 						this.state.states && this.state.states.length > 1 ? (
 
@@ -636,7 +647,9 @@ const AdressForm = class extends React.Component {
 								value={this.state.state}
 								onChange={this.handleInputChange}
 								placeholder="State"
-								onSelect={(c, s, v, zs) => { this.changeInfo(c, s, v, zs); this.changeCountry(c); }}
+								onSelect={(c, s, v, zs) => { this.changeInfo(c, s, v, zs);this.changeCountry(c); }}
+								onFocus={() => { }}
+								onBlur={() => { }}
 								country={this.state.country}
 								state={this.state.state}
 								city={this.state.city}
@@ -654,6 +667,8 @@ const AdressForm = class extends React.Component {
 							<GInput label={`${intl.formatMessage({ id: 'state' })}`}
 								name='state'
 								value={this.state.state}
+								onFocus={() => { }}
+								onBlur={() => { }}
 								onChange={this.handleInputChange} />
 						)
 					}
@@ -669,6 +684,36 @@ const AdressForm = class extends React.Component {
 							validations={[required]} />
 					</SelectInput>
 
+					{/* {
+						listValues && listValues.length > 0 ? <GountrySelect label={`${intl.formatMessage({ id: 'city' })}`}
+							name='city'
+							value={this.state.city}
+							onChange={this.handleInputChange}
+							placeholder="City"
+							onSelect={(c, s, v, zs) => { this.changeInfo(c, s, v, zs); }}
+							country={this.state.country}
+							state={this.state.state}
+							city={this.state.city}
+							step={2}
+							validations={[required]}>
+							<option value=''>City</option>
+							{
+								listValues && listValues.map(c => (
+									<option key={c.name} value={c.name} >{c.name}</option>
+								))
+							}
+						</GountrySelect> : <GInput label={`${intl.formatMessage({ id: 'city' })}`}
+							name='city'
+							value={this.state.city}
+							onFocus={() => { }}
+							onBlur={() => { }}
+							onChange={this.handleInputChange} />
+					} */}
+
+
+
+
+
 
 					<SelectInput selectHandle={(zipCode) => { this.setState({ zipCode }) }} isActive={this.state.zipFocus} searchValue={this.state.zipCode} listValues={this.state.selectedZips}>
 						<GInput label={`*${intl.formatMessage({ id: 'zip_code' })}`}
@@ -681,107 +726,77 @@ const AdressForm = class extends React.Component {
 					</SelectInput>
 
 
-					{
-						this.state.country === 'BR' && <React.Fragment>
-							<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-								<span style={{ width: 59, display: 'inline-block' }}>BR +55</span>
-								<div style={{ width: 55, display: 'inline-block' }}>
+					<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+
+						{
+							this.state.country === 'AE' && <span style={{ width: 69,flexShrink: 0, display: 'inline-block', paddingTop: 10 }}>UAE +971</span>
+						}
+
+						{
+							this.state.country === 'SA' && <span style={{ width: 69,flexShrink: 0, display: 'inline-block', paddingTop: 10 }}>KSA +966</span>
+						}
+
+						{
+							this.state.country === 'BR' && <React.Fragment>
+								<span style={{ width: 69, display: 'inline-block',flexShrink: 0, paddingTop: 10 }}>BR +55</span>
+								<div style={{ width: 55, display: 'inline-block', flexShrink: 0, paddingRight: 10 }}>
 									<GInput
 										label="Código"
 										name="phoneArea"
 										type="number"
 										maxLength={2}
 										value={this.state.phoneArea}
+										onFocus={() => { }}
+										onBlur={() => { }}
 										onChange={this.handleInputChange}
 										validations={[number]} />
 								</div>
-								<div style={{ width: `calc(100% - 124px)` }}>
-									<GInput
-										label={`*${intl.formatMessage({ id: 'phone_number' })}`}
-										name='phoneNumber'
-										value={this.state.phoneNumber}
-										type="number"
-										onChange={this.handleInputChange}
-										validations={[required, phone]} />
-								</div>
-							</div>
+							</React.Fragment>
+						}
 
+						<div style={{ width: `100%` }}>
 							<GInput
-								renderLabel={() => {
-									return <div>
-										CPF* <Ask style={{ marginLeft: 4 }} onClick={this.cpfClickHandle.bind(this)} />
-									</div>
-								}}
-								name='cpf'
-								value={this.state.cpf}
-								onChange={this.handleInputChange}
-								validations={[required, cpf]} />
-						</React.Fragment>
-					}
-
-
-					{
-						(this.state.country === 'AE' || this.state.country === 'SA') && <React.Fragment>
-							<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-								{
-									this.state.country === 'AE' && <span style={{ width: 69, display: 'inline-block', paddingTop: 10 }}>UAE +971</span>
-								}
-
-								{
-									this.state.country === 'SA' && <span style={{ width: 69, display: 'inline-block', paddingTop: 10 }}>KSA +966</span>
-								}
-
-
-								<div style={{ width: `calc(100% - 79px)` }}>
-									<GInput
-										label={`*${intl.formatMessage({ id: 'phone_number' })}`}
-										name='phoneNumber'
-										value={this.state.phoneNumber}
-										type="number"
-										onChange={this.handleInputChange}
-										validations={[required, phone]} />
-								</div>
-							</div>
-						</React.Fragment>
-					}
-
-
-					{
-						(this.state.country !== 'BR' && this.state.country !== 'AE' && this.state.country !== 'SA') && <React.Fragment>
-							<GInput label={`*${intl.formatMessage({ id: 'phone_number' })}`}
+								label={`*${intl.formatMessage({ id: 'phone_number' })}`}
 								name='phoneNumber'
 								value={this.state.phoneNumber}
+								type="number"
+								onFocus={() => { }}
+								onBlur={() => { }}
 								onChange={this.handleInputChange}
 								validations={[required, phone]} />
+						</div>
+					</div>
 
-							{
-								(this.state.country == 'TW' || this.state.country == 'MO' || this.state.country == 'HK') && <GInput label={`*身份證`}
-									name='cpf'
-									value={this.state.cpf}
-									onChange={this.handleInputChange}
-									validations={[required]} />
-							}
-						</React.Fragment>
+
+					{
+						(this.state.country === 'BR' || this.state.country == 'TW' || this.state.country == 'MO' || this.state.country == 'HK') && <GInput
+							label={this.state.country === 'BR' ? 'CPF' : `*身份證`}
+							name='cpf'
+							value={this.state.cpf}
+							onFocus={() => { }}
+							onBlur={() => { }}
+							onChange={this.handleInputChange}
+							validations={[required]} />
 					}
 
-					
+
 				</FormLayout>
 
-				<div style={{marginTop: 60, paddingBottom: 60, paddingLeft: 12, paddingRight: 12}}>
-						<Button className="__submitbtn" ref={c => this.addressButtn = c} ingoredisable="true" style={{
-							display: 'block',
-							backgroundColor: '#222',
-							color: '#fff',
-							height: 40,
-							lineHeight: '40px',
-							textAlign: 'center',
-							outline: 'none',
-							border: 'none',
-							width: '100%',
-							fontSize: 16,
-							fontFamily: 'AcuminPro-Bold'
-						}}>{intl.formatMessage({ id: 'save' })}</Button>
-					</div>
+				<div style={{ marginTop: 60, paddingBottom: 60, paddingLeft: 12, paddingRight: 12 }}>
+					<Button className="__submitbtn" ref={c => this.addressButtn = c} ingoredisable="true" style={{
+						display: 'block',
+						backgroundColor: '#222',
+						color: '#fff',
+						height: 40,
+						lineHeight: '40px',
+						textAlign: 'center',
+						outline: 'none',
+						border: 'none',
+						width: '100%',
+						fontSize: 16,
+						fontFamily: 'AcuminPro-Bold'
+					}}>{intl.formatMessage({ id: 'save' })}</Button>
+				</div>
 			</Form>
 
 
