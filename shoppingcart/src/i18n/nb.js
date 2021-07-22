@@ -141,5 +141,18 @@ export default{
 	you_can_match_width: 'kanskje du vil fylle den med',
 	addtocart: 'Legg i handlevogn',
 	addonitems: 'Tilleggsartikler',
-	addressbook: 'Address Book'
+	addressbook: 'Address Book',
+
+	card_number: 'Card Number',
+	expiration_date: 'Expiration Date',
+	remember_this_card_for_future_use: 'Remember This Card For Future Use',
+	billing_address: 'Billing Address',
+	order_payment: 'Order Payment',
+	what_is_cvv: 'what is CVV',
+	card_info_1: 'FOR VISA/Mastercard/JCB etcs',
+	card_info_2: 'last 3 digits on back of card',
+	card_info_3: '4 digits on front of card',
+	cancel_info: 'Are you sure you want to cancel payment? If your order is not paid in {countdown},it will be canceled.',
+	continue_to_pay: 'Continue to Pay',
+	confirm_cancel: 'Confirm Cancel'
 }

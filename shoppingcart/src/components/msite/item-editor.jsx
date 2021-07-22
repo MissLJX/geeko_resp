@@ -20,37 +20,51 @@ const Wrapper = styled.div`
 	background-color: #fff;
 	z-index: 10;
 	left: 0;
-	padding-top: 20px;
 	padding-bottom: 20px;
 `
 
 const HD = styled.div`
 	position: relative;
 	height: 50px;
-	border-bottom: 1px solid #e5e5e5;
 	line-height: 50px;
 	padding-left: 10px;
 	padding-right: 10px;
-	& > h1{
-		font-size: 15px;
-		font-weight: normal;
-	}
-
-	& > span{
+	.__back{
+		left: 20px;
+		font-family: iconfont;
+		cursor: pointer;
+		font-size: 18px;
+		transform: rotate(180deg);
 		position: absolute;
-		right: 10px;
+		left: 10px;
 		top: 0;
-		font-size: 20px;
 	}
 `
 
 const BD = styled.div`
 	padding-left: 20px;
 	padding-right: 20px;
+	height: calc(100% - 50px);
+	overflow: auto;
+	-webkit-overflow-scrolling: touch;
+	padding-bottom: 90px;
+`
+
+const FD = styled.div`
+	position: absolute;
+	width: 100%;
+	left: 0;
+	bottom: 0;
+	height: 75px;
+	padding-top: 10px;
+	background-color: #ffffff;
+	box-shadow: 0px 2px 20px 0px 
+		#999999;
+	padding-left: 18px;
+	padding-right: 18px;
 `
 
 const SWIPER = styled.div`
-	padding-left: 20px;
 `
 
 const INFO = styled.div`
@@ -239,7 +253,7 @@ const ImageSwiper = props => {
 	>
 		{
 			images && images.map(image => <SwiperSlide key={image}>
-				<ITEMIMAGE >
+				<ITEMIMAGE style={{ border: 'none' }}>
 					<img src={`${IMAGE_PREFIX}/medium/${image}`} />
 				</ITEMIMAGE>
 			</SwiperSlide>)
@@ -248,15 +262,15 @@ const ImageSwiper = props => {
 }
 
 const ColorSwiper = props => {
-	const { products,selectedProduct, onSelect } = props
-	
+	const { products, selectedProduct, onSelect } = props
+
 	return <Swiper
 		slidesPerView={8.5}
 		spaceBetween={8}
 	>
 		{
 			products && products.map(product => <SwiperSlide key={product.id}>
-				<ITEMIMAGE className={selectedProduct.id === product.id? 'selected': ''} style={{cursor: 'pointer'}} onClick={evt => {onSelect(product)}}>
+				<ITEMIMAGE className={selectedProduct.id === product.id ? 'selected' : ''} style={{ cursor: 'pointer' }} onClick={evt => { onSelect(product) }}>
 					<img src={`${IMAGE_PREFIX}/small/${product.pcMainImage}`} />
 				</ITEMIMAGE>
 			</SwiperSlide>)
@@ -316,7 +330,7 @@ const ProductEditor = class extends React.Component {
 	editHandle() {
 		const newVaraintId = this.state.selectedVariant.id
 		const newQuantity = this.state.selectedQuantity
-		
+
 
 		this.props.itemConfirmHandle(this.props.item.variantId, newVaraintId, newQuantity)
 	}
@@ -336,114 +350,129 @@ const ProductEditor = class extends React.Component {
 	}
 
 	render() {
-		const { intl, btnMessage } = this.props
+		const { intl, btnMessage, style2 } = this.props
 
 		const { products, selectedVariant, selectedProduct, selectedQuantity } = this.state
 		let high = selectedVariant ? higher(selectedVariant) : null
 		let low = selectedVariant ? lower(selectedVariant) : null
 		// const high = {amount:'50', unit: '$', currency: 'USD'}
 
-		if(this.state.isGift){
+		if (this.state.isGift) {
 			low = selectedProduct.giftPrice
 			high = selectedVariant.msrp || selectedVariant.price
 		}
 
 
-		return products ? (
-			<Wrapper>
-				<CloseIcon className="iconfont" onClick={this.props.onClose}>&#xe69a;</CloseIcon>
-				<SWIPER>
-					<ImageSwiper images={[selectedProduct.pcMainImage, ...(selectedProduct.pcExtraImageUrls || [])]} />
-				</SWIPER>
-				<BD>
-					<div>
-						<NAME>
-							<Ellipsis>{selectedProduct.name}</Ellipsis>
-						</NAME>
-						
-						<Price>
-							<Money style={{fontSize: 20,fontFamily: 'AcuminPro-Bold', color:this.state.isGift? '#e64545':'#222' }} money={low} />
-							{
-								high && (
-									<React.Fragment>
-										<Grey><del><Money money={high} /></del></Grey>
+		return (
+			<Wrapper style={{ height: 'calc(100% - 85px)' }}>
+
+				<HD>
+					<span className="__back" onClick={this.props.onClose}>&#xe690;</span>
+				</HD>
+
+				{
+					products && products.length > 0 ? <React.Fragment>
+						<BD>
+							<SWIPER>
+								<ImageSwiper images={[selectedProduct.pcMainImage, ...(selectedProduct.pcExtraImageUrls || [])]} />
+							</SWIPER>
+							<div>
+								<NAME>
+									<Ellipsis>{selectedProduct.name}</Ellipsis>
+								</NAME>
+
+								<Price>
+									<Money style={{ fontSize: 20, fontFamily: 'AcuminPro-Bold', color: this.state.isGift ? '#e64545' : '#222' }} money={low} />
+									{
+										high && (
+											<React.Fragment>
+												<Grey><del><Money money={high} /></del></Grey>
+												{
+													!this.state.isGift && <OFF>-{percent(high, low)}</OFF>
+												}
+
+											</React.Fragment>
+										)
+									}
+
+								</Price>
+							</div>
+
+							<SizeColor style={{ borderTop: 'none' }}>
+
+								<SizeColorRow>
+									<div style={{ display: 'flex', justifyContent: 'space-between' }}>
+										<span style={{ fontFamily: 'SlatePro-Medium', fontSize: 14 }}>{intl.formatMessage({ id: 'color' })}</span>
 										{
-											!this.state.isGift && <OFF>-{percent(high, low)}</OFF>
+											selectedVariant && selectedVariant.color && <span>
+												You selected {selectedVariant.color}
+												{
+													selectedProduct.theme ? `-${selectedProduct.theme}` : ''
+												}
+											</span>
 										}
-										
-									</React.Fragment>
+									</div>
+									<div style={{ marginTop: 8 }}>
+										<ColorSwiper selectedProduct={selectedProduct} products={products} onSelect={product => { this.setProductHandle(product) }} />
+									</div>
+								</SizeColorRow>
+								{
+									(!selectedProduct.variants.length === 1 || selectedProduct.variants[0].size) && <SizeColorRow>
+										<div>
+											<span style={{ fontFamily: 'SlatePro-Medium', fontSize: 14 }}>{intl.formatMessage({ id: 'size' })}</span>
+										</div>
+										<div style={{ marginTop: 8 }}>
+											<BLOCKS>
+												{
+													selectedProduct.variants.map(variant => <div key={variant.id} className="__block">
+														<SIZE onClick={() => { this.setState({ selectedVariant: variant }) }} className={selectedVariant.id === variant.id ? '__selected' : ''}>{variant.size}</SIZE>
+													</div>)
+												}
+											</BLOCKS>
+
+											{
+												selectedVariant && selectedVariant.description && <span style={{ fontSize: 12, lineHeight: '16px' }} dangerouslySetInnerHTML={{ __html: selectedVariant.description.replace(/:[\w|\d|\-|(|)|\.]+;/g, function (value) { return '<span style="color:#999;margin-right: 5px;">' + value + ' </span>' }) }} />
+											}
+										</div>
+									</SizeColorRow>
+								}
+								<div style={{ display: 'flex' }}>
+									<div>
+										<span style={{ fontFamily: 'SlatePro-Medium', fontSize: 14 }}>{intl.formatMessage({ id: 'qty' })}</span>
+									</div>
+									<div style={{ marginLeft: 12, position: 'relative', top: -4 }}>
+										<Quantity onChange={(quantity) => { this.setState({ selectedQuantity: quantity }) }} quantity={this.state.selectedQuantity} />
+									</div>
+								</div>
+							</SizeColor>
+
+							{/* <div style={{ paddingTop: 20 }}>
+
+						
+
+					</div> */}
+
+						</BD>
+
+						<FD>
+							{
+								selectedVariant && selectedVariant.status === '1' && (selectedVariant.inventory > 0 || selectedProduct.isAutoInventory) ? (
+									<BigButton onClick={this.editHandle.bind(this)}>{btnMessage ? btnMessage : intl.formatMessage({ id: 'confirm' })}</BigButton>
+								) : (
+									<BigButton bgColor="#999" style={{ cursor: 'not-allowed' }}>
+										<FormattedMessage id="sold_out" />
+									</BigButton>
 								)
 							}
+						</FD>
+					</React.Fragment>: <div style={{textAlign: 'center', marginTop: 20}}>Loading</div>
+				}
 
-						</Price>
-					</div>
 
-					<SizeColor style={{ borderTop: 'none' }}>
 
-						<SizeColorRow>
-							<div style={{display:'flex', justifyContent:'space-between'}}>
-								<span style={{fontFamily: 'SlatePro-Medium', fontSize: 14}}>{intl.formatMessage({ id: 'color' })}</span>
-								{
-									selectedVariant && selectedVariant.color && <span>
-										You selected {selectedVariant.color}
-										{
-											selectedProduct.theme ? `-${selectedProduct.theme}` : ''
-										}
-									</span>
-								}
-							</div>
-							<div style={{marginTop: 8}}>
-								<ColorSwiper selectedProduct={selectedProduct} products={products} onSelect={ product => {this.setProductHandle(product)} }/>
-							</div>
-						</SizeColorRow>
-						{
-							(!selectedProduct.variants.length === 1 || selectedProduct.variants[0].size) && <SizeColorRow>
-								<div>
-									<span style={{fontFamily: 'SlatePro-Medium', fontSize: 14}}>{intl.formatMessage({ id: 'size' })}</span>
-								</div>
-								<div style={{marginTop:8}}>
-									<BLOCKS>
-										{
-											selectedProduct.variants.map(variant => <div key={variant.id} className="__block">
-												<SIZE onClick={() => { this.setState({ selectedVariant: variant }) }} className={selectedVariant.id === variant.id ? '__selected' : ''}>{variant.size}</SIZE>
-											</div>)
-										}
-									</BLOCKS>
-
-									{
-										selectedVariant && selectedVariant.description && <span style={{fontSize: 12, lineHeight: '16px'}} dangerouslySetInnerHTML={{__html: selectedVariant.description.replace(/:[\w|\d|\-|(|)|\.]+;/g,function(value){return '<span style="color:#999;margin-right: 5px;">'+value+' </span>'})}}/>
-									}
-								</div>
-							</SizeColorRow>
-						}
-						<div style={{display: 'flex'}}>
-							<div>
-								<span style={{fontFamily: 'SlatePro-Medium', fontSize: 14}}>{intl.formatMessage({ id: 'qty' })}</span>
-							</div>
-							<div style={{marginLeft: 12, position: 'relative', top: -4}}>
-								<Quantity onChange={(quantity) => { this.setState({ selectedQuantity: quantity }) }} quantity={this.state.selectedQuantity} />
-							</div>
-						</div>
-					</SizeColor>
-
-					<div style={{ paddingTop: 20 }}>
-
-						{
-							selectedVariant && selectedVariant.status === '1' && (selectedVariant.inventory > 0 || selectedProduct.isAutoInventory) ? (
-								<BigButton onClick={this.editHandle.bind(this)}>{btnMessage ? btnMessage: intl.formatMessage({ id: 'confirm' })}</BigButton>
-							) : (
-								<BigButton bgColor="#999" style={{ cursor: 'not-allowed' }}>
-									<FormattedMessage id="sold_out" />
-								</BigButton>
-							)
-						}
-
-					</div>
-
-				</BD>
 
 			</Wrapper>
-		) : <div>Loading</div>
+		)
 	}
 }
 

@@ -7,6 +7,8 @@ import AddressForm from '../components/msite/address-form.jsx'
 import { updatebillingaddress } from '../api'
 import { injectIntl } from 'react-intl'
 import { __route_root__ } from '../utils/utils.js'
+import { v4 } from 'uuid'
+
 
 export const __address_token__ = window.token
 
@@ -23,6 +25,12 @@ const mapDispatchToProps = (dispatch) => {
 		},
 		CHANGELANG: (lang) => {
 			dispatch(changeLang(lang))
+		},
+		SETRESPONSE: () => {
+			dispatch({
+				type: 'SET_ORDER_RESPONSE',
+				safechargeresponse: v4()
+			})
 		}
 	}
 }
@@ -42,6 +50,7 @@ const Modal = class extends React.Component {
 	editAddress(address) {
 		const { address: billing } = this.props.location.state || {}
         updatebillingaddress({ ...address, transactionId: billing.transactionId }).then(() => {
+			this.props.SETRESPONSE()
             this.props.history.goBack()
         }).catch(({ result }) => {
             alert(result)

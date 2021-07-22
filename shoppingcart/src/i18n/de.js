@@ -139,5 +139,18 @@ export default{
 	you_can_match_width: 'Vielleicht möchten Sie es mit ... auffüllen',
 	addtocart: 'Zum Warenkorb hinzufügen',
 	addonitems: 'Zusatzartikel',
-	addressbook: 'Address Book'
+	addressbook: 'Address Book',
+
+	card_number: 'Kartennummer',
+	expiration_date: 'Verfallsdatum',
+	remember_this_card_for_future_use: 'Merken Sie sich diese Karte für die zukünftige Verwendung',
+	billing_address: 'Rechnungsadresse',
+	order_payment: 'Zahlung bestellen',
+	what_is_cvv: 'Was ist CVV',
+	card_info_1: 'Für Visa/Mastercard/JCB usw',
+	card_info_2: 'Letzte 3 Ziffern auf der Rückseite der Karte',
+	card_info_3: '4 Ziffern auf der Vorderseite der Karte',
+	cancel_info: 'Möchten Sie die Zahlung wirklich stornieren? Wenn Ihre Bestellung nicht in {countdown} bezahlt ist, wird sie storniert.',
+	continue_to_pay: 'Weiter zu Bezahlen',
+	confirm_cancel: 'Bestätigen Stornieren'
 }

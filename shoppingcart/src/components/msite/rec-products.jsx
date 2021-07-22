@@ -66,7 +66,7 @@ export default class extends React.Component {
             }
             <div className="__bd">
                 {
-                    selectedRec && selectedRec.products && selectedRec.products.length> 0 && <SwiperNormalProducts onSelect={this.props.onSelect} products={this.state.selectedRec.products} />
+                    selectedRec && selectedRec.products && selectedRec.products.length> 0 && <SwiperNormalProducts requestId={selectedRec.requestId} column={selectedRec.name} onSelect={this.props.onSelect} products={this.state.selectedRec.products} />
                 }
             </div>
         </ALSOLIKES>

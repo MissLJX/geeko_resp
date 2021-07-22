@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { openSafeChargeOrder, usecreditcard, setSafeCharge } from '../../api'
+import { openCheckOutOrder, usecreditcard } from '../../api'
 import {
     getCreditCards
 } from '../../store/actions.js'
@@ -15,6 +15,81 @@ import { unitprice, __route_root__, storage } from '../../utils/utils'
 import { FormattedMessage } from 'react-intl'
 import { withRouter } from 'react-router-dom'
 import Loading from './refreshing.jsx'
+
+const INPUTCONTAINER = styled.div`
+    display: flex;
+    position: relative;
+    display: flex;
+    height: 40px;
+
+    .icon-container:last-child {
+        right: 0;
+    }
+    .icon-container.payment-method {
+        right: 0;
+    }
+
+    &.card-number {
+    }
+    &.expiry-date {
+        margin-right: 8px;
+    }
+
+    .card-number-frame,
+    .expiry-date-frame,
+    .cvv-frame {
+        flex: 1 1 auto;
+        padding-left: 40px;
+    }
+    
+    .icon-container {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        display: flex;
+        justify-content: center;
+        width: 26px;
+        margin: 0 7px;
+    }
+    
+    .icon-container.payment-method {
+        transform: translateY(-50%) rotateY(90deg);
+        transition: opacity 0.15s ease-out;
+        opacity: 0;
+        top: 50%;
+    }
+    
+    .icon-container.payment-method.show {
+        opacity: 1;
+        transition: all 0.4s ease-out;
+        transform: translateY(-50%) rotateY(0deg);
+    }
+    
+    .icon-container.payment-method img {
+        width: 100%;
+    }
+
+    [id$="-error"] {
+        display: none;
+    }
+
+    .frame {
+        opacity: 0;
+    }
+
+    .frame--activated {
+        opacity: 1;
+    }
+    
+    .frame--activated.frame--focus {
+      
+    }
+    
+    .frame--activated.frame--invalid {
+       
+    }
+
+`
 
 
 const BOX = styled.div`
@@ -75,6 +150,11 @@ const FORMBODY = styled.div`
             }
         }
     }
+
+    iframe {
+        /* This fixes a mobile Safari bug */
+        height: 38px !important;
+    }
 `
 
 const FIELD = styled.div`
@@ -83,7 +163,6 @@ const FIELD = styled.div`
     label{
         font-size: 12px;
         color: #666;
-        margin-bottom: 11px;
         display: block;
         text-transform: uppercase;
         position: relative;
@@ -123,27 +202,6 @@ const ADDICON = styled.span`
     font-weight: bold;
 `
 
-const ScFieldStyles = {
-    base: {
-        color: '#32325D',
-        fontWeight: 500,
-        fontFamily: 'Roboto, Consolas, Menlo, monospace',
-        fontSize: '16px',
-        fontSmoothing: 'antialiased',
-        '::placeholder': {
-            color: '#CFD7DF',
-        },
-        ':-webkit-autofill': {
-            color: '#e39f48',
-        },
-    },
-    invalid: {
-        color: '#E25950',
-        '::placeholder': {
-            color: '#FFCCA5',
-        },
-    },
-}
 
 
 const SUBMITBTN = styled.button`
@@ -158,14 +216,6 @@ const SUBMITBTN = styled.button`
 	font-size: 16px;
     text-transform: uppercase;
 `
-
-
-const ScFieldClasses = {
-    focus: 'focused',
-    empty: 'empty',
-    invalid: 'invalid',
-    complete: 'complete',
-}
 
 const CARDTYPE = styled.div`
     width: 60px;
@@ -188,7 +238,7 @@ const StyledCard = styled.div`
 const Card = props => <StyledCard>
     <div onClick={() => { props.cardSelect(props.card) }} className="x-table __fixed __vm x-fw x-fh">
         <div className="x-cell">
-            {props.card.style && props.card.style.imageURL && <CARDTYPE style={{backgroundImage:`url(${props.card.style.imageURL})`}}/>}
+            {props.card.style && props.card.style.imageURL && <CARDTYPE style={{ backgroundImage: `url(${props.card.style.imageURL})` }} />}
             <span>{props.card.quickpayRecord.cardNumber}</span>
         </div>
         <div className="x-cell __right" style={{ width: 30 }}>
@@ -234,22 +284,22 @@ const ASKC = styled.div`
 `
 const AskC = props => {
     return <ASKC>
-        <Icon onClick={props.onClose} style={{width: 30, height: 30, lineHeight: '30px', position: 'absolute', right: 0, top: 10, fontSize: 14, color: '#999'}}>&#xe6af;</Icon>
-        <div style={{textAlign: 'center', fontSize: 16, fontFamily: 'AcuminPro-Bold'}}>
+        <Icon onClick={props.onClose} style={{ width: 30, height: 30, lineHeight: '30px', position: 'absolute', right: 0, top: 10, fontSize: 14, color: '#999' }}>&#xe6af;</Icon>
+        <div style={{ textAlign: 'center', fontSize: 16, fontFamily: 'AcuminPro-Bold' }}>
             <FormattedMessage id="what_is_cvv" />?
         </div>
         <div>
-            <div style={{color:'rgba(102, 102, 102, 1)', marginTop:16}}><FormattedMessage id="card_info_1" /></div>
+            <div style={{ color: 'rgba(102, 102, 102, 1)', marginTop: 16 }}><FormattedMessage id="card_info_1" /></div>
             <div className="__info">
                 <img className="__image" src="https://image.geeko.ltd/upgrade/20210715/JCB.png" />
-                <div style={{paddingLeft: 15, color: 'rgba(34, 34, 34, 1)'}}>
+                <div style={{ paddingLeft: 15, color: 'rgba(34, 34, 34, 1)' }}>
                     <FormattedMessage id="card_info_2" />
                 </div>
             </div>
-            <div style={{color:'rgba(102, 102, 102, 1)', marginTop: 20}}>For AMEXS only</div>
+            <div style={{ color: 'rgba(102, 102, 102, 1)', marginTop: 20 }}>For AMEXS only</div>
             <div className="__info">
                 <img className="__image" src="https://image.geeko.ltd/upgrade/20210715/AMEXS.png" />
-                <div style={{paddingLeft: 15, color: 'rgba(34, 34, 34, 1)'}}>
+                <div style={{ paddingLeft: 15, color: 'rgba(34, 34, 34, 1)' }}>
                     <FormattedMessage id="card_info_3" />
                 </div>
             </div>
@@ -257,15 +307,33 @@ const AskC = props => {
     </ASKC>
 }
 
+
+const logos = {
+    "card-number": {
+        src: "card",
+        alt: "card number logo",
+    },
+    "expiry-date": {
+        src: "exp-date",
+        alt: "expiry date logo",
+    },
+    "cvv": {
+        src: "cvv",
+        alt: "cvv logo",
+    }
+}
+
+const errors = {
+    "card-number": "Please enter a valid card number",
+    "expiry-date": "Please enter a valid expiry date",
+    "cvv": "Please enter a valid cvv code"
+}
+
 const Credit = class extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            merchantId: null,
-            merchantSiteId: null,
-            sessionToken: null,
-            clientUniqueId: null,
-            userTokenId: null,
+            order: null,
             saveForNext: true,
             showNew: false,
             selectedCardId: null,
@@ -275,20 +343,20 @@ const Credit = class extends React.Component {
             billingAddress: null,
             cardError: {},
             showAsk: false,
-            safechargeresponse: 1
+            safechargeresponse: 1,
+            valid: false
         }
     }
 
-    static getDerivedStateFromProps(props, state){
-        if(props.safechargeresponse != state.safechargeresponse){
-            return {...state, safechargeresponse: props.safechargeresponse}
+    static getDerivedStateFromProps(props, state) {
+        if (props.safechargeresponse != state.safechargeresponse) {
+            return { ...state, safechargeresponse: props.safechargeresponse }
         }
         return null
-    } 
+    }
 
-    componentDidUpdate(prevProps, prevState){
-        if(prevState.safechargeresponse != this.state.safechargeresponse){
-            console.log(this.state.safechargeresponse)
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.safechargeresponse != this.state.safechargeresponse) {
             this.initPage()
         }
     }
@@ -298,9 +366,9 @@ const Credit = class extends React.Component {
     }
 
 
-    initPage(){
+    initPage() {
         const { orderId } = this.props
-        this.props.GETCREDITCARDS('18').then(cards => {
+        this.props.GETCREDITCARDS().then(cards => {
             if (!cards || cards.length < 1) {
                 this.setState({
                     showNew: true
@@ -308,9 +376,7 @@ const Credit = class extends React.Component {
             }
         })
 
-        openSafeChargeOrder(orderId).then(data => data.result).then(result => {
-            const self = this
-            const response = result.openOrderResponse
+        openCheckOutOrder(orderId).then(data => data.result).then(result => {
 
             const order = result.order
             let billingAddress
@@ -320,211 +386,195 @@ const Credit = class extends React.Component {
             }
 
             this.setState({
-                merchantId: response.merchantId,
-                merchantSiteId: response.merchantSiteId,
-                sessionToken: response.sessionToken,
-                clientUniqueId: response.clientUniqueId,
-                userTokenId: response.userTokenId,
-                openResult: result,
-                billingAddress
+                order: order,
+                billingAddress: billingAddress
             })
-
-            if(!this.sfc){
-
-                this.sfc = SafeCharge({
-                    env: window.safechargeEnv || 'prod',
-                    merchantId: response.merchantId,
-                    merchantSiteId: response.merchantSiteId
-                })
-    
-                this.ScFields = this.sfc.fields({
-                    fonts: [
-                        { cssUrl: 'https://fonts.googleapis.com/css?family=Roboto' },
-                    ]
-                })
-    
-    
-                this.scard = this.ScFields.create('ccNumber', {
-                    // style: ScFieldStyles,
-                    // classes: ScFieldClasses,
-                })
-    
-                this.scard.attach('#card-number')
-    
-                this.cardExpiry = this.ScFields.create('ccExpiration', {
-                    // style: ScFieldStyles,
-                    // classes: ScFieldClasses,
-                })
-    
-                this.cardExpiry.attach('#card-expiry')
-    
-                this.cardCvc = this.ScFields.create('ccCvc', {
-                    // style: ScFieldStyles,
-                    // classes: ScFieldClasses,
-                })
-    
-                this.cardCvc.attach('#card-cvc')
-    
-    
-                this.scard.on('change', function (evt) {
-                    self.setState({cardError: { ...self.state.cardError, card: null}})
-                })
-    
-    
-                // this.cardExpiry.on('change', function (evt) {
-                //     console.log(evt);
-                // })
-            }
-
-            
-
         })
     }
+
+    initCreditForm() {
+        Frames.init("pk_test_8ac41c0d-fbcc-4ae3-a771-31ea533a2beb")
+        Frames.addEventHandler(
+            Frames.Events.FRAME_VALIDATION_CHANGED,
+            this.onValidationChanged.bind(this)
+        )
+
+        Frames.addEventHandler(
+            Frames.Events.PAYMENT_METHOD_CHANGED,
+            this.paymentMethodChanged.bind(this)
+        )
+
+        Frames.addEventHandler(
+            Frames.Events.CARD_VALIDATION_CHANGED,
+            this.cardValidationChanged.bind(this)
+        )
+
+        Frames.addEventHandler(Frames.Events.CARD_TOKENIZED, this.onCardTokenized.bind(this))
+    }
+
+    cardValidationChanged() {
+        this.setState({
+            valid: Frames.isCardValid()
+        })
+    }
+
+    onCardTokenized(event) {
+        console.log(event)
+    }
+
+
+    paymentMethodChanged(event) {
+        var pm = event.paymentMethod
+        let container = document.querySelector(".icon-container.payment-method")
+        if (!pm) {
+            this.clearPaymentMethodIcon(container)
+        } else {
+            this.clearErrorIcon("card-number")
+            this.showPaymentMethodIcon(container, pm)
+        }
+    }
+
+    onValidationChanged(event) {
+        const e = event.element
+        if (event.isValid || event.isEmpty) {
+            if (e === "card-number" && !event.isEmpty) {
+                this.showPaymentMethodIcon()
+            }
+            this.setDefaultIcon(e)
+            this.clearErrorIcon(e)
+            this.clearErrorMessage(e)
+
+        } else {
+            if (e === "card-number") {
+                this.clearPaymentMethodIcon()
+            }
+            this.setDefaultErrorIcon(e)
+            this.setErrorIcon(e)
+            this.setErrorMessage(e)
+        }
+    }
+
+    setErrorMessage(el) {
+        const msg = errors[el]
+        switch (el) {
+            case 'card-number':
+                this.setState({
+                    cardError: {
+                        ...this.state.cardError,
+                        card: msg
+                    }
+                })
+                break
+            case 'expiry-date':
+                this.setState({
+                    cardError: {
+                        ...this.state.cardError,
+                        date: msg
+                    }
+                })
+                break
+            case 'cvv':
+                this.setState({
+                    cardError: {
+                        ...this.state.cardError,
+                        cvv: msg
+                    }
+                })
+                break
+            default:
+                break
+        }
+    }
+
+    clearErrorMessage(el) {
+        switch (el) {
+            case 'card-number':
+                this.setState({
+                    cardError: {
+                        ...this.state.cardError,
+                        card: ''
+                    }
+                })
+                break
+            case 'expiry-date':
+                this.setState({
+                    cardError: {
+                        ...this.state.cardError,
+                        date: ''
+                    }
+                })
+                break
+            case 'cvv':
+                this.setState({
+                    cardError: {
+                        ...this.state.cardError,
+                        cvv: ''
+                    }
+                })
+                break
+            default:
+                break
+        }
+    }
+
+    showPaymentMethodIcon(parent, pm) {
+        if (parent) parent.classList.add("show")
+        const logo = document.getElementById("logo-payment-method")
+        if (pm) {
+            const name = pm.toLowerCase()
+            logo.setAttribute("src", "https://image.geeko.ltd/card-icons/" + name + ".svg")
+            logo.setAttribute("alt", pm || "payment method");
+        }
+        logo.style.removeProperty("display")
+    }
+
+    setDefaultIcon(el) {
+        const selector = "icon-" + el;
+        const logo = document.getElementById(selector)
+        logo.setAttribute("src", "https://image.geeko.ltd/card-icons/" + logos[el].src + ".svg")
+        logo.setAttribute("alt", logos[el].alt)
+    }
+
+    setErrorIcon(el) {
+        const logo = document.getElementById("icon-" + el + "-error")
+        logo.style.setProperty("display", "block")
+    }
+
+    setDefaultErrorIcon(el) {
+        const selector = "icon-" + el
+        const logo = document.getElementById(selector)
+        logo.setAttribute("src", "https://image.geeko.ltd/card-icons/" + logos[el].src + "-error.svg")
+        logo.setAttribute("alt", logos[el].alt)
+    }
+
+    clearErrorIcon(el) {
+        const logo = document.getElementById("icon-" + el + "-error")
+        logo.style.removeProperty("display")
+    }
+
+
+    clearPaymentMethodIcon(parent) {
+        if (parent) parent.classList.remove("show")
+        const logo = document.getElementById("logo-payment-method")
+        logo.style.setProperty("display", "none")
+    }
+
 
     submitHandle(e) {
         e.preventDefault()
         const self = this
         const { orderId, onPurchase } = this.props
-        self.setState({
-            checking: true,
-        })
-        onPurchase()
-        const { openResult } = this.state
-        if (self.state.showNew) {
-            self.sfc.createPayment({
-                "sessionToken": self.state.sessionToken,
-                "merchantId": self.state.merchantId,
-                "merchantSiteId": self.state.merchantSiteId,
-                "clientUniqueId": self.state.clientUniqueId, // optional
-                "paymentOption": self.scard,
-                "cardHolderName": this.state.billingAddress.name,
-                "billingAddress": {
-                    "email": openResult.email,
-                    "country": openResult.country
-                },
-                "deviceDetails": {
-                    "ipAddress": openResult.ip
-                }
-            }, function (res) {
-                self.callBackSafeCharge({ ...res, sessionToken: self.state.sessionToken, saveForNext: self.state.saveForNext })
-            })
-        } else {
-            const selectedCard = self.props.creditcards.find(card => card.isSelected)
-            self.sfc.createPayment({
-                "sessionToken": self.state.sessionToken,
-                "merchantId": self.state.merchantId,
-                "merchantSiteId": self.state.merchantSiteId,
-                "clientUniqueId": self.state.clientUniqueId, // optional
-                "userTokenId": self.state.userTokenId,
-                "paymentOption": {
-                    "userPaymentOptionId": selectedCard.quickpayRecord.quickpayId,
-                },
-                "billingAddress": {
-                    "email": openResult.email,
-                    "country": openResult.country
-                },
-                "deviceDetails": {
-                    "ipAddress": openResult.ip
-                }
-            }, function (res) {
-                self.callBackSafeCharge({ ...res, sessionToken: self.state.sessionToken })
-            })
-        }
-    }
 
-
-    callBackSafeCharge(res) {
-        const self = this
-        const { orderId } = this.props
-
-        if (res.result === 'APPROVED') {
-            setSafeCharge({ ...res, sessionToken: self.state.sessionToken }).then(data => data.result).then(result => {
-                window.location.href = `${window.ctx || ''}/order-confirm/${self.state.clientUniqueId}?transactionId=${self.state.clientUniqueId}`
-            }).catch(data => {
-                alert(data.result || data)
-                self.setState({
-                    checking: false
-                })
-            })
-        } else {
-            const hasCardError = this.setErrorStatus(res)
-            if (!hasCardError) {
-                if (window.isApp) {
-                    window.location.href = `${window.ctx || ''}/geekopay/app-fail?errMsg=${res.errorDescription || res.reason || 'Error'}`
-                } else {
-                    alert(res.errorDescription || res.reason || 'Error')
-                    if (orderId && window.__is_login__) {
-                        this.props.onGo(`${window.ctx || ''}/checkout/${orderId}`)
-                        storage.add('temp-order', orderId, 1 * 60 * 60)
-                    }
-                }
-            }
+        if(this.state.valid){
+            Frames.submitCard()
             self.setState({
-                checking: false
+                checking: true,
             })
+            onPurchase()
         }
 
+        
     }
-
-    setErrorStatus(res) {
-        let hasCardError = false
-        switch (res.errorDescription) {
-            case 'incomplete_cvc':
-                this.setState({
-                    cardError: {
-                        cvv: 'missing or incomplete CVV/CVC'
-                    }
-                })
-                hasCardError = true
-                break
-            case 'incomplete_date':
-                this.setState({
-                    cardError: {
-                        date: 'missing or incomplete date'
-                    }
-                })
-                hasCardError = true
-                break
-            case 'date_in_past':
-                this.setState({
-                    cardError: {
-                        date: 'date is in the past'
-                    }
-                })
-                hasCardError = true
-                break
-            case 'invalid_expiration_year':
-                this.setState({
-                    cardError: {
-                        date: 'invalid year value'
-                    }
-                })
-                hasCardError = true
-                break
-            case 'incomplete_card_number':
-                this.setState({
-                    cardError: {
-                        card: 'incomplete or missing card number'
-                    }
-                })
-                hasCardError = true
-                break
-            case 'incorrect_card_number':
-                this.setState({
-                    cardError: {
-                        card: 'incorrect card number'
-                    }
-                })
-                hasCardError = true
-                break
-            default:
-                break
-        }
-        return hasCardError
-    }
-
-
-
 
 
     addHandler() {
@@ -536,7 +586,7 @@ const Credit = class extends React.Component {
     cardSelect(card) {
         this.setState({ loading: true })
         usecreditcard(card.quickpayRecord.id).then(() => {
-            this.props.GETCREDITCARDS('18').then(() => {
+            this.props.GETCREDITCARDS().then(() => {
                 this.setState({
                     showNew: false,
                     loading: false
@@ -549,14 +599,32 @@ const Credit = class extends React.Component {
         })
     }
 
+    formRef(c, type) {
+        switch (type) {
+            case 'card':
+                this.cardRef = c
+                break
+            case 'date':
+                this.dateRef = c
+                break
+            case 'cvv':
+                this.cvvRef = c
+                break
+            default:
+                break
+        }
+
+        if (this.cardRef && this.dateRef && this.cvvRef && !this.formLoaded) {
+            this.formLoaded = true
+            this.initCreditForm()
+        }
+    }
+
+
+
     render() {
         const { creditcards: cards } = this.props
-        const { billingAddress } = this.state
-
-        let order
-        if (this.state.openResult) {
-            order = this.state.openResult.order
-        }
+        const { billingAddress, order } = this.state
 
         return <div>
             {this.state.loading && <Loading />}
@@ -567,8 +635,7 @@ const Credit = class extends React.Component {
                     </div>
 
 
-                    <form action="/charge" method="post" id="payment-form">
-
+                    <form id="payment-form" method="POST" action="/charge-card">
 
                         {
                             cards && cards.length > 0 && <div style={{ backgroundColor: '#fff', paddingTop: 16, borderTop: 'solid 1px #e6e6e6' }}>
@@ -594,6 +661,8 @@ const Credit = class extends React.Component {
 
                         <FORMBODY style={{ display: this.state.showNew ? 'block' : 'none' }}>
 
+
+
                             <div className="row">
                                 <div>
                                     {
@@ -605,8 +674,22 @@ const Credit = class extends React.Component {
                                         <label htmlFor="card-number" data-tid="scwsdk.form.card_number_label">
                                             *<FormattedMessage id="card_number" />
                                         </label>
-                                        <div id="card-number" className="input"></div>
-
+                                        <INPUTCONTAINER className="card-number">
+                                            <div className="icon-container">
+                                                <img
+                                                    id="icon-card-number"
+                                                    src="https://image.geeko.ltd/card-icons/card.svg"
+                                                    alt="PAN"
+                                                />
+                                            </div>
+                                            <div className="card-number-frame" ref={c => this.formRef(c, 'card')}></div>
+                                            <div className="icon-container payment-method">
+                                                <img id="logo-payment-method" />
+                                            </div>
+                                            <div className="icon-container" style={{ width: 16 }}>
+                                                <img id="icon-card-number-error" src="https://image.geeko.ltd/card-icons/error.svg" />
+                                            </div>
+                                        </INPUTCONTAINER>
                                         <div className="underline">
                                             {
                                                 this.state.cardError.card
@@ -615,24 +698,52 @@ const Credit = class extends React.Component {
                                     </FIELD>
                                 </div>
                             </div>
+
+
+
+
                             <div className="row">
                                 <FIELD className="field col6">
                                     <label htmlFor="card-expiry" data-tid="scwsdk.form.card_expiry_label">
                                         *<FormattedMessage id="expiration_date" />
                                     </label>
-                                    <div id="card-expiry" className="input empty"></div>
-                                    <div className="underline ">
+                                    <INPUTCONTAINER className="input-container expiry-date">
+                                        <div className="icon-container" style={{ display: 'none' }}>
+                                            <img
+                                                id="icon-expiry-date"
+                                                src="https://image.geeko.ltd/card-icons/exp-date.svg"
+                                                alt="Expiry date"
+                                            />
+                                        </div>
+                                        <div className="expiry-date-frame" style={{ paddingLeft: 0 }} ref={c => this.formRef(c, 'date')}></div>
+                                        <div className="icon-container" style={{ width: 16, background: '#fff' }}>
+                                            <img
+                                                id="icon-expiry-date-error"
+                                                src="https://image.geeko.ltd/card-icons/error.svg"
+                                            />
+                                        </div>
+                                    </INPUTCONTAINER>
+                                    <div className="underline">
                                         {
                                             this.state.cardError.date
                                         }
                                     </div>
+
                                 </FIELD>
                                 <FIELD className="field col6" style={{ paddingLeft: 12 }}>
                                     <label htmlFor="card-cvc" data-tid="scwsdk.form.card_cvc_label">
                                         *CVV
-                                        <span className="badage" onClick={() => {this.setState({showAsk: true})}}>?</span>
+                                        <span className="badage" onClick={() => { this.setState({ showAsk: true }) }}>?</span>
                                     </label>
-                                    <div id="card-cvc" className="input empty"></div>
+                                    <INPUTCONTAINER className="input-container cvv">
+                                        <div className="icon-container" style={{ display: 'none' }}>
+                                            <img id="icon-cvv" src="https://image.geeko.ltd/card-icons/cvv.svg" alt="CVV" />
+                                        </div>
+                                        <div className="cvv-frame" style={{ paddingLeft: 0 }} ref={c => this.formRef(c, 'cvv')}></div>
+                                        <div className="icon-container" style={{ width: 16, background: '#fff' }}>
+                                            <img id="icon-cvv-error" src="https://image.geeko.ltd/card-icons/error.svg" />
+                                        </div>
+                                    </INPUTCONTAINER>
                                     <div className="underline">
                                         {
                                             this.state.cardError.cvv
@@ -640,6 +751,7 @@ const Credit = class extends React.Component {
                                     </div>
                                 </FIELD>
                             </div>
+
                             {/* <div className="row">
                                 <TurnTool open={() => { this.setState({ saveForNext: !this.state.saveForNext }) }} turnAcitve={this.state.saveForNext}>
                                     <span style={{ fontSize: 14, color: '#666' }}>
@@ -655,7 +767,7 @@ const Credit = class extends React.Component {
                             </div>
                             <div className="__bd" style={{ marginTop: 3, paddingBottom: 5 }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <Address address={billingAddress}/>
+                                    <Address address={billingAddress} />
                                     <Icon onClick={() => {
                                         this.props.history.push(`${this.props.match.url}/billing-address`, { address: billingAddress })
                                     }} style={{ fontSize: 16, color: '#666' }}>&#xe690;</Icon>
@@ -729,7 +841,7 @@ const Credit = class extends React.Component {
                     }
 
 
-                    
+
 
 
                 </React.Fragment> : <div>
@@ -763,8 +875,8 @@ export default connect(state => {
     }
 }, dispatch => {
     return {
-        GETCREDITCARDS: payMethod => {
-            return dispatch(getCreditCards(payMethod))
+        GETCREDITCARDS: () => {
+            return dispatch(getCreditCards(['18', '19'], true))
         }
     }
 })(withRouter(Credit))

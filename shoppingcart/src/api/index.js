@@ -236,3 +236,14 @@ export const product_get_catch_with = params => axios.get(`${VPATH}/shopping-car
 
 
 export const addProduct = params => axios.post(`${VPATH}/shopping-cart/add-product`, params)
+
+
+
+// checkout credit card
+export const openCheckOutOrder = orderId => axios.post(`${VPATH}/checkout/open-order`, {orderId})
+
+export const getFilters = () => axios.get(`${VPATH}/filter/anon/APP0010/get-by-menu-id`, {})
+export const getSorters = () => axios.get(`/context/anon/get-sorters`, {})
+export const filterProducts = (filterVO, skip, limit) => axios.body(`${VPATH}/product/anon/${skip}/${limit}/get-recommended-products`, filterVO)
+export const suggestions = searchValue => axios.get(`${VPATH}/search/anon/simple`, {searchValue})
+export const searchProducts = (searchValue,skip, limit) => axios.get(`${VPATH}/search/anon/${skip}/${limit}/products`, {searchValue})

@@ -89,7 +89,6 @@ const NODE = styled.span`
         position: absolute;
         top: 16px;
         z-index: 1;
-        right: 0;
         background-color: rgba(233, 96, 96, 1);
 	    border-radius: 3px;
         color: #fff;
@@ -108,6 +107,17 @@ const NODE = styled.span`
             position: absolute;
             transform: rotate(-45deg);
         }
+    }
+
+    .__condition{
+        position: absolute;
+        z-index: 1;
+        right: 0;
+        top: 10px;
+        transform: translateX(50%);
+        font-family: SlatePro-Medium;
+        color: rgba(233, 96, 96, 1);
+        font-size: 12px;
     }
 `
 
@@ -152,7 +162,11 @@ const Nodes = props => {
                     }
 
                     {
-                        unReached && unReached.index === index && msg && <span style={{ right: `${100 - percent}%` }} className="__alert">{msg}</span>
+                        unReached && unReached.index === index && msg && <span style={{ right: `${100 - percent}%` }} className={`__alert`}>{msg}</span>
+                    }
+
+                    {
+                        !node.usable && <span className="__condition">{node.condition}</span>
                     }
 
                     <span className="__tip">
@@ -172,7 +186,7 @@ const Nodes = props => {
 }
 
 export default props => {
-    const { couponMsg, couponLink, couponProgress } = props
+    const { couponMsg, couponLink, couponProgress, onBuy } = props
 
     let nodes
 
@@ -186,7 +200,7 @@ export default props => {
             couponMsg && <div style={{ paddingTop: 14 }}>
                 <MESSAGE>
                     <span className="__text" dangerouslySetInnerHTML={{ __html: couponMsg }} />
-                    <a style={{fontSize: 12}} href={deeplink(couponLink)} className="__add"><FormattedMessage id="add" /> {'>'}</a>
+                    <a style={{fontSize: 12}} onClick={onBuy} className="__add"><FormattedMessage id="add" /> {'>'}</a>
                 </MESSAGE>
             </div>
         }

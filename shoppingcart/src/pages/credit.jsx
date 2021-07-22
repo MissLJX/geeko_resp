@@ -1,12 +1,16 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import CreditCard from '../components/msite/credit.jsx'
+import CreditCardC from '../components/msite/creditC.jsx'
 import styled from 'styled-components'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, FormattedHTMLMessage } from 'react-intl'
 import { AnimatedRoute } from 'react-router-transition'
 
 import Loadable from 'react-loadable'
 import Loading from '../components/msite/refreshing.jsx'
+import Icon from '../components/icon.jsx'
+import {CountDown} from '../components/msite/countdowns.jsx'
+import qs from 'qs'
 
 const defaultStyles = {
 	position: 'fixed',
@@ -102,6 +106,64 @@ const ShoppingHead = styled.div`
 
 `
 
+const MASK = styled.div`
+    display: block;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    background-color: rgba(0, 0, 0, .4);
+`
+
+const ASKC = styled.div`
+    position: fixed;
+    width: 280px;
+    border-radius: 12px;
+    background-color: #fff;
+    padding: 20px;
+	padding-top:34px;
+    z-index: 11;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+`
+
+const SUBMITBTN = styled.button`
+    height: 42px;
+    background-color: #222222;
+    color: #fff;
+    width: 100%;
+    border: none;
+    outline: none;
+    font-family: AcuminPro-Bold;
+	font-size: 14px;
+    text-transform: uppercase;
+	
+
+	&.outlined{
+		border: solid 1px #cacaca;
+		color: #222;
+		background-color: transparent;
+	}
+`
+
+
+const AskC = props => {
+    return <ASKC>
+        <Icon onClick={props.onClose} style={{width: 30, height: 30, lineHeight: '30px', position: 'absolute', right: 0, top: 10, fontSize: 14, color: '#999'}}>&#xe6af;</Icon>
+        <div style={{fontSize: 14, lineHeight: '20px', fontFamily:'SlatePro-Medium', textAlign:'center'}}>
+			<FormattedMessage id="cancel_info" values={{countdown: <span style={{color: '#e64545'}}><CountDown showHour offset={12*60*60*1000}/></span>}}/>
+		</div>
+        <div>
+            <SUBMITBTN onClick={props.onClose} style={{marginTop: 23}}><FormattedMessage id="continue_to_pay" /></SUBMITBTN>
+			
+			<SUBMITBTN onClick={props.onCancel} className="outlined" style={{marginTop: 12}}><FormattedMessage id="confirm_cancel" /></SUBMITBTN>
+        </div>
+    </ASKC>
+}
+
 export default connect(state => {
 	return {
 		...state
@@ -112,24 +174,42 @@ export default connect(state => {
 	}
 })(props => {
 
-	const [p, setP] = React.useState(window.__is_login__? `${window.ctx || ''}/checkout/${props.match.params.orderId}`: undefined)
+	const [p, setP] = React.useState(window.__is_login__ ? `${window.ctx || ''}/checkout/${props.match.params.orderId}` : undefined)
+	const [showLeave, setShowLeave] = React.useState(false)
+	const [leaved, setLeaved] = React.useState(false)
 
+	const search = qs.parse(props.location.search, {ignoreQueryPrefix: true})
 
 	return <div>
 		<ShoppingBody>
 			{
 				!window.isApp && <div className="__hd">
 					<ShoppingHead>
-						<span className="__title"><FormattedMessage id="credit_card" /></span>
+						<span className="__title"><FormattedMessage id="order_payment" /></span>
 						<span onClick={evt => {
-							p ? props.history.replace(p) : props.history.goBack()
+
+							if(leaved){
+								p ? props.history.replace(p) : props.history.goBack()
+							}else{
+								setLeaved(true)
+								setShowLeave(true)
+							}
+							
 						}} className="__back">&#xe690;</span>
 					</ShoppingHead>
 				</div>
 			}
 
-			<div className="__bd" style={{paddingTop: window.isApp ? 0: 44}}>
-				<CreditCard onGo={p => { setP(p); alert(p) }} orderId={props.match.params.orderId} />
+			<div className="__bd" style={{ paddingTop: window.isApp ? 0 : 44 }}>
+
+				{
+					search.payMethod === '87' && <CreditCardC onPurchase={() => {setLeaved(true)}} onGo={p => { setP(p); }} orderId={props.match.params.orderId} />
+				}
+
+
+				{
+					search.payMethod === '18' && <CreditCard onPurchase={() => {setLeaved(true)}} onGo={p => { setP(p); }} orderId={props.match.params.orderId} />
+				}
 			</div>
 		</ShoppingBody>
 
@@ -141,6 +221,14 @@ export default connect(state => {
 			path={`${props.match.url}/billing-address`} component={BillingAddressModal} />
 
 
+		{
+			showLeave && <React.Fragment>
+				<MASK onClick={() => { setShowLeave(false) }} />
+				<AskC onCancel={() => {
+					p ? props.history.replace(p) : props.history.goBack()
+				}} onClose={() => { setShowLeave(false) }} />
+			</React.Fragment>
+		}
 	</div>
 
 })

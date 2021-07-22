@@ -69,7 +69,7 @@ import Items from '../components/msite/items.jsx'
 import depplink from '../utils/deeplink'
 import RECProducts from '../components/msite/rec-products.jsx'
 import CouponProgress from '../components/msite/coupon-progress.jsx'
-
+import FilterProducts from '../components/msite/filter-products.jsx'
 
 
 const CreditCard = Loadable({
@@ -562,7 +562,8 @@ const ShoppingCart = class extends React.Component {
 			viewingItem: null,
 			couponBanner: null,
 			cartBanner: null,
-			recs: []
+			recs: [],
+			showFilterProducts: false
 		}
 		this.processCallBack = this.processCallBack.bind(this)
 		this.processErrorBack = this.processErrorBack.bind(this)
@@ -641,9 +642,10 @@ const ShoppingCart = class extends React.Component {
 		// })
 
 
-		getRecProducts().then(data => data.result).then(recs => {
+		getRecProducts().then(data => {
+			const result = data.result
 			this.setState({
-				recs
+				recs: (result || []).map(r => ({...r, requestId: data.requestId}))
 			})
 		})
 
@@ -1425,7 +1427,7 @@ const ShoppingCart = class extends React.Component {
 	}
 
 	viewConfirm(oldId, newId, quantity) {
-		this.props.ADDITEM({ variantId: newId, quantity }).then(() => {
+		return this.props.ADDITEM({ variantId: newId, quantity }).then(() => {
 			this.setState({
 				viewing: false,
 				viewingItem: null
@@ -2570,7 +2572,7 @@ const ShoppingCart = class extends React.Component {
 											}
 
 											{
-												cart.messages && cart.messages.couponMsg && <Box>
+												cart.messages && cart.messages.couponMsg && !cart.couponProgress && <Box>
 													<IconMessage>
 														<div>
 															<span style={{ position: 'relative', top: 2 }} className="iconfont">&#xe6c2;</span>
@@ -2579,7 +2581,11 @@ const ShoppingCart = class extends React.Component {
 															<span dangerouslySetInnerHTML={{ __html: cart.messages.couponMsg }} />
 														</div>
 														<div>
-															<a href={depplink(cart.messages.couponMsgLink)} style={{ fontFamily: 'SlatePro-Medium', fontSize: 13, textDecoration: 'none', color: '#222' }}><FormattedMessage id="add" /> {'>'}</a>
+															<a onClick={() => {
+																this.setState({
+																	showFilterProducts: true
+																})
+															}}  style={{ fontFamily: 'SlatePro-Medium', fontSize: 13, textDecoration: 'none', color: '#222' }}><FormattedMessage id="add" /> {'>'}</a>
 														</div>
 													</IconMessage>
 												</Box>
@@ -2590,7 +2596,11 @@ const ShoppingCart = class extends React.Component {
 
 											{
 												cart.couponProgress && <Box>
-													<CouponProgress couponMsg={cart.messages.couponMsg} couponLink={cart.messages.couponMsgLink} couponProgress={cart.couponProgress}/>
+													<CouponProgress onBuy={
+														this.setState({
+															showFilterProducts: true
+														})
+													} couponMsg={cart.messages.couponMsg} couponLink={cart.messages.couponMsgLink} couponProgress={cart.couponProgress}/>
 												</Box>
 											}
 
@@ -3209,6 +3219,18 @@ const ShoppingCart = class extends React.Component {
 										{/* {
 											(!this.state.couponBanner || !this.state.couponBanner.enable) && cart.messages && cart.messages.couponMsg && <CouponAlert onClick={() => { this.props.history.push(`${window.ctx || ''}${__route_root__}/coupons`) }} innerRef={c => this.couponAlert = c} coupon={cart.coupon} couponMsg={cart.messages ? cart.messages.couponMsg : null} />
 										} */}
+
+
+										{
+											this.state.showFilterProducts && <FilterProducts viewConfirm={this.viewConfirm.bind(this)} summary={cart.orderSummary} onClose={
+												() => {
+													this.setState({
+														showFilterProducts: false
+													})
+												}
+											}/>
+										}
+										
 
 
 

@@ -80,7 +80,8 @@ const initialState = {
 	uyMT: storage.get('uyMT'),
 	cashoutMethod: storage.get('cashoutMethod') || {},
 	document: null,
-	address: null
+	address: null,
+	safechargeresponse: null
 }
 
 const isEmpty = cart => !cart
@@ -176,6 +177,8 @@ const refresh = (state = initialState, action) => {
 		return {...state, cashoutMethod: action.method}
 	case 'SET_ADDRESS':
 		return {...state, address: action.address}
+	case 'SET_ORDER_RESPONSE':
+		return {...state, safechargeresponse: action.safechargeresponse}
 	default:
 		return state
 	}
