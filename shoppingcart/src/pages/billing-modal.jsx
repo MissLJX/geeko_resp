@@ -44,14 +44,17 @@ const Modal = class extends React.Component {
 
 	close(evt) {
 		evt.preventDefault()
-		this.props.history.goBack()
+		// this.props.history.goBack()
+		const {orderId, payMethod} = this.props.location.state
+		this.props.history.replace(`${window.ctx || ''}${__route_root__}/credit/${orderId}?payMethod=${payMethod}`)
 	}
 
 	editAddress(address) {
-		const { address: billing } = this.props.location.state || {}
+		const { address: billing, orderId, payMethod } = this.props.location.state || {}
         updatebillingaddress({ ...address, transactionId: billing.transactionId }).then(() => {
 			this.props.SETRESPONSE()
-            this.props.history.goBack()
+			this.props.history.replace(`${window.ctx || ''}${__route_root__}/credit/${orderId}?payMethod=${payMethod}`)
+            // this.props.history.goBack()
         }).catch(({ result }) => {
             alert(result)
         })

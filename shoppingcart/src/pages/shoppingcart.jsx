@@ -645,7 +645,7 @@ const ShoppingCart = class extends React.Component {
 		getRecProducts().then(data => {
 			const result = data.result
 			this.setState({
-				recs: (result || []).map(r => ({...r, requestId: data.requestId}))
+				recs: (result || []).map(r => ({ ...r, requestId: data.requestId }))
 			})
 		})
 
@@ -1426,7 +1426,22 @@ const ShoppingCart = class extends React.Component {
 		this.props.EDITITEM(oldId, newId, quantity)
 	}
 
-	viewConfirm(oldId, newId, quantity) {
+	viewConfirm(oldId, newId, quantity, productId) {
+
+		try {
+			if (window.GeekoSensors) {
+				window.GeekoSensors.Track('AddToCartDetail', {
+					product_id: productId,
+					variant_id: newId,
+					product_qty: quantity,
+					page_type: this.state.viewingItem.type,
+					is_success: true
+				})
+			}
+
+		} catch (e) { }
+
+
 		return this.props.ADDITEM({ variantId: newId, quantity }).then(() => {
 			this.setState({
 				viewing: false,
@@ -1435,6 +1450,7 @@ const ShoppingCart = class extends React.Component {
 		}).catch(data => {
 			alert(data.result || data)
 		})
+
 	}
 
 	giftConfirm(oldId, newId, quantity) {
@@ -2475,15 +2491,15 @@ const ShoppingCart = class extends React.Component {
 								{
 									this.state.recs && this.state.recs.length > 0 && <Box style={{ borderTop: '8px solid #f7f7f7' }}>
 										<RECProducts recs={this.state.recs} onSelect={(vairant, product) => {
-													this.setState({
-														viewingItem: {
-															productId: product.id,
-															variantId: vairant.id,
-															quantity: 1
-														},
-														viewing: true
-													})
-												}}/>
+											this.setState({
+												viewingItem: {
+													productId: product.id,
+													variantId: vairant.id,
+													quantity: 1
+												},
+												viewing: true
+											})
+										}} />
 									</Box>
 								}
 
@@ -2585,22 +2601,45 @@ const ShoppingCart = class extends React.Component {
 																this.setState({
 																	showFilterProducts: true
 																})
-															}}  style={{ fontFamily: 'SlatePro-Medium', fontSize: 13, textDecoration: 'none', color: '#222' }}><FormattedMessage id="add" /> {'>'}</a>
+
+
+																try {
+																	if (window.GeekoSensors) {
+																		window.GeekoSensors.Track('ELClick', {
+																			clicks: '凑单'
+																		})
+																	}
+
+																} catch (e) { }
+
+
+															}} style={{ fontFamily: 'SlatePro-Medium', fontSize: 13, textDecoration: 'none', color: '#222' }}><FormattedMessage id="add" /> {'>'}</a>
 														</div>
 													</IconMessage>
 												</Box>
 											}
 
-										
+
 
 
 											{
 												cart.couponProgress && <Box>
 													<CouponProgress onBuy={
-														this.setState({
-															showFilterProducts: true
-														})
-													} couponMsg={cart.messages.couponMsg} couponLink={cart.messages.couponMsgLink} couponProgress={cart.couponProgress}/>
+														() => {
+															this.setState({
+																showFilterProducts: true
+															})
+
+															try {
+																if (window.GeekoSensors) {
+																	window.GeekoSensors.Track('ELClick', {
+																		clicks: '凑单'
+																	})
+																}
+
+															} catch (e) { }
+														}
+													} couponMsg={cart.messages.couponMsg} couponLink={cart.messages.couponMsgLink} couponProgress={cart.couponProgress} />
 												</Box>
 											}
 
@@ -2924,7 +2963,8 @@ const ShoppingCart = class extends React.Component {
 															viewingItem: {
 																productId: product.id,
 																variantId: vairant.id,
-																quantity: 1
+																quantity: 1,
+																type: 'shopping_cart_match_with'
 															},
 															viewing: true
 														})
@@ -3084,17 +3124,7 @@ const ShoppingCart = class extends React.Component {
 
 										</Boxs>
 
-										{
-											this.state.viewing && (
-												<React.Fragment>
-													<Mask onClick={() => { this.setState({ viewing: false }) }} />
-													<ProductEditor onClose={() => { this.setState({ viewing: false }) }}
-														itemConfirmHandle={!!this.state.viewingItem && !!this.state.viewingItem.isGift ? this.giftConfirm : this.viewConfirm}
-														btnMessage={<FormattedMessage id="addtocart" />}
-														item={this.state.viewingItem} />
-												</React.Fragment>
-											)
-										}
+
 
 										{
 											editing.isEditing && (
@@ -3222,15 +3252,15 @@ const ShoppingCart = class extends React.Component {
 
 
 										{
-											this.state.showFilterProducts && <FilterProducts viewConfirm={this.viewConfirm.bind(this)} summary={cart.orderSummary} onClose={
+											this.state.showFilterProducts && <FilterProducts couponProgress={cart.couponProgress} viewConfirm={this.viewConfirm.bind(this)} summary={cart.orderSummary} onClose={
 												() => {
 													this.setState({
 														showFilterProducts: false
 													})
 												}
-											}/>
+											} />
 										}
-										
+
 
 
 
@@ -3320,6 +3350,18 @@ const ShoppingCart = class extends React.Component {
 
 			{
 				this.state.confirm.open && <ConfirmAlter content={this.state.confirm.content} yesBack={this.state.confirm.yesBack} noBack={this.state.confirm.noBack} />
+			}
+
+			{
+				this.state.viewing && (
+					<React.Fragment>
+						<Mask onClick={() => { this.setState({ viewing: false }) }} />
+						<ProductEditor onClose={() => { this.setState({ viewing: false }) }}
+							itemConfirmHandle={!!this.state.viewingItem && !!this.state.viewingItem.isGift ? this.giftConfirm : this.viewConfirm}
+							btnMessage={<FormattedMessage id="addtocart" />}
+							item={this.state.viewingItem} />
+					</React.Fragment>
+				)
 			}
 
 		</React.Fragment>

@@ -244,6 +244,6 @@ export const openCheckOutOrder = orderId => axios.post(`${VPATH}/checkout/open-o
 
 export const getFilters = () => axios.get(`${VPATH}/filter/anon/APP0010/get-by-menu-id`, {})
 export const getSorters = () => axios.get(`/context/anon/get-sorters`, {})
-export const filterProducts = (filterVO, skip, limit) => axios.body(`${VPATH}/product/anon/${skip}/${limit}/get-recommended-products`, filterVO)
+export const filterProducts = (filterVO, skip, limit, difference) => axios.body(`${VPATH}/product/anon/${skip}/${limit}/get-recommended-products?difference=${difference}`, filterVO)
 export const suggestions = searchValue => axios.get(`${VPATH}/search/anon/simple`, {searchValue})
 export const searchProducts = (searchValue,skip, limit) => axios.get(`${VPATH}/search/anon/${skip}/${limit}/products`, {searchValue})

@@ -417,7 +417,8 @@ export default class extends React.Component {
             showMask: false,
             limit: 20,
             searchSkip: 0,
-            filterSkip: 0
+            filterSkip: 0,
+            viewingItemType: ''
         }
         this.searchChange = _.debounce(this.searchChange.bind(this), 400)
         this.bindSearchScroll = this.bindSearchScroll.bind(this)
@@ -463,7 +464,9 @@ export default class extends React.Component {
     }
 
     onSearch(value, isScroll) {
+
         if (!this.state.searching && !this.state.searchEmpty) {
+            
             searchProducts(value, this.state.searchSkip, this.state.limit).then(data => {
                 const searchProducts = data.result
                 const resultProducts = isScroll ? [...(this.state.searchProducts || []), ...(searchProducts || [])] : searchProducts
@@ -475,17 +478,45 @@ export default class extends React.Component {
                 searchValue: value,
                 searching: true,
             })
+
+
+            try{
+                if(window.GeekoSensors){
+                    window.GeekoSensors.Track("Search", {
+                        "keywords": value,
+                        "skip": this.state.searchSkip,
+                        "limit": this.state.limit,
+                        "resourcepage_title": "shoppingcart"
+                    })
+                }
+            }catch(e){
+                console.error(e)
+            }
+
+
         }
     }
 
     onFilter(filter, isScroll) {
 
         if (!this.state.filtering && !this.state.filterEmpty) {
+
             const filterItems = filter.filterItems.filter(item => item.selections.some(selection => selection.selected)).map(item => {
                 const selections = item.selections.filter(s => s.selected)
                 return { ...item, selections }
             })
-            filterProducts({ ...filter, filterItems, sorter: this.state.sort }, this.state.filterSkip, this.state.limit).then(data => {
+
+
+            const {couponProgress} = this.props
+            let difference=0
+            if(couponProgress && couponProgress.type === 0  && couponProgress.nodes){
+                const node = couponProgress.nodes.find(n => !n.usable)
+                if(node){
+                    difference = node.conditionValue -  couponProgress.value
+                }
+            }
+
+            filterProducts({ ...filter, filterItems, sorter: this.state.sort }, this.state.filterSkip, this.state.limit, difference).then(data => {
 
                 const resultProducts = isScroll ? [...(this.state.products || []), ...(data.result || [])] : data.result
 
@@ -497,6 +528,30 @@ export default class extends React.Component {
                 })
             })
             this.setState({ filter, showFilter: false, filtering: true })
+
+
+
+            if(window.GeekoSensors){
+
+                try{
+                    window.GeekoSensors.Track("Filter", {
+                        "filter": (filterItems || []).map(item => {
+                            const fieldName = item.fieldName
+                            const selectionStr = (item.selections||[]).map(s => s.value).join(',')
+                            return `${fieldName}:${selectionStr}`
+                        }).join(';'),
+                        "sort": this.state.sort,
+                        "startPrice":filter.startPrice,
+                        "endPrice": filter.endPrice, 
+                        "skip": this.state.filterSkip,
+                        "limit": this.state.limit,
+                        "resourcepage_title": "shoppingcart"
+                    })
+                }catch(e){
+                    console.error(e)
+                }
+                
+            }
         }
 
     }
@@ -525,13 +580,26 @@ export default class extends React.Component {
 
 
 
-    viewConfirm(oldId, newId, quantity) {
+    viewConfirm(oldId, newId, quantity, productId) {
         this.props.viewConfirm(oldId, newId, quantity).then(() => {
             this.setState({
                 showEditor: false,
                 viewingItem: null
             })
         })
+
+        try{
+            if(window.GeekoSensors){
+                window.GeekoSensors.Track('AddToCartDetail', {
+                    product_id: productId,
+                    variant_id: newId,
+                    product_qty: quantity,
+                    page_type: this.state.viewingItem.type,
+                    is_success: true
+                })
+            }
+            
+        }catch(e){}
     }
 
     searchSubmit(e) {
@@ -654,19 +722,20 @@ export default class extends React.Component {
                                         viewingItem: {
                                             productId: product.id,
                                             variantId: vairant.id,
-                                            quantity: 1
+                                            quantity: 1,
+                                            type: 'filter_products'
                                         },
                                         showEditor: true
                                     })
-                                }} requestId={product.requestId} column="Bottom Products" product={product} />
+                                }} requestId={product.requestId} column="Filter Products" dataType="Filter Products" dataContent="Filter Products" product={product} />
                             </div>)
                         }
                     </PRODUCTS>
                     {
-                        this.state.filtering && <LOADING>Loading....</LOADING>
+                        this.state.filtering && <LOADING><FormattedMessage id="loading" /></LOADING>
                     }
                     {
-                        this.state.filterEmpty && <NOMORE>No More</NOMORE>
+                        this.state.filterEmpty && <NOMORE><FormattedMessage id="nomore" /></NOMORE>
                     }
                 </div>
 
@@ -684,7 +753,7 @@ export default class extends React.Component {
                                 setTimeout(() => {
                                     onClose()
                                 }, 200)
-                            }} style={{ minWidth: 162, textTransform: 'uppercase', paddingLeft: 10, paddingRight: 10 }}>Back To Bag</BUTTON>
+                            }} style={{ minWidth: 162, textTransform: 'uppercase', paddingLeft: 10, paddingRight: 10 }}><FormattedMessage id="back_to_bag"/></BUTTON>
                         </div>
                     </div>
                 </div>
@@ -706,20 +775,21 @@ export default class extends React.Component {
                                             viewingItem: {
                                                 productId: product.id,
                                                 variantId: vairant.id,
-                                                quantity: 1
+                                                quantity: 1,
+                                                type: 'search_products'
                                             },
                                             showEditor: true
                                         })
-                                    }} requestId={product.requestId} column="Bottom Products" product={product} />
+                                    }} requestId={product.requestId} column="Search Products" product={product} dataType="Search Products" dataContent="Search Products"/>
                                 </div>)
                             }
                         </PRODUCTS>
                         {
-                            this.state.searching && <LOADING>Loading...</LOADING>
+                            this.state.searching && <LOADING><FormattedMessage id="loading" /></LOADING>
                         }
 
                         {
-                            this.state.searchEmpty && <NOMORE>No More</NOMORE>
+                            this.state.searchEmpty && <NOMORE><FormattedMessage id="nomore" /></NOMORE>
                         }
                     </div>
 
@@ -737,7 +807,7 @@ export default class extends React.Component {
                                     setTimeout(() => {
                                         onClose()
                                     }, 200)
-                                }} style={{ minWidth: 162, textTransform: 'uppercase', paddingLeft: 10, paddingRight: 10 }}>Back To Bag</BUTTON>
+                                }} style={{ minWidth: 162, textTransform: 'uppercase', paddingLeft: 10, paddingRight: 10 }}><FormattedMessage id="back_to_bag"/></BUTTON>
                             </div>
                         </div>
                     </div>
@@ -791,7 +861,7 @@ export default class extends React.Component {
                                     setTimeout(() => {
                                         this.onSearch(word)
                                     })
-                                }} key={word}>
+                                }} key={word} data-source-click data-title="shoppingcart" data-type="search-words" data-content={word}>
                                     <span>{word}</span>
                                 </div>)
                             }

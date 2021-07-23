@@ -152,5 +152,12 @@ export default{
 	card_info_3: '4 Ziffern auf der Vorderseite der Karte',
 	cancel_info: 'Möchten Sie die Zahlung wirklich stornieren? Wenn Ihre Bestellung nicht in {countdown} bezahlt ist, wird sie storniert.',
 	continue_to_pay: 'Weiter zu Bezahlen',
-	confirm_cancel: 'Bestätigen Stornieren'
+	confirm_cancel: 'Bestätigen Stornieren',
+	back_to_bag: 'Zurück zum Warenkorb',
+	sort: 'Sortieren',
+	filter: 'Filter',
+	search: 'Search',
+	loading: 'Laden',
+	nomore: 'Keine weiteren Daten',
+	shopnow: 'Jetzt kaufen',
 }

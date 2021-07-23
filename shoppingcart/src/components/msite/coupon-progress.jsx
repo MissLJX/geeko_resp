@@ -143,8 +143,6 @@ const Nodes = props => {
 
     const unReached = nodes.map((n, index) => ({ index, node: n })).find(n => !n.node.usable)
 
-    console.log(unReached)
-
     let pre, prevValue = 0, percent = 0
     if (unReached) {
         pre = nodes[unReached.index - 1]
@@ -200,7 +198,7 @@ export default props => {
             couponMsg && <div style={{ paddingTop: 14 }}>
                 <MESSAGE>
                     <span className="__text" dangerouslySetInnerHTML={{ __html: couponMsg }} />
-                    <a style={{fontSize: 12}} onClick={onBuy} className="__add"><FormattedMessage id="add" /> {'>'}</a>
+                    <a style={{fontSize: 12, fontFamily: 'SlatePro-Medium'}} onClick={onBuy} className="__add"><FormattedMessage id="shopnow" /> {'>'}</a>
                 </MESSAGE>
             </div>
         }

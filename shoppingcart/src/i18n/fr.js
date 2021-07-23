@@ -152,5 +152,12 @@ export default{
 	card_info_3: '4 chiffres au recto de la carte',
 	cancel_info: 'Êtes-vous sûr de vouloir annuler le paiement ? Si votre commande n\'est pas payée à {countdown}, elle sera annulée.',
 	continue_to_pay: 'Continuer à payer',
-	confirm_cancel: 'Confirmer Annuler'
+	confirm_cancel: 'Confirmer Annuler',
+	back_to_bag: 'Retour au panier',
+	sort: 'Trier',
+	filter: 'Filtre',
+	search: 'Search',
+	loading: 'chargement',
+	nomore: 'Aucune autre donnée',
+	shopnow: 'Shop Now',
 }

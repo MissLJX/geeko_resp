@@ -330,9 +330,7 @@ const ProductEditor = class extends React.Component {
 	editHandle() {
 		const newVaraintId = this.state.selectedVariant.id
 		const newQuantity = this.state.selectedQuantity
-
-
-		this.props.itemConfirmHandle(this.props.item.variantId, newVaraintId, newQuantity)
+		this.props.itemConfirmHandle(this.props.item.variantId, newVaraintId, newQuantity, this.props.item.productId)
 	}
 
 	changeQuantity(op) {

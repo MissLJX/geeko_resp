@@ -154,6 +154,13 @@ export default{
 	card_info_3: '4 digits on front of card',
 	cancel_info: 'Are you sure you want to cancel payment? If your order is not paid in {countdown},it will be canceled.',
 	continue_to_pay: 'Continue to Pay',
-	confirm_cancel: 'Confirm Cancel'
+	confirm_cancel: 'Confirm Cancel',
+	back_to_bag: 'Back To Bag',
+	sort: 'Sort',
+	filter: 'Filter',
+	search: 'Search',
+	loading: 'Loading',
+	nomore: 'No more data',
+	shopnow: 'Shop Now',
 	
 }

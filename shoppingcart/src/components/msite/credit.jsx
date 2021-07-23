@@ -657,7 +657,7 @@ const Credit = class extends React.Component {
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <Address address={billingAddress}/>
                                     <Icon onClick={() => {
-                                        this.props.history.push(`${this.props.match.url}/billing-address`, { address: billingAddress })
+                                        this.props.history.push(`${this.props.match.url}/billing-address`, { address: billingAddress, orderId: order.id, payMethod: order.payMethod })
                                     }} style={{ fontSize: 16, color: '#666' }}>&#xe690;</Icon>
                                 </div>
                             </div>

@@ -151,5 +151,12 @@ export default{
 	card_info_3: '4 dígitos na frente do cartão',
 	cancel_info: 'Você tem certeza de que quer cancelar o pagamento? Se seu pedido não for pago até as {countdown}, será cancelado.',
 	continue_to_pay: 'Continue a pagar',
-	confirm_cancel: 'Confirmar Cancelar'
+	confirm_cancel: 'Confirmar Cancelar',
+	back_to_bag: 'Voltar ao Carrinho',
+	sort: 'Ordenar',
+	filter: 'Filtrar',
+	search: 'Search',
+	loading: 'carregando',
+	nomore: 'Sem mais dados',
+	shopnow: 'Comprar agora',
 }

@@ -27,7 +27,7 @@ module.exports = {
 		progress: true,
 		proxy: {
 			'/api': {
-				target: 'https://www.chicme.xyz',
+				target: 'https://www.chicme.com',
 				pathRewrite: { '^/api': '' },
 				cookieDomainRewrite: 'localhost',
 				cookiePathRewrite: {
