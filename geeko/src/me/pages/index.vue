@@ -90,7 +90,7 @@
 
                     <li>
                         <a class="el-me-tool-list-item" href="/share">
-                            <touch-go class="el-me-tool-list-touch" :label1="'Share & Get $15'">
+                            <touch-go class="el-me-tool-list-touch" :label1="'Share & Get $10'">
                                 <span class="iconfont _icon f-icon-18" slot="icon">&#xe69b;</span>
                             </touch-go>
                         </a>
