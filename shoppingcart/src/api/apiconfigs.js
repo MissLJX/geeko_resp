@@ -38,7 +38,7 @@ const instance = axios.create({
 	baseURL: typeof window.ctx === 'undefined' ? '/api' : window.ctx,
 	timeout: 50000,
 	headers: {
-		appVersion: '3.5.8',
+		appVersion: '4.4.11',
 		deviceType: deviceType,
 		xtoken: window.secret || '',
 		// countryCode: getCountry(),
@@ -100,6 +100,27 @@ export default {
 				if(res.data.code == 310){
 					reRequest().then((res) => {
 						this.post(url, data, headers)
+					}).catch((e) => {
+						console.error(e)
+						reject(e)
+					})
+				}else{
+					apiResult(res, resolve, reject)
+				}
+			}).catch((e) => {
+				console.error(e)
+				reject(e)
+			})
+		})
+	},
+	body (url, data, headers = {}) {
+		return new Promise((resolve, reject) => {
+			instance.post(url, data, {
+				headers: {...headers}
+			}).then((res) => {
+				if(res.data.code == 310){
+					reRequest().then((res) => {
+						this.body(url, data, headers)
 					}).catch((e) => {
 						console.error(e)
 						reject(e)

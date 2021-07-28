@@ -79,21 +79,17 @@ const Modal = class extends React.Component {
 		const { address, intl } = this.props
 		const { validate } = this.props.location.state || {}
 
-		console.log(this.props.location.search)
-
 		const FormBody = styled.div`
-		padding-left: 12px;
-		padding-right: 12px;
-    	margin-left: auto;
+		margin-left: auto;
     	margin-right: auto;
-		padding-bottom: 100px;
 		-webkit-overflow-scrolling : touch;
 		border-top: 8px solid #f7f7f7;
+		padding-bottom: 100px;
     `
 
 		return <FullFixed onClose={this.close} title={intl.formatMessage({ id: 'address' })}>
-			<FormBody >
-				<AddressForm needInitValidate={this.props.location.search === '?check=1' || validate} editAddress={this.editAddress} style={{ marginTop: 15 }} address={address} />
+			<FormBody style={{backgroundColor: '#f7f7f7'}}>
+				<AddressForm needInitValidate={this.props.location.search === '?check=1' || validate} editAddress={this.editAddress} address={address} />
 			</FormBody>
 
 		</FullFixed>

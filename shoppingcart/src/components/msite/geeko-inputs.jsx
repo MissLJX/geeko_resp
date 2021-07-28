@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { form, control, button } from 'react-validation'
 import { getCountries, getStates, getCites, getCityByZip } from '../../api'
 import _ from 'lodash'
+import { FormattedMessage } from 'react-intl'
 
 const InputContainer = styled.div`
     border: 0;
@@ -13,6 +14,17 @@ const InputContainer = styled.div`
     flex-direction: column;
     vertical-align: top;
     width: 100%;
+    &.select{
+        &::after{
+            content: '\\e690';
+            font-family: 'iconfont';
+            position: absolute;
+            right: 10px;
+            top: 12px;
+            pointer-events: none;
+            color: #666;
+        }
+    }
 `
 
 const Label = styled.label`
@@ -25,7 +37,7 @@ const Label = styled.label`
     transform-origin: top left;
     color: #999999;
     &.focused{
-        transform: translate(0, 1.5px) scale(0.85);
+        transform: translate(0, -4px) scale(0.85);
     }
     &+div{
         margin-top: 16px;
@@ -42,6 +54,7 @@ const InputWrapper = styled.div`
     position: relative;
     align-items: center;
     box-sizing: border-box;
+    padding-bottom: 8px;
 
     &::before{
         left: 0;
@@ -62,7 +75,7 @@ const InputWrapper = styled.div`
         position: absolute;
         transform: scaleX(0);
         transition: transform 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms;
-        border-bottom: 2px solid #1976d2;
+        border-bottom: 1px solid #666;
         pointer-events: none;
     }
 
@@ -71,7 +84,7 @@ const InputWrapper = styled.div`
     }
 
     &.__error::after{
-        border-bottom: 2px solid #E64545;
+        border-bottom: 1px solid #E64545;
         transform: scaleX(1);
     }
 
@@ -90,6 +103,7 @@ const InputWrapper = styled.div`
         letter-spacing: inherit;
         animation-duration: 10ms;
         -webkit-tap-highlight-color: transparent;
+        height: 20px;
     }
 
     & > select{
@@ -97,9 +111,10 @@ const InputWrapper = styled.div`
         appearance: none;
         -moz-appearance: none;
         -webkit-appearance: none;
-        background: url(https://image.geeko.ltd/site/pc/icon137.png) no-repeat scroll calc(100% - 10px) center transparent;
+        background: none;
         box-shadow: none;
         cursor: pointer;
+        position: relative;
     }
 `
 
@@ -177,6 +192,7 @@ const OPTIONS = styled.ul`
         line-height: 42px;
         border-bottom: 1px solid #eee;
         position: relative;
+        color: #666;
         &.selected{
             font-family: 'SlatePro-Medium';
             color: #000;
@@ -210,6 +226,7 @@ const OPTIONPICKER = styled.div`
            text-align: center;
            font-size: 16px;
            line-height: 47px;
+           font-family: AcuminPro-Bold;
        }
 
        & > .__search{
@@ -272,22 +289,39 @@ const OPTIONPICKER = styled.div`
         overflow: auto;
     }
 `
-
+const Close = styled.span`
+	display: inline-block;
+	position: absolute;
+	right: 10px;
+	top: 12px;
+	cursor: pointer;
+    height: 25px;
+    width: 25px;
+    text-align: center;
+    line-height: 25px;
+`
 
 
 export const Input = control(({ error, isChanged, isUsed, divStyle, ...props }) => {
     const [focused, setFocused] = useState(false)
     const label = props.label || props.renderLabel()
+
     return <InputContainer>
         <Label className={`${(focused || props.value || props.placeholder) ? 'focused' : ''} ${isChanged && isUsed && !!error && '__error'}`}>{label}</Label>
         <InputWrapper className={`${focused ? 'focused' : ''} ${isChanged && isUsed && !!error && '__error'}`}>
-            <input {...props} autoComplete="no" onFocus={(evt) => {
-                setFocused(true)
-                props.onFocus(evt)
-            }} onBlur={(evt) => {
-                setFocused(false)
-                props.onBlur(evt)
-            }} />
+            <input {...props} autoComplete="no"
+                onFocus={(evt) => {
+                    setFocused(true);
+                    if (props.onFocus) {
+                        props.onFocus(evt)
+                    }
+                }} onBlur={(evt) => {
+                    setFocused(false)
+                    if (props.onBlur) {
+                        props.onBlur(evt)
+                    }
+                }}
+            />
         </InputWrapper>
         {isChanged && isUsed && !!error && <ERROR className="ErrorMsg">{error}</ERROR>}
     </InputContainer>
@@ -297,37 +331,167 @@ export const Input = control(({ error, isChanged, isUsed, divStyle, ...props }) 
 export const Select = control(({ error, isChanged, isUsed, divStyle, ...props }) => {
     const [focused, setFocused] = useState(false)
     const label = props.label || props.renderLabel()
+    return <InputContainer className="select">
+        <Label className={`${(focused || props.value || props.placeholder) ? 'focused' : ''} ${isChanged && isUsed && !!error && '__error'}`}>{label}</Label>
+        <InputWrapper className={`${focused ? 'focused' : ''} ${isChanged && isUsed && !!error && '__error'}`}>
+            <select {...props}
+                onFocus={(evt) => {
+                    setFocused(true);
+                    if (props.onFocus) {
+                        props.onFocus(evt)
+                    }
+
+                }} onBlur={(evt) => {
+                    setFocused(false)
+                    if (props.onBlur) {
+                        props.onBlur(evt)
+                    }
+                }}
+            />
+        </InputWrapper>
+        {isChanged && isUsed && !!error && <ERROR className="ErrorMsg">{error}</ERROR>}
+    </InputContainer>
+})
+
+export const StreetInput = control(({ error, isChanged, isUsed, divStyle, ...props }) => {
+    const [focused, setFocused] = useState(false)
+    const label = props.label || props.renderLabel()
+    const addressRef = useRef()
+
+
+    useEffect(() => {
+        let autocomplete
+        if (window.google && window.google.maps && window.google.maps.places && window.google.maps.places.Autocomplete) {
+            autocomplete = new google.maps.places.Autocomplete(addressRef.current, {
+                componentRestrictions: { country: [props.country] },
+                fields: ["address_components", "geometry"],
+                types: ["address"],
+            })
+            autocomplete.addListener("place_changed", function () {
+                const place = autocomplete.getPlace();
+                let streetAddress1 = "";
+                let zipCode = "";
+                let country = "";
+                let state = "";
+                let city = "";
+                for (const component of place.address_components) {
+                    const componentType = component.types[0]
+                    switch (componentType) {
+                        case "street_number": {
+                            streetAddress1 = `${component.long_name} ${streetAddress1}`;
+                            break
+                        }
+
+                        case "route": {
+                            streetAddress1 += component.long_name;
+                            break
+                        }
+
+                        case "postal_code": {
+                            zipCode = `${component.long_name}${zipCode}`;
+                            break
+                        }
+
+                        case "postal_code_suffix": {
+                            zipCode = `${zipCode}-${component.long_name}`;
+                            break
+                        }
+
+                        case "postal_town":
+                        case "locality":
+                            city = component.long_name;
+                            break
+
+                        case "administrative_area_level_1": {
+                            state = component.short_name;
+                            break
+                        }
+                        case "country":
+                            country = component.short_name;
+                            break
+                    }
+                }
+
+
+                props.onAuto({
+                    streetAddress1,
+                    zipCode,
+                    city,
+                    state,
+                    country
+                })
+
+            });
+        }
+
+
+        return () => {
+            if (autocomplete) {
+                autocomplete.unbindAll()
+                autocomplete=null
+            }
+        }
+    }, [props.country])
+
+
     return <InputContainer>
         <Label className={`${(focused || props.value || props.placeholder) ? 'focused' : ''} ${isChanged && isUsed && !!error && '__error'}`}>{label}</Label>
         <InputWrapper className={`${focused ? 'focused' : ''} ${isChanged && isUsed && !!error && '__error'}`}>
-            <select {...props} onFocus={(evt) => {
-                setFocused(true)
-                props.onFocus(evt)
-            }} onBlur={(evt) => {
-                setFocused(false)
-                props.onBlur(evt)
-            }} />
+            <input {...props} autoComplete="no"
+                ref={addressRef}
+                onFocus={(evt) => {
+                    setFocused(true);
+                    if (props.onFocus) {
+                        props.onFocus(evt)
+                    }
+
+                }} onBlur={(evt) => {
+                    setFocused(false)
+                    if (props.onBlur) {
+                        props.onBlur(evt)
+                    }
+                }}
+            />
         </InputWrapper>
         {isChanged && isUsed && !!error && <ERROR className="ErrorMsg">{error}</ERROR>}
     </InputContainer>
 })
 
 
+
 export const GountrySelect = control(({ error, isChanged, isUsed, divStyle, ...props }) => {
     const [focused, setFocused] = useState(false)
     const [showOption, setShowOption] = useState(false)
     const label = props.label || props.renderLabel()
+
     return <React.Fragment>
-        <InputContainer onClick={evt => { setShowOption(true); evt.preventDefault(); }}>
+        <InputContainer className="select" onClick={evt => {
+            if (!!!props.disabled) {
+                setShowOption(true);
+                evt.preventDefault();
+            }
+        }}>
             <Label className={`${(focused || props.value || props.placeholder) ? 'focused' : ''} ${isChanged && isUsed && !!error && '__error'}`}>{label}</Label>
             <InputWrapper className={`${focused ? 'focused' : ''} ${isChanged && isUsed && !!error && '__error'}`}>
-                <select {...props} style={{pointerEvents:'none'}} onFocus={(evt) => {
+                <select {...props} onFocus={(evt) => {
                     setFocused(true)
-                    props.onFocus(evt)
+                    if (props.onFocus) {
+                        props.onFocus(evt)
+                    }
+
                 }} disabled onBlur={(evt) => {
                     setFocused(false)
-                    props.onBlur(evt)
-                }} />
+                    if (props.onBlur) {
+                        props.onBlur(evt)
+                    }
+                }}
+                    style={{
+                        color: !!props.disabled ? '#999' : '#000',
+                        fontSize: 14,
+                        fontFamily: 'AcuminPro-Bold',
+                        pointerEvents: 'none'
+                    }}
+                />
             </InputWrapper>
             {isChanged && isUsed && !!error && <ERROR className="ErrorMsg">{error}</ERROR>}
         </InputContainer>
@@ -335,7 +499,8 @@ export const GountrySelect = control(({ error, isChanged, isUsed, divStyle, ...p
             showOption && <React.Fragment>
                 <MASK onClick={evt => { setShowOption(false) }} />
                 <SELECTALTER>
-                    <CountryInfoPicker step={props.step || 0} onClose={() => {setShowOption(false)}} country={props.country} state={props.state} city={props.city} onSelect={props.onSelect}/>
+                    <Close onClick={() => { setShowOption(false) }}><span style={{ fontSize: 14, cursor: 'pointer', color: '#999', display: 'inline-block', fontFamily: 'iconfont' }}>&#xe6af;</span></Close>
+                    <CountryInfoPicker step={props.step || 0} onClose={() => { setShowOption(false) }} country={props.country} state={props.state} city={props.city} onSelect={props.onSelect} />
                 </SELECTALTER>
             </React.Fragment>
         }
@@ -346,7 +511,7 @@ export const GountrySelect = control(({ error, isChanged, isUsed, divStyle, ...p
 
 const CountryList = props => {
     const { options = [], selectedOption, onSelect, filter, step } = props
-    const groupedOptions = _.groupBy(options.filter( o=> o.label.indexOf(filter) >=0 ), c => c.label.substr(0, 1).toUpperCase())
+    const groupedOptions = _.groupBy(options.filter(o => o.label.toUpperCase().startsWith((filter || '').toUpperCase())), c => c.label.substr(0, 1).toUpperCase())
     const keys = Object.keys(groupedOptions).sort()
     const [option, setOption] = useState({})
     const [key, setKey] = useState()
@@ -356,14 +521,14 @@ const CountryList = props => {
     }, [selectedOption])
 
     useEffect(() => {
-        setKey()
+        setKey(selectedOption && selectedOption.label ?selectedOption.label.substr(0,1): null)
     }, [options])
 
     const refs = keys.reduce((acc, value) => {
         acc[value] = React.createRef()
         return acc
     }, {})
-     
+
     const handleClick = k => {
         setKey(k)
         refs[k].current.scrollIntoView({
@@ -373,11 +538,24 @@ const CountryList = props => {
     }
 
     const handleSelect = option => {
-       setOption(option)
-       onSelect(option)
+        setOption(option)
+        onSelect(option)
     }
 
-    
+    useLayoutEffect(() => {
+        let k
+        if(selectedOption && selectedOption.label){
+            k = selectedOption.label.substr(0,1).toUpperCase()
+            if(refs[k] && refs[k].current){
+                refs[k].current.scrollIntoView({
+                    block: 'start',
+                })
+                setKey(k)
+            }
+        }
+    }, [selectedOption])
+
+
 
     return <OPTIONCONTAINER>
         <OPTIONBODY>
@@ -386,9 +564,9 @@ const CountryList = props => {
                     <GROUPHEAD innerRef={refs[k]} id={k}>{k}</GROUPHEAD>
                     <OPTIONS>
                         {
-                          (groupedOptions[k] || []).map(op => <li className={`${op.value === option.value?'selected':''}`} onClick={() => {handleSelect(op)}} key={op.value}>
-                              {op.label}
-                          </li>)
+                            (groupedOptions[k] || []).map(op => <li className={`${op.value === option.value ? 'selected' : ''}`} onClick={() => { handleSelect(op) }} key={op.value}>
+                                {op.label}
+                            </li>)
                         }
                     </OPTIONS>
                 </div>)
@@ -402,7 +580,7 @@ const CountryList = props => {
         }}>
             <OPTIONASIDE>
                 {
-                    keys.map(k => <span className={`${k === key?'active':''}`} onClick={() => {handleClick(k)}} key={k}>{k}</span>)
+                    keys.map(k => <span className={`${k === key ? 'active' : ''}`} onClick={() => { handleClick(k) }} key={k}>{k}</span>)
                 }
             </OPTIONASIDE>
         </div>
@@ -423,57 +601,66 @@ const CountryInfoPicker = React.memo(props => {
     const [triggeCity, setTriggeCity] = useState(false)
 
     const bdref = useRef()
+    const filterRef = useRef()
+
 
     useEffect(() => {
         getCountries().then(data => data.result).then(countries => {
             setCountries(countries)
-            setCountry((countries||[]).find(c => c.value === (props.country || 'US')))
+            setCountry((countries || []).find(c => c.value === (props.country || 'US')))
         })
     }, [])
 
     useEffect(() => {
-        setCountry((countries||[]).find(c => c.value === (props.country || 'US')))
+        setFilter('')
+        filterRef.current.value = ''
+    }, [step])
 
+    useEffect(() => {
+        setCountry((countries || []).find(c => c.value === (props.country || 'US')))
         const statePromise = getStates(props.country).then(data => data.result)
         const citeyPromise = getCites(props.country, props.state).then(data => data.result)
-
-        Promise.all([statePromise,  citeyPromise]).then(values => {
+        Promise.all([statePromise, citeyPromise]).then(values => {
             const [nStates, nCities] = values
-            const pCities = (nCities || []).map(c => ({...c, label: c.name, value: c.name}))
+            const pCities = (nCities || []).map(c => ({ ...c, label: c.name, value: c.name }))
             const pStates = nStates || []
             setState(pStates.find(s => s.value === props.state))
             setCity(pCities.find(c => c.value === props.city))
             setStates(pStates)
             setCities(pCities)
-            if(triggeCountry){
-                if(pStates && pStates.length){
-                    setStep(step+1)
-                }else{
+            if (triggeCountry) {
+                if (pStates && pStates.length) {
+                    // setStep(step + 1)
+                } else {
                     props.onClose()
                 }
                 setTriggeCountry(false)
             }
         })
-       
     }, [props.country])
 
     useEffect(() => {
-        setState((states || []).find(s => s.value === props.state))
-        getCites(props.country,props.state).then(data => data.result).then(cts => {
-            setCities((cts || []).map( c => ({...c, label: c.name, value: c.name})))
-            if(triggeState){
-                if(cts && cts.length){
-                    setStep(step+1)
-                }else{
-                    props.onClose()
+
+        if(props.state){
+            setState((states || []).find(s => s.value === props.state))
+            getCites(props.country, props.state).then(data => data.result).then(cts => {
+                setCities((cts || []).map(c => ({ ...c, label: c.name, value: c.name })))
+                if (triggeState) {
+                    if (cts && cts.length) {
+                        // setStep(step + 1)
+                    } else {
+                        props.onClose()
+                    }
+                    setTriggeState(false)
                 }
-                setTriggeState(false)
-            }
-        })
+            })
+        }
+
+       
     }, [props.state])
 
     useEffect(() => {
-        if(triggeCity){
+        if (triggeCity) {
             props.onClose()
             setTriggeCity(false)
         }
@@ -485,17 +672,46 @@ const CountryInfoPicker = React.memo(props => {
 
 
     const infoChange = (option, name) => {
-        let scountry = country? country.value: ''
-        let sstate = state? state.value: ''
-        let scity = city? city.value: ''
-        switch(name){
+        let scountry = country ? country.value : ''
+        let sstate = state ? state.value : ''
+        let scity = city ? city.value : ''
+        switch (name) {
             case 'country':
                 scountry = option.value
                 setTriggeCountry(true)
+                if(scountry !== option.value){
+                    // setStates([])
+                    // setCities([])
+                    setStep(1)
+                }else{
+                    getStates(scountry).then(data => data.result).then(sts => {
+                        if(sts && sts.length > 0){
+                            setStates(sts)
+                            setStep(1)
+                        }else{
+                            props.onClose()
+                        }
+                    })
+                }
+                
                 break
             case 'state':
                 sstate = option.value
                 setTriggeState(true)
+                if(sstate !== option.value){
+                    // setCities([])
+                    setStep(2)
+                }else{
+                    getCites(scountry, sstate).then(data => data.result).then(sts => {
+                        if(sts && sts.length > 0){
+                            setCities(sts.map(s => ({...s, label: s.name, value: s.name})))
+                            setStep(2)
+                        }else{
+                            props.onClose()
+                        }
+                    })
+                }
+                
                 break
             case 'city':
                 scity = option.value
@@ -503,15 +719,16 @@ const CountryInfoPicker = React.memo(props => {
                 break
         }
         props.onSelect(scountry, sstate, scity, option.zipCodes)
+        
     }
 
     const getOptionRender = s => {
-        if(s === 0){
-            return  <CountryList onSelect={option => infoChange(option, 'country')} filter={filter} selectedOption={country} options={countries} />
-        }else if(s === 1){
-            return  <CountryList onSelect={option => infoChange(option, 'state')} filter={filter} selectedOption={state} options={states} />
-        }else if(s === 2){
-            return  <CountryList onSelect={option => infoChange(option, 'city')} filter={filter} selectedOption={city} options={cities} />
+        if (s === 0) {
+            return <CountryList step={step} onSelect={option => infoChange(option, 'country')} filter={filter} selectedOption={country} options={countries} />
+        } else if (s === 1) {
+            return <CountryList step={step} onSelect={option => infoChange(option, 'state')} filter={filter} selectedOption={state} options={states} />
+        } else if (s === 2) {
+            return <CountryList step={step} onSelect={option => infoChange(option, 'city')} filter={filter} selectedOption={city} options={cities} />
         }
     }
 
@@ -519,33 +736,33 @@ const CountryInfoPicker = React.memo(props => {
         setStep(Number(s))
     }
 
-    useLayoutEffect(() => {
-        bdref.current.scrollTo(0, 0)
-    }, [
-        step
-    ])
+    // useLayoutEffect(() => {
+    //     bdref.current.scrollTo(0, 0)
+    // }, [
+    //     step
+    // ])
 
 
     return <OPTIONPICKER>
         <div className="__hd">
-            <div className="__title">Country/Region</div>
+            <div className="__title"><FormattedMessage id="country" /></div>
             <div className="__search">
                 <span className="__icon">&#xe772;</span>
-                <input className="__input" onChange={changeHandle}/>
+                <input ref={filterRef} className="__input" onChange={changeHandle} />
             </div>
             <div className="__menu">
-                <span onClick={() => {stepClickHandle(0)}} style={{width: '50%'}}>
-                    <span style={{color: step===0?'#e64545':'#999'}}>{country?country.label:'Country'}</span>
+                <span onClick={() => { stepClickHandle(0) }} style={{ width: '50%' }}>
+                    <span style={{ color: step === 0 ? '#e64545' : '#999' }}>{country ? country.label : <span><FormattedMessage id="country" /></span>}</span>
                 </span>
                 {
-                    states && states.length > 0 && <span onClick={() => {stepClickHandle(1)}} style={{width: '50%'}}>
-                        <span style={{color: step===1?'#e64545':'#999'}}>{state?state.label:'State/Province'}</span>
+                    states && states.length > 0 && <span onClick={() => { stepClickHandle(1) }} style={{ width: '50%' }}>
+                        <span style={{ color: step === 1 ? '#e64545' : '#999' }}>{state ? state.label : <span><FormattedMessage id="state" /></span>}</span>
                     </span>
                 }
 
                 {
-                    cities && cities.length > 0 && <span onClick={() => {stepClickHandle(2)}} style={{width: '50%'}}>
-                        <span style={{color: step===2?'#e64545':'#999'}}>{city?city.label:'City'}</span>
+                    cities && cities.length > 0 && <span onClick={() => { stepClickHandle(2) }} style={{ width: '50%' }}>
+                        <span style={{ color: step === 2 ? '#e64545' : '#999' }}>{city ? city.label : <span><FormattedMessage id="city" /></span>}</span>
                     </span>
                 }
             </div>

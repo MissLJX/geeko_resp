@@ -66,7 +66,7 @@ const PromotionHead = ({promotion, selected, selectHandle}) => <PROMOTIONHEAD>
 		</div> */}
 		<div className="x-cell">
 			{/* <GiftIcon label={promotion.title}/> */}
-			<span dangerouslySetInnerHTML={{__html: promotion.title}}/>
+			<span style={{fontFamily: 'SlatePro-Medium'}} dangerouslySetInnerHTML={{__html: promotion.title}}/>
 		</div>
 		<div className="x-cell __right">
 			<a className="__href" href={getLink(promotion.deepLink)}>
@@ -85,13 +85,13 @@ const BirdHead = ({promotion, selected, selectHandle, askClick}) => <PROMOTIONHE
 			<CheckBox onClick={ () => { selectHandle(!selected) } } className={selected ? 'selected' : ''}/>
 		</div> */}
 		<div className="x-cell">
-			<div>{promotion.title} <Ask style={{ marginLeft: 4 }} onClick={ evt => { askClick(promotion.description) } }/></div>
+			<div style={{fontFamily: 'SlatePro-Medium'}}>{promotion.title} <Ask style={{ marginLeft: 4 }} onClick={ evt => { askClick(promotion.description) } }/></div>
 		</div>
 	</div>
 </PROMOTIONHEAD>
 
 const NormalHead = props => {
-	return <div style={{padding: '0 12px 0 0', fontSize: 16}}>
+	return <div style={{padding: '0 12px 0 0', fontSize: 14, fontFamily:'SlatePro-Medium'}}>
 		{props.title}
 	</div>
 }

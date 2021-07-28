@@ -12,10 +12,30 @@ import Loading1 from './components/msite/loading.jsx'
 
 import { connect } from 'react-redux'
 
+import AddressBook from './pages/address-book.jsx'
+
+
+import Credit from './pages/credit.jsx'
+
+
+
+
 const AddressModal = Loadable({
 	loader: () => import(/* webpackChunkName: "page--address-modal" */ './pages/address-modal.jsx'),
 	loading: Loading
 })
+
+const BookAddressModal = Loadable({
+	loader: () => import(/* webpackChunkName: "page--book-address-modal" */ './pages/address-book-modal.jsx'),
+	loading: Loading
+})
+
+
+
+// const AddressBook = Loadable({
+// 	loader: () => import(/* webpackChunkName: "page--address-modal" */ './pages/address-book.jsx'),
+// 	loading: Loading
+// })
 
 const ShippingMethods = Loadable({
 	loader: () => import(/* webpackChunkName: "page--shipping-methods" */ './pages/shipping-methods.jsx'),
@@ -113,6 +133,7 @@ const Index = (props) => {
 			<Switch>
 				<Route path={`${window.ctx || ''}/checkout/:orderId`} component={Checkout} />
 				<Route path={`${window.ctx || ''}/order-confirm/:transactionId`} component={OrderConfirm} />
+				<Route path={`${window.ctx || ''}${__route_root__}/credit/:orderId`} component={Credit} />
 				<Route path={`${window.ctx || ''}${__route_root__}/`} component={ShoppingCart} />
 			</Switch>
 
@@ -124,7 +145,31 @@ const Index = (props) => {
 					transform: `translateY(${styles.offset}%)`,
 					...defaultStyles
 				})}
+				path={`${window.ctx || ''}${__route_root__}/address-book`} component={AddressBook} />
+
+
+
+				
+
+
+			<AnimatedRoute	{...defaultAnimations}
+				mapStyles={(styles) => ({
+					transform: `translateY(${styles.offset}%)`,
+					...defaultStyles
+				})}
 				path={`${window.ctx || ''}${__route_root__}/address`} component={AddressModal} />
+
+
+
+			<AnimatedRoute	{...defaultAnimations}
+				mapStyles={(styles) => ({
+					transform: `translateY(${styles.offset}%)`,
+					...defaultStyles
+				})}
+				path={`${window.ctx || ''}${__route_root__}/book/address`} component={BookAddressModal} />
+
+
+
 			<AnimatedRoute	{...defaultAnimations}
 				mapStyles={(styles) => ({
 					transform: `translateY(${styles.offset}%)`,

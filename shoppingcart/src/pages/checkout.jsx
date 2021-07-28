@@ -24,7 +24,8 @@ import {
 	setSafeChargeStatus,
 	klarna_order_create_session,
 	klarna_order_get_params,
-	klarna_order_place_order
+	klarna_order_place_order,
+	placeOrderAll
 } from '../api'
 
 
@@ -122,13 +123,15 @@ const DashedLine = styled.div`
 `
 
 const OrderSummary = styled.div`
-	padding: 5px 10px;
+	padding: 0 10px 10px 10px;
+	margin-top: -8px;
 	& > div.__summary{
 		padding-top: 5px;
 		padding-bottom: 5px;
+		font-size: 14px;
 		font{
-			font-size: 16px !important;
-		}
+			font-size: 14px !important;
+		} 
 	}
 `
 
@@ -611,6 +614,13 @@ const Checkout = class extends React.Component {
 			}
 
 			if (payMethod) {
+
+				if (payMethod.id === '18') {
+					this.props.history.push(`${window.ctx || ''}${__route_root__}/credit/${orderId}`)
+					return
+				}
+
+
 
 				switch (payMethod.type) {
 					case '1':
@@ -1360,7 +1370,7 @@ const Checkout = class extends React.Component {
 
 
 						<Box innerRef={c => { this.$paylistdom = c }}>
-							<BoxHead title={intl.formatMessage({ id: 'payment_method' })} />
+							<BoxHead single title={intl.formatMessage({ id: 'payment_method' })} />
 							<div style={{ paddingLeft: 10, paddingRight: 10 }}>
 								<PayMethodList
 
@@ -1395,7 +1405,7 @@ const Checkout = class extends React.Component {
 						</Box>
 
 						<Box>
-							<BoxHead title={intl.formatMessage({ id: 'order_summary' })} />
+							<BoxHead single title={intl.formatMessage({ id: 'order_summary' })} />
 							<OrderSummary>
 
 								{

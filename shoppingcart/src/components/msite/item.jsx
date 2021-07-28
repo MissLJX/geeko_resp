@@ -160,21 +160,23 @@ const SIZECOLOR = styled.span`
   padding-right: 28px;
   display: inline-block;
   line-height: 24px;
-  font-size: 14px;
+  font-size: 12px;
   position: relative;
   cursor: pointer;
   max-width: 112px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  text-transform: capitalize;
   &::after{
     display: inline-block;
     position: absolute;
     right: 10px;
-    content: '\\e692';
+    content: '\\e690';
     font-family: iconfont;
     font-size: 12px;
     margin-top: 1px;
+    transform: rotate(90deg);
   }
 
   &.disabled{
@@ -231,6 +233,20 @@ const GIFT = styled.span`
     color: #e64545;
     text-transform: uppercase;
     margin-right: 2px;
+`
+
+const OFF = styled.span`
+    position: absolute;
+    left: 0;
+    top: 4px;
+    background-color: #222;
+    color: #fff;
+    font-size: 12px;
+    display: inline-block;
+    width: 36px;
+    height: 16px;
+    line-height: 16px;
+    text-align: center;
 `
 
 
@@ -297,6 +313,19 @@ const Item = class extends React.Component {
     const props = this.props
     const { intl, serverTime, disabledFunc, item, isGift } = props
     const isInvalid = disabledFunc(item)
+
+
+
+    
+    const isPromotion = item.itemPrice && item.realPrice && item.itemPrice.amount - item.realPrice.amount > 0
+
+    let off
+    if(isPromotion){
+        off = Math.round((Number(item.itemPrice.amount) - Number(item.realPrice.amount))*100 / Number(item.itemPrice.amount))
+    }
+
+
+
     return (
       <React.Fragment>
 
@@ -320,6 +349,9 @@ const Item = class extends React.Component {
                 <a style={{ display: 'block' }} href={producturl({ id: props.item.productId, name: props.item.productName, parentSku: props.item.parentSku })} >
                   <img className="__image" src={props.item.imageUrl} />
                 </a>
+                {
+                  isPromotion && <OFF>-{off}%</OFF>
+                }
               </ImageContainer>
 
             </div>
@@ -334,16 +366,16 @@ const Item = class extends React.Component {
                   {
                     isGift&& <GIFT>Gift</GIFT>
                   }
-                  <Grey>{props.item.productName}</Grey>
+                  <Grey style={{fontSize: 12}}>{props.item.productName}</Grey>
                 </Ellipsis>
 
 
                 <div style={{ height: '30px', paddingTop: 10, position: 'relative' }}>
 
                   {
-                    props.item.itemPrice.amount - props.item.realPrice.amount > 0 ? <React.Fragment><Red style={{ fontSize: '18px', fontFamily: 'SlatePro-Medium' }}>
+                    props.item.itemPrice.amount - props.item.realPrice.amount > 0 ? <React.Fragment><Red style={{ fontSize: '16px', fontFamily: 'AcuminPro-Bold' }}>
                       <Money money={props.item.realPrice} />
-                    </Red> <del style={{fontSize:12, marginLeft: 5}}><Money money={props.item.itemPrice} /></del></React.Fragment> : <span style={{ fontSize: '18px', fontFamily: 'SlatePro-Medium' }}><Money money={props.item.realPrice} /></span>
+                    </Red> <del style={{fontSize:12, marginLeft: 5, color:'#999'}}><Money money={props.item.itemPrice} /></del></React.Fragment> : <span style={{ fontSize: '16px', fontFamily: 'AcuminPro-Bold' }}><Money money={props.item.realPrice} /></span>
                   }
                   {
                     !props.ivalidItem && !isGift && <span onClick={evt => { this.itemWish(item) }} className="iconfont" style={{ position: 'absolute', right: 0, top: 14, cursor: 'pointer' }}>&#xe7b5;</span>

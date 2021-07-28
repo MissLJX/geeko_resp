@@ -34,6 +34,11 @@ export const storage = {
 			return null
 		}
 		return null
+	},
+	remvoe(k) {
+		if (window.localStorage) {
+			window.localStorage.removeItem(k)
+		}
 	}
 }
 

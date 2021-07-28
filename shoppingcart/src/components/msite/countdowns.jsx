@@ -52,9 +52,9 @@ export const CountDown = class extends React.Component {
     const {day, hour, minute, second} = this.getStructeDate(this.state.lefting)
     const {showDay, showHour} = this.props
     return <span {...this.props}>
-      {showDay && <React.Fragment><span>{day}</span><i>:</i></React.Fragment>}
-      {showHour && <React.Fragment><span>{hour}</span><i>:</i></React.Fragment>}
-      <span>{minute}</span><i>:</i>
+      {showDay && <React.Fragment><span>{day}</span><span>:</span></React.Fragment>}
+      {showHour && <React.Fragment><span>{hour}</span><span>:</span></React.Fragment>}
+      <span>{minute}</span><span>:</span>
       <span>{second}</span>
     </span>
   }

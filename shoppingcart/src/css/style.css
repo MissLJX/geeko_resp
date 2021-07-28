@@ -1,11 +1,20 @@
 @font-face {
   font-family: 'SlatePro';
-  src: url('https://s3.geeko.ltd/fonts/SlatePro.ttf');
+  src: url('https://s3.geeko.ltd/fonts/Roboto-Regular.ttf');
+  font-display: swap;
 }
 
 @font-face {
   font-family: 'SlatePro-Medium';
-  src: url('https://s3.geeko.ltd/fonts/SlatePro-Medium.ttf');
+  src: url('https://s3.geeko.ltd/fonts/Roboto-Medium.ttf');
+  font-display: swap;
+}
+
+
+@font-face {
+  font-family: 'AcuminPro-Bold';
+  src: url('https://s3.geeko.ltd/fonts/Roboto-Bold.ttf');
+  font-display: swap;
 }
 
 
@@ -15,10 +24,12 @@ ul, li{
 
 @font-face {
   font-family: 'iconfont';  /* Project id 384296 */
-  src: url('//at.alicdn.com/t/font_384296_elcxypbr1mt.woff2?t=1623912452214') format('woff2'),
-       url('//at.alicdn.com/t/font_384296_elcxypbr1mt.woff?t=1623912452214') format('woff'),
-       url('//at.alicdn.com/t/font_384296_elcxypbr1mt.ttf?t=1623912452214') format('truetype');
+  src: url('//at.alicdn.com/t/font_384296_bdfgyhmw18g.woff2?t=1625890741108') format('woff2'),
+       url('//at.alicdn.com/t/font_384296_bdfgyhmw18g.woff?t=1625890741108') format('woff'),
+       url('//at.alicdn.com/t/font_384296_bdfgyhmw18g.ttf?t=1625890741108') format('truetype');
+  font-display: swap;
 }
+
 .iconfont {
   font-family:"iconfont" !important;
   font-size:16px;
@@ -34,9 +45,12 @@ body{
   font-family: SlatePro, "Open Sans", Arial,"Helvetica Neue", Helvetica, sans-serif;
 }
 
+
 a{
   font-size: 14px;
 }
+
+
 
 .x-color-theme{
 
