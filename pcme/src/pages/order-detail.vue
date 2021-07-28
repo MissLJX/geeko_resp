@@ -513,7 +513,10 @@
             // }
         },
         created(){
-            this.$store.dispatch('getOrder',this.$route.params.orderId).then(()=>{
+            this.$store.dispatch('getOrder',this.$route.params.orderId).then((order)=>{
+                if(!order){
+                    window.location.href='/me/m/order';
+                }
                 this.order = this.orderdetail
                 this.orderpro = _.cloneDeep(this.orderdetail.logistics.packages[0])
                 this.shipping = this.orderdetail.shippingDetail

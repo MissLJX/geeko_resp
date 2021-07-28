@@ -738,9 +738,12 @@ const actions = {
       commit(types.HOME_ORDER_ID,id)
     },
     getOrder({commit},id){
-        return api.getOrder({orderId:id}).then((order) => {
-            commit(types.ME_ORDER_DETAIL, order)
-        })
+        return new Promise((reslove,reject) => {
+            api.getOrder({orderId:id}).then((order) => {
+                commit(types.ME_ORDER_DETAIL, order)
+                reslove(order);
+            })
+        });
     },
     getOrderByCode({commit},id){
         return api.getOrderByCode({code:id}).then((order) => {
