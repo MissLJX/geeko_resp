@@ -48,6 +48,9 @@
         },
         methods: {
             listingHandle(){
+                if(this.isReceived != "0"){
+                    return;
+                }
                 this.loading = true;
                 store.dispatch('me/getCredits',{skip: this.creditskip}).then(({empty, finished}) => {
                     if(empty) this.empty = empty;
@@ -98,6 +101,7 @@
                 next(vm => {
                     if(empty) vm.empty = empty
                     if(finished) vm.finished = finished
+                    store.dispatch('me/getCreditskip');
                 })
                 next()
             }).catch((e) => {

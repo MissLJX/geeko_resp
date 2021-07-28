@@ -146,7 +146,9 @@ const Me = [
     },
     {
         path:ROUTER_PATH_ME + "/makeSug",
-        
+        component:() => import("../pages/make-sug.vue"),
+        name:"make-sug",
+        meta:{title:"Make Sug"}
     }
 ]
 

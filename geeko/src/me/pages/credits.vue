@@ -11,7 +11,7 @@
 
         <div class="_container">
             <credit-header :me="me"></credit-header>
-            <received-used @showUsed="changeMethod"></received-used>
+            <received-used></received-used>
             <points-list></points-list>
         </div>
     </div>
