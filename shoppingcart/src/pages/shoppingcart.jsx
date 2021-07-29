@@ -812,10 +812,8 @@ const ShoppingCart = class extends React.Component {
 					this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
 				}
 			})
-			return
-		}
-
-		if (payType === '2' || payMethod === '17' || payType === '8') {
+		
+		}else if (payType === '2' || payMethod === '17' || payType === '8') {
 			this.props.TOGGLECREDIT(true)
 			this.setState({
 				checking: true
@@ -2606,7 +2604,7 @@ const ShoppingCart = class extends React.Component {
 																try {
 																	if (window.GeekoSensors) {
 																		window.GeekoSensors.Track('ELClick', {
-																			clicks: '凑单'
+																			clicks: '凑单旧'
 																		})
 																	}
 

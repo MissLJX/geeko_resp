@@ -550,7 +550,11 @@ const AdressForm = class extends React.Component {
 							</div>
 							<div style={{ position: 'absolute', top: 0, right: 0, fontSize: 12 }}>
 								<span style={{ fontSize: 12, color: '#999' }}><FormattedMessage id="already_has_account" /> </span>
-								<a style={{ color: '#222' }} href={`${window.ctx}/${
+								<a style={{ color: '#222' }} onClick={() => {
+									window.GeekoSensors.Track('address_edit', {
+										button_click: 'login' 
+									})
+								}} href={`${window.ctx}/${
 									/*global siteType b:true*/
 									/*eslint no-undef: "error"*/
 									siteType === 'new' ? 'page' : 'i'
