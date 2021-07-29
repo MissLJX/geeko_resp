@@ -71,15 +71,11 @@ input:-webkit-autofill{
 
 /** ================icon font==================**/
 @font-face {
-  font-family: 'iconfont';  /* project id 384296 */
-  src: url('//at.alicdn.com/t/font_384296_e9fq80llkdk.eot');
-  src: url('//at.alicdn.com/t/font_384296_e9fq80llkdk.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_384296_e9fq80llkdk.woff2') format('woff2'),
-  url('//at.alicdn.com/t/font_384296_e9fq80llkdk.woff') format('woff'),
-  url('//at.alicdn.com/t/font_384296_e9fq80llkdk.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_384296_e9fq80llkdk.svg#iconfont') format('svg');
+  font-family: 'iconfont';  /* Project id 384296 */
+  src: url('//at.alicdn.com/t/font_384296_jabu6tw1ui.woff2?t=1627466223346') format('woff2'),
+       url('//at.alicdn.com/t/font_384296_jabu6tw1ui.woff?t=1627466223346') format('woff'),
+       url('//at.alicdn.com/t/font_384296_jabu6tw1ui.ttf?t=1627466223346') format('truetype');
 }
-
 .iconfont{
   font-family:"iconfont" !important;
   font-size:16px;
@@ -91,12 +87,21 @@ input:-webkit-autofill{
 
 @font-face {
 	font-family: 'SlatePro';
-	src: url('https://d2py3dbi6pvb43.cloudfront.net/fonts/SlatePro.ttf');
+	src: url('https://s3.geeko.ltd/fonts/Roboto-Regular.ttf');
+	font-display: swap;
 }
 
 @font-face {
 	font-family: 'SlatePro-Medium';
-	src: url('https://d2py3dbi6pvb43.cloudfront.net/fonts/SlatePro-Medium.ttf');
+	src: url('https://s3.geeko.ltd/fonts/Roboto-Medium.ttf');
+	font-display: swap;
+}
+
+
+@font-face {
+	font-family: 'AcuminPro-Bold';
+	src: url('https://s3.geeko.ltd/fonts/Roboto-Bold.ttf');
+	font-display: swap;
 }
 
 /**=============================================**/

@@ -1,44 +1,42 @@
 <template>
-    <!-- <div class="tbl">
-        <div class="totalPoints tcl">
-            <p><span class="f-red f-28">{{me.points}}</span><span class="f-12">=${{pointsMoney}}</span></p>
-            <p class="f-15">Total Credits</p>
-        </div>
-        <div class="tcl bg-line">
-            <div class="line"></div>
-        </div>
-        <div class="expiringPoints tcl">
-            <p class="f-red f-20">{{me.overduePoints}}</p>
-            <p class="f-12 m-t" @click="isShow">Credits expiring soon<i class="iconfont">&#xe732;</i></p>
-            <div class="msg-tips" v-if="seen">{{message.message}}.</div>
-        </div>
-    </div> -->
-
     <div class="credits-header">
-        <div class="st-table credits-hd">
+        <!-- <div class="st-table credits-hd">
             <div class="st-cell st-v-m">
                 <div class="circle">
                     <span class="iconfont __icon">&#xe76e;</span>
                 </div>
             </div>
             <div class="st-cell el-credits-discount st-v-m">
-                <span>{{me.points}}</span>
-                <!-- <span>=${{pointsMoney}}</span> -->
+                <span></span>
+                <span>=${{pointsMoney}}</span>
             </div>
 
             <div class="st-cell el-credits-right st-v-m">
                 <span>=${{pointsMoney}}</span>
             </div>
-        </div>
+        </div> -->
 
-        <div class="expiring-points">
-            <span class="overduepoints">{{me.overduePoints}} </span>
-            <span class="exping-soon">points expiring soon </span>
-             <div class="__question" @click="seen = !seen;">
-                 <span>?</span>
-             </div>
+        <!-- <div class="expiring-points">
+            <span class="overduepoints"></span>
+            
+        </div> -->
 
-             <div class="msg-tips" v-if="seen">{{message.message}}.</div>
+        <div class="credits-header-container">
+            <div class="item1">
+                <span>{{me.points}}</span>
+                <p>={{pointsMoney}} US Dollars</p>
+            </div>
+            <div class="item2">
+                <p class="over-points">{{me.overduePoints}}</p>
+                <span class="exping-soon">points expiring soon </span>
+                <span class="__question" @click="seen = !seen;">
+                    <span>?</span>
+                </span>
+
+                <p class="points-history">Points History ></p>
+
+                <div class="msg-tips" v-if="seen">{{message.message}}.</div>
+            </div>
         </div>
     </div>
 </template>
@@ -89,7 +87,97 @@
     }
 
     .credits-header{
-        padding: 0px 20px;
+        background-image: linear-gradient(44deg, 
+            #f0d192 0%, 
+            #f9e5be 100%);
+        border-radius: 4px;
+
+        .credits-header-container{
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+            // align-items: center;
+
+            & > div{
+                width: 50%;
+                text-align: center;
+                padding: 10px 0px;
+            }
+
+            .item1{
+                border-right: 1px dashed #eac89c;
+
+                & span{
+                    font-size: 36px;
+                    font-family: 'AcuminPro-Bold';
+                    color: #9d6929;
+                }
+
+                & p{
+                    font-size: 12px;
+                    color: #be8f55;
+                }
+            }
+
+            .item2{
+                .over-points{
+                    font-size: 36px;
+                    font-family: 'AcuminPro-Bold';
+                    color: #9d6929;
+                }
+
+                .exping-soon{
+                    font-size: 12px;
+	                color: #be8f55;
+                    vertical-align: middle;
+                    margin-right: 3px;
+                }
+
+                .__question{
+                    display: inline-block;
+                    width: 14px;
+                    height: 14px;
+                    line-height: 11px;
+                    text-align: center;
+                    color: #cacaca;
+                    border-radius: 50%;
+                    border: 1px solid #cacaca;
+                    vertical-align: middle;
+                    cursor: pointer;
+
+                    & > span{
+                        font-size: 13px;
+                    }
+                }
+
+                .msg-tips{
+                    width: 200px;
+                    height: 60px;
+                    padding: 10px;
+                    position: absolute;
+                    background-color: white;
+                    color: #666;
+                    border: 1px solid #efefef;
+                    font-size: 12px;
+                    right: 0px;
+                    top: 35px;
+                    text-align: left;
+                }
+
+                .points-history{
+                    font-family: 'SlatePro-Medium';
+                    font-size: 12px;
+                    color: #9d6929;
+                    text-align: right;
+                    margin-top: 10px;
+                }
+            }
+        }
+
+
+
+
+
         .credits-hd{
             .circle{
                 display: inline-block;

@@ -1,41 +1,47 @@
 <template>
-    <div class="content">
-        <!-- <div class="received" @click="changeMethod(true)" v-bind:class="{ active: isActive }">Received</div>
-        <div class="used" @click="changeMethod(false)" v-bind:class="{ active: !isActive }">Used</div> -->
-        
-        <div class="earnings">
-            <div class="__cart">
-                <div>
-                    <span class="iconfont">&#xe6b2;</span>
-                </div>
-                <div>$100=+100</div>
-                <div>Make purchase</div>
-            </div>
-            <div class="__review">
-                <div>
-                    <span class="iconfont">&#xe76b;</span>
-                </div>
-                <div>+100</div>
-                <div>Leave a review</div>
-            </div>
-            <div class="__suggestion">
-                <div>
-                    <span class="iconfont">&#xe736;</span>
-                </div>
-                <div>+200</div>
-                <div>Make suggestion</div>
-            </div>
+    <div class="received-used">
+        <div class="_hd">
+            How to get points?
         </div>
 
-        <div class="impose">
-            <select v-model="selectValue" @change="$emit('showUsed',selectValue)">
-                <option value="0">All</option>
-                <option value="1">Received</option>
-                <option value="2">Used</option>
-            </select>
+        <div class="_bd">
+            <div class="review">
+                <div>
+                    <span class="iconfont">&#xe6d1;</span>
+                </div>
+                <div class="_font">
+                    <p>Review</p>
+                    <p>0~2000 points</p>
+                </div>
+            </div>
+            <div class="survey">
+                <div>
+                    <span class="iconfont">&#xe6cf;</span>
+                </div>
+                <div class="_font">
+                    <p>Survey</p>
+                    <p>0~300 points</p>
+                </div>
+            </div>
+            <div class="suggestion">
+                <div>
+                    <span class="iconfont">&#xe6d0;</span>
+                </div>
+                <div class="_font">
+                    <p>Suggestion</p>
+                    <p>0~200 points</p>
+                </div>
+            </div>
+            <div class="download">
+                <div>
+                    <span class="iconfont">&#xe6d2;</span>
+                </div>
+                <div class="_font">
+                    <p>Download App</p>
+                    <p>Get More points</p>
+                </div>
+            </div>
         </div>
-        
-        
     </div>
 </template>
 
@@ -50,66 +56,78 @@
 </script>
 
 <style scoped lang="scss">
-    .content{
-        .impose{
-            padding-left: 20px;
-            margin-top: 20px;
-            select{
-                width: 120px;
-                height: 32px;
-                border: solid 1px #e6e6e6;
-                background-color: #ffffff;
-                padding-left: 10px;
-            }
+    .received-used{
+        margin-bottom: 15px;
+        ._hd{
+            font-size: 14px;
+            color: #222222;
+            font-family: 'AcuminPro-Bold';
+            padding: 25px 0px 10px 0px;
         }
-        
 
-        .earnings{
+        ._bd{
             display: flex;
-            padding: 27px 20px 25px 20px;
-            background-color: #fffbf1;
+            flex-wrap: wrap;
+            justify-content: space-between;
+
             & > div{
-                flex: 1;
-                text-align: center;
+                width: calc(50% - 5px);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 72px;
+                margin-bottom: 10px;
 
-                & > div:first-child{
-                    width: 54px;
-                    height: 54px;
-                    line-height: 52px;
-                    border: solid 2px #f7c143;
-                    border-radius: 50%;
-                    margin:0 auto;
+                & .iconfont{
+                    font-size: 30px;
+                    color: #ffffff;
+                    margin-right: 10px;
+                }
 
-                    & > span.iconfont{
-                        font-size: 30px;
-                        color: #f7c143;
+                & ._font{
+                    & > p:first-child{
+                        font-size: 14px;
+                        color: #ffffff;
+                        font-family: 'AcuminPro-Bold';
+                    }
+
+                    & > p:last-child{
+                        font-size: 12px;
+	                    color: #ffffff;
                     }
                 }
+            }
 
-                & > div:nth-child(2){
-                    font-size: 12px;
-                    line-height: 22px;
-                    color: #222222;
-                    font-family: SlatePro-Medium;
+            .review{
+                background-image: linear-gradient(124deg, 
+                    #ff8976 0%, 
+                    #ffcca8 100%);
+                border-radius: 4px;
+            }
+
+            .survey{
+                background-image: linear-gradient(124deg, 
+                    #b886b4 0%, 
+                    #dab1db 100%);
+                border-radius: 4px;
+            }
+
+            .suggestion{
+                background-image: linear-gradient(124deg, 
+                #77efbf 0%, 
+                #7dede2 100%);
+                border-radius: 4px;
+            }
+
+            .download{
+                background-image: linear-gradient(124deg, 
+                    #a7a7a7 0%, 
+                    #d9d9d9 100%);
+                border-radius: 4px;
+
+                & .iconfont{
+                    font-size: 27px;
                 }
-
-                & > div:last-child{
-                    font-family: SlatePro-Medium;
-                    font-size: 14px;
-                    color: #deaa4f;
-                }
-            }
-
-            .__cart{
-                
-            }
-
-            .__review{
-
-            }
-
-            .__suggestion{
-
             }
         }
     }

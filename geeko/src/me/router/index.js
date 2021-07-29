@@ -137,6 +137,18 @@ const Me = [
         component: () => import('../pages/track-order.vue'),
         name:"track-order",
         meta:{title:'Track Order'}
+    },
+    {
+        path:ROUTER_PATH_ME + "/points-history",
+        component:() => import('../pages/points-history.vue'),
+        name:"points-history",
+        meta:{title:"Points History"}
+    },
+    {
+        path:ROUTER_PATH_ME + "/makeSug",
+        component:() => import("../pages/make-sug.vue"),
+        name:"make-sug",
+        meta:{title:"Make Sug"}
     }
 ]
 
