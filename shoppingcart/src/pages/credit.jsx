@@ -202,13 +202,13 @@ export default connect(state => {
 
 			<div className="__bd" style={{ paddingTop: window.isApp ? 0 : 44 }}>
 
-				{/* {
+				{
 					search.payMethod === '87' && <CreditCardC onPurchase={() => {setLeaved(true)}} onGo={p => { setP(p); }} orderId={props.match.params.orderId} />
-				} */}
+				}
 
 
 				{
-					 <CreditCard onPurchase={() => {setLeaved(true)}} onGo={p => { setP(p); }} orderId={props.match.params.orderId} />
+					 search.payMethod === '18' && <CreditCard onPurchase={() => {setLeaved(true)}} onGo={p => { setP(p); }} orderId={props.match.params.orderId} />
 				}
 			</div>
 		</ShoppingBody>

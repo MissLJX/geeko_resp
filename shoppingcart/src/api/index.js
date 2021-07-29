@@ -241,6 +241,7 @@ export const addProduct = params => axios.post(`${VPATH}/shopping-cart/add-produ
 
 // checkout credit card
 export const openCheckOutOrder = orderId => axios.post(`${VPATH}/checkout/open-order`, {orderId})
+export const payForCheckout = data => axios.post(`${VPATH}/checkout/payment`, data)
 
 export const getFilters = () => axios.get(`${VPATH}/filter/anon/APP0010/get-by-menu-id`, {})
 export const getSorters = () => axios.get(`/context/anon/get-sorters`, {})

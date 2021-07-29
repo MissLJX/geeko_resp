@@ -114,6 +114,9 @@ const AddressBook = class extends React.Component {
     addressEditHandle(address){
         this.props.SETADDRESS(address)
         this.props.history.push(`${window.ctx || ''}${__route_root__}/book/address`)
+        window.GeekoSensors.Track('address_edit', {
+            button_click: 'edit' 
+        })
     }
 
     selectAddressHandle(address){
@@ -122,6 +125,13 @@ const AddressBook = class extends React.Component {
             this.props.REFRESH()
             this.props.FETCHADDRESSES()
         })
+
+
+        if(window.GeekoSensors){
+            window.GeekoSensors.Track('address_edit', {
+               edit_type: 'Select Address' 
+            })
+        }
     }
 
     render() {
@@ -152,6 +162,11 @@ const AddressBook = class extends React.Component {
                         () => {
                             this.props.SETADDRESS(null)
                             this.props.history.push(`${window.ctx || ''}${__route_root__}/book/address`)
+                            if(window.GeekoSensors){
+                                window.GeekoSensors.Track('address_edit', {
+                                   button_click: 'Add' 
+                                })
+                            }
                         }
                     }>
                         + {intl.formatMessage({ id: 'add_new_address' })}
