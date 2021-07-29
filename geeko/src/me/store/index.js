@@ -648,6 +648,14 @@ const actions = {
     },
     getTrackOrderSkip({commit}){
         commit(types.ME_TRACK_ORDER_SKIP);
+    },
+    generalUploadImage({commit},{formData}){
+        return new Promise((reslove,reject) => {
+            console.log("formData",formData);
+            api.generalUploadImage(formData).then((result) => {
+                reslove(result);
+            });
+        });
     }
 }
 

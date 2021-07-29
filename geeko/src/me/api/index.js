@@ -172,6 +172,10 @@ export const getTrackOrderMessage = (skip) => {
     return axios.get(VPATH + '/tracking/get-packages',{skip,limit:"20"}).then((data) => data.result)
 }
 
+export const generalUploadImage = (imageFile) =>{
+    return axios.post('/context/upload',imageFile,{'Content-Type': http_infos.default_post_content_type});
+}
+
 
 
 
