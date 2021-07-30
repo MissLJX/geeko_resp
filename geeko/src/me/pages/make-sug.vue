@@ -425,7 +425,7 @@
                             white-space: nowrap;
                             text-transform: capitalize;
                             font-family: 'SlatePro-Medium';
-                    }
+                    } 
 
                     .reg-birthday-flex {
                         display: flex;
