@@ -33,7 +33,9 @@
                     <span>?</span>
                 </span>
 
-                <p class="points-history">Points History ></p>
+                <router-link :to="{name:'points-history'}">
+                    <p class="points-history">Points History ></p>
+                </router-link>
 
                 <div class="msg-tips" v-if="seen">{{message.message}}.</div>
             </div>
@@ -102,6 +104,7 @@
                 width: 50%;
                 text-align: center;
                 padding: 10px 0px;
+                position: relative;
             }
 
             .item1{
@@ -160,7 +163,7 @@
                     border: 1px solid #efefef;
                     font-size: 12px;
                     right: 0px;
-                    top: 35px;
+                    top: 70px;
                     text-align: left;
                 }
 

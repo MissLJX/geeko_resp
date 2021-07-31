@@ -5,42 +5,53 @@
         </div>
 
         <div class="_bd">
-            <div class="review">
-                <div>
-                    <span class="iconfont">&#xe6d1;</span>
+            <a href="/me/m/order/confirmed">
+                <div class="review">
+                    <div>
+                        <span class="iconfont">&#xe6d1;</span>
+                    </div>
+                    <div class="_font">
+                        <p>Review</p>
+                        <p>0~2000 points</p>
+                    </div>
                 </div>
-                <div class="_font">
-                    <p>Review</p>
-                    <p>0~2000 points</p>
+            </a>
+            
+            <router-link :to="{name:'survey'}">
+                <div class="survey">
+                    <div>
+                        <span class="iconfont">&#xe6cf;</span>
+                    </div>
+                    <div class="_font">
+                        <p>Survey</p>
+                        <p>0~300 points</p>
+                    </div>
                 </div>
-            </div>
-            <div class="survey">
-                <div>
-                    <span class="iconfont">&#xe6cf;</span>
+            </router-link>
+            
+            <router-link :to="{name:'make-sug'}">
+                <div class="suggestion">
+                    <div>
+                        <span class="iconfont">&#xe6d0;</span>
+                    </div>
+                    <div class="_font">
+                        <p>Suggestion</p>
+                        <p>0~200 points</p>
+                    </div>
                 </div>
-                <div class="_font">
-                    <p>Survey</p>
-                    <p>0~300 points</p>
+            </router-link>
+            
+            <a href="/i/download">
+                <div class="download">
+                    <div>
+                        <span class="iconfont">&#xe6d2;</span>
+                    </div>
+                    <div class="_font">
+                        <p>Download App</p>
+                        <p>Get More points</p>
+                    </div>
                 </div>
-            </div>
-            <div class="suggestion">
-                <div>
-                    <span class="iconfont">&#xe6d0;</span>
-                </div>
-                <div class="_font">
-                    <p>Suggestion</p>
-                    <p>0~200 points</p>
-                </div>
-            </div>
-            <div class="download">
-                <div>
-                    <span class="iconfont">&#xe6d2;</span>
-                </div>
-                <div class="_font">
-                    <p>Download App</p>
-                    <p>Get More points</p>
-                </div>
-            </div>
+            </a>
         </div>
     </div>
 </template>
@@ -70,13 +81,20 @@
             flex-wrap: wrap;
             justify-content: space-between;
 
-            & > div{
+            & > a{
                 width: calc(50% - 5px);
-                display: flex;
-                align-items: center;
-                justify-content: center;
                 height: 72px;
                 margin-bottom: 10px;
+                display: inline-block;
+                cursor: pointer;
+
+                & > div{
+                    height: 100%;
+                    width: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
 
                 & .iconfont{
                     font-size: 30px;

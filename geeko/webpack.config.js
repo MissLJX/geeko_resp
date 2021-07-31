@@ -96,22 +96,25 @@ module.exports = {
 
   },
   devServer: {
-    historyApiFallback: true,
-    hot: true,
-    inline: true,
-    progress: true,
-    contentBase: './dist',
-    proxy: {
-      '/api': {
-        /*target: 'http://localhost:8080/boutiquefeel',*/
-        // target: 'http://192.168.1.128:8080/wanna',
-        target:'http://localhost:8080/wanna',
-        // target: 'https://www.chicme.xyz',
-        pathRewrite: { '^/api': '' },
-        secure: false
-      }
-    },
-  },
+		historyApiFallback: true,
+		hot: true,
+		inline: true,
+		progress: true,
+		proxy: {
+			'/api': {
+				// target: 'https://www.chicme.xyz',
+				target: 'http://localhost:8080/wanna',
+				pathRewrite: { '^/api': '' },
+				cookieDomainRewrite: 'localhost',
+				cookiePathRewrite: {
+					'/wanna': '/',
+				},
+				secure: true,
+				changeOrigin: true
+			}
+		},
+		host: '0.0.0.0'
+	},
   devtool: '#eval-source-map'
 
 };

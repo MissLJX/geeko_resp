@@ -149,6 +149,11 @@ const Me = [
         component:() => import("../pages/make-sug.vue"),
         name:"make-sug",
         meta:{title:"Make Sug"}
+    },{
+        path:ROUTER_PATH_ME + "/survey",
+        component:() => import("../pages/survey.vue"),
+        name:"survey",
+        meta:{title:"Survey"}
     }
 ]
 
