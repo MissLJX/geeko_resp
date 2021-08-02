@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { openCheckOutOrder, usecreditcard, payForCheckout, checkout_credit } from '../../api'
+import { openStripeOrder, usecreditcard } from '../../api'
 import {
     getCreditCards
 } from '../../store/actions.js'
@@ -16,80 +16,31 @@ import { FormattedMessage } from 'react-intl'
 import { withRouter } from 'react-router-dom'
 import Loading from './refreshing.jsx'
 
-const INPUTCONTAINER = styled.div`
-    display: flex;
-    position: relative;
-    display: flex;
-    height: 40px;
 
-    .icon-container:last-child {
-        right: 0;
-    }
-    .icon-container.payment-method {
-        right: 0;
-    }
+import { loadStripe } from "@stripe/stripe-js"
+import {
+    CardNumberElement,
+    CardCvcElement,
+    CardExpiryElement,
+    Elements,
+    ElementsConsumer,
+} from '@stripe/react-stripe-js'
 
-    &.card-number {
-    }
-    &.expiry-date {
-        margin-right: 8px;
-    }
 
-    .card-number-frame,
-    .expiry-date-frame,
-    .cvv-frame {
-        flex: 1 1 auto;
-        padding-left: 40px;
-    }
-    
-    .icon-container {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        display: flex;
-        justify-content: center;
-        width: 26px;
-        margin: 0 7px;
-    }
-    
-    .icon-container.payment-method {
-        transform: translateY(-50%) rotateY(90deg);
-        transition: opacity 0.15s ease-out;
-        opacity: 0;
-        top: 50%;
-    }
-    
-    .icon-container.payment-method.show {
-        opacity: 1;
-        transition: all 0.4s ease-out;
-        transform: translateY(-50%) rotateY(0deg);
-    }
-    
-    .icon-container.payment-method img {
-        width: 100%;
-    }
-
-    [id$="-error"] {
-        display: none;
-    }
-
-    .frame {
-        opacity: 0;
-    }
-
-    .frame--activated {
-        opacity: 1;
-    }
-    
-    .frame--activated.frame--focus {
-      
-    }
-    
-    .frame--activated.frame--invalid {
-       
-    }
-
-`
+const ELEMENT_OPTIONS = {
+    style: {
+        base: {
+            fontSize: '12px',
+            color: '#424770',
+            '::placeholder': {
+                color: '#aab7c4',
+            },
+        },
+        invalid: {
+            color: '#9e2146',
+        },
+    },
+}
 
 
 const BOX = styled.div`
@@ -150,11 +101,6 @@ const FORMBODY = styled.div`
             }
         }
     }
-
-    iframe {
-        /* This fixes a mobile Safari bug */
-        height: 38px !important;
-    }
 `
 
 const FIELD = styled.div`
@@ -163,6 +109,7 @@ const FIELD = styled.div`
     label{
         font-size: 12px;
         color: #666;
+        margin-bottom: 11px;
         display: block;
         text-transform: uppercase;
         position: relative;
@@ -216,6 +163,7 @@ const SUBMITBTN = styled.button`
 	font-size: 16px;
     text-transform: uppercase;
 `
+
 
 const CARDTYPE = styled.div`
     width: 60px;
@@ -307,33 +255,10 @@ const AskC = props => {
     </ASKC>
 }
 
-
-const logos = {
-    "card-number": {
-        src: "card",
-        alt: "card number logo",
-    },
-    "expiry-date": {
-        src: "exp-date",
-        alt: "expiry date logo",
-    },
-    "cvv": {
-        src: "cvv",
-        alt: "cvv logo",
-    }
-}
-
-const errors = {
-    "card-number": "Please enter a valid card number",
-    "expiry-date": "Please enter a valid expiry date",
-    "cvv": "Please enter a valid cvv code"
-}
-
 const Credit = class extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            order: null,
             saveForNext: true,
             showNew: false,
             selectedCardId: null,
@@ -343,8 +268,7 @@ const Credit = class extends React.Component {
             billingAddress: null,
             cardError: {},
             showAsk: false,
-            safechargeresponse: 1,
-            valid: false
+            safechargeresponse: 1
         }
     }
 
@@ -357,6 +281,7 @@ const Credit = class extends React.Component {
 
     componentDidUpdate(prevProps, prevState) {
         if (prevState.safechargeresponse != this.state.safechargeresponse) {
+            console.log(this.state.safechargeresponse)
             this.initPage()
         }
     }
@@ -368,15 +293,14 @@ const Credit = class extends React.Component {
 
     initPage() {
         const { orderId } = this.props
-        this.props.GETCREDITCARDS().then(cards => {
+        this.props.GETCREDITCARDS('18').then(cards => {
             if (!cards || cards.length < 1) {
                 this.setState({
                     showNew: true
                 })
             }
         })
-
-        openCheckOutOrder(orderId).then(data => data.result).then(result => {
+        openStripeOrder(orderId).then(data => data.result).then(result => {
 
             const order = result.order
             let billingAddress
@@ -387,202 +311,111 @@ const Credit = class extends React.Component {
 
             this.setState({
                 order: order,
-                billingAddress: billingAddress
+                billingAddress: billingAddress,
+                openResult: result
             })
         })
+
     }
-
-    initCreditForm() {
-        Frames.init(window.__checkout_pk__)
-        Frames.addEventHandler(
-            Frames.Events.FRAME_VALIDATION_CHANGED,
-            this.onValidationChanged.bind(this)
-        )
-
-        Frames.addEventHandler(
-            Frames.Events.PAYMENT_METHOD_CHANGED,
-            this.paymentMethodChanged.bind(this)
-        )
-
-        Frames.addEventHandler(
-            Frames.Events.CARD_VALIDATION_CHANGED,
-            this.cardValidationChanged.bind(this)
-        )
-
-        Frames.addEventHandler(Frames.Events.CARD_TOKENIZED, this.onCardTokenized.bind(this))
-    }
-
-    cardValidationChanged() {
-        this.setState({
-            valid: Frames.isCardValid()
-        })
-    }
-
-    onCardTokenized(event) {
-        payForCheckout({orderId: this.state.order.id, token: event.token}).then(data => {
-            console.log(data)
-        }).catch(data => {
-            console.log(data)
-        })
-    }
-
-
-    paymentMethodChanged(event) {
-        var pm = event.paymentMethod
-        let container = document.querySelector(".icon-container.payment-method")
-        if (!pm) {
-            this.clearPaymentMethodIcon(container)
-        } else {
-            this.clearErrorIcon("card-number")
-            this.showPaymentMethodIcon(container, pm)
-        }
-    }
-
-    onValidationChanged(event) {
-        const e = event.element
-        if (event.isValid || event.isEmpty) {
-            if (e === "card-number" && !event.isEmpty) {
-                this.showPaymentMethodIcon()
-            }
-            this.setDefaultIcon(e)
-            this.clearErrorIcon(e)
-            this.clearErrorMessage(e)
-
-        } else {
-            if (e === "card-number") {
-                this.clearPaymentMethodIcon()
-            }
-            this.setDefaultErrorIcon(e)
-            this.setErrorIcon(e)
-            this.setErrorMessage(e)
-        }
-    }
-
-    setErrorMessage(el) {
-        const msg = errors[el]
-        switch (el) {
-            case 'card-number':
-                this.setState({
-                    cardError: {
-                        ...this.state.cardError,
-                        card: msg
-                    }
-                })
-                break
-            case 'expiry-date':
-                this.setState({
-                    cardError: {
-                        ...this.state.cardError,
-                        date: msg
-                    }
-                })
-                break
-            case 'cvv':
-                this.setState({
-                    cardError: {
-                        ...this.state.cardError,
-                        cvv: msg
-                    }
-                })
-                break
-            default:
-                break
-        }
-    }
-
-    clearErrorMessage(el) {
-        switch (el) {
-            case 'card-number':
-                this.setState({
-                    cardError: {
-                        ...this.state.cardError,
-                        card: ''
-                    }
-                })
-                break
-            case 'expiry-date':
-                this.setState({
-                    cardError: {
-                        ...this.state.cardError,
-                        date: ''
-                    }
-                })
-                break
-            case 'cvv':
-                this.setState({
-                    cardError: {
-                        ...this.state.cardError,
-                        cvv: ''
-                    }
-                })
-                break
-            default:
-                break
-        }
-    }
-
-    showPaymentMethodIcon(parent, pm) {
-        if (parent) parent.classList.add("show")
-        const logo = document.getElementById("logo-payment-method")
-        if (pm) {
-            const name = pm.toLowerCase()
-            logo.setAttribute("src", "https://image.geeko.ltd/card-icons/" + name + ".svg")
-            logo.setAttribute("alt", pm || "payment method");
-        }
-        logo.style.removeProperty("display")
-    }
-
-    setDefaultIcon(el) {
-        const selector = "icon-" + el;
-        const logo = document.getElementById(selector)
-        logo.setAttribute("src", "https://image.geeko.ltd/card-icons/" + logos[el].src + ".svg")
-        logo.setAttribute("alt", logos[el].alt)
-    }
-
-    setErrorIcon(el) {
-        const logo = document.getElementById("icon-" + el + "-error")
-        logo.style.setProperty("display", "block")
-    }
-
-    setDefaultErrorIcon(el) {
-        const selector = "icon-" + el
-        const logo = document.getElementById(selector)
-        logo.setAttribute("src", "https://image.geeko.ltd/card-icons/" + logos[el].src + "-error.svg")
-        logo.setAttribute("alt", logos[el].alt)
-    }
-
-    clearErrorIcon(el) {
-        const logo = document.getElementById("icon-" + el + "-error")
-        logo.style.removeProperty("display")
-    }
-
-
-    clearPaymentMethodIcon(parent) {
-        if (parent) parent.classList.remove("show")
-        const logo = document.getElementById("logo-payment-method")
-        logo.style.setProperty("display", "none")
-    }
-
 
     submitHandle(e) {
         e.preventDefault()
         const self = this
         const { orderId, onPurchase } = this.props
 
-        if (self.state.showNew) {
-            if(this.state.valid){
-                Frames.submitCard()
-                self.setState({
-                    checking: true,
-                })
-                onPurchase()
-            }
-        }else{
-            checkout_credit({orderId}).then(data => {
-                console.log(data)
-            })
+        if (!this.state.openResult || !this.state.openResult.openOrderResponse || !this.state.openResult.openOrderResponse.clientSecret) {
+            return
         }
+
+
+        self.setState({
+            checking: true,
+        })
+        onPurchase()
+
+        // this.createPaymentMethod()
+        this.confirmPayment()
     }
+
+
+    createPaymentMethod(){
+        const { stripe, elements } = this.props
+        if (!stripe || !elements) {
+            // Stripe.js has not loaded yet. Make sure to disable
+            // form submission until Stripe.js has loaded.
+            return
+        }
+
+        const card = elements.getElement(CardNumberElement)
+
+        if (card == null) {
+            return
+        }
+
+        stripe.createPaymentMethod({
+            type: 'card',
+            card,
+            billing_details: {
+                name: this.state.billingAddress.name,
+                email: this.state.openResult.email,
+                phone: this.state.billingAddress.phoneNumber,
+                address: {
+                    city: this.state.billingAddress.city,
+                    country: this.state.billingAddress.country ? this.state.billingAddress.country.value : null,
+                    line1: this.state.billingAddress.streetAddress1,
+                    line2: this.state.billingAddress.unit,
+                    postal_code: this.state.billingAddress.zipCode,
+                    state: this.state.billingAddress.state ? this.state.billingAddress.state.value : null
+                },
+            },
+        }).then(payload => {
+            if (payload.error) {
+                console.log('[error]', payload.error)
+                this.setState({
+                    errorMessage: payload.error.message,
+                    paymentMethod: null,
+                })
+            } else {
+                console.log('[PaymentMethod]', payload.paymentMethod)
+                this.setState({
+                    paymentMethod: payload.paymentMethod,
+                    errorMessage: null,
+                })
+            }
+        })
+    }
+
+
+    confirmPayment() {
+        const { stripe, elements } = this.props
+        stripe.confirmCardPayment(this.state.openResult.openOrderResponse.clientSecret, {
+            payment_method: {
+                type: 'card',
+                card: elements.getElement(CardNumberElement),
+                billing_details: {
+                    name: this.state.billingAddress.name,
+                    email: this.state.openResult.email,
+                    phone: this.state.billingAddress.phoneNumber,
+                    address: {
+                        city: this.state.billingAddress.city,
+                        country: this.state.billingAddress.country ? this.state.billingAddress.country.value : null,
+                        line1: this.state.billingAddress.streetAddress1,
+                        line2: this.state.billingAddress.unit,
+                        postal_code: this.state.billingAddress.zipCode,
+                        state: this.state.billingAddress.state ? this.state.billingAddress.state.value : null
+                    },
+                },
+            }
+        }).then(payload => {
+            if (payload.error) {
+                console.log(payload)
+            } else {
+                console.log(payload)
+            }
+        })
+    }
+
+
 
 
     addHandler() {
@@ -594,7 +427,7 @@ const Credit = class extends React.Component {
     cardSelect(card) {
         this.setState({ loading: true })
         usecreditcard(card.quickpayRecord.id).then(() => {
-            this.props.GETCREDITCARDS().then(() => {
+            this.props.GETCREDITCARDS('18').then(() => {
                 this.setState({
                     showNew: false,
                     loading: false
@@ -607,32 +440,10 @@ const Credit = class extends React.Component {
         })
     }
 
-    formRef(c, type) {
-        switch (type) {
-            case 'card':
-                this.cardRef = c
-                break
-            case 'date':
-                this.dateRef = c
-                break
-            case 'cvv':
-                this.cvvRef = c
-                break
-            default:
-                break
-        }
-
-        if (this.cardRef && this.dateRef && this.cvvRef && !this.formLoaded) {
-            this.formLoaded = true
-            this.initCreditForm()
-        }
-    }
-
-
-
     render() {
         const { creditcards: cards } = this.props
         const { billingAddress, order } = this.state
+
 
         return <div>
             {this.state.loading && <Loading />}
@@ -643,7 +454,8 @@ const Credit = class extends React.Component {
                     </div>
 
 
-                    <form id="payment-form" method="POST" action="/charge-card">
+                    <form action="/charge" method="post" id="payment-form">
+
 
                         {
                             cards && cards.length > 0 && <div style={{ backgroundColor: '#fff', paddingTop: 16, borderTop: 'solid 1px #e6e6e6' }}>
@@ -669,8 +481,6 @@ const Credit = class extends React.Component {
 
                         <FORMBODY style={{ display: this.state.showNew ? 'block' : 'none' }}>
 
-
-
                             <div className="row">
                                 <div>
                                     {
@@ -682,22 +492,11 @@ const Credit = class extends React.Component {
                                         <label htmlFor="card-number" data-tid="scwsdk.form.card_number_label">
                                             *<FormattedMessage id="card_number" />
                                         </label>
-                                        <INPUTCONTAINER className="card-number">
-                                            <div className="icon-container">
-                                                <img
-                                                    id="icon-card-number"
-                                                    src="https://image.geeko.ltd/card-icons/card.svg"
-                                                    alt="PAN"
-                                                />
-                                            </div>
-                                            <div className="card-number-frame" ref={c => this.formRef(c, 'card')}></div>
-                                            <div className="icon-container payment-method">
-                                                <img id="logo-payment-method" />
-                                            </div>
-                                            <div className="icon-container" style={{ width: 16 }}>
-                                                <img id="icon-card-number-error" src="https://image.geeko.ltd/card-icons/error.svg" />
-                                            </div>
-                                        </INPUTCONTAINER>
+                                        <CardNumberElement
+                                            id="cardNumber"
+                                            options={ELEMENT_OPTIONS}
+                                        />
+
                                         <div className="underline">
                                             {
                                                 this.state.cardError.card
@@ -706,52 +505,30 @@ const Credit = class extends React.Component {
                                     </FIELD>
                                 </div>
                             </div>
-
-
-
-
                             <div className="row">
                                 <FIELD className="field col6">
                                     <label htmlFor="card-expiry" data-tid="scwsdk.form.card_expiry_label">
                                         *<FormattedMessage id="expiration_date" />
                                     </label>
-                                    <INPUTCONTAINER className="input-container expiry-date">
-                                        <div className="icon-container" style={{ display: 'none' }}>
-                                            <img
-                                                id="icon-expiry-date"
-                                                src="https://image.geeko.ltd/card-icons/exp-date.svg"
-                                                alt="Expiry date"
-                                            />
-                                        </div>
-                                        <div className="expiry-date-frame" style={{ paddingLeft: 0 }} ref={c => this.formRef(c, 'date')}></div>
-                                        <div className="icon-container" style={{ width: 16, background: '#fff' }}>
-                                            <img
-                                                id="icon-expiry-date-error"
-                                                src="https://image.geeko.ltd/card-icons/error.svg"
-                                            />
-                                        </div>
-                                    </INPUTCONTAINER>
-                                    <div className="underline">
+                                    <CardExpiryElement
+                                        id="expiry"
+                                        options={ELEMENT_OPTIONS}
+                                    />
+                                    <div className="underline ">
                                         {
                                             this.state.cardError.date
                                         }
                                     </div>
-
                                 </FIELD>
                                 <FIELD className="field col6" style={{ paddingLeft: 12 }}>
                                     <label htmlFor="card-cvc" data-tid="scwsdk.form.card_cvc_label">
                                         *CVV
                                         <span className="badage" onClick={() => { this.setState({ showAsk: true }) }}>?</span>
                                     </label>
-                                    <INPUTCONTAINER className="input-container cvv">
-                                        <div className="icon-container" style={{ display: 'none' }}>
-                                            <img id="icon-cvv" src="https://image.geeko.ltd/card-icons/cvv.svg" alt="CVV" />
-                                        </div>
-                                        <div className="cvv-frame" style={{ paddingLeft: 0 }} ref={c => this.formRef(c, 'cvv')}></div>
-                                        <div className="icon-container" style={{ width: 16, background: '#fff' }}>
-                                            <img id="icon-cvv-error" src="https://image.geeko.ltd/card-icons/error.svg" />
-                                        </div>
-                                    </INPUTCONTAINER>
+                                    <CardCvcElement
+                                        id="cvc"
+                                        options={ELEMENT_OPTIONS}
+                                    />
                                     <div className="underline">
                                         {
                                             this.state.cardError.cvv
@@ -759,7 +536,6 @@ const Credit = class extends React.Component {
                                     </div>
                                 </FIELD>
                             </div>
-
                             {/* <div className="row">
                                 <TurnTool open={() => { this.setState({ saveForNext: !this.state.saveForNext }) }} turnAcitve={this.state.saveForNext}>
                                     <span style={{ fontSize: 14, color: '#666' }}>
@@ -777,7 +553,7 @@ const Credit = class extends React.Component {
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <Address address={billingAddress} />
                                     <Icon onClick={() => {
-                                        this.props.history.push(`${this.props.match.url}/billing-address`, { address: billingAddress })
+                                        this.props.history.push(`${this.props.match.url}/billing-address`, { address: billingAddress, orderId: order.id, payMethod: order.payMethod })
                                     }} style={{ fontSize: 16, color: '#666' }}>&#xe690;</Icon>
                                 </div>
                             </div>
@@ -877,14 +653,38 @@ const Credit = class extends React.Component {
 }
 
 
+
+// Make sure to call `loadStripe` outside of a component’s render to avoid
+// recreating the `Stripe` object on every render.
+const promise = loadStripe('pk_test_51JI2NUEf4gK6pnckAuiiFk2whunhssbSU7PbQ7vRergnUh1pMlbjjg0JM4W55Bacj5wZbutwQKiTXfNwzNTXbMNv00NVqfh1TZ');
+
+
+const InjectedCheckoutForm = props => (
+    <ElementsConsumer>
+        {({ stripe, elements }) => (
+            <Credit stripe={stripe} elements={elements} {...props} />
+        )}
+    </ElementsConsumer>
+)
+
+
+const InjectCredit = props => {
+    return (
+        <Elements stripe={promise}>
+            <InjectedCheckoutForm {...props} />
+        </Elements>
+    )
+}
+
+
 export default connect(state => {
     return {
         ...state
     }
 }, dispatch => {
     return {
-        GETCREDITCARDS: () => {
-            return dispatch(getCreditCards(['18', '87'], true))
+        GETCREDITCARDS: payMethod => {
+            return dispatch(getCreditCards(payMethod))
         }
     }
-})(withRouter(Credit))
+})(withRouter(InjectCredit))
