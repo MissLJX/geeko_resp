@@ -123,10 +123,13 @@
     export default {
         computed: {
             ...mapGetters('me', [
-                'me', /*'youlikes'*/, 'feed', 'headerImage', 'notificationCount', 'orderCountProcessing', 'orderCountShipped', 'orderCountReceipt', 'orderCountCanceled', 'orderCountUnpaid'
+                'pointsAllSkip','me', /*'youlikes'*/, 'feed', 'headerImage', 'notificationCount', 'orderCountProcessing', 'orderCountShipped', 'orderCountReceipt', 'orderCountCanceled', 'orderCountUnpaid'
             ]),
             fullName() {
                     return this.getName(this.me.name.firstName) + ' ' + this.getName(this.me.name.lastName);
+            },
+            testPoints(){
+                return this.$store.getters["me/pointsAllSkip"];
             },
             orderHref() {
                 let path = 'all';

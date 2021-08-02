@@ -33,7 +33,7 @@
                     <span>?</span>
                 </span>
 
-                <router-link :to="{name:'points-history'}">
+                <router-link :to="{name:'points-all'}">
                     <p class="points-history">Points History ></p>
                 </router-link>
 
