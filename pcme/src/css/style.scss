@@ -71,12 +71,10 @@ input:-webkit-autofill{
 
 /** ================icon font==================**/
 @font-face {
-  font-family: 'iconfont';  /* project id 384296 */
-  src: url('//at.alicdn.com/t/font_384296_zy0yzfqbvf4rt3xr.eot');
-  src: url('//at.alicdn.com/t/font_384296_zy0yzfqbvf4rt3xr.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_384296_zy0yzfqbvf4rt3xr.woff') format('woff'),
-  url('//at.alicdn.com/t/font_384296_zy0yzfqbvf4rt3xr.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_384296_zy0yzfqbvf4rt3xr.svg#iconfont') format('svg');
+  font-family: 'iconfont';  /* Project id 384296 */
+  src: url('//at.alicdn.com/t/font_384296_s1b8r4qdmr.woff2?t=1627622893908') format('woff2'),
+       url('//at.alicdn.com/t/font_384296_s1b8r4qdmr.woff?t=1627622893908') format('woff'),
+       url('//at.alicdn.com/t/font_384296_s1b8r4qdmr.ttf?t=1627622893908') format('truetype');
 }
 
 .iconfont{
@@ -90,12 +88,25 @@ input:-webkit-autofill{
 
 /**=============================================**/
 
+@font-face {
+  font-family: 'SlatePro';
+  src: url('https://s3.geeko.ltd/fonts/SlatePro.ttf');
+}
 
+@font-face {
+  font-family: 'SlatePro-Medium';
+  src: url('https://s3.geeko.ltd/fonts/SlatePro-Medium.ttf');
+}
+
+@font-face {
+  font-family: 'AcuminPro-Bold';
+  src: url('https://s3.geeko.ltd/fonts/acumin/Acumin-BdPro.otf');
+}
 
 
 body{
   font-size: 14px;
-  font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-family: SlatePro, "Open Sans", Arial,"Helvetica Neue", Helvetica, sans-serif;
   -webkit-text-size-adjust: 100%;
   color: #222928;
 }

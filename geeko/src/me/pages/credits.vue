@@ -10,7 +10,7 @@
         </nav-bar>
 
         <div class="_container">
-            <credit-header :me="me"></credit-header>
+            <credit-header :me="pointsCustomerNum"></credit-header>
             <received-used></received-used>
             <points-list></points-list>
         </div>
@@ -50,13 +50,16 @@
             }
         },
         computed: {
-            ...mapGetters('me', ['feed','me']),
+            ...mapGetters('me', ['feed','me','pointsCustomerNum']),
 /*
             receivedPoints(){
                 this.allPoints.forEach(points=>{
                     points.points>0 ? this.received += points.points : this.used += points.points
                 })
             },*/
+        },
+        created:function(){
+            this.$store.dispatch("me/getCustomerPointsNum");
         },
         components: {
             'credit-header': CreditHeader,

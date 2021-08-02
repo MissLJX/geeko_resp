@@ -142,13 +142,50 @@ const Me = [
         path:ROUTER_PATH_ME + "/points-history",
         component:() => import('../pages/points-history.vue'),
         name:"points-history",
-        meta:{title:"Points History"}
+        meta:{title:"Points History"},
+        children:[
+            {
+                path:"",
+                component:() => import("../pages/point/PointsAll.vue"),
+                name:"points-all",
+                meta:{title:"Points All",depth:1,keepAlive:true}
+            },
+            {
+                path:"all",
+                naem:"points-all2",
+                component:() => import("../pages/point/PointsAll.vue"),
+                meta:{title:"Points All",depth:1,keepAlive:true}
+            },
+            {
+                path:"recived",
+                component:() => import("../pages/point/PointsRecived.vue"),
+                name:"points-recived",
+                meta:{title:"Points Recived",depth:2,keepAlive:true}
+            },
+            {
+                path:"used",
+                component:() => import("../pages/point/PointsUsed.vue"),
+                name:"points-used",
+                meta:{title:"Points Used",depth:3,keepAlive:true}
+            },
+            {
+                path:"expired",
+                component:() => import("../pages/point/PointsExpired.vue"),
+                name:"points-expired",
+                meta:{title:"Points Expired",depth:4,keepAlive:true}
+            }
+        ]
     },
     {
         path:ROUTER_PATH_ME + "/makeSug",
         component:() => import("../pages/make-sug.vue"),
         name:"make-sug",
         meta:{title:"Make Sug"}
+    },{
+        path:ROUTER_PATH_ME + "/survey",
+        component:() => import("../pages/survey.vue"),
+        name:"survey",
+        meta:{title:"Survey"}
     }
 ]
 

@@ -1,35 +1,47 @@
 <template>
-    <div>
+    <div class="make-sug">
         <div class="p-hd">
-            <strong>{{$t('makesug')}}</strong> &nbsp;| &nbsp; We Welcome Your Comments and Suggestions.
+            <p>{{$t('makesug')}}</p>
+            <p>We Welcome Your Comments and Suggestions.</p>
         </div>
         <div class="p-bd">
             <p>We are committed to providing quality products with convenient and professional service.Your comments help us to continue to improve our website and service</p>
             <p>Please leave your thoughts in the comment box below. We welcome them.In return, we will give you <span>200 credits</span> if your comment is adopted. We will notify you by email:  </p>
-            <div class="m_email" @click="isAlert=true"><a>{{communicationEmail}}</a><i class="iconfont">&#xe61f;</i></div>
+            <!-- <div class="m_email" @click="isAlert=true"><a>{{communicationEmail}}</a><i class="iconfont">&#xe61f;</i></div> -->
             <div class="commet-area commet-area1">
-                <p>{{$t('sugcom')}}</p>
-                <div class="remnant">{{remnant}}/1000</div>
+                <p>
+                    <span>*</span><span style="color:#000000;">{{$t('sugcom')}}</span>
+                </p>
                 <div class="t-area">
-                    <textarea  style="resize:none;" maxlength="1000" @input ="descInput" v-model="info.subject" v-validate="'required'" name="suggestion" :class="{'st-input-danger':errors.has('suggestion')}"></textarea>
-                    <span>*</span>
+                    <textarea  
+                        style="resize:none;" 
+                        maxlength="1000" 
+                        @input ="descInput" 
+                        v-model="subject" 
+                        v-validate="'required'" 
+                        name="suggestion" 
+                        :class="{'st-input-danger':errors.has('suggestion')}"
+                        placeholder="Sorry for the inconvenience, we wii fix the problem as soon as possible…"
+                    ></textarea>
                 </div>
+                <div class="remnant">{{remnant}}/1000</div>
                 <span v-show="errors.has('suggestion')" class="st-is-danger">{{errors.first('suggestion')}}</span>
             </div>
-            <div class="commet-area">
+            <!-- <div class="commet-area">
                 <p>My Comments are  in reference to my experience with(Optional):</p>
                 <span class="remnant">{{remnant1}}/1000</span>
                 <div class="t-area">
                     <textarea style="resize:none;" maxlength="1000" @input ="descInput1" v-model="info.message"></textarea>
                 </div>
-            </div>
+            </div> -->
             <div class="up-img">
                 <p>{{$t('uploadscreen')}}:</p>
+                <p class="_title">Maximum of 3 photos, only JPEG, GIF or PNG. Individual photo size should not over x MB.</p>
                 <upload-img @getImgFiles="getImgFiles"></upload-img>
             </div>
             <div class="v-btn" @click="submsg">{{$t('submit')}}</div>
         </div>
-        <div class="mask" v-if="isAlert">
+        <!-- <div class="mask" v-if="isAlert">
             <div class="confirm-con">
                 <h3>{{$t('changeEmail')}}</h3>
                 <p class="cancel-btn" @click="isAlert=false"><i class="iconfont">&#xe69a;</i></p>
@@ -39,14 +51,14 @@
                     <span v-show="errors.has('email')" class="st-is-danger">{{errors.first('email')}}</span></div>
                 <div class="n-btn" @click="changeEmail">{{$t('submit')}}</div>
             </div>
-        </div>
+        </div> -->
         <loding v-if="isloding"></loding>
     </div>
 </template>
 
 <script>
     import {mapGetters} from 'vuex'
-    import uploadImg from './upload-img.vue'
+    import uploadImg from './upload-img2.vue'
     import loding from './loding.vue'
 
     export default {
@@ -54,14 +66,15 @@
             return{
                 remnant:0,
                 remnant1:0,
-                info:{
-                    subject:null,
-                    message:null,
-                },
+                subject:null,
+                // info:{
+                //     subject:null,
+                //     message:null,
+                // },
                 files:null,
                 cemail:null,
                 nemail:'',
-                isAlert:false,
+                // isAlert:false,
                 isloding:false
             }
         },
@@ -120,14 +133,14 @@
             getImgFiles(files){
                 this.files = files;
             },
-            changeEmail(){
-                this.$validator.validateAll().then((result) => {
-                    if(this.nemail){
-                        this.cemail = this.nemail
-                        this.isAlert = false
-                    }
-                })
-            }
+            // changeEmail(){
+            //     this.$validator.validateAll().then((result) => {
+            //         if(this.nemail){
+            //             this.cemail = this.nemail
+            //             this.isAlert = false
+            //         }
+            //     })
+            // }
         },
         created(){
             this.$store.dispatch('getMe')
@@ -157,20 +170,13 @@
     .st-is-danger{
         color: red;
     }
-    .p-hd{
-        color: #666;
-        strong{
-            color: #222;
-            font-size: 16px;
-        }
-    }
     .p-bd{
-        padding-left: 150px;
-        padding-top: 50px;
+        // padding-left: 150px;
+        // padding-top: 50px;
         p{
             font-size: 14px;
             line-height: 18px;
-            color: #222;
+            color: #222222;
             margin-top: 10px;
             span{
                 color: #E64545;
@@ -190,18 +196,21 @@
             }
         }
         .commet-area{
-            width: 520px;
-            height: 100px;
+            width: 100%;
             position: relative;
-            margin-top: 50px;
-            padding-left: 70px;
-            h4,p{
-                margin: 10px 0;
-            }
+            margin-top: 37px;
+            p{
+                font-family: 'SlatePro-Medium';
+                font-size: 24px;
+                color: #000000;
+                line-height: normal;
+                margin-bottom: 10px;
+            }  
+
             .remnant{
                 position: absolute;
-                right: -60px;
-                bottom: -20px;
+                right: 0px;
+                bottom: -15px;
                 color: #666;
             }
             .t-area{
@@ -214,20 +223,29 @@
                     font-size: 18px;
                 }
                 textarea{
-                    width: 520px;
-                    height: 100px;
-                    border: 1px solid #cacaca;
+                    width: 100%;
+                    height: 198px;
+                    border: none;
                     border-radius: 3px;
                     padding: 15px;
+                    background-color: #f9f9f9;
                 }
             }
 
         }
         .up-img{
-            padding-left: 70px;
             margin-top: 40px;
             p{
-                margin-bottom: 20px;
+                font-family: 'SlatePro-Medium';
+                font-size: 24px;
+                color: #000000;
+                line-height: normal;
+            }
+
+            ._title{
+                font-family: 'SlatePro';
+                font-size: 14px;
+                color: #222222;
             }
         }
         .v-btn{
@@ -237,7 +255,7 @@
             border-radius: 2px;
             color: #fff;
             text-align: center;
-            margin: 50px 0 20px 70px;
+            margin: 50px 0 20px 00px;
             cursor: pointer;
         }
     }
@@ -295,6 +313,27 @@
                 margin-top: 26px;
                 float: left;
                 border-radius: 2px;
+            }
+        }
+    }
+
+    .make-sug{
+        margin-top: -50px;
+        .p-hd{
+            text-align: center;
+            & > p{
+                &:first-child{
+                    font-family: 'SlatePro-Medium';
+                    font-size: 30px;
+                    color: #000000;
+                }
+
+                &:last-child{
+                    font-size: 16px;
+                    color: #999999;
+                    margin-bottom: 17px;
+                    margin-top: 3px;
+                }
             }
         }
     }

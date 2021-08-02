@@ -1,13 +1,21 @@
 <template>
     <div class="credits-points">
+        <div class="_header">
+            <p>MY POINTS</p>
+            <a href="/fs/points-policy">
+                Learn about {{this.GLOBAL.sitename}} points
+                <span class="iconfont">&#xe73f;</span>
+            </a>
+        </div>
+
         <div class="points">
             <div class="tot-credits fl-l">
-                <p><span class="p-red">{{me.points}}</span><span>=${{pointsMoney}}</span></p>
-                <p style="font-size: 16px">{{$t('totalcre')}}</p>
+                <p><span class="p-red">{{me.points}}</span></p>
+                <p style="font-size: 12px;color: #222222;"><span>= {{pointsMoney}} US Dollars</span></p>
             </div>
             <div class="line fl-l"></div>
             <div class="overdue-credits fl-l">
-                <p class="p-red smaller">{{me.overduePoints}}</p>
+                <p class="p-red">{{me.overduePoints}}</p>
                 <div class="p-rla">
                     <span>{{$t('creditsexpiring')}}<i class="iconfont"  @click="isShow()">&#xe73f;</i></span>
                     <div class="tips" v-if="seen">{{message.message}}.</div>
@@ -15,18 +23,39 @@
             </div>
         </div>
 
-        <div class="r-u">
+        <!-- <div class="r-u">
             <div class="rec fl-l" @click="changeMethod()" :class="{ active: isActive }">{{$t('received')}}</div>
             <div class="use fl-l" @click="changeMethod()" :class="{ active: !isActive }">{{$t('used')}}</div>
+        </div> -->
+
+        <div class="_title">
+            POINTS DETAILS
         </div>
 
         <div class="c-options">
-            <select class="x-select" v-model="selectedYear">
-                <option v-for="item in creditsYear" v-bind:value="item">{{item}}</option>
-            </select>
-            <select class="x-select" v-model="selectedMonth">
-                <option v-for="item in creditsMonth" v-bind:value="item">{{item}}</option>
-            </select>
+            <div class="_change">
+                <p @click="isReceived = '0'">
+                    <span :class="{'active' : isReceived == '0'}">All</span>
+                </p>
+                <p @click="isReceived = '1'">
+                    <span :class="{'active' : isReceived == '1'}">Earned</span>
+                </p>
+                <p @click="isReceived = '2'">
+                    <span :class="{'active' : isReceived == '2'}">Used</span>
+                </p>
+                <p @click="isReceived = '3'">
+                    <span :class="{'active' : isReceived == '3'}">Expired</span>
+                </p>
+            </div>
+
+            <div class="_select">
+                <select class="x-select" v-model="selectedYear">
+                    <option v-for="item in creditsYear" v-bind:value="item">{{item}}</option>
+                </select>
+                <select class="x-select" v-model="selectedMonth">
+                    <option v-for="item in creditsMonth" v-bind:value="item">{{item}}</option>
+                </select>
+            </div>
         </div>
 
         <div class="credits" v-if="isActive">
@@ -34,6 +63,7 @@
                 <div class="tbl-cell createTime">{{$t('Date')}}</div>
                 <div class="tbl-cell c-name">{{$t('Transaction')}}</div>
                 <div class="tbl-cell c-points">{{$t('Amount')}}</div>
+                <div class="tbl-cell c-points">Expiration</div>
             </div>
             <div class="tbl" v-if="!isHaveRec">
                 <div class="tbl-cell">{{$t('nomoredata')}}</div>
@@ -42,6 +72,7 @@
                 <div class="tbl-cell createTime">{{getDate(item.createTime)}}</div>
                 <div class="tbl-cell c-name">{{item.eventName}}</div>
                 <div class="tbl-cell c-points">{{item.points}}</div>
+                <div class="tbl-cell">1</div>
             </div>
         </div>
         <div class="credits" v-if="!isActive">
@@ -57,37 +88,68 @@
                 <div class="tbl-cell createTime">{{getDate(item.createTime)}}</div>
                 <div class="tbl-cell c-name">{{item.eventName}}</div>
                 <div class="tbl-cell c-points-green">{{item.points}}</div>
+                <div class="tbl-cell">2</div>
             </div>
         </div>
 
+        <table>
+            <thead>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </thead>
+        </table>
+
         <div class="get-method">
-            <div class="c-hd">{{$t('howtogetcre')}}</div>
-            <!--<div class="method-con">
-                <a :href="indexUrl">
-                    <i class="iconfont">&#xe739;</i>
-                    <p>{{$t('shareitem')}}</p>
-                    <span>+30</span>
+            <div class="c-hd">HOW TO EARN POINTS?</div>
+            <div class="_bd">
+                <a href="/me/m/order/confirmed">
+                    <div class="review">
+                        <div>
+                            <span class="iconfont">&#xe6d1;</span>
+                        </div>
+                        <div class="_font">
+                            <p>Review</p>
+                            <p>0~2000 points</p>
+                        </div>
+                    </div>
                 </a>
-            </div>-->
-            <div class="method-con">
-                <a :href="shoppingcartUrl">
-                    <i class="iconfont">&#xe735;</i>
-                    <p>{{$t('makepur')}}</p>
-                    <span>+30</span>
-                </a>
-            </div>
-            <div class="method-con special">
-                <a :href="confirmEmailUrl">
-                    <i class="iconfont">&#xe73a;</i>
-                    <p>{{$t('confirmemail')}}</p>
-                    <span>+50</span>
-                </a>
-            </div>
-            <div class="method-con">
-                <a :href="makeSuggestionUrl">
-                    <i class="iconfont">&#xe736;</i>
-                    <p>{{$t('makesug')}}</p>
-                    <span>+200</span>
+                
+                <router-link :to="{name:'survey'}">
+                    <div class="survey">
+                        <div>
+                            <span class="iconfont">&#xe6cf;</span>
+                        </div>
+                        <div class="_font">
+                            <p>Survey</p>
+                            <p>0~300 points</p>
+                        </div>
+                    </div>
+                </router-link>
+                
+                <router-link :to="{name:'make-sug'}">
+                    <div class="suggestion">
+                        <div>
+                            <span class="iconfont">&#xe6d0;</span>
+                        </div>
+                        <div class="_font">
+                            <p>Suggestion</p>
+                            <p>0~200 points</p>
+                        </div>
+                    </div>
+                </router-link>
+                
+                <a href="/i/download">
+                    <div class="download">
+                        <div class="_image">
+                            <img src="https://image.geeko.ltd/chicme/20210415/code.png" alt="code">
+                        </div>
+                        <div class="_font">
+                            <p>Download App</p>
+                            <p>Get More points</p>
+                        </div>
+                    </div>
                 </a>
             </div>
         </div>
@@ -163,7 +225,8 @@
                 selectedYear:{},
                 selectedMonth:{},
                 isHaveRec:false,
-                isHaveUse:false
+                isHaveUse:false,
+                isReceived:'0'
             }
         },
         methods: {
@@ -217,11 +280,41 @@
         -webkit-font-smoothing: antialiased;
         -webkit-text-stroke-width: 0.2px;
         -moz-osx-font-smoothing: grayscale;}
-    .smaller{
-        font-size: 30px !important;
-    }
     .credits-points{
         margin-top: -50px;
+
+        ._header{
+            text-align: center;
+
+            & p{
+                font-family: 'SlatePro-Medium';
+                font-size: 30px;
+                color: #000000;
+            }
+
+            & a{
+                font-size: 16px;
+                color: #666666;
+                margin:13px 0px 36px;
+                display: inline-block;
+
+                & .iconfont{
+                    color: #cccccc;
+                }
+
+                &:hover{
+                    text-decoration: underline;
+                    color: #222;
+                }
+            }
+        }
+
+        ._title{
+            font-family: 'SlatePro-Medium';
+            font-size: 24px;
+            color: #000000;
+            margin: 50px 0px 5px;
+        }
     }
     .c-header{
         color: #999;
@@ -252,18 +345,19 @@
         }
         .p-red{
             color: #E64545;
+            font-family: 'SlatePro-Medium';
             font-size: 40px;
         }
         .tot-credits{
             font-size: 20px;
             color: #222;
             p{
-                margin-bottom: 14px;
+                margin-bottom: 5px;
             }
         }
         .overdue-credits{
             p{
-                margin-bottom: 14px;
+                margin-bottom: 5px;
             }
             i{
                 margin-left: 10px;
@@ -271,7 +365,8 @@
             }
             .p-rla{
                 span{
-                    font-size: 16px;
+                    font-size: 12px;
+                    color: #222222;
                 }
                 i{
                     color: #999;
@@ -296,48 +391,35 @@
             }
         }
     }
-    .r-u{
-        width:460px;
-        border-radius: 4px;
-        margin: 30px auto;
-        border: solid 1px #cacaca;
-        font-size: 16px;
-        .rec{
-            width: 230px;
-            text-align: center;
-            line-height: 40px;
-            cursor: pointer;
-        }
-        .use{
-            width: 228px;
-            text-align: center;
-            line-height: 40px;
-            cursor: pointer;
-        }
-        .fl-l{
-            float: left;
-        }
-        &:after{
-            content: '';
-            display: block;
-            clear: both;
-        }
-        .active{
-            background-color: #000000 !important;
-            color: white !important;
-        }
-    }
     .c-options{
-        .x-select{
-            width: 125px;
-            height: 30px;
-            border: 1px solid #e6e6e6;
-            font-size: 14px;
-            color: #646464;
-            margin-bottom: 10px;
-            margin-right: 7px;
-            cursor: pointer;
-            background-color: #ffffff !important;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 20px 0px;
+
+        ._select{
+            .x-select{
+                width: 125px;
+                height: 30px;
+                border: 1px solid #e6e6e6;
+                font-size: 14px;
+                color: #646464;
+                cursor: pointer;
+                background-color: #ffffff !important;
+            }
+        }
+
+        ._change{
+            & > p{
+                padding-right: 45px;
+                display: inline-block;
+                cursor: pointer;
+
+                & span.active{
+                    border-bottom: 2px solid #000000;
+                    padding-bottom: 3px;
+                }
+            }
         }
     }
     .credits{
@@ -385,42 +467,94 @@
         .c-hd{
             width: 100%;
             line-height: 48px;
-            text-align: center;
-            color: #222;
-            background-color: #f5f5f5;
-            font-size: 16px;
-            color: #222;
-            font-weight: bold;
+            font-size: 24px;
+            color: #000000;
+            font-family: 'SlatePro-Medium';
+            text-transform: uppercase;
         }
-        .method-con{
-            position: relative;
-            color: #222;
-            width: 180px;
-            text-align: center;
-            padding-top: 75px;
-            float: left;
-            cursor: pointer;
-            i{
-                font-size: 36px;
-                &:hover{
-                    opacity: .8;
+
+        ._bd{
+            display: flex;
+
+            & > a{
+                width: 210px;
+                height: 100px;
+                margin-bottom: 10px;
+                display: inline-block;
+                cursor: pointer;
+                border-radius: 4px;
+                margin-right: 10px;
+
+                & > div{
+                    height: 100%;
+                    width: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                & .iconfont{
+                    font-size: 42px;
+                    color: #ffffff;
+                    margin-right: 10px;
+                }
+
+                & ._font{
+                    & > p:first-child{
+                        font-size: 14px;
+                        color: #ffffff;
+                        font-family: 'AcuminPro-Bold';
+                    }
+
+                    & > p:last-child{
+                        font-size: 12px;
+	                    color: #ffffff;
+                    }
                 }
             }
-            p{
-                font-size: 14px;
-                line-height: 30px;
+
+            .review{
+                background-image: linear-gradient(124deg, 
+                    #ff8976 0%, 
+                    #ffcca8 100%);
+                border-radius: 4px;
             }
-            span{
-                color: #E64545;
-                position: absolute;
-                top: 45px;
-                left: 100px;
+
+            .survey{
+                background-image: linear-gradient(124deg, 
+                    #b886b4 0%, 
+                    #dab1db 100%);
+                border-radius: 4px;
             }
-        }
-        &:after{
-            display: block;
-            clear: both;
-            content: '';
+
+            .suggestion{
+                background-image: linear-gradient(124deg, 
+                #77efbf 0%, 
+                #7dede2 100%);
+                border-radius: 4px;
+            }
+
+            .download{
+                background-image: linear-gradient(124deg, 
+                    #a7a7a7 0%, 
+                    #d9d9d9 100%);
+                border-radius: 4px;
+
+                & .iconfont{
+                    font-size: 27px;
+                }
+
+                ._image{
+                    width: 42px;
+                    height: 42px;
+                    margin-right: 10px;
+
+                    & > img{
+                        width: 100%;
+                        display: block;
+                    }
+                }
+            }
         }
     }
 

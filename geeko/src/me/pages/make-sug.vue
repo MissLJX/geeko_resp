@@ -1,7 +1,7 @@
 <template>
     <div class="make-sug">
         <nav-bar>
-            <i class="iconfont el-back-font" slot="left" @click="$router.go(-1)">&#xe693;</i>
+            <i class="iconfont el-back-font" slot="left" @click="backToPage">&#xe693;</i>
             <span slot="center">Suggestion</span>
         </nav-bar>
 
@@ -11,16 +11,16 @@
                     <span class="color-1">*</span><span>Question Type</span>
                 </div>
 
-                <div class="_bd">
+                <div class="_bd" :class="{'border-red-1' : questionClassify.questionTypeBorderShow}">
                     <div class="st-table st-fullwidth _container" @click="questionShow = !questionShow">
                         <div class="st-cell _title">Screen Freeze</div>
                         <div class="st-cell st-t-r _icon">
-                            <span class="iconfont">&#xe695;</span>
+                            <span class="iconfont" :class="{'active':questionShow}">&#xe695;</span>
                         </div>
                     </div>
 
                     <transition name="fade">
-                        <ul class="_screen-list" v-show="questionShow">
+                        <ul class="_screen-list" v-if="questionShow">
                             <li :class="{'active' : question == 'Screen Freeze'}">
                                 <input type="radio" id="question1" name="screenFreeze" value="Screen Freeze" v-model="question">
                                 <label for="question1"></label>
@@ -54,8 +54,9 @@
                         </ul>
                     </transition>
 
-                    <div class="question-error" v-show="questionShow">
-                        <textarea maxlength="150"></textarea>
+                    <div class="question-error" v-if="questionShow && question == 'Other error'">
+                        <textarea maxlength="150" v-validate="'required'" name="otherError" :class="{'st-input-danger':errors.has('otherError')}" v-model="errorInput"></textarea>
+                        <span v-show="errors.has('otherError')" class="st-is-danger">{{errors.first('otherError')}}</span>
                     </div>
                 </div>
             </div>
@@ -67,7 +68,7 @@
                             <span class="color-1">*</span><span>Time</span>
                         </div>
                     </div>
-                    <div style="position: relative;">
+                    <div style="position: relative;" :class="{'border-red-1':questionClassify.timeBorderShow}">
                         <div class="reg-birthday-flex">
                             <div class="_saveValue">
                                 {{birth}}
@@ -77,7 +78,7 @@
                                 <div class="iconfont birth">&#xe694;</div>
                             </div>
                         </div>
-                        <input type="date" id="reg-birthday-input" v-model="datatime">
+                        <input type="date" id="reg-birthday-input" v-model="datatime" name="time">
                     </div>
                 </div>
             </div>
@@ -88,7 +89,8 @@
                 </div>
 
                 <div class="_bd">
-                    <textarea maxlength="1000" placeholder="Sorry for the inconvenience, we wii fix the problem as soon as possible…" v-model="descriptionAnswer"></textarea>
+                    <textarea maxlength="1000" v-validate="'required'" name="description" :class="{'st-input-danger':errors.has('description')}" placeholder="Sorry for the inconvenience, we wii fix the problem as soon as possible…" v-model="descriptionAnswer"></textarea>
+                    <span v-show="errors.has('description')" class="st-is-danger">{{errors.first('description')}}</span>
                 </div>
 
                 <p class="_num">{{descriptionNum}}/1000</p>
@@ -96,7 +98,7 @@
 
             <div class="upload-image">
                 <div class="_hd">
-                    <span class="color-1">*</span><span>Upload image</span>
+                    <span>Upload image</span>
                     <p>Maximum of 3 photos, only JPEG, GIF or PNG.</p>
                 </div>
 
@@ -108,9 +110,9 @@
                                 <span class="removeImg" @click="removeImg(index)">&times;</span>
                             </li>
                         </ul>
-                        <div class="upload-img uploadimg" v-show="images && images.length < 6">
+                        <div class="upload-img uploadimg" v-show="images && images.length < 3">
                             <form ref="imageLoader">
-                                <input type="file" name="imageFiles" multiple="multiple" @change="loadImg(index,$event)" accept="image/jpg,image/jpeg,image/png,image/gif">
+                                <input type="file" name="imageFiles" multiple="multiple" @change="loadUploadImg(index)" accept="image/jpg,image/jpeg,image/png,image/gif">
                             </form>
                             <div class="addbtn iconfont">&#xe6d3;</div>
                         </div>
@@ -120,29 +122,60 @@
         </div>
 
         <div class="sett-address-footer">
-            <div class="add-address">Add New Address</div>
+            <!-- <div class="add-address" @click="confirmSuggestion">submit</div> -->
+            <div class="add-address" @click="successShow = !successShow">submit</div>
         </div>
+
+        <Loading v-if="uploadImageLoadingShow || confirmLoadingShow"></Loading>
+
+        <transition name="uper">
+            <div class="success-container" v-if="successShow">
+                <div class="_hd">
+                    <span class="iconfont">&#xe6b7;</span>
+                </div>
+                <p class="_title1">Submit Successfully</p>
+                <p class="_title2">
+                    We have successfully received your suggestion and it will take few days to process this issue, 
+                    we will reach out to you if we need any information. Please check our reply at your email address. 
+                    Thank you for your cooperation.
+                </p>
+                
+            </div>
+        </transition>
     </div>
 </template>
 
 <script>
     import NavBar from '../components/nav-bar.vue'
     import fecha from 'fecha'
+    import Loading from '../../components/loading.vue'
+    import HtmlImageCompress from 'html-image-compress'
+
     export default {
         name:"MakeSug",
         components:{
             'nav-bar':NavBar,
+            "Loading":Loading
         },
         data(){
             return {
-                question:"Screen Freeze",
+                question:"",
                 datatime:"",
                 descriptionAnswer:"",
-                images:["https://dgzfssf1la12s.cloudfront.net/medium/1c5o8V8y2f9086427H414j481Y-79912",
-                    "https://dgzfssf1la12s.cloudfront.net/medium/1c6e0c403y0L0z7x1f4P4D9g96-32414",
-                    "https://dgzfssf1la12s.cloudfront.net/medium/1u6g1v5Z9c4c9O8a7l5u8o2b8x-40973"
-                    ],
-                questionShow:false
+                // images:["https://dgzfssf1la12s.cloudfront.net/medium/1c5o8V8y2f9086427H414j481Y-79912",
+                //     "https://dgzfssf1la12s.cloudfront.net/medium/1c6e0c403y0L0z7x1f4P4D9g96-32414",
+                //     "https://dgzfssf1la12s.cloudfront.net/medium/1u6g1v5Z9c4c9O8a7l5u8o2b8x-40973"
+                //     ],
+                images:[],
+                questionShow:false,
+                errorInput:"",
+                uploadImageLoadingShow:false,
+                confirmLoadingShow:false,
+                questionClassify:{
+                    questionTypeBorderShow:false,
+                    timeBorderShow:false
+                },
+                successShow:false
             }
         },
         computed:{
@@ -163,6 +196,104 @@
             },
             descriptionNum(){
                 return this.descriptionAnswer ? 1000 - this.descriptionAnswer.length : 0;
+            }
+        },
+        methods:{
+            loadUploadImg(event) {
+                let _this = this;
+                _this.uploadImageLoadingShow = true;
+                this.newFiles = [...event.target.files];
+                this.files = this.files.concat(this.newFiles);
+                let files = this.files;
+
+                let promises = this.files.map(file => new HtmlImageCompress(file,{quality:.7, imageType:file.type}));
+
+                Promise.all(promises).then(result => {
+                    let formData = new FormData();
+                    formData.append("type","returnLogistics");
+                    
+                    let _files = result.map(result => result.file);
+
+                    _files.forEach((file,index) => {
+                        formData.append("files",new File([file],files[index].name));
+                    });
+
+                    this.$store.dispatch('generalUploadImage',{formData}).then((result) => {
+                        console.log("Imageresult",result);
+                        if(!!result && result.length > 0){
+                            result.forEach((item) => {
+                                _this.images.push(item);
+                            });
+                            _this.uploadImageLoadingShow = false;
+                        }
+                    });
+                });
+
+                if (this.images.length > 3) {
+                    this.images.splice(3, this.images.length - 3);
+                    this.files.splice(3, this.files.length - 3)
+                }
+            },
+            confirmSuggestion(){
+                this.successShow = true;
+                // if(!this.question){
+                //    this.questionClassify.questionTypeBorderShow = true;
+                //    return;
+                // }else if(this.question == 'Other error'){
+                //     this.$validator.validate('otherError',this.errorInput).then(result => {
+                //         if(!result){
+                //             return;
+                //         }else{
+                //             // 拿值
+                //         }
+                //     });
+                // }else{
+                //     // 拿值
+                //     this.questionClassify.questionTypeBorderShow = false;
+                // }
+
+                // if(this.datatime){
+                //     // 拿值
+                //     this.questionClassify.timeBorderShow = false;
+                // }else{
+                //     this.questionClassify.timeBorderShow = true;
+                //     return;
+                // }
+
+                // this.$validator.validate('description',this.descriptionAnswer).then(result => {
+                //     if(!result){
+                //         return;
+                //     }else{
+                //         // 拿值
+                //     }
+                // });
+
+                // this.$validator.validateAll().then(result => {
+                //     console.log("result",result);
+                //     if(result && this.datatime){
+                //         console.log("全部满足");
+                //         console.log("this.question",this.question);
+                //         console.log("this.errorInput",this.errorInput);
+                //         console.log("this.datatime",this.datatime);
+                //         console.log("this.descriptionAnswer",this.descriptionAnswer);
+                //         console.log("this.images",this.images);
+                        
+                //         let formData = new FormData();
+                //         if(this.question == 'Other error'){
+                //             // this.errorInput
+                //             formData.append();
+                //         }else{
+                //             // this.question
+                //         }
+                //     }
+                // });
+            },
+            backToPage(){
+                if(this.successShow){
+                    this.successShow = false;
+                }else{
+                    this.$router.go(-1)
+                }
             }
         }
     }
@@ -188,7 +319,15 @@
 
                    ._icon{
                        .iconfont{
-                           color: #222222;
+                            color: #222222;
+                            transform: rotate(180deg);
+                            display: inline-block;
+                            cursor: pointer;
+                            transition: transform .2s;
+
+                            &.active{
+                                transform: rotate(0deg);
+                            }
                        }
                    }
 
@@ -261,6 +400,10 @@
                             resize: none;
                             width: 100%;
                             height: 36px;
+
+                            &.st-input-danger{
+                                border: 1px solid red;
+                            }
                         }
                    }
                }
@@ -282,7 +425,7 @@
                             white-space: nowrap;
                             text-transform: capitalize;
                             font-family: 'SlatePro-Medium';
-                    }
+                    } 
 
                     .reg-birthday-flex {
                         display: flex;
@@ -330,6 +473,10 @@
                         color: #bbbbbb;
                         font-size: 12px;
                         padding: 10px;
+
+                        &.st-input-danger{
+                            border: 1px solid red;
+                        }
                    }
                }
 
@@ -417,6 +564,10 @@
            .color-1{
                color: #e64545;
            }
+
+           .border-red-1{
+               border: 1px solid red;
+           }
        }
 
        .sett-address-footer{
@@ -440,24 +591,60 @@
         }
     }
 
-    // .fade-enter-active, .fade-leave-active {
-    //     transition: opacity .5s;
-    // }
-    // .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-    //     opacity: 0;
-    // }
-
-    .fade-enter{// demo元素显示动画 开始状态的效果i的css
-        opacity:0;  
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity .5s;
     }
-    .fade-enter-acitve{//active用于添加过度时间,插入过程
-        transition:all  2s;
-    }
-    .fade-leave-active{//添加过度时间，离开过程
-    transition:all 2s;
-    }     
-    .fade-leave-to {//to 结束动画时，结束状态的效果
-        opacity:1 ;
+    .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+        opacity: 0;
     }
 
+    .st-is-danger{
+        color: red;
+    }
+
+    .success-container{
+        position: fixed;
+        top:44px;
+        left: 0px;
+        background-color: #ffffff;
+        width: 100%;
+        height: 100%;
+        z-index: 2;
+        padding-top: 50px;
+        text-align: center;
+        ._hd{
+            color: rgb(32, 183, 89);
+
+            & .iconfont{
+                font-size: 50px;
+            }
+        }
+
+        ._title1{
+            font-family: 'SlatePro-Medium';
+            font-size: 18px;
+            color: #000000;
+            margin-top: 20px;
+        }
+
+        ._title2{
+            font-size: 12px;
+            line-height: 16px;
+            color: #666666;
+            margin-top: 5px;
+            padding: 0px 30px;
+        }
+    }
+
+    .uper-enter-active, .uper-leave-to{
+        top:44px;
+    }
+
+    .uper-enter-active , .uper-leave-active{
+        transition: top .3s;
+    }
+
+    .uper-leave-active , .uper-enter{
+        top: 100%;
+    }
 </style>

@@ -3,7 +3,7 @@
         <a :href="productUrl">
             <figure>
                 <div class="img">
-                    <img :src="imageUrl" :class="{'gray':isSoldOut}"/>
+                    <img :src="imageUrl" :class="{'gray':isSoldOutProduct}"/>
                 </div>
 
                 <figcaption>
@@ -140,7 +140,7 @@
             productUrl(){
                 return window.ctx + '/' + producturl(this.product)
             },
-            isSoldOut(){
+            isSoldOutProduct(){
                 if(this.product.status == 2){
                     return true
                 }else{

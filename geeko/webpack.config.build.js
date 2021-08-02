@@ -22,8 +22,7 @@ module.exports = {
 
   output: {
     path: path.resolve(__dirname, './dist'),
-     /*publicPath: '/joyshoetique/resources/vue/me/js/',*/
-      publicPath: '/',
+    publicPath: '/resources/vue/me/js/',
     filename: '[name].js',
     chunkFilename: '[name].js'
   },
@@ -67,8 +66,7 @@ module.exports = {
 
   plugins: [
     new webpack.DefinePlugin({
-      // 'process.env.NODE_ENV': JSON.stringify('production')
-      'process.env.NODE_ENV': JSON.stringify('development')
+      'process.env.NODE_ENV': JSON.stringify('production')
     }),
     new HtmlWebpackPlugin({
       title: 'index',
@@ -102,8 +100,8 @@ module.exports = {
 		progress: true,
 		proxy: {
 			'/api': {
-				target: 'https://www.chicme.xyz',
-				// target: 'http://localhost:8080/wanna',
+				// target: 'https://www.chicme.xyz',
+				target: 'http://localhost:8080/wanna',
 				pathRewrite: { '^/api': '' },
 				cookieDomainRewrite: 'localhost',
 				cookiePathRewrite: {

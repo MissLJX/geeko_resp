@@ -70,3 +70,14 @@ export const ME_REMOVE_EXPIRED_PRODUCTS = 'ME_REMOVE_EXPIRED_PRODUCTS'
 
 export const ME_GET_TRACK_ORDER_MESSAGE = 'ME_GET_TRACK_ORDER_MESSAGE';
 export const ME_TRACK_ORDER_SKIP = "ME_TRACK_ORDER_SKIP";
+
+// points
+export const ME_GET_POINTS_ALL = "ME_GET_POINTS_ALL";
+export const ME_GET_POINTS_ALL_SKIP = "ME_GET_POINTS_ALL_SKIP";
+export const ME_GET_POINTS_Recived = "ME_GET_POINTS_Recived";
+export const ME_GET_POINTS_Recived_SKIP = "ME_GET_POINTS_Recived_SKIP";
+export const ME_GET_POINTS_Used = "ME_GET_POINTS_Used";
+export const ME_GET_POINTS_Used_SKIP = "ME_GET_POINTS_Used_SKIP";
+export const ME_GET_POINTS_Expired = "ME_GET_POINTS_Expired";
+export const ME_GET_POINTS_Expired_SKIP = "ME_GET_POINTS_Expired_SKIP";
+export const ME_GET_POINTS_CUSTOMER_NUM = "ME_GET_POINTS_CUSTOMER_NUM";

@@ -172,6 +172,52 @@ export const getTrackOrderMessage = (skip) => {
     return axios.get(VPATH + '/tracking/get-packages',{skip,limit:"20"}).then((data) => data.result)
 }
 
+export const generalUploadImage = (imageFile) =>{
+    return axios.post('/context/upload',imageFile,{'Content-Type': http_infos.default_post_content_type});
+}
+
+
+// 获取所有积分历史记录
+// 接口：/points-history-record/{skip}/{limit}/get-all
+export const getPointsAll = (skip) => {
+    return axios.get('/points-history-record/' + skip + '/20/get-all', {}, {}).then((data) => {
+        return data.result
+    })
+}
+
+// 获取所得积分历史记录
+// 接口：/points-history-record/{skip}/{limit}/get-recived
+export const getPointsRecived = (skip) => {
+    return axios.get('/points-history-record/' + skip + '/20/get-recived', {}, {}).then((data) => {
+        return data.result
+    })
+}
+
+// 获取使用积分历史记录
+// 接口：/points-history-record/{skip}/{limit}/get-used
+export const getPointsUsed = (skip) => {
+    return axios.get('/points-history-record/' + skip + '/20/get-used', {}, {}).then((data) => {
+        return data.result
+    })
+}
+
+// 获取过期积分历史记录
+// 接口：/points-history-record/{skip}/{limit}/get-expired
+export const getPointsExpired = (skip) => {
+    return axios.get('/points-history-record/' + skip + '/20/get-expired', {}, {}).then((data) => {
+        return data.result
+    })
+}
+
+// 获取当前用户积分信息
+// 接口：/points-history-record/{skip}/{limit}/get-points
+export const getCustomerPointsNum = () => {
+    return axios.get('/points-history-record/get-points', {}, {}).then((data) => {
+        return data.result
+    })
+}
+
+
 
 
 
