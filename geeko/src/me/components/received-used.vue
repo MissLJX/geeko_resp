@@ -1,7 +1,7 @@
 <template>
     <div class="received-used">
         <div class="_hd">
-            How to get points?
+            {{$t("point.how_to_get_points")}}
         </div>
 
         <div class="_bd">
@@ -11,7 +11,7 @@
                         <span class="iconfont">&#xe6d1;</span>
                     </div>
                     <div class="_font">
-                        <p>Review</p>
+                        <p>{{$t("point.review")}}</p>
                         <p>0~2000 points</p>
                     </div>
                 </div>
@@ -23,7 +23,7 @@
                         <span class="iconfont">&#xe6cf;</span>
                     </div>
                     <div class="_font">
-                        <p>Survey</p>
+                        <p>{{$t("point.survey")}}</p>
                         <p>0~300 points</p>
                     </div>
                 </div>
@@ -35,7 +35,7 @@
                         <span class="iconfont">&#xe6d0;</span>
                     </div>
                     <div class="_font">
-                        <p>Suggestion</p>
+                        <p>{{$t("point.suggestion")}}</p>
                         <p>0~200 points</p>
                     </div>
                 </div>
@@ -47,8 +47,8 @@
                         <span class="iconfont">&#xe6d2;</span>
                     </div>
                     <div class="_font">
-                        <p>Download App</p>
-                        <p>Get More points</p>
+                        <p>{{$t("point.download_app")}}</p>
+                        <p>{{$t("point.get_more_points")}}</p>
                     </div>
                 </div>
             </a>
@@ -94,6 +94,7 @@
                     display: flex;
                     align-items: center;
                     justify-content: center;
+                    padding: 0px 20px;
                 }
 
                 & .iconfont{
@@ -103,15 +104,24 @@
                 }
 
                 & ._font{
+                    overflow: hidden;
                     & > p:first-child{
                         font-size: 14px;
                         color: #ffffff;
                         font-family: 'AcuminPro-Bold';
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        width: 100%;
                     }
 
                     & > p:last-child{
                         font-size: 12px;
 	                    color: #ffffff;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        width: 100%;
                     }
                 }
             }

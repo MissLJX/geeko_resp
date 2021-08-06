@@ -24,17 +24,17 @@
         <div class="credits-header-container">
             <div class="item1">
                 <span>{{me.points}}</span>
-                <p>={{pointsMoney}} US Dollars</p>
+                <p>={{me.exchangeAmount}}</p>
             </div>
             <div class="item2">
                 <p class="over-points">{{me.overduePoints}}</p>
-                <span class="exping-soon">points expiring soon </span>
+                <span class="exping-soon">{{$t("point.points_expired_soon")}} </span>
                 <span class="__question" @click="seen = !seen;">
                     <span>?</span>
                 </span>
 
                 <router-link :to="{name:'points-all'}">
-                    <p class="points-history">Points History ></p>
+                    <p class="points-history">{{$t("point.points_history")}} ></p>
                 </router-link>
 
                 <div class="msg-tips" v-if="seen">{{message.message}}.</div>
@@ -55,9 +55,6 @@
             }
         },
         computed: {
-            pointsMoney(){
-                return this.me.points > 0 ? this.me.points/100 : this.me.points
-            },
             ...mapGetters('me', ['message']),
         },
         data(){
@@ -89,15 +86,19 @@
     }
 
     .credits-header{
-        background-image: linear-gradient(44deg, 
-            #f0d192 0%, 
-            #f9e5be 100%);
+        // background-image: linear-gradient(44deg, 
+        //     #f0d192 0%, 
+        //     #f9e5be 100%);
         border-radius: 4px;
+        background: url("https://s3.us-west-2.amazonaws.com/image.chic-fusion.com/chicme/20210804/background.jpg") no-repeat;
+        background-position: center;
+        background-size:cover;
+        padding: 10px 20px;
+        height: 100%;
 
         .credits-header-container{
             display: flex;
             justify-content: space-between;
-            padding: 20px;
             // align-items: center;
 
             & > div{
@@ -123,10 +124,12 @@
             }
 
             .item2{
+                text-align: right;
                 .over-points{
                     font-size: 36px;
                     font-family: 'AcuminPro-Bold';
                     color: #9d6929;
+                    text-align: center;
                 }
 
                 .exping-soon{
@@ -134,6 +137,9 @@
 	                color: #be8f55;
                     vertical-align: middle;
                     margin-right: 3px;
+                    text-transform: capitalize;
+                    width: 80%;
+                    display: inline-block;
                 }
 
                 .__question{
@@ -142,14 +148,14 @@
                     height: 14px;
                     line-height: 11px;
                     text-align: center;
-                    color: #cacaca;
+                    color: #be8f55;
                     border-radius: 50%;
-                    border: 1px solid #cacaca;
+                    border: 1px solid #be8f55;
                     vertical-align: middle;
                     cursor: pointer;
 
                     & > span{
-                        font-size: 13px;
+                        font-size: 12px;
                     }
                 }
 

@@ -11,7 +11,7 @@
                 </p>
             </div>
         </div>
-        <p class="mt-15">You have <span class="txr">{{me.points}}</span> credits {{this.GLOBAL.sitename}} Credits now, learn more about {{this.GLOBAL.sitename}} Bonus Credits program, <a :href="creditstUrl">Click Here.</a></p>
+        <p class="mt-15">You have <span class="txr">{{pointsCustomer.points}}</span> credits {{this.GLOBAL.sitename}} Credits now, learn more about {{this.GLOBAL.sitename}} Bonus Credits program, <a :href="creditstUrl">Click Here.</a></p>
         <div class="referfriend">
             <h3>{{$t('refer')}}</h3>
             <div class="refer-con">
@@ -153,6 +153,9 @@
             },
             showShare(){
                 return !!window.showShare
+            },
+            pointsCustomer(){
+                return this.$store.getters["point/pointsCustomerNum"];
             }
         },
         mounted(){
@@ -212,6 +215,7 @@
             this.$store.dispatch('getMe')
             this.$store.dispatch('getShareKey','facebook')
             this.$store.dispatch('getShareKey','copy')
+            this.$store.dispatch("point/getCustomerPointsNum");
         }
     }
 

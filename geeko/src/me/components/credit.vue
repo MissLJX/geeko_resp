@@ -4,11 +4,11 @@
             <p>{{createTime}}</p>
         </div>
         <div class="st-cell st-v-m el-credit-center">
-            <p>{{credit.eventName}}</p>
-            <p>Expiration：10/13/2021 18:24:20</p>
+            <p>{{credit.name}}</p>
+            <p v-if="credit.expiredDate">Expiration：{{getExpiredDate(credit.expiredDate)}}</p>
         </div>
         <div class="st-cell st-v-m el-credit-right">
-            <span :class="{'el-point':true, 'el-point-plus':credit.points < 0}">{{points}}</span>
+            <span :class="{'el-point':true, 'el-point-plus':credit.points < 0 || isExpired}">{{points}}</span>
         </div>
     </div>
 </template>
@@ -30,6 +30,7 @@
             font-size: 12px;
             color: #666666;
             width: 80px;
+            text-align: center;
         }
 
         .el-credit-center{
@@ -59,15 +60,27 @@
             credit: {
                 type: Object,
                 required: true
+            },
+            isExpired:{
+                type:Boolean,
+                default:false
             }
         },
         computed: {
             createTime(){
-                return fecha.format(new Date(this.credit.createTime), 'MMM.DD.YYYY HH:mm:dss')
+                return fecha.format(new Date(this.credit.createTime), 'MMM.DD.YYYY HH:mm:ss')
             },
             points(){
                 return this.credit.points > 0 ? '+' + this.credit.points : this.credit.points
             },
+        },
+        methods:{
+            getExpiredDate(time){
+                if(time == null){
+                    return ''
+                }
+                return fecha.format(new Date(parseInt(time)), 'MM/DD/YYYY HH:mm:ss')
+            }
         }
     }
 </script>

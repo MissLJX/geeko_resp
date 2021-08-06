@@ -12,6 +12,7 @@ export const get = () => {
     return axios.get(VPATH + '/customer/get', {}, {}).then(data => data.result)
 }
 
+// c-log中获取用户头上的关注数
 export const getFeed = (customerId) => {
     return axios.get(VPATH + '/customer/anon/' + customerId + '/feed-summary', {}, {}).then(data => data.result)
 }
@@ -218,6 +219,20 @@ export const getCustomerPointsNum = () => {
 }
 
 
+// 获取积分页面产品列表的接口
+// groupNo  0
+// menuId   APP0010
+// product/anon/{skip}/{limit}/{groupNo}/{menuId}/list-by-menu
+export const getPointsProductList = (skip) => {
+    return axios.get(VPATH+"/product/anon/"+ skip+"/20/0/APP0010/list-by-menu",{},{}).then((data) => {
+        return data.result;
+    });
+}
+
+//make-suggestion
+export const makeSuggestion = (files) => {
+    return axios.post('/ticket/add', files, {'Content-Type': http_infos.upload_image_content_type}).then(data => data.result)
+}
 
 
 

@@ -3,7 +3,7 @@
         <list :items="credits" :loading="loading" :finished="finished" @listing="$emit('listing')">
             <template slot="li" slot-scope="props">
                 <li :key="props.item.id">
-                    <credit class="el-credit" :credit="props.item"/>
+                    <credit class="el-credit" :credit="props.item" :isExpired="isExpired"/>
                 </li>
             </template>
         </list>
@@ -55,6 +55,9 @@
             },
             isReceived:{
                 type: String,
+            },
+            isExpired:{
+                type:Boolean
             }
         },
         components: {

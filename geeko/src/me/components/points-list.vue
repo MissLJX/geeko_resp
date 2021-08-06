@@ -1,7 +1,7 @@
 <template>
     <div class="points-list">
         <div class="hd">
-            Apply points towards purchase
+            {{$t("point.apply_points")}}
         </div>
         <div class="bd">
             <product-list :products="products" :loading="loading" :finished="finished" @listing="listingHandle"/>
@@ -10,7 +10,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import ProductList from '../../components/product-list.vue'
+    import PointProductList from './point/point-product-list.vue'
     import store from '../../store/index.js'
     export default{
         data(){
@@ -22,31 +22,31 @@
         },
         computed: {
             products(){
-                return store.getters['me/youlikeProducts']
+                return store.getters['me/pointsProducts']
             },
             skip(){
-                return store.getters['me/youlikeskip']
+                return store.getters['me/pointsProductsSkip']
             }
         },
         methods: {
             listingHandle(){
                 this.loading = true
-                store.dispatch("me/getYouLikeProducts", {skip: this.skip}).then(({empty, finished}) => {
+                store.dispatch("me/getPointsProducts", {skip: this.skip}).then(({empty, finished}) => {
                     if(finished) this.finished = finished
                     if(empty) this.empty = empty
                     this.loading = false
-                    store.dispatch("me/getYouLikeSkip")
+                    store.dispatch("me/getPointsSkip")
                 })
             }
         },
         components: {
-            'product-list': ProductList
+            'product-list': PointProductList
         },
         created(){
             this.loading = true;
-            store.dispatch("me/getYouLikeProducts", {skip: 0}).then(() => {
+            store.dispatch("me/getPointsProducts", {skip: 0}).then(() => {
                 this.loading = false
-                store.dispatch("me/getYouLikeSkip")
+                store.dispatch("me/getPointsSkip")
             })
         }
     }
@@ -60,8 +60,9 @@
             font-family: 'AcuminPro-Bold';
         }
         .bd{
-            padding: 0 5px;
             margin-top: 10px;
+            margin-left: -5px;
+            margin-right: -5px;
         }
     }
 </style>

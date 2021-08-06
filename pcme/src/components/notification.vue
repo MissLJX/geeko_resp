@@ -1,7 +1,7 @@
 <template>
     <div class="message-con">
         <div class="tab-list">
-            <p :class="{'active':isActive==='promotion'}" @click="changeClass('promotion')"><router-link :to="getUrl('/me/m/notification/')">{{$t('promotion')}}</router-link></p>
+            <p :class="{'active':isActive==='promotion'}" @click="changeClass('promotion')"><router-link :to="getUrl('/me/m/notification/')">{{$t('prmotion')}}</router-link></p>
             <p :class="{'active':isActive==='order'}" @click="changeClass('order')"><router-link :to="getUrl('/me/m/notification/order')">{{$t('orders')}}</router-link></p>
             <p :class="{'active':isActive==='other'}" @click="changeClass('other')"><router-link :to="getUrl('/me/m/notification/other')">{{$t('notiothers')}}</router-link></p>
         </div>

@@ -2,7 +2,7 @@
     <div class="points-history">
         <nav-bar>
             <i class="iconfont el-back-font" slot="left" @click="$router.go(-1)">&#xe693;</i>
-            <span slot="center">Points History</span>
+            <span slot="center">{{$t("point.points_history")}}</span>
         </nav-bar>
         <div class="_hd">
             <!-- <p v-for="(nav,index) in navs" :key="index+nav.path">
@@ -29,22 +29,22 @@
 
             <p>
                 <router-link :to="{name:'points-all'}" replace>
-                     <span :class="{'active' : 'points-all' == this.$route.name || 'points-all2' == this.$route.name}">All</span>
+                     <span :class="{'active' : 'points-all' == this.$route.name || 'points-all2' == this.$route.name}">{{$t("point.all")}}</span>
                 </router-link>
             </p>
             <p>
                 <router-link :to="{name:'points-recived'}" replace>
-                     <span :class="{'active' : 'points-recived' == this.$route.name}">Recived</span>
+                     <span :class="{'active' : 'points-recived' == this.$route.name}">{{$t("point.recived")}}</span>
                 </router-link>
             </p>
             <p>
                 <router-link :to="{name:'points-used'}" replace>
-                     <span :class="{'active' : 'points-used' == this.$route.name}">Used</span>
+                     <span :class="{'active' : 'points-used' == this.$route.name}">{{$t("point.used")}}</span>
                 </router-link>
             </p>
             <p>
                 <router-link :to="{name:'points-expired'}" replace>
-                     <span :class="{'active' : 'points-expired' == this.$route.name}">Expired</span>
+                     <span :class="{'active' : 'points-expired' == this.$route.name}">{{$t("point.expired")}}</span>
                 </router-link>
             </p>
 
@@ -195,6 +195,7 @@
                 & span.active{
                     font-family: 'AcuminPro-Bold';
                     padding-bottom: 3px;
+                    color: #222222;
                     border-bottom: 2px solid #222222;
                 }
             }

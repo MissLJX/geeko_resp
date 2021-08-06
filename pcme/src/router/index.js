@@ -85,9 +85,41 @@ const routes = [
             },
             {
                 path:'credits',
-                name:"credits",
+                // name:"credits",
                 component:Credits,
                 meta: {title:'My Credits'},
+                children:[
+                    {
+                        path:"",
+                        component:() => import("../pages/point/PointsAll.vue"),
+                        name:"points-all",
+                        meta:{title:"Points All",depth:1,keepAlive:true}
+                    },
+                    {
+                        path:"all",
+                        naem:"points-all2",
+                        component:() => import("../pages/point/PointsAll.vue"),
+                        meta:{title:"Points All",depth:1,keepAlive:true}
+                    },
+                    {
+                        path:"recived",
+                        component:() => import("../pages/point/PointsRecived.vue"),
+                        name:"points-recived",
+                        meta:{title:"Points Recived",depth:2,keepAlive:true}
+                    },
+                    {
+                        path:"used",
+                        component:() => import("../pages/point/PointsUsed.vue"),
+                        name:"points-used",
+                        meta:{title:"Points Used",depth:3,keepAlive:true}
+                    },
+                    {
+                        path:"expired",
+                        component:() => import("../pages/point/PointsExpired.vue"),
+                        name:"points-expired",
+                        meta:{title:"Points Expired",depth:4,keepAlive:true}
+                    }
+                ]
             },
             {
                 path:'cards',

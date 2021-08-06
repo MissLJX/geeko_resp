@@ -1,5 +1,5 @@
 import * as types from '../../mutation_types'
-import * as api  from '../../../api'
+import * as api from '../../../api'
 import _ from 'lodash'
 
 const state = {
@@ -157,6 +157,7 @@ const actions = {
 };
 
 export default {
+    namespaced:true,
     state,
     getters,
     mutations,

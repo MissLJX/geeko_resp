@@ -141,7 +141,6 @@ const Me = [
     {
         path:ROUTER_PATH_ME + "/points-history",
         component:() => import('../pages/points-history.vue'),
-        name:"points-history",
         meta:{title:"Points History"},
         children:[
             {

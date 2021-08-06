@@ -64,6 +64,13 @@
             }else{
                 next();
             }
+        },
+        watch:{
+            '$route':function(to,form){
+                if(!to.name && to.path == "/me/m"){
+                    this.isActive = "Me";
+                }
+            }
         }
     }
 </script>

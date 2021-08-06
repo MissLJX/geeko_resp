@@ -5,6 +5,8 @@ import * as types from "./mutation_types";
 import _ from 'lodash'
 import axios from '../api/apiconfigs'
 
+import point from "./module/point/index.js";
+
 Vue.use(Vuex)
 
 const state = {
@@ -1110,5 +1112,8 @@ export default new Vuex.Store({
     state,
     getters,
     mutations,
-    actions
+    actions,
+    modules:{
+        point
+    }
 })

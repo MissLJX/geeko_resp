@@ -1,23 +1,23 @@
 <template>
     <div class="credits-points">
         <div class="_header">
-            <p>MY POINTS</p>
-            <a href="/fs/points-policy">
-                Learn about {{this.GLOBAL.sitename}} points
+            <p>{{$t("point.my_points")}}</p>
+            <a href="/fs/points-policy-pc">
+                {{$t("point.learn_about_points")}} {{this.GLOBAL.sitename}} {{$t("point.points")}}
                 <span class="iconfont">&#xe73f;</span>
             </a>
         </div>
 
         <div class="points">
             <div class="tot-credits fl-l">
-                <p><span class="p-red">{{me.points}}</span></p>
-                <p style="font-size: 12px;color: #222222;"><span>= {{pointsMoney}} US Dollars</span></p>
+                <p><span class="p-red">{{pointsCustomer.points}}</span></p>
+                <p style="font-size: 12px;color: #222222;"><span>= {{pointsCustomer.exchangeAmount}}</span></p>
             </div>
             <div class="line fl-l"></div>
             <div class="overdue-credits fl-l">
-                <p class="p-red">{{me.overduePoints}}</p>
+                <p class="p-red">{{pointsCustomer.overduePoints}}</p>
                 <div class="p-rla">
-                    <span>{{$t('creditsexpiring')}}<i class="iconfont"  @click="isShow()">&#xe73f;</i></span>
+                    <span>{{$t('point.points_expired_soon')}}<i class="iconfont"  @click="isShow()">&#xe73f;</i></span>
                     <div class="tips" v-if="seen">{{message.message}}.</div>
                 </div>
             </div>
@@ -28,95 +28,24 @@
             <div class="use fl-l" @click="changeMethod()" :class="{ active: !isActive }">{{$t('used')}}</div>
         </div> -->
 
-        <div class="_title">
-            POINTS DETAILS
-        </div>
-
-        <div class="c-options">
-            <div class="_change">
-                <p @click="isReceived = '0'">
-                    <span :class="{'active' : isReceived == '0'}">All</span>
-                </p>
-                <p @click="isReceived = '1'">
-                    <span :class="{'active' : isReceived == '1'}">Earned</span>
-                </p>
-                <p @click="isReceived = '2'">
-                    <span :class="{'active' : isReceived == '2'}">Used</span>
-                </p>
-                <p @click="isReceived = '3'">
-                    <span :class="{'active' : isReceived == '3'}">Expired</span>
-                </p>
-            </div>
-
-            <div class="_select">
-                <select class="x-select" v-model="selectedYear">
-                    <option v-for="item in creditsYear" v-bind:value="item">{{item}}</option>
-                </select>
-                <select class="x-select" v-model="selectedMonth">
-                    <option v-for="item in creditsMonth" v-bind:value="item">{{item}}</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="credits" v-if="isActive">
-            <div class="tbl c-header">
-                <div class="tbl-cell createTime">{{$t('Date')}}</div>
-                <div class="tbl-cell c-name">{{$t('Transaction')}}</div>
-                <div class="tbl-cell c-points">{{$t('Amount')}}</div>
-                <div class="tbl-cell c-points">Expiration</div>
-            </div>
-            <div class="tbl" v-if="!isHaveRec">
-                <div class="tbl-cell">{{$t('nomoredata')}}</div>
-            </div>
-            <div class="tbl" v-for="item in currCredit" v-if="item.points > 0">
-                <div class="tbl-cell createTime">{{getDate(item.createTime)}}</div>
-                <div class="tbl-cell c-name">{{item.eventName}}</div>
-                <div class="tbl-cell c-points">{{item.points}}</div>
-                <div class="tbl-cell">1</div>
-            </div>
-        </div>
-        <div class="credits" v-if="!isActive">
-            <div class="tbl c-header">
-                <div class="tbl-cell createTime">{{$t('Date')}}</div>
-                <div class="tbl-cell c-name">{{$t('Transaction')}}</div>
-                <div class="tbl-cell c-points">{{$t('Amount')}}</div>
-            </div>
-            <div class="tbl" v-if="!isHaveUse">
-                <div class="tbl-cell">{{$t('nomoredata')}}</div>
-            </div>
-            <div class="tbl" v-for="item in currCredit" v-if="item.points < 0">
-                <div class="tbl-cell createTime">{{getDate(item.createTime)}}</div>
-                <div class="tbl-cell c-name">{{item.eventName}}</div>
-                <div class="tbl-cell c-points-green">{{item.points}}</div>
-                <div class="tbl-cell">2</div>
-            </div>
-        </div>
-
-        <table>
-            <thead>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-            </thead>
-        </table>
+        <points-container></points-container>
 
         <div class="get-method">
-            <div class="c-hd">HOW TO EARN POINTS?</div>
+            <div class="c-hd">{{$t("point.how_to_get_points")}}</div>
             <div class="_bd">
-                <a href="/me/m/order/confirmed">
+                <a href="/me/m/order">
                     <div class="review">
                         <div>
                             <span class="iconfont">&#xe6d1;</span>
                         </div>
                         <div class="_font">
-                            <p>Review</p>
+                            <p>{{$t("point.review")}}</p>
                             <p>0~2000 points</p>
                         </div>
                     </div>
                 </a>
                 
-                <router-link :to="{name:'survey'}">
+                <!-- <router-link :to="{name:'survey'}">
                     <div class="survey">
                         <div>
                             <span class="iconfont">&#xe6cf;</span>
@@ -126,19 +55,19 @@
                             <p>0~300 points</p>
                         </div>
                     </div>
-                </router-link>
+                </router-link> -->
                 
-                <router-link :to="{name:'make-sug'}">
+                <a :href="makeSuggestionUrl">
                     <div class="suggestion">
                         <div>
                             <span class="iconfont">&#xe6d0;</span>
                         </div>
                         <div class="_font">
-                            <p>Suggestion</p>
+                            <p>{{$t("point.suggestion")}}</p>
                             <p>0~200 points</p>
                         </div>
                     </div>
-                </router-link>
+                </a>
                 
                 <a href="/i/download">
                     <div class="download">
@@ -146,13 +75,14 @@
                             <img src="https://image.geeko.ltd/chicme/20210415/code.png" alt="code">
                         </div>
                         <div class="_font">
-                            <p>Download App</p>
-                            <p>Get More points</p>
+                            <p>{{$t("point.download_app")}}</p>
+                            <p>{{$t("point.get_more_points")}}</p>
                         </div>
                     </div>
                 </a>
             </div>
         </div>
+        <loding v-if="isLoadingShow"></loding>
     </div>
 </template>
 
@@ -160,49 +90,12 @@
     import {mapGetters} from 'vuex'
     import * as utils from '../utils/geekoutil';
     import _ from 'lodash'
+    import PointsContainer from './point/PointsContainer.vue'
+    import loding from './loding.vue'
+
     export default {
         computed: {
             ...mapGetters(['credits','message','me']),
-
-            pointsMoney(){
-                return this.me.points > 0 ? this.me.points/100 : this.me.points
-            },
-            creditsYear(){
-                let arr =[];
-                this.credits.forEach(credit =>{
-                    arr.push(this.getYear(credit.createTime))
-                })
-                this.yearArr = _.uniq(arr)
-                this.selectedYear = this.yearArr[0]
-                return _.uniq(arr)
-            },
-            creditsMonth(){
-                let arr =[];
-                this.credits.forEach(credit =>{
-                    arr.push(this.getMonth(credit.createTime))
-                })
-                this.monthArr = _.uniq(arr)
-                this.selectedMonth = this.monthArr[0]
-                return _.uniq(arr)
-            },
-            currCredit(){
-                let arr =[];
-                this.credits.forEach(credit =>{
-                    if(this.getYear(credit.createTime) === this.selectedYear && this.getMonth(credit.createTime) === this.selectedMonth){
-                        arr.push(credit)
-                    }
-                })
-                arr.forEach(point =>{
-                    if(point.points > 0){
-                        this.isHaveRec = true
-                    }
-                    if(point.points < 0){
-                        this.isHaveUse = true
-                    }
-                })
-
-                return arr
-            },
             indexUrl(){
                 return utils.PROJECT + '/'
             },
@@ -214,19 +107,19 @@
             },
             makeSuggestionUrl(){
                 return utils.ROUTER_PATH_ME + '/m/makeSug'
+            },
+            pointsCustomer(){
+                return this.$store.getters["point/pointsCustomerNum"];
             }
         },
         data(){
             return{
                 seen:false,
                 isActive:true,
-                yearArr:[],
-                monthArr:[],
-                selectedYear:{},
-                selectedMonth:{},
                 isHaveRec:false,
                 isHaveUse:false,
-                isReceived:'0'
+                isReceived:'0',
+                isLoadingShow:false
             }
         },
         methods: {
@@ -234,32 +127,41 @@
                 this.seen = !this.seen;
 
             },
-            getDate(time){
-                if(time == null){
-                    return ''
-                }
-                return utils.enTime(new Date(time))
-            },
-            getYear(time){
-                if(time == null){
-                    return ''
-                }
-                return utils.enYear(new Date(time))
-            },
-            getMonth(time){
-                if(time == null){
-                    return ''
-                }
-                return utils.enMonth(new Date(time))
-            },
-            changeMethod:function(){
-                this.isActive = !this.isActive
-            },
+            // getDate(time){
+            //     if(time == null){
+            //         return ''
+            //     }
+            //     return utils.enTime(new Date(time))
+            // },
+            // getYear(time){
+            //     if(time == null){
+            //         return ''
+            //     }
+            //     return utils.enYear(new Date(time))
+            // },
+            // getMonth(time){
+            //     if(time == null){
+            //         return ''
+            //     }
+            //     return utils.enMonth(new Date(time))
+            // },
+            // changeMethod:function(){
+            //     this.isActive = !this.isActive
+            // },
+        },
+        components:{
+            "points-container":PointsContainer,
+            "loding":loding
         },
         created(){
             this.$store.dispatch('getMessage', 'M1138');
-            this.$store.dispatch('getCredits',{skip:0});
+            // this.$store.dispatch('getCredits',{skip:0});
             this.$store.dispatch('getMe');
+            this.isLoadingShow = true;
+            let _this = this;
+            this.$store.dispatch("point/getCustomerPointsNum").then(() => {
+                _this.isLoadingShow = false;
+            });
         }
     }
 </script>
@@ -290,6 +192,7 @@
                 font-family: 'SlatePro-Medium';
                 font-size: 30px;
                 color: #000000;
+                text-transform: uppercase;
             }
 
             & a{
@@ -308,23 +211,8 @@
                 }
             }
         }
-
-        ._title{
-            font-family: 'SlatePro-Medium';
-            font-size: 24px;
-            color: #000000;
-            margin: 50px 0px 5px;
-        }
     }
-    .c-header{
-        color: #999;
-        border-bottom: 1px solid #e6e6e6;
-        padding-bottom: 10px;
-        margin-bottom: 20px;
-        .c-points{
-            color: #999 !important;
-        }
-    }
+    
     .points{
         width: 915px;
         height: 145px;
@@ -389,69 +277,6 @@
                     color: #666;
                 }
             }
-        }
-    }
-    .c-options{
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin: 20px 0px;
-
-        ._select{
-            .x-select{
-                width: 125px;
-                height: 30px;
-                border: 1px solid #e6e6e6;
-                font-size: 14px;
-                color: #646464;
-                cursor: pointer;
-                background-color: #ffffff !important;
-            }
-        }
-
-        ._change{
-            & > p{
-                padding-right: 45px;
-                display: inline-block;
-                cursor: pointer;
-
-                & span.active{
-                    border-bottom: 2px solid #000000;
-                    padding-bottom: 3px;
-                }
-            }
-        }
-    }
-    .credits{
-        max-height: 450px;
-        overflow-y: auto;
-        padding: 10px 0;
-        border: 1px solid #e6e6e6;
-        .tbl{
-            width: 100%;
-            display: table;
-        }
-        .tbl-cell{
-            display: table-cell;
-            text-align: center;
-        }
-        .createTime{
-            width: 350px;
-            padding: 5px 0 5px 40px;
-            font-size: 14px;
-            color: #999;
-            text-align: left;
-        }
-        .c-name{
-            text-align: left;
-        }
-        .c-points{
-            width: 180px;
-            color: #E64545;
-        }
-        .c-points-green{
-            width: 180px;
-            color: #59b3b2;
         }
     }
     .special{
@@ -535,6 +360,7 @@
             }
 
             .download{
+                padding: 0px 10px;
                 background-image: linear-gradient(124deg, 
                     #a7a7a7 0%, 
                     #d9d9d9 100%);
