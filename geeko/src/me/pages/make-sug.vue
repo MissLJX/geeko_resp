@@ -1,19 +1,22 @@
 <template>
     <div class="make-sug">
-        <nav-bar>
-            <i class="iconfont el-back-font" slot="left" @click="backToPage">&#xe693;</i>
-            <span slot="center">Suggestion</span>
-        </nav-bar>
+        <div class="fixed-header">
+           <nav-bar>
+                <i class="iconfont el-back-font" slot="left" @click="backToPage">&#xe693;</i>
+                <span slot="center">{{$t("point.suggestion")}}</span>
+            </nav-bar> 
+        </div>
+        
 
         <div class="make-sug-container">
             <div class="question-type">
                 <div class="_hd">
-                    <span class="color-1">*</span><span>Question Type</span>
+                    <span class="color-1">*</span><span>{{$t("point.question_type")}}</span>
                 </div>
 
                 <div class="_bd" :class="{'border-red-1' : questionClassify.questionTypeBorderShow}">
                     <div class="st-table st-fullwidth _container" @click="questionShow = !questionShow">
-                        <div class="st-cell _title">Screen Freeze</div>
+                        <div class="st-cell _title">{{question}}</div>
                         <div class="st-cell st-t-r _icon">
                             <span class="iconfont" :class="{'active':questionShow}">&#xe695;</span>
                         </div>
@@ -24,32 +27,32 @@
                             <li :class="{'active' : question == 'Screen Freeze'}">
                                 <input type="radio" id="question1" name="screenFreeze" value="Screen Freeze" v-model="question">
                                 <label for="question1"></label>
-                                <span>Screen Freeze</span>
+                                <span>{{$t("point.screen_freeze")}}</span>
                             </li>
                             <li :class="{'active' : question == 'App crush'}">
                                 <input type="radio" id="question2" name="screenFreeze" value="App crush" v-model="question">
                                 <label for="question2"></label>
-                                <span>App crush</span>
+                                <span>{{$t("point.app_crush")}}</span>
                             </li>
                             <li :class="{'active' : question == 'Balck screen'}">
                                 <input type="radio" id="question3" name="screenFreeze" value="Balck screen" v-model="question">
                                 <label for="question3"></label>
-                                <span>Balck screen</span>
+                                <span>{{$t("point.black_screen")}}</span>
                             </li>
                             <li :class="{'active' : question == 'Device reboot'}">
                                 <input type="radio" id="question4" name="screenFreeze" value="Device reboot" v-model="question">
                                 <label for="question4"></label>
-                                <span>Device reboot</span>
+                                <span>{{$t("point.device_rebot")}}</span>
                             </li>
                             <li :class="{'active' : question == 'Running slowly'}">
                                 <input type="radio" id="question5" name="screenFreeze" value="Running slowly" v-model="question">
                                 <label for="question5"></label>
-                                <span>Running slowly</span>
+                                <span>{{$t("point.running_slowly")}}</span>
                             </li>
                             <li :class="{'active' : question == 'Other error'}">
                                 <input type="radio" id="question6" name="screenFreeze" value="Other error" v-model="question">
                                 <label for="question6"></label>
-                                <span>Other error</span>
+                                <span>{{$t("point.other_error")}}</span>
                             </li>
                         </ul>
                     </transition>
@@ -65,7 +68,7 @@
                 <div class="reg-birthday">
                     <div class="_item">
                         <div>
-                            <span class="color-1">*</span><span>Time</span>
+                            <span class="color-1">*</span><span>{{$t("point.time")}}</span>
                         </div>
                     </div>
                     <div style="position: relative;" :class="{'border-red-1':questionClassify.timeBorderShow}">
@@ -85,11 +88,11 @@
 
             <div class="description">
                 <div class="_hd">
-                    <span class="color-1">*</span><span>Description</span>
+                    <span class="color-1">*</span><span>{{$t("point.description")}}</span>
                 </div>
 
                 <div class="_bd">
-                    <textarea maxlength="1000" v-validate="'required'" name="description" :class="{'st-input-danger':errors.has('description')}" placeholder="Sorry for the inconvenience, we wii fix the problem as soon as possible…" v-model="descriptionAnswer"></textarea>
+                    <textarea maxlength="1000" v-validate="'required'" name="description" :class="{'st-input-danger':errors.has('description')}" :placeholder="$t('point.sorry_inconvenience')" v-model="descriptionAnswer"></textarea>
                     <span v-show="errors.has('description')" class="st-is-danger">{{errors.first('description')}}</span>
                 </div>
 
@@ -98,21 +101,21 @@
 
             <div class="upload-image">
                 <div class="_hd">
-                    <span>Upload image</span>
-                    <p>Maximum of 3 photos, only JPEG, GIF or PNG.</p>
+                    <span>{{$t("point.upload_image")}}</span>
+                    <p>{{$t("point.maxinum_three_photos")}}</p>
                 </div>
 
                 <div class="_bd">
                     <div class="upload-container imgboxid">
-                        <ul v-if="images && images.length">
-                            <li v-for="(image,index) in images" class="uploadImage" :key="index+image">
+                        <ul v-if="uploadedImages && uploadedImages.length">
+                            <li v-for="(image,index) in uploadedImages" class="uploadImage" :key="index+image">
                                 <img :src="image"/>
                                 <span class="removeImg" @click="removeImg(index)">&times;</span>
                             </li>
                         </ul>
-                        <div class="upload-img uploadimg" v-show="images && images.length < 3">
+                        <div class="upload-img uploadimg" v-show="uploadedImages && uploadedImages.length < 3">
                             <form ref="imageLoader">
-                                <input type="file" name="imageFiles" multiple="multiple" @change="loadUploadImg(index)" accept="image/jpg,image/jpeg,image/png,image/gif">
+                                <input type="file" name="imageFiles" multiple="multiple" @change="loadImg" accept="image/jpg,image/jpeg,image/png,image/gif">
                             </form>
                             <div class="addbtn iconfont">&#xe6d3;</div>
                         </div>
@@ -123,7 +126,7 @@
 
         <div class="sett-address-footer">
             <!-- <div class="add-address" @click="confirmSuggestion">submit</div> -->
-            <div class="add-address" @click="successShow = !successShow">submit</div>
+            <div class="add-address" @click="confirmSuggestion">{{$t("point.submit")}}</div>
         </div>
 
         <Loading v-if="uploadImageLoadingShow || confirmLoadingShow"></Loading>
@@ -133,12 +136,8 @@
                 <div class="_hd">
                     <span class="iconfont">&#xe6b7;</span>
                 </div>
-                <p class="_title1">Submit Successfully</p>
-                <p class="_title2">
-                    We have successfully received your suggestion and it will take few days to process this issue, 
-                    we will reach out to you if we need any information. Please check our reply at your email address. 
-                    Thank you for your cooperation.
-                </p>
+                <p class="_title1">{{$t("point.submit_success")}}</p>
+                <p class="_title2">{{$t("point.wu_have_success")}}</p>
                 
             </div>
         </transition>
@@ -166,7 +165,9 @@
                 //     "https://dgzfssf1la12s.cloudfront.net/medium/1c6e0c403y0L0z7x1f4P4D9g96-32414",
                 //     "https://dgzfssf1la12s.cloudfront.net/medium/1u6g1v5Z9c4c9O8a7l5u8o2b8x-40973"
                 //     ],
-                images:[],
+                uploadedImages:[],
+                files:[],
+                newfiles:[],
                 questionShow:false,
                 errorInput:"",
                 uploadImageLoadingShow:false,
@@ -199,101 +200,93 @@
             }
         },
         methods:{
-            loadUploadImg(event) {
-                let _this = this;
-                _this.uploadImageLoadingShow = true;
-                this.newFiles = [...event.target.files];
-                this.files = this.files.concat(this.newFiles);
-                let files = this.files;
-
-                let promises = this.files.map(file => new HtmlImageCompress(file,{quality:.7, imageType:file.type}));
-
-                Promise.all(promises).then(result => {
-                    let formData = new FormData();
-                    formData.append("type","returnLogistics");
-                    
-                    let _files = result.map(result => result.file);
-
-                    _files.forEach((file,index) => {
-                        formData.append("files",new File([file],files[index].name));
-                    });
-
-                    this.$store.dispatch('generalUploadImage',{formData}).then((result) => {
-                        console.log("Imageresult",result);
-                        if(!!result && result.length > 0){
-                            result.forEach((item) => {
-                                _this.images.push(item);
-                            });
-                            _this.uploadImageLoadingShow = false;
-                        }
-                    });
-                });
-
-                if (this.images.length > 3) {
-                    this.images.splice(3, this.images.length - 3);
+            loadImg(event) {
+                this.newfiles = [...event.target.files];
+                this.files = this.files.concat(this.newfiles);
+                var files = this.newfiles;
+                _.each(files, (file) => {
+                    this.addnum = this.addnum + 1;
+                    var src = window.navigator.userAgent.indexOf("Chrome") >= 1 || window.navigator.userAgent.indexOf("Safari") >= 1 ? window.webkitURL.createObjectURL(file) : window.URL.createObjectURL(file);
+                    this.uploadedImages.push(src)
+                })
+                if (this.uploadedImages.length > 3) {
+                    this.uploadedImages.splice(3, this.uploadedImages.length - 3);
                     this.files.splice(3, this.files.length - 3)
                 }
             },
+            removeImg(index) {
+                this.uploadedImages.splice(index, 1)
+                this.files.splice(index, 1);
+            },
             confirmSuggestion(){
-                this.successShow = true;
-                // if(!this.question){
-                //    this.questionClassify.questionTypeBorderShow = true;
-                //    return;
-                // }else if(this.question == 'Other error'){
-                //     this.$validator.validate('otherError',this.errorInput).then(result => {
-                //         if(!result){
-                //             return;
-                //         }else{
-                //             // 拿值
-                //         }
-                //     });
-                // }else{
-                //     // 拿值
-                //     this.questionClassify.questionTypeBorderShow = false;
-                // }
+                let _this = this;
+                let files = this.files;
+                let promises = this.files.map(file => new HtmlImageCompress(file,{quality:.7, imageType:file.type}));
 
-                // if(this.datatime){
-                //     // 拿值
-                //     this.questionClassify.timeBorderShow = false;
-                // }else{
-                //     this.questionClassify.timeBorderShow = true;
-                //     return;
-                // }
+                Promise.all(promises).then(results => {
+                    let _files = results.map(result => result.file);
+                    let formData = new FormData();
 
-                // this.$validator.validate('description',this.descriptionAnswer).then(result => {
-                //     if(!result){
-                //         return;
-                //     }else{
-                //         // 拿值
-                //     }
-                // });
+                    _files.forEach((file,index) => {
+                        formData.append("imageFiles",  new File([file], files[index].name));
+                    });
 
-                // this.$validator.validateAll().then(result => {
-                //     console.log("result",result);
-                //     if(result && this.datatime){
-                //         console.log("全部满足");
-                //         console.log("this.question",this.question);
-                //         console.log("this.errorInput",this.errorInput);
-                //         console.log("this.datatime",this.datatime);
-                //         console.log("this.descriptionAnswer",this.descriptionAnswer);
-                //         console.log("this.images",this.images);
-                        
-                //         let formData = new FormData();
-                //         if(this.question == 'Other error'){
-                //             // this.errorInput
-                //             formData.append();
-                //         }else{
-                //             // this.question
-                //         }
-                //     }
-                // });
+                    if(!_this.question){
+                        _this.questionClassify.questionTypeBorderShow = true;
+                        return;
+                    }else if(_this.question == 'Other error'){
+                        _this.$validator.validate('otherError',_this.errorInput).then(result => {
+                            if(!result){
+                                return;
+                            }else{
+                                formData.append("label",_this.errorInput);
+                            }
+                        });
+                    }else{
+                        // 拿值
+                        _this.questionClassify.questionTypeBorderShow = false;
+                        formData.append("label",_this.question);
+                    }
+
+                    if(_this.datatime){
+                        // 拿值
+                        formData.append("time",_this.datatime);
+                        _this.questionClassify.timeBorderShow = false;
+                    }else{
+                        _this.questionClassify.timeBorderShow = true;
+                        return;
+                    }
+
+                    _this.$validator.validate('description',_this.descriptionAnswer).then(result => {
+                        if(!result){
+                            return;
+                        }else{
+                            // 拿值
+                            formData.append("message",_this.descriptionAnswer);
+                        }
+                    });
+
+                    _this.$validator.validateAll().then(result => {
+                        console.log("result",result);
+                        if(result && _this.datatime){
+                            console.log("全部满足");
+                            // for (var [a, b] of formData.entries()) {
+                            //     console.log("formData",a, b);
+                            // }
+                            _this.$store.dispatch("me/makeSuggestion",formData).then(() => {
+                                this.successShow = true;
+                            });
+                        }
+                    });
+                });
             },
             backToPage(){
-                if(this.successShow){
-                    this.successShow = false;
-                }else{
-                    this.$router.go(-1)
-                }
+                // if(this.successShow){
+                //     this.successShow = false;
+                // }else{
+                //     this.$router.go(-1)
+                // }
+                this.$router.go(-1);
             }
         }
     }
@@ -302,7 +295,20 @@
 <style lang="scss" scoped>
     .make-sug{
         padding-bottom: 40px;
+
+        .fixed-header{
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 5;
+            background-color: #ffffff;
+        }
+
        .make-sug-container{
+           padding-top: 44px;
+           padding-bottom: 70px;
            .question-type{
                 padding: 0px 12px;
                ._hd{
@@ -573,7 +579,7 @@
        .sett-address-footer{
             width: 100%;
             position: fixed;
-            bottom: 0px;
+            bottom: 51px;
             left: 0px;
             right: 0px;
             text-align: center;

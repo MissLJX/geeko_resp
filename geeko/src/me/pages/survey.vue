@@ -2,15 +2,15 @@
     <div class="survey">
         <nav-bar>
             <i class="iconfont el-back-font" slot="left" @click="$router.go(-1);">&#xe693;</i>
-            <span slot="center">Surevy</span>
+            <span slot="center">{{$t("point.survey")}}</span>
         </nav-bar>
 
         <div class="empty-container">
             <div class="_hd">
-                <span class="iconfont">&#xe6d4;</span>
+                <span class="iconfont">&#xe6d8;</span>
             </div>
 
-            <p class="_title">Sorry, it’s empty here now.</p>
+            <p class="_title">{{$t("point.sorry_empty_here_not")}}</p>
         </div>
     </div>
 </template>

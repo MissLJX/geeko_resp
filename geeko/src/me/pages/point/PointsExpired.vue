@@ -4,7 +4,8 @@
             :credits="pointsExpired"
             :loading="loading"
             @listing="listingHandle"
-            :finished="finished" 
+            :finished="finished"
+            :isExpired="true"
         ></credit-list>
    </div>
 </template>

@@ -3,7 +3,7 @@
 
         <nav-bar>
             <i class="iconfont el-back-font" slot="left" @click="$router.go(-1)">&#xe693;</i>
-            <span slot="center">My Points</span>
+            <span slot="center">{{$t("point.my_points")}}</span>
             <a href="/fs/points-policy" slot="right">
                 <span class="iconfont" style="font-size:20px;color:#222222;">&#xe73f;</span>
             </a>
@@ -14,6 +14,8 @@
             <received-used></received-used>
             <points-list></points-list>
         </div>
+
+        <Loading v-if="isGetCustomerLoadingShow"></Loading>
     </div>
 </template>
 
@@ -42,11 +44,14 @@
     import NavBar from '../components/nav-bar.vue'
     import PointsList from '../components/points-list.vue'
 
+    import Loading from '../../components/loading.vue'
+
     export default{
         data(){
             return {
                 received: 0,
                 used: 0,
+                isGetCustomerLoadingShow:false
             }
         },
         computed: {
@@ -59,13 +64,18 @@
             },*/
         },
         created:function(){
-            this.$store.dispatch("me/getCustomerPointsNum");
+            let _this = this;
+            _this.isGetCustomerLoadingShow = true;
+            this.$store.dispatch("me/getCustomerPointsNum").then(() => {
+                _this.isGetCustomerLoadingShow = false;
+            });
         },
         components: {
             'credit-header': CreditHeader,
             'received-used': ReceivedUsed,
             'nav-bar':NavBar,
-            'points-list':PointsList
+            'points-list':PointsList,
+            "Loading":Loading
         }
     }
 </script>
