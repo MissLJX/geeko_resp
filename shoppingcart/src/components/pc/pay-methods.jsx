@@ -8,7 +8,7 @@ import {MutiElement, FormElement} from './styled-control.jsx'
 import Ask from './ask.jsx'
 import {unitprice} from '../../utils/utils.js'
 import InputBtn from './input-btn.jsx'
-import { getDPaymethods } from '../../api'
+import {getDPaymethods} from '../../api'
 
 const __qoute_reg__ = /\([^\}]+\)/
 
@@ -16,49 +16,54 @@ const __Cpf_Tip_Message__ = 'CPF (Cadastro de Pessoa Física), utilizado para tr
 const __Coupon_Code_Tip_Message__ = 'Utiliza el código MERCADOPAGO para obtener un 10% de descuento adicional.'
 
 const METHOD = styled.div`
-	cursor: pointer;
-	& > div{
-		&:nth-child(1){ 
-			width: 28px;
-		}
-		&:nth-child(2){
-			width: 70px;
-			img{
-				width: 60px;
-			}
-		}
-	}
+  cursor: pointer;
+
+  & > div {
+    &:nth-child(1) {
+      width: 28px;
+    }
+
+    &:nth-child(2) {
+      width: 70px;
+
+      img {
+        width: 60px;
+      }
+    }
+  }
 `
 
 const METHODS = styled.ul`
-	& > li{
-		margin-top: 20px;
-		&:first-child{
-			margin-top: 0;
-		}
-	}
+  & > li {
+    margin-top: 20px;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
 `
 
 const METHODPLUGIN = styled.div`
-	background-color: #eee;
-	padding: 15px 28px;
-	margin-top: 10px;
-	position: relative;
-	&::before{
-			content: '';
-			display: inline-block;
-			width: 10px;
-			height: 10px;
-			transform: rotate(-45deg);
-			background-color: #eee;
-			top: -5px;
-			left: 50px;
-			position: absolute;
-	}
+  background-color: #eee;
+  padding: 15px 28px;
+  margin-top: 10px;
+  position: relative;
+
+  &::before {
+    content: '';
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    transform: rotate(-45deg);
+    background-color: #eee;
+    top: -5px;
+    left: 50px;
+    position: absolute;
+  }
 `
 
 const METHODCONTAINER = styled.div`
-	
+
 `
 
 const Boleto = (props) => <Form ref={props.boletoForm}>
@@ -94,75 +99,80 @@ const Apac = (props) => <Form ref={props.apac}>
 </Form>
 
 const CashMethods = styled.ul`
-	&::after{
-		content: '';
-		clear: both;
-		display: block;
-	}
-	& > li{
-		float: left;
-		margin-right: 10px;
-	}
+  &::after {
+    content: '';
+    clear: both;
+    display: block;
+  }
+
+  & > li {
+    float: left;
+    margin-right: 10px;
+  }
 `
 
 const CashMethod = styled.span`
-	display: inline-block;
-	cursor: pointer;
-	position: relative;
-	border: 1px solid #e5e5e5;
-	padding: 4px;
-	height: 31px;
-	overflow: hidden;
-	background-color: #fff;
-	box-shadow: 0 0px 4px rgba(136,136,136,.2);
-	border-radius: 2px;
-	&.selected{
-		border: 1px solid #e5004f;
-		&::after{
-			content: '\\e742';
-			right: -2px;
-			bottom: -2px;
-			position: absolute;
-			color: #e5004f;
-			font-family: iconfont;
-			font-style: normal;
-		}
-	}
+  display: inline-block;
+  cursor: pointer;
+  position: relative;
+  border: 1px solid #e5e5e5;
+  padding: 4px;
+  height: 31px;
+  overflow: hidden;
+  background-color: #fff;
+  box-shadow: 0 0px 4px rgba(136, 136, 136, .2);
+  border-radius: 2px;
 
-	img{
-		display: block;
-	}
+  &.selected {
+    border: 1px solid #e5004f;
+
+    &::after {
+      content: '\\e742';
+      right: -2px;
+      bottom: -2px;
+      position: absolute;
+      color: #e5004f;
+      font-family: iconfont;
+      font-style: normal;
+    }
+  }
+
+  img {
+    display: block;
+  }
 `
 
 const TicketCashMethod = styled.span`
-	display: inline-block;
-	cursor: pointer;
-	position: relative;
-	border: 1px solid #e5e5e5;
-	padding: 4px;
-	height: 100px;
-	width: 100px;
-	overflow: hidden;
-	background-color: #fff;
-	box-shadow: 0 0px 4px rgba(136,136,136,.2);
-	border-radius: 2px;
-	&.selected{
-		border: 1px solid #e5004f;
-		&::after{
-			content: '\\e742';
-			right: -2px;
-			bottom: -2px;
-			position: absolute;
-			color: #e5004f;
-			font-family: iconfont;
-			font-style: normal;
-		}
-	}
+  display: inline-block;
+  cursor: pointer;
+  position: relative;
+  border: 1px solid #e5e5e5;
+  padding: 4px;
+  height: 100px;
+  width: 100px;
+  overflow: hidden;
+  background-color: #fff;
+  box-shadow: 0 0px 4px rgba(136, 136, 136, .2);
+  border-radius: 2px;
 
-	img{
-		display: block;
-		width: 100%;
-	}
+  &.selected {
+    border: 1px solid #e5004f;
+
+    &::after {
+      content: '\\e742';
+      right: -2px;
+      bottom: -2px;
+      position: absolute;
+      color: #e5004f;
+      font-family: iconfont;
+      font-style: normal;
+    }
+  }
+
+  img {
+    display: block;
+    width: 100%;
+  }
 `
 
 const MoneyTransform = (props) => {
@@ -171,7 +181,9 @@ const MoneyTransform = (props) => {
 		<CashMethods>
 			{
 				atmMethods && atmMethods.map(method => <li key={method.id}>
-					<CashMethod className={atmMethod === method.id ? 'selected' : ''} onClick={(evt) => { props.atmClickHandle(method) }}>
+					<CashMethod className={atmMethod === method.id ? 'selected' : ''} onClick={(evt) => {
+						props.atmClickHandle(method)
+					}}>
 						<img src={method.secure_thumbnail}/>
 					</CashMethod>
 				</li>)
@@ -180,9 +192,9 @@ const MoneyTransform = (props) => {
 
 		{
 			showMercadopagoCouponField && <div style={{width: 320, marginTop: 10}}>
-				<div>MercadoPago Cupón  <Ask style={{marginLeft: 5}} message={__Coupon_Code_Tip_Message__}/></div>
+				<div>MercadoPago Cupón <Ask style={{marginLeft: 5}} message={__Coupon_Code_Tip_Message__}/></div>
 				<div style={{marginTop: 5}}>
-					<InputBtn initValue={couponCode} buttonText={'Utilizar Ahora'} buttonHandle={ setCouponHandle }/>
+					<InputBtn initValue={couponCode} buttonText={'Utilizar Ahora'} buttonHandle={setCouponHandle}/>
 				</div>
 
 			</div>
@@ -192,28 +204,28 @@ const MoneyTransform = (props) => {
 }
 
 const TicketCash = class extends React.Component {
-	constructor (props) {
+	constructor(props) {
 		super(props)
 		this.state = {
 			tcMethods: []
 		}
 	}
 
-	componentWillMount () {
-		const { method, initCashmethod } = this.props
+	componentWillMount() {
+		const {method, initCashmethod} = this.props
 		if (method) {
 			getDPaymethods(method.id).then(({result}) => {
 				this.setState({
 					tcMethods: result
 				})
-				if(result && result.length > 0){
+				if (result && result.length > 0) {
 					initCashmethod(method.id, result[0])
 				}
 			})
 		}
 	}
 
-	getLabel (payMethod) {
+	getLabel(payMethod) {
 		switch (payMethod) {
 		case '27':
 		case '28':
@@ -237,9 +249,9 @@ const TicketCash = class extends React.Component {
 		}
 	}
 
-	render () {
-		const { tcMethods } = this.state
-		const { method, tcMethod, tcClickHandle, document, handleInputChange, documentForm, documentRef } = this.props
+	render() {
+		const {tcMethods} = this.state
+		const {method, tcMethod, tcClickHandle, document, handleInputChange, documentForm, documentRef} = this.props
 
 		const _dni = getDNI(method.id)
 
@@ -264,7 +276,9 @@ const TicketCash = class extends React.Component {
 			<CashMethods style={{marginTop: 15}}>
 				{
 					tcMethods && tcMethods.map(method => <li key={method.id}>
-						<TicketCashMethod className={tcMethod === method.id ? 'selected' : ''} onClick={(evt) => { tcClickHandle(method.id) }}>
+						<TicketCashMethod className={tcMethod === method.id ? 'selected' : ''} onClick={(evt) => {
+							tcClickHandle(method.id)
+						}}>
 							<img src={method.logo}/>
 						</TicketCashMethod>
 					</li>)
@@ -285,7 +299,7 @@ const BrazilOcean = (props) => <Form ref={props.brazilOceanForm}>
 				className="x-select"
 				value={props.installments}
 				onChange={props.handleInputChange}>
-				<option value={1}>1*{unitprice(props.orderTotal)} ({unitprice(props.orderTotal)})  </option>
+				<option value={1}>1*{unitprice(props.orderTotal)} ({unitprice(props.orderTotal)})</option>
 				{
 
 					props.installmentoptions.map(i => (
@@ -302,18 +316,18 @@ const BrazilOcean = (props) => <Form ref={props.brazilOceanForm}>
 </Form>
 
 const Mercado = (props) => {
-	const { setCouponHandle, couponCode } = props
+	const {setCouponHandle, couponCode} = props
 	return <div style={{width: 320}}>
-		<div>MercadoPago Cupón  <Ask style={{marginLeft: 5}} message={__Coupon_Code_Tip_Message__}/></div>
+		<div>MercadoPago Cupón <Ask style={{marginLeft: 5}} message={__Coupon_Code_Tip_Message__}/></div>
 		<div style={{marginTop: 5}}>
-			<InputBtn initValue={couponCode} buttonText={'Utilizar Ahora'} buttonHandle={ setCouponHandle }/>
+			<InputBtn initValue={couponCode} buttonText={'Utilizar Ahora'} buttonHandle={setCouponHandle}/>
 		</div>
 
 	</div>
 }
 
 const getPlugin = (props) => {
-	const { method, showMercadopagoCouponField } = props
+	const {method, showMercadopagoCouponField} = props
 	switch (method.id) {
 	case '16':
 		return <Boleto {...props}/>
@@ -345,25 +359,35 @@ const getPlugin = (props) => {
 }
 
 const DISCOUNTTIP = styled.span`
-	background-color:#fff9fc;
-	border: 1px solid #f3a6c0;
-	padding: 4px;
-	font-size: 12px;
-	position: relative;
-	margin-left: 12px;
-	&::before{
-		content:'';
-		border-left: 1px solid #f3a6c0;
-		border-top: 1px solid #f3a6c0;
-		background-color:#fff9fc;
-		transform: rotate(-45deg);
-		position:absolute;
-		left: -5px;
-		top: 6px;
-		width: 8px;
-		height: 8px;
-	}
+  background-color: #fff9fc;
+  border: 1px solid #f3a6c0;
+  padding: 4px;
+  font-size: 12px;
+  position: relative;
+  margin-left: 12px;
+
+  &::before {
+    content: '';
+    border-left: 1px solid #f3a6c0;
+    border-top: 1px solid #f3a6c0;
+    background-color: #fff9fc;
+    transform: rotate(-45deg);
+    position: absolute;
+    left: -5px;
+    top: 6px;
+    width: 8px;
+    height: 8px;
+  }
 `
+
+const SHIPPING_MSG = styled.span`
+  color: #e2ae2f;
+  font-size: 12px;
+`
+
+const MethodMsg = props => {
+	return <SHIPPING_MSG dangerouslySetInnerHTML={{__html: props.msg}}/>
+}
 
 const PayMethod = (props) => {
 	const {method, selectedPayId, paypalDiscountMessage, children} = props
@@ -379,19 +403,25 @@ const PayMethod = (props) => {
 	}
 
 	return <METHODCONTAINER>
-		<METHOD onClick={() => { props.selectPayHandle(method) }} className="x-table x-fw __vm">
+		<METHOD onClick={() => {
+			props.selectPayHandle(method)
+		}} className="x-table x-fw __vm">
 			<div className="x-cell">
-				<CheckBox className={ selected ? 'selected' : ''}/>
+				<CheckBox className={selected ? 'selected' : ''}/>
 			</div>
 			<div className="x-cell">
-				<img src={ method.icon }/>
+				<img src={method.icon}/>
 			</div>
 			<div className="x-cell">
 				<span dangerouslySetInnerHTML={{__html: name}}/>
 
-				{
-					method.id === '1' && paypalDiscountMessage && <DISCOUNTTIP><span dangerouslySetInnerHTML={{__html: paypalDiscountMessage}}/></DISCOUNTTIP>
-				}
+				{/*{*/}
+				{/*	method.id === '1' && paypalDiscountMessage &&*/}
+				{/*    <DISCOUNTTIP><span dangerouslySetInnerHTML={{__html: paypalDiscountMessage}}/></DISCOUNTTIP>*/}
+				{/*}*/}
+				{method.promotionMsg && <div style={{marginTop: 4}}>
+					<MethodMsg msg={method.promotionMsg}/>
+				</div>}
 			</div>
 
 		</METHOD>
@@ -400,20 +430,20 @@ const PayMethod = (props) => {
 			selected && children && <METHODPLUGIN>
 				{children}
 			</METHODPLUGIN>
-			
+
 		}
-		{method.type === '27' && <div id={`klarna-payments-container-${method.id}`} style={{display: `${selected? 'block': 'none'}`}}/>}
+		{method.type === '27' &&
+        <div id={`klarna-payments-container-${method.id}`} style={{display: `${selected ? 'block' : 'none'}`}}/>}
 	</METHODCONTAINER>
 }
 
 const PayMethods = class extends React.Component {
-	constructor (props) {
+	constructor(props) {
 		super(props)
 	}
 
-	render () {
-		const { payMethodList } = this.props
-
+	render() {
+		const {payMethodList} = this.props
 
 
 		return <METHODS>
