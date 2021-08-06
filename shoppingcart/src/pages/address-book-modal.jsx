@@ -35,6 +35,14 @@ const Modal = class extends React.Component {
 		this.editAddress = this.editAddress.bind(this)
 	}
 
+	componentDidMount() {
+		if(window.GeekoSensors){
+			window.GeekoSensors.Track('address_edit', {
+				edit_type: this.props.address ? 'Edit Address': 'Add Address'
+			})
+		}
+	}
+
 	close(evt) {
 		evt.preventDefault()
 		this.props.history.replace(`${window.ctx || ''}${__route_root__}/address-book`)
@@ -43,33 +51,32 @@ const Modal = class extends React.Component {
 	editAddress(address) {
 		let addressOpreator = this.props.address ? editAddress : addAddress
 		let editType = this.props.address ? 'Edit Address': 'Add Address'
-        addressOpreator({ ...address, id: this.props.address ? this.props.address.id : null }).then(() => {
-            if (address.country === 'BR') {
-                Cookie.set('currency', 'BRL', { expires: 365 })
-                this.props.CHANGELANG('pt_BR')
-            } else if (address.country === 'MX') {
-                Cookie.set('currency', 'MXN', { expires: 365 })
-                this.props.CHANGELANG('es_MX')
-            } else {
-                this.props.REFRESH()
-            }
-            this.props.history.replace(`${window.ctx || ''}${__route_root__}/address-book`)
-
+		addressOpreator({ ...address, id: this.props.address ? this.props.address.id : null }).then(() => {
+			if (address.country === 'BR') {
+				Cookie.set('currency', 'BRL', { expires: 365 })
+				this.props.CHANGELANG('pt_BR')
+			} else if (address.country === 'MX') {
+				Cookie.set('currency', 'MXN', { expires: 365 })
+				this.props.CHANGELANG('es_MX')
+			} else {
+				this.props.REFRESH()
+			}
+			this.props.history.replace(`${window.ctx || ''}${__route_root__}/address-book`)
 
 			window.GeekoSensors.Track('address_edit', {
 				edit_type: editType,
 				is_success: true
 			})
 
-
-        }).catch(({ result }) => {
-            alert(result)
+		}).catch(({ result }) => {
+			alert(result)
 			window.GeekoSensors.Track('address_edit', {
 				edit_type: editType,
 				is_success: false,
 				reason: result
 			})
-        })
+		})
+		
 	}
 
 	render() {

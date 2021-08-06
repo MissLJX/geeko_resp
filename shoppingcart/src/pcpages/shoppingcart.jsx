@@ -120,22 +120,22 @@ export const __address_token__ = window.token
 
 const getPayImage = country => {
 	switch (country) {
-		case 'BR':
-			return 'https://s3-us-west-2.amazonaws.com/wanna/pt_BR.png'
-		case 'DE':
-			return 'https://s3-us-west-2.amazonaws.com/wanna/de_DE.png'
-		case 'MX':
-			return 'https://s3-us-west-2.amazonaws.com/wanna/es_ES.png'
-		case 'AR':
-			return 'https://s3-us-west-2.amazonaws.com/wanna/es_AR.png'
-		case 'CO':
-			return 'https://s3-us-west-2.amazonaws.com/wanna/es_CO.png'
-		case 'CL':
-			return 'https://s3-us-west-2.amazonaws.com/wanna/es_CL.png'
-		case 'UY':
-			return 'https://s3-us-west-2.amazonaws.com/wanna/es_UY.png'
-		default:
-			return 'https://s3-us-west-2.amazonaws.com/wanna/pc_default.png'
+	case 'BR':
+		return 'https://s3-us-west-2.amazonaws.com/wanna/pt_BR.png'
+	case 'DE':
+		return 'https://s3-us-west-2.amazonaws.com/wanna/de_DE.png'
+	case 'MX':
+		return 'https://s3-us-west-2.amazonaws.com/wanna/es_ES.png'
+	case 'AR':
+		return 'https://s3-us-west-2.amazonaws.com/wanna/es_AR.png'
+	case 'CO':
+		return 'https://s3-us-west-2.amazonaws.com/wanna/es_CO.png'
+	case 'CL':
+		return 'https://s3-us-west-2.amazonaws.com/wanna/es_CL.png'
+	case 'UY':
+		return 'https://s3-us-west-2.amazonaws.com/wanna/es_UY.png'
+	default:
+		return 'https://s3-us-west-2.amazonaws.com/wanna/pc_default.png'
 	}
 }
 
@@ -524,11 +524,11 @@ const ShoppingCart = class extends React.Component {
 					container: `#klarna-payments-container-${paymethod.id}`,
 					payment_method_category: paymethod.description
 				}, {
-					"locale": params.locale,
-					"purchase_country": params.purchase_country,
-					"purchase_currency": params.purchase_currency,
-					"order_amount": params.order_amount,
-					"order_lines": params.order_lines
+					'locale': params.locale,
+					'purchase_country': params.purchase_country,
+					'purchase_currency': params.purchase_currency,
+					'order_amount': params.order_amount,
+					'order_lines': params.order_lines
 				}, function (res) {
 					console.debug(res)
 				})
@@ -787,7 +787,7 @@ const ShoppingCart = class extends React.Component {
 					}
 				}
 
-			}).render(c);
+			}).render(c)
 
 		}
 
@@ -1018,14 +1018,15 @@ const ShoppingCart = class extends React.Component {
 			Klarna.Payments.authorize({
 				payment_method_category: selectedPayMethod.description
 			}, {
-				"shipping_address": this.state.klarnaParams.shipping_address,
-				"billing_address": this.state.klarnaParams.shipping_address
+				'shipping_address': this.state.klarnaParams.shipping_address,
+				'billing_address': this.state.klarnaParams.shipping_address
 			}, function (res) {
 
 				const {
 					authorization_token,
 					approved,
-					show_form
+					show_form,
+					error
 				} = res
 
 				if (approved && authorization_token) {
@@ -1046,7 +1047,7 @@ const ShoppingCart = class extends React.Component {
 							if (orderId && window.__is_login__) {
 								self.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
 							}
-						} else if (fraud_status === "ACCEPTED") {
+						} else if (fraud_status === 'ACCEPTED') {
 							window.location.href = redirect_url
 						}
 
@@ -1057,6 +1058,16 @@ const ShoppingCart = class extends React.Component {
 					})
 				} else {
 					self.setState({ checking: false })
+					try {
+						if(window.GeekoSensors){
+							window.GeekoSensors.Track('pay_error', {
+								payMethod,
+								error: error ? JSON.stringify(error): ''
+							})
+						}
+					}catch (e){
+						console.error(e)
+					}
 				}
 
 
@@ -1073,7 +1084,7 @@ const ShoppingCart = class extends React.Component {
 				const payResult = data.result
 				if (payResult.success) {
 					if (payResult.isFree) {
-						window.location.href = ctx + '/order-confirm/' + result.transactionId
+						window.location.href = window.ctx + '/order-confirm/' + payResult.transactionId
 					} else {
 						window.location.href = payResult.redirectCheckoutUrl
 					}
@@ -1291,26 +1302,26 @@ const ShoppingCart = class extends React.Component {
 		const value = target.type === 'checkbox' ? target.checked : target.value
 		const name = target.name
 		switch (name) {
-			case 'cpf':
-				this.props.SETCPF(value)
-				break
-			case 'email':
-				this.props.SETEMAIL(value)
-				break
-			case 'securityCode':
-				this.props.SETSECURITYCODE(value)
-				break
-			case 'installments':
-				this.props.SETINSTALLMENTS(value)
-				break
-			case 'mercado-installments':
-				this.props.SETMERCADOINTALLMENTS(value)
-				break
-			case 'document':
-				this.props.SETDOCUMENT(value)
-				break
-			default:
-				break
+		case 'cpf':
+			this.props.SETCPF(value)
+			break
+		case 'email':
+			this.props.SETEMAIL(value)
+			break
+		case 'securityCode':
+			this.props.SETSECURITYCODE(value)
+			break
+		case 'installments':
+			this.props.SETINSTALLMENTS(value)
+			break
+		case 'mercado-installments':
+			this.props.SETMERCADOINTALLMENTS(value)
+			break
+		case 'document':
+			this.props.SETDOCUMENT(value)
+			break
+		default:
+			break
 		}
 	}
 

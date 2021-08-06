@@ -41,24 +41,24 @@ const ADDRESSFOOTER = styled.div`
 `
 
 const AddressBlock = props => {
-    const { address } = props
+	const { address } = props
 
-    return <ADDRESSBLOCK>
-        <ADDRESSBODY>
-            <div>
-                <Address address={address} />
-            </div>
-            <div>
-                <CheckBox onClick={evt=>{props.onSelect(address)}} className={`${address.isDefaultAddress?'selected':''}`}/>
-            </div>
-        </ADDRESSBODY>
-        <ADDRESSFOOTER>
-            <span style={{cursor:'pointer'}} onClick={evt => {props.onEdit(address)}}>
-                <span className="iconfont">&#xe778;</span>
-                <span style={{marginLeft: 5}}><FormattedMessage id="edit"/></span>
-            </span>
-        </ADDRESSFOOTER>
-    </ADDRESSBLOCK>
+	return <ADDRESSBLOCK>
+		<ADDRESSBODY>
+			<div>
+				<Address address={address} />
+			</div>
+			<div>
+				<CheckBox onClick={evt=>{props.onSelect(address)}} className={`${address.isDefaultAddress?'selected':''}`}/>
+			</div>
+		</ADDRESSBODY>
+		<ADDRESSFOOTER>
+			<span style={{cursor:'pointer'}} onClick={evt => {props.onEdit(address)}}>
+				<span className="iconfont">&#xe778;</span>
+				<span style={{marginLeft: 5}}><FormattedMessage id="edit"/></span>
+			</span>
+		</ADDRESSFOOTER>
+	</ADDRESSBLOCK>
 }
 
 const ADDRESSBOOKFOOTER = styled.div`
@@ -74,110 +74,108 @@ const ADDRESSBOOKFOOTER = styled.div`
 
 
 const mapStateToProps = (state) => {
-    return {
-        addresses: state.addresses
-    }
+	return {
+		addresses: state.addresses
+	}
 }
 
 const mapDispatchToProps = (dispatch) => {
-    return {
-        REFRESH: () => {
-            dispatch(refreshCart())
-        },
-        FETCHADDRESSES: () => {
-            dispatch(fetchAddresses())
-        },
-        SETADDRESS: address  => {
-            dispatch({
-                type: 'SET_ADDRESS',
-                address
-            })
-        }
-    }
+	return {
+		REFRESH: () => {
+			dispatch(refreshCart())
+		},
+		FETCHADDRESSES: () => {
+			dispatch(fetchAddresses())
+		},
+		SETADDRESS: address  => {
+			dispatch({
+				type: 'SET_ADDRESS',
+				address
+			})
+		}
+	}
 }
-
+ 
 const AddressBook = class extends React.Component {
-    constructor(props) {
-        super(props)
-        this.close = this.close.bind(this)
-    }
+	constructor(props) {
+		super(props)
+		this.close = this.close.bind(this)
+	}
 
-    close(evt) {
-        evt.preventDefault()
-        this.props.history.replace(`${window.ctx || ''}${__route_root__}/checkout`)
-    }
+	close(evt) {
+		evt.preventDefault()
+		this.props.history.replace(`${window.ctx || ''}${__route_root__}/checkout`)
+	}
 
-    componentDidMount() {
-        this.props.FETCHADDRESSES()
-    }
+	componentDidMount() {
+		this.props.FETCHADDRESSES()
+		if(window.GeekoSensors){
+			window.GeekoSensors.Track('address_edit', {
+				edit_type: 'Select Address'
+			})
+		}
+	}
 
-    addressEditHandle(address){
-        this.props.SETADDRESS(address)
-        this.props.history.push(`${window.ctx || ''}${__route_root__}/book/address`)
-        window.GeekoSensors.Track('address_edit', {
-            button_click: 'edit' 
-        })
-    }
+	addressEditHandle(address){
+		this.props.SETADDRESS(address)
+		this.props.history.push(`${window.ctx || ''}${__route_root__}/book/address`)
+		window.GeekoSensors.Track('address_edit', {
+			button_click: 'edit' 
+		})
+	}
 
-    selectAddressHandle(address){
-        this.props.history.replace(`${window.ctx || ''}${__route_root__}/checkout`)
-        setdefaultaddress(address.id).then(() => {
-            this.props.REFRESH()
-            this.props.FETCHADDRESSES()
-        })
+	selectAddressHandle(address){
+		this.props.history.replace(`${window.ctx || ''}${__route_root__}/checkout`)
+		setdefaultaddress(address.id).then(() => {
+			this.props.REFRESH()
+			this.props.FETCHADDRESSES()
+		})
+	}
 
+	render() {
+		const { intl, addresses } = this.props
 
-        if(window.GeekoSensors){
-            window.GeekoSensors.Track('address_edit', {
-               edit_type: 'Select Address' 
-            })
-        }
-    }
-
-    render() {
-        const { intl, addresses } = this.props
-
-        return <div>
-            <FullFixed bodyStyle={{ backgroundColor: '#f7f7f7' }} onClose={this.close} title={intl.formatMessage({ id: 'addressbook' })}>
-                <div style={{ paddingBottom: 100 }}>
-                    {
-                        (addresses || []).map(address => <AddressBlock onSelect={this.selectAddressHandle.bind(this)} onEdit={this.addressEditHandle.bind(this)} key={address.id} address={address} />)
-                    }
-                    <ADDRESSBOOKFOOTER>
-                    <a style={{ 
-                        display: 'block',
-                        backgroundColor: '#222',
-                        color: '#fff',
-                        height: 40,
-                        lineHeight: '40px',
-                        textAlign: 'center',
-                        outline: 'none',
-                        border: 'none',
-                        width: '100%',
-                        fontSize: 16,
-                        fontFamily: 'AcuminPro-Bold',
-                        textTransform: 'capitalize',
-                        textDecoration: 'none'
-                    }} onClick={
-                        () => {
-                            this.props.SETADDRESS(null)
-                            this.props.history.push(`${window.ctx || ''}${__route_root__}/book/address`)
-                            if(window.GeekoSensors){
-                                window.GeekoSensors.Track('address_edit', {
-                                   button_click: 'Add' 
-                                })
-                            }
-                        }
-                    }>
+		return <div>
+			<FullFixed bodyStyle={{ backgroundColor: '#f7f7f7' }} onClose={this.close} title={intl.formatMessage({ id: 'addressbook' })}>
+				<div style={{ paddingBottom: 100 }}>
+					{
+						(addresses || []).map(address => <AddressBlock onSelect={this.selectAddressHandle.bind(this)} onEdit={this.addressEditHandle.bind(this)} key={address.id} address={address} />)
+					}
+					<ADDRESSBOOKFOOTER>
+						<a style={{ 
+							display: 'block',
+							backgroundColor: '#222',
+							color: '#fff',
+							height: 40,
+							lineHeight: '40px',
+							textAlign: 'center',
+							outline: 'none',
+							border: 'none',
+							width: '100%',
+							fontSize: 16,
+							fontFamily: 'AcuminPro-Bold',
+							textTransform: 'capitalize',
+							textDecoration: 'none'
+						}} onClick={
+							() => {
+								this.props.SETADDRESS(null)
+								this.props.history.push(`${window.ctx || ''}${__route_root__}/book/address`)
+								if(window.GeekoSensors){
+									window.GeekoSensors.Track('address_edit', {
+										button_click: 'Add' 
+									})
+								}
+							}
+						}>
                         + {intl.formatMessage({ id: 'add_new_address' })}
-                    </a>
-                </ADDRESSBOOKFOOTER>
-                </div>
+						</a>
+					</ADDRESSBOOKFOOTER>
+				</div>
                 
-            </FullFixed>
+			</FullFixed>
             
-        </div>
-    }
+		</div>
+	}
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(AddressBook))

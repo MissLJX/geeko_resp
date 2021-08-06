@@ -40,6 +40,8 @@ module.exports = {
         "no-unused-vars": [1, { "vars": "all", "args": "none" }],
         "no-console": 0,
         "no-duplicate-case": 0,
-        "linebreak-style": 0
+        "linebreak-style": 0,
+        "eslint-disable-next-line": 0,
+        "no-mixed-spaces-and-tabs": 0
     }
 };
