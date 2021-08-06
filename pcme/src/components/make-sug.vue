@@ -2,11 +2,11 @@
     <div class="make-sug">
         <div class="p-hd">
             <p>{{$t('makesug')}}</p>
-            <p>We Welcome Your Comments and Suggestions.</p>
+            <p>{{$t("point.we_welcome_your_comments")}}</p>
         </div>
         <div class="p-bd">
-            <p>We are committed to providing quality products with convenient and professional service.Your comments help us to continue to improve our website and service</p>
-            <p>Please leave your thoughts in the comment box below. We welcome them.In return, we will give you <span>200 credits</span> if your comment is adopted. We will notify you by email:  </p>
+            <p>{{$t("point.we_are_committed_to_prod")}}</p>
+            <p>{{$t("point.please_leave_your")}}</p>
             <!-- <div class="m_email" @click="isAlert=true"><a>{{communicationEmail}}</a><i class="iconfont">&#xe61f;</i></div> -->
             <div class="commet-area commet-area1">
                 <p>
@@ -21,7 +21,7 @@
                         v-validate="'required'" 
                         name="suggestion" 
                         :class="{'st-input-danger':errors.has('suggestion')}"
-                        placeholder="Sorry for the inconvenience, we wii fix the problem as soon as possible…"
+                        :placeholder="$t('point.sorry_inconvenience')"
                     ></textarea>
                 </div>
                 <div class="remnant">{{remnant}}/1000</div>
@@ -36,7 +36,7 @@
             </div> -->
             <div class="up-img">
                 <p>{{$t('uploadscreen')}}:</p>
-                <p class="_title">Maximum of 3 photos, only JPEG, GIF or PNG. Individual photo size should not over x MB.</p>
+                <p class="_title">{{$t("point.maxinum_three_photos")}}</p>
                 <upload-img @getImgFiles="getImgFiles"></upload-img>
             </div>
             <div class="v-btn" @click="submsg">{{$t('submit')}}</div>
@@ -67,10 +67,10 @@
                 remnant:0,
                 remnant1:0,
                 subject:null,
-                // info:{
-                //     subject:null,
-                //     message:null,
-                // },
+                info:{
+                    subject:null,
+                    message:null,
+                },
                 files:null,
                 cemail:null,
                 nemail:'',
@@ -98,8 +98,7 @@
         },
         methods:{
             descInput() {
-                let txtVal = this.info.subject.length;
-                this.remnant = txtVal;
+                this.remnant = 1000 - this.subject.length;
             },
             descInput1() {
                 let txtVal = this.info.message.length;
@@ -113,12 +112,12 @@
                         _.each(this.files, (file) => {
                             formData.append('imageFiles', file);
                         });
-                        if(this.cemail === ''){
-                            formData.append('subject', this.me.communicationEmail);
-                        }else{
-                            formData.append('subject', this.cemail);
-                        }
-                        formData.append('message', this.message);
+                        // if(this.cemail === ''){
+                        //     formData.append('subject', this.me.communicationEmail);
+                        // }else{
+                        //     formData.append('subject', this.cemail);
+                        // }
+                        formData.append('message', this.subject);
 
                         this.$store.dispatch('makeSuggestion', formData).then(() => {
                             alert("success")

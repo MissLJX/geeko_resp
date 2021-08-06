@@ -172,5 +172,28 @@ export default {
     returnlabel:"Endursendingarmiði",
     share_get:"DEILDU AÐ 50% AFSLÁTTU, FÁÐU $ 10",  //google
     share_lucky:"Deildu happdrætti með vinum þínum og fáðu allt að 50% afslátt saman. Og þú færð $ 10 þegar þeir kaupa.",  //google
-    required: 'Required'
+    required: 'Required',
+    point:{
+        my_points:"My Points",
+        points_expired_soon:"Points Expriring Soon",
+        how_to_get_points:"How to get points?",
+        review:"Review",
+        suggestion:"Suggestion",
+        download_app:"Download App",
+        get_more_points:"Get More points",
+        points_details:"POINTS DETAILS",
+        earned:"Earned",
+        expiration:"Expiration",
+        learn_about_points:"Learn about",
+        points:"points",
+        we_welcome_your_comments:"We Welcome Your Comments and Suggestions.",
+        we_are_committed_to_prod:"We are committed to providing quality products with convenient and professional service.Your comments help us to continue to improve our website and service",
+        please_leave_your:"Please leave your thoughts in the comment box below. We welcome them.In return, we will give you 200 credits if your comment is adopted. We will notify you by email:",
+        all:"All",
+        recived:"Recived",
+        used:"Used",
+        expired:"Expired",
+        sorry_inconvenience:"Sorry for the inconvenience, we wii fix the problem as soon as possible…",
+        maxinum_three_photos:"Maximum of 3 photos, only JPEG, GIF or PNG.",
+    }
 }
