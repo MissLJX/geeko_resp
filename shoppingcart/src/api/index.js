@@ -193,7 +193,7 @@ export const saveTempAddress = (address) => axios.post(`${VPATH}/pay/save-addres
 
 
 export const getGifts = collectionId => axios.get(`${VPATH}/product/0/20/${collectionId}/c/show`)
-export const getGiftId = () => axios.get(`/context/anon/get-gift-collection-id`)
+export const getGiftId = () => axios.get('/context/anon/get-gift-collection-id')
 export const selectGift = variantId => axios.post(`${VPATH}/shopping-cart/update-gift`, { variantId })
 export const removeGift = variantId => axios.post(`${VPATH}/shopping-cart/remove-gift`, { variantId })
 
@@ -206,7 +206,7 @@ export const getFaceBookUrl = () => axios.get(`${VPATH}/customer/get-register-sh
 export const getShareInputUrl = () => axios.get(`${VPATH}/customer/get-register-share-key`, { shareTo: 'copy' })
 
 //  Handler.ajaxLoaddingHandler(ctx + '/' + VERSION + '','POST', paylod, function(data){
-export const toShareEmail = (paylod) => axios.post(`${VPATH}/customer/send-share-via-emails`, paylod);
+export const toShareEmail = (paylod) => axios.post(`${VPATH}/customer/send-share-via-emails`, paylod)
 
 
 export const addToWishList = (productIds, variantIds) => axios.get(`${VPATH}/shopping-cart/move-to-wish-list`, { productIds, variantIds })
@@ -244,10 +244,12 @@ export const openCheckOutOrder = orderId => axios.post(`${VPATH}/checkout/open-o
 export const payForCheckout = data => axios.post(`${VPATH}/checkout/payment`, data)
 
 export const getFilters = () => axios.get(`${VPATH}/filter/anon/APP0010/get-by-menu-id`, {})
-export const getSorters = () => axios.get(`/context/anon/get-sorters`, {})
+export const getSorters = () => axios.get('/context/anon/get-sorters', {})
 export const filterProducts = (filterVO, skip, limit, difference) => axios.body(`${VPATH}/product/anon/${skip}/${limit}/get-recommended-products?difference=${difference}`, filterVO)
 export const suggestions = searchValue => axios.get(`${VPATH}/search/anon/simple`, {searchValue})
 export const searchProducts = (searchValue,skip, limit) => axios.get(`${VPATH}/search/anon/${skip}/${limit}/products`, {searchValue})
 
 
 export const openStripeOrder = orderId => axios.post(`${VPATH}/stripe/open-order`, {orderId})
+export const stripePay = data => axios.body(`${VPATH}/stripe/bind-card2`, data)
+export const stripeCallBack = data => axios.body(`${VPATH}/stripe/pay-result`, data)

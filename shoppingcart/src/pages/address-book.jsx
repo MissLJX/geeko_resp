@@ -119,9 +119,11 @@ const AddressBook = class extends React.Component {
 	addressEditHandle(address){
 		this.props.SETADDRESS(address)
 		this.props.history.push(`${window.ctx || ''}${__route_root__}/book/address`)
-		window.GeekoSensors.Track('address_edit', {
-			button_click: 'edit' 
-		})
+		if(window.GeekoSensors){
+			window.GeekoSensors.Track('address_edit', {
+				button_click: 'edit'
+			})
+		}
 	}
 
 	selectAddressHandle(address){

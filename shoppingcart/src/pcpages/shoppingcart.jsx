@@ -332,7 +332,8 @@ const ShoppingCart = class extends React.Component {
 			showDeleteConfirm: false,
 			itemDelete: null,
 			klarnaParams: {},
-			payImages: []
+			payImages: [],
+			policySelected: true
 		}
 
 
@@ -2142,6 +2143,17 @@ const ShoppingCart = class extends React.Component {
 													<Red style={{ fontWeight: 'normal', marginLeft: 5, fontSize: 14 }}>(Em até 3x s/ juros)</Red>
 												</div>
 											}
+
+
+											<div style={{marginTop: 15, lineHeight: '20px'}}>
+												<CheckBox onClick={() => {this.setState({policySelected: !this.state.policySelected})}} className={this.state.policySelected ? 'selected':''}/>
+												<span style={{marginLeft:10}}>
+													<FormattedMessage id="agree_with_policy" values={{
+														term: <a style={{color: '#e5004f'}} href={`${window.ctx||''}/fs/term-of-service-pc`}>Terms of Service</a>,
+														refund: <a style={{color: '#e5004f'}} href={`${window.ctx||''}/fs/return-policy-pc`}>Return Policy</a>,
+													}}/>
+												</span>
+											</div>
 
 											{
 												cancheckout && cart.canCheckout ? (

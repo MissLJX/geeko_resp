@@ -2,7 +2,7 @@ import React, {useEffect} from 'react'
 import {connect} from 'react-redux'
 import CreditCard from '../components/msite/credit.jsx'
 // import CreditCardC from '../components/msite/creditC.jsx'
-// import CreditCardS from '../components/msite/credit-stripe.jsx'
+import CreditCardS from '../components/msite/credit-stripe.jsx'
 import styled from 'styled-components'
 import {FormattedMessage, FormattedHTMLMessage} from 'react-intl'
 import {AnimatedRoute} from 'react-router-transition'
@@ -225,17 +225,17 @@ export default connect(state => {
 					 search.payMethod === '18' && <CreditCard onPurchase={() => {setLeaved(true)}} onGo={p => { setP(p); }} orderId={props.match.params.orderId} />
 				} */}
 
-				<CreditCard onPurchase={() => {
-					setLeaved(true)
-				}} onGo={p => {
-					setP(p)
-				}} orderId={props.match.params.orderId}/>
-
-				{/*<CreditCardS onPurchase={() => {*/}
+				{/*<CreditCard onPurchase={() => {*/}
 				{/*	setLeaved(true)*/}
 				{/*}} onGo={p => {*/}
 				{/*	setP(p)*/}
 				{/*}} orderId={props.match.params.orderId}/>*/}
+
+				<CreditCardS onPurchase={() => {
+					setLeaved(true)
+				}} onGo={p => {
+					setP(p)
+				}} orderId={props.match.params.orderId}/>
 			</div>
 		</ShoppingBody>
 
