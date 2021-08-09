@@ -1067,14 +1067,15 @@ const ShoppingCart = class extends React.Component {
 			Klarna.Payments.authorize({
 				payment_method_category: selectedPayMethod.description
 			}, {
-				"shipping_address": this.state.klarnaParams.shipping_address,
-				"billing_address": this.state.klarnaParams.shipping_address
+				'shipping_address': this.state.klarnaParams.shipping_address,
+				'billing_address': this.state.klarnaParams.shipping_address
 			}, function (res) {
 
 				const {
 					authorization_token,
 					approved,
-					show_form
+					show_form,
+					error
 				} = res
 
 				if (approved && authorization_token) {
@@ -1096,7 +1097,7 @@ const ShoppingCart = class extends React.Component {
 							if (orderId && window.__is_login__) {
 								self.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
 							}
-						} else if (fraud_status === "ACCEPTED") {
+						} else if (fraud_status === 'ACCEPTED') {
 							window.location.href = redirect_url
 						}
 
@@ -1108,6 +1109,18 @@ const ShoppingCart = class extends React.Component {
 					})
 				} else {
 					self.setState({ checking: false })
+
+					try {
+						if(window.GeekoSensors){
+							window.GeekoSensors.Track('pay_error', {
+								payMethod,
+								error: error ? JSON.stringify(error): ''
+							})
+						}
+					}catch (e){
+						console.error(e)
+					}
+
 				}
 
 
@@ -1121,7 +1134,7 @@ const ShoppingCart = class extends React.Component {
 				const payResult = data.result
 				if (payResult.success) {
 					if (payResult.isFree) {
-						window.location.href = ctx + '/order-confirm/' + result.transactionId
+						window.location.href = window.ctx + '/order-confirm/' + payResult.transactionId
 					} else {
 						window.location.href = payResult.redirectCheckoutUrl
 					}
@@ -1317,26 +1330,26 @@ const ShoppingCart = class extends React.Component {
 		const value = target.type === 'checkbox' ? target.checked : target.value
 		const name = target.name
 		switch (name) {
-			case 'cpf':
-				this.props.SETCPF(value)
-				break
-			case 'email':
-				this.props.SETEMAIL(value)
-				break
-			case 'securityCode':
-				this.props.SETSECURITYCODE(value)
-				break
-			case 'installments':
-				this.props.SETINSTALLMENTS(value)
-				break
-			case 'mercado-installments':
-				this.props.SETMERCADOINTALLMENTS(value)
-				break
-			case 'document':
-				this.props.SETDOCUMENT(value)
-				break
-			default:
-				break
+		case 'cpf':
+			this.props.SETCPF(value)
+			break
+		case 'email':
+			this.props.SETEMAIL(value)
+			break
+		case 'securityCode':
+			this.props.SETSECURITYCODE(value)
+			break
+		case 'installments':
+			this.props.SETINSTALLMENTS(value)
+			break
+		case 'mercado-installments':
+			this.props.SETMERCADOINTALLMENTS(value)
+			break
+		case 'document':
+			this.props.SETDOCUMENT(value)
+			break
+		default:
+			break
 		}
 	}
 
@@ -1388,11 +1401,11 @@ const ShoppingCart = class extends React.Component {
 					container: `#klarna-payments-container-${paymethod.id}`,
 					payment_method_category: paymethod.description
 				}, {
-					"locale": params.locale,
-					"purchase_country": params.purchase_country,
-					"purchase_currency": params.purchase_currency,
-					"order_amount": params.order_amount,
-					"order_lines": params.order_lines
+					'locale': params.locale,
+					'purchase_country': params.purchase_country,
+					'purchase_currency': params.purchase_currency,
+					'order_amount': params.order_amount,
+					'order_lines': params.order_lines
 				}, function (res) {
 					console.debug(res)
 				})
@@ -1566,7 +1579,7 @@ const ShoppingCart = class extends React.Component {
 								/*global siteType b:true*/
 								/*eslint no-undef: "error"*/
 								siteType === 'new' ? 'page' : 'i'
-								}/login?redirectUrl=${encodeURIComponent(window.location.href)}&loginPage=1`
+							}/login?redirectUrl=${encodeURIComponent(window.location.href)}&loginPage=1`
 						} else {
 							this.props.WISHITEM(productIds, variantIds)
 							this.setState({
@@ -1611,7 +1624,7 @@ const ShoppingCart = class extends React.Component {
 							/*global siteType b:true*/
 							/*eslint no-undef: "error"*/
 							siteType === 'new' ? 'page' : 'i'
-							}/login?redirectUrl=${encodeURIComponent(window.location.href)}&loginPage=1`
+						}/login?redirectUrl=${encodeURIComponent(window.location.href)}&loginPage=1`
 					} else {
 						this.props.WISHITEM(item.productId, item.variantId)
 						this.setState({
@@ -1898,24 +1911,24 @@ const ShoppingCart = class extends React.Component {
 
 
 		sfc.createPayment({
-			"sessionToken": response.sessionToken, //recieved form opeOrder API
-			"merchantId": response.merchantId, //as asigned by SafeCharge
-			"merchantSiteId": response.merchantSiteId, //as asigned by SafeCharge
-			"userTokenId": response.userTokenId,
-			"clientUniqueId": response.clientUniqueId, // optional
-			"paymentOption": {
-				"userPaymentOptionId": result.userPaymentOptionId,
+			'sessionToken': response.sessionToken, //recieved form opeOrder API
+			'merchantId': response.merchantId, //as asigned by SafeCharge
+			'merchantSiteId': response.merchantSiteId, //as asigned by SafeCharge
+			'userTokenId': response.userTokenId,
+			'clientUniqueId': response.clientUniqueId, // optional
+			'paymentOption': {
+				'userPaymentOptionId': result.userPaymentOptionId,
 			},
-			"billingAddress": {
-				"country": result.country,
-				"email": result.email
+			'billingAddress': {
+				'country': result.country,
+				'email': result.email
 			},
-			"deviceDetails": {
-				"ipAddress": result.ip
+			'deviceDetails': {
+				'ipAddress': result.ip
 			}
 		}, function (res) {
 			setSafeChargeStatus(response.sessionToken).then(data => data.result).then(result => {
-				if (res.result === "APPROVED") {
+				if (res.result === 'APPROVED') {
 					window.location.href = `${window.ctx || ''}/order-confirm/${response.clientUniqueId}`
 				} else {
 					alert(res.errorDescription || res.reason || 'Error')
@@ -1985,7 +1998,7 @@ const ShoppingCart = class extends React.Component {
 							'TransactionId': lookup.transactionId
 						}
 					},
-						jwt
+					jwt
 					)
 				} else {
 					self.payOcean3D(orderId)
@@ -3227,13 +3240,13 @@ const ShoppingCart = class extends React.Component {
 												/*eslint no-undef: "error"*/
 												window.siteName
 											}
-												no={() => {
-													this.setState({ showPayMsgOcean: false })
-													this.props.TOGGLECREDIT(false)
-												}}
-												close={() => { this.setState({ showPayMsgOcean: false }) }}
-												yes={() => { this.setState({ showPayMsgOcean: false }) }}
-												yesLabel="Continue" noLabel="No, Thanks">
+											no={() => {
+												this.setState({ showPayMsgOcean: false })
+												this.props.TOGGLECREDIT(false)
+											}}
+											close={() => { this.setState({ showPayMsgOcean: false }) }}
+											yes={() => { this.setState({ showPayMsgOcean: false }) }}
+											yesLabel="Continue" noLabel="No, Thanks">
 												<span dangerouslySetInnerHTML={{ __html: cart.cancelOceanpaymentPayMsg }} />
 											</Confirm>
 										}

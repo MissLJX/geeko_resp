@@ -89,84 +89,84 @@ const BUTTON = styled.button`
 `
 
 export const Filter = props => {
-    const { filter } = props
-    const [filterItems, setFilterItems] = useState(null)
-    const [endPrice, setEndPrice] = useState(100)
-    const [startPrice, setStartPrice] = useState(0)
+	const { filter } = props
+	const [filterItems, setFilterItems] = useState(null)
+	const [endPrice, setEndPrice] = useState(100)
+	const [startPrice, setStartPrice] = useState(0)
 
-    useEffect(() => {
-        if (filter) {
-            setFilterItems(filter.filterItems)
-            setEndPrice(filter.endPrice || Number(filter.maxPrice.amount))
-            setStartPrice(filter.startPrice || Number(filter.minPrice.amount))
-        }
-    }, [filter])
+	useEffect(() => {
+		if (filter) {
+			setFilterItems(filter.filterItems)
+			setEndPrice(filter.endPrice || Number(filter.maxPrice.amount))
+			setStartPrice(filter.startPrice || Number(filter.minPrice.amount))
+		}
+	}, [filter])
 
-    const selectionClick = (selection, filterItem) => {
-        setFilterItems(filterItems.map(item => {
-            if (item.fieldName === filterItem.fieldName) {
-                const selections = filterItem.selections.map(s => {
-                    if (s.value === selection.value) {
-                        return { ...s, selected: !!!s.selected }
-                    }
-                    return s
-                })
-                return { ...item, selections }
-            }
-            return item
-        }))
-    }
+	const selectionClick = (selection, filterItem) => {
+		setFilterItems(filterItems.map(item => {
+			if (item.fieldName === filterItem.fieldName) {
+				const selections = filterItem.selections.map(s => {
+					if (s.value === selection.value) {
+						return { ...s, selected: !s.selected }
+					}
+					return s
+				})
+				return { ...item, selections }
+			}
+			return item
+		}))
+	}
 
-    const handleFilter = () => {
-        props.onFilter({ ...filter, filterItems, startPrice, endPrice, currency: filter.minPrice.currency })
-    }
+	const handleFilter = () => {
+		props.onFilter({ ...filter, filterItems, startPrice, endPrice, currency: filter.minPrice.currency })
+	}
 
-    const handleClear = () => {
-        const filterItems = filter.filterItems.map(item => {
-            const selections = item.selections.map(s => ({ ...s, selected: false }))
-            return { ...item, selections }
-        })
-        setFilterItems(filterItems)
-        setEndPrice(Number(filter.maxPrice.amount))
-        setStartPrice(Number(filter.minPrice.amount))
-        props.onFilter({ ...filter, filterItems, startPrice: Number(filter.minPrice.amount), endPrice: Number(filter.maxPrice.amount), currency: filter.minPrice.currency })
-    }
+	const handleClear = () => {
+		const filterItems = filter.filterItems.map(item => {
+			const selections = item.selections.map(s => ({ ...s, selected: false }))
+			return { ...item, selections }
+		})
+		setFilterItems(filterItems)
+		setEndPrice(Number(filter.maxPrice.amount))
+		setStartPrice(Number(filter.minPrice.amount))
+		props.onFilter({ ...filter, filterItems, startPrice: Number(filter.minPrice.amount), endPrice: Number(filter.maxPrice.amount), currency: filter.minPrice.currency })
+	}
 
 
-    return <FILTERCONTAINER>
-        {
-            filter && <FILTERITEMS>
-                <FILTERITEM>
-                    <div className="__hd">Range Price</div>
-                    <div style={{ marginTop: 16, }}>
-                        <Sliders onChange={values => {
-                            setStartPrice(values[0])
-                            setEndPrice(values[1])
-                        }} values={[startPrice, endPrice]} min={filter.minPrice} max={filter.maxPrice} />
-                    </div>
-                </FILTERITEM>
-                {
-                    filterItems && filterItems.length > 0 && filterItems.map(filterItem => <FILTERITEM key={filterItem.fieldName}>
-                        <div className="__hd">{filterItem.title}</div>
-                        <div className="__bd">
-                            {
-                                filterItem.selections && filterItem.selections.length > 0 && filterItem.selections.sort((a, b) => { return a.sort - b.sort }).map(selection => <ITEM onClick={evt => { selectionClick(selection, filterItem) }} className={`${selection.selected ? 'active' : ''}`} key={selection.value}>
-                                    {selection.label}
-                                </ITEM>)
-                            }
-                        </div>
-                    </FILTERITEM>)
-                }
-            </FILTERITEMS>
+	return <FILTERCONTAINER>
+		{
+			filter && <FILTERITEMS>
+				<FILTERITEM>
+					<div className="__hd">Range Price</div>
+					<div style={{ marginTop: 16, }}>
+						<Sliders onChange={values => {
+							setStartPrice(values[0])
+							setEndPrice(values[1])
+						}} values={[startPrice, endPrice]} min={filter.minPrice} max={filter.maxPrice} />
+					</div>
+				</FILTERITEM>
+				{
+					filterItems && filterItems.length > 0 && filterItems.map(filterItem => <FILTERITEM key={filterItem.fieldName}>
+						<div className="__hd">{filterItem.title}</div>
+						<div className="__bd">
+							{
+								filterItem.selections && filterItem.selections.length > 0 && filterItem.selections.sort((a, b) => { return a.sort - b.sort }).map(selection => <ITEM onClick={evt => { selectionClick(selection, filterItem) }} className={`${selection.selected ? 'active' : ''}`} key={selection.value}>
+									{selection.label}
+								</ITEM>)
+							}
+						</div>
+					</FILTERITEM>)
+				}
+			</FILTERITEMS>
 
-        }
-        <div className="__fd">
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <BUTTON onClick={handleClear} className="secondary" style={{ width: 'calc(50% - 8px)' }}>Clear</BUTTON>
-                <BUTTON style={{ width: 'calc(50% - 8px)' }} onClick={handleFilter}>Apply</BUTTON>
-            </div>
-        </div>
-    </FILTERCONTAINER>
+		}
+		<div className="__fd">
+			<div style={{ display: 'flex', justifyContent: 'space-between' }}>
+				<BUTTON onClick={handleClear} className="secondary" style={{ width: 'calc(50% - 8px)' }}>Clear</BUTTON>
+				<BUTTON style={{ width: 'calc(50% - 8px)' }} onClick={handleFilter}>Apply</BUTTON>
+			</div>
+		</div>
+	</FILTERCONTAINER>
 }
 
 
@@ -395,487 +395,486 @@ const NOMORE = styled.div`
 
 
 export default class extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            filter: null,
-            sorters: [],
-            showFilter: false,
-            sort: 'north_sort_001 desc',
-            products: [],
-            viewingItem: null,
-            showEditor: false,
-            showSearch: false,
-            words: [],
-            searchValue: '',
-            showSearchProducts: false,
-            searchProducts: [],
-            searching: false,
-            filtering: false,
-            searchEmpty: false,
-            filterEmpty: false,
-            showMask: false,
-            limit: 20,
-            searchSkip: 0,
-            filterSkip: 0,
-            viewingItemType: ''
-        }
-        this.searchChange = _.debounce(this.searchChange.bind(this), 400)
-        this.bindSearchScroll = this.bindSearchScroll.bind(this)
-        this.bindFilterScroll = this.bindFilterScroll.bind(this)
-    }
+	constructor(props) {
+		super(props)
+		this.state = {
+			filter: null,
+			sorters: [],
+			showFilter: false,
+			sort: 'north_sort_001 desc',
+			products: [],
+			viewingItem: null,
+			showEditor: false,
+			showSearch: false,
+			words: [],
+			searchValue: '',
+			showSearchProducts: false,
+			searchProducts: [],
+			searching: false,
+			filtering: false,
+			searchEmpty: false,
+			filterEmpty: false,
+			showMask: false,
+			limit: 20,
+			searchSkip: 0,
+			filterSkip: 0,
+			viewingItemType: ''
+		}
+		this.searchChange = _.debounce(this.searchChange.bind(this), 400)
+		this.bindSearchScroll = this.bindSearchScroll.bind(this)
+		this.bindFilterScroll = this.bindFilterScroll.bind(this)
+	}
 
-    componentDidMount() {
+	componentDidMount() {
 
 
-        const fetchSorters = getSorters().then(data => data.result)
-        const fetchFilters = getFilters().then(data => data.result)
+		const fetchSorters = getSorters().then(data => data.result)
+		const fetchFilters = getFilters().then(data => data.result)
 
-        Promise.all([fetchSorters, fetchFilters]).then(values => {
-            const sorters = values[0], filter = values[1]
-            const sort = sorters && sorters.length > 0 ? sorters[0].value : undefined
-            this.setState({
-                filter,
-                sorters,
-                sort
-            })
+		Promise.all([fetchSorters, fetchFilters]).then(values => {
+			const sorters = values[0], filter = values[1]
+			const sort = sorters && sorters.length > 0 ? sorters[0].value : undefined
+			this.setState({
+				filter,
+				sorters,
+				sort
+			})
 
-            this.onFilter({ ...filter, sorter: sort })
-        })
+			this.onFilter({ ...filter, sorter: sort })
+		})
 
-    }
+	}
 
-    componentWillUnmount() {
-        this.unBind()
-    }
+	componentWillUnmount() {
+		this.unBind()
+	}
 
-    searchChange(evt) {
-        const { value } = evt.target
+	searchChange(evt) {
+		const { value } = evt.target
 
-        suggestions(value).then(data => data.result).then(result => {
-            const groupResult = result ? result.groupResult : null
-            const wordResult = groupResult ? groupResult.words : null
+		suggestions(value).then(data => data.result).then(result => {
+			const groupResult = result ? result.groupResult : null
+			const wordResult = groupResult ? groupResult.words : null
 
-            this.setState({
-                words: wordResult && wordResult.result ? wordResult.result : []
-            })
-        })
+			this.setState({
+				words: wordResult && wordResult.result ? wordResult.result : []
+			})
+		})
 
-    }
+	}
 
-    onSearch(value, isScroll) {
+	onSearch(value, isScroll) {
 
-        if (!this.state.searching && !this.state.searchEmpty) {
+		if (!this.state.searching && !this.state.searchEmpty) {
             
-            searchProducts(value, this.state.searchSkip, this.state.limit).then(data => {
-                const searchProducts = data.result
-                const resultProducts = isScroll ? [...(this.state.searchProducts || []), ...(searchProducts || [])] : searchProducts
-                this.setState({ searchSkip: (this.state.searchSkip + this.state.limit), searchProducts: (resultProducts || []).map(p => ({ ...p, requestId: data.requestId })), searching: false, searchEmpty: !searchProducts || searchProducts.length < 1 })
-            })
-            this.setState({
-                showSearchProducts: true,
-                showSearch: false,
-                searchValue: value,
-                searching: true,
-            })
+			searchProducts(value, this.state.searchSkip, this.state.limit).then(data => {
+				const searchProducts = data.result
+				const resultProducts = isScroll ? [...(this.state.searchProducts || []), ...(searchProducts || [])] : searchProducts
+				this.setState({ searchSkip: (this.state.searchSkip + this.state.limit), searchProducts: (resultProducts || []).map(p => ({ ...p, requestId: data.requestId })), searching: false, searchEmpty: !searchProducts || searchProducts.length < 1 })
+			})
+			this.setState({
+				showSearchProducts: true,
+				showSearch: false,
+				searchValue: value,
+				searching: true,
+			})
+            
+			try{
+				if(window.GeekoSensors){
+					window.GeekoSensors.Track('Search', {
+						'keywords': value,
+						'skip': this.state.searchSkip,
+						'limit': this.state.limit,
+						'resourcepage_title': 'shoppingcart'
+					})
+				}
+			}catch(e){
+				console.error(e)
+			}
 
 
-            try{
-                if(window.GeekoSensors){
-                    window.GeekoSensors.Track("Search", {
-                        "keywords": value,
-                        "skip": this.state.searchSkip,
-                        "limit": this.state.limit,
-                        "resourcepage_title": "shoppingcart"
-                    })
-                }
-            }catch(e){
-                console.error(e)
-            }
+		}
+	}
+
+	onFilter(filter, isScroll) {
+
+		if (!this.state.filtering && !this.state.filterEmpty) {
+
+			const filterItems = filter.filterItems.filter(item => item.selections.some(selection => selection.selected)).map(item => {
+				const selections = item.selections.filter(s => s.selected)
+				return { ...item, selections }
+			})
 
 
-        }
-    }
+			const {couponProgress} = this.props
+			let difference=0
+			if(couponProgress && couponProgress.type === 0  && couponProgress.nodes){
+				const node = couponProgress.nodes.find(n => !n.usable)
+				if(node){
+					difference = node.conditionValue -  couponProgress.value
+				}
+			}
 
-    onFilter(filter, isScroll) {
+			filterProducts({ ...filter, filterItems, sorter: this.state.sort }, this.state.filterSkip, this.state.limit, difference).then(data => {
 
-        if (!this.state.filtering && !this.state.filterEmpty) {
+				const resultProducts = isScroll ? [...(this.state.products || []), ...(data.result || [])] : data.result
 
-            const filterItems = filter.filterItems.filter(item => item.selections.some(selection => selection.selected)).map(item => {
-                const selections = item.selections.filter(s => s.selected)
-                return { ...item, selections }
-            })
-
-
-            const {couponProgress} = this.props
-            let difference=0
-            if(couponProgress && couponProgress.type === 0  && couponProgress.nodes){
-                const node = couponProgress.nodes.find(n => !n.usable)
-                if(node){
-                    difference = node.conditionValue -  couponProgress.value
-                }
-            }
-
-            filterProducts({ ...filter, filterItems, sorter: this.state.sort }, this.state.filterSkip, this.state.limit, difference).then(data => {
-
-                const resultProducts = isScroll ? [...(this.state.products || []), ...(data.result || [])] : data.result
-
-                this.setState({
-                    filterSkip: this.state.filterSkip + this.state.limit,
-                    products: (resultProducts || []).map(p => ({ ...p, requestId: data.requestId })),
-                    filtering: false,
-                    filterEmpty: !data.result || data.result.length < 1
-                })
-            })
-            this.setState({ filter, showFilter: false, filtering: true })
+				this.setState({
+					filterSkip: this.state.filterSkip + this.state.limit,
+					products: (resultProducts || []).map(p => ({ ...p, requestId: data.requestId })),
+					filtering: false,
+					filterEmpty: !data.result || data.result.length < 1
+				})
+			})
+			this.setState({ filter, showFilter: false, filtering: true })
 
 
 
-            if(window.GeekoSensors){
+			if(window.GeekoSensors){
 
-                try{
-                    window.GeekoSensors.Track("Filter", {
-                        "filter": (filterItems || []).map(item => {
-                            const fieldName = item.fieldName
-                            const selectionStr = (item.selections||[]).map(s => s.value).join(',')
-                            return `${fieldName}:${selectionStr}`
-                        }).join(';'),
-                        "sort": this.state.sort,
-                        "startPrice":filter.startPrice,
-                        "endPrice": filter.endPrice, 
-                        "skip": this.state.filterSkip,
-                        "limit": this.state.limit,
-                        "resourcepage_title": "shoppingcart"
-                    })
-                }catch(e){
-                    console.error(e)
-                }
+				try{
+					window.GeekoSensors.Track('Filter', {
+						'filter': (filterItems || []).map(item => {
+							const fieldName = item.fieldName
+							const selectionStr = (item.selections||[]).map(s => s.value).join(',')
+							return `${fieldName}:${selectionStr}`
+						}).join(';'),
+						'sort': this.state.sort,
+						'startPrice':filter.startPrice,
+						'endPrice': filter.endPrice, 
+						'skip': this.state.filterSkip,
+						'limit': this.state.limit,
+						'resourcepage_title': 'shoppingcart'
+					})
+				}catch(e){
+					console.error(e)
+				}
                 
-            }
-        }
+			}
+		}
 
-    }
+	}
 
-    bindSearchScroll(e) {
-        const { target } = e
-        const scrollTop = target.scrollTop,
-            scrollHeight = target.scrollHeight,
-            windowHeight = target.clientHeight;
-        if (scrollTop + windowHeight >= scrollHeight - 50) {
-            this.onSearch(this.state.searchValue, true)
-        }
-    }
+	bindSearchScroll(e) {
+		const { target } = e
+		const scrollTop = target.scrollTop,
+			scrollHeight = target.scrollHeight,
+			windowHeight = target.clientHeight
+		if (scrollTop + windowHeight >= scrollHeight - 50) {
+			this.onSearch(this.state.searchValue, true)
+		}
+	}
 
-    bindFilterScroll(e) {
-        const { target } = e
-        const scrollTop = target.scrollTop,
-            scrollHeight = target.scrollHeight,
-            windowHeight = target.clientHeight;
-        if (scrollTop + windowHeight >= scrollHeight - 50) {
-            this.onFilter(this.state.filter, true)
-        }
-    }
-
-
+	bindFilterScroll(e) {
+		const { target } = e
+		const scrollTop = target.scrollTop,
+			scrollHeight = target.scrollHeight,
+			windowHeight = target.clientHeight
+		if (scrollTop + windowHeight >= scrollHeight - 50) {
+			this.onFilter(this.state.filter, true)
+		}
+	}
 
 
 
-    viewConfirm(oldId, newId, quantity, productId) {
-        this.props.viewConfirm(oldId, newId, quantity).then(() => {
-            this.setState({
-                showEditor: false,
-                viewingItem: null
-            })
-        })
 
-        try{
-            if(window.GeekoSensors){
-                window.GeekoSensors.Track('AddToCartDetail', {
-                    product_id: productId,
-                    variant_id: newId,
-                    product_qty: quantity,
-                    page_type: this.state.viewingItem.type,
-                    is_success: true
-                })
-            }
+
+	viewConfirm(oldId, newId, quantity, productId) {
+		this.props.viewConfirm(oldId, newId, quantity).then(() => {
+			this.setState({
+				showEditor: false,
+				viewingItem: null
+			})
+		})
+
+		try{
+			if(window.GeekoSensors){
+				window.GeekoSensors.Track('AddToCartDetail', {
+					product_id: productId,
+					variant_id: newId,
+					product_qty: quantity,
+					page_type: this.state.viewingItem.type,
+					is_success: true
+				})
+			}
             
-        }catch(e){}
-    }
+		}catch(e){}
+	}
 
-    searchSubmit(e) {
-        e.preventDefault()
-        this.setState({ searchEmpty: false, searchSkip: 0 })
-        setTimeout(() => {
+	searchSubmit(e) {
+		e.preventDefault()
+		this.setState({ searchEmpty: false, searchSkip: 0 })
+		setTimeout(() => {
 
-            this.onSearch(this.state.searchValue)
-        }, 0)
-    }
+			this.onSearch(this.state.searchValue)
+		}, 0)
+	}
 
-    bindSearchBody(c) {
-        this.searchBody = c
-        if (this.searchBody) {
-            this.searchBody.removeEventListener('scroll', this.bindSearchScroll)
-            this.searchBody.addEventListener('scroll', this.bindSearchScroll)
-        }
-    }
+	bindSearchBody(c) {
+		this.searchBody = c
+		if (this.searchBody) {
+			this.searchBody.removeEventListener('scroll', this.bindSearchScroll)
+			this.searchBody.addEventListener('scroll', this.bindSearchScroll)
+		}
+	}
 
-    bindFilterBody(c) {
-        if (!this.filterBody) {
-            this.filterBody = c
-            this.filterBody.addEventListener('scroll', this.bindFilterScroll)
-        }
-    }
+	bindFilterBody(c) {
+		if (!this.filterBody) {
+			this.filterBody = c
+			this.filterBody.addEventListener('scroll', this.bindFilterScroll)
+		}
+	}
 
-    unBind() {
-        if (this.searchBody) {
-            this.searchBody.removeEventListener('scroll', this.bindFilterScroll)
-        }
+	unBind() {
+		if (this.searchBody) {
+			this.searchBody.removeEventListener('scroll', this.bindFilterScroll)
+		}
 
-        if (this.filterBody) {
-            this.filterBody.removeEventListener('scroll', this.bindFilterScroll)
-        }
-    }
+		if (this.filterBody) {
+			this.filterBody.removeEventListener('scroll', this.bindFilterScroll)
+		}
+	}
 
-    render() {
+	render() {
 
-        const { summary, onClose } = this.props
+		const { summary, onClose } = this.props
 
-        return <React.Fragment>
-            {
-                this.state.showMask && <MASK onClick={() => {
-                    this.container.classList.remove('anim')
-                    setTimeout(() => {
-                        onClose()
-                    }, 200)
-                }} />
-            }
-            <BOTTOMPRODUCTS style={{ bottom: -window.innerHeight }} innerRef={c => {
-                if (!this.container) {
-                    this.container = c
-                    setTimeout(() => {
-                        this.container.classList.add('anim')
-                        this.setState({
-                            showMask: true
-                        })
-                    }, 0)
-                }
-            }}>
-                <SEARCHBANNEL>
-                    <SEARCHINPUT onClick={() => {
-                        this.setState({ showSearch: true })
-                    }}>
-                        <span />
-                        <i className="__searchIcon">&#xe772;</i>
-                    </SEARCHINPUT>
-                    <div onClick={() => {
-                        this.setState({
-                            showSort: true
-                        })
-                    }}>
-                        <span>Sort</span>
-                    </div>
-                    <div onClick={evt => {
-                        this.setState({ showFilter: true, showSort: false })
+		return <React.Fragment>
+			{
+				this.state.showMask && <MASK onClick={() => {
+					this.container.classList.remove('anim')
+					setTimeout(() => {
+						onClose()
+					}, 200)
+				}} />
+			}
+			<BOTTOMPRODUCTS style={{ bottom: -window.innerHeight }} innerRef={c => {
+				if (!this.container) {
+					this.container = c
+					setTimeout(() => {
+						this.container.classList.add('anim')
+						this.setState({
+							showMask: true
+						})
+					}, 0)
+				}
+			}}>
+				<SEARCHBANNEL>
+					<SEARCHINPUT onClick={() => {
+						this.setState({ showSearch: true })
+					}}>
+						<span />
+						<i className="__searchIcon">&#xe772;</i>
+					</SEARCHINPUT>
+					<div onClick={() => {
+						this.setState({
+							showSort: true
+						})
+					}}>
+						<span>Sort</span>
+					</div>
+					<div onClick={evt => {
+						this.setState({ showFilter: true, showSort: false })
 
-                    }}>
-                        <span>Filter</span>
-                    </div>
+					}}>
+						<span>Filter</span>
+					</div>
 
-                    {
-                        this.state.showSort && <React.Fragment>
-                            <div className="__sortlist">
-                                {
-                                    (this.state.sorters || []).map(sorter => <div onClick={evt => {
-                                        this.setState({
-                                            sort: sorter.value,
-                                            filterEmpty: false,
-                                            filterSkip: 0,
-                                            showSort: false
-                                        })
+					{
+						this.state.showSort && <React.Fragment>
+							<div className="__sortlist">
+								{
+									(this.state.sorters || []).map(sorter => <div onClick={evt => {
+										this.setState({
+											sort: sorter.value,
+											filterEmpty: false,
+											filterSkip: 0,
+											showSort: false
+										})
 
-                                        setTimeout(() => {
-                                            this.onFilter({ ...this.state.filter, sorter: sorter.value })
-                                        }, 0)
-                                    }} key={sorter.value} className={`${this.state.sort === sorter.value ? 'active' : ''}`}>
-                                        <span>{sorter.label}</span>
-                                    </div>)
-                                }
-                            </div>
+										setTimeout(() => {
+											this.onFilter({ ...this.state.filter, sorter: sorter.value })
+										}, 0)
+									}} key={sorter.value} className={`${this.state.sort === sorter.value ? 'active' : ''}`}>
+										<span>{sorter.label}</span>
+									</div>)
+								}
+							</div>
 
-                            <SORTMASK onClick={() => {
-                                this.setState({
-                                    showSort: false
-                                })
-                            }} />
-                        </React.Fragment>
-                    }
-
-
-                </SEARCHBANNEL>
-
-                <div className="__pbd" ref={this.bindFilterBody.bind(this)}>
-                    <PRODUCTS>
-                        {
-                            this.state.products.map((product, index) => <div key={product.id}>
-                                <NormalProduct position={index + 1} onSelect={(vairant, product) => {
-                                    this.setState({
-                                        viewingItem: {
-                                            productId: product.id,
-                                            variantId: vairant.id,
-                                            quantity: 1,
-                                            type: 'filter_products'
-                                        },
-                                        showEditor: true
-                                    })
-                                }} requestId={product.requestId} column="Filter Products" dataType="Filter Products" dataContent="Filter Products" product={product} />
-                            </div>)
-                        }
-                    </PRODUCTS>
-                    {
-                        this.state.filtering && <LOADING><FormattedMessage id="loading" /></LOADING>
-                    }
-                    {
-                        this.state.filterEmpty && <NOMORE><FormattedMessage id="nomore" /></NOMORE>
-                    }
-                </div>
+							<SORTMASK onClick={() => {
+								this.setState({
+									showSort: false
+								})
+							}} />
+						</React.Fragment>
+					}
 
 
+				</SEARCHBANNEL>
 
-                <div className="__fd">
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <div>
-                            <div><span style={{ fontFamily: 'SlatePro-Medium', fontSize: 16 }}><FormattedMessage id="total" />:</span> <span style={{ fontSize: 16 }}>{summary && unitprice(summary.orderTotal)}</span></div>
-                            <div style={{ fontSize: 14, color: '#999', marginTop: 2 }}><FormattedMessage id="coupon" />: {summary && unitprice(summary.couponDiscount)}</div>
-                        </div>
-                        <div>
-                            <BUTTON onClick={() => {
-                                this.container.classList.remove('anim')
-                                setTimeout(() => {
-                                    onClose()
-                                }, 200)
-                            }} style={{ minWidth: 162, textTransform: 'uppercase', paddingLeft: 10, paddingRight: 10 }}><FormattedMessage id="back_to_bag"/></BUTTON>
-                        </div>
-                    </div>
-                </div>
-            </BOTTOMPRODUCTS>
-
-            {
-                this.state.showSearchProducts && <BOTTOMPRODUCTS>
-                    <div className="__hd">
-                        <span className="__back" onClick={() => { this.setState({ showSearchProducts: false, showSearch: true }) }}>&#xe690;</span>
-                        <span className="__title"> {this.state.searchValue}</span>
-                    </div>
-
-                    <div className="__bd" ref={this.bindSearchBody.bind(this)}>
-                        <PRODUCTS>
-                            {
-                                this.state.searchProducts.map((product, index) => <div key={product.id}>
-                                    <NormalProduct position={index + 1} onSelect={(vairant, product) => {
-                                        this.setState({
-                                            viewingItem: {
-                                                productId: product.id,
-                                                variantId: vairant.id,
-                                                quantity: 1,
-                                                type: 'search_products'
-                                            },
-                                            showEditor: true
-                                        })
-                                    }} requestId={product.requestId} column="Search Products" product={product} dataType="Search Products" dataContent="Search Products"/>
-                                </div>)
-                            }
-                        </PRODUCTS>
-                        {
-                            this.state.searching && <LOADING><FormattedMessage id="loading" /></LOADING>
-                        }
-
-                        {
-                            this.state.searchEmpty && <NOMORE><FormattedMessage id="nomore" /></NOMORE>
-                        }
-                    </div>
+				<div className="__pbd" ref={this.bindFilterBody.bind(this)}>
+					<PRODUCTS>
+						{
+							this.state.products.map((product, index) => <div key={product.id}>
+								<NormalProduct position={index + 1} onSelect={(vairant, product) => {
+									this.setState({
+										viewingItem: {
+											productId: product.id,
+											variantId: vairant.id,
+											quantity: 1,
+											type: 'filter_products'
+										},
+										showEditor: true
+									})
+								}} requestId={product.requestId} column="Filter Products" dataType="Filter Products" dataContent="Filter Products" product={product} />
+							</div>)
+						}
+					</PRODUCTS>
+					{
+						this.state.filtering && <LOADING><FormattedMessage id="loading" /></LOADING>
+					}
+					{
+						this.state.filterEmpty && <NOMORE><FormattedMessage id="nomore" /></NOMORE>
+					}
+				</div>
 
 
 
-                    <div className="__fd">
-                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <div>
-                                <div><span style={{ fontFamily: 'SlatePro-Medium', fontSize: 16 }}><FormattedMessage id="total" />:</span> <span style={{ fontSize: 16 }}>{summary && unitprice(summary.orderTotal)}</span></div>
-                                <div style={{ fontSize: 14, color: '#999', marginTop: 2 }}><FormattedMessage id="coupon" />: {summary && unitprice(summary.couponDiscount)}</div>
-                            </div>
-                            <div>
-                                <BUTTON onClick={() => {
-                                    this.container.classList.remove('anim')
-                                    setTimeout(() => {
-                                        onClose()
-                                    }, 200)
-                                }} style={{ minWidth: 162, textTransform: 'uppercase', paddingLeft: 10, paddingRight: 10 }}><FormattedMessage id="back_to_bag"/></BUTTON>
-                            </div>
-                        </div>
-                    </div>
-                </BOTTOMPRODUCTS>
-            }
+				<div className="__fd">
+					<div style={{ display: 'flex', justifyContent: 'space-between' }}>
+						<div>
+							<div><span style={{ fontFamily: 'SlatePro-Medium', fontSize: 16 }}><FormattedMessage id="total" />:</span> <span style={{ fontSize: 16 }}>{summary && unitprice(summary.orderTotal)}</span></div>
+							<div style={{ fontSize: 14, color: '#999', marginTop: 2 }}><FormattedMessage id="coupon" />: {summary && unitprice(summary.couponDiscount)}</div>
+						</div>
+						<div>
+							<BUTTON onClick={() => {
+								this.container.classList.remove('anim')
+								setTimeout(() => {
+									onClose()
+								}, 200)
+							}} style={{ minWidth: 162, textTransform: 'uppercase', paddingLeft: 10, paddingRight: 10 }}><FormattedMessage id="back_to_bag"/></BUTTON>
+						</div>
+					</div>
+				</div>
+			</BOTTOMPRODUCTS>
+
+			{
+				this.state.showSearchProducts && <BOTTOMPRODUCTS>
+					<div className="__hd">
+						<span className="__back" onClick={() => { this.setState({ showSearchProducts: false, showSearch: true }) }}>&#xe690;</span>
+						<span className="__title"> {this.state.searchValue}</span>
+					</div>
+
+					<div className="__bd" ref={this.bindSearchBody.bind(this)}>
+						<PRODUCTS>
+							{
+								this.state.searchProducts.map((product, index) => <div key={product.id}>
+									<NormalProduct position={index + 1} onSelect={(vairant, product) => {
+										this.setState({
+											viewingItem: {
+												productId: product.id,
+												variantId: vairant.id,
+												quantity: 1,
+												type: 'search_products'
+											},
+											showEditor: true
+										})
+									}} requestId={product.requestId} column="Search Products" product={product} dataType="Search Products" dataContent="Search Products"/>
+								</div>)
+							}
+						</PRODUCTS>
+						{
+							this.state.searching && <LOADING><FormattedMessage id="loading" /></LOADING>
+						}
+
+						{
+							this.state.searchEmpty && <NOMORE><FormattedMessage id="nomore" /></NOMORE>
+						}
+					</div>
 
 
-            {
-                this.state.filter && this.state.showFilter && <BOTTOMPRODUCTS>
-                    <div className="__hd">
-                        <span className="__back" onClick={() => { this.setState({ showFilter: false }) }}>&#xe690;</span>
-                        <span className="__title">Filter</span>
-                    </div>
-                    <div className="__bd">
-                        <Filter filter={this.state.filter} onFilter={filter => {
-                            this.setState({
-                                filterEmpty: false,
-                                filterSkip: 0
-                            })
-                            setTimeout(() => {
-                                this.onFilter(filter)
-                            }, 0)
 
-                        }} />
-                    </div>
-                </BOTTOMPRODUCTS>
-            }
+					<div className="__fd">
+						<div style={{ display: 'flex', justifyContent: 'space-between' }}>
+							<div>
+								<div><span style={{ fontFamily: 'SlatePro-Medium', fontSize: 16 }}><FormattedMessage id="total" />:</span> <span style={{ fontSize: 16 }}>{summary && unitprice(summary.orderTotal)}</span></div>
+								<div style={{ fontSize: 14, color: '#999', marginTop: 2 }}><FormattedMessage id="coupon" />: {summary && unitprice(summary.couponDiscount)}</div>
+							</div>
+							<div>
+								<BUTTON onClick={() => {
+									this.container.classList.remove('anim')
+									setTimeout(() => {
+										onClose()
+									}, 200)
+								}} style={{ minWidth: 162, textTransform: 'uppercase', paddingLeft: 10, paddingRight: 10 }}><FormattedMessage id="back_to_bag"/></BUTTON>
+							</div>
+						</div>
+					</div>
+				</BOTTOMPRODUCTS>
+			}
 
-            {
-                this.state.showSearch && <BOTTOMPRODUCTS>
-                    <SEARCHBANNEL style={{ borderTop: 'none' }}>
-                        <div style={{ display: 'flex', paddingLeft: 18, paddingRight: 18, alignItems: 'center' }}>
-                            <form onSubmit={this.searchSubmit.bind(this)} action="/search" style={{ flex: 1 }}>
-                                <INPUT value={this.state.searchValue} onChange={evt => {
-                                    this.setState({ searchValue: evt.target.value })
-                                    this.searchChange(evt)
-                                }} placeholder="Search" autoFocus ref={c => this.searchRef = c} type="search" />
-                            </form>
-                            <span style={{ marginLeft: 6, cursor: 'pointer', color: '#999' }} onClick={() => { this.setState({ showSearch: false }) }}><FormattedMessage id="cancel" /></span>
-                        </div>
-                    </SEARCHBANNEL>
 
-                    <div className="__bd">
-                        <SEARCHLIST>
-                            {
-                                (this.state.words || []).map(word => <div onClick={() => {
-                                    this.setState({
-                                        searchEmpty: false,
-                                        searchSkip: 0
-                                    })
-                                    setTimeout(() => {
-                                        this.onSearch(word)
-                                    })
-                                }} key={word} data-source-click data-title="shoppingcart" data-type="search-words" data-content={word}>
-                                    <span>{word}</span>
-                                </div>)
-                            }
-                        </SEARCHLIST>
-                    </div>
-                </BOTTOMPRODUCTS>
-            }
+			{
+				this.state.filter && this.state.showFilter && <BOTTOMPRODUCTS>
+					<div className="__hd">
+						<span className="__back" onClick={() => { this.setState({ showFilter: false }) }}>&#xe690;</span>
+						<span className="__title">Filter</span>
+					</div>
+					<div className="__bd">
+						<Filter filter={this.state.filter} onFilter={filter => {
+							this.setState({
+								filterEmpty: false,
+								filterSkip: 0
+							})
+							setTimeout(() => {
+								this.onFilter(filter)
+							}, 0)
 
-            {
-                this.state.viewingItem && this.state.showEditor && <ProductEditor style2 onClose={() => { this.setState({ showEditor: false }) }}
-                    itemConfirmHandle={this.viewConfirm.bind(this)}
-                    btnMessage={<FormattedMessage id="addtocart" />}
-                    item={this.state.viewingItem} />
-            }
-        </React.Fragment>
-    }
+						}} />
+					</div>
+				</BOTTOMPRODUCTS>
+			}
+
+			{
+				this.state.showSearch && <BOTTOMPRODUCTS>
+					<SEARCHBANNEL style={{ borderTop: 'none' }}>
+						<div style={{ display: 'flex', paddingLeft: 18, paddingRight: 18, alignItems: 'center' }}>
+							<form onSubmit={this.searchSubmit.bind(this)} action="/search" style={{ flex: 1 }}>
+								<INPUT value={this.state.searchValue} onChange={evt => {
+									this.setState({ searchValue: evt.target.value })
+									this.searchChange(evt)
+								}} placeholder="Search" autoFocus ref={c => this.searchRef = c} type="search" />
+							</form>
+							<span style={{ marginLeft: 6, cursor: 'pointer', color: '#999' }} onClick={() => { this.setState({ showSearch: false }) }}><FormattedMessage id="cancel" /></span>
+						</div>
+					</SEARCHBANNEL>
+
+					<div className="__bd">
+						<SEARCHLIST>
+							{
+								(this.state.words || []).map(word => <div onClick={() => {
+									this.setState({
+										searchEmpty: false,
+										searchSkip: 0
+									})
+									setTimeout(() => {
+										this.onSearch(word)
+									})
+								}} key={word} data-source-click data-title="shoppingcart" data-type="search-words" data-content={word}>
+									<span>{word}</span>
+								</div>)
+							}
+						</SEARCHLIST>
+					</div>
+				</BOTTOMPRODUCTS>
+			}
+
+			{
+				this.state.viewingItem && this.state.showEditor && <ProductEditor style2 onClose={() => { this.setState({ showEditor: false }) }}
+					itemConfirmHandle={this.viewConfirm.bind(this)}
+					btnMessage={<FormattedMessage id="addtocart" />}
+					item={this.state.viewingItem} />
+			}
+		</React.Fragment>
+	}
 }

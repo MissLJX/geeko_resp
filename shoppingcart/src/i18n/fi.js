@@ -37,7 +37,6 @@ export default{
 	shipping_tip: 'Pikatoimitus: Valitsemme sinulle sopivimman operaattorin .',
 	select: 'Valitse',
 	add_new_card: 'Lis\u00e4\u00e4 uusi kortti',
-	add_shipping_insurance: 'Lis\u00e4\u00e4 Toimitusvakuutus',
 	apply: 'K\u00e4yt\u00e4',
 	to_this_order: 't\u00e4h\u00e4n tilaukseen',
 	credit_card_number: 'Luottokortin numero',	//google
@@ -115,20 +114,20 @@ export default{
 	
 	share_up_to:'JAA Jopa 50% ALENNUSTA, SAA 10 dollaria',   //google
 	share_luckly_draw:'Jaa onnellinen arvonta ystävillesi, jotka saavat JOPA 50%: n alennuksen. Ja saat 10 dollaria, kun he tekevät ostoksen.',   //google
-	facebook:"Facebook",
-	messenger:"Messenger",
+	facebook:'Facebook',
+	messenger:'Messenger',
 	copy:'Kopioi',
-	terms_conditions:"Käyttöehdot",
-	invitation_link:"Kutsulinkki",
-	share_via_email:"Jaa sähköpostitse",
-	to:"Vastaanottaja",
+	terms_conditions:'Käyttöehdot',
+	invitation_link:'Kutsulinkki',
+	share_via_email:'Jaa sähköpostitse',
+	to:'Vastaanottaja',
 	friend_email:'Ystävän sähköposti',   //google
-	invite_more:"+Kutsu lisää",
-	subject:"Aihe",
+	invite_more:'+Kutsu lisää',
+	subject:'Aihe',
 	note:'Huomautus',
-	the_site_has_so_many:"Tällä sivustolla on niin paljon pakollisia kohteita. Tarkista heidän uudet saapumistaan ​​ja saat jopa 50% alennusta ensimmäisestä tilauksestasi !! Olet tervetullut",   //google
-	send_email:"Lähetä sähköpostia",
-	send_you_up:"Lähetämme sinulle jopa 50% POIS",   //google
+	the_site_has_so_many:'Tällä sivustolla on niin paljon pakollisia kohteita. Tarkista heidän uudet saapumistaan ​​ja saat jopa 50% alennusta ensimmäisestä tilauksestasi !! Olet tervetullut',   //google
+	send_email:'Lähetä sähköpostia',
+	send_you_up:'Lähetämme sinulle jopa 50% POIS',   //google
 
 	you_selected:'Valitsit ',
 	coupon_code:'Kuponkikoodi',
@@ -162,5 +161,7 @@ export default{
 	loading: 'Loading',
 	nomore: 'No more data',
 	shopnow: 'Shop Now',
-	
+	agree_with_policy: 'I agree with the {term} & {refund}',
+	terms_of_service: 'Käyttöehdot',
+	return_policy: 'Palautuskäytäntö'
 }

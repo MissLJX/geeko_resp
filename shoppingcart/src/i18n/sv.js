@@ -37,7 +37,6 @@ export default{
 	shipping_tip: 'Expressfrakt: Vi väljer den mest lämpliga transportören för dig .',
 	select: 'Välj',
 	add_new_card: 'L\u00e4gg till ett nytt kort',
-	add_shipping_insurance: 'Lägg till Frakt Försäkring',
 	apply: 'Använd',
 	to_this_order: 'p\u00e5 den h\u00e4r best\u00e4llningen',
 	credit_card_number: 'Kreditkortsnummer',   //google
@@ -115,20 +114,20 @@ export default{
 	
 	share_up_to:'SHARE UP TO 50% OFF , GET $10',   //google
 	share_luckly_draw:'Dela lyckad dragning med dina vänner som får upp till 50% rabatt. Och du får $ 10 när de gör ett köp.',   //google
-	facebook:"Facebook",
-	messenger:"Messenger",
+	facebook:'Facebook',
+	messenger:'Messenger',
 	copy:'Kopiera',
-	terms_conditions:"Villkor",
-	invitation_link:"Inbjudningslänk",
-	share_via_email:"Dela via mejl",
-	to:"Till",
+	terms_conditions:'Villkor',
+	invitation_link:'Inbjudningslänk',
+	share_via_email:'Dela via mejl',
+	to:'Till',
 	friend_email:'Friend\'s Email',   //google
-	invite_more:"+ Bjud in fler",
-	subject:"Ämne",
+	invite_more:'+ Bjud in fler',
+	subject:'Ämne',
 	note:'OBS',
-	the_site_has_so_many:"Denna webbplats har så många måste-haves. Kolla in deras nyanlända och få upp till 50% rabatt för din första beställning !! Varsågod",   //google
-	send_email:"Skicka ett mejl",
-	send_you_up:"Skickar upp till 50% rabatt",   //google
+	the_site_has_so_many:'Denna webbplats har så många måste-haves. Kolla in deras nyanlända och få upp till 50% rabatt för din första beställning !! Varsågod',   //google
+	send_email:'Skicka ett mejl',
+	send_you_up:'Skickar upp till 50% rabatt',   //google
 
 	you_selected:'Du valde ',
 	coupon_code:'Kupongkod',
@@ -162,4 +161,7 @@ export default{
 	loading: 'Loading',
 	nomore: 'No more data',
 	shopnow: 'Shop Now',
+	agree_with_policy: 'I agree with the {term} & {refund}',
+	terms_of_service: 'Användarvillkor',
+	return_policy: 'Returpolicy'
 }

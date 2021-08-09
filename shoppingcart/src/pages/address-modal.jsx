@@ -35,6 +35,14 @@ const Modal = class extends React.Component {
 		this.editAddress = this.editAddress.bind(this)
 	}
 
+	componentDidMount() {
+		if(window.GeekoSensors){
+			window.GeekoSensors.Track('address_edit', {
+				edit_type: this.props.address ? 'Edit Address' : 'Add Address'
+			})
+		}
+	}
+
 	close(evt) {
 		evt.preventDefault()
 		this.props.history.replace(`${window.ctx || ''}${__route_root__}/checkout`)
@@ -72,17 +80,23 @@ const Modal = class extends React.Component {
 				}
 				this.props.history.replace(`${window.ctx || ''}${__route_root__}/checkout`)
 
-				window.GeekoSensors.Track('address_edit', {
-					edit_type: editType,
-					is_success: true
-				})
+
+				if(window.GeekoSensors){
+					window.GeekoSensors.Track('address_edit', {
+						edit_type: editType,
+						is_success: true
+					})
+				}
+
 			}).catch(({ result }) => {
 				alert(result)
-				window.GeekoSensors.Track('address_edit', {
-					edit_type: editType,
-					is_success: false,
-					reason: result
-				})
+				if(window.GeekoSensors){
+					window.GeekoSensors.Track('address_edit', {
+						edit_type: editType,
+						is_success: false,
+						reason: result
+					})
+				}
 			})
 		}
 	}

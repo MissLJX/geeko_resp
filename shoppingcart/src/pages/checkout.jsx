@@ -378,20 +378,20 @@ const Checkout = class extends React.Component {
 		const value = target.type === 'checkbox' ? target.checked : target.value
 		const name = target.name
 		switch (name) {
-			case 'securityCode':
-				this.props.SETSECURITYCODE(value)
-				break
-			case 'installments':
-				this.props.SETINSTALLMENTS(value)
-				break
-			case 'mercado-installments':
-				this.props.SETMERCADOINTALLMENTS(value)
-				break
-			case 'document':
-				this.props.SETDOCUMENT(value)
-				break
-			default:
-				break
+		case 'securityCode':
+			this.props.SETSECURITYCODE(value)
+			break
+		case 'installments':
+			this.props.SETINSTALLMENTS(value)
+			break
+		case 'mercado-installments':
+			this.props.SETMERCADOINTALLMENTS(value)
+			break
+		case 'document':
+			this.props.SETDOCUMENT(value)
+			break
+		default:
+			break
 		}
 	}
 
@@ -423,11 +423,11 @@ const Checkout = class extends React.Component {
 					container: `#klarna-payments-container-${paymethod.id}`,
 					payment_method_category: paymethod.description
 				}, {
-					"locale": params.locale,
-					"purchase_country": params.purchase_country,
-					"purchase_currency": params.purchase_currency,
-					"order_amount": params.order_amount,
-					"order_lines": params.order_lines
+					'locale': params.locale,
+					'purchase_country': params.purchase_country,
+					'purchase_currency': params.purchase_currency,
+					'order_amount': params.order_amount,
+					'order_lines': params.order_lines
 				}, function (res) {
 					console.debug(res)
 				})
@@ -623,352 +623,363 @@ const Checkout = class extends React.Component {
 
 
 				switch (payMethod.type) {
-					case '1':
-						this.setState({
-							paypaling: true,
-							checking: true
-						})
-						checkout_paypal({ orderId }).then(data => data.result).then(({ TOKEN, success, transactionId, ACK, L_LONGMESSAGE0 }) => {
-							if (success && transactionId && !TOKEN) {
-								window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-								return
-							}
-							if (ACK === 'Failure') {
-								alert(L_LONGMESSAGE0)
-								this.setState({
-									paypaling: false,
-									checking: false
-								})
-								return
-							}
-
-							if (TOKEN && paypal) {
-								window.location.href = paypal + TOKEN
-							}
-						}).catch(({ result }) => {
+				case '1':
+					this.setState({
+						paypaling: true,
+						checking: true
+					})
+					checkout_paypal({ orderId }).then(data => data.result).then(({ TOKEN, success, transactionId, ACK, L_LONGMESSAGE0 }) => {
+						if (success && transactionId && !TOKEN) {
+							window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
+							return
+						}
+						if (ACK === 'Failure') {
+							alert(L_LONGMESSAGE0)
 							this.setState({
 								paypaling: false,
 								checking: false
 							})
-							alert(result)
-						})
-						break
-					case '2':
-						this.setState({
-							checking: true
-						})
-						this.props.GETCREDITCARDS(payMethod.id).then(cards => {
-							if (!cards || cards.length < 1) {
-								this.props.history.push(`${this.props.match.url}/ocean/credit`)
-								this.setState({
-									checking: false
-								})
-							} else {
-								this.setState({
-									checking: false
-								})
-								this.props.TOGGLECREDIT(true)
-							}
-						})
-						break
-
-					case '3':
-						this.setState({
-							checking: true
-						})
-						this.checkcomputop({ orderId }).catch((data) => {
-							this.setState({
-								checking: false
-							})
-							if (data) {
-								alert(data.result)
-							}
-						})
-						break
-					case '5':
-					case '26':
-						this.setState({
-							checking: true
-						})
-						this.checkparams({ orderId }).catch(() => {
-							this.setState({
-								checking: false
-							})
-						})
-						break
-					case '6':
-						break
-					case '7':
-						this.setState({
-							checking: true
-						})
-						this.props.GETMERCADOCARDS().then((cards) => {
-							if (!cards || cards.length < 1) {
-								this.props.history.push(`${this.props.match.url}/mercado/credit`)
-							} else {
-								this.props.TOGGLECREDIT(true)
-							}
-							this.setState({
-								checking: false
-							})
-						}).catch(() => {
-							this.setState({
-								checking: false
-							})
-						})
-						break
-					case '8':
-						this.setState({
-							checking: true
-						})
-						this.props.GETCREDITCARDS(payMethod.id).then(cards => {
-							if (!cards || cards.length < 1) {
-								this.checkparams({
-									orderId
-								}).catch(() => {
-									this.setState({
-										checking: false
-									})
-								})
-							} else {
-								this.setState({
-									checking: false
-								})
-								this.props.TOGGLECREDIT(true)
-							}
-						})
-						break
-					case '9':
-						if (!this.props.atmMethod) {
-							alert('Please select a pay method!')
-							this.$paylistdom.scrollIntoView()
 							return
 						}
+
+						if (TOKEN && paypal) {
+							window.location.href = paypal + TOKEN
+						}
+					}).catch(({ result }) => {
 						this.setState({
-							checking: true
+							paypaling: false,
+							checking: false
 						})
-						this.checkpay({
-							orderId,
-							paymentMethodId: this.props.atmMethod
-						}).catch(() => {
+						alert(result)
+					})
+					break
+				case '2':
+					this.setState({
+						checking: true
+					})
+					this.props.GETCREDITCARDS(payMethod.id).then(cards => {
+						if (!cards || cards.length < 1) {
+							this.props.history.push(`${this.props.match.url}/ocean/credit`)
 							this.setState({
-								checking: true
+								checking: false
 							})
-						})
-						break
-					case '10':
-						this.setState({
-							checking: true
-						})
-						this.checkpay({
-							orderId,
-							paymentMethodId: 'oxxo'
-						}).catch(() => {
+						} else {
 							this.setState({
-								checking: true
+								checking: false
 							})
-						})
-						break
-					case '11':
+							this.props.TOGGLECREDIT(true)
+						}
+					})
+					break
+
+				case '3':
+					this.setState({
+						checking: true
+					})
+					this.checkcomputop({ orderId }).catch((data) => {
 						this.setState({
-							checking: true
+							checking: false
 						})
-						if (payMethod.id === '23') {
-							this.checkpay({
-								orderId
-							}).catch(() => {
-								this.setState({
-									checking: true
-								})
-							})
-						} else if (payMethod.id === '22') {
+						if (data) {
+							alert(data.result)
+						}
+					})
+					break
+				case '5':
+				case '26':
+					this.setState({
+						checking: true
+					})
+					this.checkparams({ orderId }).catch(() => {
+						this.setState({
+							checking: false
+						})
+					})
+					break
+				case '6':
+					break
+				case '7':
+					this.setState({
+						checking: true
+					})
+					this.props.GETMERCADOCARDS().then((cards) => {
+						if (!cards || cards.length < 1) {
+							this.props.history.push(`${this.props.match.url}/mercado/credit`)
+						} else {
+							this.props.TOGGLECREDIT(true)
+						}
+						this.setState({
+							checking: false
+						})
+					}).catch(() => {
+						this.setState({
+							checking: false
+						})
+					})
+					break
+				case '8':
+					this.setState({
+						checking: true
+					})
+					this.props.GETCREDITCARDS(payMethod.id).then(cards => {
+						if (!cards || cards.length < 1) {
 							this.checkparams({
 								orderId
 							}).catch(() => {
 								this.setState({
-									checking: true
+									checking: false
 								})
 							})
+						} else {
+							this.setState({
+								checking: false
+							})
+							this.props.TOGGLECREDIT(true)
 						}
-						break
-
-					case '12':
+					})
+					break
+				case '9':
+					if (!this.props.atmMethod) {
+						alert('Please select a pay method!')
+						this.$paylistdom.scrollIntoView()
+						return
+					}
+					this.setState({
+						checking: true
+					})
+					this.checkpay({
+						orderId,
+						paymentMethodId: this.props.atmMethod
+					}).catch(() => {
 						this.setState({
 							checking: true
 						})
-
-						this.props.TOGGLECREDIT(true)
-						this.props.GETDLOCALCARDS(payMethod.id).then(cards => {
-							if (!cards || cards.length < 1) {
-								this.props.history.push(`${this.props.match.url}/dlocal/credit`)
-							}
-							this.setState({
-								checking: false
-							})
-						}).catch(({ result }) => {
-							alert(result)
-							this.setState({
-								checking: false
-							})
+					})
+					break
+				case '10':
+					this.setState({
+						checking: true
+					})
+					this.checkpay({
+						orderId,
+						paymentMethodId: 'oxxo'
+					}).catch(() => {
+						this.setState({
+							checking: true
 						})
-
-						break
-
-					case '13':
+					})
+					break
+				case '11':
+					this.setState({
+						checking: true
+					})
+					if (payMethod.id === '23') {
 						this.checkpay({
-							orderId,
-							payMethod: payMethod.id,
-							paymentMethodId: 'BL'
-						}).catch(({ result }) => {
-							alert(result)
+							orderId
+						}).catch(() => {
 							this.setState({
-								checking: false
+								checking: true
 							})
 						})
-						break
-					case '14':
-					case '15':
-					case '16':
-					case '17':
-					case '18':
-					case '19':
-					case '20':
-					case '21':
-					case '22':
-					case '23':
-					case '24':
-					case '25':
-						{
-							if (payMethod.type !== '14') {
-								this.documentForm.validateAll()
-							}
+					} else if (payMethod.id === '22') {
+						this.checkparams({
+							orderId
+						}).catch(() => {
+							this.setState({
+								checking: true
+							})
+						})
+					}
+					break
+
+				case '12':
+					this.setState({
+						checking: true
+					})
+
+					this.props.TOGGLECREDIT(true)
+					this.props.GETDLOCALCARDS(payMethod.id).then(cards => {
+						if (!cards || cards.length < 1) {
+							this.props.history.push(`${this.props.match.url}/dlocal/credit`)
+						}
+						this.setState({
+							checking: false
+						})
+					}).catch(({ result }) => {
+						alert(result)
+						this.setState({
+							checking: false
+						})
+					})
+
+					break
+
+				case '13':
+					this.checkpay({
+						orderId,
+						payMethod: payMethod.id,
+						paymentMethodId: 'BL'
+					}).catch(({ result }) => {
+						alert(result)
+						this.setState({
+							checking: false
+						})
+					})
+					break
+				case '14':
+				case '15':
+				case '16':
+				case '17':
+				case '18':
+				case '19':
+				case '20':
+				case '21':
+				case '22':
+				case '23':
+				case '24':
+				case '25':
+					{
+						if (payMethod.type !== '14') {
+							this.documentForm.validateAll()
+						}
 
 
-							const paymentMethodId = this.getTcMethod()
-							let document = this.props.document
+						const paymentMethodId = this.getTcMethod()
+						let document = this.props.document
 
-							if (!paymentMethodId) {
-								alert('Please select a pay method!')
-								this.$paylistdom.scrollIntoView()
-								return
-							}
+						if (!paymentMethodId) {
+							alert('Please select a pay method!')
+							this.$paylistdom.scrollIntoView()
+							return
+						}
 
-							if (this.props.document || payMethod.type === '14') {
+						if (this.props.document || payMethod.type === '14') {
+							this.setState({
+								checking: true
+							})
+							this.checkpay({
+								orderId,
+								payMethod: payMethod.id,
+								paymentMethodId,
+								document
+							}).catch(({ result }) => {
+								alert(result)
 								this.setState({
-									checking: true
+									checking: false
 								})
-								this.checkpay({
-									orderId,
-									payMethod: payMethod.id,
-									paymentMethodId,
-									document
-								}).catch(({ result }) => {
-									alert(result)
-									this.setState({
-										checking: false
+							})
+						}
+					}
+					break
+				case '27':
+					const self = this
+					this.setState({
+						checking: true
+					})
+
+					Klarna.Payments.authorize({
+						payment_method_category: payMethod.description
+					}, {
+						'shipping_address': this.state.klarnaParams.shipping_address,
+						'billing_address': this.state.klarnaParams.shipping_address
+					}, function (res) {
+
+						const {
+							authorization_token,
+							approved,
+							show_form,
+							error
+						} = res
+
+						if (approved && authorization_token) {
+							klarna_order_place_order({ authorizationToken: authorization_token, payMethod: payMethod.id, orderId }).then(data => data.result).then(response => {
+
+								const {
+									order_id,
+									redirect_url,
+									fraud_status,
+									authorized_payment_method,
+									correlation_id,
+									error_code,
+									error_messages
+								} = response
+
+								if (error_code) {
+									alert(error_messages)
+								} else if (fraud_status === 'ACCEPTED') {
+									window.location.href = redirect_url
+								}
+
+								self.setState({ checking: false })
+							}).catch(data => {
+								alert(data.result)
+								self.setState({ checking: false })
+							})
+						} else {
+							self.setState({ checking: false })
+							try {
+								if(window.GeekoSensors){
+									window.GeekoSensors.Track('pay_error', {
+										payMethod: payMethod.id,
+										error: error ? JSON.stringify(error): ''
 									})
-								})
+								}
+							}catch (e){
+								console.error(e)
 							}
 						}
-						break
-					case '27':
-						const self = this
+
+
+
+					})
+					break
+				case '28':
+					this.setState({
+						checking: true
+					})
+					checkout_pay({ payMethod: payMethod.id, orderId }).then(data => {
+						const payResult = data.result
+						if (payResult.success) {
+							if (payResult.isFree) {
+								window.location.href = window.ctx + '/order-confirm/' + payResult.transactionId
+							} else {
+								window.location.href = payResult.redirectCheckoutUrl
+							}
+						} else {
+							alert(payResult.details)
+						}
 						this.setState({
-							checking: true
+							checking: false
 						})
-
-						Klarna.Payments.authorize({
-							payment_method_category: payMethod.description
-						}, {
-							"shipping_address": this.state.klarnaParams.shipping_address,
-							"billing_address": this.state.klarnaParams.shipping_address
-						}, function (res) {
-
-							const {
-								authorization_token,
-								approved,
-								show_form
-							} = res
-
-							if (approved && authorization_token) {
-								klarna_order_place_order({ authorizationToken: authorization_token, payMethod: payMethod.id, orderId }).then(data => data.result).then(response => {
-
-									const {
-										order_id,
-										redirect_url,
-										fraud_status,
-										authorized_payment_method,
-										correlation_id,
-										error_code,
-										error_messages
-									} = response
-
-									if (error_code) {
-										alert(error_messages)
-									} else if (fraud_status === "ACCEPTED") {
-										window.location.href = redirect_url
-									}
-
-									self.setState({ checking: false })
-								}).catch(data => {
-									alert(data.result)
-									self.setState({ checking: false })
-								})
-							} else {
-								self.setState({ checking: false })
-							}
-
-
-
-						})
-						break
-					case '28':
+					}).catch(data => {
+						if (data.result) {
+							alert(data.result)
+						} else {
+							alert(data)
+						}
 						this.setState({
-							checking: true
+							checking: false
 						})
-						checkout_pay({ payMethod: payMethod.id, orderId }).then(data => {
-							const payResult = data.result
-							if (payResult.success) {
-								if (payResult.isFree) {
-									window.location.href = ctx + '/order-confirm/' + result.transactionId
-								} else {
-									window.location.href = payResult.redirectCheckoutUrl
-								}
-							} else {
-								alert(payResult.details)
-							}
-							this.setState({
-								checking: false
-							})
-						}).catch(data => {
-							if (data.result) {
-								alert(data.result)
-							} else {
-								alert(data)
-							}
-							this.setState({
-								checking: false
-							})
-						})
-						break
-					case '29':
+					})
+					break
+				case '29':
+					this.setState({
+						checking: true
+					})
+					checkout_getparams({ payMethod: payMethod.id, orderId }).then(({ result }) => {
+						const { isFree, payURL, params, transactionId, orderId } = result
+						if (isFree) {
+							window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
+						} else {
+							submit(result)
+						}
+					}).catch(({ result }) => {
+						alert(result)
 						this.setState({
-							checking: true
+							checking: false
 						})
-						checkout_getparams({ payMethod: payMethod.id, orderId }).then(({ result }) => {
-							const { isFree, payURL, params, transactionId, orderId } = result
-							if (isFree) {
-								window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}`
-							} else {
-								submit(result)
-							}
-						}).catch(({ result }) => {
-							alert(result)
-							this.setState({
-								checking: false
-							})
-						})
-						break
+					})
+					break
 				}
 
 			}
@@ -1048,24 +1059,24 @@ const Checkout = class extends React.Component {
 
 
 		sfc.createPayment({
-			"sessionToken": response.sessionToken, //recieved form opeOrder API
-			"merchantId": response.merchantId, //as asigned by SafeCharge
-			"merchantSiteId": response.merchantSiteId, //as asigned by SafeCharge
-			"userTokenId": response.userTokenId,
-			"clientUniqueId": response.clientUniqueId, // optional
-			"paymentOption": {
-				"userPaymentOptionId": result.userPaymentOptionId,
+			'sessionToken': response.sessionToken, //recieved form opeOrder API
+			'merchantId': response.merchantId, //as asigned by SafeCharge
+			'merchantSiteId': response.merchantSiteId, //as asigned by SafeCharge
+			'userTokenId': response.userTokenId,
+			'clientUniqueId': response.clientUniqueId, // optional
+			'paymentOption': {
+				'userPaymentOptionId': result.userPaymentOptionId,
 			},
-			"billingAddress": {
-				"country": result.country,
-				"email": result.email
+			'billingAddress': {
+				'country': result.country,
+				'email': result.email
 			},
-			"deviceDetails": {
-				"ipAddress": result.ip
+			'deviceDetails': {
+				'ipAddress': result.ip
 			}
 		}, function (res) {
 			setSafeChargeStatus(response.sessionToken).then(data => data.result).then(result => {
-				if (res.result === "APPROVED") {
+				if (res.result === 'APPROVED') {
 					window.location.href = `${window.ctx || ''}/order-confirm/${response.clientUniqueId}`
 				} else {
 					alert(res.errorDescription || res.reason || 'Error')
@@ -1123,7 +1134,7 @@ const Checkout = class extends React.Component {
 							'TransactionId': lookup.transactionId
 						}
 					},
-						jwt
+					jwt
 					)
 				} else {
 					self.payOcean3D(orderId)

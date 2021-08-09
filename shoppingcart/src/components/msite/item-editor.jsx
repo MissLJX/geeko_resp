@@ -9,9 +9,11 @@ import SizeColorBlockers from './size-color-blockers.jsx'
 import _ from 'lodash'
 import Quantity from '../quantity.jsx'
 import { BigButton } from './buttons.jsx'
-import { injectIntl } from 'react-intl'
+import { injectIntl, FormattedMessage } from 'react-intl'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { IMAGE_PREFIX } from '../../utils/constants'
+import ReactDOM from 'react-dom'
+import {imageClick} from './image-displayer'
 
 const Wrapper = styled.div`
 	position: fixed;
@@ -247,13 +249,16 @@ const percent = (high, low) => {
 
 const ImageSwiper = props => {
 	const { images } = props
+	const imageHandle = (image) => {
+		imageClick(image, images)
+	}
 	return <Swiper
 		slidesPerView={2.3}
 		spaceBetween={10}
 	>
 		{
 			images && images.map(image => <SwiperSlide key={image}>
-				<ITEMIMAGE style={{ border: 'none' }}>
+				<ITEMIMAGE style={{ border: 'none', cursor:'pointer' }} onClick={() => {imageHandle(image)}}>
 					<img src={`${IMAGE_PREFIX}/medium/${image}`} />
 				</ITEMIMAGE>
 			</SwiperSlide>)

@@ -37,7 +37,6 @@ export default{
 	shipping_tip: 'Hra\u00f0sending : Vi\u00f0 veljum hva\u00f0a sendingara\u00f0fer\u00f0 hentar \u00fe\u00e9r best .',
 	select: 'Velja',
 	add_new_card: 'B\u00e6ta vi\u00f0 n\u00fdju korti',
-	add_shipping_insurance: 'Bæta við Sendingartrygging',
 	apply: 'Nota',
 	to_this_order: 'fyrir \u00feessa p\u00f6ntun',
 	credit_card_number: 'Kreditkortanúmer',	//google
@@ -115,20 +114,20 @@ export default{
 	
 	share_up_to:'DEILDU AÐ 50% AFSLÁTTU, FÁÐU $ 10',		//google
 	share_luckly_draw:'Deildu happdrætti með vinum þínum sem fá UPP Í 50% afslátt. Og þú munt fá $ 10 þegar þeir kaupa.',		//google
-	facebook:"Facebook",
-	messenger:"Messenger",
+	facebook:'Facebook',
+	messenger:'Messenger',
 	copy:'Afrita',
-	terms_conditions:"Skilmálar ",
-	invitation_link:"Boðstengill",
-	share_via_email:"Deila með tölvupósti",
-	to:"Til",
+	terms_conditions:'Skilmálar ',
+	invitation_link:'Boðstengill',
+	share_via_email:'Deila með tölvupósti',
+	to:'Til',
 	friend_email:'Netfang vinar',		//google
-	invite_more:"+bjóða fleirum",
-	subject:"Efni",
+	invite_more:'+bjóða fleirum',
+	subject:'Efni',
 	note:'Glósa',
-	the_site_has_so_many:"Þessi síða hefur svo mörg skylduþarfir. Skoðaðu nýkomna þeirra og fáðu allt að 50% afslátt fyrir fyrstu pöntunina !! Þú ert velkominn",		//google
-	send_email:"Senda tölvupóst",
-	send_you_up:"Sendir þér allt að 50% afslátt",		//google
+	the_site_has_so_many:'Þessi síða hefur svo mörg skylduþarfir. Skoðaðu nýkomna þeirra og fáðu allt að 50% afslátt fyrir fyrstu pöntunina !! Þú ert velkominn',		//google
+	send_email:'Senda tölvupóst',
+	send_you_up:'Sendir þér allt að 50% afslátt',		//google
 
 	you_selected:'\u00de\u00fa valdir ',
 	coupon_code:'Kóði fyrir afsláttarmiða',
@@ -161,4 +160,7 @@ export default{
 	loading: 'Loading',
 	nomore: 'No more data',
 	shopnow: 'Shop Now',
+	agree_with_policy: 'I agree with the {term} & {refund}',
+	terms_of_service: 'Notendaskilmálar',
+	return_policy: 'Skilastefna'
 }

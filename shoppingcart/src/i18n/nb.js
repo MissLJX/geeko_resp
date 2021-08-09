@@ -37,7 +37,7 @@ export default{
 	shipping_tip: 'Ekspressforsendelse: Vi velger den mest passende transport\u00f8ren for deg.',
 	select: 'Velg',
 	add_new_card: 'Legg til et nytt kort',
-	add_shipping_insurance: 'Legg til Fraktforsikring',
+
 	apply: 'Bruk',
 	to_this_order: 'p\u00e5 denne bestillingen',
 	credit_card_number: 'Kredittkortnummer',		//google
@@ -115,20 +115,20 @@ export default{
 	
 	share_up_to:'DEL OPP TIL 50% AVSLAG, FÅ $ 10',		//google
 	share_luckly_draw:'Del heldig trekning med vennene dine som får opptil 50% rabatt. Og du får $ 10 når de kjøper.',		//google
-	facebook:"Facebook",
-	messenger:"Messenger",
+	facebook:'Facebook',
+	messenger:'Messenger',
 	copy:'Kopier',
-	terms_conditions:"Vilkår og betingelser",
-	invitation_link:"Kobling til invitasjon",
-	share_via_email:"Del via e-post",
-	to:"Til",
+	terms_conditions:'Vilkår og betingelser',
+	invitation_link:'Kobling til invitasjon',
+	share_via_email:'Del via e-post',
+	to:'Til',
 	friend_email:'Venners epost',		//google
-	invite_more:"+inviter flere",
-	subject:"Emne",
+	invite_more:'+inviter flere',
+	subject:'Emne',
 	note:'Merk',
-	the_site_has_so_many:"Dette nettstedet har så mange må-ha. Sjekk ut de nyankomne og få opptil 50% rabatt på din første bestilling !! Du er velkommen",		//google
-	send_email:"Send e-post",
-	send_you_up:"Sender deg opptil 50% AVSLAG",		//google
+	the_site_has_so_many:'Dette nettstedet har så mange må-ha. Sjekk ut de nyankomne og få opptil 50% rabatt på din første bestilling !! Du er velkommen',		//google
+	send_email:'Send e-post',
+	send_you_up:'Sender deg opptil 50% AVSLAG',		//google
 
 	you_selected:'Du valgte ',
 	coupon_code:'Kupongkode',
@@ -162,4 +162,7 @@ export default{
 	loading: 'Loading',
 	nomore: 'No more data',
 	shopnow: 'Shop Now',
+	agree_with_policy: 'I agree with the {term} & {refund}',
+	terms_of_service: 'Vilkår for bruk',
+	return_policy: 'Policy for retur'
 }

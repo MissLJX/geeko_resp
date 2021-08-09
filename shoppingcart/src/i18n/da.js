@@ -37,7 +37,6 @@ export default{
 	shipping_tip: 'Ekspreslevering : Vi v\u00e6lger det mest passende fragtfirma for dig.',
 	select: 'Vælg',
 	add_new_card: 'Tilf\u00f8j et nyt kort',
-	add_shipping_insurance: 'Tilf\u00f8j Fragtforsikring',
 	apply: 'Anvend',
 	to_this_order: 'p\u00e5 denne ordre',
 	credit_card_number: 'Kreditkortnummer',   //google
@@ -115,20 +114,20 @@ export default{
 	
 	share_up_to:'DEL OP TIL 50% RABAT, FÅ $ 10',   //google
 	share_luckly_draw:'Del heldig lodtrækning med dine venner, der får OP til 50% rabat. Og du får $ 10, når de foretager et køb.',   //google
-	facebook:"Facebook",
-	messenger:"Messenger",
+	facebook:'Facebook',
+	messenger:'Messenger',
 	copy:'Kopier',
-	terms_conditions:"Vilkår og betingelser ",
-	invitation_link:"Ugyldigt link",
-	share_via_email:"Del via e-mail",
-	to:"Til",
+	terms_conditions:'Vilkår og betingelser ',
+	invitation_link:'Ugyldigt link',
+	share_via_email:'Del via e-mail',
+	to:'Til',
 	friend_email:'Vens e-mail',   //google
-	invite_more:"+Inviter flere",
-	subject:"Emne",
+	invite_more:'+Inviter flere',
+	subject:'Emne',
 	note:'Bemærk',
-	the_site_has_so_many:"Dette websted har så mange must-haves. Tjek deres nyankomne og få op til 50% rabat på din første ordre !! Du er velkommen",   //google
-	send_email:"Send e-mail",
-	send_you_up:"Sender dig op til 50% FRA",   //google
+	the_site_has_so_many:'Dette websted har så mange must-haves. Tjek deres nyankomne og få op til 50% rabat på din første ordre !! Du er velkommen',   //google
+	send_email:'Send e-mail',
+	send_you_up:'Sender dig op til 50% FRA',   //google
 
 	you_selected:'Du valgte ',
 	coupon_code:'Kuponkode',
@@ -161,4 +160,7 @@ export default{
 	loading: 'Loading',
 	nomore: 'No more data',
 	shopnow: 'Shop Now',
+	agree_with_policy: 'I agree with the {term} & {refund}',
+	terms_of_service: 'Servicevilkår',
+	return_policy: 'Returpolitik'
 }
