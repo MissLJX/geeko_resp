@@ -6,7 +6,7 @@ import Page404 from '../pages/404.vue'
 import Index from '../pages/chicme/index.vue'
 
 // ChiCme Msite
-import mIndex from '../pages/chicme/m-index.vue'
+// import mIndex from '../pages/chicme/m-index.vue'
 
 // Belle Pc
 // import Index from '../pages/belle/index.vue'

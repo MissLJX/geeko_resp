@@ -65,5 +65,11 @@ export default {
         your_bust:"Your bust",
         your_waist:"Your waist",
         your_hips:"Your hips"
+    },
+    model:{
+        size_fit:"Size & Fit",
+        height_waist:"Height/Weight",
+        measure:"Measurements",
+        model_wear:"Model Wear"
     }
 }

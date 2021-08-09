@@ -99,6 +99,8 @@
             </div>
         </div>
 
+        <model-size-fit-pc :model="model" :active="picked" v-if="Object.keys(model).length > 0"></model-size-fit-pc>
+
         <div class="body-measure" v-if="!ifShoe">
             <div class="_title">
                 {{$t('label.body_measurements')}}
@@ -186,12 +188,15 @@
 
     import sizeBwh from '../../../data/sizeBwh.js'
 
+    import ModelSizeFitPc from "../../components/model-size-fit-pc.vue";
+
 
     export default {
         name: 'index',
         components: {
             PictureShow,
-            SizeDetail
+            SizeDetail,
+            "model-size-fit-pc":ModelSizeFitPc
         },
         data(){
             return {
@@ -211,7 +216,8 @@
                 isMeasureActive:false,
                 isMeasureBodyActive:false,
                 bwhSize:"XS",
-                fitStr:{}
+                fitStr:{},
+                model:{}
             }
         },
         computed: {
@@ -349,6 +355,8 @@
                         this.pmethod = dataMap['pMethod']
                         this.imgSrc = ImageDATA.imgDataPc[this.pmethod[0]]
                         this.fitStr = dataMap['fitStr'];
+
+                        this.model = dataMap['modelStature'];
                     }else{
                         return;
                     }
@@ -388,6 +396,40 @@
     //     -webkit-font-smoothing: antialiased;
     //     -moz-osx-font-smoothing: grayscale;
     // }
+
+    @font-face {
+    font-family: 'iconfont';  /* Project id 384296 */
+    src: url('//at.alicdn.com/t/font_384296_47cj6px3rdv.woff2?t=1628055254161') format('woff2'),
+        url('//at.alicdn.com/t/font_384296_47cj6px3rdv.woff?t=1628055254161') format('woff'),
+        url('//at.alicdn.com/t/font_384296_47cj6px3rdv.ttf?t=1628055254161') format('truetype');
+    }
+    .iconfont{
+    font-family:"iconfont" !important;
+    font-size:16px;
+    font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;
+    }
+
+    @font-face {
+        font-family: 'SlatePro';
+        src: url('https://s3.geeko.ltd/fonts/Roboto-Regular.ttf');
+        font-display: swap;
+    }
+
+    @font-face {
+        font-family: 'SlatePro-Medium';
+        src: url('https://s3.geeko.ltd/fonts/Roboto-Medium.ttf');
+        font-display: swap;
+    }
+
+
+    @font-face {
+        font-family: 'AcuminPro-Bold';
+        src: url('https://s3.geeko.ltd/fonts/Roboto-Bold.ttf');
+        font-display: swap;
+    }
 
     .mainArea{
         width: 528px;
