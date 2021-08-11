@@ -59,7 +59,7 @@ export default {
     uploadscreen:'Lähetä kuvakaappaus (valinnainen)',
     changeEmail: 'Vaihda sähköposti',
     newemailaddress:'Uusi sähköpostiosoite',  //google
-    verify:'Vahvista 50 opintopistettä varten',   //google
+    verify:'Vahvista 100 opintopistettä varten',   //google
     verified:'Vahvistettu',  //google
     refer:'Lähetä kaverille',
     give:'ANNA',  //google

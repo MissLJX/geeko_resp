@@ -57,7 +57,7 @@ export default {
     uploadscreen:'CARGAR CAPTURA DE PANTALLA (Opcional)',
     changeEmail: 'Cambiar email',
     newemailaddress:'New email address',
-    verify:'Verify for 50 credits',
+    verify:'Verify for 100 credits',
     verified:'Verified',
     refer:'Recomendar a un amigo',
     give:'GIVE',

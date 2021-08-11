@@ -2,8 +2,8 @@
     <div class="el-me-body">
         <p><i class="iconfont">&#xe73c;</i>{{$t('sucesschanged')}}</p>
         <div class="credit-con">
-            <strong>50 {{$t('points')}}</strong>
-            <p>50 {{$t('pointsyougot')}}</p>
+            <strong>100 {{$t('points')}}</strong>
+            <p>100 {{$t('pointsyougot')}}</p>
             <i class="iconfont">&#xe747;</i>
             <i class="iconfont">&#xe747;</i>
             <i class="iconfont">&#xe747;</i>

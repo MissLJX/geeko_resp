@@ -57,7 +57,7 @@ export default {
     uploadscreen:'ENVIAR CAPTURA DE ECRÃ(Opcional)',
     changeEmail: 'Alterar Email',
     newemailaddress:'New email address',
-    verify:'Verify for 50 credits',
+    verify:'Verify for 100 credits',
     verified:'Verified',
     refer:'Recomendar a um amigo',
     give:'GIVE',

@@ -59,7 +59,7 @@ export default {
     uploadscreen:'Last opp skjermbilde (valgfritt)',
     changeEmail: 'Endre e-postadresse',
     newemailaddress:'Ny e-postadresse',  //google
-    verify:'Bekreft for 50 studiepoeng',  //google
+    verify:'Bekreft for 100 studiepoeng',  //google
     verified:'Bekreftet',  //google
     refer:'Henvis en venn',
     give:'GI',  //google
