@@ -12,7 +12,11 @@ export default ( deepLink ) => {
 	if(!deepLink) return '#'
 
 	if(typeof deepLink === 'string'){
-		deepLink = JSON.parse(deepLink)
+		try {
+			deepLink = JSON.parse(deepLink)
+		}catch (e){
+			return '#'
+		}
 	}
 
 

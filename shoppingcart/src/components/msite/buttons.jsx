@@ -15,6 +15,12 @@ export const BigButton = styled.div`
 	&:active{
 		opacity: .8;
 	}
+    &.outlined{
+      border: 1px solid #222;
+      background-color: transparent;
+      color: #222;
+      line-height: 38px;
+    }
 `
 
 const rotate360 = keyframes`

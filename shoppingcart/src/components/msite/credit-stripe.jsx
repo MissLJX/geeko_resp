@@ -437,11 +437,33 @@ const Credit = class extends React.Component {
 				},
 			}
 		}).then(payload => {
-			if (payload.error) {
-				console.log(payload)
-			} else {
-				console.log(payload)
-			}
+			stripeCallBack({
+				...payload,
+				orderId: this.state.order.id,
+				transactionId: this.state.order.transactionId,
+			}).then(data => {
+				self.setState({
+					checking: false,
+				})
+				if (payload.error) {
+					if(window.isApp){
+						window.location.href = `${window.ctx || ''}/geekopay/app-fail?errMsg=${payload.error.message}`
+					}else{
+						alert(payload.error.message)
+					}
+				} else {
+					window.location.href = `${window.ctx || ''}/order-confirm/${this.state.order.transactionId}?transactionId=${this.state.order.transactionId}`
+				}
+			}).catch(data => {
+				self.setState({
+					checking: false,
+				})
+				if(window.isApp){
+					window.location.href = `${window.ctx || ''}/geekopay/app-fail?errMsg=${data.result || data}`
+				}else{
+					alert(data.result || data)
+				}
+			})
 		})
 	}
 

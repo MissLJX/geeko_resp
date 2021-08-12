@@ -10,6 +10,7 @@ export const MASK = styled.div`
 	background-color:rgba(0,0,0,.6);
 	z-index:100;
 	overflow: auto;
+	cursor: pointer;
 `
 
 export const MODAL = styled.div`
@@ -32,12 +33,12 @@ const CLOSE = styled.span`
 `
 
 export const Modal = (props) => <Fragment>
-  <MASK>
+	<MASK>
 	  <MODAL>
 	    <CLOSE onClick={props.onClose}>&#xe69a;</CLOSE>
 	    {
 	      props.children
 	    }
 	  </MODAL>
-  </MASK>
+	</MASK>
 </Fragment>

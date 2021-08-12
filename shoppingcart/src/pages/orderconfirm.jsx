@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { connect } from 'react-redux'
 import { injectIntl, FormattedMessage } from 'react-intl'
 import styled from 'styled-components'
@@ -6,7 +6,7 @@ import { Boxs, Box, BoxBody, BoxHead } from '../components/msite/layout.jsx'
 import { Grey, Red, UpperCase, Blue } from '../components/text.jsx'
 import Address from '../components/msite/address.jsx'
 import { Btn, BigButton } from '../components/msite/buttons.jsx'
-import { gettransactionrelatedproducts, clientcall, getCountryMessage } from '../api'
+import { gettransactionrelatedproducts, clientcall, getCountryMessage, register } from '../api'
 import Order from '../components/msite/order.jsx'
 import { fetchTransactionPage } from '../store/actions.js'
 import { Link } from 'react-router-dom'
@@ -75,13 +75,13 @@ const OverFlow = styled.div`
 
 const AddressBox = styled.div`
 	& > .__hd{
-		height: 50px;
 		padding-left: 10px;
 		padding-right: 10px;
-		border-bottom: 1px solid #ededed;
+		font-family: AcuminPro-Bold;
+		padding-top: 14px;
 	}
 	& > .__bd{
-		padding: 10px;
+		padding: 6px 10px 10px 10px;
 	}
 `
 
@@ -145,6 +145,220 @@ const BARCODE = styled.div`
 	}
 `
 
+const WARNTIP = styled.div`
+	background-color: #ffeadb;
+	color: #ff792b;
+	font-family: SlatePro-Medium;
+	padding: 6px 12px;
+	font-size: 12px;
+`
+
+const NEWCBLOCKER = styled.div`
+	text-align: center;
+	.__icon{
+		font-size: 54px;
+		color: #20b759;
+		font-family: iconfont;
+	}
+	
+	& > .__bd{
+		padding: 16px 12px 24px 12px;
+	}
+`
+
+const COUPON = styled.div`
+	display: flex;
+	& > .__bd{
+		-webkit-mask-image: radial-gradient(circle at 3px, transparent 3px, red 3.5px), radial-gradient(circle at 0px 0px, red 0px, transparent 0.5px);
+		-webkit-mask-position: -3px, -0px -0px;
+		-webkit-mask-size: 100% 14px, 100%;
+		-webkit-mask-composite: source-out, destination-over;
+		mask-composite: subtract, add;
+		background-color: #ffeadb;
+		height: 100px;
+		flex: 1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	
+	& > .__check{
+		-webkit-mask-image: radial-gradient(circle at 3px, transparent 3px, red 3.5px), radial-gradient(circle at 0px 0px, red 0px, transparent 0.5px);
+		-webkit-mask-position: -3px, -0px -0px;
+		-webkit-mask-size: 100% 14px, 100%;
+		-webkit-mask-composite: source-out, destination-over;
+		mask-composite: subtract, add;
+		background-color: #ff792b;
+		height: 100px;
+	}
+`
+
+const TimeRange = (props) => {
+	const {begin, end} = props
+	return <span style={{fontSize: 12}}>
+		<time>{new Date(begin).toLocaleString()}</time>
+		<span> - </span>
+		<time>{new Date(end).toLocaleString()}</time>
+	</span>
+}
+
+const Coupon = props => {
+	const {coupon} = props
+	return <COUPON>
+		<div className={'__bd'}>
+			<div>
+				<div style={{fontSize: 44, color: '#ff782a', lineHeight: '52px', fontFamily: 'SlatePro-Medium', textTransform:'uppercase'}}>
+					{coupon.couponName}
+				</div>
+				<div style={{marginTop: 6}}>
+					{
+						coupon.beginDate && coupon.endDate && <div style={{marginTop: 4}}><Grey><TimeRange begin={coupon.beginDate} end={coupon.endDate}/></Grey></div>
+					}
+				</div>
+
+
+			</div>
+		</div>
+		<div className={'__check'} style={{padding:'0 20px', lineHeight: '100px'}}>
+			<a style={{textDecoration:'none', color:'#fff', fontSize: 16,}} href={'/me/m/coupons'}><FormattedMessage id="check"/> ></a>
+		</div>
+	</COUPON>
+}
+
+const NewCustomerBlocker = injectIntl(props => {
+	const [finished, setFinished] = useState(false)
+	const [loading, setLoading] = useState(false)
+	const [password, setPassword] = useState(undefined)
+	const {thanks, message, tips, email, intl, coupon} = props
+
+	const handlePassword = () => {
+		setLoading(true)
+		register({
+			email,
+			password
+		}).then(() => {
+			setLoading(false)
+			setFinished(true)
+		}).catch((data) => {
+			setLoading(false)
+			alert(data.result || data)
+		})
+
+		if(window.GeekoSensors){
+			window.GeekoSensors.Track('ELClick', {
+				clicks: 'password_save'
+			})
+		}
+	}
+
+
+	// const coupon = {
+	// 	amount: '20%',
+	// 	beginDate: 1628092800000,
+	// 	code: 'CM20',
+	// 	couponName: '20% Off',
+	// 	couponName2: '20% Off',
+	// 	description: 'FOR ALL PRODUCT',
+	// 	endDate: 1628755200000,
+	// 	id: '1J6z254j217D9q2h5q9l2f0X7L',
+	// 	isStoreCoupon: false,
+	// 	logo: 'https://dgzfssf1la12s.cloudfront.net/storelogo/chicme.png',
+	// 	name: 'ON ORDERS US$69+',
+	// 	serverTime: 1628666789885,
+	// 	shoppingCartWarnMsg: '',
+	// 	storeId: null,
+	// }
+
+	return <NEWCBLOCKER>
+		{
+			!finished? <React.Fragment>
+				{
+					tips && <WARNTIP>
+						<span dangerouslySetInnerHTML={{__html: tips}}/>
+					</WARNTIP>
+				}
+
+				<div className={'__bd'}>
+					<div>
+						<span className={'__icon'}>&#xe6b7;</span>
+					</div>
+					<div style={{marginTop:10}}>
+						<span style={{fontFamily:'AcuminPro-Bold', textTransform:'capitalize'}} dangerouslySetInnerHTML={{__html: thanks}}/>
+					</div>
+					<div style={{fontSize: 12, lineHeight: '14px', marginTop: 10}}>
+						<span dangerouslySetInnerHTML={{__html: message}}/>
+					</div>
+					<div>
+						<div style={{borderBottom: '1px solid #e6e6e6', color: '#366dce', paddingBottom: 8, textAlign:'left', marginTop: 18}}>
+							{email}
+						</div>
+						<div style={{borderBottom: '1px solid #e6e6e6', paddingBottom: 8, textAlign:'left', marginTop: 26}}>
+							<input style={{
+								outline:'none',
+								border: 'none',
+								boxShadow: 'none',
+								width: '100%'
+							}}
+							onFocus={() => {
+								if(window.GeekoSensors){
+									window.GeekoSensors.Track('ELClick', {
+										clicks: 'password'
+									})
+								}
+							}}
+
+								   placeholder={intl.formatMessage({id: 'set_password'})}
+								   value={password}
+							onChange={(e) => {setPassword(e.target.value)}}
+							/>
+						</div>
+						<div style={{fontSize: 12, lineHeight: '14px', marginTop: 18, color: '#666'}}>
+							Register on ChicMe to track your order and get more discount!
+						</div>
+						<div style={{marginTop: 16}}>
+
+							{
+								loading ? <BigButton bgColor="#999">
+									<FormattedMessage id="please_wait" />...
+								</BigButton>: <BigButton onClick={handlePassword}><FormattedMessage id={'save'}/></BigButton>
+							}
+
+
+
+						</div>
+					</div>
+				</div>
+			</React.Fragment>: <React.Fragment>
+				<div className={'__bd'}>
+					<div>
+						<span className={'__icon'}>&#xe6b7;</span>
+					</div>
+					<div style={{marginTop:10}}>
+						<span style={{fontFamily:'AcuminPro-Bold', textTransform:'capitalize'}}>
+							<FormattedMessage id="welcome_to_chicme"/>
+						</span>
+					</div>
+					<div style={{fontSize: 12, lineHeight: '14px', marginTop: 10}}>
+						<FormattedMessage id="check_order_msg"/>
+					</div>
+
+					{
+						coupon && <div style={{marginTop: 14}}>
+							<Coupon coupon={coupon}/>
+						</div>
+					}
+
+
+
+				</div>
+			</React.Fragment>
+		}
+	</NEWCBLOCKER>
+})
+
+
+
+
 const mapStateToProps = (state) => {
 	return {
 		transaction: state.transaction,
@@ -168,8 +382,8 @@ const OrderConfirm = class extends React.Component {
 		super(props)
 		this.state = {
 			products: [],
-			faceurl: "",
-			inputValue: "",
+			faceurl: '',
+			inputValue: '',
 			confirmBanner: null
 		}
 	}
@@ -201,18 +415,18 @@ const OrderConfirm = class extends React.Component {
 			getShareInputUrl().then(data => {
 				// console.log("getShareInputUrl", data);
 				this.setState({
-					inputValue: window.siteUrl + "/i/share/register?key=" + data.result
-				});
+					inputValue: window.siteUrl + '/i/share/register?key=' + data.result
+				})
 
-			});
+			})
 
 			// faceUrl
 			getFaceBookUrl().then(data => {
 				// console.log("getFaceBookUrl", data);
 				this.setState({
-					faceurl: window.siteUrl + "/i/share/register?key=" + data.result
-				});
-			});
+					faceurl: window.siteUrl + '/i/share/register?key=' + data.result
+				})
+			})
 		}
 
 		getCountryMessage('M1396').then(({ result }) => {
@@ -264,7 +478,19 @@ const OrderConfirm = class extends React.Component {
 
 	handleViewOrder() {
 		const { transaction } = this.props
+
+		try {
+			if(window.GeekoSensors){
+				window.GeekoSensors.Track('ELClick', {
+					clicks: 'check_order'
+				})
+			}
+		}catch (e){
+			console.log(e)
+		}
+
 		window.location.href = `${window.ctx || ''}/me/m/order/detail/${transaction.id}`
+
 	}
 
 	handleSetPassword() {
@@ -289,81 +515,82 @@ const OrderConfirm = class extends React.Component {
 	getPayUrl() {
 		const { transaction } = this.props
 		switch (transaction.payMethod) {
-			case '20':
-			case '21':
-				return transaction.mercadopagoPayURL
-			case '16':
-			case '23':
-			case '25':
-			case '29':
-			case '27':
-			case '28':
-			case '30':
-			case '31':
-			case '34':
-			case '35':
-			case '37':
-			case '40':
-			case '41':
-			case '43':
-			case '44':
-				return transaction.boletoPayCodeURL
+		case '20':
+		case '21':
+			return transaction.mercadopagoPayURL
+		case '16':
+		case '23':
+		case '25':
+		case '29':
+		case '27':
+		case '28':
+		case '30':
+		case '31':
+		case '34':
+		case '35':
+		case '37':
+		case '40':
+		case '41':
+		case '43':
+		case '44':
+			return transaction.boletoPayCodeURL
 		}
 	}
 
+	
 	getTips() {
 		const { m1186, transaction } = this.props
 		const bb = JSON.parse(m1186.message)
 		switch (transaction.payMethod) {
-			case '20':
-			case '21':
-			case '27':
-			case '28':
-			case '30':
-			case '31':
-			case '34':
-			case '35':
-			case '37':
-			case '40':
-			case '41':
-			case '43':
-			case '44':
-				return bb.spain
-			case '16':
-			case '23':
-			case '25':
-			case '29':
-				return bb.portugal
-			default:
-				return null
+		case '20':
+		case '21':
+		case '27':
+		case '28':
+		case '30':
+		case '31':
+		case '34':
+		case '35':
+		case '37':
+		case '40':
+		case '41':
+		case '43':
+		case '44':
+			return bb.spain
+		case '16':
+		case '23':
+		case '25':
+		case '29':
+			return bb.portugal
+		default:
+			return null
 		}
 	}
 
 	getBtnText() {
 		const { transaction } = this.props
 		switch (transaction.payMethod) {
-			case '20':
-			case '21':
-			case '27':
-			case '28':
-			case '30':
-			case '31':
-			case '34':
-			case '35':
-			case '37':
-			case '40':
-			case '41':
-			case '43':
-			case '44':
-				return 'Generar Ticket'
-			case '29':
-				return 'Gerar Ticket'
-			case '16':
-			case '23':
-			case '25':
-				return 'Imprimir boleto'
-			default:
-				return null
+		case '20':
+		case '21':
+		case '27':
+		case '28':
+		case '30':
+		case '31':
+		case '34':
+		case '35':
+		case '37':
+		case '40':
+		case '41':
+		case '43':
+		case '44':
+			return 'Generar Ticket'
+		case '29':
+			return 'Gerar Ticket'
+		case '16':
+		case '23':
+		case '25':
+			return 'Imprimir boleto'
+		default:
+			return null
 		}
 	}
 
@@ -378,15 +605,15 @@ const OrderConfirm = class extends React.Component {
 						'type': '1',
 						'info1': window.utm_source,
 						'info2': window.utm_campaign
-					});
+					})
 				}
-			});
+			})
 		}
 	}
 
 	// Messenger分享
 	messengerShare = () => {
-		window.open('https://www.facebook.com/dialog/share_referral/?app_id=' + window.__FB_Messenger_App_ID + '&redirect_uri=' + window.siteUrl + "/i/fbshare-back" + '&state=1', '_blank', 'width=500,height=725,top=110,left=710,menubar=no,toolbar=no,status=no,scrollbars=no');
+		window.open('https://www.facebook.com/dialog/share_referral/?app_id=' + window.__FB_Messenger_App_ID + '&redirect_uri=' + window.siteUrl + '/i/fbshare-back' + '&state=1', '_blank', 'width=500,height=725,top=110,left=710,menubar=no,toolbar=no,status=no,scrollbars=no')
 	}
 
 	// 点击email
@@ -398,7 +625,7 @@ const OrderConfirm = class extends React.Component {
 
 	// 去terms页面
 	toTermsConditions() {
-		this.props.history.push(`${this.props.match.url}/term-conditions`);
+		this.props.history.push(`${this.props.match.url}/term-conditions`)
 	}
 
 
@@ -409,7 +636,7 @@ const OrderConfirm = class extends React.Component {
 
 		const communicationEmail = __me ? __me.communicationEmail : ''
 
-		let __Tips__, payUrl, isCashout, btnText
+		let __Tips__, payUrl, isCashout, btnText, email
 
 		if (transaction) {
 			isCashout = this.isCashout()
@@ -418,6 +645,7 @@ const OrderConfirm = class extends React.Component {
 			if (m1186) {
 				__Tips__ = this.getTips()
 			}
+			email = transaction.shippingDetail.email
 		}
 
 		const getTitle = () => {
@@ -448,14 +676,15 @@ const OrderConfirm = class extends React.Component {
 			<div>
 				<Boxs>
 					<Box>
-						<div style={{ padding: 10 }}>
-							<div>
-								<Icon style={{ color: '#57b936', fontSize: 25, marginRight: 10 }}>&#xe73c;</Icon><span style={{ fontSize: 20 }} dangerouslySetInnerHTML={{ __html: m1073.message }} />
+						{
+							window.__isnew ? <NewCustomerBlocker coupon={transaction.coupon} email={email} thanks={m1073.message} tips={transaction.warnMsg} message={message}/>: <div style={{ padding: 10 }}>
+								<div>
+									<Icon style={{ color: '#57b936', fontSize: 25, marginRight: 10 }}>&#xe73c;</Icon><span style={{ fontSize: 20 }} dangerouslySetInnerHTML={{ __html: m1073.message }} />
+								</div>
+
+								<div style={{ marginTop: 10, lineHeight: '20px' }}>{getTitle()}</div>
 							</div>
-
-							<div style={{ marginTop: 10, lineHeight: '20px' }}>{getTitle()}</div>
-						</div>
-
+						}
 					</Box>
 
 					{
@@ -509,11 +738,12 @@ const OrderConfirm = class extends React.Component {
 							<div className="__hd">
 								<div className="x-table __vm __fixed x-fw x-fh">
 									<div className="x-cell">
-										<div><UpperCase><FormattedMessage id="shipping_address" /></UpperCase></div>
-										<div><Red style={{ fontSize: 12 }}>(Please check it carefully.)</Red></div>
+										<div><FormattedMessage id="shipping_address" /></div>
 									</div>
 									<div className="x-cell __right">
-										<Btn><Link style={{ textDecoration: 'none', color: '#fff' }} to={`${this.props.match.url}/address`}><FormattedMessage id="edit" /></Link></Btn>
+										<Link style={{ textDecoration: 'none', color: '#222' }} to={`${this.props.match.url}/address`}>
+											<span className={'iconfont'}>&#xe778;</span>
+										</Link>
 									</div>
 								</div>
 							</div>
@@ -528,8 +758,8 @@ const OrderConfirm = class extends React.Component {
 					</Box>
 
 					<Box>
-						<BoxHead title={intl.formatMessage({ id: 'payment_method' })} />
-						<BoxBody>
+						<BoxHead single title={intl.formatMessage({ id: 'payment_method' })} />
+						<BoxBody style={{paddingTop: 0, marginTop: -4}}>
 							<div>{transaction.payMethodName}</div>
 							{transaction.accountNo && <div style={{ marginTop: 5 }}>
 								{transaction.accountNo}
@@ -564,15 +794,27 @@ const OrderConfirm = class extends React.Component {
 						</div>
 					}
 
+					<div style={{display: 'flex'}}>
+						<div style={{width:'50%', paddingRight: 5}}>
+							<BigButton style={{textTransform:'uppercase'}} onClick={this.handleViewOrder.bind(this)} className="__btn" height={47}>
+								<FormattedMessage id="check_order" />
+							</BigButton>
+						</div>
+
+						<div style={{width:'50%', paddingLeft: 5}}>
+							<BigButton style={{textTransform:'uppercase'}} onClick={() => {
+								window.location.href = '/'
+							}} className="__btn" height={47}>
+								<FormattedMessage id="continue_shopping" />
+							</BigButton>
+						</div>
+					</div>
 
 
-					<BigButton onClick={this.handleViewOrder.bind(this)} className="__btn" height={47}>
-						<FormattedMessage id="check_order" />
-					</BigButton>
 				</div>
 				{
 					window.showShare && window.__is_login__ && (
-						<div className="main" style={{ margin: "10px 0px", borderTop: '10px solid #f7f7f7', borderBottom: '10px solid #f7f7f7' }}>
+						<div className="main" style={{ margin: '10px 0px', borderTop: '10px solid #f7f7f7', borderBottom: '10px solid #f7f7f7' }}>
 
 							<div className="share-body">
 								<div>
@@ -648,47 +890,47 @@ const OrderConfirm = class extends React.Component {
 
 		)}
 
-			<AnimatedRoute {...defaultAnimations}
-				mapStyles={(styles) => ({
-					transform: `translateY(${styles.offset}%)`,
-					...defaultStyles
-				})}
-				path={`${this.props.match.path}/address`} component={OrderAddress} />
+		<AnimatedRoute {...defaultAnimations}
+			mapStyles={(styles) => ({
+				transform: `translateY(${styles.offset}%)`,
+				...defaultStyles
+			})}
+			path={`${this.props.match.path}/address`} component={OrderAddress} />
 
-			<AnimatedRoute {...defaultAnimations}
-				mapStyles={(styles) => ({
-					transform: `translateY(${styles.offset}%)`,
-					...defaultStyles
-				})}
-				path={`${this.props.match.path}/set-password`} component={SetPassword} />
+		<AnimatedRoute {...defaultAnimations}
+			mapStyles={(styles) => ({
+				transform: `translateY(${styles.offset}%)`,
+				...defaultStyles
+			})}
+			path={`${this.props.match.path}/set-password`} component={SetPassword} />
 
-			<AnimatedRoute {...defaultAnimations}
-				mapStyles={(styles) => ({
-					transform: `translateY(${styles.offset}%)`,
-					...defaultStyles
-				})}
-				path={`${this.props.match.path}/change-phone`} component={ChangePhone} />
+		<AnimatedRoute {...defaultAnimations}
+			mapStyles={(styles) => ({
+				transform: `translateY(${styles.offset}%)`,
+				...defaultStyles
+			})}
+			path={`${this.props.match.path}/change-phone`} component={ChangePhone} />
 
-			<AnimatedRoute {...defaultAnimations}
-				mapStyles={(styles) => ({
-					transform: `translateY(${styles.offset}%)`,
-					...defaultStyles
-				})}
-				path={`${this.props.match.path}/change-email`} component={ChangeEmail} />
+		<AnimatedRoute {...defaultAnimations}
+			mapStyles={(styles) => ({
+				transform: `translateY(${styles.offset}%)`,
+				...defaultStyles
+			})}
+			path={`${this.props.match.path}/change-email`} component={ChangeEmail} />
 
-			<AnimatedRoute {...defaultAnimations}
-				mapStyles={(styles) => ({
-					transform: `translateY(${styles.offset}%)`,
-					...defaultStyles
-				})}
-				path={`${this.props.match.path}/to-share-email`} component={SendEmail} />
+		<AnimatedRoute {...defaultAnimations}
+			mapStyles={(styles) => ({
+				transform: `translateY(${styles.offset}%)`,
+				...defaultStyles
+			})}
+			path={`${this.props.match.path}/to-share-email`} component={SendEmail} />
 
-			<AnimatedRoute {...defaultAnimations}
-				mapStyles={(styles) => ({
-					transform: `translateY(${styles.offset}%)`,
-					...defaultStyles
-				})}
-				path={`${this.props.match.path}/term-conditions`} component={TermsConditions} />
+		<AnimatedRoute {...defaultAnimations}
+			mapStyles={(styles) => ({
+				transform: `translateY(${styles.offset}%)`,
+				...defaultStyles
+			})}
+			path={`${this.props.match.path}/term-conditions`} component={TermsConditions} />
 		</div>
 	}
 }

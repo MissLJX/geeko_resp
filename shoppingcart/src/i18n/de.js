@@ -161,5 +161,14 @@ export default{
 	shopnow: 'Jetzt kaufen',
 	agree_with_policy: 'Ich stimme den {term} & {refund} zu',
 	terms_of_service: 'Nutzungsbedingungen',
-	return_policy: 'Rückgaberichtlinie'
+	return_policy: 'Rückgaberichtlinie',
+	welcome_to_chicme: 'Herzlich Willkommen bei ChicMe!',
+	check_order_msg: 'Jetzt können Sie Ihre Bestellung in Ihrem Konto überprüfen. Bitte überprüfen Sie "Meine Bestellung" unter "Ich", um Ihre Bestellung zu verfolgen.',
+	check: 'Prüfen',
+	register: 'REGISTER',
+	sign_in: 'Anmelden',
+	guest_checkout: 'Gästekasse',
+	get_more_discount: 'Erstellen Sie ein neues Konto, um mehr Rabatt zu erhalten',
+	check_as_email: 'Bezahlen Sie als Gast mit Ihrer E-Mail',
+	secure_checkout: 'SICHERE KASSE'
 }
