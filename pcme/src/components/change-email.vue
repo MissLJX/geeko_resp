@@ -7,7 +7,7 @@
             <div class="p-l line">|</div>
             <div class="p-l tips">
                 1.Email verification is required to make this change,Please enter your new email address and check your inbox for the confirmation link.<br/><br/>
-                2.Confirm email address and <span>get 50 credits</span>.
+                2.Confirm email address and <span>get 100 credits</span>.
             </div>
         </div>
         <div class="p-bd">

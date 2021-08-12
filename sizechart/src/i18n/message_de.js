@@ -64,5 +64,11 @@ export default {
         your_bust:"Ihr Busen",
         your_waist:"Ihre Taille",
         your_hips:"Ihre Hüften"
+    },
+    model:{
+        size_fit:"Größe & Passform",
+        height_waist:"Höhe/Gewicht",
+        measure:"Messungen",
+        model_wear:"Modell Bekleidung"
     }
 }

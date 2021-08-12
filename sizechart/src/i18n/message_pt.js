@@ -63,5 +63,15 @@ export default {
         your_bust:"Seu busto",
         your_waist:"Sua cintura",
         your_hips:"Seus quadris"
+    },
+    model:{
+        size_fit:"Tamanho & Ajuste",
+        height_waist:"Altura/Peso",
+        measure:"Medidas",
+        model_wear:"Desgaste do Modelo"
     }
 }
+
+
+
+

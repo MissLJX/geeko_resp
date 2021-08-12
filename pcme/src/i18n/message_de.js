@@ -57,7 +57,7 @@ export default {
     uploadscreen:'Upload screenshot(Optional)',
     changeEmail: 'Ändern Sie die E-Mail',
     newemailaddress:'New email address',
-    verify:'Verify for 50 credits',
+    verify:'Verify for 100 credits',
     verified:'Verified',
     refer:'Empfehlen Sie einen Freund',
     give:'GIVE',

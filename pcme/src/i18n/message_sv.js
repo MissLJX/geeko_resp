@@ -59,7 +59,7 @@ export default {
     uploadscreen:'Ladda upp skärmdump (valfritt)',
     changeEmail: 'Byta mejladress',
     newemailaddress:'Ny Email Adress',  //google
-    verify:'Verifiera för 50 poäng',  //google
+    verify:'Verifiera för 100 poäng',  //google
     verified:'Verifierad',  //google
     refer:'H\u00e4nvisa en v\u00e4n',
     give:'GE',  //google

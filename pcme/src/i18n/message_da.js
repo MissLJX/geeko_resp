@@ -59,7 +59,7 @@ export default {
     uploadscreen:'Upload skærmbillede (valgfrit)',
     changeEmail: 'Skift e-mail',
     newemailaddress:'Ny e-mail-adresse',    //google
-    verify:'Bekræft for 50 point',   //google
+    verify:'Bekræft for 100 point',   //google
     verified:'Bekræftet',   //google
     refer:'Henvis en ven',
     give:'GIV',   //google

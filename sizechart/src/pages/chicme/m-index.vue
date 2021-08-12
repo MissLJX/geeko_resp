@@ -89,6 +89,9 @@
                 </div>
             </div>
         </div>
+
+        <model-size-fit :model="model" :active="isActive" v-if="Object.keys(model).length > 0"></model-size-fit>
+
         <div class="body-measure" v-if="!ifShoe">
             <div class="_title">
                 {{$t('label.body_measurements')}}
@@ -195,6 +198,41 @@
     //     -webkit-font-smoothing: antialiased;
     //     -moz-osx-font-smoothing: grayscale;
     // }
+
+    @font-face {
+    font-family: 'iconfont';  /* Project id 384296 */
+    src: url('//at.alicdn.com/t/font_384296_47cj6px3rdv.woff2?t=1628055254161') format('woff2'),
+        url('//at.alicdn.com/t/font_384296_47cj6px3rdv.woff?t=1628055254161') format('woff'),
+        url('//at.alicdn.com/t/font_384296_47cj6px3rdv.ttf?t=1628055254161') format('truetype');
+    }
+    .iconfont{
+    font-family:"iconfont" !important;
+    font-size:16px;
+    font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;
+    }
+
+    @font-face {
+        font-family: 'SlatePro';
+        src: url('https://s3.geeko.ltd/fonts/Roboto-Regular.ttf');
+        font-display: swap;
+    }
+
+    @font-face {
+        font-family: 'SlatePro-Medium';
+        src: url('https://s3.geeko.ltd/fonts/Roboto-Medium.ttf');
+        font-display: swap;
+    }
+
+
+    @font-face {
+        font-family: 'AcuminPro-Bold';
+        src: url('https://s3.geeko.ltd/fonts/Roboto-Bold.ttf');
+        font-display: swap;
+    }
+
     .mainArea{
         width: 100%;
 
@@ -492,10 +530,10 @@
         border: 1px solid #e0e0e0;
         text-align: center;
         vertical-align: middle;
-        line-height: 40px;
+        // line-height: 40px;
         font-size:12px;
         color: #999;
-        padding: 0px 15px;
+        padding: 10px 15px;
         max-width: 100px;
         min-width: 60px;
     }
@@ -574,10 +612,13 @@
 
     import SizeDetailMsite from '../../components/size-detail-msite.vue'
 
+    import ModelSizeFit from "../../components/model-size-fit.vue";
+
     export default {
         name: 'mIndex',
         components: {
-            SizeDetailMsite
+            SizeDetailMsite,
+            "model-size-fit":ModelSizeFit
         },
         data(){
             return {
@@ -733,6 +774,8 @@
                         this.imgSrc = dataMap['imgSrc'];
 
                         this.fitStr = dataMap['fitStr'];
+
+                        this.model = dataMap['modelStature'];
                     }else{
                         return;
                     }
@@ -746,13 +789,6 @@
             changeMethod(method){
                 this.picked = method;
                 this.isActive = !this.isActive;
-            },
-            scorllTo:function(scroll){
-                if(scroll === "model"){
-                    this.scrollActive = true;
-                }else{
-                    this.scrollActive = false;
-                }
             }
         }
     };

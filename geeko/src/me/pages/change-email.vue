@@ -5,7 +5,7 @@
             <span slot="center">{{$t('label.changeEmail')}}</span>
         </nav-bar>
 
-        <div class="el-email-block" style="margin-top: 0">
+        <div class="el-email-block" style="margin-top: 0"> 
             <div>
                 <form @submit.prevent="changeAcountHandle">
                     <p class="_title">Your new account:</p>

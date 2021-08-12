@@ -59,7 +59,7 @@ export default {
     uploadscreen:'Hlaða upp skyndimynd (valfrjálst)',
     changeEmail: 'Breyta netfangi',
     newemailaddress:'Nýtt netfang',  //google
-    verify:'Staðfestu fyrir 50 einingar',  //google
+    verify:'Staðfestu fyrir 100 einingar',  //google
     verified:'Staðfest',  //google
     refer:'Tilv\u00edsa vini',
     give:'GEFA',  //google
