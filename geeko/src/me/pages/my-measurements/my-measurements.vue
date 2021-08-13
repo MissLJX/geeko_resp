@@ -338,13 +338,9 @@ export default {
     },
     methods:{
         inputChange(value){
-            // console.log("input",value)
             this.submitData = value;
         },
         saveData(){
-            this.slotList = []
-            this.testShow = !this.testShow
-            return
             let final = {};
             for(let item in this.submitData){
                 // final[item] = this.submitData.
