@@ -254,4 +254,4 @@ export const openStripeOrder = orderId => axios.post(`${VPATH}/stripe/open-order
 export const stripePay = data => axios.body(`${VPATH}/stripe/bind-card2`, data)
 export const stripeCallBack = data => axios.body(`${VPATH}/stripe/pay-result`, data)
 
-export const register = data => axios.post(`${VPATH}/customer/anon/register`, data)
+export const register = data => axios.post(`${VPATH}/customer/anon/register2`, data)

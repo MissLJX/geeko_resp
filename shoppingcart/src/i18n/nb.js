@@ -173,5 +173,6 @@ export default{
 	guest_checkout: 'guest checkout',
 	get_more_discount: 'Creat a new account to get more discount',
 	check_as_email: 'Checkout as a guest with your email',
-	secure_checkout: 'SECURE CHECKOUT'
+	secure_checkout: 'SECURE CHECKOUT',
+	register_and_get: 'Register on ChicMe to track your order and get more discount!'
 }

@@ -170,5 +170,6 @@ export default{
 	guest_checkout: 'pago de invitado',
 	get_more_discount: 'Cree una nueva cuenta para obtener más descuentos',
 	check_as_email: 'Pague como invitado con su correo electrónico',
-	secure_checkout: 'PAGO SEGURO'
+	secure_checkout: 'PAGO SEGURO',
+	register_and_get: '¡Regístrese en ChicMe para rastrear su pedido y obtener más descuentos!'
 }

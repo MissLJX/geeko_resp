@@ -169,5 +169,6 @@ export default{
 	guest_checkout: 'checkout de convidado',
 	get_more_discount: 'Crie uma nova conta para obter mais desconto',
 	check_as_email: 'Faça check-out como um convidado com o seu e-mail',
-	secure_checkout: 'VERIFICAÇÃO SEGURA'
+	secure_checkout: 'VERIFICAÇÃO SEGURA',
+	register_and_get: 'Cadastre-se no ChicMe para rastrear seu pedido e obter mais desconto!'
 }

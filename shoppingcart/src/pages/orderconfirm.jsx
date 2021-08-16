@@ -289,7 +289,7 @@ const NewCustomerBlocker = injectIntl(props => {
 						<span dangerouslySetInnerHTML={{__html: message}}/>
 					</div>
 					<div>
-						<div style={{borderBottom: '1px solid #e6e6e6', color: '#366dce', paddingBottom: 8, textAlign:'left', marginTop: 18}}>
+						<div style={{borderBottom: '1px solid #e6e6e6', color: '#222', paddingBottom: 8, textAlign:'left', marginTop: 18}}>
 							{email}
 						</div>
 						<div style={{borderBottom: '1px solid #e6e6e6', paddingBottom: 8, textAlign:'left', marginTop: 26}}>
@@ -313,7 +313,7 @@ const NewCustomerBlocker = injectIntl(props => {
 							/>
 						</div>
 						<div style={{fontSize: 12, lineHeight: '14px', marginTop: 18, color: '#666'}}>
-							Register on ChicMe to track your order and get more discount!
+							<FormattedMessage id="register_and_get"/>
 						</div>
 						<div style={{marginTop: 16}}>
 
@@ -741,9 +741,11 @@ const OrderConfirm = class extends React.Component {
 										<div><FormattedMessage id="shipping_address" /></div>
 									</div>
 									<div className="x-cell __right">
+
 										<Link style={{ textDecoration: 'none', color: '#222' }} to={`${this.props.match.url}/address`}>
 											<span className={'iconfont'}>&#xe778;</span>
 										</Link>
+
 									</div>
 								</div>
 							</div>

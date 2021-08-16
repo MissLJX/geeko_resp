@@ -170,5 +170,6 @@ export default{
 	guest_checkout: 'Gästekasse',
 	get_more_discount: 'Erstellen Sie ein neues Konto, um mehr Rabatt zu erhalten',
 	check_as_email: 'Bezahlen Sie als Gast mit Ihrer E-Mail',
-	secure_checkout: 'SICHERE KASSE'
+	secure_checkout: 'SICHERE KASSE',
+	register_and_get: 'Registrieren Sie sich bei ChicMe, um Ihre Bestellung zu verfolgen und mehr Rabatt zu erhalten!'
 }
