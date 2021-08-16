@@ -115,4 +115,16 @@ export const dateFormat = function(times) {
     return day + "/" + month + "/" + year + " " + hours + ":" + minutes + ":" + seconds + " " + str;
 }
 
+export const changeLocalLanguage = function(language){
+    Cookie.set('lang', language , {expires: 30});
+}
+
+export const changeLocalCurrency = function(currency){
+    Cookie.set('currency', currency , {expires: 30});
+}
+
+export const getLocalCookie = function(name){
+    return Cookie.get(name);
+}
+
 

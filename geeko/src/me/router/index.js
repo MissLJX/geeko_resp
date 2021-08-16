@@ -6,9 +6,9 @@ import {ROUTER_PATH_ME} from '../../utils/geekoutils'
 const Me = [
     {
         path: ROUTER_PATH_ME,
-        component: () => import('../pages/index.vue'),
+        component: () => import('../pages/index3.vue'),
         name: 'me',
-        meta: {title: 'me'}
+        meta: {title: 'me',keepAlive:true}
     },
     {
         path: ROUTER_PATH_ME + '/creditcards',
@@ -185,6 +185,42 @@ const Me = [
         component:() => import("../pages/survey.vue"),
         name:"survey",
         meta:{title:"Survey"}
+    },
+    {
+        path:ROUTER_PATH_ME + "/about-policy",
+        component:() => import("../pages/about-policy.vue"),
+        name:"about-policy",
+        meta:{title:"Policy"}
+    },
+    {
+        path:ROUTER_PATH_ME + "/my-preference",
+        component:() => import("../pages/editmessage/MyPreference.vue"),
+        name:"my-preference",
+        meta:{title:"My Preference"}
+    },
+    {
+        path:ROUTER_PATH_ME + "/my-measurements",
+        component:() => import("../pages/editmessage/MyMeasurements.vue"),
+        name:"my-measurements",
+        meta:{title:"My Measurements"}
+    },
+    {
+        path:ROUTER_PATH_ME + "/edit-name",
+        component:() => import("../pages/editmessage/EditUserName.vue"),
+        name:"edit-name",
+        meta:{title:"Edit User Name"}
+    },
+    {
+        path:ROUTER_PATH_ME + "/edit-nickname",
+        component:() => import("../pages/editmessage/EditUserNickName.vue"),
+        name:"edit-nickname",
+        meta:{title:"Edit User NickName"}
+    },
+    {
+        path:ROUTER_PATH_ME + "/edit-bio",
+        component:() => import("../pages/editmessage/EditUserBio.vue"),
+        name:"edit-bio",
+        meta:{title:"Edit User Bio"}
     }
 ]
 

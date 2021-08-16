@@ -3,7 +3,7 @@
         <!--   <span @click="addAddressHandle" slot="oplabel">{{$t('label.add')}}</span> -->
         <page-header><span>{{$t('label.addressBook')}}</span></page-header>
 
-        <address-list :addresses="addresses" :loading="false" @listing="listing" @delete="deleteHandle" @list-address-edit="listEditHandle" @make-default="makeDefaultHandle"/>
+        <address-list :addresses="addresses" :finished="finished" :loading="false" @listing="listing" @delete="deleteHandle" @list-address-edit="listEditHandle" @make-default="makeDefaultHandle"/>
 
 
         <div class="sett-address-footer">
@@ -79,7 +79,8 @@
             return {
                 loading: false,
                 showeditor: false,
-                editing:null
+                editing:null,
+                finished:false
             }
         },
         computed: {
@@ -117,8 +118,11 @@
             'loadding' : Loading
         },
         beforeRouteEnter(to, from, next){
-            store.dispatch('me/getAddresses').then(() => {
-                next()
+            store.dispatch('me/getAddresses').then(({finished}) => {
+                console.log("finished",finished);
+                next(vm => {
+                    if(finished) vm.finished = finished;
+                })
             }).catch((e) => {
                 console.error(e)
                 next(false)

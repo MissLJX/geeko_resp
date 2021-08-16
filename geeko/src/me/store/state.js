@@ -1,6 +1,7 @@
 const state = {
     me: null,
-    addresses: null,
+    isLogin:false,
+    addresses: [],
     coupons: [],
     feed: null,
 /*    allPoints:[],*/
@@ -39,7 +40,11 @@ const state = {
     trackOrder:[],
     trackOrderSkip:0,
     expiredCoupons:[],
-    expiredCouponsSkip:0
+    expiredCouponsSkip:0,
+    currencyList:[],
+    shoppingCartCount:0,
+    messageM1518:"",
+    messageM1521:null
 }
 
 export default state;

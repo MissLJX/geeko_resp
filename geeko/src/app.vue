@@ -8,20 +8,23 @@
         </div>
         <!-- 路由出口 -->
         <!-- 路由匹配到的组件将渲染在这里 -->
-        <keep-alive>
-            <router-view v-if="$route.meta.keepAlive"></router-view>
-        </keep-alive>
-        <router-view v-if="!$route.meta.keepAlive"></router-view>
-        <i v-if="screenLoading" class="iconfont st-screen-loading">
-            &#xe62d;
-        </i>
+        <div class="el-index-container">
+            <div class="el-index-bg">
+                <keep-alive>
+                    <router-view v-if="$route.meta.keepAlive"></router-view>
+                </keep-alive>
+                <router-view v-if="!$route.meta.keepAlive"></router-view>
+                <i v-if="screenLoading" class="iconfont st-screen-loading">
+                    &#xe62d;
+                </i>
+            </div>
+        </div>
     </div>
 </template>
 
 <style scoped lang="scss">
     .el-body {
         font-size: 14px;
-        padding-bottom: 51px;
     }
 
     #vue-header{
@@ -47,6 +50,14 @@
                 animation: processing 1s forwards;
             }
         }
+    }
+
+    .el-index-container{
+        padding-bottom: 51px;
+    }
+
+    .el-index-bg{
+        background-color: #ffffff;
     }
 
     @keyframes processing {

@@ -234,5 +234,21 @@ export const makeSuggestion = (files) => {
     return axios.post('/ticket/add', files, {'Content-Type': http_infos.upload_image_content_type}).then(data => data.result)
 }
 
+// get cart product num
+export const getShoppingCartNum = () => {
+    return axios.get(VPATH + "/shopping-cart/count-products",{},{}).then(data => data.result);
+}
+
+export const updateCustomerSave = (customer) => {
+    console.log("customer",customer);
+    return axios.post(VPATH + "/customer/save",customer,{}).then(data => data.result);
+}
+
+// /context/anon/get-currency-list
+export const getCurrencyList =() => {
+    return axios.get("/context/anon/get-currency-list",{},{}).then(data => data.result);
+}
+
+
 
 

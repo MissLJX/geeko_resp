@@ -11,28 +11,28 @@ const actions = {
             ]).then(([me, wishlist]) => {
                 commit(types.ME_GET, me)
                 commit(types.ME_GET_WISH_LIST, wishlist)
+                commit(types.ME_GET_NO_LOGIN,true);
                 return me
             }).then((me) => {
-                // return dispatch('getFeed', me.id)
-                return me;
+                return dispatch('getFeed', me.id)
             }).then((feed) => {
-                // commit(types.ME_GET_FEED, feed)
+                commit(types.ME_GET_FEED, feed)
                 commit(types.ME_INITIALIZED)
-            })
+            }).catch((e) => {
+                console.log("initcatch",e);
+                commit(types.ME_GET_NO_LOGIN,false);
+            });
         }
-
-
     },
     getMe({commit}){
-        return new Promise((resolve, reject) => {
-            api.get().then(me => {
-                commit(types.ME_GET, me)
-                resolve(me)
-            }).catch(e => {
-                reject(e)
-            })
+        return api.get().then(me => {
+            commit(types.ME_GET, me)
+            return me
+        }).catch(e => {
+            console.log("e",e);
+            commit(types.ME_GET_NO_LOGIN,false);
+            return null
         })
-
     },
     getFeed({commit}, customerId){
         return new Promise((resolve, reject) => {
@@ -57,8 +57,13 @@ const actions = {
     getAddresses({commit}){
         return new Promise((resolve, reject) => {
             api.getShippingDetails().then(addresses => {
-                commit(types.ME_GET_ADDRESSES, addresses)
-                resolve()
+                console.log("address",addresses);
+                if(addresses && addresses.length > 0){
+                    commit(types.ME_GET_ADDRESSES, addresses);
+                    resolve();
+                }else{
+                    resolve({finished:true});
+                }
             }).catch(e => {
                 reject(e)
             })
@@ -150,13 +155,12 @@ const actions = {
     },*/
 
     getWishlist({commit}){
-        return new Promise((resolve, reject) => {
-            api.getWishlist().then(wishlist => {
-                commit(types.ME_GET_WISH_LIST, wishlist)
-                resolve(wishlist)
-            }).catch(e => {
-                reject(e)
-            })
+        return api.getWishlist().then(wishlist => {
+            commit(types.ME_GET_WISH_LIST, wishlist)
+            return wishlist
+        }).catch(e => {
+            console.log("wishlistcatch",e);
+            return [];
         })
     },
 
@@ -296,9 +300,12 @@ const actions = {
     },
 
     changeCurrency({commit},currency){
-        return api.changeCurrency(currency.value).then(() => {
-            commit(types.ME_CHANGE_CURRENCY, currency)
-        })
+        return new Promise((reslove,reject) => {
+            api.changeCurrency(currency.value).then(() => {
+                commit(types.ME_CHANGE_CURRENCY, currency);
+                reslove(currency);
+            })
+        });
     },
 
 
@@ -394,6 +401,38 @@ const actions = {
             api.generalUploadImage(formData).then((result) => {
                 reslove(result);
             });
+        });
+    },
+    updateCustomerSave({commit},customer){
+        return new Promise((reslove,reject) => {
+            api.updateCustomerSave({"customer":customer.customer}).then((result) => {
+                reslove(result);
+                console.log("customer",customer);
+                commit(types.CHANGE_GET_ME_DATA,customer);
+            });
+        });
+    },
+    getCurrencyList({commit}){
+        return new Promise((reslove,reject) => {
+            api.getCurrencyList().then((result) => {
+                commit(types.GET_ME_CURRENCY_LIST,result.currencies);
+                reslove();
+            });
+        });
+    },
+    getShoppingCartNum({commit}){
+        return api.getShoppingCartNum().then(result => {
+            commit(types.GET_SHOPPING_CART_NUM,result);
+        });
+    },
+    getIndexLoginMessageCode({commit},code){
+        return api.getMessage(code).then(result => {
+            commit(types.GET_INDEX_MESSAGE_CODE_LOGIN,result.message);
+        });
+    },
+    getMyPreferenceMessageCode({commit},code){
+        return api.getMessage(code).then(result => {
+            commit(types.GET_MY_PREFERENCES_MESSAGE_CODE,JSON.parse(result.message));
         });
     }
 }

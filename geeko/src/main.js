@@ -10,6 +10,12 @@ import App from './app.vue'
 import {sync} from 'vuex-router-sync'
 import VeeValidate from 'vee-validate'
 
+import Loading from "./components/loading.vue"
+
+import _global from "./components/Global.vue"
+
+Vue.prototype.GLOBAL = _global
+
 import './css/style.scss'
 
 
@@ -17,6 +23,8 @@ Vue.use(VeeValidate)
 
 
 sync(store, router)
+
+Vue.component('loading',Loading);
 
 
 new Vue({
