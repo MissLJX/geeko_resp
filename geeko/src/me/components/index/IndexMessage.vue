@@ -1,22 +1,22 @@
 <template>
     <div class="index-message">
         <div class="_hd">
-            <a @click.prevent="specificationLogin('/me/m/notification')">
+            <a @click.prevent="specificationLogin('/me/m/notification',1)">
                 <span class="iconfont" :class="{'active' : notificationCount > 0}">&#xe60b;</span>
             </a>
             
-            <a @click.prevent="specificationLogin('/me/m/settings')">
+            <a @click.prevent="specificationLogin('/me/m/settings',1)">
                 <span class="iconfont">&#xe699;</span>
             </a>
             
-            <a href="/cart">
+            <!-- <a href="/cart">
                 <span class="iconfont">&#xe6a4;</span>
                 <span 
                     class="_num" 
                     v-if="shoppingCartCount > 0"
                     :class="{'special-count' : shoppingCartCount && shoppingCartCount < 10}"
                 >{{shoppingCartCount}}</span>
-            </a>
+            </a> -->
         </div>
 
         <div class="login-message" v-if="!isLogin" @click="specificationLogin()">
@@ -28,14 +28,14 @@
         <div class="header-icon">
             <div class="st-table">
                 <div class="st-cell st-v-m icon-container">
-                    <div class="icon" :style="{'background-image': 'url('+headerImage+'),url('+baseHeaderUrl+')' }" @click="toEditUserMessage" >
+                    <div class="icon" :style="{'background-image': 'url('+headerImage+'),url('+baseHeaderUrl+')' }" @click="specificationLogin('/me/m/edit-message',1)" >
                         <span class="_bg" v-if="isLogin">
                             <span class="iconfont _icon">&#xe6ce;</span>
                         </span>
                     </div>
                 </div>
                 <div class="st-cell edit st-v-m">
-                    <p>{{disposeName}}</p>
+                    <p @click="changeToLogin">{{disposeName}}</p>
                     <div class="bio" @click="toEditUserBio">
                         <span>{{me && me.bio ? me.bio : "Introduce yourself to others…"}}</span>
                         <span class="iconfont">&#xe6ce;</span>
@@ -45,19 +45,19 @@
         </div>
 
         <div class="discount">
-            <a @click.prevent="specificationLogin('/me/m/coupons')">
+            <a @click.prevent="specificationLogin('/me/m/coupons',1)">
                 <p class="iconfont">
                     <span :class="{'_font' : isLogin}">{{getFeedNum(feed && feed.canUseCouponCount,"&#xe6dc;")}}</span>
                 </p>
                 <p>{{$t("label.coupons")}}</p>
             </a>
-            <a @click.prevent="specificationLogin('/me/m/credits')">
+            <a @click.prevent="specificationLogin('/me/m/credits',1)">
                 <p class="iconfont">
                     <span :class="{'_font' : isLogin}">{{getFeedNum(feed && feed.points,"&#xe6db;")}}</span>
                 </p>
                 <p>{{$t("index.points")}}</p>
             </a>
-            <a @click.prevent="specificationLogin('/me/m/creditcards')">
+            <a @click.prevent="specificationLogin('/me/m/creditcards',1)">
                 <p class="iconfont">&#xe6dd;</p>
                 <p>{{$t("index.wallet")}}</p>
             </a>
@@ -143,17 +143,17 @@
 
                 <div class="service-bd">
                     <a href="/robot">
-                            <p class="iconfont">&#xe6e1;</p>
-                            <p>{{$t("index.suport")}}</p>
-                        </a>
-                        <a @click.prevent="specificationLogin('/me/m/survey')">
-                            <p class="iconfont">&#xe6e2;</p>
-                            <p>{{$t("point.survey")}}</p>
-                        </a>
-                        <a @click.prevent="specificationLogin('/me/m/make-sug')">
-                            <p class="iconfont">&#xe6e5;</p>
-                            <p>{{$t("point.suggestion")}}</p>
-                        </a>
+                        <p class="iconfont">&#xe6e1;</p>
+                        <p>{{$t("index.suport")}}</p>
+                    </a>
+                    <a @click.prevent="specificationLogin('/me/m/survey',1)">
+                        <p class="iconfont">&#xe6e2;</p>
+                        <p>{{$t("point.survey")}}</p>
+                    </a>
+                    <a @click.prevent="specificationLogin('/me/m/makeSug',1)">
+                        <p class="iconfont">&#xe6e5;</p>
+                        <p>{{$t("point.suggestion")}}</p>
+                    </a>
                 </div>
             </div>
         </div>
@@ -185,6 +185,8 @@
                     return this.me.nickname;
                 }else if(this.isLogin && this.me.name && this.me.name.firstName && this.me.name.lastName){
                     return this.me.name.firstName + " " + this.me.name.lastName;
+                }else if(this.isLogin && !(this.me && this.me.nickname && this.me.name && this.me.name.firstName && this.me.name.lastName)){
+                    return this.me.email;
                 }
                 return this.$t("index.login_or_register");
             }
@@ -201,18 +203,26 @@
             getOrderNum(num){
                 return this.isLogin && num > 0 ? num : "";
             },
-            toEditUserMessage(){
-                this.$router.push({name:"edit-user-message"});
-            },
             toEditUserBio(){
                 if(this.isLogin){
                     this.$router.push({name:"edit-bio"});
+                }else{
+                    window.location.href = "/i/login";
                 }
             },
-            specificationLogin(path){
+            specificationLogin(path,difference){
                 if(this.isLogin){
-                    window.location.href = utils.PROJECT + path;
+                    if(difference){
+                        this.$router.push({path:path});
+                    }else{
+                        window.location.href = utils.PROJECT + path;
+                    }
                 }else{
+                    window.location.href = "/i/login";
+                }
+            },
+            changeToLogin(){
+                if(this.isLogin){
                     window.location.href = "/i/login";
                 }
             }
@@ -222,7 +232,7 @@
 
             store.dispatch('me/getOrderCountUnpaid');
 
-            store.dispatch("me/getShoppingCartNum");
+            // store.dispatch("me/getShoppingCartNum");
 
             store.dispatch("me/getIndexLoginMessageCode","M1518");
         }
@@ -231,7 +241,7 @@
 
 <style scoped lang="scss">
     .index-message{
-        padding-top: 20px;
+        // padding-top: 20px;
         ._hd{
             padding: 10px 0px;
             padding-right: 20px;
@@ -265,7 +275,7 @@
                 position: absolute;
                 background-color: #e64545;
                 top: -10px;
-                right: -15px;
+                right: -10px;
                 color: #fff;
                 padding: 2px 2px;
                 border-radius: 50%;
@@ -274,7 +284,7 @@
             }
 
             .special-count{
-                padding: 2px 5px;
+                padding: 1.5px 5px;
             }
         }
 
@@ -464,8 +474,8 @@
                     ._count{
                         position: absolute;
                         background-color: #e64545;
-                        top: -6px;
-                        left: 60%;
+                        top: -10px;
+                        left: 57%;
                         color: #fff;
                         padding: 2px 4px;
                         border-radius: 50%;
@@ -474,7 +484,7 @@
                     }
 
                     .special-count{
-                        padding: 0px 6px;
+                        padding: 1px 7px;
                     }
                 }
             }

@@ -30,8 +30,10 @@
         </div>
 
         <!-- save按钮 -->
-        <div class="saveBtn" @click="saveData">
-            save
+        <div class="footer-btn">
+            <div class="saveBtn" @click="saveData">
+                {{$t("label.save")}}
+            </div>
         </div>
 
         <loading v-if="isLoadingShow"></loading>
@@ -39,6 +41,10 @@
 </template>
 
 <style scoped lang="scss">
+    .my-measurements-page{
+        padding-bottom: 90px;
+    }
+
     @font-face {
         font-family: 'iconfont';  /* Project id 384296 */
         src: url('//at.alicdn.com/t/font_384296_hyeeafv2ple.woff2?t=1627626329519') format('woff2'),
@@ -131,11 +137,22 @@
         margin: 0 auto;
         margin-top: 40px;
         transition: all 0.1s;
+        padding-bottom: 20px;
     }
     .saveBtn:active{
         background-color: rgba(35,35,35,0.6);
     }
     
+    .footer-btn{
+        width: 100%;
+        position: fixed;
+        bottom: 51px;
+        left: 0px;
+        right: 0px;
+        text-align: center;
+        padding: 0px 13px 20px 13px;
+        background-color: #ffffff;
+    }
     
 </style>
 
@@ -326,7 +343,8 @@
                 infoPart,
                 testShow: true,
                 backMock,
-                isLoadingShow:false
+                isLoadingShow:false,
+                inputData:{}
             }
         },
         computed:{
@@ -336,8 +354,94 @@
             defaultV:function(){
                 return this.checkList.length > 0 ? this.checkList[0] : " "
             },
-            inputData:function(){
-                console.log("触发");
+        },
+        watch:{
+
+        },
+        created:function(){
+           this.getData()
+        },
+        mounted(){
+             
+        },
+        methods:{
+            inputChange(value){
+                // console.log(this.inputData)
+                // console.log(value)
+                // console.log(this.slotList);
+                this.inputData = value;
+                this.submitData = value;
+
+                for(let i in this.slotList){
+                    console.log(this.slotList[i])
+                    for(let item in value){
+                        console.log(item)
+                        if(this.slotList[i].slotTitle === item){
+                            console.log(this.slotList[i])
+                            for(let j = 0; j < this.slotList[i]['slotList'].length; j++){
+                                if(this.slotList[i]['slotList'][j]['slotType'] == "checkbox"){
+                                    this.slotList[i]['slotList'][j]['slotDefaultV'] = value[item]['select'];
+                                } else if(this.slotList[i]['slotList'][j]['slotType'] == "input" && this.slotList[i]['slotList'][j]['slotInputType'] == "number"){
+                                    this.slotList[i]['slotList'][j]['slotDefaultV'] = value[item]['number'];
+                                } else {
+                                    this.slotList[i]['slotList'][j]['slotDefaultV'] = value[item]['text'];
+                                }
+                            }
+                        }
+                    }
+                }
+                console.log(this.slotList)
+            },
+            getData(){
+                let result = this.me.mySizeInformation;
+                for(let i = 0; i < this.slotList.length; i++){
+                    for(let item in result){
+                        if(item == this.slotList[i].slotTitle.split(" ")[0].toLocaleLowerCase()){
+                            this.slotList[i].slotList[0].slotDefaultV = result[item]
+                        } else if(item == this.slotList[i].slotTitle.split(" ")[0].toLocaleLowerCase()+"Unit"){
+                            this.slotList[i].slotList[1].slotDefaultV = result[item]
+                        } else if((item == "sizingRecommendation") && this.slotList[i].slotTitle == "What is your preference?" ){
+                            this.slotList[i].slotList[0].slotDefaultV = result[item];
+                        }
+                    }
+                }
+                this.initInputData();
+            },
+            saveData(){
+                // console.log(this.submitData)
+                this.isLoadingShow = true;
+                let final = {};
+                for(let item in this.submitData){
+                    // console.log(item)
+                    if(item == "What is your preference?"){
+                        final['sizingRecommendation'] = this.submitData['What is your preference?']['select'];
+                    } else {
+                        let key = item.split(" ")[0].toLocaleLowerCase();
+                        final[key] = "";
+                        final[key + "Unit"] = "";
+                        for(let item1 in this.submitData[item]){
+                            if(item1 == "number"){
+                                final[key] = this.submitData[item][item1];
+                            } else {
+                                final[key + "Unit"] = this.submitData[item][item1];
+                            }
+                        }
+                    }
+                }
+                // console.log(final)
+                // return;
+                let obj = {
+                            "customer":{"mySizeInformation": final},
+                            "name":"mySizeInformation"
+                            }
+
+                store.dispatch("me/updateCustomerSave", obj).then(res => {
+                    this.$router.go(-1);
+                    this.isLoadingShow = false;
+                })
+            },
+            initInputData(){
+                // console.log("触发");
                 let data = {};
                 for(let i = 0; i < this.slotList.length; i++){
                     let title = this.slotList[i]['slotTitle'];
@@ -361,71 +465,7 @@
                     }
                 }
                 // console.log(data)
-                this.submitData = data;
-                return data;
-            }
-        },
-        watch:{
-
-        },
-        created:function(){
-           this.getData()
-        },
-        mounted(){
-             
-        },
-        methods:{
-            inputChange(value){
-                console.log("value",value);
-                console.log(this.inputData)
-                this.submitData = value;
-            },
-            getData(){
-                console.log(this.me)
-                let result = this.me.mySizeInformation;
-                for(let i = 0; i < this.slotList.length; i++){
-                    for(let item in result){
-                        if(item == this.slotList[i].slotTitle.split(" ")[0].toLocaleLowerCase()){
-                            this.slotList[i].slotList[0].slotDefaultV = result[item]
-                        } else if(item == this.slotList[i].slotTitle.split(" ")[0].toLocaleLowerCase()+"Unit"){
-                            this.slotList[i].slotList[1].slotDefaultV = result[item]
-                        } else if((item == "sizingRecommendation") && this.slotList[i].slotTitle == "What is your preference?" ){
-                            console.log(item)
-                            this.slotList[i].slotList[0].slotDefaultV = result[item];
-                        }
-                    }
-                }
-            },
-            saveData(){
-                console.log(this.submitData)
-                this.isLoadingShow = true;
-                let final = {};
-                for(let item in this.submitData){
-                    if(item == "What is your preference?"){
-                        final['sizingRecommendation'] = this.submitData['What is your preference?']['select'];
-                    } else {
-                        let key = item.split(" ")[0].toLocaleLowerCase();
-                        final[key] = "";
-                        final[key + "Unit"] = "";
-                        for(let item1 in this.submitData[item]){
-                            if(!final[key]){
-                                final[key] = this.submitData[item][item1];
-                            } else {
-                                final[key + "Unit"] = this.submitData[item][item1];
-                            }
-                        }
-                    }
-                }
-
-                let obj = {
-                            "customer":{"mySizeInformation": final},
-                            "name":"mySizeInformation"
-                            }
-
-                store.dispatch("me/updateCustomerSave", obj).then(res => {
-                    this.$router.go(-1);
-                    this.isLoadingShow = false;
-                })
+                this.inputData = data;
             }
         },
         components:{

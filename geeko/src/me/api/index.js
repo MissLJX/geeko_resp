@@ -146,6 +146,22 @@ export const getMessage = (code) => {
     })
 }
 
+export const getMessage2 = (code) => {
+    return axios.get("/message/anon/country-message/"+code).then(data => data.result);
+}
+
+// 如果message的结构为Object
+// /v9/message/anon/get-object/{code}
+export const getMessageToObject = (code) => {
+    return axios.get(VPATH + "/message/anon/get-object/"+code).then(data => data.result);
+}
+
+// 如果message的结构为数组
+// /v9/message/anon/get-list/{code}
+export const getMessageToArray = (code) => {
+    return axios.get(VPATH + "/message/anon/get-list/"+code).then(data => data.result);
+}
+
 export const getCreditCards = () => {
     return axios.get('/quickpay-record/history').then(data => data.result)
 }

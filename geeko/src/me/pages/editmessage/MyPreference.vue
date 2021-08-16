@@ -89,16 +89,15 @@
             }  
         },
         created(){
-            console.log(this.me);
-            this.myPreference.favoriteCategories = this.me.myPreference.favoriteCategories.map(item => {
-                return item.value ? item.value : item;
-            });
-            this.myPreference.usuallyBuyClothesFor = this.me.myPreference.usuallyBuyClothesFor.map(item => {
-                return item.value ? item.value : item;
-            });
-            this.myPreference.favoriteStyles = this.me.myPreference.favoriteStyles.map(item => {
-                return item.value ? item.value : item;
-            });
+            if(!this.me.myPreference){
+                this.myPreference.favoriteCategories = [];
+                this.myPreference.usuallyBuyClothesFor = [];
+                this.myPreference.favoriteStyles = [];
+                return;
+            }
+            this.myPreference.favoriteCategories = this.me.myPreference.favoriteCategories;
+            this.myPreference.usuallyBuyClothesFor = this.me.myPreference.usuallyBuyClothesFor;
+            this.myPreference.favoriteStyles = this.me.myPreference.favoriteStyles;
         },
         methods:{
             getCategoryValue(value){
@@ -115,14 +114,26 @@
                 _this.isLoadingShow = true;
                 let obj = {
                     customer:{
-                        myPreference:this.myPreference
+                        myPreference:{
+                            "favoriteCategories":this.disposeCustomer(this.myPreference.favoriteCategories),
+                            "usuallyBuyClothesFor":this.disposeCustomer(this.myPreference.usuallyBuyClothesFor),
+                            "favoriteStyles":this.disposeCustomer(this.myPreference.favoriteStyles)
+                        }
                     },
-                    name:"myPreference"
+                    name:"myPreference",
+                    definition:{myPreference:this.myPreference}
+
                 };
                 _this.$store.dispatch("me/updateCustomerSave",obj).then(result => {
                     _this.isLoadingShow = false;
                     _this.$router.go(-1);
                 });
+            },
+            disposeCustomer(arr){
+                if(arr && arr.length > 0){
+                    return arr.map(item => item.value);
+                }
+                return [];
             }
         },
         beforeRouteEnter(to, from, next){

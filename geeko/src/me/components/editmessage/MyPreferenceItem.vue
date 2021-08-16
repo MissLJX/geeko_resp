@@ -9,8 +9,8 @@
                 <div 
                     v-for="(item,index) in category" 
                     :key="index+item.value" 
-                    @click="getFavoriteValue(item.value)"
-                    :class="{'active' : verifyActive(item.value)}"
+                    @click="getFavoriteValue(item)"
+                    :class="{'active' : verifyActive(item.value) >= 0}"
                 >
                     {{item.label}}
                 </div>
@@ -38,25 +38,24 @@
         },
         data(){
             return {
-                favoriteValue:[]
+                favoriteValue:[],
             }
         },
         mounted(){
             this.favoriteValue = this.favorite;
         },
         methods:{
-            getFavoriteValue(value){
-                let flag = this.favoriteValue.indexOf(value);
+            getFavoriteValue(item){
+                let flag = this.verifyActive(item.value);
                 if(flag >= 0){
                     this.favoriteValue.splice(flag,1);
                 }else{
-                    this.favoriteValue.push(value);
+                    this.favoriteValue.push(item);
                 }
                 this.$emit("getValue",this.favoriteValue);
-                console.log("this.favoriteValue",this.favoriteValue);
             },
             verifyActive(value){
-                return this.favoriteValue.indexOf(value) >= 0;
+                return this.favoriteValue.findIndex((item) => item.value == value);
             }
         }
     }

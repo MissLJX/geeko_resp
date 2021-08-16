@@ -90,7 +90,7 @@ export default {
         used:"Used",
         expired:"Expirado",
     },
-    ndex:{
+    index:{
         points:"Pontos",
         wallet:"Carteira",
         get_discount:"Ganhe $ 10",

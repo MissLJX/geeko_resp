@@ -43,7 +43,8 @@
                 <router-link :to="{name:'edit-nickname'}">
                     <div class="st-table st-fullwidth">
                         <div class="st-cell st-v-m">
-                            <span class="_red">*</span><span class="_name">{{$t("index.nickName")}}</span>
+                            <!-- <span class="_red">*</span> -->
+                            <span class="_name">{{$t("index.nickName")}}</span>
                         </div>
                         <div class="st-cell st-v-m st-t-r">
                             <span class="_message" v-if="!getNikeName"></span>
@@ -73,16 +74,22 @@
         <div class="other-container">
             <div class="global-padding">
                 <router-link :to="{name:'my-preference'}">
-                    <div class="st-table st-fullwidth">
-                        <div class="st-cell st-v-m">
+                    <div class="my-preference">
+                        <div class="_first">
                             <span class="_name">{{$t("index.my_preference")}}</span>
                         </div>
-                        <div class="st-cell st-v-m st-t-r">
-                            <span class="_message"></span>
+
+                        <div v-if="getMyPreference && getMyPreference.length >0" class="_secoed">
+                            <div class="_preference" v-for="(item,index) in getMyPreference.slice(0,3)" :key="index+item">
+                                {{item.label}}
+                            </div>
+
+                            <div style="display:inline-block;" v-if="getMyPreference.length > 3">...</div>
+                        </div>
+
+                        <div class="_three">
+                            <!-- <span class="_message"></span> -->
                             <!-- <span class="_font">About me…About me…About me…About me…</span> -->
-                            <!-- <div class="_preference">Myself</div>
-                            <div class="_preference">Myself</div>
-                            <div class="_preference">Myself</div> -->
                             <i class="iconfont el-go">&#xe694;</i>
                         </div>
                     </div>
@@ -96,7 +103,7 @@
                             <span class="_name">{{$t("index.my_measurements")}}</span>
                         </div>
                         <div class="st-cell st-v-m st-t-r">
-                            <span class="_message"></span>
+                            <!-- <span class="_message"></span> -->
                             <i class="iconfont el-go">&#xe694;</i>
                         </div>
                     </div>
@@ -151,6 +158,16 @@
             },
             getUserBio(){
                 return this.getName(this.me.bio);
+            },
+            getMyPreference(){
+                let mypreference = this.me.myPreference;
+                console.log("this.me.myPreference",this.me.myPreference)
+                if(mypreference){
+                    let arr = _.concat(mypreference.favoriteCategories,mypreference.favoriteStyles,mypreference.usuallyBuyClothesFor);
+                    return arr;
+                }
+
+                return "";
             }
         },
         methods:{
@@ -248,7 +265,7 @@
                     font-size: 12px;
                     color: #666666;
                     position: relative;
-                    top: -3px;
+                    margin-left: 6px;
                 }
 
                 & ._red{
@@ -298,6 +315,27 @@
 
         .el-go{
             color: #cccccc;
+        }
+
+        .my-preference{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            & ._first{
+                width:100px;
+            }
+
+            & ._secoed{
+                white-space: nowrap;
+                overflow: hidden;
+                flex: 1;
+            }
+
+            & ._three{
+                width: 30px;
+                text-align: right;
+            }
         }
     }
 </style>

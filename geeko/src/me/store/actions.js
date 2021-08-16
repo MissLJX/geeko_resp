@@ -408,6 +408,10 @@ const actions = {
             api.updateCustomerSave({"customer":customer.customer}).then((result) => {
                 reslove(result);
                 console.log("customer",customer);
+                if(customer.name === 'myPreference'){
+                    console.log("customer",customer.name);
+                    customer["customer"] = customer["definition"];
+                }
                 commit(types.CHANGE_GET_ME_DATA,customer);
             });
         });
@@ -431,8 +435,8 @@ const actions = {
         });
     },
     getMyPreferenceMessageCode({commit},code){
-        return api.getMessage(code).then(result => {
-            commit(types.GET_MY_PREFERENCES_MESSAGE_CODE,JSON.parse(result.message));
+        return api.getMessageToObject(code).then(result => {
+            commit(types.GET_MY_PREFERENCES_MESSAGE_CODE,result);
         });
     }
 }

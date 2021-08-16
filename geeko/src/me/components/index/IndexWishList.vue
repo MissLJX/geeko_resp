@@ -73,7 +73,6 @@
             store.dispatch("me/getWishproducts", {skip: 0}).then(({empty, finished}) => {
                 this.loading = false
                 store.dispatch("me/getWishskip")
-                console.log(finished)
                 if(finished){
                     this.goShoppingShow = true;
                     this.finished = finished;
