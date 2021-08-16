@@ -6,7 +6,7 @@ import Page404 from '../pages/404.vue'
 import Index from '../pages/chicme/index.vue'
 
 // ChiCme Msite
-// import mIndex from '../pages/chicme/m-index.vue'
+import mIndex from '../pages/chicme/m-index.vue'
 
 // Belle Pc
 // import Index from '../pages/belle/index.vue'
@@ -20,10 +20,10 @@ const routes = [
   {path: '*', name: '404', component: Page404, meta: {title:'404'}},
 
   // PC
-  // {path:'/', name: 'Index', component: Index, meta: {title: 'Index'}}
+  {path:'/', name: 'Index', component: Index, meta: {title: 'Index'}}
 
   // Msite
-  {path:'/', name: 'mIndex', component: mIndex, meta: {title: 'mIndex'}}
+  // {path:'/', name: 'mIndex', component: mIndex, meta: {title: 'mIndex'}}
 ]
 
 

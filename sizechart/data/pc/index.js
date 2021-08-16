@@ -66,7 +66,14 @@ export const getData = async productId => {
         result.push([labelArr[i],sizeArr[i],changeArr[i]]);
     }
 
-    if(!!productVO.product.modelStature && productVO.product.modelStature != null){
+    let productModelStature = productVO.product.modelStature;
+    if(!!productModelStature 
+            && productModelStature != null 
+            && productModelStature.modelListOnCm 
+            && productModelStature.modelListOnCm.length > 0
+            && productModelStature.modelListOnInch 
+            && productModelStature.modelListOnInch.length > 0
+        ){
         let model = productVO.product.modelStature;
         modelStature["modelListOnCm"] = model.modelListOnCm;
         modelStature["modelListOnInch"] = model.modelListOnInch;
