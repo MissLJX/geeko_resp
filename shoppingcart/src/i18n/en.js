@@ -20,7 +20,7 @@ export default{
 	shipping_insurance: 'Shipping Insurance',
 	order_total: 'Order Total',
 	total: 'Total',
-	check_out: 'Check Out',
+	check_out: 'CHECKOUT',
 	required_tips: 'Indicates a field is required',
 	full_name: 'Full Name',
 	street_address: 'Address Line1',
@@ -159,5 +159,15 @@ export default{
 	shopnow: 'Shop Now',
 	agree_with_policy: 'I agree with the {term} & {refund}',
 	terms_of_service: 'Terms of Service',
-	return_policy: 'Return Policy'
+	return_policy: 'Return Policy',
+	welcome_to_chicme: 'Welcome to ChicMe!',
+	check_order_msg: 'Now, you can check your order in your account. Please check “My order” under “Me” to track your order.',
+	check: 'Check',
+	register: 'REGISTER',
+	sign_in: 'Sign In',
+	guest_checkout: 'guest checkout',
+	get_more_discount: 'Creat a new account to get more discount',
+	check_as_email: 'Checkout as a guest with your email',
+	secure_checkout: 'SECURE CHECKOUT',
+	register_and_get: 'Register on ChicMe to track your order and get more discount!'
 }

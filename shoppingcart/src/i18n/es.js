@@ -161,5 +161,15 @@ export default{
 	shopnow: 'Comprar ahora',
 	agree_with_policy: 'Estoy de acuerdo con el {term} y el {refund}',
 	terms_of_service: 'Términos de servicio',
-	return_policy: 'Política de devoluciones'
+	return_policy: 'Política de devoluciones',
+	welcome_to_chicme: '¡Bienvenido a ChicMe!',
+	check_order_msg: 'Ahora, puede verificar su pedido en su cuenta. Marque "Mi pedido" en "Yo" para rastrear su pedido.',
+	check: 'Cheque',
+	register: 'REGISTRARSE',
+	sign_in: 'Iniciar sesión',
+	guest_checkout: 'pago de invitado',
+	get_more_discount: 'Cree una nueva cuenta para obtener más descuentos',
+	check_as_email: 'Pague como invitado con su correo electrónico',
+	secure_checkout: 'PAGO SEGURO',
+	register_and_get: '¡Regístrese en ChicMe para rastrear su pedido y obtener más descuentos!'
 }

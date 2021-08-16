@@ -726,6 +726,15 @@ export default class extends React.Component {
 										},
 										showEditor: true
 									})
+
+
+									if(window.GeekoSensors){
+										window.GeekoSensors.Track('ELClick', {
+											clicks: 'add_to_cart'
+										})
+									}
+
+
 								}} requestId={product.requestId} column="Filter Products" dataType="Filter Products" dataContent="Filter Products" product={product} />
 							</div>)
 						}
@@ -752,6 +761,14 @@ export default class extends React.Component {
 								setTimeout(() => {
 									onClose()
 								}, 200)
+
+								if(window.GeekoSensors){
+									window.GeekoSensors.Track('ELClick', {
+										clicks: 'back_to_bag'
+									})
+								}
+
+
 							}} style={{ minWidth: 162, textTransform: 'uppercase', paddingLeft: 10, paddingRight: 10 }}><FormattedMessage id="back_to_bag"/></BUTTON>
 						</div>
 					</div>

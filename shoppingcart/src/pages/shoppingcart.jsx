@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, {createRef, useLayoutEffect, useState} from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import Loading from '../components/msite/loading.jsx'
@@ -70,6 +70,7 @@ import depplink from '../utils/deeplink'
 import RECProducts from '../components/msite/rec-products.jsx'
 import CouponProgress from '../components/msite/coupon-progress.jsx'
 import FilterProducts from '../components/msite/filter-products.jsx'
+import {MASK} from '../components/pc/modal'
 
 
 const CreditCard = Loadable({
@@ -87,6 +88,80 @@ const ProductEditor = Loadable({
 	),
 	loading: Refreshing
 })
+
+const GUESTCONFIRM = styled.span`
+	background-color: #fff;
+	position: fixed;
+	bottom: -400px;
+	left: 0;
+	width: 100%;
+	z-index: 101;
+	padding: 0 10px 20px 10px;
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+	overflow: hidden;
+	transition: 200ms bottom;
+	& > .__hd{
+		height: 38px;
+		line-height: 38px;
+		font-size: 16px;
+		font-family: AcuminPro-Bold;
+		text-align: center;
+		border-bottom: 1px solid #dfdfdf;
+	}
+	
+	.__txt{
+		font-size: 12px;
+		color: #999;
+	}
+	
+	&.anim{
+		bottom: 0;
+	}
+	
+	.__close{
+		font-family: iconfont;
+		cursor: pointer;
+		right: 10px;
+		top: 0;
+		position: absolute;
+		color: #999;
+	}
+`
+
+const GuestConfirm = props => {
+
+	const ref = createRef()
+
+	useLayoutEffect(() => {
+		ref.current.classList.add('anim')
+	}, [])
+
+	const handleClose = () => {
+		ref.current.classList.remove('anim')
+		setTimeout(() => {
+			props.onClose()
+		} , 200)
+	}
+
+
+	return <GUESTCONFIRM innerRef={ref}>
+		<div className="__hd">
+			<span><FormattedMessage id="secure_checkout"/></span>
+			<span onClick={handleClose} className={'__close'}>&#xe6af;</span>
+		</div>
+		<div style={{marginTop: 10}}>
+			<div className="__txt"><FormattedMessage id="get_more_discount"/></div>
+			<div style={{marginTop:6}}>
+				<BigButton onClick={props.onLogin}><FormattedMessage id="register"/>/<FormattedMessage id="sign_in"/></BigButton>
+			</div>
+			<div style={{marginTop: 14}} className="__txt"><FormattedMessage id="check_as_email"/></div>
+			<div style={{marginTop: 6}}>
+				<BigButton className="outlined" onClick={props.onCheckout}><FormattedMessage id="guest_checkout"/></BigButton>
+			</div>
+		</div>
+	</GUESTCONFIRM>
+}
 
 
 
@@ -563,7 +638,8 @@ const ShoppingCart = class extends React.Component {
 			couponBanner: null,
 			cartBanner: null,
 			recs: [],
-			showFilterProducts: false
+			showFilterProducts: false,
+			showGuest: false
 		}
 		this.processCallBack = this.processCallBack.bind(this)
 		this.processErrorBack = this.processErrorBack.bind(this)
@@ -2425,7 +2501,8 @@ const ShoppingCart = class extends React.Component {
 
 			let validateOverseasItems = this.getValidItems(cart.shoppingCartProductsByOverseas)
 			hasOverseas = validateOverseasItems && validateOverseasItems.length > 0
-			hasQuickPay = cart.isSupportPaypal
+			// hasQuickPay = cart.isSupportPaypal
+			hasQuickPay=false
 
 			country = this.props.cart.shippingDetail && this.props.cart.shippingDetail.country ? this.props.cart.shippingDetail.country.value : window.__country
 			tcMethod = this.getTcMethod()
@@ -2582,77 +2659,84 @@ const ShoppingCart = class extends React.Component {
 												)
 											}
 
-											{
-												cart.messages && cart.messages.shippingMsg && <Box>
-													<IconMessage>
-														<div>
-															<span className="iconfont">&#xe765;</span>
-														</div>
-														<div>
-															<span dangerouslySetInnerHTML={{ __html: cart.messages.shippingMsg }} />
-														</div>
-														<div>
-															<a href={depplink(cart.messages.shippingMsgLink)} style={{ fontFamily: 'SlatePro-Medium', fontSize: 13, textDecoration: 'none', color: '#222' }}><FormattedMessage id="add" /> {'>'}</a>
-														</div>
-													</IconMessage>
-												</Box>
-											}
 
 											{
-												cart.messages && cart.messages.couponMsg && !cart.couponProgress && <Box>
-													<IconMessage>
-														<div>
-															<span style={{ position: 'relative', top: 2 }} className="iconfont">&#xe6c2;</span>
-														</div>
-														<div>
-															<span dangerouslySetInnerHTML={{ __html: cart.messages.couponMsg }} />
-														</div>
-														<div>
-															<a onClick={() => {
-																this.setState({
-																	showFilterProducts: true
-																})
+												cart.route !== 'B' && <React.Fragment>
+													{
+														cart.messages && cart.messages.shippingMsg && <Box>
+															<IconMessage>
+																<div>
+																	<span className="iconfont">&#xe765;</span>
+																</div>
+																<div>
+																	<span dangerouslySetInnerHTML={{ __html: cart.messages.shippingMsg }} />
+																</div>
+																<div>
+																	<a href={depplink(cart.messages.shippingMsgLink)} style={{ fontFamily: 'SlatePro-Medium', fontSize: 13, textDecoration: 'none', color: '#222' }}><FormattedMessage id="add" /> {'>'}</a>
+																</div>
+															</IconMessage>
+														</Box>
+													}
 
-
-																try {
-																	if (window.GeekoSensors) {
-																		window.GeekoSensors.Track('ELClick', {
-																			clicks: '凑单旧'
+													{
+														cart.messages && cart.messages.couponMsg && !cart.couponProgress && <Box>
+															<IconMessage>
+																<div>
+																	<span style={{ position: 'relative', top: 2 }} className="iconfont">&#xe6c2;</span>
+																</div>
+																<div>
+																	<span dangerouslySetInnerHTML={{ __html: cart.messages.couponMsg }} />
+																</div>
+																<div>
+																	<a onClick={() => {
+																		this.setState({
+																			showFilterProducts: true
 																		})
-																	}
-
-																} catch (e) { }
 
 
-															}} style={{ fontFamily: 'SlatePro-Medium', fontSize: 13, textDecoration: 'none', color: '#222' }}><FormattedMessage id="add" /> {'>'}</a>
-														</div>
-													</IconMessage>
-												</Box>
-											}
+																		try {
+																			if (window.GeekoSensors) {
+																				window.GeekoSensors.Track('ELClick', {
+																					clicks: '凑单旧'
+																				})
+																			}
+
+																		} catch (e) { }
+
+
+																	}} style={{ fontFamily: 'SlatePro-Medium', fontSize: 13, textDecoration: 'none', color: '#222' }}><FormattedMessage id="add" /> {'>'}</a>
+																</div>
+															</IconMessage>
+														</Box>
+													}
 
 
 
 
-											{
-												cart.couponProgress && <Box>
-													<CouponProgress onBuy={
-														() => {
-															this.setState({
-																showFilterProducts: true
-															})
-
-															try {
-																if (window.GeekoSensors) {
-																	window.GeekoSensors.Track('ELClick', {
-																		clicks: '凑单'
+													{
+														cart.couponProgress && <Box>
+															<CouponProgress onBuy={
+																() => {
+																	this.setState({
+																		showFilterProducts: true
 																	})
-																}
 
-															} catch (e) { }
-														}
-													} couponMsg={cart.messages.couponMsg} couponLink={cart.messages.couponMsgLink} couponProgress={cart.couponProgress} />
-												</Box>
+																	try {
+																		if (window.GeekoSensors) {
+																			window.GeekoSensors.Track('ELClick', {
+																				clicks: '凑单'
+																			})
+																		}
+
+																	} catch (e) { }
+																}
+															} couponMsg={cart.messages.couponMsg} couponLink={cart.messages.couponMsgLink} couponProgress={cart.couponProgress} />
+														</Box>
+													}
+												</React.Fragment>
 											}
+
+
 
 
 
@@ -2801,46 +2885,7 @@ const ShoppingCart = class extends React.Component {
 											}
 
 
-											{
-												isprogresspage && (
-													<Box innerRef={c => { this.$paylistdom = c }}>
-														<BoxHead single title={intl.formatMessage({ id: 'payment_method' })} />
-														<div style={{ paddingLeft: 10, paddingRight: 10, marginTop: -10 }}>
-															<PayMethodList
-																cpfClickHandle={this.cpfClickHandle.bind(this)}
-																boletoForm={(c) => this.boletoForm = c}
-																boleto={(c) => { this.boleto = c }}
-																cpf={this.props.cpf}
-																email={this.props.email}
-																handleInputChange={this.handleInputChange}
-																selectedPayId={this.props.payMethod}
-																selectPayHandle={this.selectPayHandle.bind(this)}
-																methods={this.props.cart.payMethodList}
-																ticketMethods={this.state.ticketMethods}
-																atmClickHandle={this.atmClickHandle.bind(this)}
-																ticketClickHandle={this.ticketClickHandle.bind(this)}
-																atmMethod={this.props.atmMethod}
-																ticketMethod={this.props.ticketMethod}
-																atmMethods={this.state.atmMethods}
-																apac={c => this.apac = c}
-																apacBB={c => this.apacBB = c}
-																paypalDiscountMessage={cart.paypalDiscountMessage}
-																showMercadopagoCouponField={cart.showMercadopagoCouponField}
-																setCouponHandle={this.useMercadoCoupon.bind(this)}
-																couponCode={this.props.couponCode}
-																mercadoCouponClickHandle={this.mercadoCouponClickHandle.bind(this)}
-																tcClickHandle={this.tcClickHandle.bind(this)}
-																tcMethod={tcMethod}
 
-																documentForm={c => this.documentForm = c}
-																documentRef={c => this.documentRef = c}
-																document={this.props.document}
-																initCashmethod={this.initCashmethod.bind(this)}
-															/>
-														</div>
-													</Box>
-												)
-											}
 
 
 
@@ -2869,6 +2914,85 @@ const ShoppingCart = class extends React.Component {
 
 												</LineBox>
 											</Box>
+
+
+
+
+											{
+												cart.route === 'B' && <React.Fragment>
+													{
+														cart.messages && cart.messages.shippingMsg && <Box>
+															<IconMessage>
+																<div>
+																	<span className="iconfont">&#xe765;</span>
+																</div>
+																<div>
+																	<span dangerouslySetInnerHTML={{ __html: cart.messages.shippingMsg }} />
+																</div>
+																<div>
+																	<a href={depplink(cart.messages.shippingMsgLink)} style={{ fontFamily: 'SlatePro-Medium', fontSize: 13, textDecoration: 'none', color: '#222' }}><FormattedMessage id="add" /> {'>'}</a>
+																</div>
+															</IconMessage>
+														</Box>
+													}
+
+													{
+														cart.messages && cart.messages.couponMsg && !cart.couponProgress && <Box>
+															<IconMessage>
+																<div>
+																	<span style={{ position: 'relative', top: 2 }} className="iconfont">&#xe6c2;</span>
+																</div>
+																<div>
+																	<span dangerouslySetInnerHTML={{ __html: cart.messages.couponMsg }} />
+																</div>
+																<div>
+																	<a onClick={() => {
+																		this.setState({
+																			showFilterProducts: true
+																		})
+
+
+																		try {
+																			if (window.GeekoSensors) {
+																				window.GeekoSensors.Track('ELClick', {
+																					clicks: '凑单旧'
+																				})
+																			}
+
+																		} catch (e) { }
+
+
+																	}} style={{ fontFamily: 'SlatePro-Medium', fontSize: 13, textDecoration: 'none', color: '#222' }}><FormattedMessage id="add" /> {'>'}</a>
+																</div>
+															</IconMessage>
+														</Box>
+													}
+
+
+
+
+													{
+														cart.couponProgress && <Box>
+															<CouponProgress onBuy={
+																() => {
+																	this.setState({
+																		showFilterProducts: true
+																	})
+
+																	try {
+																		if (window.GeekoSensors) {
+																			window.GeekoSensors.Track('ELClick', {
+																				clicks: '凑单'
+																			})
+																		}
+
+																	} catch (e) { }
+																}
+															} couponMsg={cart.messages.couponMsg} couponLink={cart.messages.couponMsgLink} couponProgress={cart.couponProgress} />
+														</Box>
+													}
+												</React.Fragment>
+											}
 
 
 
@@ -2916,6 +3040,48 @@ const ShoppingCart = class extends React.Component {
 													}
 												</LineBox>
 											</Box>
+
+
+											{
+												isprogresspage && (
+													<Box innerRef={c => { this.$paylistdom = c }}>
+														<BoxHead single title={intl.formatMessage({ id: 'payment_method' })} />
+														<div style={{ paddingLeft: 10, paddingRight: 10, marginTop: -10 }}>
+															<PayMethodList
+																cpfClickHandle={this.cpfClickHandle.bind(this)}
+																boletoForm={(c) => this.boletoForm = c}
+																boleto={(c) => { this.boleto = c }}
+																cpf={this.props.cpf}
+																email={this.props.email}
+																handleInputChange={this.handleInputChange}
+																selectedPayId={this.props.payMethod}
+																selectPayHandle={this.selectPayHandle.bind(this)}
+																methods={this.props.cart.payMethodList}
+																ticketMethods={this.state.ticketMethods}
+																atmClickHandle={this.atmClickHandle.bind(this)}
+																ticketClickHandle={this.ticketClickHandle.bind(this)}
+																atmMethod={this.props.atmMethod}
+																ticketMethod={this.props.ticketMethod}
+																atmMethods={this.state.atmMethods}
+																apac={c => this.apac = c}
+																apacBB={c => this.apacBB = c}
+																paypalDiscountMessage={cart.paypalDiscountMessage}
+																showMercadopagoCouponField={cart.showMercadopagoCouponField}
+																setCouponHandle={this.useMercadoCoupon.bind(this)}
+																couponCode={this.props.couponCode}
+																mercadoCouponClickHandle={this.mercadoCouponClickHandle.bind(this)}
+																tcClickHandle={this.tcClickHandle.bind(this)}
+																tcMethod={tcMethod}
+
+																documentForm={c => this.documentForm = c}
+																documentRef={c => this.documentRef = c}
+																document={this.props.document}
+																initCashmethod={this.initCashmethod.bind(this)}
+															/>
+														</div>
+													</Box>
+												)
+											}
 
 
 
@@ -3100,7 +3266,9 @@ const ShoppingCart = class extends React.Component {
 																				<PaypalBtn onClick={this.quickPaypal.bind(this)}><img src={cart.paypalButtonImage} /></PaypalBtn>
 																			</div>
 																		</DoubleBtn> : <div>
-																			<BigButton onClick={() => { this.props.history.push(`${window.ctx || ''}${__route_root__}/address`) }} className="__btn" height={47} bgColor="#222">
+																			<BigButton onClick={() => {
+																				this.setState({showGuest: true})
+																			}} className="__btn" height={47} bgColor="#222">
 																				{intl.formatMessage({ id: 'check_out' })} ({totalCount})
 																			</BigButton>
 																		</div>
@@ -3270,6 +3438,22 @@ const ShoppingCart = class extends React.Component {
 													})
 												}
 											} />
+										}
+
+										{
+											this.state.showGuest && <React.Fragment>
+												<MASK/>
+												<GuestConfirm onCheckout={() => {
+													this.setState({showGuest: false})
+													this.props.history.push(`${window.ctx || ''}${__route_root__}/address`)
+												}}  onLogin={()=>{
+													window.location.href = `${window.ctx}/${
+														/*global siteType b:true*/
+														/*eslint no-undef: "error"*/
+														siteType === 'new' ? 'page' : 'i'
+													}/login?redirectUrl=${encodeURIComponent(window.location.href)}`
+												}} onClose={() => {this.setState({showGuest:false})}}/>
+											</React.Fragment>
 										}
 
 

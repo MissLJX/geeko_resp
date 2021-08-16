@@ -4,6 +4,7 @@ import {injectIntl} from 'react-intl'
 import OrderItem from './order-item.jsx'
 import {Grey, Red} from '../text.jsx'
 import Money from '../money.jsx'
+import Clipboard from 'react-clipboard.js'
 
 const ORDER = styled.div`
 	.__fd{
@@ -35,19 +36,31 @@ const ORDERHEAD = styled.div`
   padding-left: 10px;
 `
 
+const COPY = styled.span`
+  
+`
+
 const Order = class extends React.Component {
-  constructor (props) {
-    super(props)
-  }
-  render () {
+	constructor (props) {
+		super(props)
+	}
+	render () {
   	const {intl, transaction} = this.props
 
   	return <ORDER>
-      <ORDERHEAD>
-        <span>{intl.formatMessage({id: 'order_no'})}: </span>
-        <Grey>{transaction.id}</Grey>
-      </ORDERHEAD>
-  		<ul>
+			<ORDERHEAD style={{position:'relative'}}>
+				<span>{intl.formatMessage({id: 'order_no'})}: </span>
+				<Grey>{transaction.id}</Grey>
+
+				<Clipboard onSuccess={()=> {
+				    alert('Success')
+				}} style={{border:'none', backgroundColor: 'transparent', position: 'absolute', right: 10, top: 12, cursor: 'pointer'}} data-clipboard-text={transaction.id}>
+					<COPY className={'iconfont'}>&#xe776;</COPY>
+				</Clipboard>
+
+
+			</ORDERHEAD>
+  		<ul> 
   			{transaction.orderItems.map(item => (
   				<li key={item.variantId}>
   					<OrderItem item={item}/>
@@ -58,7 +71,7 @@ const Order = class extends React.Component {
   			<span>{intl.formatMessage({id: 'total'})}: </span><Red><Money money={transaction.orderTotal}/> </Red><span>(<Money money={transaction.shippingPrice}/> shipping cost)</span>
   		</div>
   	</ORDER>
-  }
+	}
 }
 
 export default injectIntl(Order)
