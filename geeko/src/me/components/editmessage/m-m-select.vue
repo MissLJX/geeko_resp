@@ -95,7 +95,7 @@
                 }
             },
             "defaultValue":function(newValue, oldValue){
-                console.log("DV===========",newValue)
+                // console.log("DV===========",newValue)
                 if(newValue){
                     this.selectItem = newValue
                     this.value = newValue

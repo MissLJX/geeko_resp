@@ -344,7 +344,8 @@
                 testShow: true,
                 backMock,
                 isLoadingShow:false,
-                inputData:{}
+                inputData:{},
+                sizingList: ["True to size","Large","Small"]
             }
         },
         computed:{
@@ -373,11 +374,11 @@
                 this.submitData = value;
 
                 for(let i in this.slotList){
-                    console.log(this.slotList[i])
+                    // console.log(this.slotList[i])
                     for(let item in value){
-                        console.log(item)
+                        // console.log(item)
                         if(this.slotList[i].slotTitle === item){
-                            console.log(this.slotList[i])
+                            // console.log(this.slotList[i])
                             for(let j = 0; j < this.slotList[i]['slotList'].length; j++){
                                 if(this.slotList[i]['slotList'][j]['slotType'] == "checkbox"){
                                     this.slotList[i]['slotList'][j]['slotDefaultV'] = value[item]['select'];
@@ -390,7 +391,7 @@
                         }
                     }
                 }
-                console.log(this.slotList)
+                // console.log(this.slotList)
             },
             getData(){
                 let result = this.me.mySizeInformation;
@@ -401,7 +402,7 @@
                         } else if(item == this.slotList[i].slotTitle.split(" ")[0].toLocaleLowerCase()+"Unit"){
                             this.slotList[i].slotList[1].slotDefaultV = result[item]
                         } else if((item == "sizingRecommendation") && this.slotList[i].slotTitle == "What is your preference?" ){
-                            this.slotList[i].slotList[0].slotDefaultV = result[item];
+                            this.slotList[i].slotList[0].slotDefaultV = this.sizingList[result[item]];
                         }
                     }
                 }
@@ -414,7 +415,11 @@
                 for(let item in this.submitData){
                     // console.log(item)
                     if(item == "What is your preference?"){
-                        final['sizingRecommendation'] = this.submitData['What is your preference?']['select'];
+                        /**
+                         * this.submitData['What is your preference?']['select'] == "True to size" ? 0 :
+                                                        this.submitData['What is your preference?']['select'] == "Large" ? 1 : 2;
+                         */
+                        final['sizingRecommendation'] = this.sizingList.indexOf(this.submitData["What is your preference?"]["select"]);
                     } else {
                         let key = item.split(" ")[0].toLocaleLowerCase();
                         final[key] = "";

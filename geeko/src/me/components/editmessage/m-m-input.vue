@@ -59,7 +59,7 @@
             }
         },
         mounted(){
-            console.log(this.slotList)
+            // console.log(this.slotList)
         },
         methods:{
             selectChange(value, title){
