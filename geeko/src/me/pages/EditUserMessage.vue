@@ -2,7 +2,7 @@
     <div class="edit-user-message">
         <nav-bar>
             <i class="iconfont el-back-font" slot="left" @click="$router.go(-1)">&#xe693;</i>
-            <span slot="center">{{$t("point.my_points")}}</span>
+            <span slot="center">{{$t("label.editProfile")}}</span>
         </nav-bar>
 
         <div class="edit-container">
@@ -81,7 +81,7 @@
 
                         <div v-if="getMyPreference && getMyPreference.length >0" class="_secoed">
                             <div class="_preference" v-for="(item,index) in getMyPreference.slice(0,3)" :key="index+item">
-                                {{item.label}}
+                                {{getName(item.label)}}
                             </div>
 
                             <div style="display:inline-block;" v-if="getMyPreference.length > 3">...</div>
@@ -161,9 +161,11 @@
             },
             getMyPreference(){
                 let mypreference = this.me.myPreference;
-                console.log("this.me.myPreference",this.me.myPreference)
                 if(mypreference){
-                    let arr = _.concat(mypreference.favoriteCategories,mypreference.favoriteStyles,mypreference.usuallyBuyClothesFor);
+                    let arr = _.concat(
+                            this.getDisposeArr(mypreference.favoriteCategories),
+                            this.getDisposeArr(mypreference.favoriteStyles),
+                            this.getDisposeArr(mypreference.usuallyBuyClothesFor));
                     return arr;
                 }
 
@@ -190,6 +192,9 @@
             },
             getName(value){
                 return value ? value : '';
+            },
+            getDisposeArr(arr){
+                return arr && arr.length > 0 ? arr : [];
             }
         }
     }

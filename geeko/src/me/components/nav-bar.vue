@@ -34,6 +34,7 @@
             font-family: SlatePro-Medium;
 	        font-size: 17px;
             color: #222222;
+            text-transform: capitalize;
         }
 
         .left{

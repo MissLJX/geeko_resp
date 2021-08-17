@@ -173,7 +173,7 @@ const mutations = {
     [types.CHANGE_GET_ME_DATA](state,customer){
         let name = customer.name;
         let changeValue = customer.customer[name];
-        state.me[name] = changeValue;
+        state.me[name] = _.cloneDeep(changeValue);
     },
     [types.GET_ME_CURRENCY_LIST](state,currency){
         state.currencyList = _.concat(state.currencyList,currency);

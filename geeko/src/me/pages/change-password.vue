@@ -93,6 +93,7 @@
                 font-family: SlatePro-Medium;
                 font-size: 17px;
                 color: #ffffff;
+                text-transform: uppercase;
             }
         }
     }

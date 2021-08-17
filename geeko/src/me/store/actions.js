@@ -57,7 +57,6 @@ const actions = {
     getAddresses({commit}){
         return new Promise((resolve, reject) => {
             api.getShippingDetails().then(addresses => {
-                console.log("address",addresses);
                 if(addresses && addresses.length > 0){
                     commit(types.ME_GET_ADDRESSES, addresses);
                     resolve();

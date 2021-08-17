@@ -118,11 +118,8 @@
             'loadding' : Loading
         },
         beforeRouteEnter(to, from, next){
-            store.dispatch('me/getAddresses').then(({finished}) => {
-                console.log("finished",finished);
-                next(vm => {
-                    if(finished) vm.finished = finished;
-                })
+            store.dispatch('me/getAddresses').then(() => {
+                next();
             }).catch((e) => {
                 console.error(e)
                 next(false)

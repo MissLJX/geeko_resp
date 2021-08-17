@@ -95,9 +95,12 @@
                 this.myPreference.favoriteStyles = [];
                 return;
             }
-            this.myPreference.favoriteCategories = this.me.myPreference.favoriteCategories;
-            this.myPreference.usuallyBuyClothesFor = this.me.myPreference.usuallyBuyClothesFor;
-            this.myPreference.favoriteStyles = this.me.myPreference.favoriteStyles;
+
+            let {favoriteCategories,usuallyBuyClothesFor,favoriteStyles} = JSON.parse(JSON.stringify(this.me.myPreference));
+
+            this.myPreference.favoriteCategories = this.getDisposeArr(favoriteCategories);
+            this.myPreference.usuallyBuyClothesFor = this.getDisposeArr(usuallyBuyClothesFor);
+            this.myPreference.favoriteStyles = this.getDisposeArr(favoriteStyles);
         },
         methods:{
             getCategoryValue(value){
@@ -134,6 +137,9 @@
                     return arr.map(item => item.value);
                 }
                 return [];
+            },
+            getDisposeArr(arr){
+                return arr && arr.length > 0 ? arr : [];
             }
         },
         beforeRouteEnter(to, from, next){

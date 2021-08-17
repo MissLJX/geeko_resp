@@ -6,7 +6,7 @@
             </a>
             
             <a @click.prevent="specificationLogin('/me/m/settings',1)">
-                <span class="iconfont">&#xe699;</span>
+                <span class="iconfont">&#xe6e6;</span>
             </a>
             
             <!-- <a href="/cart">
@@ -142,7 +142,7 @@
                 </div>
 
                 <div class="service-bd">
-                    <a href="/robot">
+                    <a href="/f/mobile/contact_us">
                         <p class="iconfont">&#xe6e1;</p>
                         <p>{{$t("index.suport")}}</p>
                     </a>
@@ -183,8 +183,8 @@
             disposeName(){
                 if(this.isLogin && this.me && this.me.nickname){
                     return this.me.nickname;
-                }else if(this.isLogin && this.me.name && this.me.name.firstName && this.me.name.lastName){
-                    return this.me.name.firstName + " " + this.me.name.lastName;
+                }else if(this.isLogin && this.me.name && (this.me.name.firstName || this.me.name.lastName)){
+                    return this.getName(this.me.name.firstName) + " " + this.getName(this.me.name.lastName);
                 }else if(this.isLogin && !(this.me && this.me.nickname && this.me.name && this.me.name.firstName && this.me.name.lastName)){
                     return this.me.email;
                 }
@@ -193,7 +193,7 @@
         },
         methods:{
             getFeedNum(num,icon){
-                if(this.isLogin && num){
+                if(this.isLogin && num >= 0){
                     return num;
                 }else if(!this.isLogin && icon){
                     return icon;
@@ -222,9 +222,12 @@
                 }
             },
             changeToLogin(){
-                if(this.isLogin){
+                if(!this.isLogin){
                     window.location.href = "/i/login";
                 }
+            },
+            getName(value){
+                return value ? value : '';
             }
         },
         created:function(){
@@ -364,6 +367,7 @@
                     overflow: hidden;
                     text-overflow: ellipsis;
                     position: relative;
+                    color: #999999;
 
                     & span{
                         font-size: 12px;

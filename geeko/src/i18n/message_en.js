@@ -42,7 +42,7 @@ export default {
         changeCurrency: 'Change currency',
         wishlist: 'Wish List',
         settings: 'settings',
-        mayLike:'YOU MAY ALSO LIKE',
+        mayLike:'You May Also Like',
         logout:'Log out',
         logoff:'Log off',
         delete:'Delete',
