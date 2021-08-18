@@ -28,7 +28,7 @@
         <div class="header-icon">
             <div class="st-table">
                 <div class="st-cell st-v-m icon-container">
-                    <div class="icon" :style="{'background-image': 'url('+headerImage+'),url('+baseHeaderUrl+')' }" @click="specificationLogin('/me/m/edit-message',1)" >
+                    <div class="icon" :style="{'background-image': 'url('+getHeaderImage+'),url('+baseHeaderUrl+')' }" @click="specificationLogin('/me/m/edit-message',1)" >
                         <span class="_bg" v-if="isLogin">
                             <span class="iconfont _icon">&#xe6ce;</span>
                         </span>
@@ -169,7 +169,7 @@
         name:"IndexMessage",
         computed:{
             ...mapGetters('me', [
-                'pointsAllSkip','me', "isLogin", 'feed', 'headerImage', 'notificationCount', 'orderCountUnpaid',"shoppingCartCount","messageM1518"
+                'pointsAllSkip','me', "isLogin", 'feed', 'notificationCount', 'orderCountUnpaid',"shoppingCartCount","messageM1518"
             ]),
             baseHeaderUrl() {
                 if (window.name === 'chicme') {
@@ -189,6 +189,10 @@
                     return this.me.email;
                 }
                 return this.$t("index.login_or_register");
+            },
+            getHeaderImage(){
+                let headerIcon = store.getters["me/headerImage"];
+                return headerIcon ? headerIcon : this.baseHeaderUrl;
             }
         },
         methods:{
@@ -207,7 +211,7 @@
                 if(this.isLogin){
                     this.$router.push({name:"edit-bio"});
                 }else{
-                    window.location.href = "/i/login";
+                    window.location.href = '/i/login?redirectUrl?=/me/m/edit-bio';
                 }
             },
             specificationLogin(path,difference){
@@ -218,12 +222,12 @@
                         window.location.href = utils.PROJECT + path;
                     }
                 }else{
-                    window.location.href = "/i/login";
+                    window.location.href = `/i/login?redirectUrl=${path}`;
                 }
             },
             changeToLogin(){
                 if(!this.isLogin){
-                    window.location.href = "/i/login";
+                    window.location.href = "/i/login?redirectUrl=/me/m";
                 }
             },
             getName(value){

@@ -35,6 +35,7 @@ export default {
     .edit-footer{
         position: relative;
         bottom: 0px;
-        margin-top: 50px;
+        padding-top: 50px;
+        background-color: #f5f5f5;
     }
 </style>

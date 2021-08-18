@@ -92,6 +92,7 @@
                 padding-right: 10px;
                 font-size: 12px;
                 color: #999999;
+                line-height: 40px;
             }
 
             .st-input-danger{

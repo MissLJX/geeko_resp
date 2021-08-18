@@ -22,7 +22,7 @@
 <style scoped lang="scss">
     .index{
         background-image: linear-gradient(2deg, 
-		#eeeeee 0%, 
-        #ffffff 100%);
+		#ffffff 0%, 
+        #f6f6f6 100%);
     }
 </style>

@@ -11,7 +11,7 @@
 
             <div class="_btn">
                 <span v-if="goShoppingShow" @click="selectGo('/')">Go Shopping</span>
-                <span v-if="!isLogin" @click="selectGo('/i/login')">Sign In</span>
+                <span v-if="!isLogin" @click="selectGo('/i/login?redirectUrl=/me/m')">Sign In</span>
             </div>
             <!-- <div class="_btn">Go Shopping</div> -->
         </div>

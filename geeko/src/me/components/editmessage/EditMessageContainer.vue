@@ -1,6 +1,6 @@
 <template>
     <div class="edit-message-container">
-        <nav-bar>
+        <nav-bar class="add-border">
             <i class="iconfont el-back-font" slot="left" @click="$router.go(-1)">&#xe693;</i>
             <span slot="center">{{headerTitle}}</span>
         </nav-bar>
@@ -26,3 +26,9 @@
         props:["headerTitle","btnName"]
     }
 </script>
+
+<style scoped>
+    .add-border{
+        border-bottom: 1px solid #f5f5f5;
+    }
+</style>
