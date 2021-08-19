@@ -867,7 +867,7 @@ const ShoppingCart = class extends React.Component {
 			return
 		}
 
-		if (payMethod === '18') {
+		if (payType === '30' || payMethod === '18') {
 
 			this.setState({
 				checking: true
@@ -875,7 +875,7 @@ const ShoppingCart = class extends React.Component {
 
 			placeOrderAll(payMethod).then(data => data.result).then(result => {
 				const { orderId } = result
-				this.props.history.push(`${window.ctx || ''}${__route_root__}/credit/${orderId}`)
+				this.props.history.push(`${window.ctx || ''}${__route_root__}/credit/${orderId}?payMethod=${payMethod}`)
 				this.setState({
 					checking: false
 				})

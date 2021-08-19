@@ -615,8 +615,8 @@ const Checkout = class extends React.Component {
 
 			if (payMethod) {
 
-				if (payMethod.id === '18') {
-					this.props.history.push(`${window.ctx || ''}${__route_root__}/credit/${orderId}`)
+				if (payMethod.type === '30' || payMethod.id === '18') {
+					this.props.history.push(`${window.ctx || ''}${__route_root__}/credit/${orderId}?payMethod=${payMethod.id}`)
 					return
 				}
 

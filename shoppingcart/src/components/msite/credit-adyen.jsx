@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react'
+import React, {createRef, useEffect, useLayoutEffect, useState} from 'react'
 import {
-	openStripeOrder,
+	openAdyenOrder,
 	usecreditcard,
-	stripePay,
-	stripeCallBack,
 	checkout_credit,
-	openSafeChargeOrder, setSafeCharge
+	openSafeChargeOrder,
+	setSafeCharge,
+	alyen_check_out
 } from '../../api'
 import {
 	getCreditCards
@@ -23,31 +23,85 @@ import { FormattedMessage } from 'react-intl'
 import { withRouter } from 'react-router-dom'
 import Loading from './refreshing.jsx'
 
-
-import { loadStripe } from '@stripe/stripe-js'
-import {
-	CardNumberElement,
-	CardCvcElement,
-	CardExpiryElement,
-	Elements,
-	ElementsConsumer,
-} from '@stripe/react-stripe-js'
+import AdyenCheckout from '@adyen/adyen-web'
+import '@adyen/adyen-web/dist/adyen.css'
+import {BigButton} from './buttons'
 
 
-const ELEMENT_OPTIONS = {
-	style: {
-		base: {
-			fontSize: '12px',
-			color: '#424770',
-			'::placeholder': {
-				color: '#aab7c4',
-			},
-		},
-		invalid: {
-			color: '#9e2146',
-		},
-	},
-}
+const INPUTCONTAINER = styled.div`
+    display: flex;
+    position: relative;
+    display: flex;
+    height: 40px;
+
+    .icon-container:last-child {
+        right: 0;
+    }
+    .icon-container.payment-method {
+        right: 0;
+    }
+
+    &.card-number {
+    }
+    &.expiry-date {
+        margin-right: 8px;
+    }
+
+    .card-number-frame,
+    .expiry-date-frame,
+    .cvv-frame {
+        flex: 1 1 auto;
+        padding-left: 40px;
+    }
+    
+    .icon-container {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        display: flex;
+        justify-content: center;
+        width: 26px;
+        margin: 0 7px;
+    }
+    
+    .icon-container.payment-method {
+        transform: translateY(-50%) rotateY(90deg);
+        transition: opacity 0.15s ease-out;
+        opacity: 0;
+        top: 50%;
+    }
+    
+    .icon-container.payment-method.show {
+        opacity: 1;
+        transition: all 0.4s ease-out;
+        transform: translateY(-50%) rotateY(0deg);
+    }
+    
+    .icon-container.payment-method img {
+        width: 100%;
+    }
+
+    [id$="-error"] {
+        display: none;
+    }
+
+    .frame {
+        opacity: 0;
+    }
+
+    .frame--activated {
+        opacity: 1;
+    }
+    
+    .frame--activated.frame--focus {
+      
+    }
+    
+    .frame--activated.frame--invalid {
+       
+    }
+
+`
 
 
 const BOX = styled.div`
@@ -85,110 +139,242 @@ const SUMMARY = styled.div`
 `
 
 const CREDITIMAGE = styled.img`
-    height: 30px;
+  height: 30px;
 `
 
 const FORMBODY = styled.div`
-    background-color: #fff;
-    padding-left: 12px;
-    padding-right: 12px;
-    & > .row{
-        border-top: solid 1px #e6e6e6;
-     
-        display: flex;
+  background-color: #fff;
+  padding-left: 12px;
+  padding-right: 12px;
+  & > .row{
+    border-top: solid 1px #e6e6e6;
 
-        & > div{
-            width: 100%;
-        }
-        & > .col6{
-            width: 50%;
-            border-left:  solid 1px #e6e6e6;
-            &:first-child{
-                border-left: none;
-            }
-        }
+    display: flex;
+
+    & > div{
+      width: 100%;
     }
+    & > .col6{
+      width: 50%;
+      border-left:  solid 1px #e6e6e6;
+      &:first-child{
+        border-left: none;
+      }
+    }
+  }
+
+  iframe {
+    /* This fixes a mobile Safari bug */
+    height: 38px !important;
+  }
 `
 
 const FIELD = styled.div`
-    min-height: 69px;
-    padding-top: 12px;
-    label{
-        font-size: 12px;
-        color: #666;
-        margin-bottom: 11px;
-        display: block;
-        text-transform: uppercase;
-        position: relative;
-        .badage{
-            width: 14px;
-            height: 14px;
-            font-size: 12px;
-            text-align: center;
-            line-height: 12px;
-            cursor: pointer;
-            color: #999;
-            border: 1px solid #999;
-            border-radius: 50%;
-            position: absolute;
-            right: 0;
-            top: 0;
-            display: inline-block;
-        }
+  min-height: 69px;
+  padding-top: 12px;
+	padding-bottom: 2px;
+  label{
+    font-size: 12px;
+    color: #666;
+    display: block;
+    text-transform: uppercase;
+    position: relative;
+    .badage{
+      width: 14px;
+      height: 14px;
+      font-size: 12px;
+      text-align: center;
+      line-height: 12px;
+      cursor: pointer;
+      color: #999;
+      border: 1px solid #999;
+      border-radius: 50%;
+      position: absolute;
+      right: 0;
+      top: 0;
+      display: inline-block;
     }
+  }
 
-    .underline{
-        color: rgba(230, 69, 69, 1);
-        font-size: 12px;
-    }
+  .underline{
+    color: rgba(230, 69, 69, 1);
+    font-size: 12px;
+  }
+`
+
+const BADAGE = styled.span`
+		width: 14px;
+		height: 14px;
+		font-size: 12px;
+		text-align: center;
+		line-height: 12px;
+		cursor: pointer;
+		color: #999;
+		border: 1px solid #999;
+		border-radius: 50%;
+		display: inline-block;
 `
 
 const ADDICON = styled.span`
-    display: inline-block;
-    width: 20px;
-	height: 20px;
-    text-align: center;
-    line-height: 18px;
-    font-family: iconfont;
-    color: #cacaca;
-    border: 1px solid #cacaca;
-    border-radius: 50%;
-    font-weight: bold;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 18px;
+  font-family: iconfont;
+  color: #cacaca;
+  border: 1px solid #cacaca;
+  border-radius: 50%;
+  font-weight: bold;
 `
 
 
 
 const SUBMITBTN = styled.button`
-    height: 42px;
-    background-color: #222222;
-    border-radius: 2px;
-    color: #fff;
-    width: 100%;
-    border: none;
-    outline: none;
-    font-family: AcuminPro-Bold;
-	font-size: 16px;
-    text-transform: uppercase;
+  height: 42px;
+  background-color: #222222;
+  border-radius: 2px;
+  color: #fff;
+  width: 100%;
+  border: none;
+  outline: none;
+  font-family: AcuminPro-Bold;
+  font-size: 16px;
+  text-transform: uppercase;
 `
-
 
 const CARDTYPE = styled.div`
-    width: 60px;
-    height: 30px;
-    background: no-repeat left center/49px;
-    display: inline-block;
-    vertical-align: middle;
-    position: relative;
-    top: -2px;
+  width: 60px;
+  height: 30px;
+  background: no-repeat left center/49px;
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  top: -2px;
 `
 
+const CVVCONFIRM = styled.span`
+	background-color: #fff;
+	position: fixed;
+	bottom: -400px;
+	left: 0;
+	width: 100%;
+	z-index: 101;
+	padding: 0 10px 20px 10px;
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+	overflow: hidden;
+	transition: 200ms bottom;
+	& > .__hd{
+		height: 38px;
+		line-height: 38px;
+		font-size: 16px;
+		font-family: AcuminPro-Bold;
+		text-align: center;
+	}
+
+	.__txt{
+		font-size: 12px;
+		color: #999;
+	}
+
+	&.anim{
+		bottom: 0;
+	}
+
+	.__close{
+		font-family: iconfont;
+		cursor: pointer;
+		right: 10px;
+		top: 0;
+		position: absolute;
+		color: #999;
+	}
+`
+
+const CVVINPUT = styled.div`
+	input{
+		border: 1px solid #eee;
+		height: 40px;
+		width: 100%;
+		outline: none;
+		box-shadow: none;
+		padding-left: 12px;
+		-webkit-appearance: none;
+		appearance: none;
+		&::-webkit-outer-spin-button,
+		&::-webkit-inner-spin-button {
+			-webkit-appearance: none !important;
+			margin: 0;
+		}
+	}
+`
+
+const CVVConfirm = props => {
+
+	const { onConfirm, onClose } = props
+
+	const [cvv, setCvv] = useState(undefined)
+	const [error, setError] = useState(undefined)
+
+	const ref = createRef()
+
+	useLayoutEffect(() => {
+		ref.current.classList.add('anim')
+	}, [])
+
+	const handleClose = () => {
+		ref.current.classList.remove('anim')
+		setTimeout(() => {
+			props.onClose()
+		} , 200)
+	}
+
+	const confirmHandle = () => {
+		if(!cvv){
+			setError('Required')
+			return
+		}
+		onConfirm(cvv)
+	}
+
+	const handleChange = e => {
+		const {value} = e.target
+		setError('')
+		if(value.toString().length <=4){
+			setCvv(e.target.value)
+		}
+	}
+
+	return <CVVCONFIRM innerRef={ref}>
+		<div className="__hd">
+			<span>CVC</span>
+			<span onClick={handleClose} className={'__close'}>&#xe6af;</span>
+		</div>
+		<div style={{marginTop: 8}}>
+			<div style={{display:'flex', alignItems: 'center'}}>
+				<CVVINPUT style={{flex:1}}>
+					<input type={'number'} value={cvv} onChange={handleChange}/>
+					{
+						error && <div style={{fontSize: 12, color:'rgba(230,69,69,1)', marginTop: 4}}>{error}</div>
+					}
+
+				</CVVINPUT>
+				<BADAGE style={{marginLeft: 12}} className="badage" onClick={props.onAsk}>?</BADAGE>
+			</div>
+			<div style={{marginTop: 20}}>
+				<BigButton onClick={confirmHandle}><FormattedMessage id="confirm"/></BigButton>
+			</div>
+		</div>
+	</CVVCONFIRM>
+}
 
 const StyledCard = styled.div`
-	height: 42px;
-	cursor: pointer;
-	padding-left:10px;
-	padding-right:10px;
-	background-color:#fff;
+  height: 42px;
+  cursor: pointer;
+  padding-left:10px;
+  padding-right:10px;
+  background-color:#fff;
 `
 const Card = props => <StyledCard>
 	<div onClick={() => { props.cardSelect(props.card) }} className="x-table __fixed __vm x-fw x-fh">
@@ -203,14 +389,14 @@ const Card = props => <StyledCard>
 </StyledCard>
 
 const MASK = styled.div`
-    display: block;
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    z-index: 10;
-    background-color: rgba(0, 0, 0, .4);
+  display: block;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, .4);
 `
 
 const ASKC = styled.div`
@@ -262,10 +448,12 @@ const AskC = props => {
 	</ASKC>
 }
 
+
 const Credit = class extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
+			order: null,
 			saveForNext: true,
 			showNew: false,
 			selectedCardId: null,
@@ -275,41 +463,47 @@ const Credit = class extends React.Component {
 			billingAddress: null,
 			cardError: {},
 			showAsk: false,
-			safechargeresponse: 1
+			safechargeresponse: 1,
+			valid: false,
+			formState: null,
+			showCvv: false
 		}
+
+		this.checkout = new AdyenCheckout({
+			locale: window.locale,
+			environment: window.adyenEnv,
+			clientKey: window.__adyen_pk__,
+			onChange: this.handleOnChange
+		})
 	}
-
-
-	static getDerivedStateFromProps(props, state){
-		if(props.safechargeresponse != state.safechargeresponse){
-			return {...state, safechargeresponse: props.safechargeresponse}
-		}
-		return null
-	}
-
-	componentDidUpdate(prevProps, prevState){
-		if(prevState.safechargeresponse != this.state.safechargeresponse){
-			console.log(this.state.safechargeresponse)
-			this.initPage()
-		}
-	}
-
 
 	componentDidMount() {
 		this.initPage()
+
 	}
+
+
+
+	handleOnChange(state, component){
+		// state.isValid // True or false. Specifies if all the information that the shopper provided is valid.
+		// state.data // Provides the data that you need to pass in the `/payments` call.
+		// component // Provides the active component instance that called this event.
+		console.log(state)
+	}
+
 
 
 	initPage() {
 		const { orderId } = this.props
-		this.props.GETCREDITCARDS('18').then(cards => {
+		this.props.GETCREDITCARDS().then(cards => {
 			if (!cards || cards.length < 1) {
 				this.setState({
 					showNew: true
 				})
 			}
 		})
-		openStripeOrder(orderId).then(data => data.result).then(result => {
+
+		openAdyenOrder(orderId).then(data => data.result).then(result => {
 
 			const order = result.order
 			let billingAddress
@@ -320,78 +514,68 @@ const Credit = class extends React.Component {
 
 			this.setState({
 				order: order,
-				billingAddress: billingAddress,
-				openResult: result
+				billingAddress: billingAddress
 			})
 		})
-
 	}
+
+
 
 	submitHandle(e) {
 		e.preventDefault()
 		const self = this
 		const { orderId, onPurchase } = this.props
 
-
 		if (self.state.showNew) {
-			if (!this.state.openResult) {
-				return
-			}
+			if(this.state.formState && this.state.formState.isValid){
+				self.setState({
+					checking: true,
+				})
+				alyen_check_out({
+					orderId,
+					paymentMethod: this.state.formState.data.paymentMethod
+				}).then(data => {
+					const result = data.result
+					if(result){
+						const {transactionId, orderId, success, warnMsg} = result
+						if(success){
+							window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}?transactionId=${transactionId}`
+						}else{
+							if (window.isApp) {
+								window.location.href = `${window.ctx || ''}/geekopay/app-fail?errMsg=${warnMsg}`
+							}else{
+								alert(warnMsg || 'Error')
+							}
+						}
+					}
 
-			if(!window.__is_login__){
-				if(!this.state.openResult.openOrderResponse || !this.state.openResult.openOrderResponse.clientSecret)
-					return
-				this.confirmPayment()
-			}else{
-				this.createPaymentMethod()
+					self.setState({
+						checking: false,
+					})
+				}).catch(data => {
+					self.setState({
+						checking: false,
+					})
+					if(window.isApp){
+						window.location.href = `${window.ctx || ''}/geekopay/app-fail?errMsg=${data.result || data}`
+					}else{
+						alert(data.result || data)
+					}
+				})
+
+				onPurchase()
 			}
 		}else{
-
 			const selectedCard = self.props.creditcards.find(card => card.isSelected)
 
 			if(selectedCard && selectedCard.quickpayRecord.payMethod === '18'){
 				this.paySafeCharge(selectedCard)
 			}else{
-				self.setState({
-					checking: true
-				})
-				checkout_credit({orderId}).then(data => {
-					const result = data.result
-					if(result.success){
-						window.location.href = `${window.ctx || ''}/order-confirm/${result.transactionId}?transactionId=${result.transactionId}`
-					}else{
-						if (window.isApp) {
-							window.location.href = `${window.ctx || ''}/geekopay/app-fail?errMsg=${result.details || 'Error'}`
-						} else {
-							alert(result.details || 'Error')
-							if (orderId && window.__is_login__) {
-								this.props.onGo(`${window.ctx || ''}/checkout/${orderId}`)
-								storage.add('temp-order', orderId, 1 * 60 * 60)
-							}
-						}
-					}
-					self.setState({
-						checking: false
-					})
-				}).catch(data => {
-					if (window.isApp) {
-						window.location.href = `${window.ctx || ''}/geekopay/app-fail?errMsg=${data.result || data || 'Error'}`
-					} else {
-						alert(data.result || data)
-						if (orderId && window.__is_login__) {
-							this.props.onGo(`${window.ctx || ''}/checkout/${orderId}`)
-							storage.add('temp-order', orderId, 1 * 60 * 60)
-						}
-					}
-
-				})
+				this.setState({showCvv: true})
 			}
+
 		}
-
-
-		onPurchase()
 	}
-
 
 
 	paySafeCharge(selectedCard){
@@ -463,142 +647,6 @@ const Credit = class extends React.Component {
 	}
 
 
-	createPaymentMethod(){
-		const { stripe, elements } = this.props
-		const self = this
-		if (!stripe || !elements) {
-			// Stripe.js has not loaded yet. Make sure to disable
-			// form submission until Stripe.js has loaded.
-			return
-		}
-
-		const card = elements.getElement(CardNumberElement)
-
-		if (card == null) {
-			return
-		}
-
-		this.setState({
-			checking: true,
-		})
-
-		stripe.createPaymentMethod({
-			type: 'card',
-			card,
-			billing_details: {
-				name: this.state.billingAddress.name,
-				email: this.state.openResult.email,
-				phone: this.state.billingAddress.phoneNumber,
-				address: {
-					city: this.state.billingAddress.city,
-					country: this.state.billingAddress.country ? this.state.billingAddress.country.value : null,
-					line1: this.state.billingAddress.streetAddress1,
-					line2: this.state.billingAddress.unit,
-					postal_code: this.state.billingAddress.zipCode,
-					state: this.state.billingAddress.state ? this.state.billingAddress.state.value : null
-				},
-			},
-		}).then(payload => {
-			if (payload.error) {
-				console.log('[error]', payload.error)
-				alert(payload.error.message)
-			} else {
-				console.log('[PaymentMethod]', payload.paymentMethod)
-
-				stripePay({
-					orderId: this.state.order.id,
-					transactionId: this.state.order.transactionId,
-					paymentMethod: payload.paymentMethod
-				}).then(data => {
-					self.setState({
-						checking: false,
-					})
-
-					const {transactionId, orderId, success, warnMsg} = data.result
-
-					if(success){
-						window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}?transactionId=${transactionId}`
-					}else{
-						if (window.isApp) {
-							window.location.href = `${window.ctx || ''}/geekopay/app-fail?errMsg=${warnMsg}`
-						}else{
-							alert(warnMsg || 'Error')
-						}
-					}
-
-				}).catch(data => {
-					self.setState({
-						checking: false,
-					})
-					if(window.isApp){
-						window.location.href = `${window.ctx || ''}/geekopay/app-fail?errMsg=${data.result || data}`
-					}else{
-						alert(data.result || data)
-					}
-				})
-			}
-		})
-	}
-
-
-	confirmPayment() {
-		const { stripe, elements } = this.props
-		var self = this
-		this.setState({
-			checking: true,
-		})
-		stripe.confirmCardPayment(this.state.openResult.openOrderResponse.clientSecret, {
-			payment_method: {
-				type: 'card',
-				card: elements.getElement(CardNumberElement),
-				billing_details: {
-					name: this.state.billingAddress.name,
-					email: this.state.openResult.email,
-					phone: this.state.billingAddress.phoneNumber,
-					address: {
-						city: this.state.billingAddress.city,
-						country: this.state.billingAddress.country ? this.state.billingAddress.country.value : null,
-						line1: this.state.billingAddress.streetAddress1,
-						line2: this.state.billingAddress.unit,
-						postal_code: this.state.billingAddress.zipCode,
-						state: this.state.billingAddress.state ? this.state.billingAddress.state.value : null
-					},
-				},
-			}
-		}).then(payload => {
-			stripeCallBack({
-				...payload,
-				orderId: this.state.order.id,
-				transactionId: this.state.order.transactionId,
-			}).then(data => {
-				self.setState({
-					checking: false,
-				})
-				if (payload.error) {
-					if(window.isApp){
-						window.location.href = `${window.ctx || ''}/geekopay/app-fail?errMsg=${payload.error.message}`
-					}else{
-						alert(payload.error.message)
-					}
-				} else {
-					window.location.href = `${window.ctx || ''}/order-confirm/${this.state.order.transactionId}?transactionId=${this.state.order.transactionId}`
-				}
-			}).catch(data => {
-				self.setState({
-					checking: false,
-				})
-				if(window.isApp){
-					window.location.href = `${window.ctx || ''}/geekopay/app-fail?errMsg=${data.result || data}`
-				}else{
-					alert(data.result || data)
-				}
-			})
-		})
-	}
-
-
-
-
 	addHandler() {
 		this.setState({
 			showNew: true,
@@ -608,7 +656,7 @@ const Credit = class extends React.Component {
 	cardSelect(card) {
 		this.setState({ loading: true })
 		usecreditcard(card.quickpayRecord.id).then(() => {
-			this.props.GETCREDITCARDS('18').then(() => {
+			this.props.GETCREDITCARDS().then(() => {
 				this.setState({
 					showNew: false,
 					loading: false
@@ -619,6 +667,117 @@ const Credit = class extends React.Component {
 		}).catch(() => {
 			this.setState({ loading: false })
 		})
+	}
+
+	formRef(c){
+		var self = this
+
+		if(!this.customCard){
+			this.customCard = this.checkout.create('securedfields', {
+				// Optional configuration
+				type: 'card',
+				brands: ['mc', 'visa', 'amex', 'bcmc', 'maestro'],
+				styles: {
+					error: {
+						color: 'red'
+					},
+					validated: {
+						color: 'green'
+					},
+					placeholder: {
+						color: '#d8d8d8'
+					}
+				},
+				onChange: function(state) {
+					self.setState({
+						formState: state
+					})
+
+				},
+				onValid : function(state) {
+					self.setState({
+						cardError: {
+						}
+					})
+				},
+				onLoad: function() {},
+				onConfigSuccess: function() {},
+				onFieldValid : function() {},
+				onBrand: function(state) {
+				},
+				onError: function(data) {
+					self.setState({
+						cardError: {
+							...self.state.cardError,
+							[data.fieldType]: data.errorI18n
+						}
+					})
+				},
+				onFocus: function() {},
+				onBinValue: function(state) {
+
+				}
+			}).mount('#customCard-container')
+		}
+
+
+
+	}
+
+	onCvvHandle(cvv){
+		this.cvvQuickPay(cvv)
+	}
+
+	cvvQuickPay(cvv){
+		const { orderId } = this.props
+		const self = this
+		self.setState({
+			checking: true
+		})
+		checkout_credit({orderId, cvv}).then(data => {
+			this.successHandle(data)
+			self.setState({
+				checking: false
+			})
+		}).catch(data => {
+			this.errorHandle(data)
+			self.setState({
+				checking: false
+			})
+		})
+	}
+
+
+	errorHandle(data){
+		const {orderId} = this.props
+		if (window.isApp) {
+			window.location.href = `${window.ctx || ''}/geekopay/app-fail?errMsg=${data.result || data || 'Error'}`
+		} else {
+			alert(data.result || data)
+			if (orderId && window.__is_login__) {
+				this.props.onGo(`${window.ctx || ''}/checkout/${orderId}`)
+				storage.add('temp-order', orderId, 1 * 60 * 60)
+			}
+		}
+	}
+
+
+	successHandle(data){
+		const result = data.result
+		const {orderId} = this.props
+		if(result.success){
+			window.location.href = `${window.ctx || ''}/order-confirm/${result.transactionId}?transactionId=${result.transactionId}`
+		}else{
+			if (window.isApp) {
+				window.location.href = `${window.ctx || ''}/geekopay/app-fail?errMsg=${result.details || 'Error'}`
+			} else {
+				alert(result.details || 'Error')
+				if (orderId && window.__is_login__) {
+					this.props.onGo(`${window.ctx || ''}/checkout/${orderId}`)
+					storage.add('temp-order', orderId, 1 * 60 * 60)
+				}
+			}
+		}
 	}
 
 	render() {
@@ -633,9 +792,7 @@ const Credit = class extends React.Component {
 						<CREDITIMAGE src="https://image.geeko.ltd/upgrade/20210713/credit.jpg" />
 					</div>
 
-
-					<form action="/charge" method="post" id="payment-form">
-
+					<form id="payment-form" method="POST" action="/charge-card">
 
 						{
 							cards && cards.length > 0 && <div style={{ backgroundColor: '#fff', paddingTop: 16, borderTop: 'solid 1px #e6e6e6' }}>
@@ -659,8 +816,7 @@ const Credit = class extends React.Component {
 						}
 
 
-						<FORMBODY style={{ display: this.state.showNew ? 'block' : 'none' }}>
-
+						<FORMBODY style={{ display: this.state.showNew ? 'block' : 'none' }} id="customCard-container" innerRef={this.formRef.bind(this)}>
 							<div className="row">
 								<div>
 									{
@@ -672,50 +828,49 @@ const Credit = class extends React.Component {
 										<label htmlFor="card-number" data-tid="scwsdk.form.card_number_label">
                                             *<FormattedMessage id="card_number" />
 										</label>
-										<CardNumberElement
-											id="cardNumber"
-											options={ELEMENT_OPTIONS}
-										/>
-
+										<INPUTCONTAINER className="card-number">
+											<span data-cse="encryptedCardNumber"></span>
+										</INPUTCONTAINER>
 										<div className="underline">
 											{
-												this.state.cardError.card
+												this.state.cardError.encryptedCardNumber
 											}
 										</div>
 									</FIELD>
 								</div>
 							</div>
+
 							<div className="row">
 								<FIELD className="field col6">
 									<label htmlFor="card-expiry" data-tid="scwsdk.form.card_expiry_label">
                                         *<FormattedMessage id="expiration_date" />
 									</label>
-									<CardExpiryElement
-										id="expiry"
-										options={ELEMENT_OPTIONS}
-									/>
-									<div className="underline ">
+									<INPUTCONTAINER className="input-container expiry-date">
+										<span data-cse="encryptedExpiryDate"></span>
+									</INPUTCONTAINER>
+									<div className="underline">
 										{
-											this.state.cardError.date
+											this.state.cardError.encryptedExpiryDate
 										}
 									</div>
+
 								</FIELD>
 								<FIELD className="field col6" style={{ paddingLeft: 12 }}>
 									<label htmlFor="card-cvc" data-tid="scwsdk.form.card_cvc_label">
                                         *CVV
 										<span className="badage" onClick={() => { this.setState({ showAsk: true }) }}>?</span>
 									</label>
-									<CardCvcElement
-										id="cvc"
-										options={ELEMENT_OPTIONS}
-									/>
+									<INPUTCONTAINER className="input-container cvv">
+										<span data-cse="encryptedSecurityCode"></span>
+									</INPUTCONTAINER>
 									<div className="underline">
 										{
-											this.state.cardError.cvv
+											this.state.cardError.encryptedSecurityCode
 										}
 									</div>
 								</FIELD>
 							</div>
+
 							{/* <div className="row">
                                 <TurnTool open={() => { this.setState({ saveForNext: !this.state.saveForNext }) }} turnAcitve={this.state.saveForNext}>
                                     <span style={{ fontSize: 14, color: '#666' }}>
@@ -804,6 +959,16 @@ const Credit = class extends React.Component {
 						</React.Fragment>
 					}
 
+					{
+						this.state.showCvv && <React.Fragment>
+							<MASK/>
+							<CVVConfirm onConfirm={cvv => {
+								this.setState({showCvv: false})
+								this.onCvvHandle(cvv)
+							}}  onClose={() => {this.setState({showCvv:false})}} onAsk={() => {this.setState({showAsk: true})}}/>
+						</React.Fragment>
+					}
+
 
 
 
@@ -833,38 +998,14 @@ const Credit = class extends React.Component {
 }
 
 
-
-// Make sure to call `loadStripe` outside of a component’s render to avoid
-// recreating the `Stripe` object on every render.
-const promise = loadStripe(window.__stripe_pk_)
-
-
-const InjectedCheckoutForm = props => (
-	<ElementsConsumer>
-		{({ stripe, elements }) => (
-			<Credit stripe={stripe} elements={elements} {...props} />
-		)}
-	</ElementsConsumer>
-)
-
-
-const InjectCredit = props => {
-	return (
-		<Elements stripe={promise}>
-			<InjectedCheckoutForm {...props} />
-		</Elements>
-	)
-}
-
-
 export default connect(state => {
 	return {
 		...state
 	}
 }, dispatch => {
 	return {
-		GETCREDITCARDS: payMethod => {
-			return dispatch(getCreditCards(['18', '88'], true))
+		GETCREDITCARDS: () => {
+			return dispatch(getCreditCards(['18', '89'], true))
 		}
 	}
-})(withRouter(InjectCredit))
+})(withRouter(Credit))
