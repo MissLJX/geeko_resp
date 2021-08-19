@@ -7,6 +7,9 @@ const mutations = {
         state.me = _me
         state.headerImage = utils.IMAGE_PREFIX + '/icon/' + _me.id
     },
+    [types.ME_GET_NO_LOGIN](state,flag){
+        state.isLogin = flag;
+    },
     [types.ME_GET_FEED](state, _feed){
         state.feed = _feed
     },
@@ -164,8 +167,25 @@ const mutations = {
     [types.ME_GET_EXPIRED_COUPONS](state,expiredCoupons){
         state.expiredCoupons = _.concat(state.expiredCoupons,expiredCoupons);
     },
-    [types.ME_GET_EXPIRED_COUPONS_SKIP](){
+    [types.ME_GET_EXPIRED_COUPONS_SKIP](state){
         state.expiredCouponsSkip += 20;
+    },
+    [types.CHANGE_GET_ME_DATA](state,customer){
+        let name = customer.name;
+        let changeValue = customer.customer[name];
+        state.me[name] = _.cloneDeep(changeValue);
+    },
+    [types.GET_ME_CURRENCY_LIST](state,currency){
+        state.currencyList = _.concat(state.currencyList,currency);
+    },
+    [types.GET_SHOPPING_CART_NUM](state,num){
+        state.shoppingCartCount = num;
+    },
+    [types.GET_INDEX_MESSAGE_CODE_LOGIN](state,message){
+        state.messageM1518 = message;
+    },
+    [types.GET_MY_PREFERENCES_MESSAGE_CODE](state,message){
+        state.messageM1521 = message;
     }
 }
 

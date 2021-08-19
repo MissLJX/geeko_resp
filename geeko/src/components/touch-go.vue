@@ -27,10 +27,10 @@
 
     .el-touch-go-label1{    
         ._font{
-            font-family: SlatePro;
-            font-size: 15px;
+            font-size: 14px;
             color: #222222;
             margin-left: 3px;
+            text-transform: capitalize;
         }
 
         _icon{

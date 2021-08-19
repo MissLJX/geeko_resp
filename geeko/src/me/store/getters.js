@@ -1,5 +1,6 @@
 const getters = {
     me: state => state.me,
+    isLogin:state => state.isLogin,
     feed: state => state.feed,
     addresses: state => state.addresses,
     coupons: state => state.coupons,
@@ -40,7 +41,11 @@ const getters = {
     trackOrderSkip: state => state.trackOrderSkip,
 
     expiredCoupons:state => state.expiredCoupons,
-    expiredCouponsSkip:state => state.expiredCouponsSkip
+    expiredCouponsSkip:state => state.expiredCouponsSkip,
+    currencyList:state => state.currencyList,
+    shoppingCartCount:state => state.shoppingCartCount,
+    messageM1518:state => state.messageM1518,
+    messageM1521:state => state.messageM1521
 }
 
 export default getters;

@@ -16,6 +16,8 @@ import NBMessage from './message_nb'
 import ISMessage from './message_is'
 import FIMessage from './message_fi'
 
+import store from "../store/index.js"
+
 Vue.use(VueI18n)
 
 

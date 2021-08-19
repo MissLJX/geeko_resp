@@ -34,7 +34,9 @@ router.beforeEach((to, from, next) => {
     if (to.path.startsWith(ROUTER_PATH_ME)) {
         store.dispatch('me/init').then(() => {
             next()
-        })
+        }).catch(e => {
+            next();
+        });
     } else {
         next()
     }

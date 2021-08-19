@@ -74,6 +74,8 @@
                         <div @click="addProduct(item.variantId)" v-if="item.variantId && orderdetail.status===4" class="review-btn">
                             <span>{{$t("repurchase")}}</span>
                         </div>
+
+                        <div v-if="confirmedOrder" class="returns-btn" @click="showTicket(orderdetail.id)">Return</div>
                     </td>
                 </tr>
             </table>
@@ -557,6 +559,19 @@
         text-align: center;
         line-height: 32px;
         cursor: pointer;
+    }
+    .returns-btn{
+        width: 140px;
+        height: 32px;
+        background-color: #ffffff;
+        border-radius: 2px;
+	    border: solid 1px #cacaca;
+        text-align: center;
+        line-height: 32px;
+        cursor: pointer;
+        font-size: 14px;
+        color: #222222;
+        margin-top: 10px;
     }
     .grey{
         color: #999;

@@ -146,10 +146,16 @@
                 }else{
                     return false
                 }
+            },
+            isLogin(){
+                return this.$store.getters["me/isLogin"];
             }
         },
         methods: {
             likeHandle(){
+                if(!this.isLogin){
+                    window.location.href = "/i/login?redirectUrl=/me/m";
+                }
                 var wishlist = this.$store.getters['me/wishlist']
                 var index = _.indexOf(wishlist[0].productIds, this.product.id)
                 if (index < 0) {
