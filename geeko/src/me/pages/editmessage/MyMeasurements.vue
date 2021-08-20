@@ -3,7 +3,7 @@
         <!-- 标题 -->
         <nav-bar>
             <i class="iconfont el-back-font" slot="left" @click="$router.go(-1)">&#xe693;</i>
-            <span slot="center">My Measurements</span>
+            <span slot="center">{{$t("measurements.mea_title")}}</span>
         </nav-bar>
 
         <div class="line">
@@ -42,7 +42,7 @@
 
 <style scoped lang="scss">
     .my-measurements-page{
-        padding-bottom: 90px;
+        padding-bottom: 35%;
     }
 
     @font-face {
@@ -163,173 +163,6 @@
     import store from "../../../store/index";
     import {mapGetters, mapActions} from 'vuex';
 
-    let list = [
-        {
-            slotTitle: "Height", // 标题
-            slotList:[
-                {
-                    slotType: "input", // input & checkbox
-                    slotDefaultV: "", // 默认值
-                    slotInputType: "number", // 控制input框的输入类型
-                    slotCheckList: [], // 如果type是checkbox需要这个不为空
-                    slotSize: "primary", // primary为固定54px宽，large为父容器宽度
-                },
-                {
-                    slotType: "checkbox", // input & checkbox
-                    slotDefaultV: "", // 默认值
-                    slotCheckList: ["cm","inch"], // 如果type是checkbox需要这个不为空
-                    slotInputType: "", // 控制input框的输入类型
-                    slotSize: "primary", // primary为固定54px宽，large为父容器宽度
-                }
-            ]
-        },
-        {
-            slotTitle: "Weight", // 标题
-            slotList:[
-                {
-                    slotType: "input", // input & checkbox
-                    slotDefaultV: "", // 默认值
-                    slotInputType: "number", // 控制input框的输入类型
-                    slotCheckList: [], // 如果type是checkbox需要这个不为空
-                    slotSize: "primary", // primary为固定54px宽，large为父容器宽度
-                },
-                {
-                    slotType: "checkbox", // input & checkbox
-                    slotDefaultV: "", // 默认值
-                    slotCheckList: ["kg","lbs"], // 如果type是checkbox需要这个不为空
-                    slotInputType: "", // 控制input框的输入类型
-                    slotSize: "primary", // primary为固定54px宽，large为父容器宽度
-                }
-            ]
-        },
-        {
-            slotTitle: "Bust Size", // 标题
-            slotList:[
-                {
-                    slotType: "input", // input & checkbox
-                    slotDefaultV: "", // 默认值
-                    slotInputType: "number", // 控制input框的输入类型
-                    slotCheckList: [], // 如果type是checkbox需要这个不为空
-                    slotSize: "primary", // primary为固定54px宽，large为父容器宽度
-                },
-                {
-                    slotType: "checkbox", // input & checkbox
-                    slotDefaultV: "", // 默认值
-                    slotCheckList: ["cm","inch"], // 如果type是checkbox需要这个不为空
-                    slotInputType: "", // 控制input框的输入类型
-                    slotSize: "primary", // primary为固定54px宽，large为父容器宽度
-                }
-            ]
-        },
-        {
-            slotTitle: "Bra Size", // 标题
-            slotList:[
-                {
-                    slotType: "input", // input & checkbox
-                    slotDefaultV: "", // 默认值
-                    slotInputType: "number", // 控制input框的输入类型
-                    slotCheckList: [], // 如果type是checkbox需要这个不为空
-                    slotSize: "primary", // primary为固定54px宽，large为父容器宽度
-                },
-                {
-                    slotType: "input", // input & checkbox
-                    slotDefaultV: "", // 默认值
-                    slotCheckList: [], // 如果type是checkbox需要这个不为空
-                    slotInputType: "text", // 控制input框的输入类型
-                    slotSize: "primary", // primary为固定54px宽，large为父容器宽度
-                }
-            ]
-        },
-        {
-            slotTitle: "Waist", // 标题
-            slotList:[
-                {
-                    slotType: "input", // input & checkbox
-                    slotDefaultV: "", // 默认值
-                    slotInputType: "number", // 控制input框的输入类型
-                    slotCheckList: [], // 如果type是checkbox需要这个不为空
-                    slotSize: "primary", // primary为固定54px宽，large为父容器宽度
-                },
-                {
-                    slotType: "checkbox", // input & checkbox
-                    slotDefaultV: "", // 默认值
-                    slotCheckList: ["cm","inch"], // 如果type是checkbox需要这个不为空
-                    slotInputType: "", // 控制input框的输入类型
-                    slotSize: "primary", // primary为固定54px宽，large为父容器宽度
-                }
-            ]
-        },
-        {
-            slotTitle: "Hips", // 标题
-            slotList:[
-                {
-                    slotType: "input", // input & checkbox
-                    slotDefaultV: "", // 默认值
-                    slotInputType: "number", // 控制input框的输入类型
-                    slotCheckList: [], // 如果type是checkbox需要这个不为空
-                    slotSize: "primary", // primary为固定54px宽，large为父容器宽度
-                },
-                {
-                    slotType: "checkbox", // input & checkbox
-                    slotDefaultV: "", // 默认值
-                    slotCheckList: ["cm","inch"], // 如果type是checkbox需要这个不为空
-                    slotInputType: "", // 控制input框的输入类型
-                    slotSize: "primary", // primary为固定54px宽，large为父容器宽度
-                }
-            ]
-        },
-        {
-            slotTitle: "What is your preference?", // 标题
-            slotList:[
-                {
-                    slotType: "checkbox", // input & checkbox
-                    slotDefaultV: "", // 默认值
-                    slotCheckList: ["True to size","Large", "Small"], // 如果type是checkbox需要这个不为空
-                    slotInputType: "", // 控制input框的输入类型
-                    slotSize: "large", // primary为固定54px宽，large为父容器宽度
-                }
-            ]
-        },
-
-    ]
-
-    let infoPart = {
-        title: "How to measure your body?",
-        imageUrl: "https://s3.us-west-2.amazonaws.com/image.chic-fusion.com/chicme/2021-08-11/2021-08-11-select-body.png",
-        infoList: [
-            {
-                infoTitle:"1.Your bust",
-                infoContent:"Measure the circumference over the fullest part of your breast."
-            },
-            {
-                infoTitle:"2.Your waist",
-                infoContent:"Measure your waist at the thinnest place."
-            },
-            {
-                infoTitle:"3.Your hips",
-                infoContent:"Measure the fullest part of your hips."
-            }
-        ]
-    }
-    let backMock = {
-        "customer" : {
-            "mySizeInformation" : {
-                "height" : "175",
-                "weight" : "80",
-                "bust" : "30",
-                "hips" : "20",
-                "waist" : "40",
-                "bra" : "30",
-                "braUnit" : "C",
-                "heightUnit" : "inch",
-                "weightUnit" : "lbs",
-                "bustUnit" : "inch",
-                "hipsUnit" : "inch",
-                "waistUnit" : "inch",
-                "sizingRecommendation": "Large"
-            }
-        }
-    }
     export default {
         name:"MyMeasurements",
         data(){
@@ -338,11 +171,155 @@
                 checkList: ["cm","inch"],
                 dataList:[1,2,3,4],
                 isSelecting: false,
-                slotList: list,
+                slotList: [
+                    {
+                        slotTitle: this.$t("measurements.mea_height"), // 标题
+                        slotList:[
+                            {
+                                slotType: "input", // input & checkbox
+                                slotDefaultV: "", // 默认值
+                                slotInputType: "number", // 控制input框的输入类型
+                                slotCheckList: [], // 如果type是checkbox需要这个不为空
+                                slotSize: "primary", // primary为固定54px宽，large为父容器宽度
+                            },
+                            {
+                                slotType: "checkbox", // input & checkbox
+                                slotDefaultV: "", // 默认值
+                                slotCheckList: [this.$t("measurements.mea_cm"),this.$t("measurements.mea_inch")], // 如果type是checkbox需要这个不为空
+                                slotInputType: "", // 控制input框的输入类型
+                                slotSize: "primary", // primary为固定54px宽，large为父容器宽度
+                            }
+                        ]
+                    },
+                    {
+                        slotTitle: this.$t("measurements.mea_weight"), // 标题
+                        slotList:[
+                            {
+                                slotType: "input", // input & checkbox
+                                slotDefaultV: "", // 默认值
+                                slotInputType: "number", // 控制input框的输入类型
+                                slotCheckList: [], // 如果type是checkbox需要这个不为空
+                                slotSize: "primary", // primary为固定54px宽，large为父容器宽度
+                            },
+                            {
+                                slotType: "checkbox", // input & checkbox
+                                slotDefaultV: "", // 默认值
+                                slotCheckList: [this.$t("measurements.mea_kg"),this.$t("measurements.mea_lbs")], // 如果type是checkbox需要这个不为空
+                                slotInputType: "", // 控制input框的输入类型
+                                slotSize: "primary", // primary为固定54px宽，large为父容器宽度
+                            }
+                        ]
+                    },
+                    {
+                        slotTitle: this.$t("measurements.mea_bust_size"), // 标题
+                        slotList:[
+                            {
+                                slotType: "input", // input & checkbox
+                                slotDefaultV: "", // 默认值
+                                slotInputType: "number", // 控制input框的输入类型
+                                slotCheckList: [], // 如果type是checkbox需要这个不为空
+                                slotSize: "primary", // primary为固定54px宽，large为父容器宽度
+                            },
+                            {
+                                slotType: "checkbox", // input & checkbox
+                                slotDefaultV: "", // 默认值
+                                slotCheckList: [this.$t("measurements.mea_cm"),this.$t("measurements.mea_inch")], // 如果type是checkbox需要这个不为空
+                                slotInputType: "", // 控制input框的输入类型
+                                slotSize: "primary", // primary为固定54px宽，large为父容器宽度
+                            }
+                        ]
+                    },
+                    {
+                        slotTitle: this.$t("measurements.mea_bra_size"), // 标题
+                        slotList:[
+                            {
+                                slotType: "input", // input & checkbox
+                                slotDefaultV: "", // 默认值
+                                slotInputType: "number", // 控制input框的输入类型
+                                slotCheckList: [], // 如果type是checkbox需要这个不为空
+                                slotSize: "primary", // primary为固定54px宽，large为父容器宽度
+                            },
+                            {
+                                slotType: "input", // input & checkbox
+                                slotDefaultV: "", // 默认值
+                                slotCheckList: [], // 如果type是checkbox需要这个不为空
+                                slotInputType: "text", // 控制input框的输入类型
+                                slotSize: "primary", // primary为固定54px宽，large为父容器宽度
+                            }
+                        ]
+                    },
+                    {
+                        slotTitle: this.$t("measurements.mea_waist"), // 标题
+                        slotList:[
+                            {
+                                slotType: "input", // input & checkbox
+                                slotDefaultV: "", // 默认值
+                                slotInputType: "number", // 控制input框的输入类型
+                                slotCheckList: [], // 如果type是checkbox需要这个不为空
+                                slotSize: "primary", // primary为固定54px宽，large为父容器宽度
+                            },
+                            {
+                                slotType: "checkbox", // input & checkbox
+                                slotDefaultV: "", // 默认值
+                                slotCheckList: [this.$t("measurements.mea_cm"),this.$t("measurements.mea_inch")], // 如果type是checkbox需要这个不为空
+                                slotInputType: "", // 控制input框的输入类型
+                                slotSize: "primary", // primary为固定54px宽，large为父容器宽度
+                            }
+                        ]
+                    },
+                    {
+                        slotTitle: this.$t("measurements.mea_hips"), // 标题
+                        slotList:[
+                            {
+                                slotType: "input", // input & checkbox
+                                slotDefaultV: "", // 默认值
+                                slotInputType: "number", // 控制input框的输入类型
+                                slotCheckList: [], // 如果type是checkbox需要这个不为空
+                                slotSize: "primary", // primary为固定54px宽，large为父容器宽度
+                            },
+                            {
+                                slotType: "checkbox", // input & checkbox
+                                slotDefaultV: "", // 默认值
+                                slotCheckList: [this.$t("measurements.mea_cm"),this.$t("measurements.mea_inch")], // 如果type是checkbox需要这个不为空
+                                slotInputType: "", // 控制input框的输入类型
+                                slotSize: "primary", // primary为固定54px宽，large为父容器宽度
+                            }
+                        ]
+                    },
+                    {
+                        slotTitle: this.$t("measurements.mea_perference"), // 标题
+                        slotList:[
+                            {
+                                slotType: "checkbox", // input & checkbox
+                                slotDefaultV: "", // 默认值
+                                slotCheckList: [this.$t("measurements.mea_true_to_size"),this.$t("measurements.mea_large"),this.$t("measurements.mea_small")], // 如果type是checkbox需要这个不为空
+                                slotInputType: "", // 控制input框的输入类型
+                                slotSize: "large", // primary为固定54px宽，large为父容器宽度
+                            }
+                        ]
+                    },
+
+                ],
                 submitData: {},
-                infoPart,
+                infoPart: {
+                    title: this.$t("measurements.mea_mea_how"),
+                    imageUrl: "https://s3.us-west-2.amazonaws.com/image.chic-fusion.com/chicme/2021-08-11/2021-08-11-select-body.png",
+                    infoList: [
+                        {
+                            infoTitle: this.$t("measurements.mea_bust"),
+                            infoContent: this.$t("measurements.mea_bust_txt")
+                        },
+                        {
+                            infoTitle: this.$t("measurements.mea_waist"),
+                            infoContent: this.$t("measurements.mea_waist_txt")
+                        },
+                        {
+                            infoTitle: this.$t("measurements.mea_your_hips"),
+                            infoContent: this.$t("measurements.mea_hips_txt")
+                        }
+                    ]
+                },
                 testShow: true,
-                backMock,
                 isLoadingShow:false,
                 inputData:{},
                 sizingList: ["True to size","Large","Small"]
@@ -401,7 +378,7 @@
                             this.slotList[i].slotList[0].slotDefaultV = result[item]
                         } else if(item == this.slotList[i].slotTitle.split(" ")[0].toLocaleLowerCase()+"Unit"){
                             this.slotList[i].slotList[1].slotDefaultV = result[item]
-                        } else if((item == "sizingRecommendation") && this.slotList[i].slotTitle == "What is your preference?" ){
+                        } else if((item == "sizingRecommendation") && this.slotList[i].slotTitle == this.$t("measurements.mea_perference") ){
                             this.slotList[i].slotList[0].slotDefaultV = this.sizingList[result[item]];
                         }
                     }
@@ -414,12 +391,12 @@
                 let final = {};
                 for(let item in this.submitData){
                     // console.log(item)
-                    if(item == "What is your preference?"){
+                    if(item == this.$t("measurements.mea_perference")){
                         /**
                          * this.submitData['What is your preference?']['select'] == "True to size" ? 0 :
                                                         this.submitData['What is your preference?']['select'] == "Large" ? 1 : 2;
                          */
-                        final['sizingRecommendation'] = this.sizingList.indexOf(this.submitData["What is your preference?"]["select"]);
+                        final['sizingRecommendation'] = this.sizingList.indexOf(this.submitData[this.$t("measurements.mea_perference")]["select"]);
                     } else {
                         let key = item.split(" ")[0].toLocaleLowerCase();
                         final[key] = "";

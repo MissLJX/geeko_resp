@@ -75,8 +75,8 @@
                         },
                         {
                             name:this.$t("index.my_measurements"),
-                            routerName:"",
-                            routerPath:""
+                            routerName:"my-measurements",
+                            routerPath:"/me/m/my-measurements"
                         },
                         {
                             name:this.$t("index.my_preference"),

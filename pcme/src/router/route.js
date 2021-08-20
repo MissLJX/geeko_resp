@@ -164,6 +164,12 @@ const routes = [
                 name:"my-preference",
                 component:() => import("../pages/editmessage/MyPreference.vue"),
                 meta:{title:"My Preference"}
+            },
+            {
+                path:"my-measurements",
+                name:"my-measurements",
+                component:() => import("../pages/editmessage/MyMeasurements.vue"),
+                meta:{title:"My Measurements"}
             }
         ]
         },
