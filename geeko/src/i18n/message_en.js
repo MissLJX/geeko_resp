@@ -99,7 +99,7 @@ export default {
         unpaid:"Unpaid",
         processing:"Processing",
         shipped:"Shipped",
-        returns:"Returens",
+        returns:"Returns",
         my_services:"My Service",
         suport:"Support",
         wishlist:"Wishlist",
