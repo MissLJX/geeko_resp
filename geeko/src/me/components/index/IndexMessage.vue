@@ -19,7 +19,7 @@
             </a> -->
         </div>
 
-        <div class="login-message" v-if="!isLogin" @click="specificationLogin()">
+        <div class="login-message" v-if="!isLogin" @click="specificationLogin('/me/m')">
             <div class="iconfont">&#xe6ca;</div>
             <div class="_font">{{messageM1518}}</div>
             <div class="iconfont">&#xe694;</div>
@@ -217,7 +217,7 @@
             specificationLogin(path,difference){
                 if(this.isLogin){
                     if(difference){
-                        this.$router.push({path:path});
+                        this.$router.push({path:utils.PROJECT + path});
                     }else{
                         window.location.href = utils.PROJECT + path;
                     }
