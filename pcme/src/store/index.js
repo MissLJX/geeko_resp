@@ -612,6 +612,7 @@ const actions = {
                 commit(types.ME_GET, me)
                 resolve(me)
             }).catch(e => {
+                window.location.href = "/i/login";
                 reject(e)
             })
         })
