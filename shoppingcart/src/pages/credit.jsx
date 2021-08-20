@@ -230,7 +230,7 @@ export default connect(state => {
 				}
 
 				{
-					!search.payMethod && <CreditCard onPurchase={() => {setLeaved(true)}} onGo={p => { setP(p) }} orderId={props.match.params.orderId} />
+					(!search.payMethod || search.payMethod === '18') && <CreditCard onPurchase={() => {setLeaved(true)}} onGo={p => { setP(p) }} orderId={props.match.params.orderId} />
 				}
 
 

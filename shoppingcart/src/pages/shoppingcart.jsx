@@ -1,4 +1,4 @@
-import React, {createRef, useLayoutEffect, useState} from 'react'
+import React, {createRef, useEffect, useLayoutEffect, useState} from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import Loading from '../components/msite/loading.jsx'
@@ -133,6 +133,17 @@ const GuestConfirm = props => {
 
 	const ref = createRef()
 
+	useEffect(() => {
+		if(window.GeekoSensors){
+			window.GeekoSensors.Track('PitPositionExposure', {
+				resource_type: 'Guest Login'
+			})
+			window.GeekoSensors.Track('PitPositionExposure', {
+				resource_type: 'Guest Checkout'
+			})
+		}
+	}, [])
+
 	useLayoutEffect(() => {
 		ref.current.classList.add('anim')
 	}, [])
@@ -144,6 +155,35 @@ const GuestConfirm = props => {
 		} , 200)
 	}
 
+	const loginHandle = () => {
+		try {
+			if(window.GeekoSensors){
+				window.GeekoSensors.Track('PitPositionClick', {
+					resource_type: 'Guest Login'
+				})
+			}
+
+		}catch(e){
+			console.error(e)
+		}
+
+		props.onLogin()
+
+	}
+
+	const continueHandle = () => {
+		props.onCheckout()
+		try {
+			if(window.GeekoSensors){
+				window.GeekoSensors.Track('PitPositionClick', {
+					resource_type: 'Guest Checkout'
+				})
+			}
+		}catch(e){
+			console.error(e)
+		}
+	}
+
 
 	return <GUESTCONFIRM innerRef={ref}>
 		<div className="__hd">
@@ -153,11 +193,11 @@ const GuestConfirm = props => {
 		<div style={{marginTop: 10}}>
 			<div className="__txt"><FormattedMessage id="get_more_discount"/></div>
 			<div style={{marginTop:6}}>
-				<BigButton onClick={props.onLogin}><FormattedMessage id="register"/>/<FormattedMessage id="sign_in"/></BigButton>
+				<BigButton onClick={loginHandle}><FormattedMessage id="register"/>/<FormattedMessage id="sign_in"/></BigButton>
 			</div>
 			<div style={{marginTop: 14}} className="__txt"><FormattedMessage id="check_as_email"/></div>
 			<div style={{marginTop: 6}}>
-				<BigButton className="outlined" onClick={props.onCheckout}><FormattedMessage id="guest_checkout"/></BigButton>
+				<BigButton className="outlined" onClick={continueHandle}><FormattedMessage id="guest_checkout"/></BigButton>
 			</div>
 		</div>
 	</GUESTCONFIRM>
@@ -884,9 +924,6 @@ const ShoppingCart = class extends React.Component {
 				this.setState({
 					checking: false
 				})
-				if (window.__is_login__) {
-					this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
-				}
 			})
 		
 		}else if (payType === '2' || payMethod === '17' || payType === '8') {

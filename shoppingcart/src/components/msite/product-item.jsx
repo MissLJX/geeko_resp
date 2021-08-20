@@ -95,7 +95,7 @@ export const NormalProduct = class extends React.Component {
 			onSelect(product.variants[0], product)
 		}}>
 			<a ref={this.productRef.bind(this)} className="__image product-click" product-id={product.id}
-				data-product-source={product.dataSource} data-geeko-id={product.geekoRequsestId || requestId}
+				data-product-source={product.dataSource} data-geeko-id={product.geekoRequsestId || requestId} data-geeko-experiment={product.experimentId}
 				data-request-id={product.aliRequestId} data-experiment-id={product.aliExperimentId}
 				type="shopping_cart_match_with" data-column={column} data-product-list-source data-title="shoppingcart"
 				data-type={type} data-content={content} data-product-position={position}>
