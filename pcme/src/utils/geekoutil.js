@@ -2,6 +2,8 @@ import Cookie from 'js-cookie'
 
 export const PROJECT = window.ctx || ''
 export const ROUTER_PATH_ME = PROJECT + '/me'
+export const ROUTER_PATH_ME_M = PROJECT + "/me/m"
+
 export const getUUID = () => {
     function S4() {
         return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
@@ -183,4 +185,8 @@ export const getDYD = function(birthday){
         day:newArr[2]
     };
     return obj;
+}
+
+export const checkArray = function(arr){
+    return arr && arr.length > 0
 }

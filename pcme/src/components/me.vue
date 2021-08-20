@@ -1,77 +1,62 @@
 <template>
-    <div>
-        <div class="m-hd">
-            <div class="el-me-headerImage" :style="{'background-image': 'url('+headerImage+'),url('+baseHeaderUrl+')' }"></div>
-            <div class="el-me-info">
-                <p class="el-me-fullname">{{fullName}}</p>
-                <p class="el-me-email">
-                    {{me.email}}
-                    <span class="verify" v-if="!me.isConfirmEmail" @click="confirmEmail">{{$t('verify')}}</span>
-                    <span class="have-verify" v-if="me.isConfirmEmail"><i class="iconfont">&#xe73d;</i>{{$t('verified')}}</span>
-                </p>
-            </div>
-        </div>
-        <p class="mt-15">You have <span class="txr">{{pointsCustomer.points}}</span> credits {{this.GLOBAL.sitename}} Credits now, learn more about {{this.GLOBAL.sitename}} Bonus Credits program, <a :href="creditstUrl">Click Here.</a></p>
-        <div class="referfriend">
-            <h3>{{$t('refer')}}</h3>
-            <div class="refer-con">
-                <img src="https://image.geeko.ltd/upgrade/20180920/gift.png">
-                <p>
-                    <span class="refer-info">{{$t('share_get')}}</span><br/>
-                    <span class="refer-info-1">{{$t('share_lucky')}}</span>
-                </p>
-                <div class="bgline"></div>
-                <div class="refer-method">
-                    <div id="face-share">
-                        <img src="https://image.geeko.ltd/upgrade/20180920/Facebook.png"><br/><span>Facebook</span>
-                    </div>
-                    <div id="face-messenger" v-if="showShare">
-                        <img src="https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/chicme/20200824/messenger-1.png"><br/><span>Messenger</span>
-                    </div>
-                    <div @click="showEmail">
-                        <img src="https://image.geeko.ltd/upgrade/20180920/email.png"><br/><span>{{$t('email')}}</span>
-                    </div>
-                    <div @click="showCopy">
-                        <img src="https://image.geeko.ltd/upgrade/20180920/copy.png"/><br/><span>Copy</span>
-                    </div>
+    <div class="me">
+        <div class="_left-container">
+            <div class="_top">
+                <!-- 顶部头像组件 -->
+                <index-header-icon 
+                    :me="me"
+                    :feed="feed"
+                    :isShowConfirm.sync="isShowConfirm"
+                    :isloding.sync="isloding"
+                ></index-header-icon>
+                <div class="view-more">
+                    <router-link to="/me/m/updateProfile">
+                        {{$t("index.my_profile")}} >
+                    </router-link>
                 </div>
             </div>
+
+            <!-- order -->
+            <div class="_order m-top">
+                <index-order-container
+                    :feed="feed"
+                ></index-order-container>
+            </div>
+
+            <!-- wishlist -->
+            <div class="wishlist global-class m-top">
+                <index-wishlist :isloding.sync="isloding"></index-wishlist>
+            </div>
+
+            <div class="share m-top">
+                <index-share 
+                    :isloding="isloding" 
+                    @changeLoadin="changeLoadin"
+                    :isShowCopy.sync="isShowCopy"
+                    :isshowTerm.sync="isshowTerm"
+                ></index-share>
+
+            </div>
         </div>
-        <div class="term" @click="isshowTerm=true"><span style="text-transform: uppercase">{{$t('termandconditions')}}</span><i class="iconfont">&#xe73f;</i></div>
+
+        <div class="_right-container">
+            <!-- right service -->
+            <div class="_top">
+                <index-service-container></index-service-container>
+            </div>
+
+            <!-- right you map also likes -->
+            <div class="_you-likes m-top">
+                <index-you-likes></index-you-likes>
+            </div>
+        </div>
+
         <div class="mask" v-if="isShowCopy">
             <div class="confirm-con confirm-con-l">
                 <h3>{{$t('invitationlink')}}</h3>
                 <p class="cancel-btn" @click="isShowCopy=false"><i class="iconfont">&#xe69a;</i></p>
                 <div><input type="text" :value="this.copy_link"/></div>
                 <button class="n-btn tag-read" :data-clipboard-text="this.copy_link" @click="copy">{{$t('copylink')}}</button>
-            </div>
-        </div>
-
-        <div class="mask" v-if="isShowEmail">
-            <div class="confirm-con">
-                <h3>{{$t('shareemail')}}</h3>
-                <p class="cancel-btn" @click="isShowEmail=false"><i class="iconfont">&#xe69a;</i></p>
-                <form @submit.prevent="sendEmailHandle" accept-charset="utf-8">
-                    <div class="email_area">
-                        <h4>{{$t('to')}}</h4>
-                        <div v-for="item in inviteCount">
-                            <label>{{$t('friendemail')}}:</label>
-                            <input type="email" v-model="item.emailvalue"/>
-                        </div>
-                    </div>
-                    <p v-if="maxCount" class="maxtip">*{{$t('linkcanbeshare')}}</p>
-                    <div v-if="!maxCount" class="share-invite-button" @click="inviteMore">+{{$t('invitemore')}}</div>
-                    <div class="subject">
-                        <label>{{$t('subject')}}:</label>
-                        <input type="text" v-model="subinfo"/>
-                    </div>
-                    <div class="note">
-                        <label>{{$t('note')}}:</label>
-                        <textarea v-model="noteinfo">{{noteinfo}}</textarea>
-                    </div>
-
-                    <button class="share-email-button">{{$t('send')}}</button>
-                </form>
             </div>
         </div>
 
@@ -83,10 +68,20 @@
                     *Up to 50% OFF is valid only for new customers
                 </p>
                 <p class="term-info">
-                    If customers want to use the discount of up to  50% off, the referred person must (i) be a new customer, (ii) use a referral link to obtain the discount and (iii) make a purchase on  {{this.GLOBAL.siteurl}} specified in the referral offer prior to the discount's expiration. Referring customers will also receive a $10 coupon in their  {{this.GLOBAL.siteurl}} account after the referred person pay for the order.  And $10 coupon can be used when the order amount is more than $59. Custom-ers may not refer anyone who has an existing  {{this.GLOBAL.siteurl}} account under an alternate email address. The discount is only valid for one month and the referred person can only use the discount once.
+                    If customers want to use the discount of up to  50% off, the referred person must (i) be a new customer, 
+                    (ii) use a referral link to obtain the discount and (iii) make a purchase on  {{this.GLOBAL.siteurl}} 
+                    specified in the referral offer prior to the discount's expiration. Referring customers will also receive 
+                    a $10 coupon in their  {{this.GLOBAL.siteurl}} account after the referred person pay for the order.  
+                    And $10 coupon can be used when the order amount is more than $59. Custom-ers may not refer anyone who has an 
+                    existing  {{this.GLOBAL.siteurl}} account under an alternate email address. The discount is only valid 
+                    for one month and the referred person can only use the discount once.
                 </p>
                 <p class="term-info">
-                Any abuse of this offer, as determined by us in our sole discretion, may result in the rescission of the refer-ring customer's referral discount and the referred person's discount as well as both parties' inability to partici-pate in this or future promotions. Discount cannot be applied to previous purchases, and is not redeemable for cash. This referral program is subject to modification or termination at any time without notice in our sole discretion.
+                    Any abuse of this offer, as determined by us in our sole discretion, may result in the 
+                    rescission of the refer-ring customer's referral discount and the referred person's discount 
+                    as well as both parties' inability to partici-pate in this or future promotions. Discount cannot 
+                    be applied to previous purchases, and is not redeemable for cash. This referral program is subject to 
+                    modification or termination at any time without notice in our sole discretion.
                 </p>
             </div>
         </div>
@@ -108,6 +103,14 @@
     import * as utils from '../utils/geekoutil';
     import Clipboard from 'clipboard';
     import loding from './loding.vue';
+    import store from "../store/index.js"
+
+    import IndexHeaderIcon from "../components/index/index-header-icon.vue"
+    import IndexOrderContainer from "../components/index/index-order-container.vue"
+    import IndexServiceContainer from "../components/index/index-service-container.vue"
+    import IndexWishList from "../components/index/index-wishlist.vue"
+    import IndexYouLikes from "../components/index/index-you-likes.vue"
+    import IndexShare from "../components/index/index-share.vue"
 
     export default {
         data(){
@@ -115,47 +118,25 @@
                 isloding:false,
                 isshowTerm:false,
                 isShowCopy:false,
-                isShowEmail:false,
-                isShowConfirm:false,
-                inviteCount:[{'emailvalue':''},{'emailvalue':''}],
-                count:3,
-                maxCount:false,
-                subinfo:'Sending you up to 50% OFF',
-                noteinfo:'This site has so many must-haves. Check out their new arrivals and get up to 50% OFF for your first order!! You’re welcome'
+                isShowConfirm:false
             }
         },
         components: {
-            'loding':loding
+            'loding':loding,
+            "index-header-icon":IndexHeaderIcon,
+            "index-order-container":IndexOrderContainer,
+            "index-service-container":IndexServiceContainer,
+            "index-wishlist":IndexWishList,
+            "index-you-likes":IndexYouLikes,
+            "index-share":IndexShare
         },
         computed:{
-            ...mapGetters(['me','sharekey','copylink']),
-            baseHeaderUrl() {
-                return 'https://image.geeko.ltd/site/pc/icon35.png';
-            },
-            headerImage(){
-                if(this.me.id){
-                    return utils.imageutil.getHeaderImg(this.me.id)
-                }
-            },
-            fullName() {
-                if(this.me.name){
-                    return this.me.name.firstName + ' ' + this.me.name.lastName;
-                }
-            },
-            facebook_key(){
-                return '/i/share/register?key='+this.sharekey
+            ...mapGetters(['me',"feed","copylink"]),
+            pointsCustomer(){
+                return this.$store.getters["point/pointsCustomerNum"];
             },
             copy_link(){
                 return window.site + '/i/share/register?key='+this.copylink
-            },
-            creditstUrl(){
-                return utils.ROUTER_PATH_ME + '/m/credits'
-            },
-            showShare(){
-                return !!window.showShare
-            },
-            pointsCustomer(){
-                return this.$store.getters["point/pointsCustomerNum"];
             }
         },
         mounted(){
@@ -170,58 +151,85 @@
                     alert('Content copied!')
                 })
             },
-            showEmail(){
-                this.isShowEmail = true;
+            changeLoadin(flag){
+                this.isloding = flag;
             },
-            inviteMore(){
-                if(this.count>10){
-                    this.maxCount = true;
-                }else{
-                    this.inviteCount.push({'emailvalue':''});
-                    this.count +=1
-                }
-            },
-            sendEmailHandle(){
-
-                let emails ='';
-                _.each(this.inviteCount, (email) => {
-                    if(email.emailvalue){
-                        emails = email.emailvalue +','
-                    }
-                });
-
-                if(emails!==''){
-                    let shareInfo={'emails':emails.slice(0,-1),'subject':this.subinfo,'content':this.noteinfo}
-                    this.$store.dispatch('sendShareEmail', shareInfo).then(() => {
-                        alert("success");
-                        this.isShowEmail = false;
-                    })
-                }else{
-                    isAlert("Please enter at least one email address");
-                }
-            },
-            confirmEmail(){
-                this.isloding = true;
-                this.$store.dispatch('confirmEmail', this.me.email).then(() => {
-                    this.isloding = false;
-                    this.isShowConfirm = true;
-                }).catch((data) => {
-                    this.isloding = false;
-                    alert(data.result)
-                })
-            }
         },
         created(){
-            this.$store.dispatch('getMe')
-            this.$store.dispatch('getShareKey','facebook')
-            this.$store.dispatch('getShareKey','copy')
-            this.$store.dispatch("point/getCustomerPointsNum");
+            store.dispatch("point/getCustomerPointsNum");
+            store.dispatch('getShareKey','copy')
         }
     }
 
 </script>
 
 <style scoped lang="scss">
+    .me{
+        display: flex;
+        justify-content: space-between;
+
+        ._left-container{
+            width: 642px;
+
+            ._top{
+                position: relative;
+                background-color: #ffffff;
+                padding: 24px 20px;
+            }
+
+            ._order{
+                background-color: #ffffff;
+                padding: 24px 0px;
+            }
+
+            .global-class{
+                background-color: #ffffff;
+                padding: 24px 20px;
+            }
+
+            .wishlist{
+                padding-bottom: 0px;
+            }
+
+            .m-top{
+                margin-top: 20px;
+            }
+
+            .view-more{
+                position: absolute;
+                top: 24px;
+                right: 20px;
+                font-family: 'SlatePro-Medium';
+                font-size: 14px;
+                color: #666666;
+
+                a{
+                    color: #666666;
+                    text-decoration: none;
+                }
+            }
+        }
+
+        ._right-container{
+            width: 250px;
+
+            ._top{
+                padding: 19px 0px;
+                padding-bottom: 9px;
+                background-color: #ffffff;
+            }
+
+            .m-top{
+                margin-top: 20px;
+            }
+
+            ._you-likes{
+                background-color: #ffffff;
+                padding-top: 10px;
+            }
+        }
+    }
+
     .mt-15{
         margin-top: 15px;
     }
@@ -232,130 +240,6 @@
         text-decoration: underline;
         color: #666666;
         cursor: pointer;
-    }
-    .referfriend{
-        margin-top: 65px;
-        .refer-con{
-            width: 100%;
-            height: 131px;
-            margin-top: 8px;
-            background-color: #ffffff;
-            border: solid 1px #fedddd;
-            padding: 17px 22px 27px 22px;
-            img{
-                width: 81px;
-                height: 81px;
-            }
-            p{
-                display: inline-block;
-                position: relative;
-                line-height: 20px;
-                left: 10px;
-                width: 515px;
-                overflow-wrap: break-word;
-                .refer-info{
-                    color: #e64545;
-                    font-size: 30px;
-                    font-weight: bold;
-                }
-                .refer-info-1{
-                    font-size: 14px;
-                    color: #222222;
-                    line-height: 20px;
-                    display: inline-block;
-                    margin-top: 10px;
-                }
-            }
-            .bgline{
-                display: inline-block;
-                width: 2px;
-                height: 47px;
-                background-color:#e6e6e6;
-                margin-left: 25px;
-                position: relative;
-                top: -5px;
-            }
-            .refer-method{
-                display: inline-block;
-                position: relative;
-                top: -3px;
-                a{
-                    text-decoration: none;
-                }
-                & > div{
-                    float: left;
-                    text-align: center;
-                    padding: 0 7px;
-                    cursor: pointer;
-                    img{
-                        width: 32px;
-                        height: 32px;
-                    }
-                    span{
-                        font-size:11px;
-                    }
-                }
-                &:after{
-                    display: block;
-                    content: '';
-                    clear: both;
-                }
-            }
-        }
-    }
-    .term{
-        text-align: right;
-        color: #999;
-        font-size: 12px;
-        margin-top: 15px;
-        cursor: pointer;
-        span{
-            text-decoration: underline;
-            margin-right: 6px;
-        }
-    }
-    .m-hd{
-        padding-bottom: 16px;
-        border-bottom: 1px solid #e6e6e6;
-        .el-me-headerImage {
-            width: 70px;
-            height: 70px;
-            background: no-repeat center/cover;
-            border-radius: 50%;
-            float: left;
-        }
-        .el-me-info{
-            float: left;
-            height: 70px;
-            line-height: 22px;
-            padding-top: 14px;
-            padding-left: 16px;
-            .el-me-fullname{
-                font-size: 16px;
-                color: #222;
-            }
-            .el-me-email{
-                font-size: 14px;
-                color: #666;
-                span{
-                    margin-left: 10px;
-                }
-                .verify{
-                    color: #E64545;
-                    text-decoration: underline;
-                    cursor: pointer;
-                }
-                .have-verify{
-                    color: #57b936;
-                    font-size: 14px;
-                }
-            }
-        }
-        &:after{
-            display: block;
-            clear: both;
-            content: '';
-        }
     }
 
     .mask{
@@ -508,5 +392,4 @@
             }
         }
     }
-
 </style>

@@ -72,9 +72,9 @@ input:-webkit-autofill{
 /** ================icon font==================**/
 @font-face {
   font-family: 'iconfont';  /* Project id 384296 */
-  src: url('//at.alicdn.com/t/font_384296_s1b8r4qdmr.woff2?t=1627622893908') format('woff2'),
-       url('//at.alicdn.com/t/font_384296_s1b8r4qdmr.woff?t=1627622893908') format('woff'),
-       url('//at.alicdn.com/t/font_384296_s1b8r4qdmr.ttf?t=1627622893908') format('truetype');
+  src: url('//at.alicdn.com/t/font_384296_cxqg2n0bzi6.woff2?t=1629367300105') format('woff2'),
+       url('//at.alicdn.com/t/font_384296_cxqg2n0bzi6.woff?t=1629367300105') format('woff'),
+       url('//at.alicdn.com/t/font_384296_cxqg2n0bzi6.ttf?t=1629367300105') format('truetype');
 }
 
 .iconfont{
@@ -109,6 +109,8 @@ body{
   font-family: SlatePro, "Open Sans", Arial,"Helvetica Neue", Helvetica, sans-serif;
   -webkit-text-size-adjust: 100%;
   color: #222928;
+  // background-color: #f7f7f7;
+  background-color: #ffffff;
 }
 
 
