@@ -1,5 +1,12 @@
 import React, { useEffect } from 'react'
-import { openCheckOutOrder, usecreditcard, payForCheckout, checkout_credit } from '../../api'
+import {
+	openCheckOutOrder,
+	usecreditcard,
+	payForCheckout,
+	checkout_credit,
+	openSafeChargeOrder,
+	setSafeCharge
+} from '../../api'
 import {
 	getCreditCards
 } from '../../store/actions.js'
@@ -349,19 +356,6 @@ const Credit = class extends React.Component {
 		}
 	}
 
-	static getDerivedStateFromProps(props, state) {
-		if (props.safechargeresponse != state.safechargeresponse) {
-			return { ...state, safechargeresponse: props.safechargeresponse }
-		}
-		return null
-	}
-
-	componentDidUpdate(prevProps, prevState) {
-		if (prevState.safechargeresponse != this.state.safechargeresponse) {
-			this.initPage()
-		}
-	}
-
 	componentDidMount() {
 		this.initPage()
 	}
@@ -393,24 +387,37 @@ const Credit = class extends React.Component {
 		})
 	}
 
+
 	initCreditForm() {
-		Frames.init(window.__checkout_pk__)
-		Frames.addEventHandler(
-			Frames.Events.FRAME_VALIDATION_CHANGED,
-			this.onValidationChanged.bind(this)
-		)
+		if(window.Frames){
+			Frames.init(window.__checkout_pk__)
+			Frames.addEventHandler(
+				Frames.Events.FRAME_VALIDATION_CHANGED,
+				this.onValidationChanged.bind(this)
+			)
 
-		Frames.addEventHandler(
-			Frames.Events.PAYMENT_METHOD_CHANGED,
-			this.paymentMethodChanged.bind(this)
-		)
+			Frames.addEventHandler(
+				Frames.Events.PAYMENT_METHOD_CHANGED,
+				this.paymentMethodChanged.bind(this)
+			)
 
-		Frames.addEventHandler(
-			Frames.Events.CARD_VALIDATION_CHANGED,
-			this.cardValidationChanged.bind(this)
-		)
+			Frames.addEventHandler(
+				Frames.Events.CARD_VALIDATION_CHANGED,
+				this.cardValidationChanged.bind(this)
+			)
+			Frames.addEventHandler(
+				Frames.Events.CARD_TOKENIZATION_FAILED,
+				this.onCardTokenizationFailed.bind(this)
+			)
 
-		Frames.addEventHandler(Frames.Events.CARD_TOKENIZED, this.onCardTokenized.bind(this))
+			Frames.addEventHandler(Frames.Events.CARD_TOKENIZED, this.onCardTokenized.bind(this))
+
+		}
+	}
+
+	onCardTokenizationFailed(error) {
+		console.log('CARD_TOKENIZATION_FAILED: %o', error)
+		Frames.enableSubmitForm()
 	}
 
 	cardValidationChanged() {
@@ -420,10 +427,41 @@ const Credit = class extends React.Component {
 	}
 
 	onCardTokenized(event) {
+		const self = this
+		const { orderId, onPurchase } = this.props
+
 		payForCheckout({orderId: this.state.order.id, token: event.token}).then(data => {
-			console.log(data)
+			const result = data.result
+			if(result.success){
+				window.location.href = `${window.ctx || ''}/order-confirm/${result.transactionId}?transactionId=${result.transactionId}`
+			}else{
+				if (window.isApp) {
+					window.location.href = `${window.ctx || ''}/geekopay/app-fail?errMsg=${result.details || 'Error'}`
+				} else {
+					alert(result.details || 'Error')
+					if (orderId && window.__is_login__) {
+						this.props.onGo(`${window.ctx || ''}/checkout/${orderId}`)
+						storage.add('temp-order', orderId, 1 * 60 * 60)
+					}
+				}
+			}
+			self.setState({
+				checking: false
+			})
+			Frames.enableSubmitForm()
 		}).catch(data => {
-			console.log(data)
+			if (window.isApp) {
+				window.location.href = `${window.ctx || ''}/geekopay/app-fail?errMsg=${data.result || data ||'Error'}`
+			} else {
+				if (orderId && window.__is_login__) {
+					this.props.onGo(`${window.ctx || ''}/checkout/${orderId}`)
+					storage.add('temp-order', orderId, 1 * 60 * 60)
+				}
+			}
+			self.setState({
+				checking: false
+			})
+			Frames.enableSubmitForm()
 		})
 	}
 
@@ -579,8 +617,119 @@ const Credit = class extends React.Component {
 				onPurchase()
 			}
 		}else{
-			checkout_credit({orderId}).then(data => {
-				console.log(data)
+			const selectedCard = self.props.creditcards.find(card => card.isSelected)
+
+			if(selectedCard && selectedCard.quickpayRecord.payMethod === '18'){
+				this.paySafeCharge(selectedCard)
+			}else{
+				self.setState({
+					checking: true
+				})
+				checkout_credit({orderId}).then(data => {
+					const result = data.result
+					if(result.success){
+						window.location.href = `${window.ctx || ''}/order-confirm/${result.transactionId}?transactionId=${result.transactionId}`
+					}else{
+						if (window.isApp) {
+							window.location.href = `${window.ctx || ''}/geekopay/app-fail?errMsg=${result.details || 'Error'}`
+						} else {
+							alert(result.details || 'Error')
+							if (orderId && window.__is_login__) {
+								this.props.onGo(`${window.ctx || ''}/checkout/${orderId}`)
+								storage.add('temp-order', orderId, 1 * 60 * 60)
+							}
+						}
+					}
+					self.setState({
+						checking: false
+					})
+				}).catch(data => {
+
+					if (window.isApp) {
+						window.location.href = `${window.ctx || ''}/geekopay/app-fail?errMsg=${data.result || data || 'Error'}`
+					} else {
+						alert(data.result || data)
+						if (orderId && window.__is_login__) {
+							this.props.onGo(`${window.ctx || ''}/checkout/${orderId}`)
+							storage.add('temp-order', orderId, 1 * 60 * 60)
+						}
+					}
+
+
+					self.setState({
+						checking: false
+					})
+
+				})
+			}
+		}
+	}
+
+
+	paySafeCharge(selectedCard){
+		const { orderId } = this.props
+		const { billingAddress } = this.state
+		const self = this
+		self.setState({
+			checking: true
+		})
+		openSafeChargeOrder(orderId).then(data => data.result).then(result => {
+			const response = result.openOrderResponse
+
+			self.sfc = SafeCharge({
+				env: window.safechargeEnv || 'prod',
+				merchantId: response.merchantId,
+				merchantSiteId: response.merchantSiteId
+			})
+
+			self.sfc.createPayment({
+				'sessionToken': response.sessionToken,
+				'merchantId': response.merchantId,
+				'merchantSiteId': response.merchantSiteId,
+				'clientUniqueId': response.clientUniqueId, // optional
+				'userTokenId': response.userTokenId,
+				'paymentOption': {
+					'userPaymentOptionId': selectedCard.quickpayRecord.quickpayId,
+				},
+				'billingAddress': {
+					'email': result.email,
+					'country': result.country
+				},
+				'deviceDetails': {
+					'ipAddress': result.ip
+				}
+			}, function (res) {
+				self.callBackSafeCharge({ ...res, sessionToken: response.sessionToken })
+			})
+		})
+	}
+
+
+	callBackSafeCharge(res) {
+		const self = this
+		const { orderId } = this.props
+
+		if (res.result === 'APPROVED') {
+			setSafeCharge({ ...res }).then(data => data.result).then(result => {
+				window.location.href = `${window.ctx || ''}/order-confirm/${result.clientUniqueId}?transactionId=${result.clientUniqueId}`
+			}).catch(data => {
+				alert(data.result || data)
+				self.setState({
+					checking: false
+				})
+			})
+		} else {
+			if (window.isApp) {
+				window.location.href = `${window.ctx || ''}/geekopay/app-fail?errMsg=${res.errorDescription || res.reason || 'Error'}`
+			} else {
+				alert(res.errorDescription || res.reason || 'Error')
+				if (orderId && window.__is_login__) {
+					this.props.onGo(`${window.ctx || ''}/checkout/${orderId}`)
+					storage.add('temp-order', orderId, 1 * 60 * 60)
+				}
+			}
+			self.setState({
+				checking: false
 			})
 		}
 	}
@@ -778,7 +927,7 @@ const Credit = class extends React.Component {
 								<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 									<Address address={billingAddress} />
 									<Icon onClick={() => {
-										this.props.history.push(`${this.props.match.url}/billing-address`, { address: billingAddress })
+										this.props.history.push(`${this.props.match.url}/billing-address`, { address: billingAddress, orderId: order.id, payMethod: order.payMethod })
 									}} style={{ fontSize: 16, color: '#666' }}>&#xe690;</Icon>
 								</div>
 							</div>
