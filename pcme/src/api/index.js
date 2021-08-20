@@ -286,4 +286,23 @@ export const getCustomerPointsNum = () => {
     })
 }
 
+// 获取you may also likes产品
+export const getYouLikeProducts = (skip) => {
+    return axios.get('/product/1/'+skip+'/20/show', {}, {}).then((data) => {
+        return data.result
+    })
+}
+
+// 传body体修改用户的信息
+export const updateCustomerSave = (customer) => {
+    console.log("customer",customer);
+    return axios.post(VPATH + "/customer/save",customer,{}).then(data => data.result);
+}
+
+// 如果message的结构为Object
+// /v9/message/anon/get-object/{code}
+export const getMessageToObject = (code) => {
+    return axios.get(VPATH + "/message/anon/get-object/"+code).then(data => data.result);
+}
+
 

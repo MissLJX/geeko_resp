@@ -112,7 +112,14 @@ const state = {
 
     logisticsCompanies:null,
 
-    returnLogistics:null
+    returnLogistics:null,
+    feed:null,
+    paging: false,
+    initialized:false,
+    youlikeProducts:[],
+    youlikeskip:0,
+    messageM1521:null,
+    orderStatus:0
 };
 const getters = {
     me: state => state.me,
@@ -209,7 +216,15 @@ const getters = {
 
     logisticsCompanies:state => state.logisticsCompanies,
 
-    returnLogistics: state => state.returnLogistics
+    returnLogistics: state => state.returnLogistics,
+    feed:state => state.feed,
+    paging:state => state.paging,
+    initialized:state => state.initialized,
+
+    youlikeProducts:state => state.youlikeProducts,
+    youlikeskip:state => state.youlikeskip,
+    messageM1521:state => state.messageM1521,
+    orderStatus:state => state.orderStatus
 };
 const mutations = {
     [types.INIT_ME](state, me){
@@ -217,6 +232,9 @@ const mutations = {
     },
     [types.ME_GET](state, _me){
         state.me = _me
+    },
+    [types.ME_INITIALIZED](state){
+        state.initialized = true
     },
     //order count
     [types.ME_ORDER_COUNT_ALL](state, count){
@@ -538,14 +556,55 @@ const mutations = {
     },
     [types.GET_RETURN_LOGISTICS](state,returnLogistics){
         state.returnLogistics = returnLogistics;
+    },
+    [types.ME_GET_FEED_SUMMARYRY_ALL_DATA](state,_feed){
+        state.feed = _feed;
+    },
+    [types.GLOBAL_PAGING](state, paging){
+        state.paging = paging
+    },
+    [types.GET_INDEX_YOU_MAY_ALSO_LIKES_PRODUCTS](state,products){
+        state.youlikeProducts = _.concat(state.youlikeProducts,products);
+    },
+    [types.GET_INDEX_YOU_MAY_ALSO_LIKES_PRODUCTS_SKIP](state){
+        state.youlikeskip += 20;
+    },
+    [types.CHANGE_GET_ME_DATA](state,customer){
+        console.log("customer",customer)
+        let name = customer.name;
+        let changeValue = customer.customer[name];
+        state.me[name] = _.cloneDeep(changeValue);
+    },
+    [types.GET_MY_PREFERENCES_MESSAGE_CODE](state,message){
+        state.messageM1521 = message;
+    },
+    [types.CHANGE_ORDER_ACTIVE_STATUS](state,status){
+        state.orderStatus = status;
     }
 }
 const actions = {
-    init({commit}){
-        return api.get().then(data => data.result).then((me) => {
-            commit(types.INIT_ME, me)
-            return me
-        })
+    // init({commit}){
+    //     return api.get().then(data => data.result).then((me) => {
+    //         commit(types.INIT_ME, me)
+    //         return me
+    //     })
+    // },
+    init({dispatch, commit, state}){
+        if (!state.initialized) {
+            return Promise.all([
+                dispatch('getMe'),
+            ]).then(([me]) => {
+                commit(types.ME_GET, me)
+                return me
+            }).then((me) => {
+                return dispatch('getFeedSummary', me.id)
+            }).then((feed) => {
+                commit(types.ME_GET_FEED_SUMMARYRY_ALL_DATA, feed)
+                commit(types.ME_INITIALIZED)
+            }).catch((e) => {
+                console.log("e",e);
+            });
+        }
     },
     getMe({commit}){
         return new Promise((resolve, reject) => {
@@ -1088,8 +1147,10 @@ const actions = {
     getFeedSummary({commit, state}){
         return api.getFeedSummary(state.me.id).then((userinfo) => {
             if(userinfo) {
-                commit(types.ME_GET_FEED_SUMMARY, userinfo.wannaListNum)
+                commit(types.ME_GET_FEED_SUMMARY, userinfo.wannaListNum);
+                commit(types.ME_GET_FEED_SUMMARYRY_ALL_DATA, userinfo)
             }
+            return userinfo;
         })
     },
     //getReturnLabel
@@ -1106,6 +1167,47 @@ const actions = {
                 reslove(data.result);
             });
         });
+    },
+    paging({commit}, {paging}){
+        commit(types.GLOBAL_PAGING, paging)
+    },
+    getYouLikeProducts({commit},{skip}){
+        return api.getYouLikeProducts(skip).then((result) => {
+            if(result && result.length > 0){
+                commit(types.GET_INDEX_YOU_MAY_ALSO_LIKES_PRODUCTS,result);
+                return {finished:false,empty:true}
+            }else{
+                return {finished:true,empty:false};
+            }
+        });
+    },
+    getYouLikeProductsSkip({commit}){
+        commit(types.GET_INDEX_YOU_MAY_ALSO_LIKES_PRODUCTS_SKIP);
+    },
+    updateCustomerSave({commit},customer){
+        return new Promise((reslove,reject) => {
+            api.updateCustomerSave({"customer":customer.customer}).then((result) => {
+                reslove(result);
+                console.log("customer",customer);
+                if(customer.name === 'myPreference'){
+                    console.log("customer",customer.name);
+                    customer["customer"] = customer["definition"];
+                }
+
+                if(customer.name === 'name'){
+                    commit(types.CHANGE_GET_ME_DATA,{name:"nickname",customer:{nickname:customer.customer.nickname}});
+                }
+                commit(types.CHANGE_GET_ME_DATA,customer);
+            });
+        });
+    },
+    getMyPreferenceMessageCode({commit},code){
+        return api.getMessageToObject(code).then(result => {
+            commit(types.GET_MY_PREFERENCES_MESSAGE_CODE,result);
+        });
+    },
+    changeOrderStatus({commit},status){
+        commit(types.CHANGE_ORDER_ACTIVE_STATUS,status);
     }
 }
 export default new Vuex.Store({

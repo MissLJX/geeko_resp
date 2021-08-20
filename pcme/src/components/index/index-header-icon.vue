@@ -1,0 +1,175 @@
+<template>
+    <div class="index-header-icon">
+        <div class="m-hd">
+            <div class="el-me-headerImage" :style="{'background-image': 'url('+headerImage+'),url('+baseHeaderUrl+')' }"></div>
+            <div class="el-me-info">
+                <p class="el-me-fullname">{{fullName}}</p>
+                <p class="el-me-email">
+                    {{me.email}}
+                    <span class="verify" v-if="!me.isConfirmEmail" @click="confirmEmail">{{$t('verify')}}</span>
+                    <span class="have-verify" v-if="me.isConfirmEmail"><i class="iconfont">&#xe73d;</i>{{$t('verified')}}</span>
+                </p>
+            </div>
+        </div>
+
+        <div class="m-header-icon">
+            <router-link to="/me/m/coupons">
+                <p class="iconfont">
+                    <span class="_font" v-if="feed && feed.canUseCouponCount">{{feed && feed.canUseCouponCount}}</span>
+                    <span v-else>&#xe6dc;</span>
+                </p>
+                <p>{{$t("index.coupons")}}</p>
+            </router-link>
+
+            <router-link to="/me/m/credits">
+                <p class="iconfont">
+                    <span class="_font" v-if="feed && feed.points">{{feed && feed.points}}</span>
+                    <span v-else>&#xe6db;</span>
+                </p>
+                <p>{{$t("point.points")}}</p>
+            </router-link>
+            
+            <router-link to="/me/m/cards">
+                <p class="iconfont">&#xe6dd;</p>
+                <p>{{$t("index.wallet")}}</p>
+            </router-link>
+            
+            <a href="/share">
+                <p class="iconfont">&#xe6da;</p>
+                <p>{{$t("index.get_discount_10")}}</p>
+            </a>
+        </div>
+    </div>
+</template>
+
+<script>
+    import * as utils from '../../utils/geekoutil.js';
+
+    export default {
+        name:"IndexHeaderIcon",
+        props:{
+            me:{
+                type:Object,
+                default:() => {
+                    return {};
+                }
+            },
+            feed:{
+                type:Object,
+                default:() => {
+                    return {}
+                }
+            }
+        },
+        computed:{
+            headerImage(){
+                if(this.me.id){
+                    return utils.imageutil.getHeaderImg(this.me.id)
+                }
+            },
+            baseHeaderUrl() {
+                return 'https://image.geeko.ltd/site/pc/icon35.png';
+            },
+            fullName() {
+                if(this.me.name){
+                    return this.me.name.firstName + ' ' + this.me.name.lastName;
+                }
+            },
+        },
+        methods:{
+            confirmEmail(){
+                this.$emit("update:isloding",true);
+                this.$store.dispatch('confirmEmail', this.me.email).then(() => {
+                    this.$emit("update:isloding",false);
+                    this.$emit("update:isShowConfirm",true);
+                }).catch((data) => {
+                    this.$emit("update:isloding",false);
+                    alert(data.result)
+                })
+            },
+        }
+    }
+</script>
+
+<style lang="scss" scoped>
+    .index-header-icon{
+        .m-hd{
+            display: flex;
+            align-items: center;
+            .el-me-headerImage {
+                width: 96px;
+                height: 96px;
+                background: no-repeat center/cover;
+                border-radius: 50%;
+            }
+            .el-me-info{
+                margin-left: 20px;
+                .el-me-fullname{
+                    font-size: 16px;
+                    color: #222;
+                }
+                .el-me-email{
+                    font-size: 14px;
+                    color: #666;
+                    margin-top: 12px;
+                    span{
+                        margin-left: 10px;
+                    }
+                    .verify{
+                        color: #E64545;
+                        text-decoration: underline;
+                        cursor: pointer;
+                    }
+                    .have-verify{
+                        color: #57b936;
+                        font-size: 14px;
+                    }
+                }
+            }
+            &:after{
+                display: block;
+                clear: both;
+                content: '';
+            }
+        }
+
+        .m-header-icon{
+            display: flex;
+            justify-content: space-between;
+            background-color: #ffffff;
+            margin: 0px -20px;
+            margin-top: 20px;
+            align-items: center;
+
+            & > a{
+                width: calc(25% - 20px);
+                display: inline-block;
+                text-align: center;
+                text-decoration: none;
+                cursor: pointer;
+
+                & > p{
+                    &:first-child{
+                        font-size: 22px;
+                        color: #000000;
+                    }
+
+                    &:last-child{
+                        font-size: 14px;
+                        color: #000000;
+                        margin-top: 4px;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+                }
+            }
+
+            ._font{
+                font-family: 'AcuminPro-Bold';
+                font-size: 18px;
+                color: #000000;
+            }
+        }
+    }
+</style>

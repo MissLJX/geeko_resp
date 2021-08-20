@@ -1,26 +1,27 @@
 <template>
     <div>
+        <!-- {{orderStatus}} -->
         <div class="hd">
             <div class="el-tbl">
-                <div class="el-tbl-cell" @click="getData(0,'all','click')" :class="{active:0===index}">
+                <div class="el-tbl-cell" @click="getData(0,'all','click')" :class="{active:0===orderStatus}">
                     {{$t('all')}}<span>{{orderCountAll}}</span>
                 </div>
-                <div class="el-tbl-cell" @click="getData(1,'Unpaid','click')" :class="{active:1===index}">
+                <div class="el-tbl-cell" @click="getData(1,'Unpaid','click')" :class="{active:1===orderStatus}">
                     {{$t('unpaid')}}<span>{{orderCountUnpaid}}</span>
                 </div>
-                <div class="el-tbl-cell" @click="getData(2,'Paid','click')" :class="{active:2===index}">
+                <div class="el-tbl-cell" @click="getData(2,'Paid','click')" :class="{active:2===orderStatus}">
                     {{$t('paid')}}<span>{{orderCountPaid}}</span>
                 </div>
-                <div class="el-tbl-cell" @click="getData(3,'Processing','click')" :class="{active:3===index}">
+                <div class="el-tbl-cell" @click="getData(3,'Processing','click')" :class="{active:3===orderStatus}">
                     {{$t('processing')}}<span>{{orderCountProcessing}}</span>
                 </div>
-                <div class="el-tbl-cell" @click="getData(4,'Shipped','click')" :class="{active:4===index}">
+                <div class="el-tbl-cell" @click="getData(4,'Shipped','click')" :class="{active:4===orderStatus}">
                     {{$t('ordershipped')}}<span>{{orderCountShipped}}</span>
                 </div>
-                <div class="el-tbl-cell" @click="getData(5,'Comfirmed','click')" :class="{active:5===index}">
+                <div class="el-tbl-cell" @click="getData(5,'Comfirmed','click')" :class="{active:5===orderStatus}">
                     {{$t('orderconfirm')}}<span>{{orderCountReceipt}}</span>
                 </div>
-                <div class="el-tbl-cell" @click="getData(6,'Canceled','click')" :class="{active:6===index}">
+                <div class="el-tbl-cell" @click="getData(6,'Canceled','click')" :class="{active:6===orderStatus}">
                     {{$t('cancelorder1')}}<span>{{orderCountCanceled}}</span>
                 </div>
             </div>
@@ -158,7 +159,8 @@
                 'processingDone',
                 'confirmedDone',
                 'canceledDone',
-                'shippedDone'
+                'shippedDone',
+                "orderStatus"
             ]),
             ifDone(){
                 if(this.method==='all'){
@@ -185,6 +187,13 @@
             },
 
         },
+        watch:{
+            orderStatus(newStatus){
+                console.log("newStatus",newStatus);
+                let orderName =  this.getOrderStatusName(this.orderStatus);
+                this.getData(newStatus,orderName,"click");
+            }
+        },
         created(){
             this.$store.dispatch('getOrderCountAll');
             this.$store.dispatch('getOrderCountProcessing');
@@ -193,10 +202,14 @@
             this.$store.dispatch('getOrderCountCanceled');
             this.$store.dispatch('getOrderCountUnpaid');
             this.$store.dispatch('getOrderCountPaid');
-            this.loadAll(20).then(()=> {
-                this.orderMethod = this.all
-                this.isloded = true
-            })
+
+            let orderName =  this.getOrderStatusName(this.orderStatus);
+            // this.loadAll(20).then(()=> {
+            //     this.orderMethod = this.all
+            //     this.isloded = true
+            // })
+            this.isloded = true
+            this.getData(this.orderStatus,orderName,"click");
         },
         mounted(){
             window.addEventListener('scroll',this.scrollHandle)
@@ -206,10 +219,11 @@
         },
         methods:{
             ...mapActions([
-                'loadAll'
+                'loadAll',"changeOrderStatus"
             ]),
             getData(index,method,flag){
-                this.index = index
+                // this.index = index
+                this.changeOrderStatus(index);
                 this.method = method
                 if(flag ==='click'){
                     this.orderMethod = ''
@@ -294,7 +308,7 @@
             scrollHandle(evt){
                 evt.preventDefault();
                 if(document.documentElement.scrollTop + window.innerHeight >= document.body.offsetHeight-300) {
-                    this.getData(this.index,this.method,'scroll')
+                    this.getData(this.orderStatus,this.method,'scroll')
                 }
             },
             productUrl(name,sku,id){
@@ -376,6 +390,23 @@
                         return 'Imprimir boleto'
                     default:
                         return null
+                }
+            },
+            getOrderStatusName(status){
+                if(status === 0){
+                    return "all";
+                }else if(status == 1){
+                    return "Unpaid";
+                }else if(status === 2){
+                    return "Paid";
+                }else if(status === 3){
+                    return "Processing";
+                }else if(status === 4){
+                    return "Shipped";
+                }else if(status === 5){
+                    return "Comfirmed";
+                }else{
+                    return "Canceled";
                 }
             }
         }

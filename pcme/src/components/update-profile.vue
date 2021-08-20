@@ -1,5 +1,9 @@
 <template>
     <div>
+        <div class="_hd">
+            My Profile
+        </div>
+
         <div class="p-hd">
             <strong>{{$t('updatepro')}}</strong> &nbsp;| &nbsp; Complete your profile for a more customized shopping experience.
         </div>
@@ -29,6 +33,11 @@
             </div>
             <div class="namearea">
                 <div class="firstname">
+                    <label>Nickname:</label>
+                    <input v-model="nickname"/>
+                </div>
+
+                <div class="firstname">
                     <label>{{$t('firstName')}}:</label>
                     <input v-model="firstname"/>
                 </div>
@@ -39,9 +48,9 @@
                     </div>
                 </div>
 
-                <div class="birthday">
+                <!-- <div class="birthday">
                     <select-birthday :yearSon="birthday.year" :monthSon="birthday.month" :daySon="birthday.day" @getChildDate="getChildDate"></select-birthday>
-                </div>
+                </div> -->
 
                 <div class="v-btn" @click="infoSaveHandle">{{$t('submit')}}</div>
             </div>
@@ -56,7 +65,7 @@
     import loding from './loding.vue';
     import myUpload from 'vue-image-crop-upload';
     
-    import selectBirthday from './select-birthday.vue'
+    // import selectBirthday from './select-birthday.vue'
 
     export default {
         data() {
@@ -65,6 +74,7 @@
                 isAlert:false,
                 firstname:'',
                 lastname:'',
+                nickname:"",
                 isloding:false,
                 show: false,
                 headers: {
@@ -81,7 +91,6 @@
         components: {
             'loding':loding,
             'my-upload': myUpload,
-            'select-birthday':selectBirthday
         },
         computed:{
             ...mapGetters(['me']),
@@ -94,76 +103,30 @@
                 }
                 return null;
             }
-            /*headerImage(){
-                if(this.me.id){
-                    return
-                }
-            }*/
         },
         methods:{
-            /*
-            var formData = new FormData();
-            this.cropImg ? this.imgfile = this.cropImg : this.imgfile = this.imgSrc
-            this.imgfile = this.convertImgDataToBlob(this.imgfile)
-            formData.append('imageFile', this.imgfile);
-            this.$store.dispatch('setHeaderImage', formData)
-            */
             getChildDate:function(value){
                 console.log(value);
                 this.birthday = value;
             },
             infoSaveHandle(){
-                console.log("getConfireValue",this.getConfireValue)
-                let postData = {
-                    'id': this.me.id,
-                    'name.firstName': this.firstname,
-                    'name.lastName': this.lastname,
-                    'gender':this.me.gender,
-                    'birthday':this.getConfireValue
-                }
-                if(!this.firstname){
-                    alert('First Name is required.')
-                    return;
-                }
-                if(!this.lastname){
-                    alert('Last Name is required.')
-                    return;
-                }
                 this.isloding = true
-                this.$store.dispatch('postProfile', postData).then(() => {
+                let obj = {
+                    customer:{
+                        "name":{
+                            firstName:this.firstname,
+                            lastName:this.lastname,
+                        },
+                        "nickname":this.nickname
+                    },
+                    name:"name"
+                };
+                this.$store.dispatch('updateCustomerSave', obj).then(() => {
                     this.isloding = false
                 }).then(() => {
                     alert('success')
                 })
             },
-            /*convertImgDataToBlob(base64Data){
-                var format = "image/jpeg";               
-                var base64 = base64Data;                
-                var code = window.atob(base64.split(",")[1]);                
-                var aBuffer = new window.ArrayBuffer(code.length);                
-                var uBuffer = new window.Uint8Array(aBuffer);                
-                for (var i = 0; i < code.length; i++) {                    
-                    uBuffer[i] = code.charCodeAt(i) & 0xff;                
-                }                
-                var blob = null;                
-                try {                    
-                    blob = new Blob([uBuffer], {                        
-                        type: format                    
-                    });                
-                } catch (e) {                    
-                    window.BlobBuilder =window.BlobBuilder || window.WebKitBlobBuilder ||window.MozBlobBuilder ||window.MSBlobBuilder;                    
-                    if (e.name == "TypeError" && window.BlobBuilder) {                        
-                        var bb = new window.BlobBuilder();                        
-                        bb.append(uBuffer.buffer);                        
-                        blob = bb.getBlob("image/jpeg");                    
-                    } else if (e.name == "InvalidStateError") {                        
-                        blob = new Blob([aBuffer], {                            
-                            type: format                        
-                        });                    
-                    } else {}                
-                }                
-                return blob;
-            }*/
             toggleShow() {
                 this.show = !this.show;
             },
@@ -186,20 +149,19 @@
             }
         },
         created(){
-            this.$store.dispatch('getMe').then(()=>{
-                this.firstname = this.me.name.firstName
-                this.lastname = this.me.name.lastName
-                this.headerImage = utils.imageutil.getHeaderImg(this.me.id)
-                // this.me.birthday = "2020-04-04";
-                if(!!this.me.birthday && this.me.birthday != null){
-                    let obj = utils.getDYD(this.me.birthday);
-                    this.birthday.year = obj.year;
-                    this.birthday.month = obj.month;
-                    this.birthday.day = obj.day;
-                }else{
-                    this.birthday.year = 1;
-                }
-            })
+            this.firstname = this.me.name.firstName
+            this.lastname = this.me.name.lastName
+            this.nickname = this.me.nickname;
+            this.headerImage = utils.imageutil.getHeaderImg(this.me.id)
+            // this.me.birthday = "2020-04-04";
+            // if(!!this.me.birthday && this.me.birthday != null){
+            //     let obj = utils.getDYD(this.me.birthday);
+            //     this.birthday.year = obj.year;
+            //     this.birthday.month = obj.month;
+            //     this.birthday.day = obj.day;
+            // }else{
+            //     this.birthday.year = 1;
+            // }
         },
     }
 </script>
@@ -220,6 +182,14 @@
         -webkit-text-stroke-width: 0.2px;
         -moz-osx-font-smoothing: grayscale;
     }
+
+    ._hd{
+        font-size: 24px;
+        color: #222222;
+        font-family: 'AcuminPro-Bold';
+        text-align: center;
+    }
+
     .mask{
         position: fixed;
         top: 0;
@@ -280,6 +250,8 @@
     }
     .p-hd{
         color: #666;
+        margin-top: 40px;
+
         strong{
             color: #222;
             font-size: 16px;
