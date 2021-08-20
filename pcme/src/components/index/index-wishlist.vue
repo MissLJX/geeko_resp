@@ -10,7 +10,7 @@
         </div>
 
         <div class="_bd">
-            <ul v-if="disposeWishlistProducts">
+            <ul v-if="!isWishListEmptyShow">
                 <li v-for="(item,index) in wishProducts.slice(0,8)" :key="index+item.id">
                     <div>
                         <a :href="getProUrl(item)">
@@ -52,7 +52,8 @@
         name:"IndexWishList",
         data(){
             return {
-                ifloding:false
+                ifloding:false,
+                isWishListEmptyShow:false
             }
         },
         created(){
@@ -60,9 +61,11 @@
                 return;
             }
             this.ifloding = true;
-            this.$store.dispatch("getWishproducts",this.wishskip).then(() => {
+            this.$store.dispatch("getWishproducts",this.wishskip).then(({finished}) => {
                 this.$store.dispatch("getWishskip");
                 this.ifloding = false;
+                console.log("finished",finished);
+                if(finished) this.isWishListEmptyShow = finished;
             });
         },
         computed:{

@@ -146,6 +146,7 @@
                 padding: 10px 0;
                 display: inline-block;
                 width: 100%;
+                text-transform: capitalize;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
