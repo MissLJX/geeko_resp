@@ -195,6 +195,7 @@ export default {
         expired:"Expired",
         sorry_inconvenience:"Sorry for the inconvenience, we wii fix the problem as soon as possible…",
         maxinum_three_photos:"Maximum of 3 photos, only JPEG, GIF or PNG.",
+        personal_center:"Personal Center"
     },
     index:{
         my_account:"My Account",

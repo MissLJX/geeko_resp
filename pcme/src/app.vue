@@ -19,6 +19,7 @@
 
 <script type="text/ecmascript-6">
     import loding from "./components/loding.vue"
+    import * as utils from "./utils/geekoutil.js"
 
     export default {
         mounted(){
@@ -32,7 +33,7 @@
                 return this.$store.getters.paging
             },
             getContainerBackground(){
-                return this.$route.path === "/me/m" || this.$route.path === "/me/m/" ? {backgroundColor:"#f7f7f7"} : {backgroundColor:"#ffffff"}
+                return this.$route.path === utils.PROJECT + "/me/m" ? {backgroundColor:"#f7f7f7"} : {backgroundColor:"#ffffff"}
             }
         }
     }

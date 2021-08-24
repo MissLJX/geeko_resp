@@ -17,6 +17,9 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
+    if(!window.__is_login__){
+        window.location.href = "/i/login?redirectUrl=/me/m";
+    }
 
     store.dispatch('paging', {paging: true})
 

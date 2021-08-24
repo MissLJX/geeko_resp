@@ -222,7 +222,8 @@ export default {
         you_may_also_ilke:"Sie können auch mögen",
         whitch_are_your_favorite:"Welches sind Ihre Lieblingskategorien?",
         who_do_you_ususlly:"Für wen kaufst du normalerweise Kleidung?",
-        whitch_are_your_styles:"Welches sind deine Lieblingsstile"
+        whitch_are_your_styles:"Welches sind deine Lieblingsstile",
+        personal_center:"Persönliches Zentrum"
     },
     measurements:{
         mea_info1: '"Meine Maße" hilft Ihnen dabei, Ihre perfekte Passform zu finden. Wenn Sie "Meine Maße" ausfüllen, können Sie dies tun.',

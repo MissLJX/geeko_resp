@@ -224,7 +224,8 @@ export default {
         you_may_also_ilke:"você pode gostar",
         whitch_are_your_favorite:"Quais são suas categorias favoritas?",
         who_do_you_ususlly:"Para quem você costuma comprar roupas?",
-        whitch_are_your_styles:"Quais são seus estilos favoritos"
+        whitch_are_your_styles:"Quais são seus estilos favoritos",
+        personal_center:"Centro Pessoal"
     },
     measurements:{
         mea_info1: '"Minhas medições" ajuda a simplificar o processo de encontrar o ajuste perfeito. O preenchimento de "Minhas medições" permite que você.',

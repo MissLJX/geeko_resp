@@ -40,7 +40,7 @@
                         v-if="getOrderNum(feed && feed.orderShippedCount)"
                     >{{getOrderNum(feed && feed.orderShippedCount)}}</span>
                 </p>
-                <p>{{$t("index.shipped")}}</p>
+                <p>{{$t("ordershipped")}}</p>
             </a>
             <a href="/" @click.prevent="changeOrdStatus('5')">
                 <p class="iconfont">

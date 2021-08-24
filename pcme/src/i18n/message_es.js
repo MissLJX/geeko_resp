@@ -192,6 +192,7 @@ export default {
         expired:"Caducado",
         sorry_inconvenience:"Disculpe las molestias, solucionaremos el problema lo antes posible ...",
         maxinum_three_photos:"Máximo de 3 fotos, solo JPEG, GIF o PNG.",
+        personal_center:"Centro personal"
     },
     index:{
         my_account:"Mi cuenta",

@@ -7,7 +7,7 @@
             <div class="el-me-nav">
                 <div class="el-me-left-container">
                     <p class="h-title">
-                        <router-link :to="getUrl('/me/m')">Personal Center</router-link>
+                        <router-link :to="getUrl('/me/m')">{{$t("point.personal_center")}}</router-link>
                     </p>
 
                     <!-- 导航中的路由 -->
@@ -54,6 +54,10 @@
                 next(vm => {
                     vm.isActive = "notification";
                 });
+            }else if(to.path && !!to.path && to.path.includes("credits")){
+                next(vm => {
+                    vm.isActive = "credits";
+                });
             }else if(to.name && !!to.name){
                 next(vm => {
                     vm.isActive = to.name;
@@ -64,11 +68,12 @@
         },
         watch:{
             '$route':function(to,form){
-                console.log("to.name",to.name)
                 if(!to.name && to.path == "/me/m"){
                     this.isActive = "Me";
                 }else if(to.path && !!to.path && to.path.includes("notification")){
                     this.isActive = "notification";
+                }else if(to.path && !!to.path && to.path.includes("credits")){
+                    this.isActive = "credits";
                 }else{
                     this.isActive = to.name;
                 }
