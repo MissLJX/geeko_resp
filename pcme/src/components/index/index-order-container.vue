@@ -1,9 +1,9 @@
 <template>
     <div class="index-order-container">
         <div class="_hd st-table st-fullwidth">
-            <div class="st-cell st-v-m">My Order</div>
+            <div class="st-cell st-v-m">{{$t("myorders")}}</div>
             <div class="st-cell st-v-m st-t-r" @click="changeOrdStatus('0')">
-                View all >
+                {{$t("index.view_all")}} >
             </div>
         </div>
 
@@ -118,6 +118,7 @@
                 &:last-child{
                     font-size: 14px;
                     color: #666666;
+                    cursor: pointer;
                 }
             }
         }

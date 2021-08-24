@@ -455,7 +455,6 @@
                             }
 
                 store.dispatch("updateCustomerSave", obj).then(res => {
-                    this.$router.go(-1);
                     this.isLoadingShow = false;
                 })
             },

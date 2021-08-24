@@ -6,6 +6,7 @@ import _ from 'lodash'
 import axios from '../api/apiconfigs'
 
 import point from "./module/point/index.js";
+import * as utils from "../utils/geekoutil.js"
 
 Vue.use(Vuex)
 
@@ -119,7 +120,7 @@ const state = {
     youlikeProducts:[],
     youlikeskip:0,
     messageM1521:null,
-    orderStatus:0
+    orderStatus:0,
 };
 const getters = {
     me: state => state.me,
@@ -224,14 +225,15 @@ const getters = {
     youlikeProducts:state => state.youlikeProducts,
     youlikeskip:state => state.youlikeskip,
     messageM1521:state => state.messageM1521,
-    orderStatus:state => state.orderStatus
+    orderStatus:state => state.orderStatus,
 };
 const mutations = {
     [types.INIT_ME](state, me){
         state.me = me
     },
     [types.ME_GET](state, _me){
-        state.me = _me
+        state.me = _me;
+        state.headerImage = utils.imageutil.getHeaderImg(_me.id);
     },
     [types.ME_INITIALIZED](state){
         state.initialized = true
@@ -434,6 +436,11 @@ const mutations = {
 
     },
     [types.ME_ADD_ADDRESS](state, address){
+        state.addresses.forEach(item => {
+            if(item && item.isDefaultAddress){
+                item.isDefaultAddress = false;
+            }
+        });
         state.addresses.unshift(address)
     },
     //cancel-order-reasons
@@ -984,6 +991,11 @@ const actions = {
     setHeaderImage({commit}, formData){
         return api.postHeaderImage(formData)
     },
+
+    setHeaderImage2({commit},imageUrl){
+        commit(types.ME_HEADER_IMAGE,imageUrl);
+    },
+
     postProfile({}, postData){
         return api.postProfile(postData)
     },

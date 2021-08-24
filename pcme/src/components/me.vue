@@ -10,7 +10,7 @@
                     :isloding.sync="isloding"
                 ></index-header-icon>
                 <div class="view-more">
-                    <router-link to="/me/m/updateProfile">
+                    <router-link :to="getUrl('/me/m/updateProfile')">
                         {{$t("index.my_profile")}} >
                     </router-link>
                 </div>
@@ -153,6 +153,9 @@
             },
             changeLoadin(flag){
                 this.isloding = flag;
+            },
+            getUrl(suffix){
+                return utils.PROJECT + suffix;
             },
         },
         created(){

@@ -100,6 +100,7 @@
 
                 };
                 _this.$store.dispatch("updateCustomerSave",obj).then(result => {
+                    alert("Success!");
                     _this.isLoadingShow = false;
                 });
             },

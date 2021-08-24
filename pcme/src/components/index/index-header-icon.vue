@@ -62,17 +62,24 @@
             }
         },
         computed:{
-            headerImage(){
-                if(this.me.id){
-                    return utils.imageutil.getHeaderImg(this.me.id)
-                }
+            // headerImage(){
+            //     if(this.me.id){
+            //         return utils.imageutil.getHeaderImg(this.me.id)
+            //     }
+            // },
+            headerImage:function(){
+                return this.$store.getters.headerImage;
             },
             baseHeaderUrl() {
                 return 'https://image.geeko.ltd/site/pc/icon35.png';
             },
             fullName() {
-                if(this.me.name){
-                    return this.me.name.firstName + ' ' + this.me.name.lastName;
+                if(this.me && this.me.nickname){
+                    return this.me.nickname;
+                }else if(this.me.name && (this.me.name.firstName || this.me.name.lastName)){
+                    return this.getName(this.me.name.firstName) + " " + this.getName(this.me.name.lastName);
+                }else{
+                    return this.me.email;
                 }
             },
         },
@@ -87,6 +94,9 @@
                     alert(data.result)
                 })
             },
+            getName(value){
+                return value ? value : '';
+            }
         }
     }
 </script>
