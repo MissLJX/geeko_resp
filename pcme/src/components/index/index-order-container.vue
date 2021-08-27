@@ -71,6 +71,7 @@
 <script>
     import { mapGetters,mapActions } from "vuex"
     import _ from "lodash"
+    import * as utils from "../../utils/geekoutil.js"
 
     export default {
         name:"IndexOrderContainer",
@@ -95,7 +96,7 @@
             },
             changeOrdStatus(status){
                 this.changeOrderStatus(_.toNumber(status));
-                this.$router.push("/me/m/order");
+                this.$router.push(utils.PROJECT + "/me/m/order");
             }
         },
         created:function(){

@@ -46,15 +46,19 @@ const config = {
     progress: true,
     contentBase: './dist',
     proxy: {
-      '/api': {
-        /*68是刚哥得IP*/
-        /*target: 'http://192.168.1.68:8080/wanna',*/
-        target: 'http://localhost:8080/wanna',
-        /*target: 'https://www.chicme.xyz/',*/
-        pathRewrite: { '^/api': '' },
-        secure: false
-      }
-    }
+			'/api': {
+				target: 'https://www.chicme.xyz',
+				// target: 'http://localhost:8080/wanna',
+				pathRewrite: { '^/api': '' },
+				cookieDomainRewrite: 'localhost',
+				cookiePathRewrite: {
+					'/wanna': '/',
+				},
+				secure: true,
+				changeOrigin: true
+			}
+		},
+		host: '0.0.0.0'
   },
   plugins: [
     extractHTML,

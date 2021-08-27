@@ -21,7 +21,7 @@
                                 v-model="show"
                                 :width="300"
                                 :height="300"
-                                url="/api/v9/customer/upload-icon"
+                                url="/v9/customer/upload-icon"
                                 :headers="headers"
                                 img-format="png"
                                 langType="en"
