@@ -1,6 +1,6 @@
 .pageContanier{
     width: 100%;
-    min-height: calc(100vh - 44px);
+    height: calc(100vh - 44px);
     background: #fff;
     max-width: 500px;
     margin: 0 auto;

@@ -14,6 +14,9 @@ import SupportNew from './support/support.jsx';
 import FAQ from './FAQ/FAQ.jsx'
 import ContactUs from './contact-us/contact-us.jsx'
 import Ticket1 from './ticket/ticket.jsx'
+import Order from './order/order.jsx'
+import TicketAdd from './ticket-add/ticket-add.jsx'
+
 
 import {addLocaleData, IntlProvider} from 'react-intl'
 import en from 'react-intl/locale-data/en'
@@ -29,6 +32,7 @@ import fr_L from '../i18n/fr'
 import es_L from '../i18n/es'
 import pt_L from '../i18n/pt'
 import en_L from '../i18n/en'
+
 
 
 
@@ -66,6 +70,8 @@ export default () => (
         <Route path={`${window.ctx || ''}/support/faq`} component={FAQ}/>
         <Route path={`${window.ctx || ''}/support/contact-us`} component={ContactUs}/>
         <Route path={`${window.ctx || ''}/support/ticket1`} component={Ticket1}/>
+        <Route path={`${window.ctx || ''}/support/order`} component={Order}/>
+        <Route path={`${window.ctx || ''}/support/ticketadd`} component={TicketAdd}/>
       </Switch>
     </div>
   </IntlProvider>

@@ -1,12 +1,16 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
-import {get, getByOrderId, sendImage, sendTicket} from '../api'
+import {get, getByOrderId, sendImage, sendTicket} from '../../api'
 import styled from 'styled-components'
-import {GeekoSelect, ColoredButton, PageHeader, PageContanier} from '../components/buttons.jsx'
+import {GeekoSelect, ColoredButton, PageHeader, PageContanier} from '../../components/buttons.jsx'
 import _ from 'lodash'
-import {gloabvars} from '../commons/instance.js'
+import {gloabvars} from '../../commons/instance.js'
 import {FormattedMessage, injectIntl} from 'react-intl'
 import HtmlImageCompress from 'html-image-compress'
+import style from './ticket-add.module.css';
+
+import PageHeader1 from '../../components/page-header/page-header';
+import PageContanier1 from '../../components/page-contanier/page-contanier';
 
 import {
   OrderSelector,
@@ -19,16 +23,14 @@ import {
   ChatContainer,
   ChatSendor,
   ImageLoader
-} from '../components/styled-ticket.jsx'
+} from '../../components/styled-ticket.jsx'
+import SelectType from '../../components/select-type/select-type'
 
 const RATE = styled.span`
 	font-family: iconfont;
 	font-size: 30px;
-	
-	
 `
-
-const Ticket = class extends React.Component {
+class TicketAdd extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -44,7 +46,9 @@ const Ticket = class extends React.Component {
       image: null,
 
       orderInvalid: false,
-      messageInvalid: false
+      messageInvalid: false,
+
+      showTip: false, // 最后一条聊天记录是不是用户的 是的话提示客服会在24h内回复
     }
     this.handleImage = this.handleImage.bind(this)
     this.handleTicket = this.handleTicket.bind(this)
@@ -133,11 +137,12 @@ const Ticket = class extends React.Component {
       this.chatDiv.scrollTop = this.chatDiv.scrollHeight
     }, 200)
   }
-
+  
   componentWillMount () {
-    const {id} = this.props.match.params
-    console.log(this.props.match)
+    const id = this.props.location.search.split('=')[1]
+    console.log(id)
     if (id) {
+      localStorage.__order = ""
       get(id).then(({result}) => {
         const {ticket, order, cusomerName, headSculptureUrl} = result
         this.setState({
@@ -158,9 +163,24 @@ const Ticket = class extends React.Component {
         }
       })
     } else {
-      if (gloabvars.selectedOrder) {
-        getByOrderId(gloabvars.selectedOrder.id).then(({result}) => {
+      console.log(localStorage.__order)
+      if (localStorage.__order) {
+        
+        getByOrderId(JSON.parse(localStorage.__order).id).then(({result}) => {
           const {ticket, order, cusomerName, headSculptureUrl} = result
+          // console.log(ticket.ticketReplies.slice(-1)[ticket.ticketReplies.slice(-1).length - 1]['sender'])
+          if(ticket){
+            if(ticket.ticketReplies.slice(-1)[ticket.ticketReplies.slice(-1).length - 1]['sender'] == "buyers"){
+              this.setState({
+                showTip:true
+              })
+            } else {
+              this.setState({
+                showTip: false
+              })
+            }
+          }
+          
           this.setState({
             isNew: true,
             ticket,
@@ -181,10 +201,14 @@ const Ticket = class extends React.Component {
         this.setState({
           isNew: true,
           loading: false,
-          order: gloabvars.selectedOrder
+          order: {}
         })
       }
     }
+  }
+
+  componentWillUnmount(){
+    localStorage.__order = ''
   }
 
   render () {
@@ -241,7 +265,7 @@ const Ticket = class extends React.Component {
 
     const groupReplies = (replies) => {
       var groups = _.groupBy(replies, function (obj) {
-        return new Date(obj.date).toLocaleDateString()
+        return new Date(obj.date).toLocaleDateString() + " " + new Date(obj.date).toTimeString().substr(0, 5);
       })
       return groups
     }
@@ -291,7 +315,7 @@ const Ticket = class extends React.Component {
 
     const GroupReplyHtmls = (props) => {
       const replies = props.replies
-
+      console.log(replies)
       return <ChatRows>
         {
           replies.map((reply, index) => (
@@ -304,11 +328,15 @@ const Ticket = class extends React.Component {
       </ChatRows>
     }
 
+    const selectChange= (e) => {
+        console.log(e)
+    }
+
     return <div>
 
-      {isFromNotification ? <PageHeader href={'/'} label={intl.formatMessage({id: 'submitticket'})}/> : <PageHeader label={intl.formatMessage({id: 'submitticket'})}/>}
+      {isFromNotification ? <PageHeader1 href={'/'} label={intl.formatMessage({id: 'Ticket'})}/> : <PageHeader1 label={intl.formatMessage({id: 'Ticket'})}/>}
 
-      <PageContanier>
+      <PageContanier1 style={{background: '#f6f6f6'}}>
         { this.state.loading ? (
           <div style={{height: '50px', lineHeight: '50px', fontSize: '12px', textAlign: 'center', color: '#666'}}>
             <FormattedMessage id="loading"/>
@@ -316,29 +344,43 @@ const Ticket = class extends React.Component {
 
         ) : (
 
-          <ChatContainer className="x-flex __column">
-            <OrderInfoContainer>
-              {ticketOrder}
-              <div style={{borderTop: '1px solid #cacaca', paddingTop: '20px', paddingLeft: '20px', paddingRight: '20px', paddingBottom: '15px'}}>
-                <h1 style={{fontSize: '18px', fontWeight: '400', textAlign: 'center'}}><FormattedMessage id="helpyou"/></h1>
-                <div>
-                  <GeekoSelect value={this.state.subject} onChange={(evt) => { this.setState({subject: evt.currentTarget.value}) }} style={{width: '100%', height: '40px', marginTop: '10px'}}>
-                    {questions.map(q => (
-                      <option key={q.value} value={q.value}>{q.label}</option>
-                    ))}
-                  </GeekoSelect>
+          <ChatContainer className="x-flex __column" style={{height:"100%", paddingTop:"12px"}}>
+            {/* 当前订单 */}
+            <div className={style.selectedOrderBox} onClick={()=>window.location.href="/support/order"}>
+                <div className={style.orderNo}>
+                    Order No 
+                    <span>01006099388</span>
                 </div>
-                <div style={{fontSize: '13px', textAlign: 'center', color: '#999', marginTop: '10px'}}><FormattedMessage id="responetime"/></div>
-              </div>
-            </OrderInfoContainer>
+                <div className={style.orderCreateTime}>
+                    Time of Payment
+                    <span>2021/8/06 14:30</span>
+                </div>
+                <span className={`${style.iconfont} ${style.changeOrder}`}>&#xe66b;</span>
+            </div>
 
-            <Chat innerRef={(div) => { this.chatDiv = div }}>
+            {/* 选择帮助项 */}
+            <div className={style.chooseHelpBox}>
+                <div className={style.helpTxt}><FormattedMessage id="helpyou"/></div>
+                <SelectType itemList={questions} selectChange={(e)=>selectChange(e)} type={"chat"}/>
+            </div>
+            
+            {/* 对话 */}
+            <Chat innerRef={(div) => { this.chatDiv = div }} style={{ height:'calc(100% - 230px)',overflow: 'hidden', overflowY: 'scroll', padding:'20px 0'}}>
               {this.state.ticket && this.state.ticket.ticketReplies && _.map(groupReplies(this.state.ticket.ticketReplies), (group, index) => (
                 <div key={index}>
                   <div style={{textAlign: 'center', color: '#999', fontSize: '12px', height: '40px', lineHeight: '40px'}}>{index}</div>
                   <GroupReplyHtmls headSculptureUrl={this.state.headSculptureUrl} replies={group}/>
                 </div>
               ))}
+              {/* 提示 */}
+              {
+                this.state.ticket && this.state.ticket.ticketReplies && this.state.showTip && (
+                  <div className={style.responseTip}>
+                    {"Expected response time：Within 24h"}
+                  </div>
+                )
+              }
+              
               {
                 this.state.ticket && this.state.ticket.canBeRated && <div style={{marginTop: 20, textAlign: 'center'}}>
                   <Link to={`/support/rate/${this.state.ticket.id}`} style={{color: '#3aa978', textDecoration: 'none'}}>
@@ -347,34 +389,38 @@ const Ticket = class extends React.Component {
                   </Link>
                 </div>
               }
-            </Chat>
-            <ChatSendor>
-              <textarea className={this.state.messageInvalid ? 'invalid' : ''} onChange={(evt) => { this.setState({message: evt.currentTarget.value, messageInvalid: false}) }} value={this.state.message} style={{border: '1px solid #666', width: '100%', height: '80px'}}></textarea>
-              <div style={{marginTop: '5px'}}>
-                <div className="x-fw x-table __vm">
-                  <div className="x-cell">
-                    <form ref="imageForm">
-                      <ImageLoader>
-                        <input id="imageFiles" name="imageFiles"
+            </Chat> 
+            
+
+            {/* 输入提交 */}
+            <div className={style.chatInputBox}>
+                <div className={style.chatInput}>
+                    <textarea className={`${this.state.messageInvalid ? style.invalid : ''} ${style.textInput}`} 
+                              placeholder={"Type a message here..."}
+                              onChange={(evt) => { this.setState({message: evt.currentTarget.value, messageInvalid: false}) }} 
+                              value={this.state.message} 
+                              >
+                    </textarea>
+                </div>
+                <div className={style.uploadBtn}>
+                    <label htmlFor="imageFiles">
+                        <span className={`${style.iconfont} ${style.upload}`}>&#xe788;</span>
+                    </label>
+                    <input style={{display:'none'}} id="imageFiles" name="imageFiles"
                           multiple="multiple" type="file"
                           accept="image/jpg,image/jpeg,image/png,image/gif"
                           onChange={this.handleImage}/>
-                      </ImageLoader>
-                    </form>
-                  </div>
-
-                  <div className="x-cell" style={{textAlign: 'right'}}>
-                    <ColoredButton onClick={this.handleTicket} style={{fontSize: '14px', fontWeight: '400', height: '30px', width: '100px'}} btnColor="#000"><FormattedMessage id="send"/></ColoredButton>
-                  </div>
                 </div>
-              </div>
-            </ChatSendor>
+                <div className={style.sendBtn} onClick={this.handleTicket}>
+                    <span className={`${style.iconfont} ${style.send}`}>&#xe789;</span>
+                </div>
+            </div>
           </ChatContainer>
 
         ) }
-      </PageContanier>
+      </PageContanier1>
     </div>
   }
 }
 
-export default injectIntl(Ticket)
+export default injectIntl(TicketAdd)

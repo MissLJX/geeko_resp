@@ -1,9 +1,9 @@
 import React from 'react'
-import styled from 'styled-components'
-import {gloabvars} from '../commons/instance.js'
 import {FormattedMessage, injectIntl} from 'react-intl'
+import style from './new-order-list.module.css'
+import styled from 'styled-components'
 
-const OrderList = class extends React.Component {
+const NewOrderList = class extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -61,10 +61,20 @@ const OrderList = class extends React.Component {
       return label
   	}
 
-    const LabelValue = (props) => <span style={props.style}>
-									<label style={{color: '#666', marginRight: '5px'}}>{props.label}</label>
-									<span >{props.value}</span>
-								  </span>
+    const LabelValue = (props) => {
+		if(props.style){
+			return <span style={props.style}>
+						<label style={{marginRight: '5px'}}>{props.label}</label>
+						<span >{props.value}</span>
+					</span>
+		} else {
+			return <span style={props.style}>
+						<label style={{color: '#999', marginRight: '5px'}}>{props.label}</label>
+						<span >{props.value}</span>
+					</span>
+		}
+		
+	}
 
   	const OrderHD = styled.div`
   		height: 40px;
@@ -164,44 +174,48 @@ const OrderList = class extends React.Component {
 
   	const getMoney = money => money ? (money.unit + money.amount) : ''
 
-  	return <OrderUL>
+  	return <ul className={style.new_order_list_ul}>
   		{
   			this.props.orders && this.props.orders.map(({selected, detail}) => (
-  				<OrderLI key={detail.id} onClick={(evt) => { this.props.clickHandler(evt, detail) }}>
-		            <OrderHD className="x-table __vm x-fw">
+  				<li className={style.new_order_list_li} key={detail.id} onClick={(evt) => { this.props.clickHandler(evt, detail) }}>
+                      {/* "x-table __vm x-fw" */}
+		            <div className={style.new_order_list_item_title_box}>
 		              <div className="x-cell">
 		                <LabelValue label={intl.formatMessage({id: 'orderno'})} value={detail.id}/>
 		              </div>
 		              <div className="x-cell" style={{textAlign: 'right'}}>
 		                <OrderStatus>{status(detail.status)}</OrderStatus>
 		              </div>
-		            </OrderHD>
-		            <OrderBD className="x-table __vm x-fw">
-		              <div className="x-cell">
-		              	<OrderRadio className={selected ? 'selected' : ''}/>
+		            </div>
+		            <div className={style.new_order_list_img_box}>
+		              <div className={style.new_order_list_select}>
+		              	{/* <OrderRadio className={selected ? 'selected' : ''}/> */}
+						  {
+							selected ?
+							<span className={`${style.new_order_list_select_span} ${selected ? style.selected:''}`}>&#xe658;</span>:
+							<span className={`${style.new_order_list_select_span} `}>&#xe65a;</span>
+						  }
+						
 		              </div>
-		              <div className="x-cell">
-		              	<OrderItems>
-		              	{detail.orderItems.map((item, index) => (
-		              		<OrderItem key={index}>
-		              			<OrderImage>
-		              				<img src={item.productImageUrl}/>
-		              			</OrderImage>
-		              		</OrderItem>
-		              	))}
-		              	</OrderItems>
+		              <div className={style.new_order_list_item}>
+						  <ul>
+							{detail.orderItems.map((item, index) => (
+								<li key={index}>
+									<img src={item.productImageUrl}/>
+								</li>
+							))}
+						  </ul>
 		              </div>
-		            </OrderBD>
-
-		            <OrderFD>
-              <FormattedMessage id="count_items" values={{count: detail.orderItems.length}}/>
-		            	<LabelValue style={{marginLeft: '15px'}} label={intl.formatMessage({id: 'ordertotal'})} value={getMoney(detail.orderTotal)}/>
-		            </OrderFD>
-  				</OrderLI>
+                    </div>
+		            <div className={style.new_order_list_total_box}>
+                        <FormattedMessage id="count_items" values={{count: detail.orderItems.length}}/>
+		            	<LabelValue style={{color:"#222", fontWeight:'600'}} label={intl.formatMessage({id: 'ordertotal'})} value={getMoney(detail.orderTotal)}/>
+		            </div>
+  				</li>
   			))
   		}
-  	</OrderUL>
+  	</ul>
   }
 }
 
-export default injectIntl(OrderList)
+export default injectIntl(NewOrderList)

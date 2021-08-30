@@ -26,8 +26,9 @@ const DropDownItem = (props) => {
         }
     }
 
-    const toDetail = () => {
-        history.push({pathname:"/question-detail",params:{aaa:'1111'}})
+    const toDetail = (item) => {
+        // history.push({pathname:"/question-detail",params:{aaa:'1111'}})
+        props.clickItem(item)
     }
 
     useEffect(()=>{
@@ -37,13 +38,13 @@ const DropDownItem = (props) => {
     },[props.open])
     return (
         <div className={style.dropDownPositionBox}>
-            <div className={style.dropDownItem}>
+            <div className={style.dropDownItem} onClick={()=>setShowMore(!showMore)}>
                 <span className={`${style.iconfont} ${style.dropDownIcon}`} dangerouslySetInnerHTML={{__html:props.iconImg}}></span>
                 <span className={style.dropDownTxt}>{props.title}</span>
                 {
                     showMore ? 
-                    <span className={`${style.iconfont} ${style.show}`} onClick={()=>showQuestions("hide")}>&#xe6ba;</span> :
-                    <span className={`${style.iconfont} ${style.show}`} onClick={()=>showQuestions("show")}>&#xe6b9;</span>
+                    <span className={`${style.iconfont} ${style.show}`}>&#xe6ba;</span> :
+                    <span className={`${style.iconfont} ${style.show}`}>&#xe6b9;</span>
                 }
             </div>
             {
@@ -51,7 +52,7 @@ const DropDownItem = (props) => {
                 <div className={style.moreQuestion}>
                     {
                         props.questionList.map((item, index) => {
-                            return <span key={index} onClick={()=>toDetail()}>{item}</span>
+                            return <span key={index} onClick={()=>toDetail(item)}>{item}</span>
                         })
                     }
                 </div>

@@ -80,7 +80,8 @@ class FAQ extends React.PureComponent{
             ],
             isSearched: false,
             searchValue: "",
-            resultList: resultList1,
+            // resultList: resultList1,
+            resultList: [],
 
             questionDetail:`<div style="color:red;">hdsjkadhladd;asd</div>`,
             likeQuestion: "",
@@ -137,6 +138,10 @@ class FAQ extends React.PureComponent{
             })
         }
 
+        const clickItem = (e) => {
+            console.log(e);
+        }
+
         return (
             <div className={style.faqPage}>
                 <PageHeader1 label={intl.formatMessage({id: 'FAQ'})} href="/supportnew"/>
@@ -156,7 +161,14 @@ class FAQ extends React.PureComponent{
                         <div className={style.dropDownList}>
                             {
                                 dropDownList.map((item, index) => {
-                                    return <DropDownItem iconImg={item.iconImg} title={item.title} questionList={item.questionList} open={item.open} key={index}></DropDownItem>
+                                    return <DropDownItem 
+                                                iconImg={item.iconImg} 
+                                                title={item.title} 
+                                                questionList={item.questionList} 
+                                                open={item.open} 
+                                                clickItem={(e)=>clickItem(e)}
+                                                key={index}>
+                                           </DropDownItem>
                                 })
                             }
                         </div>

@@ -3,7 +3,7 @@ import style from './search-bar.module.css'
 
 
 const SearchBar = (props) => {
-    console.log(props)
+    // console.log(props)
     const [showClear, setShowClear] = useState(false);
     const [inputValue, setInputValue] = useState("");
     const [searchTips, setSearchTips] = useState([
@@ -61,7 +61,7 @@ const SearchBar = (props) => {
                        />
                 {
                     showClear&&
-                    <span className={`${style.span} ${style.iconfont}`} onClick={()=>clear()}>&#xe6cb;</span>
+                    <span className={`${style.span} ${style.iconfont}`} onClick={()=>clear()}>&#xe7c5;</span>
                 }
             </div>
             {/* 搜索按钮 */}

@@ -57,16 +57,46 @@ export const ChatTip = styled.div`
   		display: inline-block;
       position: relative;
       top: 5px;
+      min-width: 30px;
+      min-height: 38px;
+      padding: 12px 18px;
   
 
   		&.buyer{
-  			background-color: #1a95d3;
-  			color: #fff;
+  			background-color: #e6e6e6;
+  			color: #222;
+        position:relative;
+        
+        &::after{
+          content: "";
+          position: absolute;
+          color: #000;
+          width: 0;
+          height: 0;
+          top: 16px;
+          right: -4px;
+          border-top: 3px solid transparent;
+          border-left: 4px solid #e6e6e6;
+          border-bottom: 3px solid transparent;
+        }
   		}
 
   		&.seller{
-  			background-color: #efefef;
-  			color: #999;
+  			background-color: #FFF;
+  			color: #222;
+        position:relative;
+        &::after{
+          content: "";
+          position: absolute;
+          color: #000;
+          width: 0;
+          height: 0;
+          top: 16px;
+          left: -4px;
+          border-top: 3px solid transparent;
+          border-right: 4px solid #fff;
+          border-bottom: 3px solid transparent;
+        }
   		}
 
   		img{
@@ -111,7 +141,7 @@ export const ChatRow = styled.div`
   	`
 
   	export const Chat = styled.div`
-  		background-color: #fff;
+  		// background-color: #fff;
   		padding-left: 10px;
   		padding-right: 10px;
   		padding-bottom: 10px;
@@ -119,18 +149,18 @@ export const ChatRow = styled.div`
 
 export const ChatContainer = styled.div`
       & > div{
-        &:nth-child(1){
-          height: 200px;
-          overflow: hidden;
-        }
-        &:nth-child(3){
-          height: 140px;
-          overflow: hidden;
-        }
-        &:nth-child(2){
-          height: calc(100vh - 390px);
-          overflow: auto;
-        }
+        // &:nth-child(1){
+        //   height: 200px;
+        //   overflow: hidden;
+        // }
+        // &:nth-child(3){
+        //   height: 140px;
+        //   overflow: hidden;
+        // }
+        // &:nth-child(2){
+        //   height: calc(100vh - 390px);
+        //   overflow: auto;
+        // }
       }
     `
 

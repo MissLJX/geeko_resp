@@ -12,6 +12,34 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.header{
+    width: 100%;
+    height: 44px;
+    background: #fff;
+    color: #222;
+    /* border: 1px solid; */
+    /* margin-top: 30px; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    font-family: Roboto-Bold;
+    font-size: 16px;
+    line-height: 44px;
+    font-weight: 600;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    max-width: 500px;
+    margin: 0 auto;
+    position: fixed;
+    top: 0;
+}
+.iconfont {
+    position: absolute;
+    left: 13px;
+    color: #222;
+    font-weight: 600;
+}
 .ticketPage{
     position: relative;
 }
@@ -22,7 +50,7 @@
     width: 100%;
     height: 61px;
     border-top: 1px solid #e6e6e6;
-    /* background-color: #fff; */
+    background-color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -62,7 +90,12 @@
 }
 
 .ticketListBox{
-
+    /* overflow: hidden;
+    overflow-y: scroll;
+    height: calc(100vh - 107px); */
+    margin-top: 44px;
+    padding-bottom: 61px;
+    background-color: #fff;
 }
 .ticketItemBox{
     width: 100%;
@@ -83,7 +116,7 @@
     padding-top: 16px;
     margin-bottom: 13px;
     font-family: Roboto-Regular;
-    font-size: 14px;
+    font-size: 12px;
     line-height: 16px;
     font-weight: normal;
     font-stretch: normal;
@@ -110,6 +143,9 @@
     overflow: hidden;
     width: 100%;
     height: 16px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 .ticketStatus{
 

@@ -98,6 +98,7 @@ export const PageHead = styled.div`
 const PageHeaderC = class extends React.Component {
   constructor (props) {
     super(props)
+	console.log(props)
   }
   render () {
   	return <PageHead>

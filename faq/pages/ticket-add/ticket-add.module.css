@@ -1,0 +1,136 @@
+@font-face {
+    font-family: 'iconfont';  /* Project id 384296 */
+    src: url('//at.alicdn.com/t/font_384296_9ise0ifj6r4.woff2?t=1630303916248') format('woff2'),
+         url('//at.alicdn.com/t/font_384296_9ise0ifj6r4.woff?t=1630303916248') format('woff'),
+         url('//at.alicdn.com/t/font_384296_9ise0ifj6r4.ttf?t=1630303916248') format('truetype');
+  }
+  .iconfont {
+    font-family:"iconfont" !important;
+    font-size:16px;
+    font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.chatInputBox{
+    width: 100%;
+    /* border: 1px solid; */
+    height: 64px;
+    display: flex;
+    align-items: center;
+    background: #fff;
+    position: fixed;
+    bottom: 0;
+    box-shadow: 0px 2px 20px 0px 
+		rgba(204, 204, 204, 0.5);
+
+    padding-left: 4%;
+}
+.chatInput{
+    background: #fff;
+    flex: 1;
+}
+.uploadBtn{
+    font-size: 22px;
+    color: #999;
+    margin-right: 30px;
+    margin-left: 15px;
+}
+.upload{
+    font-size: 18px;
+}
+.sendBtn{
+    color: #999;
+    margin-right: 20px;
+}
+.send{
+    font-size: 18px;
+}
+.invalid{
+    box-shadow: inset 0 0 1px red !important;
+    border-color: red !important;
+}
+
+.textInput{
+    width: 100%;
+    height: 40px;
+    line-height: 20px;
+    overflow-y: visible;
+    padding-top: 10px;
+    border: none;
+    resize: none;
+}
+.textInput::-webkit-scrollbar{
+    display: none;
+}
+
+.selectedOrderBox{
+    width: 92%;
+    margin: 0 auto;
+    background: #fff;
+    height: 75px;
+    overflow: hidden;
+    /* line-height: 37.5px; */
+    position: relative;
+    padding-left: 12px;
+    /* margin-top: 12px; */
+    margin-bottom: 20px;
+}
+.orderNo{
+    margin-top: 14px;
+    margin-bottom: 12px;
+    font-family: Roboto-Regular;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #999999;
+}
+.orderNo span{
+    color: #222;
+    margin-left: 12px;
+}
+.orderCreateTime{
+    font-family: Roboto-Regular;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #999999;
+}
+.orderCreateTime span{
+    color: #222;
+    margin-left: 12px;
+}
+.changeOrder{
+    position: absolute;
+    right: 16px;
+    top: calc(50% - 7px);
+    font-size: 12px;
+    color: #666;
+}
+
+.helpTxt{
+    font-family: Roboto-Medium;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #222222;
+    width: 100%;
+    text-align: center;
+    font-weight: 600;
+    margin-top: 5px;
+    margin-bottom: 12px;
+}
+
+.responseTip{
+    font-family: Roboto-Regular;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #999999;
+    text-align: center;
+    margin-top: 7px;
+}
