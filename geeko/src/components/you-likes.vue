@@ -4,7 +4,13 @@
             {{$t("label.mayLike")}}
         </div> -->
         <div class="bd">
-            <product-list :products="products" :loading="loading" :finished="finished" @listing="listingHandle"/>
+            <product-list 
+                :products="products" 
+                :loading="loading" 
+                :finished="finished" 
+                @listing="listingHandle"
+                calssify-name="you may also like"
+            />
         </div>
     </div>
 </template>

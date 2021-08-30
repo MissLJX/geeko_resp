@@ -25,7 +25,7 @@
                 <!-- save按钮 -->
                 <div class="footer-btn">
                     <div class="saveBtn" @click="saveData">
-                        {{$t("label.save")}}
+                        {{$t("save")}}
                     </div>
                 </div>
             </div>

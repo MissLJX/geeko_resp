@@ -4,7 +4,13 @@
             {{$t("point.apply_points")}}
         </div>
         <div class="bd">
-            <product-list :products="products" :loading="loading" :finished="finished" @listing="listingHandle"/>
+            <product-list 
+                :products="products" 
+                :loading="loading" 
+                :finished="finished" 
+                @listing="listingHandle"
+                calssify-name="points"
+            />
         </div>
     </div>
 </template>
