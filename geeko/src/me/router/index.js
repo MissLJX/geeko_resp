@@ -221,6 +221,12 @@ const Me = [
         component:() => import("../pages/editmessage/EditUserBio.vue"),
         name:"edit-bio",
         meta:{title:"Edit User Bio"}
+    },
+    {
+        path:ROUTER_PATH_ME + "/point-guide",
+        component:() => import("../pages/point-guide.vue"),
+        name:"point-guide",
+        meta:{title:"My Points"}
     }
 ]
 
