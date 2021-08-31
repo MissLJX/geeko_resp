@@ -12,9 +12,10 @@ import VeeValidate from 'vee-validate'
 
 import Loading from "./components/loading.vue"
 
-import _global from "./components/Global.vue"
+// import _global from "./components/Global.vue"
+import common from "./common.js"
 
-Vue.prototype.GLOBAL = _global
+Vue.prototype.GLOBAL = common
 
 import './css/style.scss'
 

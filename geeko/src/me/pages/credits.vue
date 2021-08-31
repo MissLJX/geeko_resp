@@ -1,6 +1,5 @@
 <template>
     <div class="el-credit-body">
-
         <nav-bar>
             <i class="iconfont el-back-font" slot="left" @click="$router.go(-1)">&#xe693;</i>
             <span slot="center">{{$t("point.my_points")}}</span>
@@ -32,7 +31,6 @@
             margin-top: 10px;
         }
     }
-
 </style>
 
 <script type="text/ecmascript-6">
@@ -75,7 +73,7 @@
             'received-used': ReceivedUsed,
             'nav-bar':NavBar,
             'points-list':PointsList,
-            "Loading":Loading
+            "Loading":Loading,
         }
     }
 </script>

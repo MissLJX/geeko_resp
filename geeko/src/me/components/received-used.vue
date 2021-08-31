@@ -5,7 +5,7 @@
         </div>
 
         <div class="_bd">
-            <a href="/me/m/order/confirmed">
+            <a :href="GLOBAL.getUrl('/me/m/order/confirmed')">
                 <div class="review">
                     <div>
                         <span class="iconfont">&#xe6d1;</span>
@@ -53,6 +53,10 @@
                 </div>
             </a>
         </div>
+
+        <router-link :to="GLOBAL.getUrl('/me/m/point-guide')" class="fd global-overflow">
+            {{$t("point.more_ways_to_earn_more_points")}} >
+        </router-link>
     </div>
 </template>
 
@@ -149,14 +153,28 @@
 
             .download{
                 background-image: linear-gradient(124deg, 
-                    #a7a7a7 0%, 
-                    #d9d9d9 100%);
+                #73a9f9 0%, 
+                #b2dbf9 100%);
                 border-radius: 4px;
 
                 & .iconfont{
                     font-size: 27px;
                 }
             }
+        }
+
+        .fd{
+            background-image: linear-gradient(131deg, #ffb448 0%, #f5ef4c 100%);
+            border-radius: 4px;
+            height: 30px;
+            line-height: 30px;
+            font-size: 14px;
+            color: #f6f6f6;
+            font-family: 'AcuminPro-Bold';
+            text-align: center;
+            padding: 0px 20px;
+            cursor: pointer;
+            display: inline-block;
         }
     }
 

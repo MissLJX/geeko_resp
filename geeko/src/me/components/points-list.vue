@@ -50,6 +50,11 @@
         },
         created(){
             this.loading = true;
+
+            if(this.products && this.products.length > 0){
+                return;
+            }
+
             store.dispatch("me/getPointsProducts", {skip: 0}).then(() => {
                 this.loading = false
                 store.dispatch("me/getPointsSkip")

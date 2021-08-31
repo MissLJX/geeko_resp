@@ -89,6 +89,12 @@ export default {
         recived:"Recibido",
         used:"Usado",
         expired:"Caducado",
+        more_ways_to_earn_more_points:"Más formas de ganar más puntos",
+        improve_size_information:"Mejora la información de tu talla",
+        complete_your_size_information:"Complete su información de tamaño personal y usted",
+        will_earn_size_information:"ganará 100 puntos.",
+        we_will_keep_the_size_information:"Mantendremos la información que complete estrictamente",
+        confidential:"confidencial."
     },
     index:{
         points:"Puntos",
