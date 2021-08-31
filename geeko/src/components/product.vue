@@ -5,8 +5,7 @@
             data-title="me" 
             :data-column="calssifyName" 
             :data-product-position="index+1"
-            data-source 
-            data-source-click 
+            data-product-list-source 
             :product-id="product.id"
         >
             <figure>
