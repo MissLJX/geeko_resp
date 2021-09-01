@@ -655,6 +655,7 @@ const ShoppingCart = class extends React.Component {
 			tipFixed: false,
 			showAsk: false,
 			askMessage: '',
+			askTitle: '',
 			paypaling: false,
 			checking: false,
 			refreshing: false,
@@ -828,15 +829,15 @@ const ShoppingCart = class extends React.Component {
 			}
 		}
 
-		// if (scrollTop > this.scrollTop) {
-		// 	if (this.couponAlert) {
-		// 		this.couponAlert.classList.add('closed')
-		// 	}
-		// } else {
-		// 	if (this.couponAlert && documentHeight - scrollTop > windowHeight) {
-		// 		this.couponAlert.classList.remove('closed')
-		// 	}
-		// }
+		if (scrollTop > this.scrollTop) {
+			if (this.couponAlert) {
+				this.couponAlert.classList.add('closed')
+			}
+		} else {
+			if (this.couponAlert && documentHeight - scrollTop > windowHeight) {
+				this.couponAlert.classList.remove('closed')
+			}
+		}
 
 
 		this.scrollTop = scrollTop
@@ -1892,7 +1893,8 @@ const ShoppingCart = class extends React.Component {
 		const { shippingInsuranceMsg2 } = this.props.cart
 		this.setState({
 			showAsk: true,
-			askMessage: shippingInsuranceMsg2
+			askMessage: shippingInsuranceMsg2,
+			askTitle: <FormattedMessage id={'shipping_insurance'}/>
 		})
 	}
 
@@ -2550,6 +2552,9 @@ const ShoppingCart = class extends React.Component {
 			// 	{id: '5fd3c997-4d17-43d5-bf2e-0f26fabff1db',pcMainImage: '5fd3c997-4d17-43d5-bf2e-0f26fabff1db-54534-pc-sec', name: 'Give me a reason to prove me wrong', price: {amount: '0', unit: '$'}, msrp: {amount: '20', unit: '$'}},
 			// 	{id: '191f7188-5578-4427-a700-326ddbc3f08f',pcMainImage: '191f7188-5578-4427-a700-326ddbc3f08f-53915-pc', name: 'Give me a reason to prove me wrong', price: {amount: '0', unit: '$'}, msrp: {amount: '30', unit: '$'}}
 			// ]
+
+			// cart.expectedPointDiscount = null
+			// cart.expectedPoints = 0
 		}
 
 		const TipModal = Tip
@@ -3061,19 +3066,13 @@ const ShoppingCart = class extends React.Component {
 
 
 												<LineBox style={{ paddingLeft: 10, paddingRight: 10 }}>
-
-
-
-
-
 													{
-														cart.expectedPoints > 0 && (
-															<TurnTool open={this.openPoints.bind(this)} turnAcitve={cart.openPointUse}>
-
-																<FormattedMessage style={{ fontSize: 15 }} id="credit_msg" values={{ credits: cart.expectedPoints, discount: <Red><Money money={cart.expectedPointDiscount} /></Red> }} />
-																<Ask style={{ marginLeft: 4 }} onClick={this.creditClickHandle.bind(this)} />
-															</TurnTool>
-														)
+														<TurnTool ignoreButton={cart.expectedPoints <= 0} open={this.openPoints.bind(this)} turnAcitve={cart.openPointUse}>
+															<span style={{ fontSize: 14, fontFamily:'SlatePro-Medium' }}>
+																<FormattedMessage  id="credit_msg" values={{ credits: cart.expectedPoints, discount: <Red><Money money={cart.expectedPointDiscount || {amount:'0', unit: ''}} /></Red> }} />
+															</span>
+															<Ask style={{ marginLeft: 4 }} onClick={this.creditClickHandle.bind(this)} />
+														</TurnTool>
 													}
 												</LineBox>
 											</Box>
@@ -3421,7 +3420,7 @@ const ShoppingCart = class extends React.Component {
 											this.state.showAsk && this.state.askMessage && (
 												<React.Fragment>
 													<Mask />
-													<FixedMessage onClose={() => { this.setState({ showAsk: false, askMessage: null }) }}>
+													<FixedMessage title={this.state.askTitle} onClose={() => { this.setState({ showAsk: false, askMessage: null, askTitle: '' }) }}>
 														<p dangerouslySetInnerHTML={{ __html: this.state.askMessage }} />
 													</FixedMessage>
 												</React.Fragment>
@@ -3462,9 +3461,10 @@ const ShoppingCart = class extends React.Component {
 											</SUCCESSTIP>
 										}
 
-										{/* {
-											(!this.state.couponBanner || !this.state.couponBanner.enable) && cart.messages && cart.messages.couponMsg && <CouponAlert onClick={() => { this.props.history.push(`${window.ctx || ''}${__route_root__}/coupons`) }} innerRef={c => this.couponAlert = c} coupon={cart.coupon} couponMsg={cart.messages ? cart.messages.couponMsg : null} />
-										} */}
+										{
+											// (!this.state.couponBanner || !this.state.couponBanner.enable) &&
+											cart.messages && cart.messages.couponMsg && <CouponAlert onClick={() => { this.props.history.push(`${window.ctx || ''}${__route_root__}/coupons`) }} innerRef={c => this.couponAlert = c} coupon={cart.coupon} couponMsg={cart.messages ? cart.messages.couponMsg : null} />
+										}
 
 
 										{

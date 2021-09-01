@@ -63,7 +63,7 @@ export default{
 	sum: 'Suma',
 	use_now: 'Utilizar Ahora',
 	credits: 'Créditos',
-	credit_msg: 'aplique {credits} créditos de ({discount}) a este pedido',
+	credit_msg: 'Aplicar {credits} Puntos ({discount})',
 	we_accept: 'Aceptamos',
 	can_use_coupon: '{canUseCouponCount} Disponible',
 	shipping_time: 'tiempo de envío',
@@ -171,5 +171,6 @@ export default{
 	get_more_discount: 'Cree una nueva cuenta para obtener más descuentos',
 	check_as_email: 'Pague como invitado con su correo electrónico',
 	secure_checkout: 'PAGO SEGURO',
-	register_and_get: '¡Regístrese en ChicMe para rastrear su pedido y obtener más descuentos!'
+	register_and_get: '¡Regístrese en ChicMe para rastrear su pedido y obtener más descuentos!',
+	select_a_card: 'Seleccione una tarjeta'
 }

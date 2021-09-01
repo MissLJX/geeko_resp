@@ -1,5 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
+import {BigButton} from './buttons'
+import { FormattedMessage } from 'react-intl'
 
 const Message = styled.div`
 	position: fixed;
@@ -9,11 +11,25 @@ const Message = styled.div`
 	left: 50%;
 	background-color: #fff;
 	z-index: 10;
+    font-size: 14px;
+    font-family: SlatePro-Medium;
+    text-align: center;
+`
+
+const HD = styled.div`
+  text-align: center;
+  font-size: 14px;
+  font-family: 'AcuminPro-Bold';
+  padding: 8px 8px 4px 8px;
 `
 
 const BD = styled.div`
-	padding: 40px 20px 20px 20px;
+	padding: 8px;
 	line-height: 25px;
+`
+
+const FD = styled.div`
+  padding: 0 8px 8px;
 `
 
 const Close = styled.span`
@@ -25,8 +41,18 @@ const Close = styled.span`
 `
 
 export default (props) => <Message>
-  <Close onClick={props.onClose} className="iconfont">&#xe69a;</Close>
-  <BD>
+	{
+		props.title && <HD>
+			{props.title}
+		</HD>
+	}
+
+	<BD>
   	{props.children}
-  </BD>
+	</BD>
+	<FD>
+		<BigButton  onClick={props.onClose}>
+			<FormattedMessage id="confirm"/>
+		</BigButton>
+	</FD>
 </Message>

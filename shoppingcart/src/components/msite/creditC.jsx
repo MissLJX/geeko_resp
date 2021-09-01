@@ -432,8 +432,20 @@ const Credit = class extends React.Component {
 
 		payForCheckout({orderId: this.state.order.id, token: event.token}).then(data => {
 			const result = data.result
+
+			if(result.redirect){
+				window.location.href = result.redirect
+				return
+			}
+
 			if(result.success){
-				window.location.href = `${window.ctx || ''}/order-confirm/${result.transactionId}?transactionId=${result.transactionId}`
+
+				if(result.redirect){
+					window.location.href = result.redirect
+				}else{
+					window.location.href = `${window.ctx || ''}/order-confirm/${result.transactionId}?transactionId=${result.transactionId}`
+				}
+
 			}else{
 				if (window.isApp) {
 					window.location.href = `${window.ctx || ''}/geekopay/app-fail?errMsg=${result.details || 'Error'}`
@@ -798,7 +810,7 @@ const Credit = class extends React.Component {
 						{
 							cards && cards.length > 0 && <div style={{ backgroundColor: '#fff', paddingTop: 16, borderTop: 'solid 1px #e6e6e6' }}>
 								<div style={{ paddingLeft: 12 }}>
-									<span style={{ fontFamily: 'AcuminPro-Bold' }}>Select a Card</span>
+									<span style={{ fontFamily: 'AcuminPro-Bold' }}><FormattedMessage id="select_a_card"/></span>
 								</div>
 								<div>
 									{

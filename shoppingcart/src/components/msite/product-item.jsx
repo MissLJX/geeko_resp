@@ -102,7 +102,12 @@ export const NormalProduct = class extends React.Component {
 				<img src={`${IMAGE_PREFIX}/medium/${product.pcMainImage}`}/>
 			</a>
 
-			{off > 0 && <OFF>-{off}%</OFF>}
+
+			{
+				product.isNew && <OFF style={{backgroundColor: '#5ad133'}}>NEW</OFF>
+			}
+
+			{off > 0 && !product.isNew && <OFF>-{off}%</OFF>}
 
 			<div className="__price">
 

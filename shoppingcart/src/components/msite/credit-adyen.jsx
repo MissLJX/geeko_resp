@@ -5,7 +5,8 @@ import {
 	checkout_credit,
 	openSafeChargeOrder,
 	setSafeCharge,
-	alyen_check_out
+	alyen_check_out,
+	adyen_3d_call_back
 } from '../../api'
 import {
 	getCreditCards
@@ -316,8 +317,20 @@ const CVVConfirm = props => {
 
 	const [cvv, setCvv] = useState(undefined)
 	const [error, setError] = useState(undefined)
+	const [checkout, setCheckout] = useState(undefined)
+	const [cvvComponent, setCvvComponent] = useState(undefined)
+	const [cvvState, setCvvState] = useState(undefined)
 
 	const ref = createRef()
+
+	useEffect(() => {
+		setCheckout(new AdyenCheckout({
+			locale: window.locale,
+			environment: window.adyenEnv,
+			clientKey: window.__adyen_pk__,
+			onChange: handleOnChange
+		}))
+	}, [])
 
 	useLayoutEffect(() => {
 		ref.current.classList.add('anim')
@@ -331,20 +344,58 @@ const CVVConfirm = props => {
 	}
 
 	const confirmHandle = () => {
-		if(!cvv){
-			setError('Required')
-			return
+		if(cvvState && cvvState.isValid && cvvState.data && cvvState.data.paymentMethod){
+			onConfirm(cvvState.data.paymentMethod.encryptedSecurityCode)
 		}
-		onConfirm(cvv)
 	}
 
-	const handleChange = e => {
-		const {value} = e.target
-		setError('')
-		if(value.toString().length <=4){
-			setCvv(e.target.value)
+
+	const handleOnChange = () => {}
+
+	const cvvRef = c => {
+		if(checkout){
+			if(!cvvComponent){
+				setCvvComponent(checkout.create('securedfields', {
+					// Optional configuration
+					type: 'card',
+					brands: ['mc', 'visa', 'amex', 'bcmc', 'maestro'],
+					styles: {
+						error: {
+							color: 'red'
+						},
+						validated: {
+							color: 'green'
+						},
+						placeholder: {
+							color: '#d8d8d8'
+						}
+					},
+					onChange: function(state) {
+						setCvvState(state)
+					},
+					onValid : function(state) {
+					},
+					onLoad: function() {},
+					onConfigSuccess: function() {},
+					onFieldValid : function() {},
+					onBrand: function(state) {
+					},
+					onError: function(data) {
+						setError(data.errorI18n)
+					},
+					onFocus: function() {},
+					onBinValue: function(state) {
+
+					}
+				}).mount('#cvv-container'))
+			}
+
 		}
+
+
 	}
+
+
 
 	return <CVVCONFIRM innerRef={ref}>
 		<div className="__hd">
@@ -354,7 +405,10 @@ const CVVConfirm = props => {
 		<div style={{marginTop: 8}}>
 			<div style={{display:'flex', alignItems: 'center'}}>
 				<CVVINPUT style={{flex:1}}>
-					<input type={'number'} value={cvv} onChange={handleChange}/>
+					<div style={{height: 35, border:'1px solid #eee', paddingLeft: 12}} id="cvv-container">
+						<span ref={cvvRef} data-cse="encryptedSecurityCode"></span>
+					</div>
+
 					{
 						error && <div style={{fontSize: 12, color:'rgba(230,69,69,1)', marginTop: 4}}>{error}</div>
 					}
@@ -423,6 +477,36 @@ const ASKC = styled.div`
 
 
 `
+
+
+
+const FRAME = styled.div`
+	background-color: #fff;
+	position: fixed;
+	left: 0;
+	bottom: -2000px;
+	transition: bottom 400ms;
+	width: 100%;
+	height: 100%;
+	z-index: 10;
+	& > .__hd{
+		height: 40px;
+	}
+	
+	& > .__bd{
+		height: calc(100% - 40px);
+		overflow: auto;
+		-webkit-overflow-scrolling: touch;
+		padding: 0 12px 50px 12px;
+	}
+	
+	&.active{
+		bottom: 0;
+	}
+	
+`
+
+
 const AskC = props => {
 	return <ASKC>
 		<Icon onClick={props.onClose} style={{ width: 30, height: 30, lineHeight: '30px', position: 'absolute', right: 0, top: 10, fontSize: 14, color: '#999' }}>&#xe6af;</Icon>
@@ -466,28 +550,52 @@ const Credit = class extends React.Component {
 			safechargeresponse: 1,
 			valid: false,
 			formState: null,
-			showCvv: false
+			showCvv: false,
+			showFrame: false
 		}
 
 		this.checkout = new AdyenCheckout({
 			locale: window.locale,
 			environment: window.adyenEnv,
 			clientKey: window.__adyen_pk__,
-			onChange: this.handleOnChange
+			onChange: this.handleOnChange,
+			onAdditionalDetails: this.handleOnAdditionalDetails.bind(this)
 		})
 	}
 
 	componentDidMount() {
 		this.initPage()
-
 	}
 
+	handleOnAdditionalDetails(state){
+		const {order} = this.state
+
+		this.setState({showFrame: false})
+
+		adyen_3d_call_back({transactionId: order.transactionId, details: state.data.details}).then(data => {
+			const { result } = data
+			const {transactionId, orderId, success, warnMsg, response} = result
+
+			if(success){
+				window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}?transactionId=${transactionId}`
+			}else{
+				if (window.isApp) {
+					window.location.href = `${window.ctx || ''}/geekopay/app-fail?errMsg=${warnMsg}`
+				}else{
+					alert(warnMsg || 'Error')
+				}
+			}
+
+			this.setState({checking: false})
+		})
+	}
 
 
 	handleOnChange(state, component){
 		// state.isValid // True or false. Specifies if all the information that the shopper provided is valid.
 		// state.data // Provides the data that you need to pass in the `/payments` call.
 		// component // Provides the active component instance that called this event.
+
 		console.log(state)
 	}
 
@@ -537,21 +645,39 @@ const Credit = class extends React.Component {
 				}).then(data => {
 					const result = data.result
 					if(result){
-						const {transactionId, orderId, success, warnMsg} = result
+						const {transactionId, orderId, success, warnMsg, response} = result
 						if(success){
 							window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}?transactionId=${transactionId}`
+							self.setState({
+								checking: false,
+							})
 						}else{
-							if (window.isApp) {
-								window.location.href = `${window.ctx || ''}/geekopay/app-fail?errMsg=${warnMsg}`
+							if(response.action){
+								const { action } = response
+
+								const threeDSConfiguration = {
+									challengeWindowSize: '05'
+								}
+
+								this.checkout.createFromAction(action,threeDSConfiguration).mount('#frame-container')
+
+								this.setState({
+									showFrame: true
+								})
 							}else{
-								alert(warnMsg || 'Error')
+								if (window.isApp) {
+									window.location.href = `${window.ctx || ''}/geekopay/app-fail?errMsg=${warnMsg}`
+								}else{
+									alert(warnMsg || 'Error')
+								}
+								self.setState({
+									checking: false,
+								})
 							}
 						}
 					}
 
-					self.setState({
-						checking: false,
-					})
+
 				}).catch(data => {
 					self.setState({
 						checking: false,
@@ -576,6 +702,7 @@ const Credit = class extends React.Component {
 
 		}
 	}
+
 
 
 	paySafeCharge(selectedCard){
@@ -724,6 +851,10 @@ const Credit = class extends React.Component {
 
 	}
 
+	cvvRef(){
+
+	}
+
 	onCvvHandle(cvv){
 		this.cvvQuickPay(cvv)
 	}
@@ -797,7 +928,7 @@ const Credit = class extends React.Component {
 						{
 							cards && cards.length > 0 && <div style={{ backgroundColor: '#fff', paddingTop: 16, borderTop: 'solid 1px #e6e6e6' }}>
 								<div style={{ paddingLeft: 12 }}>
-									<span style={{ fontFamily: 'AcuminPro-Bold' }}>Select a Card</span>
+									<span style={{ fontFamily: 'AcuminPro-Bold' }}><FormattedMessage id="select_a_card"/></span>
 								</div>
 								<div>
 									{
@@ -880,6 +1011,15 @@ const Credit = class extends React.Component {
                             </div> */}
 						</FORMBODY>
 
+						<FRAME className={this.state.showFrame ? 'active': ''} >
+							<div className="__hd">
+								<Icon onClick={() => {this.setState({showFrame: false})}} style={{fontSize: 20, cursor: 'pointer', color: '#999', display: 'inline-block', width: 25, position: 'absolute', right: 12, top: 12}}>&#xe6af;</Icon>
+							</div>
+							<div className="__bd">
+								<div id="frame-container"></div>
+							</div>
+						</FRAME>
+
 						{billingAddress && <BOX style={{ marginTop: 8 }}>
 							<div className="__hd">
 								<FormattedMessage id="billing_address" />
@@ -950,6 +1090,8 @@ const Credit = class extends React.Component {
 					<div style={{ marginTop: 16, color: '#999', fontSize: 12, paddingLeft: 36, paddingRight: 36, paddingBottom: 50, lineHeight: '16px', textAlign: 'center' }}>
                         Your account details are fully protected and will not be revealed to any third party for any reasons.
 					</div>
+
+
 
 
 					{

@@ -43,7 +43,7 @@ export default{
 	expiration_year: 'Expiration year',
 	ard_holder_name: 'Card holder name',
 	installments: 'Installments',
-	pay_now: 'pay now',
+	pay_now: 'Zahlen Sie jetzt',
 	please_wait: 'Warten Sie mal',
 	ivalid_tems: 'Ungültige Artikel',
 	clear_all: 'alles löschen',
@@ -63,7 +63,7 @@ export default{
 	sum: 'Summe',
 	use_now: 'Jetzt benutzen',
 	credits: 'Punkte',
-	credit_msg: 'Wenden Sie {credits} Punkte ({discount}) auf diese Bestellung an',
+	credit_msg: '{credits} Punkte Anwenden({discount})',
 	we_accept: 'Wir akzeptieren',
 	can_use_coupon: '{canUseCouponCount} Erhältlich',
 	shipping_time: 'Lieferzeit',
@@ -171,5 +171,6 @@ export default{
 	get_more_discount: 'Erstellen Sie ein neues Konto, um mehr Rabatt zu erhalten',
 	check_as_email: 'Bezahlen Sie als Gast mit Ihrer E-Mail',
 	secure_checkout: 'SICHERE KASSE',
-	register_and_get: 'Registrieren Sie sich bei ChicMe, um Ihre Bestellung zu verfolgen und mehr Rabatt zu erhalten!'
+	register_and_get: 'Registrieren Sie sich bei ChicMe, um Ihre Bestellung zu verfolgen und mehr Rabatt zu erhalten!',
+	select_a_card: 'Wähle eine Karte'
 }

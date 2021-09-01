@@ -640,7 +640,7 @@ const Credit = class extends React.Component {
 						{
 							cards && cards.length > 0 && <div style={{ backgroundColor: '#fff', paddingTop: 16, borderTop: 'solid 1px #e6e6e6' }}>
 								<div style={{ paddingLeft: 12 }}>
-									<span style={{ fontFamily: 'AcuminPro-Bold' }}>Select a Card</span>
+									<span style={{ fontFamily: 'AcuminPro-Bold' }}><FormattedMessage id="select_a_card"/></span>
 								</div>
 								<div>
 									{
