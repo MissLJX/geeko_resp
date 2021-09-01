@@ -117,6 +117,11 @@ const mutations = {
         state.addresses.splice(_index, 1)
     },
     [types.ME_ADD_ADDRESS](state, address){
+        state.addresses.forEach(item => {
+            if(item && item.isDefaultAddress){
+                item.isDefaultAddress = false;
+            }
+        });
         state.addresses.unshift(address)
     },
     [types.ME_GET_NOTIFICATION_COUNT](state, count){

@@ -15,7 +15,7 @@ const OrderList = class extends React.Component {
   	const STATUS_PENDING = 1
     const STATUS_REVIEWING = 2
     const STATUS_PROCESSING = 3
- 	  const STATUS_SHIPPED = 4
+ 	const STATUS_SHIPPED = 4
     const STATUS_PARTIALLY_REFUNDED = 5
     const STATUS_REFUNDED = 6
     const STATUS_CANCELED = 7
@@ -62,9 +62,9 @@ const OrderList = class extends React.Component {
   	}
 
     const LabelValue = (props) => <span style={props.style}>
-      <label style={{color: '#666', marginRight: '5px'}}>{props.label}</label>
-      <span >{props.value}</span>
-    </span>
+									<label style={{color: '#666', marginRight: '5px'}}>{props.label}</label>
+									<span >{props.value}</span>
+								  </span>
 
   	const OrderHD = styled.div`
   		height: 40px;

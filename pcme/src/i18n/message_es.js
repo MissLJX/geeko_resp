@@ -192,6 +192,7 @@ export default {
         expired:"Caducado",
         sorry_inconvenience:"Disculpe las molestias, solucionaremos el problema lo antes posible ...",
         maxinum_three_photos:"Máximo de 3 fotos, solo JPEG, GIF o PNG.",
+        personal_center:"Centro personal"
     },
     index:{
         my_account:"Mi cuenta",
@@ -223,5 +224,31 @@ export default {
         whitch_are_your_favorite:"¿Cuáles son tus categorías favoritas?",
         who_do_you_ususlly:"¿A quién le compras ropa habitualmente?",
         whitch_are_your_styles:"Cuales son tus estilos favoritos"
+    },
+    measurements:{
+        mea_info1: '"Mis medidas" ayuda a simplificar el proceso de encontrar su ajuste perfecto. Completar "Mis medidas" le permite hacerlo.',
+        mea_info2: 'Aplica tus medidas a nuestra tabla de tallas',
+        mea_info3: 'Cree comentarios útiles para que otros clientes los consulten',
+        mea_how: '¿Cómo medir tu cuerpo?',
+        mea_bust: '1.Tu busto',
+        mea_bust_txt: 'Mide la circunferencia sobre la parte más ancha de tu pecho.',
+        mea_waist: '2.Tu cintura',
+        mea_waist_txt: 'Mide tu cintura en el lugar más delgado.',
+        mea_your_hips: '3.Tus caderas',
+        mea_hips_txt: 'Mide la parte más ancha de tus caderas.',
+        mea_height: 'Altura',
+        mea_weight: "Peso",
+        mea_bust_size: 'Tamaño del busto',
+        mea_bra_size: 'Talla de sujetador',
+        mea_waist: 'Cintura',
+        mea_hips: 'Caderas',
+        mea_perference: '¿Cuál es tu preferencia?',
+        mea_true_to_size: 'Fiel al tamaño',
+        mea_large: 'Grande',
+        mea_small: 'Pequeño',
+        mea_cm: 'cm',
+        mea_inch: 'pulgada',
+        mea_lbs: 'libras',
+        mea_kg: 'kg',
     }
 }

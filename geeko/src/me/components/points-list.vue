@@ -4,7 +4,13 @@
             {{$t("point.apply_points")}}
         </div>
         <div class="bd">
-            <product-list :products="products" :loading="loading" :finished="finished" @listing="listingHandle"/>
+            <product-list 
+                :products="products" 
+                :loading="loading" 
+                :finished="finished" 
+                @listing="listingHandle"
+                calssify-name="points"
+            />
         </div>
     </div>
 </template>
@@ -44,6 +50,11 @@
         },
         created(){
             this.loading = true;
+
+            if(this.products && this.products.length > 0){
+                return;
+            }
+
             store.dispatch("me/getPointsProducts", {skip: 0}).then(() => {
                 this.loading = false
                 store.dispatch("me/getPointsSkip")

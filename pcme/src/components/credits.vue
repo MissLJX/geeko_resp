@@ -69,10 +69,10 @@
                     </div>
                 </a>
                 
-                <a href="/i/download">
+                <a href="/i/download" v-if="getDownLoadImage">
                     <div class="download">
                         <div class="_image">
-                            <img src="https://image.geeko.ltd/chicme/20210415/code.png" alt="code">
+                            <img :src="getDownLoadImage" alt="code">
                         </div>
                         <div class="_font">
                             <p>{{$t("point.download_app")}}</p>
@@ -110,6 +110,9 @@
             },
             pointsCustomer(){
                 return this.$store.getters["point/pointsCustomerNum"];
+            },
+            getDownLoadImage(){
+                return window.downloadIcon ? downloadIcon : "";
             }
         },
         data(){

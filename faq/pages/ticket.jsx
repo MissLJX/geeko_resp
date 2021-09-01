@@ -136,7 +136,7 @@ const Ticket = class extends React.Component {
 
   componentWillMount () {
     const {id} = this.props.match.params
-
+    console.log(this.props.match)
     if (id) {
       get(id).then(({result}) => {
         const {ticket, order, cusomerName, headSculptureUrl} = result

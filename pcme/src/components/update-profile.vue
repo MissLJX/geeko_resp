@@ -80,7 +80,7 @@
                 headers: {
                     smail: '*_~'
                 },
-                headerImage:'',
+                headerImageContainer:'',
                 birthday:{
                     year:0,
                     month:0,
@@ -93,7 +93,7 @@
             'my-upload': myUpload,
         },
         computed:{
-            ...mapGetters(['me']),
+            ...mapGetters(['me',"headerImage"]),
             baseHeaderUrl() {
                 return 'https://image.geeko.ltd/site/pc/icon35.png';
             },
@@ -132,12 +132,14 @@
             },
             cropSuccess(imgDataUrl, field){
                 console.log('-------- crop success --------');
-                this.headerImage = imgDataUrl;
+                console.log("imgDataUrl",imgDataUrl)
+                this.headerImageContainer = imgDataUrl;
             },
             cropUploadSuccess(jsonData, field){
                 console.log('-------- upload success --------');
                 console.log(jsonData);
                 console.log('field: ' + field);
+                this.$store.dispatch("setHeaderImage2",this.headerImageContainer);
             },
             cropUploadFail(status, field){
                 console.log('-------- upload fail --------');
@@ -152,7 +154,7 @@
             this.firstname = this.me.name.firstName
             this.lastname = this.me.name.lastName
             this.nickname = this.me.nickname;
-            this.headerImage = utils.imageutil.getHeaderImg(this.me.id)
+            // this.headerImage = utils.imageutil.getHeaderImg(this.me.id)
             // this.me.birthday = "2020-04-04";
             // if(!!this.me.birthday && this.me.birthday != null){
             //     let obj = utils.getDYD(this.me.birthday);

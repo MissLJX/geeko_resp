@@ -75,8 +75,8 @@
                         },
                         {
                             name:this.$t("index.my_measurements"),
-                            routerName:"",
-                            routerPath:""
+                            routerName:"my-measurements",
+                            routerPath:"/me/m/my-measurements"
                         },
                         {
                             name:this.$t("index.my_preference"),
@@ -105,7 +105,7 @@
                         },
                         {
                             name:this.$t("point.my_points"),
-                            routerName:"points-all",
+                            routerName:"credits",
                             routerPath:"/me/m/credits"
                         }
                     ]
@@ -172,7 +172,7 @@
                             routerPath:"/me/m/notification"
                         },
                         {
-                            name:this.$t("points.suggestion"),
+                            name:this.$t("point.suggestion"),
                             routerName:"makeSug",
                             routerPath:"/me/m/makeSug"
                         }

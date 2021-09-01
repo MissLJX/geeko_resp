@@ -1,0 +1,180 @@
+@font-face {
+    font-family: 'iconfont';  /* Project id 384296 */
+    src: url('//at.alicdn.com/t/font_384296_ea5pedcgl35.woff2?t=1629961872918') format('woff2'),
+        url('//at.alicdn.com/t/font_384296_ea5pedcgl35.woff?t=1629961872918') format('woff'),
+        url('//at.alicdn.com/t/font_384296_ea5pedcgl35.ttf?t=1629961872918') format('truetype');
+}
+.iconfont {
+    font-family:"iconfont" !important;
+    font-size:16px;
+    font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.header{
+    width: 100%;
+    height: 44px;
+    background: #fff;
+    color: #222;
+    /* border: 1px solid; */
+    /* margin-top: 30px; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    font-family: Roboto-Bold;
+    font-size: 16px;
+    line-height: 44px;
+    font-weight: 600;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    max-width: 500px;
+    margin: 0 auto;
+    position: fixed;
+    top: 0;
+}
+.iconfont {
+    position: absolute;
+    left: 13px;
+    color: #222;
+    font-weight: 600;
+}
+.ticketPage{
+    position: relative;
+}
+.submitBtn{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 61px;
+    border-top: 1px solid #e6e6e6;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+}
+.submitBtn>span{
+    width: 92%;
+    height: 38px;
+    line-height: 38px;
+    background-color: #000;
+    color: #fff;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.noDataBox{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: calc(75vh);
+    justify-content: center;
+    color: #999;
+}
+.noDataImg{
+    font-size: 82px;
+    color: #999;
+}
+.noDataTxt{
+    margin-top: 40px;
+    color: #999;
+    font-family: Roboto-Regular;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #999999;
+}
+
+.ticketListBox{
+    /* overflow: hidden;
+    overflow-y: scroll;
+    height: calc(100vh - 107px); */
+    margin-top: 44px;
+    padding-bottom: 61px;
+    background-color: #fff;
+}
+.ticketItemBox{
+    width: 100%;
+    height: 119px;
+    padding: 0 4%;
+    border-bottom: 10px solid #f6f6f6;
+    font-family: Roboto-Regular;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #222222;
+}
+.ticketLineOne{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 16px;
+    margin-bottom: 13px;
+    font-family: Roboto-Regular;
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #222222;
+}
+.ticketID{
+
+}
+.ticketTime{
+    color: #999;
+}
+.ticketContent{
+    margin-bottom: 12px;
+    font-family: Roboto-Regular;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 18px;
+    letter-spacing: 0px;
+    color: #999999;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 100%;
+    height: 16px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.ticketStatus{
+
+}
+.statusCircle{
+    width: 8px;
+    height: 8px;
+    background-color: #57b936;
+    display: inline-block;
+    border-radius: 50%;
+    margin-right: 3px;
+}
+.statusTxt{
+    font-family: Roboto-Regular;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #57b936;
+}
+.waiting{
+    color: #f9a646;
+}
+.waiting > .statusCircle {
+    background-color: #f9a646;
+}
+.resolved{
+    color: #999;
+}
+.resolved > .statusCircle {
+    background-color: #999;
+}

@@ -1,0 +1,74 @@
+@font-face {
+    font-family: 'iconfont';  /* Project id 384296 */
+    src: url('//at.alicdn.com/t/font_384296_j1fq1nejzkl.woff2?t=1630049678280') format('woff2'),
+         url('//at.alicdn.com/t/font_384296_j1fq1nejzkl.woff?t=1630049678280') format('woff'),
+         url('//at.alicdn.com/t/font_384296_j1fq1nejzkl.ttf?t=1630049678280') format('truetype');
+  }
+.iconfont {
+    font-family:"iconfont" !important;
+    font-size:16px;
+    font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+.supportPage{
+    /* border: 1px solid; */
+
+}
+.entryButtonBox{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 8px 0 0 0;
+}
+.clickToFAQ{
+    font-family: Roboto-Regular;
+	font-size: 12px;
+	font-weight: normal;
+	font-stretch: normal;
+	line-height: 14px;
+	letter-spacing: 0px;
+	color: #666666;
+    width: 100%;
+    line-height: 54px;
+    height: 54px;
+    text-align: center;
+    border-bottom: 1px solid #e6e6e6;
+}
+.clickToFAQ > span{
+    margin: 0 3px;
+    font-family: Roboto-Regular;
+	text-decoration: underline;
+	font-size: 12px;
+	font-weight: normal;
+	letter-spacing: 0px;
+	color: #222222;
+}
+.findMore{
+    font-family: Roboto-Medium;
+	font-size: 14px;
+	font-weight: normal;
+	font-stretch: normal;
+	line-height: 14px;
+	letter-spacing: 0px;
+	color: #222222;
+    width: 100%;
+    text-align: center;
+    line-height: 54px;
+    height: 54px;
+    text-shadow: 0 0 #222;
+}
+.contactUs{
+    width: 140px;
+    height: 32px;
+    background-color: #222;
+    border-radius: 2px;
+    color: #fff;
+    line-height: 32px;
+    text-align: center;
+    margin: 0 auto;
+}
+.contactUs > span{
+    margin-right: 8px;
+}

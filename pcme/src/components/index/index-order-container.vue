@@ -1,9 +1,9 @@
 <template>
     <div class="index-order-container">
         <div class="_hd st-table st-fullwidth">
-            <div class="st-cell st-v-m">My Order</div>
+            <div class="st-cell st-v-m">{{$t("myorders")}}</div>
             <div class="st-cell st-v-m st-t-r" @click="changeOrdStatus('0')">
-                View all >
+                {{$t("index.view_all")}} >
             </div>
         </div>
 
@@ -40,7 +40,7 @@
                         v-if="getOrderNum(feed && feed.orderShippedCount)"
                     >{{getOrderNum(feed && feed.orderShippedCount)}}</span>
                 </p>
-                <p>{{$t("index.shipped")}}</p>
+                <p>{{$t("ordershipped")}}</p>
             </a>
             <a href="/" @click.prevent="changeOrdStatus('5')">
                 <p class="iconfont">
@@ -71,6 +71,7 @@
 <script>
     import { mapGetters,mapActions } from "vuex"
     import _ from "lodash"
+    import * as utils from "../../utils/geekoutil.js"
 
     export default {
         name:"IndexOrderContainer",
@@ -95,7 +96,7 @@
             },
             changeOrdStatus(status){
                 this.changeOrderStatus(_.toNumber(status));
-                this.$router.push("/me/m/order");
+                this.$router.push(utils.PROJECT + "/me/m/order");
             }
         },
         created:function(){
@@ -118,6 +119,7 @@
                 &:last-child{
                     font-size: 14px;
                     color: #666666;
+                    cursor: pointer;
                 }
             }
         }

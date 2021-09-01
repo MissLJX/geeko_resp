@@ -6,11 +6,12 @@ import Accordion from '../components/accordion.jsx'
 import {questions} from '../data'
 import {Link} from 'react-router-dom'
 import {FormattedMessage, injectIntl} from 'react-intl'
+import '../css/style.css'
 
 const Support = class extends React.Component {
-  constructor (props) {
-    super(props)
-  }
+	constructor (props) {
+		super(props)
+	}
 
   comsponentWillMount () {
     if (window.zE) {
@@ -35,6 +36,7 @@ const Support = class extends React.Component {
 
   render () {
     const {intl} = this.props
+
 
   	const supportbuttons = <ul className='x-flex __around'>
   		<li>
@@ -161,7 +163,7 @@ const Support = class extends React.Component {
   			        					{
   			        						(question.questions || []).map((q) => (
   			        							<li key={q.id}>
-  			        								<Link style={{color: '#666'}} activeStyle={{color: '#e5004f'}} to={`${window.ctx||''}/support/question/${q.id}`}>{q.title}</Link>
+  			        								<Link style={{color: '#666'}} activeStyle={{color: '#e5004f'}} to={`${window.ctx || ''}/support/question/${q.id}`}>{q.title}</Link>
   			        							</li>
   			        						))
   			        					}

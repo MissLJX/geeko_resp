@@ -28,7 +28,10 @@
         <div class="header-icon">
             <div class="st-table">
                 <div class="st-cell st-v-m icon-container">
-                    <div class="icon" :style="{'background-image': 'url('+getHeaderImage+'),url('+baseHeaderUrl+')' }" @click="specificationLogin('/me/m/edit-message',1)" >
+                    <div class="icon" 
+                        :style="{'background-image': 'url('+getHeaderImage+'),url('+baseHeaderUrl+')' }" 
+                        @click="specificationLogin('/me/m/edit-message',1)"
+                    >
                         <span class="_bg" v-if="isLogin">
                             <span class="iconfont _icon">&#xe6ce;</span>
                         </span>
@@ -45,23 +48,23 @@
         </div>
 
         <div class="discount">
-            <a @click.prevent="specificationLogin('/me/m/coupons',1)">
+            <a @click.prevent="specificationLogin('/me/m/coupons',1)" click-name="Coupons">
                 <p class="iconfont">
                     <span :class="{'_font' : isLogin}">{{getFeedNum(feed && feed.canUseCouponCount,"&#xe6dc;")}}</span>
                 </p>
                 <p>{{$t("label.coupons")}}</p>
             </a>
-            <a @click.prevent="specificationLogin('/me/m/credits',1)">
+            <a @click.prevent="specificationLogin('/me/m/credits',1)" click-name="Points">
                 <p class="iconfont">
                     <span :class="{'_font' : isLogin}">{{getFeedNum(feed && feed.points,"&#xe6db;")}}</span>
                 </p>
                 <p>{{$t("index.points")}}</p>
             </a>
-            <a @click.prevent="specificationLogin('/me/m/creditcards',1)">
+            <a @click.prevent="specificationLogin('/me/m/creditcards',1)" click-name="Wallet">
                 <p class="iconfont">&#xe6dd;</p>
                 <p>{{$t("index.wallet")}}</p>
             </a>
-            <a href="/share">
+            <a href="/share" click-name="Get$10">
                 <p class="iconfont">&#xe6da;</p>
                 <p>{{$t("index.get_discount")}}</p>
             </a>
@@ -71,11 +74,14 @@
             <div class="order-container">
                 <div class="order-hd st-table">
                     <div class="st-cell my-order">{{$t("index.my_order")}}</div>
-                    <div class="st-cell st-t-r view-all" @click="specificationLogin('/me/m/order/all')">{{$t("index.view_all")}} ></div>
+                    <div 
+                        class="st-cell st-t-r view-all" 
+                        @click="specificationLogin('/me/m/order/all')"
+                    >{{$t("index.view_all")}} ></div>
                 </div>
 
                 <div class="order-bd">
-                    <a href="/" @click.prevent="specificationLogin('/me/m/order/unpaid')">
+                    <a href="/" @click.prevent="specificationLogin('/me/m/order/unpaid')" click-name="Unpaid">
                         <p class="iconfont">
                             <span>&#xe6df;</span>
                             <span 
@@ -86,7 +92,7 @@
                         </p>
                         <p>{{$t("index.unpaid")}}</p>
                     </a>
-                    <a href="/" @click.prevent="specificationLogin('/me/m/order/processing')">
+                    <a href="/" @click.prevent="specificationLogin('/me/m/order/processing')" click-name="Processing">
                         <p class="iconfont">
                             <span>&#xe6e0;</span>
                             <span class="_count"
@@ -98,7 +104,7 @@
                         </p>
                         <p>{{$t("index.processing")}}</p>
                     </a>
-                    <a href="/" @click.prevent="specificationLogin('/me/m/order/shipped')">
+                    <a href="/" @click.prevent="specificationLogin('/me/m/order/shipped')" click-name="Shipped">
                         <p class="iconfont">
                             <span>&#xe6e4;</span>
                             <span 
@@ -109,7 +115,7 @@
                         </p>
                         <p>{{$t("index.shipped")}}</p>
                     </a>
-                    <a href="/" @click.prevent="specificationLogin('/me/m/order/confirmed')">
+                    <a href="/" @click.prevent="specificationLogin('/me/m/order/confirmed')" click-name="Review">
                         <p class="iconfont">
                             <span>&#xe6de;</span>
                             <span 
@@ -120,7 +126,7 @@
                         </p>
                         <p>{{$t("point.review")}}</p>
                     </a>
-                    <a href="/" class="not-mar" @click.prevent="specificationLogin('/me/m/order/canceled')">
+                    <a href="/" class="not-mar" @click.prevent="specificationLogin('/me/m/order/canceled')" click-name="Returns">
                         <p class="iconfont">
                             <span>&#xe6e3;</span>
                             <span 
@@ -142,15 +148,15 @@
                 </div>
 
                 <div class="service-bd">
-                    <a href="/f/mobile/contact_us">
+                    <a href="/f/mobile/contact_us" click-name="Support">
                         <p class="iconfont">&#xe6e1;</p>
                         <p>{{$t("index.suport")}}</p>
                     </a>
-                    <a @click.prevent="specificationLogin('/me/m/survey',1)">
+                    <a @click.prevent="specificationLogin('/me/m/survey',1)" click-name="Survey">
                         <p class="iconfont">&#xe6e2;</p>
                         <p>{{$t("point.survey")}}</p>
                     </a>
-                    <a @click.prevent="specificationLogin('/me/m/makeSug',1)">
+                    <a @click.prevent="specificationLogin('/me/m/makeSug',1)" click-name="Suggestion">
                         <p class="iconfont">&#xe6e5;</p>
                         <p>{{$t("point.suggestion")}}</p>
                     </a>

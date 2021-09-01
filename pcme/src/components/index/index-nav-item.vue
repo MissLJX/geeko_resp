@@ -74,6 +74,12 @@
         },
         mounted(){
             this.containerHeight = {height:this.num * 39 + "px",overflow: "hidden"};
+
+            let name = this.$route.name;
+            let arr = this.disposeRouteName();
+            if(arr.includes(name)){
+                this.isShow = true;
+            }
         },
         methods:{
             ...mapActions(["changeOrderStatus"]),
@@ -91,6 +97,8 @@
                 return this.list.list.map(item => {
                     if(item.routerName === "notification"){
                         return "promotion";
+                    }else if(item.routerName === "credits"){
+                        return "points-all";
                     }
                     return item.routerName;
                 });

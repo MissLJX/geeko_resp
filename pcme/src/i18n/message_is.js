@@ -195,6 +195,7 @@ export default {
         expired:"Expired",
         sorry_inconvenience:"Sorry for the inconvenience, we wii fix the problem as soon as possible…",
         maxinum_three_photos:"Maximum of 3 photos, only JPEG, GIF or PNG.",
+        personal_center:"Personal Center"
     },
     index:{
         my_account:"My Account",
@@ -226,5 +227,31 @@ export default {
         whitch_are_your_favorite:"Which are your favorite categories?",
         who_do_you_ususlly:"Who do you usually buy clothes for?",
         whitch_are_your_styles:"Which are your favorite styles?"
+    },
+    measurements:{
+        mea_info1: '"My Measurements" helps simplify the process of finding your perfect fit .Filling out "My Measurements" allows you to.',
+        mea_info2: 'Apply your measurements to our sizing chartfit',
+        mea_info3: 'Create useful comments for other customers to refer to',
+        mea_how: 'How to measure your body?',
+        mea_bust: '1.Your bust',
+        mea_bust_txt: 'Measure the circumference over the fullest part of your breast.',
+        mea_waist: '2.Your waist',
+        mea_waist_txt: 'Measure your waist at the thinnest place.',
+        mea_your_hips: '3.Your hips',
+        mea_hips_txt: 'Measure the fullest part of your hips.',
+        mea_height: 'Height',
+        mea_weight: "Weight",
+        mea_bust_size : 'Bust Size',
+        mea_bra_size: 'Bra Size',
+        mea_waist: 'Waist',
+        mea_hips: 'Hips',
+        mea_perference: 'What is your preference?',
+        mea_true_to_size: 'True to size',
+        mea_large: 'Large',
+        mea_small: 'Small',
+        mea_cm: 'cm',
+        mea_inch: 'inch',
+        mea_lbs: 'lbs',
+        mea_kg: 'kg',
     }
 }

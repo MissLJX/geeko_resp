@@ -120,12 +120,16 @@ export const imageutil = {
         return IMAGE_PREFIX + '/' + IMAGE_ORIGINAL + '/' + id
     },
     getHeaderImg(id){
-        return IMAGE_PREFIX + '/icon/' + id
+        return IMAGE_PREFIX + '/icon/' + id + "?icon=" + Date.now();
     }
 }
 
-export const unitprice = function (money) {
-    return money && (money.unit + money.amount) || '';
+export const unitprice = (money) => {
+	if(money){
+		return money.currency === 'EUR'? (money.amount + money.unit) : (money.unit + money.amount)
+	}else{
+		return ''
+	}
 }
 
 const _url_analyst = function (name) {

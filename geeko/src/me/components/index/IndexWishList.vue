@@ -1,6 +1,14 @@
 <template>
     <div class="index-wishlist">
-        <product-list :products="products" :loading="loading" :finished="finished" :scrollable="scrollable" @listing="listingHandle" v-if="isLogin"/>
+        <product-list 
+            :products="products" 
+            :loading="loading" 
+            :finished="finished" 
+            :scrollable="scrollable" 
+            @listing="listingHandle" 
+            v-if="isLogin"
+            calssify-name="wishlist"
+        />
 
         <div class="_bd" v-if="goShoppingShow || !isLogin">
             <div class="_icon">

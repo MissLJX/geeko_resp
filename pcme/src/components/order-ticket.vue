@@ -133,7 +133,8 @@
             },
             headerImage(){
                 if(this.ticket_con.customerId){
-                    return utils.imageutil.getHeaderImg(this.ticket_con.customerId)
+                    // return utils.imageutil.getHeaderImg(this.ticket_con.customerId)
+                    return this.$store.getters.headerImage;
                 }
             },
             sellerheaderImage(){
