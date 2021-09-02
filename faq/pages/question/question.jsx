@@ -1,16 +1,15 @@
-import React from 'react';
+import React, { createRef } from 'react';
 import style from './question.module.css';
 import {FormattedMessage, injectIntl} from 'react-intl';
-import PageContanier1 from '../../components/page-contanier/page-contanier';
-import PageHeader1 from '../../components/page-header/page-header';
 import SearchBar from '../../components/search-bar/search-bar';
-import DropDownItem from '../../components/drop-down-item/drop-down-item';
 import {secondaries, questions} from '../../data'
+import { Page } from '../../components/page/page';
 
 
 class Question1 extends React.PureComponent{
     constructor(props){
         super(props);
+        console.log(props)
         this.state = {
             isSearched: false,
             searchValue: "",
@@ -27,46 +26,22 @@ class Question1 extends React.PureComponent{
             richText:'',
             parent:{},
             stopSearch: false, // 如果是选择下拉框里提示跳转过来的为true
+            headerRef: createRef()
         }
     }
 
     componentWillMount(){
-        // console.log(secondaries.find(q => q.id === 'se-13'))
-        console.log(this.props.location.search)
-        console.log(this.props.match.params.id)
-        // return
-        if(this.props.location.search && this.props.match.params.id){
-            console.log('ss')
-            this.setState({
-                detailShow:true,
-                searchShow:false,
-                secondaryId: this.props.match.params.id,
-                secondary: secondaries.find(q => q.id === this.props.match.params.id),
-                richText:  secondaries.find(q => q.id === this.props.match.params.id).richText,
-                parent: questions.find(q => q.id ===  secondaries.find(q => q.id === this.props.match.params.id).parentId),
-                searchValue: this.replaceStr(this.props.location.search.split("=")[1]),
-                stopSearch: true
-            })
-        } else if(this.props.location.search){
-            this.setState({
-                detailShow: false,
-                searchShow: true,
-                searchValue: this.replaceStr(this.props.location.search.split("=")[1]),
-                stopSearch:false,
-                // parent: questions.find(q => q.id === secondary.parentId)
-            })
-        } else {
-            this.setState({
-                detailShow:true,
-                searchShow:false,
-                secondaryId: this.props.match.params.id,
-                secondary: secondaries.find(q => q.id === this.props.match.params.id),
-                richText:  secondaries.find(q => q.id === this.props.match.params.id).richText,
-                parent: questions.find(q => q.id ===  secondaries.find(q => q.id === this.props.match.params.id).parentId),
-                stopSearch: false
-            })
-            
-        }
+        this.initPage()
+    }
+
+    componentWillUpdate(){
+        console.log(this.state.headerRef)
+        console.log(this.props)
+        this.initPage()
+        this.state.headerRef.current.scrollIntoView({
+            top: 0,
+            behavior:'smooth'
+        })
     }
 
     replaceStr(str){
@@ -79,8 +54,49 @@ class Question1 extends React.PureComponent{
         }
     }
 
+    initPage(){
+        let search = this.props.history.location.state ? this.props.history.location.state.search : 
+                     this.props.location.search ? this.props.location.search : 0;
+        let id = this.props.history.location.state ? this.props.history.location.state.id : 
+                 this.props.match.params.id ? this.props.match.params.id : 0;
+                 console.log(search, id)
+        // return
+        if(search && id){
+            console.log('ss')
+            this.setState({
+                detailShow:true,
+                searchShow:false,
+                secondaryId: id,
+                secondary: secondaries.find(q => q.id === id),
+                richText:  secondaries.find(q => q.id === id).richText,
+                parent: questions.find(q => q.id ===  secondaries.find(q => q.id === id).parentId),
+                searchValue: this.replaceStr(search.split("=")[1]),
+                stopSearch: true
+            })
+        } else if(search){
+            this.setState({
+                detailShow: false,
+                searchShow: true,
+                searchValue: this.replaceStr(search.split("=")[1]),
+                stopSearch:false,
+                // parent: questions.find(q => q.id === secondary.parentId)
+            })
+        } else if(id){
+            this.setState({
+                detailShow:true,
+                searchShow:false,
+                secondaryId: id,
+                secondary: secondaries.find(q => q.id === id),
+                richText:  secondaries.find(q => q.id === id).richText,
+                parent: questions.find(q => q.id ===  secondaries.find(q => q.id === id).parentId),
+                stopSearch: false
+            })
+            
+        }
+    }
+
     render(){
-        const {intl} = this.props;
+        const {intl, history} = this.props;
         const { 
                 dropDownList, 
                 isSearched, 
@@ -95,7 +111,8 @@ class Question1 extends React.PureComponent{
                 secondaryId,
                 richText,
                 parent,
-                stopSearch
+                stopSearch,
+                headerRef
             } = this.state;
         // console.log(secondaryId, secondary, richText, parent)
 
@@ -123,16 +140,7 @@ class Question1 extends React.PureComponent{
         }
 
         const showDetail = (e) => {
-            // console.log(e)
-            window.location.href = "/supportnew/question1/"+e.id+'?search='+searchValue;
-            // document.body.scrollIntoView({
-            //     top:0,
-            //     behavior:'smooth'
-            // })
-            // this.setState({
-            //     searchShow: false,
-            //     detailShow: true
-            // })
+            history.push({pathname:"/supportnew/question1",state:{id:e.id,search:searchValue}})
         }
 
         const removeHeader = (text) => {
@@ -142,8 +150,7 @@ class Question1 extends React.PureComponent{
         }
 
         const clickItem = (e) => {
-            // console.log(e);
-            window.location.href = "/supportnew/question1/"+e.id+'?search='+e.title;
+            history.push({pathname:"/supportnew/question1",state:{id:e.id,search:searchValue}})
         }
 
         const highLightSearch = (title) => {
@@ -156,10 +163,9 @@ class Question1 extends React.PureComponent{
 
         return (
             <div className={style.faqPage}>
-                <PageHeader1 label={intl.formatMessage({id: 'faq'})}/>
-                <PageContanier1>
+                <Page label={intl.formatMessage({id: 'faq'})}>
                     {/* 搜索框 */}
-                    <div className={style.searchBar}>
+                    <div className={style.searchBar} ref={headerRef}>
                         <SearchBar search={(e)=>search(e)} value={searchValue} stopSearch={stopSearch}></SearchBar>
                     </div>                    
 
@@ -219,11 +225,11 @@ class Question1 extends React.PureComponent{
                                 <div className={style.questionDetailContent} dangerouslySetInnerHTML={{__html:removeHeader(richText)}}></div>
                             </div>
                             <div className={style.questionRateBox}>
-                                <div className={style.questionRateTxt}>{intl.formatMessage({id:"articleHelpful"})}</div>
+                                {/* <div className={style.questionRateTxt}>{intl.formatMessage({id:"articleHelpful"})}</div>
                                 <div className={style.questionRateIcon}>
                                     <span className={`${style.iconfont} ${style.like} ${likeQuestion==1?style.liked:""}`} onClick={()=>this.setState({likeQuestion: 1})}>&#xe7af;</span>
                                     <span className={`${style.iconfont} ${style.unlike} ${likeQuestion==2?style.unliked:""}`} onClick={()=>this.setState({likeQuestion: 2})}>&#xe7af;</span>
-                                </div>
+                                </div> */}
                                 <div className={style.noResultTxt}>
                                     {intl.formatMessage({id:"question"})}
                                     <span onClick={()=>window.location.href = "/supportnew/contact-us"}>{intl.formatMessage({id: 'contact'})}</span>
@@ -249,9 +255,7 @@ class Question1 extends React.PureComponent{
                             
                         </div>
                     }
-                                        
-
-                </PageContanier1>
+                </Page>
             </div>
         )
     }

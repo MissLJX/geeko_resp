@@ -6,6 +6,7 @@ import {SupportButton, PageHeader, PageContanier} from '../../components/buttons
 import PageHeader1 from '../../components/page-header/page-header';
 import PageContanier1 from '../../components/page-contanier/page-contanier';
 import EntryButton from '../../components/entry-button/entry-button';
+import { Page } from '../../components/page/page';
 
 class Support extends React.PureComponent{
     constructor(props){
@@ -67,8 +68,7 @@ class Support extends React.PureComponent{
 
         return(
             <div className={style.supportPage}>
-                <PageHeader1 label={intl.formatMessage({id: 'support'})} href="/index"/>
-                <PageContanier1>
+                <Page label={intl.formatMessage({id: 'support'})} href="/index">
                     <div className={style.entryButtonBox}>
                         {
                             buttonList.map((item, index)=>{
@@ -88,7 +88,7 @@ class Support extends React.PureComponent{
                         <span className={style.iconfont}>&#xe6e9;</span>
                         {intl.formatMessage({id:"contact"})}
                     </div>
-                </PageContanier1>
+                </Page>
 
             </div>
         )

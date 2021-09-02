@@ -9,8 +9,8 @@ import {FormattedMessage, injectIntl} from 'react-intl'
 import HtmlImageCompress from 'html-image-compress'
 import style from './ticket-add.module.css';
 
-import PageHeader1 from '../../components/page-header/page-header';
-import PageContanier1 from '../../components/page-contanier/page-contanier';
+import {PageHeader1, PageContanier1} from '../../components/page/page';
+// import PageContanier1 from '../../components/page-contanier/page-contanier';
 
 import {
   OrderSelector,

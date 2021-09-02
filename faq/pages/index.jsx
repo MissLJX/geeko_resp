@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {Switch, Route} from 'react-router-dom'
+import {Switch, Route, BrowserRouter} from 'react-router-dom'
 import Support from './support.jsx'
 import Question from './question.jsx'
 import SearchResult from './search-result.jsx'
@@ -51,20 +51,23 @@ messages['fr'] = fr_L
 
 messages['es'] = es_L
 messages['pt'] = pt_L
+console.log = () =>{
 
+}
 export default () => (
 
   <IntlProvider locale={lang} messages={messages[lang]}>
     <div>
+      <BrowserRouter>
       <Switch>
-        <Route path={`${window.ctx || ''}/support`} exact component={Support}/>
+        {/* <Route path={`${window.ctx || ''}/support`} exact component={Support}/>
         <Route path={`${window.ctx || ''}/support/online-help`} exact component={OnlineHelp}/>
         <Route path={`${window.ctx || ''}/support/search`} component={SearchResult}/>
         <Route path={`${window.ctx || ''}/support/question/:id`} component={Question}/>
         <Route path={`${window.ctx || ''}/support/ticket/add`} component={Ticket}/>
         <Route path={`${window.ctx || ''}/support/ticket/:id`} component={Ticket}/>
         <Route path={`${window.ctx || ''}/support/ticket`} component={Tickets}/>
-        <Route path={`${window.ctx || ''}/support/orders`} component={Orders}/>
+        <Route path={`${window.ctx || ''}/support/orders`} component={Orders}/> */}
         <Route path={`${window.ctx || ''}/support/rate/:id`} component={Rate}/>
 
         
@@ -77,6 +80,7 @@ export default () => (
         <Route path={`${window.ctx || ''}/supportnew/ticketadd`} component={TicketAdd}/>
         <Route path={`${window.ctx || ''}/supportnew`} component={SupportNew}/>
       </Switch>
+      </BrowserRouter>
     </div>
   </IntlProvider>
 )

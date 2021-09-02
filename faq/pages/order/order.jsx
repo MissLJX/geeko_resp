@@ -8,6 +8,7 @@ import {injectIntl} from 'react-intl'
 import PageHeader1 from '../../components/page-header/page-header';
 import style from './order.module.css'
 import SelectType from '../../components/select-type/select-type'
+import { Page } from '../../components/page/page'
 
 const Order = class extends React.Component {
   constructor (props) {
@@ -61,9 +62,8 @@ const Order = class extends React.Component {
     }
 
     return <div style={{overflow:'hidden'}}>
-      <PageHeader1 label={intl.formatMessage({id: 'Ticket'})}/>
-      <PageContanier1>
-          <div className={style.header}>{intl.formatMessage({id: 'selectorder'})}</div>
+      <Page label={intl.formatMessage({id: 'Ticket'})}>
+        <div className={style.header}>{intl.formatMessage({id: 'selectorder'})}</div>
           <SelectType itemList={this.paths} selectChange={(e)=>selectChange(e)}/>
 
             <div className={style.orderList}>
@@ -79,7 +79,7 @@ const Order = class extends React.Component {
                 {intl.formatMessage({id: 'submit'})}
               </span>    
           </div>
-      </PageContanier1>
+      </Page>
     </div>
   }
 }

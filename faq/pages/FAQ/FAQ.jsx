@@ -6,6 +6,7 @@ import PageHeader1 from '../../components/page-header/page-header';
 import SearchBar from '../../components/search-bar/search-bar';
 import DropDownItem from '../../components/drop-down-item/drop-down-item';
 import {secondaries, questions} from '../../data'
+import { Page } from '../../components/page/page';
 
 let resultList1 = [{
     title: "How can I change or modify my order?",
@@ -171,8 +172,7 @@ class FAQ extends React.PureComponent{
 
         return (
             <div className={style.faqPage}>
-                <PageHeader1 label={intl.formatMessage({id: 'faq'})} href="/supportnew"/>
-                <PageContanier1>
+                <Page label={intl.formatMessage({id: 'faq'})} href="/supportnew">
                     {/* 搜索框 */}
                     <div className={style.searchBar}>
                         {
@@ -286,9 +286,8 @@ class FAQ extends React.PureComponent{
                             </div>
                         </div>
                     }
-                                        
+                </Page>
 
-                </PageContanier1>
             </div>
         )
     }

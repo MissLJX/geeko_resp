@@ -5,6 +5,7 @@ import PageContanier1 from '../../components/page-contanier/page-contanier';
 import PageHeader1 from '../../components/page-header/page-header';
 import {list} from '../../api'
 import {withScroll} from '../../HoCs/list'
+import { Page } from '../../components/page/page';
 
 class TicketList extends React.PureComponent{
     constructor(props){
@@ -132,8 +133,7 @@ class Ticket1 extends React.PureComponent{
             {
                 this.state.finished && this.state.skip === this.state.limit ? <Redirect to="/supportnew/ticketadd"/> :
                 <div className={style.ticketPage}>
-                    <PageHeader1 label={intl.formatMessage({id: 'Ticket'})} href="/supportnew/contact-us"/>                    
-                    <PageContanier1>
+                    <Page label={intl.formatMessage({id: 'Ticket'})} href="/supportnew/contact-us">
                         {/* 列表 */}
                         {
                             tickets.length > 0 &&
@@ -156,7 +156,7 @@ class Ticket1 extends React.PureComponent{
                         <div className={style.submitBtn} >
                             <span onClick={()=>window.location.href="order"}>{intl.formatMessage({id: 'submit'})}</span>    
                         </div>
-                    </PageContanier1>
+                    </Page>
                 </div>
             }
         </div>
