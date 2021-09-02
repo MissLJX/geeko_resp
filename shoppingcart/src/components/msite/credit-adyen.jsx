@@ -313,24 +313,14 @@ const CVVINPUT = styled.div`
 
 const CVVConfirm = props => {
 
-	const { onConfirm, onClose } = props
+	const { onConfirm, onClose, checkout } = props
 
 	const [cvv, setCvv] = useState(undefined)
 	const [error, setError] = useState(undefined)
-	const [checkout, setCheckout] = useState(undefined)
 	const [cvvComponent, setCvvComponent] = useState(undefined)
 	const [cvvState, setCvvState] = useState(undefined)
 
 	const ref = createRef()
-
-	useEffect(() => {
-		setCheckout(new AdyenCheckout({
-			locale: window.locale,
-			environment: window.adyenEnv,
-			clientKey: window.__adyen_pk__,
-			onChange: handleOnChange
-		}))
-	}, [])
 
 	useLayoutEffect(() => {
 		ref.current.classList.add('anim')
@@ -651,7 +641,7 @@ const Credit = class extends React.Component {
 							self.setState({
 								checking: false,
 							})
-						}else{
+						}else if(response){
 							if(response.action){
 								const { action } = response
 
@@ -674,6 +664,15 @@ const Credit = class extends React.Component {
 									checking: false,
 								})
 							}
+						}else{
+							if (window.isApp) {
+								window.location.href = `${window.ctx || ''}/geekopay/app-fail?errMsg=${warnMsg}`
+							}else{
+								alert(warnMsg || 'Error')
+							}
+							self.setState({
+								checking: false,
+							})
 						}
 					}
 
@@ -896,8 +895,33 @@ const Credit = class extends React.Component {
 	successHandle(data){
 		const result = data.result
 		const {orderId} = this.props
+		const {response, details} = result
+
 		if(result.success){
 			window.location.href = `${window.ctx || ''}/order-confirm/${result.transactionId}?transactionId=${result.transactionId}`
+		}else if(response){
+			if(response.action){
+				const { action } = response
+
+				const threeDSConfiguration = {
+					challengeWindowSize: '05'
+				}
+
+				this.checkout.createFromAction(action,threeDSConfiguration).mount('#frame-container')
+
+				this.setState({
+					showFrame: true
+				})
+			}else{
+				if (window.isApp) {
+					window.location.href = `${window.ctx || ''}/geekopay/app-fail?errMsg=${details}`
+				}else{
+					alert(details || 'Error')
+				}
+				self.setState({
+					checking: false,
+				})
+			}
 		}else{
 			if (window.isApp) {
 				window.location.href = `${window.ctx || ''}/geekopay/app-fail?errMsg=${result.details || 'Error'}`
@@ -1107,7 +1131,7 @@ const Credit = class extends React.Component {
 							<CVVConfirm onConfirm={cvv => {
 								this.setState({showCvv: false})
 								this.onCvvHandle(cvv)
-							}}  onClose={() => {this.setState({showCvv:false})}} onAsk={() => {this.setState({showAsk: true})}}/>
+							}} checkout={this.checkout}  onClose={() => {this.setState({showCvv:false})}} onAsk={() => {this.setState({showAsk: true})}}/>
 						</React.Fragment>
 					}
 
