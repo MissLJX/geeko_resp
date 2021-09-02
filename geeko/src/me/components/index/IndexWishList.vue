@@ -27,7 +27,7 @@
 </template>
 
 <script>
-    import ProductList from '../../../components/product-list.vue'
+    import ProductList from '../../components/wishlist/product-wishlist-list.vue'
     import store from '../../../store/index.js'
     import { mapGetters } from "vuex"
 

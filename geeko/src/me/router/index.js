@@ -124,7 +124,7 @@ const Me = [
         path: ROUTER_PATH_ME + '/wishlist',
         component: () => import('../pages/wishlist.vue'),
         name: 'wishlist',
-        meta: {title: 'Wish List'}
+        meta: {title: 'Wish List',keepAlive:true}
     },
     {
         path: ROUTER_PATH_ME + '/confirmSuccess*',
@@ -223,11 +223,17 @@ const Me = [
         meta:{title:"Edit User Bio"}
     },
     {
-        path:ROUTER_PATH_ME + "/point-guide",
-        component:() => import("../pages/point-guide.vue"),
-        name:"point-guide",
-        meta:{title:"My Points"}
+        path:ROUTER_PATH_ME + "/relation-products/:productId",
+        component:() => import("../pages/relation-products.vue"),
+        name:"relation-products",
+        meta:{title:"Relation Products"}
     }
+    // {
+    //     path:ROUTER_PATH_ME + "/point-guide",
+    //     component:() => import("../pages/point-guide.vue"),
+    //     name:"point-guide",
+    //     meta:{title:"My Points"}
+    // }
 ]
 
 export default Me

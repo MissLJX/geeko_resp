@@ -54,9 +54,9 @@
             </a>
         </div>
 
-        <router-link :to="GLOBAL.getUrl('/me/m/point-guide')" class="fd global-overflow">
+        <!-- <router-link :to="GLOBAL.getUrl('/me/m/point-guide')" class="fd global-overflow">
             {{$t("point.more_ways_to_earn_more_points")}} >
-        </router-link>
+        </router-link> -->
     </div>
 </template>
 

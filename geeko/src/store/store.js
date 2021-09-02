@@ -4,6 +4,8 @@ import _ from 'lodash'
 
 export const state = {
     paging: false,
+    modalconfirmshow: false,
+    confirmCfg:null,
     screenLoading: false,
     countries: null,
     states: null,
@@ -15,6 +17,8 @@ export const getters = {
     countries: state => state.countries,
     states: state => state.states,
     paging: state => state.paging,
+    modalconfirmshow: state => state.modalconfirmshow,
+    confirmCfg: state => state.confirmCfg,
     screenLoading: state => state.screenLoading,
     currencies: state => state.currencies
 }
@@ -58,6 +62,10 @@ export const mutations = {
     },
     [types.GLOBAL_GET_CURRENCIES](state, currencies){
         state.currencies = currencies
+    },
+    [types.APP_CONFIRM_SHOW](state, {show , cfg}){
+        state.confirmCfg = cfg
+        state.modalconfirmshow = show
     }
 }
 
@@ -80,6 +88,12 @@ export const actions = {
     },
     paging({commit}, {paging}){
         commit(types.GLOBAL_PAGING, paging)
+    },
+    confirmShow: function ({commit}, shower) {
+        commit(types.APP_CONFIRM_SHOW, shower)
+    },
+    closeConfirm: function ({commit}) {
+        commit(types.APP_CONFIRM_SHOW, {show: false, cfg: null})
     },
     screenLoading({commit}, {loading}){
         commit(types.GLOBAL_SCREEN_LOADING, loading)

@@ -62,12 +62,17 @@
         line-height: 18px;
     }
     .myCheck:checked + label{
-        background-color: #e5004f;
+        // background-color: #e5004f;
         border: none;
-        color: white;
+        // color: white;
     }
     .myCheck:checked + label:after{
-        content:"\2714";
+        content:'\e65b';
+        font-family: 'iconfont';
+        color: #222222;
+        font-size: 18px;
+        position: relative;
+        right: -1px;
     }
     .gray{
         -webkit-filter: grayscale(100%);

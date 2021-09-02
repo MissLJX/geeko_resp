@@ -1,10 +1,16 @@
 <template>
     <div class="el-wishlist-body">
-        <page-header>
-            <span>{{$t('label.wishlist')}}</span>
-            <span v-if="ifEdit" slot="oplabel" @click="editHandle">{{$t('label.edit')}}</span>
-            <span v-if="!ifEdit" slot="oplabel" @click="cancelHandle">{{$t('label.cancel')}}</span>
-        </page-header>
+        <nav-bar>
+            <i class="iconfont el-back-font" slot="left" @click="$router.go(-1)">&#xe693;</i>
+            <span slot="center">{{$t('label.wishlist')}}</span>
+            <span v-if="ifEdit" slot="right" @click="editHandle" class="iconfont" style="font-size:18px;">&#xe6eb;</span>
+            <span v-if="!ifEdit" slot="right" @click="cancelHandle">{{$t('label.cancel')}}</span>
+        </nav-bar>
+
+        <div class="fd_message" v-if="fdMessageShow">
+            {{$t("label.manage_your_wishlist")}}
+        </div>
+
         <product-list v-if="ifEdit" :products="products" :loading="loading" :finished="finished" @listing="listingHandle" />
         <product-wishlist v-if="!ifEdit" :products="products" :loading="loading" :finished="finished" @listing="listingHandle" @refresh="refreshHandle"/>
         <loading v-if="ifloding"></loading>
@@ -14,15 +20,53 @@
 <style scoped lang="scss">
     .el-wishlist-body{
         background-color: #fff;
+        position: relative;
+
+        ._hd{
+            position: relative;
+        }
+
+        .fd_message{
+            background-color: #ffffff;
+            width:75%;
+            padding: 15px 10px;
+            position: relative;
+            -os-box-shadow: 0 0 15px 2px rgba(0,0,0,0.25);
+            -ms-box-shadow: 0 0 15px 2px rgba(0,0,0,0.25);
+            box-shadow: 0 0 15px 2px rgba(0,0,0,0.25);
+            position: absolute;
+            right: 5px;
+            top: 50px;
+            z-index: 3;
+            color: #222222;
+            font-size: 14px;
+            font-family: 'SlatePro-Medium';
+            text-align: center;
+
+            &::after{
+                content: ' ';
+                position: absolute;
+                width: 20px;
+                height: 20px;
+                right: 15px;
+                top: -10px;
+                background-color: #ffffff;
+                transform:rotate(315deg);
+                -moz-transform:rotate(315deg); 	/* Firefox */
+                -webkit-transform:rotate(315deg); /* Safari 和 Chrome */
+                box-shadow: 0px 0px 0px 0 transparent, 0 0px 0px 0px transparent, 0 0 0 0 transparent, 2px -1px 1px -1px rgba(0,0,0,0.25);
+            }
+        }
     }
 </style>
 
 <script type="text/ecmascript-6">
-    import PageHeader from '../components/page-header.vue'
-    import ProductList from '../../components/product-list.vue'
+    import NavBar from "../components/nav-bar.vue"
+    import ProductList from '../components/wishlist/product-wishlist-list.vue'
     import ProductWishList from '../../components/product-wishlist.vue'
     import store from '../../store'
     import Loading from "../../components/loading.vue";
+
     export default{
         data(){
             return{
@@ -31,7 +75,13 @@
                 empty: false,
                 ifEdit:true,
                 ifloding:false,
+                fdMessageShow:true
             }
+        },
+        created:function(){
+            setTimeout(() => {
+                this.fdMessageShow = false;
+            },3000);
         },
         computed: {
             products(){
@@ -89,7 +139,7 @@
         },
         components: {
             'loading':Loading,
-            'page-header': PageHeader,
+            'nav-bar': NavBar,
             'product-list': ProductList,
             'product-wishlist':ProductWishList
         },

@@ -56,7 +56,8 @@ export default {
         yes:'YES',
         no:'NO',
         cancel:'Cancel',
-        use:'Use'
+        use:'Use',
+        manage_your_wishlist:"Click here to manage your wishlist"
     },
     point:{
         my_points:"My Points",

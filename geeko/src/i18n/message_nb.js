@@ -57,7 +57,8 @@ export default {
         yes: 'Ja',
 	    no: 'Nei',
         cancel:'Avbryt',
-        use:'Bruk'
+        use:'Bruk',
+        manage_your_wishlist:"Click here to manage your wishlist"
     },
     point:{
         my_points:"My Points",

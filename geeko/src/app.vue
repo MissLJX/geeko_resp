@@ -19,6 +19,13 @@
                 </i>
             </div>
         </div>
+
+        <!-- modals -->
+        <transition name="fade-alert">
+            <modal-confirm v-if="modalconfirmshow" :cfg="confirmCfg" />
+        </transition>
+
+        <div class="mask" v-if="modalconfirmshow"></div>
     </div>
 </template>
 
@@ -71,10 +78,37 @@
             opacity: 1;
         }
     }
+
+    .fade-alert-enter{
+        width: calc(80% - 20px);
+        opacity: 0;
+        top: calc(50% + 20px);
+    }
+
+    .fade-alert-enter-active{
+        transition: all .1s linear;
+    }
+
+    .fade-alert-leave-active{
+        opacity: 0;
+        width: calc(80% - 20px);
+        top: calc(50% + 20px);
+        transition: all .1s linear;
+    }
+
+    .mask{
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        left: 0;
+        top:0;
+        background-color: rgba(0,0,0,0.4);
+        z-index: 200;
+    }
 </style>
 
 <script type="text/ecmascript-6">
-
+    import ModalConfirm from "./components/modal-confirm.vue"
 
     export default{
         computed:{
@@ -83,7 +117,16 @@
             },
             screenLoading(){
                 return this.$store.getters.screenLoading
-            }
+            },
+            modalconfirmshow(){
+                return this.$store.getters.modalconfirmshow
+            },
+            confirmCfg(){
+                return this.$store.getters.confirmCfg
+            },
+        },
+        components:{
+            "modal-confirm":ModalConfirm
         }
     }
 </script>

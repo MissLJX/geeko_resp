@@ -57,7 +57,8 @@ export default {
         yes: 'Kyllä',
 	    no: 'Ei',
         cancel:'Peruuta',
-        use:'K\u00e4yt\u00e4'
+        use:'K\u00e4yt\u00e4',
+        manage_your_wishlist:"Click here to manage your wishlist"
     },
     point:{
         my_points:"My Points",

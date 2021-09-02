@@ -57,7 +57,8 @@ export default {
         yes: 'J\u00e1',
 	    no: 'Nei',
         cancel:'Hætta við',
-        use:'Nota'
+        use:'Nota',
+        manage_your_wishlist:"Click here to manage your wishlist"
     },
     point:{
         my_points:"My Points",
