@@ -49,5 +49,36 @@ export default {
   satisfied: 'Satisfied',
   unsatisfied: 'Unsatisfied',
   you_can_rate: 'You can comment customer service here.',
-  please_rate: 'Please rate my service'
+  please_rate: 'Please rate my service',
+  // support:
+  click:'For all Q&As Please Click on our',
+  faq:"FAQ",
+  page:"page",
+  findNothing:"Can't find the answer you are looking for?",
+  contact:"Contact Us",
+  orderProcessing: "Order Processing",
+  tracking:"Logistics Tracking",
+  return:"Return & Refund",
+  product:"Product & Stock",
+  payment:"Payment & Promos",
+  account:"Account Issues",
+  // contact:
+  Ticket:'Ticket',
+  within:'Within 24H',
+  online:'Online Help',
+  // faq
+  search: "Search Results",
+  resultFor: "results for \"<strong>{result}</strong>\"",
+  question:"Have more questions?",
+  articleHelpful:"Was this article helpful?",
+  related:"Related Articles",
+  // ticket
+  noTicket:"no Ticket",
+  // order
+  // ticket add
+  textareaPlaceHolder:"Type a message here...",
+  orderNo:"order NO",
+  responseTime:"Expected response time：Within 24h",
+  selectTip: 'Please select your question type',
+  statuswating: 'Wating for Replied',
 }

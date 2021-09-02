@@ -16,6 +16,7 @@ import ContactUs from './contact-us/contact-us.jsx'
 import Ticket1 from './ticket/ticket.jsx'
 import Order from './order/order.jsx'
 import TicketAdd from './ticket-add/ticket-add.jsx'
+import Question1 from './question/question.jsx'
 
 
 import {addLocaleData, IntlProvider} from 'react-intl'
@@ -39,7 +40,7 @@ import en_L from '../i18n/en'
 addLocaleData([...en, ...zh, ...fr, ...de, ...pt, ...es])
 
 const messages = {}
-
+window.lang = 'en'
 const lang = (window.lang || 'en').substring(0, 2)
 
 messages['en'] = en_L
@@ -66,12 +67,15 @@ export default () => (
         <Route path={`${window.ctx || ''}/support/orders`} component={Orders}/>
         <Route path={`${window.ctx || ''}/support/rate/:id`} component={Rate}/>
 
+        
+        <Route path={`${window.ctx || ''}/supportnew/faq`} component={FAQ}/>
+        <Route path={`${window.ctx || ''}/supportnew/question1/:id`} component={Question1}/>
+        <Route path={`${window.ctx || ''}/supportnew/question1`} component={Question1}/>
+        <Route path={`${window.ctx || ''}/supportnew/contact-us`} component={ContactUs}/>
+        <Route path={`${window.ctx || ''}/supportnew/ticket1`} component={Ticket1}/>
+        <Route path={`${window.ctx || ''}/supportnew/order`} component={Order}/>
+        <Route path={`${window.ctx || ''}/supportnew/ticketadd`} component={TicketAdd}/>
         <Route path={`${window.ctx || ''}/supportnew`} component={SupportNew}/>
-        <Route path={`${window.ctx || ''}/support/faq`} component={FAQ}/>
-        <Route path={`${window.ctx || ''}/support/contact-us`} component={ContactUs}/>
-        <Route path={`${window.ctx || ''}/support/ticket1`} component={Ticket1}/>
-        <Route path={`${window.ctx || ''}/support/order`} component={Order}/>
-        <Route path={`${window.ctx || ''}/support/ticketadd`} component={TicketAdd}/>
       </Switch>
     </div>
   </IntlProvider>

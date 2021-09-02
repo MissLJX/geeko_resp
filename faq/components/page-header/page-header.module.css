@@ -34,6 +34,9 @@
     letter-spacing: 0px;
     max-width: 500px;
     margin: 0 auto;
+    position: fixed;
+    top: 0;
+    z-index: 10;
 }
 .iconfont {
     position: absolute;

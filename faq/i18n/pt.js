@@ -48,5 +48,37 @@ export default {
   satisfied: 'Satisfeito',
   unsatisfied: 'Insatisfeito',
   you_can_rate: 'Você pode comentar o atendimento ao cliente aqui',
-  please_rate: 'Por favor classifique meu serviço'
+  please_rate: 'Por favor classifique meu serviço',
+  // support:
+  click:'Para todas as perguntas e respostas, clique em nosso',
+  faq:"FAQ",
+  page:"página",
+  findNothing:"Não consegue encontrar a resposta que procura?",
+  contact:"Fale conosco",
+  orderProcessing: "Order Processing",
+  tracking:"Rastreamento Logístico",
+  return:"Devolução e reembolso",
+  product:"Produto e estoque",
+  payment:"Pagamento e promoções",
+  account:"Problemas de conta",
+  // contact:
+  Ticket:'Ingresso',
+  within:'Dentro de 24H',
+  online:'Ajuda online',
+  // faq
+  search: "Resultados da pesquisa",
+  resultFor: "resultados para \"<strong>{result}</strong>\"",
+  question:"Tem mais perguntas?",
+  articleHelpful:"Este artigo foi útil?",
+  related:"Artigos Relacionados",
+  // ticket
+  noTicket:"no Ticket",
+  // order
+  // ticket add
+  textareaPlaceHolder:"Digite uma mensagem aqui ...",
+  orderNo:"pedido NÃO",
+  responseTime:"Tempo de resposta esperado：Dentro de 24h",
+  selectTip: 'Selecione seu tipo de pergunta',
+  statuswating: 'Esperando por respostas'
+  
 }

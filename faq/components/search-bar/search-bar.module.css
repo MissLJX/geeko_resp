@@ -83,7 +83,7 @@
     
 }
 .searchTipsBox span, .searchTipsBox strong{
-    margin-right: 3px;
+    /* margin-right: 3px; */
 }
 .tipItem{
     width: calc(100%);

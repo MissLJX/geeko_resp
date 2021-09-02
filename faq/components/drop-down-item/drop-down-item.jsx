@@ -18,7 +18,7 @@ const DropDownItem = (props) => {
     const [questionList, setQuestionList] = useState(questionListMock);
 
     const showQuestions = (type) => {
-        console.log(type)
+        // console.log(type)
         if(type == 'hide'){
             setShowMore(false)
         } else {
@@ -52,7 +52,7 @@ const DropDownItem = (props) => {
                 <div className={style.moreQuestion}>
                     {
                         props.questionList.map((item, index) => {
-                            return <span key={index} onClick={()=>toDetail(item)}>{item}</span>
+                            return <span key={index} onClick={()=>toDetail(item)}>{item.title}</span>
                         })
                     }
                 </div>

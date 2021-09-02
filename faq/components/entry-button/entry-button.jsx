@@ -6,6 +6,7 @@ const EntryButton = (props) => {
     // console.log(props);
     const history = useHistory();
     const pageEntry = (url, title) => {
+        console.log(url)
         history.push({pathname:url, params:{title: title}})
     }
 

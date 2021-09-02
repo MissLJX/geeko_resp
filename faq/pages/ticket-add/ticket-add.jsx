@@ -140,10 +140,11 @@ class TicketAdd extends React.Component {
   
   componentWillMount () {
     const id = this.props.location.search.split('=')[1]
-    console.log(id)
+    // console.log(id)
     if (id) {
       localStorage.__order = ""
       get(id).then(({result}) => {
+        // console.log(result)
         const {ticket, order, cusomerName, headSculptureUrl} = result
         this.setState({
           ticket,
@@ -163,11 +164,12 @@ class TicketAdd extends React.Component {
         }
       })
     } else {
-      console.log(localStorage.__order)
+      // console.log(localStorage.__order)
       if (localStorage.__order) {
         
         getByOrderId(JSON.parse(localStorage.__order).id).then(({result}) => {
           const {ticket, order, cusomerName, headSculptureUrl} = result
+          // console.log(result)
           // console.log(ticket.ticketReplies.slice(-1)[ticket.ticketReplies.slice(-1).length - 1]['sender'])
           if(ticket){
             if(ticket.ticketReplies.slice(-1)[ticket.ticketReplies.slice(-1).length - 1]['sender'] == "buyers"){
@@ -192,7 +194,7 @@ class TicketAdd extends React.Component {
           })
           this.initScroll()
         }).catch((data) => {
-          alert(data.result)
+          alert(data)
           if (data.code === 401) {
             window.location.href = `${window.ctx || ''}/me/m`
           }
@@ -211,10 +213,13 @@ class TicketAdd extends React.Component {
     localStorage.__order = ''
   }
 
+  
+
   render () {
     const {intl, location} = this.props
 
     const isFromNotification = location.search && location.search.indexOf('utm_source=pcnotification') >= 0
+    console.log(this.state.subject)
 
     //   subjectsizecolor: '尺码相关',
     // subjectaddress: '更改收货地址',
@@ -315,7 +320,7 @@ class TicketAdd extends React.Component {
 
     const GroupReplyHtmls = (props) => {
       const replies = props.replies
-      console.log(replies)
+      // console.log(replies)
       return <ChatRows>
         {
           replies.map((reply, index) => (
@@ -329,7 +334,18 @@ class TicketAdd extends React.Component {
     }
 
     const selectChange= (e) => {
-        console.log(e)
+        // console.log(e)
+        this.setState({subject: e})
+    }
+
+    const textareaChange = (evt) => {
+      alert(intl.formatMessage({id:"selectTip"}));
+      if(typeof(this.state.subject)!=='number'){
+        this.setState({
+          message: evt.currentTarget.value, 
+          messageInvalid: false
+        })
+      }
     }
 
     return <div>
@@ -346,14 +362,20 @@ class TicketAdd extends React.Component {
 
           <ChatContainer className="x-flex __column" style={{height:"100%", paddingTop:"12px"}}>
             {/* 当前订单 */}
-            <div className={style.selectedOrderBox} onClick={()=>window.location.href="/support/order"}>
+            <div className={style.selectedOrderBox} onClick={()=>window.location.href="/supportnew/order"}>
                 <div className={style.orderNo}>
-                    Order No 
-                    <span>01006099388</span>
+                    {intl.formatMessage({id:"orderno"})}
+                    <span>{this.state.ticket ? this.state.ticket.operaId : this.state.order.id}</span>
                 </div>
                 <div className={style.orderCreateTime}>
-                    Time of Payment
-                    <span>2021/8/06 14:30</span>
+                    {intl.formatMessage({id:"paymenttime"})}
+                    <span>{
+                      this.state.ticket ?
+                      this.state.ticket.openDate ? 
+                        (new Date(this.state.ticket.openDate).toLocaleDateString() + " " + new Date(this.state.ticket.openDate).toTimeString().substr(0, 5)) : 
+                        "":
+                      "-"
+                      }</span>
                 </div>
                 <span className={`${style.iconfont} ${style.changeOrder}`}>&#xe66b;</span>
             </div>
@@ -361,7 +383,7 @@ class TicketAdd extends React.Component {
             {/* 选择帮助项 */}
             <div className={style.chooseHelpBox}>
                 <div className={style.helpTxt}><FormattedMessage id="helpyou"/></div>
-                <SelectType itemList={questions} selectChange={(e)=>selectChange(e)} type={"chat"}/>
+                <SelectType itemList={questions} selectChange={(e)=>selectChange(e)} type={"chat"} value={this.state.subject}/>
             </div>
             
             {/* 对话 */}
@@ -376,7 +398,7 @@ class TicketAdd extends React.Component {
               {
                 this.state.ticket && this.state.ticket.ticketReplies && this.state.showTip && (
                   <div className={style.responseTip}>
-                    {"Expected response time：Within 24h"}
+                    {intl.formatMessage({id:"responseTime"})}
                   </div>
                 )
               }
@@ -396,9 +418,10 @@ class TicketAdd extends React.Component {
             <div className={style.chatInputBox}>
                 <div className={style.chatInput}>
                     <textarea className={`${this.state.messageInvalid ? style.invalid : ''} ${style.textInput}`} 
-                              placeholder={"Type a message here..."}
-                              onChange={(evt) => { this.setState({message: evt.currentTarget.value, messageInvalid: false}) }} 
+                              placeholder={intl.formatMessage({id:"textareaPlaceHolder"})}
+                              onChange={(evt) => {textareaChange(evt) }} 
                               value={this.state.message} 
+                              // disabled={typeof(this.state.subject)==='number'}
                               >
                     </textarea>
                 </div>

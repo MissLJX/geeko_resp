@@ -1,25 +1,35 @@
 import React, { useEffect, useState, useRef } from 'react';
 import style from './search-bar.module.css'
+import {questions} from '../../data/index';
 
 
 const SearchBar = (props) => {
-    // console.log(props)
+    console.log(props)
     const [showClear, setShowClear] = useState(false);
     const [inputValue, setInputValue] = useState("");
-    const [searchTips, setSearchTips] = useState([
-            {tips:"How can I change or modify my order?"},
-            {tips:"How can I change or modify my order?"},
-            {tips:"How can I change or modify my order?"},
-            {tips:"How can I change or modify my order?"},
-            {tips:"How can I change or modify my order?"},
-            {tips:"How can I change or modify my order?"},
-            {tips:"How can I change or modify my order?"},
-            {tips:"How can I change or modify my order?"},
-            {tips:"How can I change or modify my order?"}
-        ]);
+    const [searchTips, setSearchTips] = useState([]);
 
     useEffect(()=>{
-    },[inputValue])
+        if(questions.length > 0){
+            let list = [];
+            for(let i = 0; i < questions.length; i++){
+                if(questions.id!='root-7' && questions.id != 'root-8'){
+                    list = list.concat(questions[i]['questions'])
+                }
+            }
+            // console.log(list)
+            setSearchTips(list)
+        }
+    },[questions])
+
+    useEffect(()=>{
+        if(props.value){
+            setInputValue(props.value);
+            if(!props.stopSearch){
+                props.search(props.value)
+            }
+        }
+    }, [props.value])
 
     const inputChange = (e) => {
         // console.log(e.target.value)
@@ -36,17 +46,27 @@ const SearchBar = (props) => {
     }
 
     const relatedSearch = (item) => {
-        console.log(item)
-        setInputValue(item.tips)
-        props.search(item.tips)
+        // console.log(item)
+        setInputValue(item.title)
+        // props.search(item.title)
+        
+        window.location.href = '/supportnew/question1/'+item.id+"?search="+JSON.stringify(item.title);
+        
     }
 
-    const filter = (e, key) => {
-        if(e == inputValue){
-            return <strong key={key}>{e}</strong>
+    const filter = (e) => {
+        let value = e;
+        let reg = new RegExp(''+inputValue+'', "ig")
+        let after = e;
+        if(inputValue){
+            after = value.replace(reg, (e)=>{return'<strong>'+e+"</strong>"})
+            if(after.indexOf('<strong>') != -1){
+                return after
+            }
         } else {
-            return <span key={key}>{e}</span>
+            return after
         }
+        
     }
 
     return(
@@ -74,10 +94,8 @@ const SearchBar = (props) => {
                 <div className={style.searchTipsBox}>
                     {
                         searchTips.map((item, index) => (
-                            <div className={style.tipItem} key={index} onClick={()=>{relatedSearch(item)}}>
-                                {item.tips.split(" ").map((item1,key)=>(
-                                    filter(item1,key)
-                                ))}
+                            <div className={style.tipItem} key={index} onClick={()=>{relatedSearch(item)}} dangerouslySetInnerHTML={{__html:filter(item.title)}}>
+                                
                             </div> 
                         ))
                     }

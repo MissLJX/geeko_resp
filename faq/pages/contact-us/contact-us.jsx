@@ -8,29 +8,30 @@ class ContactUs extends React.PureComponent{
     constructor(props){
         super(props);
         this.state = {
-
         }
     }
 
 
     render(){
         const {intl} = this.props;
+        const {intlPage} = this.state;
         return (
             <div className={style.contactPage}>
-                <PageHeader1 label={intl.formatMessage({id: 'Contact Us'})} href="/supportnew"/>
-                <div className={style.entryItem} onClick={()=> window.location.href = "/support/ticket1"}>
+                <PageHeader1 label={intl.formatMessage({id: 'contact'})} href="/supportnew/faq"/>
+                <div style={{height:'44px'}}></div>
+                <div className={style.entryItem} onClick={()=> window.location.href = "/supportnew/ticket1"}>
                     <span className={`${style.iconfont} ${style.icon}`}>&#xe69c;</span>
                     <div className={style.entryInfoBox}>
-                        <span className={style.entryItemTitle}>Ticket</span>
-                        <span className={style.supportTime}>Within 24H</span>
+                        <span className={style.entryItemTitle}>{intl.formatMessage({id: 'Ticket'})}</span>
+                        <span className={style.supportTime}>{intl.formatMessage({id: 'within'})}</span>
                     </div>
                     <span className={`${style.iconfont} ${style.linkTo}`}>&#xe78a;</span>
                 </div>
-                <div className={style.entryItem} onClick={() => console.log("online")}>
+                <div className={style.entryItem} onClick={() => window.location.href="/f/mobile/contact_us"}>
                     <span className={`${style.iconfont} ${style.icon}`}>&#xe770;</span>
                     <div className={style.entryInfoBox}>
-                        <span className={style.entryItemTitle}>Online Help</span>
-                        <span className={style.supportTime}>Within 24H</span>
+                        <span className={style.entryItemTitle}>{intl.formatMessage({id: 'online'})}</span>
+                        <span className={style.supportTime}>{intl.formatMessage({id: 'within'})}</span>
                     </div>
                     <span className={`${style.iconfont} ${style.linkTo}`}>&#xe78a;</span>
                 </div>

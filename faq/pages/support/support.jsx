@@ -11,36 +11,37 @@ class Support extends React.PureComponent{
     constructor(props){
         super(props)
         this.state = {
+            // intl: this.props.intl.formatMessage({id:"version1"}).support,
             buttonList:[
                 {
                     imgUrl: "&#xe6ee;",
-                    txt: "Order Processing",
-                    to: "/support/faq"
+                    txt: this.props.intl.formatMessage({id:"orderProcessing"}),
+                    to: "/supportnew/faq"
                 },
                 {
                     imgUrl: "&#xe6f1;",
-                    txt: "Logistics Tracking",
-                    to: "/support/faq"
+                    txt: this.props.intl.formatMessage({id:"tracking"}),
+                    to: "/supportnew/faq"
                 },
                 {
                     imgUrl: "&#xe6ed;",
-                    txt: "Return & Refund",
-                    to: "/support/faq"
+                    txt: this.props.intl.formatMessage({id:"return"}),
+                    to: "/supportnew/faq"
                 },
                 {
                     imgUrl: "&#xe6ec;",
-                    txt: "Product & Stock",
-                    to: "/support/faq"
+                    txt: this.props.intl.formatMessage({id:"product"}),
+                    to: "/supportnew/faq"
                 },
                 {
                     imgUrl: "&#xe6ef;",
-                    txt: "Payment & Promos",
-                    to: "/support/faq"
+                    txt: this.props.intl.formatMessage({id:"payment"}),
+                    to: "/supportnew/faq"
                 },
                 {
                     imgUrl: "&#xe6f2;",
-                    txt: "Account Issues",
-                    to: "/support/faq"
+                    txt: this.props.intl.formatMessage({id:"account"}),
+                    to: "/supportnew/faq"
                 },
             ]
         }
@@ -58,13 +59,12 @@ class Support extends React.PureComponent{
       
             zE('webWidget', 'helpCenter:setSuggestions', { search: 'FAQ' })
         }
-        console.log(this.props.location.params)
     }
 
     render(){
         const {intl} = this.props;
         const {buttonList} = this.state;
-        console.log(buttonList)
+
         return(
             <div className={style.supportPage}>
                 <PageHeader1 label={intl.formatMessage({id: 'support'})} href="/index"/>
@@ -77,16 +77,16 @@ class Support extends React.PureComponent{
                         }
                     </div>
                     <div className={style.clickToFAQ}>
-                        {"For all Q&As Please Click on our"}
-                        <span onClick={()=>window.location.href="support/faq"}>FAQ</span> 
-                        page 
+                        {intl.formatMessage({id:"click"})}
+                        <span onClick={()=>window.location.href="supportnew/faq"}>{intl.formatMessage({id:"faq"})}</span> 
+                        {intl.formatMessage({id:"page"})} 
                     </div>
                     <div className={style.findMore}>
-                        Can't find the answer you are looking for?
+                        {intl.formatMessage({id:"findNothing"})}
                     </div>
-                    <div className={style.contactUs} onClick={()=>window.location.href="support/contact-us"}>
+                    <div className={style.contactUs} onClick={()=>window.location.href="supportnew/contact-us"}>
                         <span className={style.iconfont}>&#xe6e9;</span>
-                        Contact Us
+                        {intl.formatMessage({id:"contact"})}
                     </div>
                 </PageContanier1>
 

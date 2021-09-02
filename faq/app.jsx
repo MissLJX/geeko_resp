@@ -17,7 +17,7 @@ class App extends React.Component {
     )
   }
 }
-
+window.lang = 'de'
 const root = document.createElement('div')
 document.body.appendChild(root)
 

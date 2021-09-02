@@ -46,7 +46,7 @@ const Order = class extends React.Component {
 
     const selectChange = (e) => {
         console.log(e)
-        this.props.history.replace(`/support/order/${e}`)
+        this.props.history.replace(`/supportnew/order/${e}`)
     }
 
     const linkTo = () => {
@@ -57,19 +57,19 @@ const Order = class extends React.Component {
       // } else {
       //   this.props.history.goBack()
       // }
-      window.location.href = "/support/ticketadd"
+      window.location.href = "/supportnew/ticketadd"
     }
 
     return <div style={{overflow:'hidden'}}>
       <PageHeader1 label={intl.formatMessage({id: 'Ticket'})}/>
       <PageContanier1>
-          <div className={style.header}>Please select your order</div>
+          <div className={style.header}>{intl.formatMessage({id: 'selectorder'})}</div>
           <SelectType itemList={this.paths} selectChange={(e)=>selectChange(e)}/>
 
             <div className={style.orderList}>
                 <Switch>
-                    <Route path={`${window.ctx||''}/support/order/:page`} component={OrdersPath}/>
-                    <Route path={`${window.ctx||''}/support/order`} component={OrdersPath}/>
+                    <Route path={`${window.ctx||''}/supportnew/order/:page`} component={OrdersPath}/>
+                    <Route path={`${window.ctx||''}/supportnew/order`} component={OrdersPath}/>
                 </Switch>
             </div> 
 

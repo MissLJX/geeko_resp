@@ -13,7 +13,12 @@ const SelectType = (props) => {
 
     useEffect(()=>{
         if(props.type == "chat"){
-            setSelect("Please select your question type")
+            if(props.value){
+                setSelect(props.itemList[props.value-0].label)
+            } else {
+                setSelect("Please select your question type")
+            }
+           
         } else if(props.itemList.length > 0){
             setSelect(props.itemList[0].label)
         }

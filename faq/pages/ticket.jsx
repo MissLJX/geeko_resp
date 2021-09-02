@@ -322,7 +322,7 @@ const Ticket = class extends React.Component {
               <div style={{borderTop: '1px solid #cacaca', paddingTop: '20px', paddingLeft: '20px', paddingRight: '20px', paddingBottom: '15px'}}>
                 <h1 style={{fontSize: '18px', fontWeight: '400', textAlign: 'center'}}><FormattedMessage id="helpyou"/></h1>
                 <div>
-                  <GeekoSelect value={this.state.subject} onChange={(evt) => { this.setState({subject: evt.currentTarget.value}) }} style={{width: '100%', height: '40px', marginTop: '10px'}}>
+                  <GeekoSelect value={this.state.subject} onChange={(evt) => { console.log(evt.currentTarget.value);this.setState({subject: evt.currentTarget.value}) }} style={{width: '100%', height: '40px', marginTop: '10px'}}>
                     {questions.map(q => (
                       <option key={q.value} value={q.value}>{q.label}</option>
                     ))}

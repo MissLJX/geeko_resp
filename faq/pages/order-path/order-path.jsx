@@ -40,7 +40,7 @@ export default class Orders extends React.Component {
 
   handleClick (evt, _detail) {
     gloabvars.selectedOrder = this.state.selectedOrderId === _detail.id ? null : _detail
-    console.log(gloabvars)
+    // console.log(gloabvars)
     localStorage.__order=this.state.selectedOrderId === _detail.id ? null : JSON.stringify(_detail)
     this.setState({
       selectedOrderId: this.state.selectedOrderId === _detail.id ? null : _detail.id,
@@ -95,6 +95,14 @@ export default class Orders extends React.Component {
           loading: false,
           finished: !orders || !orders.length
         })
+      }).catch(err => {
+        // console.log(err)
+        this.setState({
+          loading: false
+        })
+        if(err.code == 300){
+          window.location.href = "/i/login"
+        }
       })
     }
   }

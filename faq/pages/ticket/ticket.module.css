@@ -77,6 +77,10 @@
 .noDataImg{
     font-size: 82px;
     color: #999;
+    position: relative;
+    top: 0;
+    left: 0;
+    font-weight: normal;
 }
 .noDataTxt{
     margin-top: 40px;
@@ -116,7 +120,7 @@
     padding-top: 16px;
     margin-bottom: 13px;
     font-family: Roboto-Regular;
-    font-size: 12px;
+    font-size: 14px;
     line-height: 16px;
     font-weight: normal;
     font-stretch: normal;
