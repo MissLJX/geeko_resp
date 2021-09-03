@@ -39,7 +39,7 @@ const languages = [
   'fr',
   'pt'
 ]
-window.lang = 'en'
+// window.lang = 'en'
 const localelang = (window.lang || 'en').substring(0, 2)
 
 const lang = languages.find(l => l == localelang)

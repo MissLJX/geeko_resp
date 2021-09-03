@@ -40,7 +40,7 @@ import en_L from '../i18n/en'
 addLocaleData([...en, ...zh, ...fr, ...de, ...pt, ...es])
 
 const messages = {}
-window.lang = 'en'
+// window.lang = 'en'
 const lang = (window.lang || 'en').substring(0, 2)
 
 messages['en'] = en_L
@@ -51,9 +51,10 @@ messages['fr'] = fr_L
 
 messages['es'] = es_L
 messages['pt'] = pt_L
-// console.log = () =>{
+// 清空打印
+console.log = () =>{
 
-// }
+}
 export default () => (
 
   <IntlProvider locale={lang} messages={messages[lang]}>
