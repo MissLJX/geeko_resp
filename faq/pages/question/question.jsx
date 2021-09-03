@@ -142,10 +142,11 @@ class Question1 extends React.PureComponent{
         const search = (e) => {
             let searchAbout = []
             console.log(e)
+            let reg = new RegExp(e, 'ig')
             if(e){
                 questions.forEach((q) => {
                     let s = q.questions.filter((qq)=>{
-                        return qq.title.indexOf(e) != -1;
+                        return reg.test(qq.title);
                     })
                     searchAbout = searchAbout.concat(s)
                 })
@@ -181,7 +182,7 @@ class Question1 extends React.PureComponent{
         }
 
         const highLightSearch = (title) => {
-            let reg = new RegExp(''+this.state.searchValue+'', "g");
+            let reg = new RegExp(''+this.state.searchValue+'', "ig");
             return title.replace(reg, (e)=>{return '<strong>'+e+"</strong>"})
         }
 
