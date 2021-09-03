@@ -61,39 +61,62 @@ class Question1 extends React.PureComponent{
         if(lastSearchId !== id){
             // return
             lastSearchId = id;
-            if(search && id){
-                this.setState({
-                    detailShow:true,
-                    searchShow:false,
-                    secondaryId: id,
-                    secondary: secondaries.find(q => q.id === id),
-                    richText:  secondaries.find(q => q.id === id).richText,
-                    parent: questions.find(q => q.id ===  secondaries.find(q => q.id === id).parentId),
-                    searchValue: this.replaceStr(search),
-                    stopSearch: true
-                })
-            } else if(search){
-                this.setState({
-                    detailShow: false,
-                    searchShow: true,
-                    searchValue: this.replaceStr(search),
-                    stopSearch:false,
-                    // parent: questions.find(q => q.id === secondary.parentId)
-                })
-            } else if(id){
-                this.setState({
-                    detailShow:true,
-                    searchShow:false,
-                    secondaryId: id,
-                    secondary: secondaries.find(q => q.id === id),
-                    richText:  secondaries.find(q => q.id === id).richText,
-                    parent: questions.find(q => q.id ===  secondaries.find(q => q.id === id).parentId),
-                    stopSearch: false
-                })
-                
-            }
+            this.changeShow(search,id)
         }
-        
+    }
+
+    changeShow(search, id){
+        let type = search && id ? 0:
+                   search ? 1: 
+                   id ? 2: ''
+        switch(type){
+            case 0:
+                this.show1(search, id)
+                return;
+            case 1:
+                this.show2(search)
+                return;
+            case 2:
+                this.show3(id)
+                return;
+            default:
+                return;
+        }
+    }
+
+    show1(search,id){
+        this.setState({
+            detailShow:true,
+            searchShow:false,
+            secondaryId: id,
+            secondary: secondaries.find(q => q.id === id),
+            richText:  secondaries.find(q => q.id === id).richText,
+            parent: questions.find(q => q.id ===  secondaries.find(q => q.id === id).parentId),
+            searchValue: this.replaceStr(search),
+            stopSearch: true
+        })
+    }
+
+    show2(search){
+        this.setState({
+            detailShow: false,
+            searchShow: true,
+            searchValue: this.replaceStr(search),
+            stopSearch:false,
+            // parent: questions.find(q => q.id === secondary.parentId)
+        })
+    }
+
+    show3(id){
+        this.setState({
+            detailShow:true,
+            searchShow:false,
+            secondaryId: id,
+            secondary: secondaries.find(q => q.id === id),
+            richText:  secondaries.find(q => q.id === id).richText,
+            parent: questions.find(q => q.id ===  secondaries.find(q => q.id === id).parentId),
+            stopSearch: false
+        })
     }
 
     render(){
