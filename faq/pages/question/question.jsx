@@ -1,11 +1,12 @@
 import React, { createRef } from 'react';
 import style from './question.module.css';
 import {FormattedMessage, injectIntl} from 'react-intl';
-import SearchBar from '../../components/search-bar/search-bar';
+// import SearchBar from '../../components/search/search-bar';
 import {secondaries, questions} from '../../data'
 import { Page } from '../../components/page/page';
+import {SearchBar} from '../../components/newComponents/new-components';
 
-
+let lastSearchId = 0
 class Question1 extends React.PureComponent{
     constructor(props){
         super(props);
@@ -35,8 +36,6 @@ class Question1 extends React.PureComponent{
     }
 
     componentWillUpdate(){
-        console.log(this.state.headerRef)
-        console.log(this.props)
         this.initPage()
         this.state.headerRef.current.scrollIntoView({
             top: 0,
@@ -46,7 +45,6 @@ class Question1 extends React.PureComponent{
 
     replaceStr(str){
         str = decodeURI(str).split("\"");
-        console.log(str)
         for(let i in str){
             if(str[i] != ''){
                 return str[i]
@@ -55,44 +53,47 @@ class Question1 extends React.PureComponent{
     }
 
     initPage(){
+        console.log(this.state)
         let search = this.props.history.location.state ? this.props.history.location.state.search : 
                      this.props.location.search ? this.props.location.search : 0;
         let id = this.props.history.location.state ? this.props.history.location.state.id : 
-                 this.props.match.params.id ? this.props.match.params.id : 0;
-                 console.log(search, id)
-        // return
-        if(search && id){
-            console.log('ss')
-            this.setState({
-                detailShow:true,
-                searchShow:false,
-                secondaryId: id,
-                secondary: secondaries.find(q => q.id === id),
-                richText:  secondaries.find(q => q.id === id).richText,
-                parent: questions.find(q => q.id ===  secondaries.find(q => q.id === id).parentId),
-                searchValue: this.replaceStr(search.split("=")[1]),
-                stopSearch: true
-            })
-        } else if(search){
-            this.setState({
-                detailShow: false,
-                searchShow: true,
-                searchValue: this.replaceStr(search.split("=")[1]),
-                stopSearch:false,
-                // parent: questions.find(q => q.id === secondary.parentId)
-            })
-        } else if(id){
-            this.setState({
-                detailShow:true,
-                searchShow:false,
-                secondaryId: id,
-                secondary: secondaries.find(q => q.id === id),
-                richText:  secondaries.find(q => q.id === id).richText,
-                parent: questions.find(q => q.id ===  secondaries.find(q => q.id === id).parentId),
-                stopSearch: false
-            })
-            
+                this.props.match.params.id ? this.props.match.params.id : 0;
+        if(lastSearchId !== id){
+            // return
+            lastSearchId = id;
+            if(search && id){
+                this.setState({
+                    detailShow:true,
+                    searchShow:false,
+                    secondaryId: id,
+                    secondary: secondaries.find(q => q.id === id),
+                    richText:  secondaries.find(q => q.id === id).richText,
+                    parent: questions.find(q => q.id ===  secondaries.find(q => q.id === id).parentId),
+                    searchValue: this.replaceStr(search),
+                    stopSearch: true
+                })
+            } else if(search){
+                this.setState({
+                    detailShow: false,
+                    searchShow: true,
+                    searchValue: this.replaceStr(search),
+                    stopSearch:false,
+                    // parent: questions.find(q => q.id === secondary.parentId)
+                })
+            } else if(id){
+                this.setState({
+                    detailShow:true,
+                    searchShow:false,
+                    secondaryId: id,
+                    secondary: secondaries.find(q => q.id === id),
+                    richText:  secondaries.find(q => q.id === id).richText,
+                    parent: questions.find(q => q.id ===  secondaries.find(q => q.id === id).parentId),
+                    stopSearch: false
+                })
+                
+            }
         }
+        
     }
 
     render(){
@@ -114,12 +115,10 @@ class Question1 extends React.PureComponent{
                 stopSearch,
                 headerRef
             } = this.state;
-        // console.log(secondaryId, secondary, richText, parent)
-
 
         const search = (e) => {
             let searchAbout = []
-            // console.log(e)
+            console.log(e)
             if(e){
                 questions.forEach((q) => {
                     let s = q.questions.filter((qq)=>{
@@ -127,7 +126,7 @@ class Question1 extends React.PureComponent{
                     })
                     searchAbout = searchAbout.concat(s)
                 })
-                // console.log(searchAbout)
+                console.log(searchAbout)
                 // 搜索请求
                 this.setState({
                     defaultShow: false,
@@ -140,7 +139,8 @@ class Question1 extends React.PureComponent{
         }
 
         const showDetail = (e) => {
-            history.push({pathname:"/supportnew/question1",state:{id:e.id,search:searchValue}})
+            lastSearchId = 0
+            history.push({pathname:"/supportnew/question1",state:{id:e.id,search:e.title}})
         }
 
         const removeHeader = (text) => {
@@ -150,20 +150,21 @@ class Question1 extends React.PureComponent{
         }
 
         const clickItem = (e) => {
-            history.push({pathname:"/supportnew/question1",state:{id:e.id,search:searchValue}})
+            console.log(e)
+            this.setState({
+                searchValue: e.title
+            })
+            history.push({pathname:"/supportnew/question1",state:{id:e.id,search:e.title}})
         }
 
         const highLightSearch = (title) => {
-            // console.log(title)
             let reg = new RegExp(''+this.state.searchValue+'', "g");
-            // console.log(reg.test(title))
-
             return title.replace(reg, (e)=>{return '<strong>'+e+"</strong>"})
         }
 
         return (
             <div className={style.faqPage}>
-                <Page label={intl.formatMessage({id: 'faq'})}>
+                <Page label={intl.formatMessage({id: 'faq'})} >
                     {/* 搜索框 */}
                     <div className={style.searchBar} ref={headerRef}>
                         <SearchBar search={(e)=>search(e)} value={searchValue} stopSearch={stopSearch}></SearchBar>
@@ -211,7 +212,7 @@ class Question1 extends React.PureComponent{
                             </div>
                             <div className={style.noResultTxt}>
                                 {intl.formatMessage({id:"question"})}
-                                <span onClick={()=>window.location.href = "contact-us"}>{intl.formatMessage({id: 'contact'})}</span>
+                                <span onClick={()=>this.props.history.push({pathname: "contact-us"})}>{intl.formatMessage({id: 'contact'})}</span>
                             </div>
                         </div>
                     }

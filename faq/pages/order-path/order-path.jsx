@@ -1,10 +1,9 @@
 import React from 'react'
 import {getOrders} from '../../api'
 import {withScroll} from '../../HoCs/list.jsx'
-import OrderList from '../../components/order-list.jsx'
 import {gloabvars} from '../../commons/instance.js'
 import styled from 'styled-components'
-import newOrderList from '../../components/new-order-list/new-order-list'
+import {NewOrderList} from '../../components/newComponents/new-components'
 
 export default class Orders extends React.Component {
   constructor (props) {
@@ -101,7 +100,7 @@ export default class Orders extends React.Component {
           loading: false
         })
         if(err.code == 300){
-          window.location.href = "/i/login"
+          // window.location.href = "/i/login"
         }
       })
     }
@@ -113,7 +112,7 @@ export default class Orders extends React.Component {
 
   render () {
     // const ScrollOrders = withScroll(OrderList)
-    const ScrollOrders = withScroll(newOrderList)
+    const ScrollOrders = withScroll(NewOrderList)
 
     const Loading = styled.div`
 			height: 50px;

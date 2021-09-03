@@ -1,18 +1,12 @@
 import React from 'react';
 import style from './FAQ.module.css';
 import {FormattedMessage, injectIntl} from 'react-intl';
-import PageContanier1 from '../../components/page-contanier/page-contanier';
-import PageHeader1 from '../../components/page-header/page-header';
-import SearchBar from '../../components/search-bar/search-bar';
-import DropDownItem from '../../components/drop-down-item/drop-down-item';
+// import SearchBar from '../../components/search/search-bar';
+// import DropDownItem from '../../components/drop-down-item/drop-down-item';
 import {secondaries, questions} from '../../data'
 import { Page } from '../../components/page/page';
+import {SearchBar, DropDownItem} from '../../components/newComponents/new-components';
 
-let resultList1 = [{
-    title: "How can I change or modify my order?",
-    likes: "134",
-    content: `<div>Shipping address or items can be modified by contacting customer service before being shipped out.</div>`,
-}]
 
 class FAQ extends React.PureComponent{
     constructor(props){
@@ -111,21 +105,11 @@ class FAQ extends React.PureComponent{
 
         const search = (e) => {
             console.log(e)
-            // questions.forEach((q) => {
-            //     let s = q.questions.filter((qq)=>{
-            //         return qq.title.indexOf(e) != -1;
-            //     })
-            //     searchAbout = searchAbout.concat(s)
-            // })
-            // console.log(searchAbout)
-            
             if(e){
-                window.location.href = '/supportnew/question1?search='+e;
+                // window.location.href = '/supportnew/question1?search='+e;
+                this.props.history.push({pathname: '/supportnew/question1', state:{search: e}})
                 // 搜索请求
                 this.setState({
-                    // defaultShow: false,
-                    // searchShow: true,
-                    // detailShow:false,
                     searchValue: e,
                     resultList: searchAbout
                 })
@@ -151,23 +135,10 @@ class FAQ extends React.PureComponent{
             // })
         }
 
-        const removeHeader = (text) => {
-            let before = text.split("<header>")[0];
-            let after = text.split("</header>")[1];
-            return before + after;
-        }
-
         const clickItem = (e) => {
             console.log(e);
-            window.location.href = "/supportnew/question1/"+e.id+"?search="+e.title;
-        }
-
-        const highLightSearch = (title) => {
-            console.log(title)
-            let reg = new RegExp(''+this.state.searchValue+'', "g");
-            console.log(reg.test(title))
-
-            return title.replace(reg, (e)=>{return '<strong>'+e+"</strong>"})
+            // window.location.href = "/supportnew/question1/"+e.id+"?search="+e.title;
+            this.props.history.push({pathname: '/supportnew/question1', state:{id:e.id,search: e.title}})
         }
 
         return (
@@ -249,7 +220,7 @@ class FAQ extends React.PureComponent{
                             </div>
                             <div className={style.noResultTxt}>
                                 {intl.formatMessage({id:"question"})}
-                                <span onClick={()=>window.location.href = "contact-us"}>{intl.formatMessage({id: 'contact'})}</span>
+                                <span onClick={()=>this.props.history.push({pathname: '/contact-us'})}>{intl.formatMessage({id: 'contact'})}</span>
                             </div>
                         </div>
                     }

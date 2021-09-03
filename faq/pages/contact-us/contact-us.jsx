@@ -1,8 +1,6 @@
 import React from 'react';
 import style from './contact-us.module.css'
 import {FormattedMessage, injectIntl} from 'react-intl';
-import PageContanier1 from '../../components/page-contanier/page-contanier';
-import PageHeader1 from '../../components/page-header/page-header';
 import { Page } from '../../components/page/page';
 
 class ContactUs extends React.PureComponent{
@@ -12,14 +10,13 @@ class ContactUs extends React.PureComponent{
         }
     }
 
-
     render(){
         const {intl} = this.props;
         const {intlPage} = this.state;
         return (
             <div className={style.contactPage}>
-                <Page label={intl.formatMessage({id: 'contact'})} href="/supportnew/faq">
-                    <div className={style.entryItem} onClick={()=> window.location.href = "/supportnew/ticket1"}>
+                <Page label={intl.formatMessage({id: 'contact'})} style={{background:"#f6f6f6",border:'none',}} href="/supportnew/faq">
+                    <div className={style.entryItem} onClick={()=> this.props.history.push({pathname:'/supportnew/ticket1'})}>
                         <span className={`${style.iconfont} ${style.icon}`}>&#xe69c;</span>
                         <div className={style.entryInfoBox}>
                             <span className={style.entryItemTitle}>{intl.formatMessage({id: 'Ticket'})}</span>

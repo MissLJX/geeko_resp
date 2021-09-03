@@ -1,8 +1,8 @@
 import React from 'react';
 import style from './ticket.module.css'
 import {FormattedMessage, injectIntl} from 'react-intl';
-import PageContanier1 from '../../components/page-contanier/page-contanier';
-import PageHeader1 from '../../components/page-header/page-header';
+// import PageContanier1 from '../../components/page-contanier/page-contanier';
+// import PageHeader1 from '../../components/page-header/page-header';
 import {list} from '../../api'
 import {withScroll} from '../../HoCs/list'
 import { Page } from '../../components/page/page';
@@ -81,7 +81,7 @@ let isLoading = false;
 class Ticket1 extends React.PureComponent{
     constructor(props){
         super(props);
-        // console.log(this.props)
+        console.log(this.props)
         this.state = {
             loading: false,
             skip: 0,
@@ -108,7 +108,7 @@ class Ticket1 extends React.PureComponent{
             }).catch((err)=>{
                 // console.log(err)
                 if(err.code == 300){
-                    window.location.href = "/i/login"
+                    // window.location.href = "/i/login"
                 }
             })
         }
@@ -131,7 +131,7 @@ class Ticket1 extends React.PureComponent{
 
         return (<div>
             {
-                this.state.finished && this.state.skip === this.state.limit ? <Redirect to="/supportnew/ticketadd"/> :
+                this.state.finished && this.state.skip === this.state.limit && false ? <Redirect to="/supportnew/ticketadd"/> :
                 <div className={style.ticketPage}>
                     <Page label={intl.formatMessage({id: 'Ticket'})} href="/supportnew/contact-us">
                         {/* 列表 */}
@@ -139,8 +139,6 @@ class Ticket1 extends React.PureComponent{
                             tickets.length > 0 &&
                             <ListWidthScroll scrollHandler={this.scrollHandler} tickets={tickets}></ListWidthScroll>
                         }
-                        
-                        
 
                         {/* 没有数据 */}
                         {
@@ -154,7 +152,7 @@ class Ticket1 extends React.PureComponent{
 
                         {/* 提交按钮 */}
                         <div className={style.submitBtn} >
-                            <span onClick={()=>window.location.href="order"}>{intl.formatMessage({id: 'submit'})}</span>    
+                            <span onClick={()=>this.props.history.push({pathname:'/supportnew/order'})}>{intl.formatMessage({id: 'submit'})}</span>    
                         </div>
                     </Page>
                 </div>

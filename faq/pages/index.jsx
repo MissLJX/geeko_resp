@@ -51,9 +51,9 @@ messages['fr'] = fr_L
 
 messages['es'] = es_L
 messages['pt'] = pt_L
-console.log = () =>{
+// console.log = () =>{
 
-}
+// }
 export default () => (
 
   <IntlProvider locale={lang} messages={messages[lang]}>

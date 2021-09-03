@@ -2,15 +2,12 @@ import React from 'react'
 import {Link} from 'react-router-dom'
 import {get, getByOrderId, sendImage, sendTicket} from '../../api'
 import styled from 'styled-components'
-import {GeekoSelect, ColoredButton, PageHeader, PageContanier} from '../../components/buttons.jsx'
 import _ from 'lodash'
-import {gloabvars} from '../../commons/instance.js'
 import {FormattedMessage, injectIntl} from 'react-intl'
 import HtmlImageCompress from 'html-image-compress'
 import style from './ticket-add.module.css';
 
 import {PageHeader1, PageContanier1} from '../../components/page/page';
-// import PageContanier1 from '../../components/page-contanier/page-contanier';
 
 import {
   OrderSelector,
@@ -24,7 +21,7 @@ import {
   ChatSendor,
   ImageLoader
 } from '../../components/styled-ticket.jsx'
-import SelectType from '../../components/select-type/select-type'
+import {SelectType} from '../../components/newComponents/new-components'
 
 const RATE = styled.span`
 	font-family: iconfont;
@@ -339,12 +336,15 @@ class TicketAdd extends React.Component {
     }
 
     const textareaChange = (evt) => {
-      alert(intl.formatMessage({id:"selectTip"}));
-      if(typeof(this.state.subject)!=='number'){
-        this.setState({
-          message: evt.currentTarget.value, 
-          messageInvalid: false
-        })
+      if(!this.state.subject){
+        alert(intl.formatMessage({id:"selectTip"}));
+      } else {
+        if(typeof(this.state.subject)!=='number'){
+          this.setState({
+            message: evt.currentTarget.value, 
+            messageInvalid: false
+          })
+        }
       }
     }
 
@@ -362,7 +362,7 @@ class TicketAdd extends React.Component {
 
           <ChatContainer className="x-flex __column" style={{height:"100%", paddingTop:"12px"}}>
             {/* 当前订单 */}
-            <div className={style.selectedOrderBox} onClick={()=>window.location.href="/supportnew/order"}>
+            <div className={style.selectedOrderBox} onClick={()=>this.props.history.push({pathname: "/supportnew/order"})}>
                 <div className={style.orderNo}>
                     {intl.formatMessage({id:"orderno"})}
                     <span>{this.state.ticket ? this.state.ticket.operaId : this.state.order.id}</span>

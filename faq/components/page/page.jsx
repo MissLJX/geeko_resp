@@ -53,7 +53,7 @@ const PageContanierDiv = styled.div`
     background: #fff;
     max-width: 500px;
     margin: 0 auto;
-    border: 1px solid;
+    // border: 1px solid;
     margin-top: 44px;
     overflow: hidden;
     overflow-y: scroll;
@@ -62,40 +62,42 @@ const PageContanierDiv = styled.div`
 
 const PageHeader = (props) => {
     console.log(props)
+    const p = props.props ? props.props : props;
     return <PageHeaderDiv>
-        <span>{props.props.label}</span>
+        <span>{p.label}</span>
   		 <IconStyle onClick={() => {
-  		 	if (props.props.to) {
-  		 		props.props.history.replace(props.props.to)
-  		 	} else if (props.props.href) {
-  		 		window.location.href = props.props.href
+  		 	if (p.to) {
+  		 		props.history.replace(p.to)
+  		 	} else if (p.href) {
+  		 		// window.location.href = props.props.href
+                props.history.push({pathname:p.href})
   		 	} else {
-  		 		props.props.history.goBack()
+  		 		props.history.goBack()
   		 	}
   		 }}>&#xe78a;</IconStyle>
     </PageHeaderDiv>
 }
 
 const PageContanier = (props) => {
-    console.log(props.props)
+    console.log(props)
+    const p = props.props ? props.props : props;
     return (
-        <PageContanierDiv style={props.props?props.props.style?props.props.style:{border:'none'}:{border:'none'}}>
-            {props.props.children}
-
-
+        <PageContanierDiv style={p.style}>
+            {p.children}
 
         </PageContanierDiv>
     )
 }
 
+export const PageHeader1 = withRouter(PageHeader);
+
 const Page1 = (props) => {
+    console.log(props)
     return <div>
-        <PageHeader props={props}/>
+        <PageHeader1 props={props}/>
         <PageContanier1 props={props}></PageContanier1>
     </div>
 }
 
-
-export const PageHeader1 = withRouter(PageHeader);
 export const PageContanier1 = PageContanier;
 export const Page = Page1; 

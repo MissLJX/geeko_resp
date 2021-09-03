@@ -1,18 +1,15 @@
 import React from 'react'
-import {getOrders} from '../../api'
-import {gloabvars} from '../../commons/instance.js'
 import {Switch, Route} from 'react-router-dom'
 import OrdersPath from '../order-path/order-path.jsx'
-import PageContanier1 from '../../components/page-contanier/page-contanier';
 import {injectIntl} from 'react-intl'
-import PageHeader1 from '../../components/page-header/page-header';
 import style from './order.module.css'
-import SelectType from '../../components/select-type/select-type'
+import {SelectType} from '../../components/newComponents/new-components'
 import { Page } from '../../components/page/page'
 
 const Order = class extends React.Component {
   constructor (props) {
     super(props)
+    console.log(props)
     this.state = {
       currentPage: this.getPath(this.props.location.pathname),
       selected: true,
@@ -51,14 +48,9 @@ const Order = class extends React.Component {
     }
 
     const linkTo = () => {
-      // if (this.props.to) {
-      //   this.props.history.replace(this.props.to)
-      // } else if (this.props.href) {
-      //   window.location.href = this.props.href
-      // } else {
-      //   this.props.history.goBack()
-      // }
-      window.location.href = "/supportnew/ticketadd"
+      // window.location.href = "/supportnew/ticketadd"
+      this.props.history.push({pathname: "/supportnew/ticketadd"})
+
     }
 
     return <div style={{overflow:'hidden'}}>

@@ -1,12 +1,9 @@
 import React from 'react';
 import style from './support.module.css';
 import {FormattedMessage, injectIntl} from 'react-intl';
-
-import {SupportButton, PageHeader, PageContanier} from '../../components/buttons.jsx';
-import PageHeader1 from '../../components/page-header/page-header';
-import PageContanier1 from '../../components/page-contanier/page-contanier';
-import EntryButton from '../../components/entry-button/entry-button';
+// import EntryButton from '../../components/entry-button/entry-button';
 import { Page } from '../../components/page/page';
+import {EntryButton} from '../../components/newComponents/new-components'
 
 class Support extends React.PureComponent{
     constructor(props){
@@ -78,13 +75,13 @@ class Support extends React.PureComponent{
                     </div>
                     <div className={style.clickToFAQ}>
                         {intl.formatMessage({id:"click"})}
-                        <span onClick={()=>window.location.href="supportnew/faq"}>{intl.formatMessage({id:"faq"})}</span> 
+                        <span onClick={()=>this.props.history.push({pathname: "/supportnew/faq"})}>{intl.formatMessage({id:"faq"})}</span> 
                         {intl.formatMessage({id:"page"})} 
                     </div>
                     <div className={style.findMore}>
                         {intl.formatMessage({id:"findNothing"})}
                     </div>
-                    <div className={style.contactUs} onClick={()=>window.location.href="supportnew/contact-us"}>
+                    <div className={style.contactUs} onClick={()=>this.props.history.push({pathname: "/supportnew/contact-us"})}>
                         <span className={style.iconfont}>&#xe6e9;</span>
                         {intl.formatMessage({id:"contact"})}
                     </div>
