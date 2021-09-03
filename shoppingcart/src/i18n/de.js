@@ -17,7 +17,7 @@ export default{
 	item_total: 'gesamte Artikel  ',
 	subtotal: 'gesamte Artikel ',
 	shipping_price: 'Versandpreis',
-	shipping_insurance: 'Versandpreis',
+	shipping_insurance: 'Versandversicherung',
 	order_total: 'Bestellsumme',
 	total: 'Summe',
 	check_out: 'KASSE',

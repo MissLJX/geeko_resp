@@ -560,7 +560,7 @@ const Credit = class extends React.Component {
 	handleOnAdditionalDetails(state){
 		const {order} = this.state
 
-		this.setState({showFrame: false})
+		this.setState({showFrame: false, checking: true})
 
 		adyen_3d_call_back({transactionId: order.transactionId, details: state.data.details}).then(data => {
 			const { result } = data
@@ -577,6 +577,9 @@ const Credit = class extends React.Component {
 			}
 
 			this.setState({checking: false})
+		}).catch(data => {
+			this.setState({checking: false})
+			alert(data.result || data || 'Error')
 		})
 	}
 
@@ -630,8 +633,8 @@ const Credit = class extends React.Component {
 					checking: true,
 				})
 				alyen_check_out({
-					orderId,
-					paymentMethod: this.state.formState.data.paymentMethod
+					...this.state.formState.data,
+					orderId
 				}).then(data => {
 					const result = data.result
 					if(result){

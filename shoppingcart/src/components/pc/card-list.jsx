@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import styled from 'styled-components'
 import {FormattedMessage, injectIntl} from 'react-intl'
 import CheckBox from '../checkbox.jsx'
@@ -11,6 +11,9 @@ import {MutiElement, FormElement} from './styled-control.jsx'
 import {Red} from '../text.jsx'
 import {unitprice} from '../../utils/utils.js'
 import { getDInstallments } from '../../api'
+
+import AdyenCheckout from '@adyen/adyen-web'
+import '@adyen/adyen-web/dist/adyen.css'
 
 const LABELICON = styled.span`
 	color: #666;
@@ -307,6 +310,98 @@ const DLocalPlugin = class extends React.Component {
 	}
 }
 
+
+
+
+const AdyenPlugin = props => {
+
+	const [checkout, setCheckout] = useState(undefined)
+	const [cvvComponent, setCvvComponent] = useState(undefined)
+	const [error, setError] = useState('')
+
+	useEffect(() => {
+		setCheckout(new AdyenCheckout({
+			locale: window.locale,
+			environment: window.adyenEnv,
+			clientKey: window.__adyen_pk__,
+			onChange: () => {},
+			onAdditionalDetails: handleOnAdditionalDetails
+		}))
+	}, [])
+
+	const handleOnAdditionalDetails = state => {
+		props.handleOnAdditionalDetails(state)
+	}
+
+	const adyenCvvHandle = cvvState => {
+		props.adyenCvvHandle(cvvState,checkout )
+	}
+
+	const cvvRef = c => {
+		if(checkout){
+			if(!cvvComponent){
+				setCvvComponent(checkout.create('securedfields', {
+					// Optional configuration
+					type: 'card',
+					brands: ['mc', 'visa', 'amex', 'bcmc', 'maestro'],
+					styles: {
+						error: {
+							color: 'red'
+						},
+						validated: {
+							color: 'green'
+						},
+						placeholder: {
+							color: '#666'
+						},
+
+					},
+					onChange: function(state) {
+						adyenCvvHandle(state)
+					},
+					onValid : function(state) {
+					},
+					onLoad: function() {},
+					onConfigSuccess: function() {},
+					onFieldValid : function() {},
+					onBrand: function(state) {
+					},
+					onError: function(data) {
+						setError(data.errorI18n)
+					},
+					onFocus: function() {},
+					onBinValue: function(state) {
+
+					}
+				}).mount('#cvv-container'))
+			}
+
+		}
+
+
+	}
+
+	return <CARDPLUGIN >
+		<div>
+			<Form>
+				<MutiElement>
+					<FormElement label="CVV / CVV2" className="__required">
+						<div id="cvv-container" style={{height: 40, backgroundColor:'#fff', paddingLeft: 12}}>
+							<span ref={cvvRef} data-cse="encryptedSecurityCode"></span>
+						</div>
+						{
+							error && <div style={{fontSize: 12, marginTop:5}}><Red>{error}</Red></div>
+						}
+					</FormElement>
+					<FormElement/>
+				</MutiElement>
+			</Form>
+		</div>
+	</CARDPLUGIN>
+}
+
+
+
 const I18DLocalPlugin = injectIntl(DLocalPlugin)
 
 const getPlugin = props => {
@@ -321,6 +416,8 @@ const getPlugin = props => {
 	case '39':
 	case '42':
 		return <I18DLocalPlugin {...props}/>
+	case '89':
+		return <AdyenPlugin {...props}/>
 	default:
 		return null
 	}

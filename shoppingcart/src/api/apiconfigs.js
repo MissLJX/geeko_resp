@@ -49,7 +49,7 @@ const instance = axios.create({
 		'x-height': window.screen.height,
 		'javaenabled': window.navigator.javaEnabled(),
 		'x-colordepth':  window.screen.colorDepth,
-		'x-time-zone-offset': new Date().getTimezoneOffset()/60
+		'x-time-zone-offset': new Date().getTimezoneOffset()
 	}
 })
 
