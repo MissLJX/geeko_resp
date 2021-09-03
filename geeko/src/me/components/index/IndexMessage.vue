@@ -1,6 +1,10 @@
 <template>
     <div class="index-message">
         <div class="_hd">
+            <a @click.prevent="specificationLogin('/me/m/wishlist',1)">
+                <span class="iconfont">&#xe6a2;</span>
+            </a>
+            
             <a @click.prevent="specificationLogin('/me/m/notification',1)">
                 <span class="iconfont" :class="{'active' : notificationCount > 0}">&#xe60b;</span>
             </a>
@@ -48,6 +52,7 @@
         </div>
 
         <div class="discount">
+            <!-- click-name  记录事件全局捕获了此事件  命名都不重复即可 -->
             <a @click.prevent="specificationLogin('/me/m/coupons',1)" click-name="Coupons">
                 <p class="iconfont">
                     <span :class="{'_font' : isLogin}">{{getFeedNum(feed && feed.canUseCouponCount,"&#xe6dc;")}}</span>

@@ -1,10 +1,9 @@
 import React from 'react'
 import {getOrders} from '../../api'
 import {withScroll} from '../../HoCs/list.jsx'
-import OrderList from '../../components/order-list.jsx'
 import {gloabvars} from '../../commons/instance.js'
 import styled from 'styled-components'
-import newOrderList from '../../components/new-order-list/new-order-list'
+import {NewOrderList} from '../../components/newComponents/new-components'
 
 export default class Orders extends React.Component {
   constructor (props) {
@@ -40,7 +39,7 @@ export default class Orders extends React.Component {
 
   handleClick (evt, _detail) {
     gloabvars.selectedOrder = this.state.selectedOrderId === _detail.id ? null : _detail
-    console.log(gloabvars)
+    // console.log(gloabvars)
     localStorage.__order=this.state.selectedOrderId === _detail.id ? null : JSON.stringify(_detail)
     this.setState({
       selectedOrderId: this.state.selectedOrderId === _detail.id ? null : _detail.id,
@@ -95,6 +94,14 @@ export default class Orders extends React.Component {
           loading: false,
           finished: !orders || !orders.length
         })
+      }).catch(err => {
+        // console.log(err)
+        this.setState({
+          loading: false
+        })
+        if(err.code == 300){
+          // window.location.href = "/i/login"
+        }
       })
     }
   }
@@ -105,7 +112,7 @@ export default class Orders extends React.Component {
 
   render () {
     // const ScrollOrders = withScroll(OrderList)
-    const ScrollOrders = withScroll(newOrderList)
+    const ScrollOrders = withScroll(NewOrderList)
 
     const Loading = styled.div`
 			height: 50px;

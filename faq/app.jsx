@@ -17,7 +17,6 @@ class App extends React.Component {
     )
   }
 }
-
 const root = document.createElement('div')
 document.body.appendChild(root)
 

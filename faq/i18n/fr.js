@@ -48,5 +48,36 @@ export default {
   satisfied: 'Satisfait',
   unsatisfied: 'Insatisfait',
   you_can_rate: 'Vous pouvez commenter le service client ici',
-  please_rate: 'S\'il vous plaît noter mon service'
+  please_rate: 'S\'il vous plaît noter mon service',
+  // support:
+  click:'Pour toutes les questions/réponses, veuillez cliquer sur notre',
+  faq:"FAQ",
+  page:"page",
+  findNothing:"Vous ne trouvez pas la réponse que vous recherchez?",
+  contact:"Nous contacter",
+  orderProcessing: "Traitement des commandes",
+  tracking:"Suivi logistique",
+  return:"Retour & Remboursement",
+  product:"Produit & Stock",
+  payment:"Paiement et promotions",
+  account:"Problèmes de compte",
+  // contact:
+  Ticket:'Billet',
+  within:'Sous 24H',
+  online:'Aide en ligne',
+  // faq
+  search: "Résultats de la recherche",
+  resultFor: "résultats pour \"<strong>{result}</strong>\"",
+  question:"Vous avez d'autres questions?",
+  articleHelpful:"Cet article vous a-t-il été utile?",
+  related:"Articles liés",
+  // ticket
+  noTicket:"pas de billet",
+  // order
+  // ticket add
+  textareaPlaceHolder:"Tapez un message ici...",
+  orderNo:"N° de commande",
+  responseTime:"Temps de réponse attendu：Dans les 24 h",
+  selectTip: 'Veuillez sélectionner votre type de question',
+  statuswating: 'Esperando respuestas'
 }

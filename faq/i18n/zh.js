@@ -48,5 +48,36 @@ export default {
   satisfied: '满意',
   unsatisfied: '不满意',
   you_can_rate: '这里写评价',
-  please_rate: '请给我评价'
+  please_rate: '请给我评价',
+  // support:
+  click:'所有问答请点击我们的',
+  faq:"常见问题",
+  page:"页面",
+  findNothing:"找不到您要找的答案？",
+  contact:"联系我们",
+  orderProcessing: "订单处理",
+  tracking:"物流追踪",
+  return:"退货和退款",
+  product:"产品和库存",
+  payment:"付款和促销",
+  account:"帐户问题",
+  // contact:
+  Ticket:'处理记录',
+  within:'24小时内',
+  online:'在线帮助',
+  // faq
+  search: "搜索结果",
+  resultFor: "个有关\"<strong>{result}</strong>\"的结果",
+  question:"还有更多问题？",
+  articleHelpful:"这篇文章有帮助吗？",
+  related:"相关文章",
+  // ticket
+  noTicket:"没有处理记录",
+  // order
+  // ticket add
+  textareaPlaceHolder:"在此处输入消息...",
+  orderNo:"订单号",
+  responseTime:"预期响应时间：24小时内",
+  selectTip: '请选择您的问题类型',
+  statuswating: '等待回复'
 }

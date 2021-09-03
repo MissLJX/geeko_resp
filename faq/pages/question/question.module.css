@@ -12,9 +12,6 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
-.faqPage{
-    background-color: #fff;
-}
 .searchBar{
     width: 100%;
     border-top: 1px solid #e6e6e6;
@@ -37,7 +34,6 @@
     width: 100%;
     padding: 0 4%;
     margin-top: 28px;
-    background-color: #fff;
 }
 .resultBox{
     width: 100%;
@@ -46,6 +42,7 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    padding: 0 4%;
 }
 .resultTitle{
     font-family: Roboto-Medium;
@@ -93,6 +90,7 @@
     font-stretch: normal;
     letter-spacing: 0px;
     color: #999999;
+    line-height: 48px;
 }
 .noResultTxt > span{
     margin-left: 5px;
@@ -106,14 +104,23 @@
 }
 /* 问题列表 */
 .resultListBox{
-    width: 92%;
+    width: 100%;
     margin: 0 auto;
-    padding: 20px 0;
+    padding: 20px 4% 20px;
     border-top: 1px solid #e6e6e6;
     margin-top: 10px;
+    background-color: #fff;
+}
+.resultListBox img {
+    width: 100%;
+    margin: 10px 0;
 }
 .resultItemBox{
-
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #e6e6e6;
+    max-height: 300px;
+    overflow: hidden;
 }
 .resultItemTitle{
     font-family: Roboto-Bold;
@@ -125,8 +132,11 @@
     font-weight: 600;
     margin-bottom: 13px;
 }
-.resultTitleTxt > span{
-    margin-right: 3px;
+.resultItemContent {
+    line-height: 1.5;
+}
+.resultTitleTxt > span {
+    margin-right: 15px;
 }
 .resultTitleTxt > strong {
     color: #3483f4;
@@ -145,9 +155,17 @@
     width: 100%;
     padding: 0 4%;
     margin-top: 27px;
+    background-color: #fff;
 }
 .questionDetail{
     padding-bottom: 32px;
+}
+.questionDetailContent{
+    line-height: 1.25;
+}
+.questionDetailContent img{
+    width: 100%;
+    margin: 10px 0;
 }
 .questionDetailTitle{
 	font-family: Roboto-Bold;
@@ -161,7 +179,7 @@
 }
 .questionRateBox{
     width: 100%;
-    height: 130px;
+    max-height: 130px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -211,6 +229,7 @@
     letter-spacing: 0px;
     color: #222222;
     text-shadow: 0 0 #222;
+    background-color: #fff;
 }
 .relatedTitle{
     line-height: 48px;

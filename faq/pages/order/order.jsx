@@ -1,17 +1,15 @@
 import React from 'react'
-import {getOrders} from '../../api'
-import {gloabvars} from '../../commons/instance.js'
 import {Switch, Route} from 'react-router-dom'
 import OrdersPath from '../order-path/order-path.jsx'
-import PageContanier1 from '../../components/page-contanier/page-contanier';
 import {injectIntl} from 'react-intl'
-import PageHeader1 from '../../components/page-header/page-header';
 import style from './order.module.css'
-import SelectType from '../../components/select-type/select-type'
+import {SelectType} from '../../components/newComponents/new-components'
+import { Page } from '../../components/page/page'
 
 const Order = class extends React.Component {
   constructor (props) {
     super(props)
+    console.log(props)
     this.state = {
       currentPage: this.getPath(this.props.location.pathname),
       selected: true,
@@ -46,30 +44,24 @@ const Order = class extends React.Component {
 
     const selectChange = (e) => {
         console.log(e)
-        this.props.history.replace(`/support/order/${e}`)
+        this.props.history.replace(`/supportnew/order/${e}`)
     }
 
     const linkTo = () => {
-      // if (this.props.to) {
-      //   this.props.history.replace(this.props.to)
-      // } else if (this.props.href) {
-      //   window.location.href = this.props.href
-      // } else {
-      //   this.props.history.goBack()
-      // }
-      window.location.href = "/support/ticketadd"
+      // window.location.href = "/supportnew/ticketadd"
+      this.props.history.push({pathname: "/supportnew/ticketadd"})
+
     }
 
     return <div style={{overflow:'hidden'}}>
-      <PageHeader1 label={intl.formatMessage({id: 'Ticket'})}/>
-      <PageContanier1>
-          <div className={style.header}>Please select your order</div>
+      <Page label={intl.formatMessage({id: 'Ticket'})}>
+        <div className={style.header}>{intl.formatMessage({id: 'selectorder'})}</div>
           <SelectType itemList={this.paths} selectChange={(e)=>selectChange(e)}/>
 
             <div className={style.orderList}>
                 <Switch>
-                    <Route path={`${window.ctx||''}/support/order/:page`} component={OrdersPath}/>
-                    <Route path={`${window.ctx||''}/support/order`} component={OrdersPath}/>
+                    <Route path={`${window.ctx||''}/supportnew/order/:page`} component={OrdersPath}/>
+                    <Route path={`${window.ctx||''}/supportnew/order`} component={OrdersPath}/>
                 </Switch>
             </div> 
 
@@ -79,7 +71,7 @@ const Order = class extends React.Component {
                 {intl.formatMessage({id: 'submit'})}
               </span>    
           </div>
-      </PageContanier1>
+      </Page>
     </div>
   }
 }

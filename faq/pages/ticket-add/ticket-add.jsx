@@ -2,15 +2,12 @@ import React from 'react'
 import {Link} from 'react-router-dom'
 import {get, getByOrderId, sendImage, sendTicket} from '../../api'
 import styled from 'styled-components'
-import {GeekoSelect, ColoredButton, PageHeader, PageContanier} from '../../components/buttons.jsx'
 import _ from 'lodash'
-import {gloabvars} from '../../commons/instance.js'
 import {FormattedMessage, injectIntl} from 'react-intl'
 import HtmlImageCompress from 'html-image-compress'
 import style from './ticket-add.module.css';
 
-import PageHeader1 from '../../components/page-header/page-header';
-import PageContanier1 from '../../components/page-contanier/page-contanier';
+import {PageHeader1, PageContanier1} from '../../components/page/page';
 
 import {
   OrderSelector,
@@ -24,7 +21,7 @@ import {
   ChatSendor,
   ImageLoader
 } from '../../components/styled-ticket.jsx'
-import SelectType from '../../components/select-type/select-type'
+import {SelectType} from '../../components/newComponents/new-components'
 
 const RATE = styled.span`
 	font-family: iconfont;
@@ -140,10 +137,11 @@ class TicketAdd extends React.Component {
   
   componentWillMount () {
     const id = this.props.location.search.split('=')[1]
-    console.log(id)
+    // console.log(id)
     if (id) {
       localStorage.__order = ""
       get(id).then(({result}) => {
+        // console.log(result)
         const {ticket, order, cusomerName, headSculptureUrl} = result
         this.setState({
           ticket,
@@ -163,11 +161,12 @@ class TicketAdd extends React.Component {
         }
       })
     } else {
-      console.log(localStorage.__order)
+      // console.log(localStorage.__order)
       if (localStorage.__order) {
         
         getByOrderId(JSON.parse(localStorage.__order).id).then(({result}) => {
           const {ticket, order, cusomerName, headSculptureUrl} = result
+          // console.log(result)
           // console.log(ticket.ticketReplies.slice(-1)[ticket.ticketReplies.slice(-1).length - 1]['sender'])
           if(ticket){
             if(ticket.ticketReplies.slice(-1)[ticket.ticketReplies.slice(-1).length - 1]['sender'] == "buyers"){
@@ -192,7 +191,7 @@ class TicketAdd extends React.Component {
           })
           this.initScroll()
         }).catch((data) => {
-          alert(data.result)
+          alert(data)
           if (data.code === 401) {
             window.location.href = `${window.ctx || ''}/me/m`
           }
@@ -211,10 +210,13 @@ class TicketAdd extends React.Component {
     localStorage.__order = ''
   }
 
+  
+
   render () {
     const {intl, location} = this.props
 
     const isFromNotification = location.search && location.search.indexOf('utm_source=pcnotification') >= 0
+    console.log(this.state.subject)
 
     //   subjectsizecolor: '尺码相关',
     // subjectaddress: '更改收货地址',
@@ -315,7 +317,7 @@ class TicketAdd extends React.Component {
 
     const GroupReplyHtmls = (props) => {
       const replies = props.replies
-      console.log(replies)
+      // console.log(replies)
       return <ChatRows>
         {
           replies.map((reply, index) => (
@@ -329,7 +331,21 @@ class TicketAdd extends React.Component {
     }
 
     const selectChange= (e) => {
-        console.log(e)
+        // console.log(e)
+        this.setState({subject: e})
+    }
+
+    const textareaChange = (evt) => {
+      if(!this.state.subject){
+        alert(intl.formatMessage({id:"selectTip"}));
+      } else {
+        if(typeof(this.state.subject)!=='number'){
+          this.setState({
+            message: evt.currentTarget.value, 
+            messageInvalid: false
+          })
+        }
+      }
     }
 
     return <div>
@@ -346,14 +362,20 @@ class TicketAdd extends React.Component {
 
           <ChatContainer className="x-flex __column" style={{height:"100%", paddingTop:"12px"}}>
             {/* 当前订单 */}
-            <div className={style.selectedOrderBox} onClick={()=>window.location.href="/support/order"}>
+            <div className={style.selectedOrderBox} onClick={()=>this.props.history.push({pathname: "/supportnew/order"})}>
                 <div className={style.orderNo}>
-                    Order No 
-                    <span>01006099388</span>
+                    {intl.formatMessage({id:"orderno"})}
+                    <span>{this.state.ticket ? this.state.ticket.operaId : this.state.order.id}</span>
                 </div>
                 <div className={style.orderCreateTime}>
-                    Time of Payment
-                    <span>2021/8/06 14:30</span>
+                    {intl.formatMessage({id:"paymenttime"})}
+                    <span>{
+                      this.state.ticket ?
+                      this.state.ticket.openDate ? 
+                        (new Date(this.state.ticket.openDate).toLocaleDateString() + " " + new Date(this.state.ticket.openDate).toTimeString().substr(0, 5)) : 
+                        "":
+                      "-"
+                      }</span>
                 </div>
                 <span className={`${style.iconfont} ${style.changeOrder}`}>&#xe66b;</span>
             </div>
@@ -361,7 +383,7 @@ class TicketAdd extends React.Component {
             {/* 选择帮助项 */}
             <div className={style.chooseHelpBox}>
                 <div className={style.helpTxt}><FormattedMessage id="helpyou"/></div>
-                <SelectType itemList={questions} selectChange={(e)=>selectChange(e)} type={"chat"}/>
+                <SelectType itemList={questions} selectChange={(e)=>selectChange(e)} type={"chat"} value={this.state.subject}/>
             </div>
             
             {/* 对话 */}
@@ -376,7 +398,7 @@ class TicketAdd extends React.Component {
               {
                 this.state.ticket && this.state.ticket.ticketReplies && this.state.showTip && (
                   <div className={style.responseTip}>
-                    {"Expected response time：Within 24h"}
+                    {intl.formatMessage({id:"responseTime"})}
                   </div>
                 )
               }
@@ -396,9 +418,10 @@ class TicketAdd extends React.Component {
             <div className={style.chatInputBox}>
                 <div className={style.chatInput}>
                     <textarea className={`${this.state.messageInvalid ? style.invalid : ''} ${style.textInput}`} 
-                              placeholder={"Type a message here..."}
-                              onChange={(evt) => { this.setState({message: evt.currentTarget.value, messageInvalid: false}) }} 
+                              placeholder={intl.formatMessage({id:"textareaPlaceHolder"})}
+                              onChange={(evt) => {textareaChange(evt) }} 
                               value={this.state.message} 
+                              // disabled={typeof(this.state.subject)==='number'}
                               >
                     </textarea>
                 </div>

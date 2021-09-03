@@ -48,5 +48,36 @@ export default {
   satisfied: 'Zufrieden',
   unsatisfied: 'Unzufrieden',
   you_can_rate: 'Sie können den Kundenservice hier kommentieren',
-  please_rate: 'Bitte bewerten Sie meinen Service'
+  please_rate: 'Bitte bewerten Sie meinen Service',
+  // support:
+  click:'Für alle Fragen und Antworten klicken Sie bitte auf unsere',
+  faq:"FAQ",
+  page:"Seite",
+  findNothing:"Kann die gesuchte Antwort nicht finden?",
+  contact:"Kontaktieren Sie uns",
+  orderProcessing: "Auftragsabwicklung",
+  tracking:"Logistik-Tracking",
+  return:"Rückgabe & Rückerstattung",
+  product:"Produkt & Lager",
+  payment:"Zahlung & Promos",
+  account:"Kontoprobleme",
+  // contact:
+  Ticket:'Fahrkarte',
+  within:'Innerhalb von 24 Stunden',
+  online:'Online-Hilfe',
+  // faq
+  search: "Suchergebnisse",
+  resultFor: "Ergebnisse für \"<strong>{result}</strong>\"",
+  question:"Haben Sie weitere Fragen?",
+  articleHelpful:"War dieser Artikel hilfreich?",
+  related:"Ähnliche Artikel",
+  // ticket
+  noTicket:"kein Ticket",
+  // order
+  // ticket add
+  textareaPlaceHolder:"Geben Sie hier eine Nachricht ein...",
+  orderNo:"Bestell-Nr",
+  responseTime:"Erwartete Reaktionszeit: Innerhalb von 24 Stunden",
+  selectTip: 'Bitte wählen Sie Ihren Fragetyp',
+  statuswating: 'Warte auf Antwort'
 }
