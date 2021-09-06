@@ -13,7 +13,7 @@
 <style>
     .st-confirm {
         position: fixed;
-        width: 85%;
+        width: 80%;
         max-width: 320px;
         top: 50%;
         left: 50%;

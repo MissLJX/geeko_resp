@@ -12,21 +12,21 @@
                 <div class="img">
                     <img :src="imageUrl" :class="{'gray':isSoldOutProduct}"/>
                 </div>
-
-                <figcaption>
-                    <p class="st-ellipsis el-product-name">{{product.name}}</p>
-                    <div class="st-table st-fullwidth">
-                        <div class="st-cell st-v-m">
-                            <span class="el-product-price">{{price}}</span>
-                            <del class="el-product-del">{{delPrice}}</del>
-                        </div>
-                        <div class="st-cell st-v-m st-t-r">
-                            <i @click.prevent="likeHandle" class="iconfont el-product-like" :class="{red:liked}">{{liked ? '&#xe677;' : '&#xe631;'}}</i>
-                        </div>
-                    </div>
-                </figcaption>
             </figure>
         </a>
+
+        <figcaption>
+            <p class="st-ellipsis el-product-name">{{product.name}}</p>
+            <div class="st-table st-fullwidth">
+                <div class="st-cell st-v-m">
+                    <span class="el-product-price">{{price}}</span>
+                    <del class="el-product-del">{{delPrice}}</del>
+                </div>
+                <div class="st-cell st-v-m st-t-r" :data-productId="product.id">
+                    <i @click.prevent="addToCart(product.id)" class="iconfont el-product-like">&#xe6a8;</i>
+                </div>
+            </div>
+        </figcaption>
     </div>
 </template>
 
@@ -138,14 +138,6 @@
                     return unitprice(this.product.price)
                 return ''
             },
-            liked(){
-                var wishlist = this.$store.getters['me/wishlist']
-                if (wishlist && wishlist.length && wishlist[0].productIds && wishlist[0].productIds.length) {
-                        return _.indexOf(wishlist[0].productIds, this.product.id) >= 0
-                }
-
-                return false
-            },
             productUrl(){
                 return PROJECT + '/' + producturl(this.product)
             },
@@ -161,17 +153,12 @@
             }
         },
         methods: {
-            likeHandle(){
-                if(!this.isLogin){
-                    window.location.href = "/i/login?redirectUrl=/me/m";
-                }
-                var wishlist = this.$store.getters['me/wishlist']
-                var index = _.indexOf(wishlist[0].productIds, this.product.id)
-                if (index < 0) {
-                    this.$store.dispatch('like', this.product.id)
-                } else {
-                    this.$store.dispatch('unlike',  this.product.id)
-                }
+            addToCart(productId){
+                this.$store.dispatch("globalLoadingShow",true);
+                this.$store.dispatch("getProductDetailMessage",productId).then((product) => {
+                    this.$store.dispatch("addToCartIsShow",true);
+                    this.$store.dispatch("globalLoadingShow",false);
+                });
             }
         }
     }

@@ -437,6 +437,27 @@ const actions = {
         return api.getMessageToObject(code).then(result => {
             commit(types.GET_MY_PREFERENCES_MESSAGE_CODE,result);
         });
+    },
+    getRelationProducts({commit,state},{productId,skip}){
+        return api.getRelationProducts({productId,skip}).then((result) => {
+            let products = result.result;
+            if(products && products.length > 0){
+                if(skip === 0){
+                    state.relationProducts = [];
+                    state.relationProductsSkip = 0;
+                }
+                commit(types.GET_RELATION_PRODUCTS,products);
+            }else{
+                if (skip === 0) {
+                    return {empty: true, finished: true}
+                }
+                return {finished: true}
+            }
+            return {}
+        });
+    },
+    getRelationProductsSkip({commit}){
+        commit(types.GET_RELATION_PRODUCTS_SKIP);
     }
 }
 

@@ -44,7 +44,9 @@ const state = {
     currencyList:[],
     shoppingCartCount:0,
     messageM1518:"",
-    messageM1521:null
+    messageM1521:null,
+    relationProducts:[],
+    relationProductsSkip:0
 }
 
 export default state;

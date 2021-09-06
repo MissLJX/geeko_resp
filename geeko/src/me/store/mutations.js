@@ -191,6 +191,12 @@ const mutations = {
     },
     [types.GET_MY_PREFERENCES_MESSAGE_CODE](state,message){
         state.messageM1521 = message;
+    },
+    [types.GET_RELATION_PRODUCTS](state,products){
+        state.relationProducts = _.concat(state.relationProducts,products);
+    },
+    [types.GET_RELATION_PRODUCTS_SKIP](state){
+        state.relationProductsSkip += 20;
     }
 }
 

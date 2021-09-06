@@ -45,7 +45,9 @@ const getters = {
     currencyList:state => state.currencyList,
     shoppingCartCount:state => state.shoppingCartCount,
     messageM1518:state => state.messageM1518,
-    messageM1521:state => state.messageM1521
+    messageM1521:state => state.messageM1521,
+    relationProducts:state => state.relationProducts,
+    relationProductsSkip:state => state.relationProductsSkip
 }
 
 export default getters;
