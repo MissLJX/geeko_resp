@@ -2,17 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 import {withRouter} from 'react-router-dom'
 
-const style =  `
-    @font-face {
-        font-family: 'iconfont';  /* project id 384296 */
-        src: url('//at.alicdn.com/t/font_384296_w8akz97a3dr.eot');
-        src: url('//at.alicdn.com/t/font_384296_w8akz97a3dr.eot?#iefix') format('embedded-opentype'),
-            url('//at.alicdn.com/t/font_384296_w8akz97a3dr.woff2') format('woff2'),
-            url('//at.alicdn.com/t/font_384296_w8akz97a3dr.woff') format('woff'),
-            url('//at.alicdn.com/t/font_384296_w8akz97a3dr.ttf') format('truetype'),
-            url('//at.alicdn.com/t/font_384296_w8akz97a3dr.svg#iconfont') format('svg');
-    }
-`
 const PageHeaderDiv = styled.div`
     width: 100%;
     height: 44px;
@@ -36,6 +25,12 @@ const PageHeaderDiv = styled.div`
 `
 
 const IconStyle = styled.i`
+    @font-face {
+        font-family: 'iconfont';  /* Project id 384296 */
+        src: url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.woff2?t=1630652306181') format('woff2'),
+            url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.woff?t=1630652306181') format('woff'),
+            url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.ttf?t=1630652306181') format('truetype');
+    }
     font-family:"iconfont" !important;
     font-size:16px;
     font-style:normal;
@@ -63,7 +58,7 @@ const PageContanierDiv = styled.div`
 const PageHeader = (props) => {
     console.log(props)
     const p = props.props ? props.props : props;
-    return <PageHeaderDiv>
+    return <PageHeaderDiv >
         <span>{p.label}</span>
   		 <IconStyle onClick={() => {
   		 	if (p.to) {
@@ -74,7 +69,7 @@ const PageHeader = (props) => {
   		 	} else {
   		 		props.history.goBack()
   		 	}
-  		 }}>&#xe78a;</IconStyle>
+  		 }}>&#xe760;</IconStyle>
     </PageHeaderDiv>
 }
 

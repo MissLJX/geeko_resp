@@ -11,6 +11,18 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+.back{
+    font-family:"iconfont" !important;
+    font-size:16px;
+    font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    position: absolute;
+    left: 13px;
+    color: #222;
+    font-weight: 600;
+}
+
 .dropDownPositionBox{
     border-bottom: 1px solid #e6e6e6;
 }

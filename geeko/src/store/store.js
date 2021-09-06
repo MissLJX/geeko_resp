@@ -9,7 +9,11 @@ export const state = {
     screenLoading: false,
     countries: null,
     states: null,
-    currencies: null
+    currencies: null,
+    productDetail:null,
+    productId:"",
+    addToCartModalShow:false,
+    globalLoadingShow:false
 }
 
 
@@ -20,7 +24,11 @@ export const getters = {
     modalconfirmshow: state => state.modalconfirmshow,
     confirmCfg: state => state.confirmCfg,
     screenLoading: state => state.screenLoading,
-    currencies: state => state.currencies
+    currencies: state => state.currencies,
+    productDetail:state => state.productDetail.products,
+    productId:state => state.productId,
+    addToCartModalShow:state => state.addToCartModalShow,
+    globalLoadingShow:state => state.globalLoadingShow
 }
 
 
@@ -66,6 +74,18 @@ export const mutations = {
     [types.APP_CONFIRM_SHOW](state, {show , cfg}){
         state.confirmCfg = cfg
         state.modalconfirmshow = show
+    },
+    [types.GET_PRODUCT_DETAIL_MESSAGE](state,product){
+        state.productDetail = _.cloneDeep(product);
+    },
+    [types.GET_PRODUCT_DETAIL_MESSAGE_PRODUCT_ID](state,productId){
+        state.productId = productId;
+    },
+    [types.ADD_TO_CART_IS_SHOW](state,flag){
+        state.addToCartModalShow = flag;
+    },
+    [types.GLOBAL_LOADING_SHOW](state,flag){
+        state.globalLoadingShow = flag;
     }
 }
 
@@ -121,5 +141,25 @@ export const actions = {
     },
     logoff(closedReason){
         return api.logoff(closedReason)
+    },
+    getProductDetailMessage({commit},productId){
+        return api.getProductDetailMessage(productId).then((result) => {
+            commit(types.GET_PRODUCT_DETAIL_MESSAGE,result.result);
+            commit(types.GET_PRODUCT_DETAIL_MESSAGE_PRODUCT_ID,productId);
+            return result.result;
+        }).catch((e) => {
+            console.log(e)
+        });
+    },
+    addToCartIsShow({commit},flag){
+        commit(types.ADD_TO_CART_IS_SHOW,flag);
+    },
+    globalLoadingShow({commit},flag){
+        commit(types.GLOBAL_LOADING_SHOW,flag);
+    },
+    addToCart({commit},product){
+        return api.addProducts(product).then((result) => {
+            console.log(result);
+        });
     }
 }

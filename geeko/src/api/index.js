@@ -40,3 +40,14 @@ export function logoff(closedReason) {
     return axios.post(VPATH+'/login-customer/close',closedReason)
 }
 
+// add to cart 
+// params {} {"variantId":product.variantId,"quantity":'1'}
+export const addProducts = (products) => {
+    return axios.cpost('/v9/shopping-cart/add-products', products)
+}
+
+
+// https://www.chicme.com/v9/product/anon/e3a51d8d-045b-46d8-a937-9c76f0466d6e/show2
+export const getProductDetailMessage = (productId) => {
+    return axios.get(`/v9/product/anon/${productId}/show2`);
+}

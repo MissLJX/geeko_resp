@@ -26,6 +26,14 @@
         </transition>
 
         <div class="mask" v-if="modalconfirmshow"></div>
+
+        <transition name="add-cart">
+            <add-to-cart-modal v-if="addToCartModalShow"></add-to-cart-modal>
+        </transition>
+
+        <div class="mask" v-if="addToCartModalShow" @click="modalHide"></div>
+
+        <loading v-if="loadingShow"></loading>
     </div>
 </template>
 
@@ -38,6 +46,7 @@
         width: 100%;
         left: 0;
         position: relative;
+        z-index: 99;
     }
 
     #progress {
@@ -96,6 +105,18 @@
         transition: all .1s linear;
     }
 
+    .add-cart-enter-active, .add-cart-leave-to{
+        bottom:0 !important;
+    }
+
+    .add-cart-enter-active , .add-cart-leave-active{
+        transition: bottom .5s !important;
+    }
+
+    .add-cart-leave-active , .add-cart-enter{
+        bottom:-100% !important;
+    }
+
     .mask{
         width: 100%;
         height: 100%;
@@ -109,6 +130,7 @@
 
 <script type="text/ecmascript-6">
     import ModalConfirm from "./components/modal-confirm.vue"
+    import addToCartModal from "./components/addToCart/AddToCartModal.vue"
 
     export default{
         computed:{
@@ -124,9 +146,21 @@
             confirmCfg(){
                 return this.$store.getters.confirmCfg
             },
+            addToCartModalShow(){
+                return this.$store.getters.addToCartModalShow
+            },
+            loadingShow(){
+                return this.$store.getters.globalLoadingShow;
+            }
         },
         components:{
-            "modal-confirm":ModalConfirm
+            "modal-confirm":ModalConfirm,
+            "add-to-cart-modal":addToCartModal
+        },
+        methods:{
+            modalHide(){
+                this.$store.dispatch("addToCartIsShow",false);
+            }
         }
     }
 </script>

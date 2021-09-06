@@ -17,7 +17,7 @@
                     </span>
 
                     <div class="suspend-container" v-if="suspendShow && suspendSumShow">
-                        <div class="find-similar" @click.prevent="">
+                        <div class="find-similar" @click.prevent="findSimlar(product.id)">
                             Find Similar
                         </div>
 
@@ -65,7 +65,11 @@
             calssifyName:String
         },
         created(){
-            console.log("1111");
+        },
+        activated(){
+        },
+        deactivated(){
+            this.suspendShow = false;
         },
         computed: {
             imageUrl(){
@@ -139,6 +143,9 @@
                         }
                     }
                 });
+            },
+            findSimlar(productId){
+                this.$router.push({name:"relation-products",params:{productId}});
             }
         }
     }
@@ -239,7 +246,7 @@
                     width: 93px;
                     font-family: 'AcuminPro-Bold';
                     font-size: 14px;
-                    background-color: rgba(0, 0, 0, 0.7);
+                    background-color: rgba(0, 0, 0, 0.5);
                     margin-top: 12px;
                 }
             }
