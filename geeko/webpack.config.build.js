@@ -16,7 +16,8 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, './dist'),
         publicPath:"auto",
-        filename: '[name].js',
+        filename: '[name].bundle.js',
+		chunkFilename: '[name].chunk.js'
     },
     mode: 'production',
     optimization: {
