@@ -260,6 +260,14 @@ export const updateCustomerSave = (customer) => {
     return axios.post(VPATH + "/customer/save",customer,{}).then(data => data.result);
 }
 
+export const surveySave = (params) => {
+    return axios.post(VPATH + '/questionnaire-answer/anon/save',params,{}).then(data => data.result);
+}
+
+export const surveyGet = () => {
+    return axios.get(VPATH + '/questionnaire-answer/anon/get',{},{}).then(data => data.result)
+}
+
 // /context/anon/get-currency-list
 export const getCurrencyList =() => {
     return axios.get("/context/anon/get-currency-list",{},{}).then(data => data.result);

@@ -1,8 +1,8 @@
-// import Data from './data.js'
-// import PtData from './data_pt.js'
-// import DeData from './data_de.js'
-// import EsData from './data_es.js'
-// import FrData from './data_fr.js'
+import Data from './data.js'
+import PtData from './data_pt.js'
+import DeData from './data_de.js'
+import EsData from './data_es.js'
+import FrData from './data_fr.js'
 
 // import Data from './ivrose/data.js'
 // import PtData from './ivrose/data_pt.js'
@@ -17,11 +17,11 @@
 // import FrData from './boutiquefeel/data_fr.js'
 
 
-import Data from './chiquedoll/data.js'
-import PtData from './chiquedoll/data_pt.js'
-import DeData from './chiquedoll/data_de.js'
-import EsData from './chiquedoll/data_es.js'
-import FrData from './chiquedoll/data_fr.js'
+// import Data from './chiquedoll/data.js'
+// import PtData from './chiquedoll/data_pt.js'
+// import DeData from './chiquedoll/data_de.js'
+// import EsData from './chiquedoll/data_es.js'
+// import FrData from './chiquedoll/data_fr.js'
 
 
 const messages = {

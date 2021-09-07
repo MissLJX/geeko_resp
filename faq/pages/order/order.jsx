@@ -2,9 +2,54 @@ import React from 'react'
 import {Switch, Route} from 'react-router-dom'
 import OrdersPath from '../order-path/order-path.jsx'
 import {injectIntl} from 'react-intl'
-import style from './order.module.css'
+// import style from './order.module.css'
 import {SelectType} from '../../components/newComponents/new-components'
 import { Page } from '../../components/page/page'
+import styled from 'styled-components';
+
+
+
+const Header = styled.div`
+  font-family: Roboto-Regular;
+  font-size: 12px;
+  font-weight: normal;
+  font-stretch: normal;
+  letter-spacing: 0px;
+  color: #666666;
+  text-align: center;
+  margin: 0px 0 6px;
+  padding-top: 12px;
+`
+
+const OrderList = styled.div`
+  margin-top: 27px;
+  overflow: hidden;
+  overflow-y: scroll;
+  height: calc(100% - 161px);
+`
+
+const SubmitBtn = styled.div`
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 61px;
+  border-top: 1px solid #e6e6e6;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  span{
+    width: 92%;
+    height: 38px;
+    line-height: 38px;
+    background-color: #000;
+    color: #fff;
+    text-transform: uppercase;
+    text-align: center;
+  }
+`
 
 const Order = class extends React.Component {
   constructor (props) {
@@ -44,33 +89,37 @@ const Order = class extends React.Component {
 
     const selectChange = (e) => {
         console.log(e)
-        this.props.history.replace(`/supportnew/order/${e}`)
+        this.props.history.replace(`${(window.ctx || '')}/support/order/${e}`)
     }
 
     const linkTo = () => {
-      // window.location.href = "/supportnew/ticketadd"
-      this.props.history.push({pathname: "/supportnew/ticketadd"})
+      if(JSON.stringify(localStorage.__order)=='null' || JSON.stringify(localStorage.__order)=='{}' || !localStorage.__order){
+        // this.props.history.push({pathname: `${(window.ctx || '')}/support/ticket`})
+      } else {
+        this.props.history.push({pathname: `${(window.ctx || '')}/support/ticketadd`})
+      }
+      
 
     }
 
     return <div style={{overflow:'hidden'}}>
       <Page label={intl.formatMessage({id: 'Ticket'})}>
-        <div className={style.header}>{intl.formatMessage({id: 'selectorder'})}</div>
+        <Header>{intl.formatMessage({id: 'selectorder'})}</Header>
           <SelectType itemList={this.paths} selectChange={(e)=>selectChange(e)}/>
 
-            <div className={style.orderList}>
+            <OrderList>
                 <Switch>
-                    <Route path={`${window.ctx||''}/supportnew/order/:page`} component={OrdersPath}/>
-                    <Route path={`${window.ctx||''}/supportnew/order`} component={OrdersPath}/>
+                    <Route path={`${window.ctx||''}/support/order/:page`} component={OrdersPath}/>
+                    <Route path={`${window.ctx||''}/support/order`} component={OrdersPath}/>
                 </Switch>
-            </div> 
+            </OrderList> 
 
           {/* 提交按钮 */}
-          <div className={style.submitBtn} >
+          <SubmitBtn>
               <span onClick={()=>linkTo()}>
                 {intl.formatMessage({id: 'submit'})}
               </span>    
-          </div>
+          </SubmitBtn>
       </Page>
     </div>
   }

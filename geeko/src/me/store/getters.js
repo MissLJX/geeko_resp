@@ -47,7 +47,9 @@ const getters = {
     messageM1518:state => state.messageM1518,
     messageM1521:state => state.messageM1521,
     relationProducts:state => state.relationProducts,
-    relationProductsSkip:state => state.relationProductsSkip
+    relationProductsSkip:state => state.relationProductsSkip,
+
+    survey: state => state.survey,
 }
 
 export default getters;

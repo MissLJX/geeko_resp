@@ -1,10 +1,295 @@
 import React, { createRef } from 'react';
-import style from './question.module.css';
+// import style from './question.module.css';
 import {FormattedMessage, injectIntl} from 'react-intl';
 // import SearchBar from '../../components/search/search-bar';
 import {secondaries, questions} from '../../data'
 import { Page } from '../../components/page/page';
 import {SearchBar} from '../../components/newComponents/new-components';
+import styled from 'styled-components';
+
+let style = {}
+
+const ResultBox = styled.div`
+    width: 100%;
+    height: 82px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+`
+
+const ResultTitle = styled.div`
+    font-family: Roboto-Medium;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #222222;
+    margin: 0 auto;
+    text-shadow: 0 0 #222;
+    margin-bottom: 10px;
+`
+
+const ResultNum = styled.div`
+    margin: 0 auto;
+    font-family: Roboto-Regular;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #666666;
+`
+
+const SearchBarBox = styled.div`
+    width: 100%;
+    border-top: 1px solid #e6e6e6;
+    max-height: 100px;
+    /* line-height: 42px; */
+    padding-top: 25px;
+`
+
+const ResultListBox = styled.div`
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px 4% 20px;
+    border-top: 1px solid #e6e6e6;
+    margin-top: 10px;
+    background-color: #fff;
+    img {
+        width: 100%;
+        margin: 10px 0;
+    }
+`
+
+const ResultItemBox = styled.div`
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #e6e6e6;
+    max-height: 300px;
+    overflow: hidden;
+`
+
+const ResultItemTitle = styled.div`
+    font-family: Roboto-Bold;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #222222;
+    font-weight: 600;
+    margin-bottom: 13px;
+    span:nth-child(1){
+        span {
+            margin-right: 15px;
+        }
+        strong {
+            color: #3483f4;
+        }
+    }
+    span:nth-child(2){
+        @font-face {
+            font-family: 'iconfont';  /* Project id 384296 */
+            src: url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.woff2?t=1630652306181') format('woff2'),
+                url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.woff?t=1630652306181') format('woff'),
+                url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.ttf?t=1630652306181') format('truetype');
+        }
+        font-family:"iconfont" !important;
+        font-size:16px;
+        font-style:normal;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        color: #999;
+        margin-left: 15px;
+    }
+    span:nth-child(3){
+        color: #999;
+        margin-left: 3px;
+    }
+`
+
+const ResultItemContent = styled.div`
+    // width: 100%;
+    // padding: 0 4%;
+    // margin-top: 27px;
+    // background-color: #fff;
+    line-height: 1.5;
+`
+
+const NoResult = styled.div`
+    width: 92%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 30px;
+`
+const NoResultImg = styled.div`
+    @font-face {
+        font-family: 'iconfont';  /* Project id 384296 */
+        src: url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.woff2?t=1630652306181') format('woff2'),
+            url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.woff?t=1630652306181') format('woff'),
+            url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.ttf?t=1630652306181') format('truetype');
+    }
+    font-family:"iconfont" !important;
+    font-size:16px;
+    font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 61px;
+    color: #999;
+`
+
+const RelatedBox = styled.div`
+    width: 100%;
+    /* margin: 0 auto; */
+    border-top: 10px solid #f6f6f6;
+    padding: 0 4% 20px;
+    font-family: Roboto-Bold;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #222222;
+    text-shadow: 0 0 #222;
+    background-color: #fff;
+`
+const RelatedTitle = styled.div`
+    line-height: 48px;
+    line-height: 48px;
+    font-weight: 600;
+    text-shadow: none;
+`
+const RelatedItem = styled.div`
+    width: 100%;
+    /* border: 1px solid; */
+    height: 40px;
+    line-height: 40px;
+    background: #f6f6f6;
+    padding: 0 16px;
+    font-family: Roboto-Regular;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #222222;
+    text-shadow: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 8px;
+`
+
+const QuestionDetailBox = styled.div`
+    width: 100%;
+    padding: 0 4%;
+    margin-top: 27px;
+    background-color: #fff;
+`
+
+const QuestionDetail = styled.div`
+    padding-bottom: 32px;
+`
+
+const QuestionDetailContent = styled.div`
+    line-height: 1.25;
+    img{
+        width: 100%;
+        margin: 10px 0;
+    }
+`
+
+const QuestionDetailTitle = styled.div`
+    font-family: Roboto-Bold;
+    font-size: 16px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #222222;
+    font-weight: bold;
+    margin-bottom: 13px;
+`
+
+const QuestionRateBox = styled.div`
+    width: 100%;
+    max-height: 130px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    border-top: 1px solid #e6e6e6;
+`
+
+const QuestionRateTxt = styled.div`
+    margin-top: 20px;
+    margin-bottom: 16px;
+    font-family: Roboto-Regular;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #222222;
+`
+const QuestionRateIcon = styled.div`
+    font-size: 16px;
+    width: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin-bottom: 20px;
+`
+
+const Liked = styled.span`
+    @font-face {
+        font-family: 'iconfont';  /* Project id 384296 */
+        src: url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.woff2?t=1630652306181') format('woff2'),
+            url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.woff?t=1630652306181') format('woff'),
+            url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.ttf?t=1630652306181') format('truetype');
+    }
+    font-family:"iconfont" !important;
+    font-size:16px;
+    font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #57b936;
+`
+const Unlike = styled.span`
+    @font-face {
+        font-family: 'iconfont';  /* Project id 384296 */
+        src: url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.woff2?t=1630652306181') format('woff2'),
+            url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.woff?t=1630652306181') format('woff'),
+            url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.ttf?t=1630652306181') format('truetype');
+    }
+    font-family:"iconfont" !important;
+    font-size:16px;
+    font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transform: rotate(180deg);
+`
+const Unliked = styled.span`
+    color: #e64545;
+`
+
+const NoResultTxt = styled.div`
+    font-family: Roboto-Regular;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #999999;
+    line-height: 48px;
+
+    span{
+        margin-left: 5px;
+        text-decoration: underline;
+        font-family: Roboto-Regular;
+        font-size: 12px;
+        font-weight: normal;
+        font-stretch: normal;
+        letter-spacing: 0px;
+        color: #222222;
+    }
+`
 
 let lastSearchId = 0
 class Question1 extends React.PureComponent{
@@ -37,6 +322,7 @@ class Question1 extends React.PureComponent{
 
     componentWillUpdate(){
         this.initPage()
+        console.log(this.state.headerRef)
         this.state.headerRef.current.scrollIntoView({
             top: 0,
             behavior:'smooth'
@@ -164,7 +450,7 @@ class Question1 extends React.PureComponent{
 
         const showDetail = (e) => {
             lastSearchId = 0
-            history.push({pathname:"/supportnew/question1",state:{id:e.id,search:e.title}})
+            history.push({pathname:`${(window.ctx || '')}/support/question1`,state:{id:e.id,search:e.title}})
         }
 
         const removeHeader = (text) => {
@@ -178,7 +464,7 @@ class Question1 extends React.PureComponent{
             this.setState({
                 searchValue: e.title
             })
-            history.push({pathname:"/supportnew/question1",state:{id:e.id,search:e.title}})
+            history.push({pathname:`${(window.ctx || '')}/support/question1`,state:{id:e.id,search:e.title}})
         }
 
         const highLightSearch = (title) => {
@@ -186,99 +472,104 @@ class Question1 extends React.PureComponent{
             return title.replace(reg, (e)=>{return '<strong>'+e+"</strong>"})
         }
 
+        
+
+        
         return (
             <div className={style.faqPage}>
                 <Page label={intl.formatMessage({id: 'faq'})} >
+                    <div ref={headerRef}></div>
                     {/* 搜索框 */}
-                    <div className={style.searchBar} ref={headerRef}>
+                    <SearchBarBox >
                         <SearchBar search={(e)=>search(e)} value={searchValue} stopSearch={stopSearch}></SearchBar>
-                    </div>                    
+                    </SearchBarBox>                    
 
+                    
                     {/* 搜素结果 */}
                     {
                         searchShow &&
-                        <div className={style.resultBox}>
-                            <div className={style.resultTitle}>{intl.formatMessage({id:'search'})}</div>
-                            <div className={style.resultNum}>{resultList.length}&nbsp;<span dangerouslySetInnerHTML={{__html:intl.formatMessage({id:"resultFor"}, {result:searchValue})}}></span></div>
-                        </div>
+                        <ResultBox>
+                            <ResultTitle>{intl.formatMessage({id:'search'})}</ResultTitle>
+                            <ResultNum>{resultList.length}&nbsp;<span dangerouslySetInnerHTML={{__html:intl.formatMessage({id:"resultFor"}, {result:searchValue})}}></span></ResultNum>
+                        </ResultBox>
                     }
                     
                     {/* 结果列表 */}
                     {
                         searchShow &&
-                        <div className={style.resultListBox}>
+                        <ResultListBox>
                             {
                                 resultList.map((item, index) => {
-                                    return <div className={style.resultItemBox} onClick={()=> showDetail(item)} key={index}>
-                                            <div className={style.resultItemTitle}>
-                                                <span className={style.resultTitleTxt} dangerouslySetInnerHTML={{__html:highLightSearch(item.title)}}>
+                                    return <ResultItemBox onClick={()=> showDetail(item)} key={index}>
+                                            <ResultItemTitle>
+                                                <span dangerouslySetInnerHTML={{__html:highLightSearch(item.title)}}>
                                                     
                                                 </span>
-                                                <span className={`${style.iconfont} ${style.resultlike}`}>&#xe7af;</span>
-                                                <span className={style.likes}>{item.likes}</span>
-                                            </div>
-                                            <div className={style.resultItemContent} dangerouslySetInnerHTML={{__html: removeHeader(item.richText)}}>
+                                                <span>&#xe7af;</span>
+                                                <span>{item.likes}</span>
+                                            </ResultItemTitle>
+                                            <ResultItemContent dangerouslySetInnerHTML={{__html: removeHeader(item.richText)}}>
 
-                                            </div>
-                                    </div>
+                                            </ResultItemContent>
+                                    </ResultItemBox>
                                 })
                             }
-                        </div>
+                        </ResultListBox>
                     }
                     
 
                     {/* 暂无资料 */}
                     {
                         searchShow && resultList.length == 0 && 
-                        <div className={style.noResult}>
-                            <div className={style.noResultImg}>
-                                <span className={`${style.iconfont} ${style.noResultIcon}`}>&#xe7c6;</span>
-                            </div>
-                            <div className={style.noResultTxt}>
+                        <NoResult>
+                            <NoResultImg>
+                                <span>&#xe7c6;</span>
+                            </NoResultImg>
+                            <NoResultTxt>
                                 {intl.formatMessage({id:"question"})}
-                                <span onClick={()=>this.props.history.push({pathname: "contact-us"})}>{intl.formatMessage({id: 'contact'})}</span>
-                            </div>
-                        </div>
+                                <span onClick={()=>this.props.history.push({pathname: `${(window.ctx || '')}/support/contact-us`})}>{intl.formatMessage({id: 'contact'})}</span>
+                            </NoResultTxt>
+                        </NoResult>
                     }
 
                     {/* 问题详情 */}
                     {
                         detailShow && 
-                        <div className={style.questionDetailBox}>
-                            <div className={style.questionDetail} >
-                                <div className={style.questionDetailTitle}>{secondary.title}</div>
-                                <div className={style.questionDetailContent} dangerouslySetInnerHTML={{__html:removeHeader(richText)}}></div>
-                            </div>
-                            <div className={style.questionRateBox}>
-                                {/* <div className={style.questionRateTxt}>{intl.formatMessage({id:"articleHelpful"})}</div>
-                                <div className={style.questionRateIcon}>
+                        <QuestionDetailBox>
+                            <QuestionDetail>
+                                <QuestionDetailTitle>{secondary.title}</QuestionDetailTitle>
+                                <QuestionDetailContent dangerouslySetInnerHTML={{__html:removeHeader(richText)}}></QuestionDetailContent>
+                            </QuestionDetail>
+                            <QuestionRateBox>
+                                {/* <QuestionRateTxt>{intl.formatMessage({id:"articleHelpful"})}</QuestionRateTxt>
+                                <QuestionRateIcon>
                                     <span className={`${style.iconfont} ${style.like} ${likeQuestion==1?style.liked:""}`} onClick={()=>this.setState({likeQuestion: 1})}>&#xe7af;</span>
                                     <span className={`${style.iconfont} ${style.unlike} ${likeQuestion==2?style.unliked:""}`} onClick={()=>this.setState({likeQuestion: 2})}>&#xe7af;</span>
-                                </div> */}
-                                <div className={style.noResultTxt}>
+                                </QuestionRateIcon> */}
+                                <NoResultTxt>
                                     {intl.formatMessage({id:"question"})}
-                                    <span onClick={()=>window.location.href = "/supportnew/contact-us"}>{intl.formatMessage({id: 'contact'})}</span>
-                                </div>
-                            </div>
-                        </div>
+                                    <span onClick={()=>this.props.history.push({pathname: `${(window.ctx || '')}/support/contact-us`})}>{intl.formatMessage({id: 'contact'})}</span>
+                                </NoResultTxt>
+                            </QuestionRateBox>
+                        </QuestionDetailBox>
                     }
 
                     {/* 相似推荐 */}
                     {
                         detailShow &&
-                        <div className={style.relatedBox}>
-                            <div className={style.relatedTitle}>{intl.formatMessage({id:"related"})}</div>
+                        <RelatedBox>
+                            <RelatedTitle>{intl.formatMessage({id:"related"})}</RelatedTitle>
                             {
                                 parent.questions.map((item,index)=>{
                                     if(item.title != secondary.title){
-                                        return <div className={style.relatedItem} key={index} onClick={()=>clickItem(item)}>
+                                        return <RelatedItem key={index} onClick={()=>clickItem(item)}>
                                             {item.title}
-                                        </div>
+                                        </RelatedItem>
                                     }
                                 })
                             }
                             
-                        </div>
+                        </RelatedBox>
                     }
                 </Page>
             </div>

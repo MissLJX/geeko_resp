@@ -1,13 +1,13 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+// import ReactDOM from 'react-dom'
 import {Switch, Route, BrowserRouter} from 'react-router-dom'
-import Support from './support.jsx'
-import Question from './question.jsx'
-import SearchResult from './search-result.jsx'
-import Tickets from './tickets.jsx'
-import Ticket from './ticket.jsx'
-import Orders from './orders.jsx'
-import OnlineHelp from './onlinehelpframe.jsx'
+// import Support from './support.jsx'
+// import Question from './question.jsx'
+// import SearchResult from './search-result.jsx'
+// import Tickets from './tickets.jsx'
+// import Ticket from './ticket.jsx'
+// import Orders from './orders.jsx'
+// import OnlineHelp from './onlinehelpframe.jsx'
 import Rate from './rate.jsx'
 
 import SupportNew from './support/support.jsx';
@@ -52,9 +52,9 @@ messages['fr'] = fr_L
 messages['es'] = es_L
 messages['pt'] = pt_L
 // 清空打印
-// console.log = () =>{
+console.log = () =>{
 
-// }
+}
 export default () => (
 
   <IntlProvider locale={lang} messages={messages[lang]}>
@@ -72,14 +72,14 @@ export default () => (
         <Route path={`${window.ctx || ''}/support/rate/:id`} component={Rate}/>
 
         
-        <Route path={`${window.ctx || ''}/supportnew/faq`} component={FAQ}/>
-        <Route path={`${window.ctx || ''}/supportnew/question1/:id`} component={Question1}/>
-        <Route path={`${window.ctx || ''}/supportnew/question1`} component={Question1}/>
-        <Route path={`${window.ctx || ''}/supportnew/contact-us`} component={ContactUs}/>
-        <Route path={`${window.ctx || ''}/supportnew/ticket1`} component={Ticket1}/>
-        <Route path={`${window.ctx || ''}/supportnew/order`} component={Order}/>
-        <Route path={`${window.ctx || ''}/supportnew/ticketadd`} component={TicketAdd}/>
-        <Route path={`${window.ctx || ''}/supportnew`} component={SupportNew}/>
+        <Route path={`${window.ctx || ''}/support/faq`} component={FAQ}/>
+        <Route path={`${window.ctx || ''}/support/question1/:id`} component={Question1}/>
+        <Route path={`${window.ctx || ''}/support/question1`} component={Question1}/>
+        <Route path={`${window.ctx || ''}/support/contact-us`} component={ContactUs}/>
+        <Route path={`${window.ctx || ''}/support/ticket`} component={Ticket1}/>
+        <Route path={`${window.ctx || ''}/support/order`} component={Order}/>
+        <Route path={`${window.ctx || ''}/support/ticketadd`} component={TicketAdd}/>
+        <Route path={`${window.ctx || ''}/support`} component={SupportNew}/>
       </Switch>
       </BrowserRouter>
     </div>

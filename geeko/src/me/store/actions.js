@@ -458,7 +458,27 @@ const actions = {
     },
     getRelationProductsSkip({commit}){
         commit(types.GET_RELATION_PRODUCTS_SKIP);
-    }
+    },
+    updateSurvey({commit},params){
+        console.log(params)
+        return new Promise((reslove,reject) => {
+            api.surveySave(params).then((result) => {
+                reslove(result);
+                commit(types.GET_SURVEY_ANSWER, params);
+            });
+        });
+    },
+    getSurvey({commit},params){
+        console.log(params)
+        return new Promise((reslove,reject) => {
+            api.surveyGet(params).then((result) => {
+                console.log(result)
+                reslove(result);
+                commit(types.GET_SURVEY_ANSWER, params);
+            });
+        });
+    },
+
 }
 
 export default actions;

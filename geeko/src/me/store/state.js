@@ -46,7 +46,8 @@ const state = {
     messageM1518:"",
     messageM1521:null,
     relationProducts:[],
-    relationProductsSkip:0
+    relationProductsSkip:0,
+    survey: {}
 }
 
 export default state;

@@ -197,6 +197,9 @@ const mutations = {
     },
     [types.GET_RELATION_PRODUCTS_SKIP](state){
         state.relationProductsSkip += 20;
+    },
+    [types.GET_SURVEY_ANSWER](state, obj){
+        state.survey = obj
     }
 }
 

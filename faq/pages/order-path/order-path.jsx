@@ -100,7 +100,7 @@ export default class Orders extends React.Component {
           loading: false
         })
         if(err.code == 300){
-          // window.location.href = "/i/login"
+          window.location.href = "/i/login"
         }
       })
     }
