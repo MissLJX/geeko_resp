@@ -2513,6 +2513,13 @@ const ShoppingCart = class extends React.Component {
 		}
 	}
 
+	couponClick(){
+		if (window.GeekoSensors) {
+			window.GeekoSensors.Track('CouponButtonClick', {
+			})
+		}
+	}
+
 
 	render() {
 		const { cart, loading, empty, editing, isCreditShow, mercadocards, creditcards, intl } = this.props
@@ -3463,7 +3470,10 @@ const ShoppingCart = class extends React.Component {
 
 										{
 											// (!this.state.couponBanner || !this.state.couponBanner.enable) &&
-											cart.messages && cart.messages.couponMsg && <CouponAlert onClick={() => { this.props.history.push(`${window.ctx || ''}${__route_root__}/coupons`) }} innerRef={c => this.couponAlert = c} coupon={cart.coupon} couponMsg={cart.messages ? cart.messages.couponMsg : null} />
+											cart.messages && cart.messages.couponMsg && <CouponAlert onClick={() => {
+												this.props.history.push(`${window.ctx || ''}${__route_root__}/coupons`)
+												this.couponClick()
+											}} innerRef={c => this.couponAlert = c} coupon={cart.coupon} couponMsg={cart.messages ? cart.messages.couponMsg : null} />
 										}
 
 

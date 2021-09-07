@@ -85,7 +85,7 @@
         }
 
         .el-product-like {
-            font-size: 20px;
+            font-size: 18px;
             &.red {
                 color: #f00;
             }

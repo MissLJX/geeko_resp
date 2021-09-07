@@ -502,6 +502,9 @@ const Credit = class extends React.Component {
 			if (payload.error) {
 				console.log('[error]', payload.error)
 				alert(payload.error.message)
+				self.setState({
+					checking: false,
+				})
 			} else {
 				console.log('[PaymentMethod]', payload.paymentMethod)
 
@@ -592,6 +595,10 @@ const Credit = class extends React.Component {
 				}else{
 					alert(data.result || data)
 				}
+			})
+		}).catch(e => {
+			self.setState({
+				checking: false,
 			})
 		})
 	}

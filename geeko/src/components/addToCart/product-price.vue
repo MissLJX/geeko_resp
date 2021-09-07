@@ -28,37 +28,49 @@
             }
         },
         computed:{
+            // promotionPrice   促销价格
+            // msrp  市场价
+            // price   正常售价   一定会有一个售价
             price(){
+                // 当有促销价格并且大于0的时候  售价显示促销价格
                 if (this.variantProduct && this.variantProduct.promotionPrice && this.variantProduct.promotionPrice.amount > 0) {
                     return unitprice(this.variantProduct.promotionPrice)
                 }
 
+                // 当有价格并且大于0的时候  售价显示价格
                 if (this.variantProduct && this.variantProduct.price && this.variantProduct.price.amount > 0) {
                     return unitprice(this.variantProduct.price)
                 }
                 return "";
             },
             delPrice(){
-                if(!this.variantProduct){
-                    return;
-                }
-
-                if(this.variantProduct && this.variantProduct.msrp && this.variantProduct.msrp.amount > 0){
-                    return unitprice(this.variantProduct.msrp)
+                if(this.variantProduct && this.variantProduct.promotionPrice){
+                    if(this.variantProduct.msrp && this.variantProduct.msrp.amount > 0){
+                        return unitprice(this.variantProduct.msrp);
+                    }else{
+                        return unitprice(this.variantProduct.price);
+                    }
                 }else{
-                    return unitprice(this.variantProduct.price)
+                    if(this.variantProduct.msrp && this.variantProduct.msrp.amount > 0){
+                        return unitprice(this.variantProduct.msrp);
+                    }
                 }
+                return "";
             },
             discountPrecent(){
-                if(!this.variantProduct){
-                    return;
-                }
-                if(this.variantProduct && this.variantProduct.promotionPrice && this.variantProduct.msrp && this.variantProduct.msrp.amount > 0){
-                    return "-" + Math.round((this.variantProduct.msrp.amount - this.variantProduct.promotionPrice.amount)*100/this.variantProduct.msrp.amount) + "%";
-				}
                 if(this.variantProduct && this.variantProduct.promotionPrice){
-					return "-" + Math.round((this.variantProduct.price.amount - this.variantProduct.promotionPrice.amount)*100/this.variantProduct.price.amount) + "%";
+                    if(this.variantProduct.msrp && this.variantProduct.msrp.amount > 0){
+                        return "-" + Math.round((this.variantProduct.msrp.amount - this.variantProduct.promotionPrice.amount)*100/this.variantProduct.msrp.amount) + "%";
+                    }else{
+                        return "-" + Math.round((this.variantProduct.price.amount - this.variantProduct.promotionPrice.amount)*100/this.variantProduct.price.amount) + "%";
+                    }
+                }else{
+                    if(this.variantProduct.msrp && this.variantProduct.msrp.amount > 0){
+                        return "-" + Math.round((this.variantProduct.msrp.amount - this.variantProduct.price.amount)*100/this.variantProduct.msrp.amount) + "%";
+                    }
                 }
+
+                return "";
             },
         }
     }
@@ -71,6 +83,11 @@
             color: #999;
             line-height: 20px;
             margin-top: 5px;
+            visibility: visible;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            -webkit-line-clamp: 2;
         }
 
         ._prices{
