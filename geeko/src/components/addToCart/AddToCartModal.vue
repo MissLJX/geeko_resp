@@ -75,7 +75,14 @@
                 this.variantId = this.product.variants[0].id;
             },
             addToCart(){
-                this.$store.dispatch("addToCart",{"variantId":this.variantId,"quantity":'1'});
+                this.$store.dispatch("addToCart",{"variantId":this.variantId,"quantity":'1'}).then(() => {
+                    console.log("success");
+                    this.$store.dispatch("addToCartIsShow",false);
+                    window.countShoppingCart ? window.countShoppingCart() : "";
+                }).catch((e) => {
+                    console.log("e",e);
+                    this.$store.dispatch("addToCartIsShow",false);
+                });
             }
         }
     }

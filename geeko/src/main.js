@@ -1,7 +1,7 @@
 /**
  * Created by shao_ on 2017/7/20.
  */
-import 'babel-polyfill'
+ import "@babel/polyfill";
 import Vue from 'vue'
 import store from './store'
 import i18n from './i18n'

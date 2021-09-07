@@ -1,6 +1,7 @@
 import * as types from './mutation_types'
 import * as api from '../api'
 import _ from 'lodash'
+import { stringify } from 'qs'
 
 export const state = {
     paging: false,
@@ -124,9 +125,9 @@ export const actions = {
     clearId({commit}){
         commit(types.GLOBAL_CLEAR_ID)
     },
-    clearskip({commit}){
-        commit(types.GLOBAL_CLEAR_SKIP)
-    },
+    // clearskip({commit}){
+    //     commit(types.GLOBAL_CLEAR_SKIP)
+    // },
     like({commit}, productId){
         commit(types.GLOBAL_LIKE, productId)
     },
@@ -158,8 +159,6 @@ export const actions = {
         commit(types.GLOBAL_LOADING_SHOW,flag);
     },
     addToCart({commit},product){
-        return api.addProducts(product).then((result) => {
-            console.log(result);
-        });
+        return api.addProducts(product);
     }
 }

@@ -43,7 +43,7 @@ export function logoff(closedReason) {
 // add to cart 
 // params {} {"variantId":product.variantId,"quantity":'1'}
 export const addProducts = (products) => {
-    return axios.cpost('/v9/shopping-cart/add-products', products)
+    return axios.cpost('/v9/shopping-cart/add-product', products)
 }
 
 
