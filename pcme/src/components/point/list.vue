@@ -3,7 +3,7 @@
         <ul class="st-clear" ref="fineRef" @scroll="getMore">
             <slot v-for="item in items" name="li" :item="item" track-by="$index"></slot>
         </ul>
-        <div v-show="loading" class="el-list-loading"><i class="iconfont">&#xe69f;</i></div>
+        <div v-show="loading" class="el-list-loading-1"><i class="iconfont">&#xe69f;</i></div>
         <div class="el-no-more" v-show="finished && scrollable">{{$t('nomoredata')}}</div>
     </div>
 </template>
@@ -15,7 +15,7 @@
         color: #666;
     }
 
-    .el-list-loading {
+    .el-list-loading-1 {
         text-align: center;
         padding: 10px 0;
         i {

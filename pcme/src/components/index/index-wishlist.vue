@@ -14,7 +14,9 @@
                 <li v-for="(item,index) in wishProducts.slice(0,8)" :key="index+item.id">
                     <div>
                         <a :href="getProUrl(item)">
-                            <img :src="imageUrl(item.pcMainImage)"/>
+                            <div class="image-item">
+                                <img :src="imageUrl(item.pcMainImage)"/>
+                            </div>
                         </a>
                     </div>
                     <div class="p-info" v-if="item.status !== '2'">
@@ -137,12 +139,27 @@
                     width: 25%;
                     padding-right: 13px;
                     margin-bottom: 20px;
-                    img{
-                        width: 100%;
-                        height: 100%;
+
+                    .image-item{
                         position: relative;
-                        display: block;
+                        overflow: hidden;
+                        background-color: #f1f1f1;
+                        img{
+                            width: 100%;
+                            height: 100%;
+                            display: block;
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                        }
+
+                        &::after{
+                            content: "";
+                            display: block;
+                            margin-top: 125%;
+                        }
                     }
+                    
                     .p-info{
                         padding-top: 7px;
                         display: flex;

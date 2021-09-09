@@ -85,6 +85,7 @@
                 if(finished){
                     this.goShoppingShow = true;
                     this.finished = finished;
+                    this.scrollable = false;
                 }else{
                     this.goShoppingShow = false;
                 }

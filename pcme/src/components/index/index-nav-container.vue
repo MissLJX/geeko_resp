@@ -125,12 +125,12 @@
                             routerPath:"/me/m/order",
                             status:1
                         },
-                        {
-                            name:this.$t("paid"),
-                            routerName:"orders",
-                            routerPath:"/me/m/order",
-                            status:2
-                        },
+                        // {
+                        //     name:this.$t("paid"),
+                        //     routerName:"orders",
+                        //     routerPath:"/me/m/order",
+                        //     status:2
+                        // },
                         {
                             name:this.$t("processing"),
                             routerName:"orders",
