@@ -180,7 +180,8 @@ const Me = [
         component:() => import(/* webpackChunkName: "make-sug" */ "../pages/make-sug.vue"),
         name:"make-sug",
         meta:{title:"Make Sug"}
-    },{
+    },
+    {
         path:ROUTER_PATH_ME + "/survey",
         component:() => import(/* webpackChunkName: "survey" */ "../pages/survey.vue"),
         name:"survey",

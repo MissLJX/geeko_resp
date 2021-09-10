@@ -104,7 +104,11 @@ export default class Orders extends React.Component {
           loading: false
         })
         if(err.code == 300){
-          window.location.href = `/i/login?redirectUrl=${(window.ctx || '')}/support`
+          if(window.isApp=="true"){
+            window.location.href = "chic-me://chic.me/loginRoot"
+          } else {
+            window.location.href = `/i/login?redirectUrl=${(window.ctx || '')}/support`
+          }
         }
       })
     }

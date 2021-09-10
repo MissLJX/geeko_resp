@@ -250,9 +250,12 @@ class Ticket1 extends React.PureComponent{
                 })
                 isLoading = false
             }).catch((err)=>{
-                // console.log(err)
                 if(err.code == 300){
-                    window.location.href = `/i/login?redirectUrl=${(window.ctx || '')}/support`
+                    if(window.isApp=="true"){
+                        window.location.href = "chic-me://chic.me/loginRoot"
+                     } else {
+                        window.location.href = `/i/login?redirectUrl=${(window.ctx || '')}/support`
+                    }
                 }
             })
         }
@@ -276,6 +279,7 @@ class Ticket1 extends React.PureComponent{
                 this.state.finished && this.state.skip === this.state.limit && false ? <Redirect to={`${(window.ctx || '')}/support/ticketadd`}/> :
                 <div style={{position:'relative'}}>
                     <Page label={intl.formatMessage({id: 'Ticket'})} href={`${(window.ctx || '')}/support/contact-us`} style={{backgroundColor:'#f6f6f6'}}>
+                        
                         {/* 列表 */}
                         {
                             tickets.length > 0 &&
@@ -290,7 +294,6 @@ class Ticket1 extends React.PureComponent{
                                 <NoDataTxt>{intl.formatMessage({id: 'noTicket'})}</NoDataTxt>
                             </NoDataBox>
                         }
-                        
 
                         {/* 提交按钮 */}
                         <SubmitBtn>

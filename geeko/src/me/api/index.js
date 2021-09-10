@@ -261,11 +261,11 @@ export const updateCustomerSave = (customer) => {
 }
 
 export const surveySave = (params) => {
-    return axios.post(VPATH + '/questionnaire-answer/anon/save',params,{}).then(data => data.result);
+    return axios.post('/questionnaire-answer/anon/save',params,{}).then(data => data);
 }
 
 export const surveyGet = () => {
-    return axios.get(VPATH + '/questionnaire-answer/anon/get',{},{}).then(data => data.result)
+    return axios.get('/questionnaire-answer/anon/get',{},{}).then(data => data)
 }
 
 // /context/anon/get-currency-list

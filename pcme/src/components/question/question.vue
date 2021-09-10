@@ -6,13 +6,13 @@
                  :key="index"
                  :class="{'answer': true, 'answer-selected': defaultV==item.value}"
                  >
-                <label :for="title+item.value" >
-                    <div class="answer-content">{{index + 1}}. {{item.label}}</div>
+                <label :for="item.value">
                     <div class="answer-select">
                         <i class="iconfont">&#xe638;</i>
                     </div>
+                    <div class="answer-content">{{index + 1}}. {{item.label}}</div>
                 </label>
-                <input :disabled="hadDoneBefore" type="radio" :name="title" :value='item.value' :id='title+item.value' @change="changeHandle($event)"/>
+                <input :disabled="hadDoneBefore" type="radio" :name="title" :value='item.value' :id='item.value' @change="changeHandle($event)"/>
                 <div class="checkboxTextArea" v-if="item.value=='Others'&&defaultV.indexOf(item.value) != -1 ">
                     <textarea :disabled="hadDoneBefore" :value='inputValue' @change="othersChange($event)"></textarea>
                 </div>
@@ -25,15 +25,16 @@
                  :class="{'answer': true, 'answer-checkbox':true, 'answer-selected': defaultV.indexOf(item.value) != -1}"
                  >
                 <label :for="title+item.value">
-                    <div class="answer-content">{{index + 1}}. {{item.label}}</div>
                     <div class="answer-select">
                         <i class="iconfont">&#xe638;</i>
                     </div>
+                    <div class="answer-content">{{index + 1}}. {{item.label}}</div>
                 </label>
                 <input :disabled="hadDoneBefore" type="checkbox" :name="title" :value='item.value' :id='title+item.value' @change="changeHandle($event)"/>
                 <div class="checkboxTextArea" v-if="item.value=='Others'&&defaultV.indexOf(item.value) != -1 ">
                     <textarea :disabled="hadDoneBefore" :value='inputValue' @change="othersChange($event)"></textarea>
                 </div>
+                
             </div>
         </div>
 
@@ -67,13 +68,13 @@
 
 <script type="text/ecmascript-6">
     import _ from 'lodash'
+    import {createLogger, mapGetters} from 'vuex'
 
     export default{
         data(){
             return {
                 selectOpen: false,
-                selectItem: 'Country',
-                othersInput: ''
+                selectItem: 'Country'
             }
         },
         props: {
@@ -102,7 +103,6 @@
             },
             question: {
                 type: Object,
-                required: true,
             },
             inputValue: {
                 default: ''
@@ -113,32 +113,21 @@
                 default:false,
             }
         },
-        computed:{
-            countries(){
-                return this.$store.getters.countries
-            },
-            selectedValue:function(){
-                return this.defaultV ? this.countries.find(cty => cty.value == this.defaultV).label : 'Country'
-            }
-        },
-        watch:{
-            hadDoneBefore:function(newV,oldV){
-                console.log(newV, oldV)
-            }
-        },
         created(){
+
             if(this.type == 'select'){
                // 点击其他区域关闭弹窗
                 document.addEventListener("click",this.closeItem,false)     
-                // this.$store.dispatch('getCountries');
+                this.$store.dispatch('getCountries');
             } else if(this.type == 'radio' || this.type == 'textarea'){
             } else if(this.type == 'checkbox'){
             }
         },
+        mounted(){
+        },
         activated(){
         },
         deactivated(){
-            // this.suspendShow = false;
         },
         beforeDestroy(){
             if(this.type == 'select'){
@@ -146,11 +135,17 @@
                 document.removeEventListener("click",this.closeItem,false);   
             }
         },
+        computed: {
+            ...mapGetters(['countries']),
+            selectedValue:function(){
+                return this.defaultV ? this.countries.find(cty => cty.value == this.defaultV).label : 'Country'
+
+            }
+        },
         watch:{
         },
         methods: {
             openSelect(){
-                // console.log('sss')
                 if(!this.hadDoneBefore){
                     this.selectOpen = !this.selectOpen
                 }
@@ -168,7 +163,6 @@
                 }
             },
             changeHandle(e ){
-                console.log(e)
                 if(!this.hadDoneBefore){
                     this.$emit("change", {
                         question: this.question,
@@ -177,8 +171,6 @@
                 }
             },
             othersChange(e){
-                console.log(e.target.value)
-                console.log(this.question)
                 if(!this.hadDoneBefore){
                     this.$emit("otherChange",{
                         question: this.question,
@@ -206,9 +198,12 @@
         -webkit-text-stroke-width: 0.2px;
         -moz-osx-font-smoothing: grayscale;}
     .question{
-        width: 94%;
-        padding: 18px 0;
+        width: 65%;
+        min-width: 800px;
+        max-width: 1200px;
         margin: 0 auto;
+        padding: 18px 0;
+        // margin: 0 auto;
         border-bottom: 1px solid #e6e6e6;
 
         .question-title{
@@ -228,7 +223,10 @@
             .answer{
                 line-height: 30px;
                 color: #666;
-
+                min-width: 100px;
+                // border: 1px solid;
+                max-width: 500px;
+                
                 input{
                     display: none;
                 }
@@ -236,9 +234,10 @@
                 label{
                     display: flex;
                     align-items: center;
-                    justify-content: space-between;
+                    justify-content: flex-start;
+                    cursor: pointer;
                 }
-
+            
                 .answer-select{
                     border: 1px solid #cacaca;
                     background-color: #fff;
@@ -250,6 +249,7 @@
                     align-items: center;
                     justify-content: center;
                     font-family: Roboto-Regular;
+                    margin-right: 13px;
 
                     & > i {
                         font-size: 12px;
@@ -296,6 +296,9 @@
                 line-height: 1.5;
             }
             .selectBox{
+                min-width: 351px;
+                max-width: 500px;
+                position: relative;
                 .selectInputBox {
                     width: 100%;
                     height: 32px;
@@ -307,6 +310,7 @@
                     appearance: none;
                     -webkit-appearance: none;
                     -moz-appearance: none;
+                    cursor: pointer;
 
                     span{
                         padding: 15px;
@@ -326,6 +330,7 @@
                         
                         .selectOption{
                             padding: 0 15px;
+                            cursor: pointer;
                         }
 
                         .selectOption-select{

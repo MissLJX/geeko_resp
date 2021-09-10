@@ -305,4 +305,11 @@ export const getMessageToObject = (code) => {
     return axios.get(VPATH + "/message/anon/get-object/"+code).then(data => data.result);
 }
 
+// survey
+export const surveySave = (params) => {
+    return axios.cpost('/questionnaire-answer/anon/save',params,{}).then(data => data);
+}
 
+export const surveyGet = () => {
+    return axios.get('/questionnaire-answer/anon/get',{},{}).then(data => data)
+}

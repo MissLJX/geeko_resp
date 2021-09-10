@@ -6,6 +6,7 @@ import _ from 'lodash'
 import {FormattedMessage, injectIntl} from 'react-intl'
 import HtmlImageCompress from 'html-image-compress'
 // import style from './ticket-add.module.css';
+import {gloabvars} from '../../commons/instance.js'
 
 import {PageHeader1, PageContanier1} from '../../components/page/page';
 
@@ -345,7 +346,11 @@ class TicketAdd extends React.Component {
   }
   
   componentWillMount () {
+    console.log('pageIn')
     const id = this.props.location.search.split('=')[1]
+    if(!id && !localStorage.__order){
+      window.location.href = `${window.ctx || ''}/support/ticket`
+    }
     console.log(id)
     if (id) {
       localStorage.__order = ""
@@ -559,15 +564,13 @@ class TicketAdd extends React.Component {
       }
     }
 
-    
-
     return <div>
 
       {
          this.state.isNew? 
         <PageHeader1 href={`${window.ctx || ''}/support/order`} label={intl.formatMessage({id: 'Ticket'})}/> : 
-        <PageHeader1 href={`${window.ctx || ''}/support/ticket`} label={intl.formatMessage({id: 'Ticket'})}
-      />}
+        <PageHeader1 href={`${window.ctx || ''}/support/ticket`} label={intl.formatMessage({id: 'Ticket'})}/>
+      }
 
       <PageContanier1 style={{background: '#f6f6f6'}}>
         { this.state.loading ? (

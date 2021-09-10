@@ -127,6 +127,8 @@ class Support extends React.PureComponent{
     }
 
     componentWillMount(){
+        console.log(window.isApp)
+        // window.isApp = "true";
         if (window.zE) {
             zE('webWidget:on', 'open', function () {
               zE('webWidget', 'show')
@@ -143,6 +145,7 @@ class Support extends React.PureComponent{
     render(){
         const {intl} = this.props;
         const {buttonList} = this.state;
+        
 
         const toContact = () => {
             list(0,20).then(({result: items}) => {
@@ -150,14 +153,32 @@ class Support extends React.PureComponent{
             }).catch((err)=>{
                 // console.log(err)
                 if(err.code == 300){
-                    window.location.href = `/i/login?redirectUrl=${(window.ctx || '')}/support/contact-us`
+                    if(window.isApp=="true"){
+                        window.location.href = "chic-me://chic.me/loginRoot"
+                    } else {
+                        window.location.href = `/i/login?redirectUrl=${(window.ctx || '')}/support/contact-us`
+                    }
                 }
             })
         }
 
+        const outAppUrl = () => {
+            // console.log(window.isApp)
+            if(window.isApp == 'true'){
+                // console.log('aa')
+                //loginRoot
+                return "chic-me://chic.me/index";
+            } else {
+                console.log('ss')
+                // window.location.href = ctx + '/i/login';
+                return `${(window.ctx || '')}/index`;
+            }
+        }
+
         return(
             <div>
-                <Page label={intl.formatMessage({id: 'support'})} outApp={`${(window.ctx || '')}/`}>
+                {/* outApp={outAppUrl()} */}
+                <Page label={intl.formatMessage({id: 'support'})}  outApp={outAppUrl()}>
                     <EntryButtonBox>
                         {
                             buttonList.map((item, index)=>{

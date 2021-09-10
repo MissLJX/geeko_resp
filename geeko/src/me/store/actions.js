@@ -14,6 +14,7 @@ const actions = {
                 commit(types.ME_GET_NO_LOGIN,true);
                 return me
             }).then((me) => {
+                console.log(me)
                 return dispatch('getFeed', me.id)
             }).then((feed) => {
                 commit(types.ME_GET_FEED, feed)
@@ -469,7 +470,7 @@ const actions = {
         });
     },
     getSurvey({commit},params){
-        console.log(params)
+        // console.log(params)
         return new Promise((reslove,reject) => {
             api.surveyGet(params).then((result) => {
                 console.log(result)

@@ -504,7 +504,11 @@ class Question1 extends React.PureComponent{
             }).catch((err)=>{
                 // console.log(err)
                 if(err.code == 300){
-                    window.location.href = `/i/login?redirectUrl=${(window.ctx || '')}/support/contact-us`
+                    if(window.isApp=="true"){
+                        window.location.href = "chic-me://chic.me/loginRoot"
+                    } else {
+                        window.location.href = `/i/login?redirectUrl=${(window.ctx || '')}/support/contact-us`
+                    }
                 }
             })
         }
