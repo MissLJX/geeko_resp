@@ -1,10 +1,11 @@
 import React from 'react';
-import style from './support.module.css';
+// import style from './support.module.css';
 import {FormattedMessage, injectIntl} from 'react-intl';
 // import EntryButton from '../../components/entry-button/entry-button';
 import { Page } from '../../components/page/page';
 import {EntryButton} from '../../components/newComponents/new-components'
 import styled from 'styled-components';
+import {list} from '../../api'
 
 const EntryButtonBox = styled.div`
     display: flex;
@@ -23,12 +24,9 @@ const ClickToFAQ = styled.div`
     letter-spacing: 0px;
     color: #666666;
     width: 100%;
-    /* line-height: 54px; */
-    min-height: 54px;
     text-align: center;
     border-bottom: 1px solid #e6e6e6;
-    /* border: 1px solid; */
-    padding: 20px 0;
+    padding: 8px 0 20px;
     & > span {
         margin: 0 3px;
         font-family: Roboto-Regular;
@@ -49,10 +47,10 @@ const FindMore = styled.div`
     letter-spacing: 0px;
     color: #222222;
     width: 100%;
-    text-align: center;
-    line-height: 54px;
+    display:flex;
+    align-items: center;
+    justify-content: center;
     height: 54px;
-    text-shadow: 0 0 #222;
     text-align: center;
 `
 
@@ -62,20 +60,24 @@ const ContactUs = styled.div`
     background-color: #222;
     border-radius: 2px;
     color: #fff;
-    line-height: 32px;
     text-align: center;
     margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Roboto-Regular;
     & > span{
         margin-right: 8px;
+        font-size:18px;
     }
 `
 
 const ContactIcon = styled.span`
     @font-face {
         font-family: 'iconfont';  /* Project id 384296 */
-        src: url('//at.alicdn.com/t/font_384296_j1fq1nejzkl.woff2?t=1630049678280') format('woff2'),
-            url('//at.alicdn.com/t/font_384296_j1fq1nejzkl.woff?t=1630049678280') format('woff'),
-            url('//at.alicdn.com/t/font_384296_j1fq1nejzkl.ttf?t=1630049678280') format('truetype');
+        src: url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.woff2?t=1630652306181') format('woff2'),
+            url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.woff?t=1630652306181') format('woff'),
+            url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.ttf?t=1630652306181') format('truetype');
     }
     font-family:"iconfont" !important;
     font-size:16px;
@@ -142,11 +144,20 @@ class Support extends React.PureComponent{
         const {intl} = this.props;
         const {buttonList} = this.state;
 
-        
+        const toContact = () => {
+            list(0,20).then(({result: items}) => {
+                this.props.history.push({pathname: `${(window.ctx || '')}/support/contact-us`})
+            }).catch((err)=>{
+                // console.log(err)
+                if(err.code == 300){
+                    window.location.href = `/i/login?redirectUrl=${(window.ctx || '')}/support/contact-us`
+                }
+            })
+        }
 
         return(
             <div>
-                <Page label={intl.formatMessage({id: 'support'})} href={ `${(window.ctx || '')}/index`}>
+                <Page label={intl.formatMessage({id: 'support'})} outApp={`${(window.ctx || '')}/`}>
                     <EntryButtonBox>
                         {
                             buttonList.map((item, index)=>{
@@ -156,13 +167,13 @@ class Support extends React.PureComponent{
                     </EntryButtonBox>
                     <ClickToFAQ>
                         {intl.formatMessage({id:"click"})}
-                        <span onClick={()=>this.props.history.push({pathname:  `${(window.ctx || '')}/support/faq`})}>{intl.formatMessage({id:"faq"})}</span> 
+                        <span onClick={()=>this.props.history.push({pathname: `${(window.ctx || '')}/support/faq`})}>{intl.formatMessage({id:"faq"})}</span> 
                         {intl.formatMessage({id:"page"})} 
                     </ClickToFAQ>
                     <FindMore>
                         {intl.formatMessage({id:"findNothing"})}
                     </FindMore>
-                    <ContactUs onClick={()=>this.props.history.push({pathname:  `${(window.ctx || '')}/support/contact-us`})}>
+                    <ContactUs onClick={()=>toContact()}>
                         <ContactIcon>&#xe6e9;</ContactIcon>
                         {intl.formatMessage({id:"contact"})}
                     </ContactUs>

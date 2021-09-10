@@ -22,10 +22,12 @@ const Header = styled.div`
 `
 
 const OrderList = styled.div`
-  margin-top: 27px;
+  margin-top: 16px;
   overflow: hidden;
   overflow-y: scroll;
   height: calc(100% - 161px);
+  background: #f6f6f6;
+  padding-bottom: 32px;
 `
 
 const SubmitBtn = styled.div`
@@ -58,6 +60,7 @@ const Order = class extends React.Component {
     this.state = {
       currentPage: this.getPath(this.props.location.pathname),
       selected: true,
+      from: 'ticket'
     }
 
     const {intl} = props
@@ -72,6 +75,7 @@ const Order = class extends React.Component {
     this.paths = [
       {label: intl.formatMessage({id: 'order_status_all'}), value: 'all'},
       {label: intl.formatMessage({id: 'order_status_unpaid'}), value: 'unpaid'},
+      // {label: intl.formatMessage({id: 'order_status_paid'}), value: 'paid'},
       {label: intl.formatMessage({id: 'order_status_processing'}), value: 'processing'},
       {label: intl.formatMessage({id: 'order_status_shipped'}), value: 'shipped'},
       {label: intl.formatMessage({id: 'order_status_confirmed'}), value: 'confirmed'},
@@ -82,6 +86,13 @@ const Order = class extends React.Component {
   getPath (str) {
     const lastindex = str.lastIndexOf('/')
     return str.substring(lastindex + 1, str.length)
+  }
+
+  componentWillMount(){
+    console.log('order from:',this.props.history.location.state)
+    this.setState({
+      from: this.props.history.location.state ? this.props.history.location.state.from : 'ticket'
+    })
   }
 
   render () {
@@ -98,16 +109,14 @@ const Order = class extends React.Component {
       } else {
         this.props.history.push({pathname: `${(window.ctx || '')}/support/ticketadd`})
       }
-      
-
     }
 
     return <div style={{overflow:'hidden'}}>
-      <Page label={intl.formatMessage({id: 'Ticket'})}>
+      <Page label={intl.formatMessage({id: 'Ticket'})} href={this.state.from == 'ticket' ? `${window.ctx || ''}/support/ticket` : ''}>
         <Header>{intl.formatMessage({id: 'selectorder'})}</Header>
           <SelectType itemList={this.paths} selectChange={(e)=>selectChange(e)}/>
 
-            <OrderList>
+            <OrderList id="orderScroll">
                 <Switch>
                     <Route path={`${window.ctx||''}/support/order/:page`} component={OrdersPath}/>
                     <Route path={`${window.ctx||''}/support/order`} component={OrdersPath}/>

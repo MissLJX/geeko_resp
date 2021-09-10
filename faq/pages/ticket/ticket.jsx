@@ -25,21 +25,21 @@ const StatusTxt = styled.span`
     color: #57b936;
 `
 const Waiting = styled.div`
-    color: #f9a646;
-    .statusCircle {
-        background-color: #f9a646;
+    color: #f9a646 !important;
+    div:nth-child(1) {
+        background-color: #f9a646 !important;
     }
 `
 const Resolved = styled.div`{
-    color: #999;
-    .statusCircle {
-        background-color: #999;
+    color: #999 !important;
+    div:nth-child(1) {
+        background-color: #999 !important;
     }
 }`
 
 const TicketListBox = styled.div`
-    padding-bottom: 61px;
-    background-color: #fff;
+    padding-bottom: 93px;
+    // background-color: #fff;
 `
 const TicketItemBox = styled.div`
     width: 100%;
@@ -52,6 +52,7 @@ const TicketItemBox = styled.div`
     font-stretch: normal;
     letter-spacing: 0px;
     color: #222222;
+    background: #fff;
 `
 const TicketLineOne = styled.div`
     display: flex;
@@ -71,7 +72,7 @@ const TicketTime = styled.div`
     color: #999;
 `
 const TicketContent = styled.div`
-    margin-bottom: 12px;
+    margin-bottom: 16px;
     font-family: Roboto-Regular;
     font-size: 14px;
     font-weight: normal;
@@ -95,13 +96,15 @@ class TicketList extends React.PureComponent{
         this.state={
             tickets:[],
         }
-        // console.log(props);
+        console.log('ppp',this.props);
     }
 
     render(){
         const {tickets} = this.state;
         const {intl} = this.props;
         const StatusBox = (status) => {
+            // 加 已评价状态为 灰色
+            // 加 等待评价为 黄色
             switch(status){
                 case 2:
                     return (<div>
@@ -110,19 +113,16 @@ class TicketList extends React.PureComponent{
                             </div>)
                 case 1:
                     return (<Waiting>
-                                <StatusCircle></StatusCircle>
-                                <StatusTxt>{intl.formatMessage({id:'statuswating'})}</StatusTxt>
+                                <StatusCircle style={{backgroundColor:'#f9a646'}}></StatusCircle>
+                                <StatusTxt style={{color:'#f9a646'}}>{intl.formatMessage({id:'statuswating'})}</StatusTxt>
                             </Waiting>)
-                case 0:
-                    return (<Resolved>
-                                <StatusCircle></StatusCircle>
-                                <StatusTxt>{intl.formatMessage({id:'statusresolved'})}</StatusTxt>
-                            </Resolved>)
                 default:
-                    return (<div>
-                                <StatusCircle></StatusCircle>
-                                <StatusTxt>{intl.formatMessage({id:'statusreplied'})}</StatusTxt>
-                            </div>)
+                    // case 0:
+                    return (<Resolved>
+                                <StatusCircle style={{backgroundColor:'#999'}}></StatusCircle>
+                                <StatusTxt style={{color:'#999'}}>{intl.formatMessage({id:'statusresolved'})}</StatusTxt>
+                            </Resolved>)
+                
             }
         }
 
@@ -133,10 +133,11 @@ class TicketList extends React.PureComponent{
         return <TicketListBox>
             {
                 this.props.tickets.map((item, index) => (
+                    
                     <TicketItemBox key={index} onClick={()=>link(item)}>
                         <TicketLineOne>
                             <div>
-                                Ticket ID {item.operaId}
+                                {intl.formatMessage({id:'ticketid'})} {item.operaId}
                             </div>
                             <TicketTime>
                                 {new Date(item.openDate).toLocaleDateString()}
@@ -170,9 +171,9 @@ const NoDataBox = styled.div`
 const NoDataImg = styled.span`
     @font-face {
         font-family: 'iconfont';  /* Project id 384296 */
-        src: url('//at.alicdn.com/t/font_384296_ea5pedcgl35.woff2?t=1629961872918') format('woff2'),
-            url('//at.alicdn.com/t/font_384296_ea5pedcgl35.woff?t=1629961872918') format('woff'),
-            url('//at.alicdn.com/t/font_384296_ea5pedcgl35.ttf?t=1629961872918') format('truetype');
+        src: url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.woff2?t=1630652306181') format('woff2'),
+            url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.woff?t=1630652306181') format('woff'),
+            url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.ttf?t=1630652306181') format('truetype');
     }
     font-family:"iconfont" !important;
     font-size:16px;
@@ -198,6 +199,7 @@ const NoDataTxt = styled.span`
 `
 
 const SubmitBtn = styled.div`
+    font-family: Roboto-Bold;
     position: fixed;
     bottom: 0;
     left: 0;
@@ -250,7 +252,7 @@ class Ticket1 extends React.PureComponent{
             }).catch((err)=>{
                 // console.log(err)
                 if(err.code == 300){
-                    // window.location.href = "/i/login"
+                    window.location.href = `/i/login?redirectUrl=${(window.ctx || '')}/support`
                 }
             })
         }
@@ -273,7 +275,7 @@ class Ticket1 extends React.PureComponent{
             {
                 this.state.finished && this.state.skip === this.state.limit && false ? <Redirect to={`${(window.ctx || '')}/support/ticketadd`}/> :
                 <div style={{position:'relative'}}>
-                    <Page label={intl.formatMessage({id: 'Ticket'})} href={`${(window.ctx || '')}/support/contact-us`}>
+                    <Page label={intl.formatMessage({id: 'Ticket'})} href={`${(window.ctx || '')}/support/contact-us`} style={{backgroundColor:'#f6f6f6'}}>
                         {/* 列表 */}
                         {
                             tickets.length > 0 &&
@@ -292,7 +294,7 @@ class Ticket1 extends React.PureComponent{
 
                         {/* 提交按钮 */}
                         <SubmitBtn>
-                            <span onClick={()=>this.props.history.push({pathname:`${(window.ctx || '')}/support/order`})}>{intl.formatMessage({id: 'submit'})}</span>    
+                            <span onClick={()=>this.props.history.push({pathname:`${(window.ctx || '')}/support/order`,state:{from:'ticket'}})}>{intl.formatMessage({id: 'submit'})}</span>    
                         </SubmitBtn>
                     </Page>
                 </div>

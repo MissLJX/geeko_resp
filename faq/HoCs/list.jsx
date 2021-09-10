@@ -32,11 +32,12 @@ export function withScroll (WrappedComponent) {
     }
 
     componentDidMount () {
-    	document.addEventListener('scroll', this.handleScroll)
+      // console.log('34',document.getElementById("pageScroll"))
+    	document.getElementById("pageScroll").addEventListener('scroll', this.handleScroll)
     }
 
     componentWillUnmount () {
-    	document.removeEventListener('scroll', this.handleScroll)
+    	document.getElementById("pageScroll").removeEventListener('scroll', this.handleScroll)
     }
 
     render () {

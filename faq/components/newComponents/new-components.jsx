@@ -26,7 +26,6 @@ export const DropDownItem = (props) => {
     const DropDownItem = styled.div`
         display: flex;
         align-items: center;
-        /* border: 1px solid; */
         font-family: Roboto-Medium;
         font-size: 14px;
         font-weight: normal;
@@ -35,36 +34,37 @@ export const DropDownItem = (props) => {
         color: #222222;
         height: 48px;
         line-height: 48px;
-        /* border-bottom: 1px solid #e6e6e6; */
     `
 
     const DropDownIcon = styled.span`
         @font-face {
             font-family: 'iconfont';  /* Project id 384296 */
-            src: url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.woff2?t=1630652306181') format('woff2'),
-                url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.woff?t=1630652306181') format('woff'),
-                url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.ttf?t=1630652306181') format('truetype');
+            src: url('//at.alicdn.com/t/font_384296_waimmey03x.woff2?t=1631165132958') format('woff2'),
+                url('//at.alicdn.com/t/font_384296_waimmey03x.woff?t=1631165132958') format('woff'),
+                url('//at.alicdn.com/t/font_384296_waimmey03x.ttf?t=1631165132958') format('truetype');
         }
         font-family:"iconfont" !important;
         font-size:16px;
         font-style:normal;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-        font-size: 18px;
+        font-size: 20px;
         margin-right: 16px;
+        color: #000;
+        text-shadow: 0 0 black;
     `
 
     const DropDownTxt = styled.span`
         flex: 1;
-        text-shadow: 0 0 #222;
+        // text-shadow: 0 0 #222;
     `
 
     const DropDownShow = styled.span`
         @font-face {
             font-family: 'iconfont';  /* Project id 384296 */
-            src: url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.woff2?t=1630652306181') format('woff2'),
-                url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.woff?t=1630652306181') format('woff'),
-                url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.ttf?t=1630652306181') format('truetype');
+            src: url('//at.alicdn.com/t/font_384296_9jjvzuj4fxt.woff2?t=1631168925174') format('woff2'),
+                url('//at.alicdn.com/t/font_384296_9jjvzuj4fxt.woff?t=1631168925174') format('woff'),
+                url('//at.alicdn.com/t/font_384296_9jjvzuj4fxt.ttf?t=1631168925174') format('truetype');
         }
         font-family:"iconfont" !important;
         font-size:16px;
@@ -72,6 +72,9 @@ export const DropDownItem = (props) => {
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         font-size: 14px;
+        margin-right: 14px;
+        color: #666;
+        // text-shadow: 0 0 black;
     `
 
     const MoreQuestion = styled.div`
@@ -104,8 +107,8 @@ export const DropDownItem = (props) => {
                 <DropDownTxt>{props.title}</DropDownTxt>
                 {
                     showMore ? 
-                    <DropDownShow>&#xe6ba;</DropDownShow> :
-                    <DropDownShow>&#xe6b9;</DropDownShow>
+                    <DropDownShow>&#xe77f;</DropDownShow> :
+                    <DropDownShow>&#xe77e;</DropDownShow>
                 }
             </DropDownItem>
             {
@@ -155,9 +158,9 @@ export const EntryButton = (props) => {
     const EntryIcon = styled.span`
         @font-face {
             font-family: 'iconfont';  /* Project id 384296 */
-            src: url('//at.alicdn.com/t/font_384296_i4gbs9w8xo.woff2?t=1630652306181') format('woff2'),
-                url('//at.alicdn.com/t/font_384296_i4gbs9w8xo.woff?t=1630652306181') format('woff'),
-                url('//at.alicdn.com/t/font_384296_i4gbs9w8xo.ttf?t=1630652306181') format('truetype');
+            src: url('//at.alicdn.com/t/font_384296_waimmey03x.woff2?t=1631165132958') format('woff2'),
+                url('//at.alicdn.com/t/font_384296_waimmey03x.woff?t=1631165132958') format('woff'),
+                url('//at.alicdn.com/t/font_384296_waimmey03x.ttf?t=1631165132958') format('truetype');
         }
         font-family:"iconfont" !important;
         font-size:16px;
@@ -165,13 +168,14 @@ export const EntryButton = (props) => {
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         fontSize:24px;
-        marginBottom:10px;
+        display:inline-block;
+        line-height: 20px;
     `
 
     return (
         <EntryButton onClick={()=> pageEntry(props.to,props.txt)}>
             {/* <img className={style.buttonImg} src={props.imgUrl} alt="" /> */}
-            <EntryIcon style={{fontSize:'24px',marginBottom:'10px'}} dangerouslySetInnerHTML={{__html:props.imgUrl}}/>
+            <EntryIcon style={{fontSize:'24px',marginBottom:'12px'}} dangerouslySetInnerHTML={{__html:props.imgUrl}}/>
             <span>{props.txt}</span>
         </EntryButton>
     )
@@ -186,54 +190,156 @@ const NewOrderList1 = class extends React.Component {
     }
   
     render () {
-        const STATUS_PENDING = 1
+      const STATUS_PENDING = 1
       const STATUS_REVIEWING = 2
       const STATUS_PROCESSING = 3
-       const STATUS_SHIPPED = 4
+      const STATUS_SHIPPED = 4
       const STATUS_PARTIALLY_REFUNDED = 5
       const STATUS_REFUNDED = 6
       const STATUS_CANCELED = 7
       const STATUS_HELD = 8
       const STATUS_CONFIRMED = 10
+
+      // ToTal Order Status
+      const TOTAL_STATUS_UNPAID = 0;       //未付款订单
+      const TOTAL_STATUS_PROCCESSING = 1;      //仓库正在打包与包含废弃状态paid一起存在的订单
+      const TOTAL_STATUS_SHIPPED = 2;      //运送中的订单
+      const TOTAL_STATUS_CANCELED = 3;     //已取消订单
+      const TOTAL_STATUS_REVIEW = 4;        //已完成订单
   
       const {intl} = this.props
+
+      const OrderStatus = styled.span`
+            color: #999;
+        `
+
+  const getMoney = money => money ? (money.unit + money.amount) : ''
+
+  const New_order_list_li = styled.li`
+    //   margin-top: 10px;
+      background-color: #fff;
+      padding-left: 10px;
+      padding-right: 10px;
+      cursor: pointer;
+      border-bottom: 10px solid #f6f6f6;
+      font-family: Roboto-Regular;
+      &:last-child{
+          border-bottom: none;
+      }
+      &:first-child{
+          margin-top: 0;
+      }
+  `
+  const New_order_list_item_title_box = styled.div`
+      height: 42px;
+      /* border-bottom: 1px solid #cacaca; */
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+  `
+  const New_order_list_img_box = styled.div`
+    //   margin-top: 6px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #e6e6e6;
+  `
+  const New_order_list_select = styled.div`
+      display: inline-block;
+      /* height: 80px; */
+      top: -30px;
+      position: relative;
+  `
+  const New_order_list_item = styled.div`
+      /* flex: 1; */
+      display: inline-block;
+      width: calc(100% - 28px);
+      ul{
+          white-space: nowrap;
+          overflow: hidden;
+          overflow-x: scroll;
+          width: 100%;
+          height: 80px;
+          /* border: 1px solid; */
+      }
+      ul::-webkit-scrollbar{
+          display: none;
+      }
+      li{
+          display: inline-block;
+          margin-right: 8px;
+      }
+      img{
+          width: 64px;
+          height: 80px;
+      }
+  `
+  const New_order_list_select_span = styled.div`
+      font-size: 20px;
+      display: inline-block;
+      font-family: iconfont;
+      font-style: normal;
+      margin-right: 8px;
+  `
+  const New_order_list_total_box = styled.div`
+      height: 42px;
+      line-height: 42px;
+      display: flex;
+      justify-content: space-between;
+      color: #999;
+      font-size:12px;
+      /* border-bottom: 10px solid #f6f6f6; */
+  `
   
-        const status = (value) => {
-          let label
+    const status = (value) => {
+        let label
         switch (value) {
-          case STATUS_PENDING:
-            label = intl.formatMessage({id: 'order_status_pendding'})
-            break
-          case STATUS_REVIEWING:
-            label = intl.formatMessage({id: 'order_status_paid'})
-            break
-          case STATUS_PROCESSING:
-            label = intl.formatMessage({id: 'order_status_processing'})
-            break
-          case STATUS_SHIPPED:
-            label = intl.formatMessage({id: 'order_status_shipped'})
-            break
-          case STATUS_PARTIALLY_REFUNDED:
-            label = intl.formatMessage({id: 'order_status_partially_refunded'})
-            break
-          case STATUS_REFUNDED:
-            label = intl.formatMessage({id: 'order_status_refunded'})
-            break
-          case STATUS_CANCELED:
-            label = intl.formatMessage({id: 'order_status_canceled'})
-            break
-          case STATUS_HELD:
-            label = intl.formatMessage({id: 'order_status_held'})
-            break
-          case STATUS_CONFIRMED:
-            label = intl.formatMessage({id: 'order_status_confirmed'})
-            break
+            case TOTAL_STATUS_UNPAID:
+                label = <span>{intl.formatMessage({id: 'order_status_unpaid'})}</span>
+                break
+            case TOTAL_STATUS_PROCCESSING:
+                label = <span>{intl.formatMessage({id: 'order_status_processing'})}</span>
+                break
+            case TOTAL_STATUS_SHIPPED:
+                label = <span>{intl.formatMessage({id: 'order_status_shipped'})}</span>
+                break
+            case TOTAL_STATUS_CANCELED:
+                label = <span>{intl.formatMessage({id: 'order_status_canceled'})}</span>
+                break
+            case TOTAL_STATUS_REVIEW:
+                label = <span>{intl.formatMessage({id: 'order_status_confirmed'})}</span>
+                break
+        //   case STATUS_PENDING:
+        //     label = <span>{intl.formatMessage({id: 'order_status_pendding'})}</span>
+        //     break
+        //   case STATUS_REVIEWING:
+        //     label = <span>{intl.formatMessage({id: 'order_status_paid'})}</span>
+        //     break
+        //   case STATUS_PROCESSING:
+        //     label = <span>{intl.formatMessage({id: 'order_status_processing'})}</span>
+        //     break
+        //   case STATUS_SHIPPED:
+        //     label = <span>{intl.formatMessage({id: 'order_status_shipped'})}</span>
+        //     break
+        //   case STATUS_PARTIALLY_REFUNDED:
+        //     label = <span>{intl.formatMessage({id: 'order_status_partially_refunded'})}</span>
+        //     break
+        //   case STATUS_REFUNDED:
+        //     label = <span>{intl.formatMessage({id: 'order_status_refunded'})}</span>
+        //     break
+        //   case STATUS_CANCELED:
+        //     label = <span>{intl.formatMessage({id: 'order_status_canceled'})}</span>
+        //     break
+        //   case STATUS_HELD:
+        //     label = <span>{intl.formatMessage({id: 'order_status_held'})}</span>
+        //     break
+        //   case STATUS_CONFIRMED:
+        //     label = <span>{intl.formatMessage({id: 'order_status_confirmed'})}</span>
+        //     break
           default:
             label = ''
         }
   
         return label
-        }
+    }
   
       const LabelValue = (props) => {
           if(props.style){
@@ -247,92 +353,7 @@ const NewOrderList1 = class extends React.Component {
                           <span >{props.value}</span>
                       </span>
           }
-          
       }
-  
-        const OrderStatus = styled.span`
-            color: #666;
-        `
-
-        const getMoney = money => money ? (money.unit + money.amount) : ''
-
-        const New_order_list_li = styled.li`
-            margin-top: 10px;
-            background-color: #fff;
-            padding-left: 10px;
-            padding-right: 10px;
-            cursor: pointer;
-            border-bottom: 10px solid #f6f6f6;
-            &:last-child{
-                border-bottom: none;
-            }
-            &:first-child{
-                margin-top: 0;
-            }
-        `
-        
-        const New_order_list_item_title_box = styled.div`
-            height: 40px;
-            /* border-bottom: 1px solid #cacaca; */
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        `
-        const New_order_list_img_box = styled.div`
-            margin-top: 10px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #e6e6e6;
-        `
-        const New_order_list_select = styled.div`
-            display: inline-block;
-            /* height: 80px; */
-            top: -30px;
-            position: relative;
-        `
-        const New_order_list_item = styled.div`
-            /* flex: 1; */
-            display: inline-block;
-            width: calc(100% - 28px);
-            ul{
-                white-space: nowrap;
-                overflow: hidden;
-                overflow-x: scroll;
-                width: 100%;
-                height: 80px;
-                /* border: 1px solid; */
-            }
-            ul::-webkit-scrollbar{
-                display: none;
-            }
-            li{
-                display: inline-block;
-                margin-right: 7px;
-            }
-            img{
-                width: 64px;
-                height: 80px;
-            }
-        `
-        const New_order_list_select_span = styled.div`
-            font-size: 20px;
-            display: inline-block;
-            font-family: iconfont;
-            font-style: normal;
-            margin-right: 8px;
-        `
-        const Selected = styled.div`
-            color: #e5004f;
-        `
-
-        const New_order_list_total_box = styled.div`
-            height: 42px;
-            line-height: 42px;
-            display: flex;
-            justify-content: space-between;
-            color: #999;
-            /* border-bottom: 10px solid #f6f6f6; */
-        `
-
   
         return <ul>
             {
@@ -344,17 +365,16 @@ const NewOrderList1 = class extends React.Component {
                           <LabelValue label={intl.formatMessage({id: 'orderno'})} value={detail.id}/>
                         </div>
                         <div className="x-cell" style={{textAlign: 'right'}}>
-                          <OrderStatus>{status(detail.status)}</OrderStatus>
+                          <OrderStatus>{status(detail.fulfillmentStatus)}</OrderStatus>
                         </div>
                       </New_order_list_item_title_box>
                       <New_order_list_img_box>
                         <New_order_list_select>
                             {
                               selected ?
-                              <New_order_list_select_span style={selected ?{color: '#e5004f'}: {}}>&#xe658;</New_order_list_select_span>:
-                              <New_order_list_select_span>&#xe65a;</New_order_list_select_span>
+                              <New_order_list_select_span style={selected ?{color: '#222'}: {color: '#cacaca'}}>&#xe658;</New_order_list_select_span>:
+                              <New_order_list_select_span style={{color: '#cacaca'}}>&#xe65a;</New_order_list_select_span>
                             }
-                          
                         </New_order_list_select>
                         <New_order_list_item>
                             <ul>
@@ -375,7 +395,7 @@ const NewOrderList1 = class extends React.Component {
             }
         </ul>
     }
-  }
+}
 
 export const NewOrderList = injectIntl(NewOrderList1)
 
@@ -392,7 +412,7 @@ const QuestionInputBox = styled.div`
             border: none;
             outline: none;
             flex: 1;
-            padding: 0 0px 0 12px;
+            padding: 0 12px 0 12px;
             font-family: Roboto-Regular;
             font-size: 12px;
             font-weight: normal;
@@ -419,9 +439,9 @@ const QuestionInputBox = styled.div`
     const ClearIcon = styled.span`
         @font-face {
             font-family: 'iconfont';  /* Project id 384296 */
-            src: url('//at.alicdn.com/t/font_384296_i4gbs9w8xo.woff2?t=1630652306181') format('woff2'),
-                url('//at.alicdn.com/t/font_384296_i4gbs9w8xo.woff?t=1630652306181') format('woff'),
-                url('//at.alicdn.com/t/font_384296_i4gbs9w8xo.ttf?t=1630652306181') format('truetype');
+            src: url('//at.alicdn.com/t/font_384296_waimmey03x.woff2?t=1631165132958') format('woff2'),
+                url('//at.alicdn.com/t/font_384296_waimmey03x.woff?t=1631165132958') format('woff'),
+                url('//at.alicdn.com/t/font_384296_waimmey03x.ttf?t=1631165132958') format('truetype');
         }
         font-family:"iconfont" !important;
         font-size:16px;
@@ -429,14 +449,15 @@ const QuestionInputBox = styled.div`
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         margin: 0 13px;
+        color:rgba(34, 34, 34, 0.3);
     `
 
     const InputIconBox = styled.div`
         @font-face {
             font-family: 'iconfont';  /* Project id 384296 */
-            src: url('//at.alicdn.com/t/font_384296_i4gbs9w8xo.woff2?t=1630652306181') format('woff2'),
-                url('//at.alicdn.com/t/font_384296_i4gbs9w8xo.woff?t=1630652306181') format('woff'),
-                url('//at.alicdn.com/t/font_384296_i4gbs9w8xo.ttf?t=1630652306181') format('truetype');
+            src: url('//at.alicdn.com/t/font_384296_waimmey03x.woff2?t=1631165132958') format('woff2'),
+                url('//at.alicdn.com/t/font_384296_waimmey03x.woff?t=1631165132958') format('woff'),
+                url('//at.alicdn.com/t/font_384296_waimmey03x.ttf?t=1631165132958') format('truetype');
         }
         width: 15%;
         background: #222;
@@ -471,16 +492,20 @@ const QuestionInputBox = styled.div`
         background: #fff;
         z-index: 1;
         div{
+            line-height: 29px;
             width: calc(100%);
             white-space: nowrap;
             overflow: hidden;
             display: block;
             text-overflow: ellipsis;
         }
+        strong{
+            color:#222;
+        }
     `
 
 const SearchBar1 = (props) => {
-    console.log(props)
+    console.log('searchbar:',props)
     const [showClear, setShowClear] = useState(false);
     const [inputValue, setInputValue] = useState("");
     const [searchTips, setSearchTips] = useState([]);
@@ -499,14 +524,16 @@ const SearchBar1 = (props) => {
     },[])
 
     useEffect(()=>{
-        
+        if(props.value == 0){
+            setInputValue('');
+        }
         if(props.value){
             setInputValue(props.value);
             if(!props.stopSearch){
                 props.search(props.value)
             }
-        }
-    }, [])
+        } 
+    }, [props.value])
 
     const inputChange = (e) => {
         console.log(e.target.value)
@@ -519,13 +546,14 @@ const SearchBar1 = (props) => {
     }
 
     const search = () => {
+        // console.log('com o=input', inputValue)
         props.search(inputValue)
     }
 
     const relatedSearch = (item) => {
         // console.log(item)
         setInputValue(item.title)
-        props.history.push({pathname: `${(window.ctx || '')}/support/question1/`, state:{id: item.id, search: JSON.stringify(item.title)}})
+        props.history.push({pathname: `${(window.ctx || '')}/support/question/`, state:{id: item.id}})
         
     }
 
@@ -541,10 +569,7 @@ const SearchBar1 = (props) => {
         } else {
             return after
         }
-        
-    }
-
-    
+    }    
 
     return(
         <QuestionInputBox>
@@ -555,6 +580,7 @@ const SearchBar1 = (props) => {
                        onBlur={()=>{setTimeout(()=>{setShowClear(false)},100)}}
                        value={inputValue}
                        onChange={(e)=>inputChange(e)}
+                       style={{paddingRight:showClear?'0px':'12px'}}
                        />
                 {
                     showClear&&

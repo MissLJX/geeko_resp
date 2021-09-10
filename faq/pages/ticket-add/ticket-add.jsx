@@ -50,9 +50,9 @@ const ChatInputBox = styled.div`
   const Upload = styled.span`
       @font-face {
         font-family: 'iconfont';  /* Project id 384296 */
-        src: url('//at.alicdn.com/t/font_384296_9ise0ifj6r4.woff2?t=1630303916248') format('woff2'),
-            url('//at.alicdn.com/t/font_384296_9ise0ifj6r4.woff?t=1630303916248') format('woff'),
-            url('//at.alicdn.com/t/font_384296_9ise0ifj6r4.ttf?t=1630303916248') format('truetype');
+        src: url('//at.alicdn.com/t/font_384296_waimmey03x.woff2?t=1631165132958') format('woff2'),
+            url('//at.alicdn.com/t/font_384296_waimmey03x.woff?t=1631165132958') format('woff'),
+            url('//at.alicdn.com/t/font_384296_waimmey03x.ttf?t=1631165132958') format('truetype');
       }
       font-family:"iconfont" !important;
       font-size:16px;
@@ -68,9 +68,9 @@ const ChatInputBox = styled.div`
   const Send = styled.span`
       @font-face {
         font-family: 'iconfont';  /* Project id 384296 */
-        src: url('//at.alicdn.com/t/font_384296_9ise0ifj6r4.woff2?t=1630303916248') format('woff2'),
-            url('//at.alicdn.com/t/font_384296_9ise0ifj6r4.woff?t=1630303916248') format('woff'),
-            url('//at.alicdn.com/t/font_384296_9ise0ifj6r4.ttf?t=1630303916248') format('truetype');
+        src: url('//at.alicdn.com/t/font_384296_waimmey03x.woff2?t=1631165132958') format('woff2'),
+            url('//at.alicdn.com/t/font_384296_waimmey03x.woff?t=1631165132958') format('woff'),
+            url('//at.alicdn.com/t/font_384296_waimmey03x.ttf?t=1631165132958') format('truetype');
       }
       font-family:"iconfont" !important;
       font-size:16px;
@@ -138,9 +138,9 @@ const ChatInputBox = styled.div`
   const ChangeOrder = styled.span`
       @font-face {
         font-family: 'iconfont';  /* Project id 384296 */
-        src: url('//at.alicdn.com/t/font_384296_9ise0ifj6r4.woff2?t=1630303916248') format('woff2'),
-            url('//at.alicdn.com/t/font_384296_9ise0ifj6r4.woff?t=1630303916248') format('woff'),
-            url('//at.alicdn.com/t/font_384296_9ise0ifj6r4.ttf?t=1630303916248') format('truetype');
+        src: url('//at.alicdn.com/t/font_384296_waimmey03x.woff2?t=1631165132958') format('woff2'),
+            url('//at.alicdn.com/t/font_384296_waimmey03x.woff?t=1631165132958') format('woff'),
+            url('//at.alicdn.com/t/font_384296_waimmey03x.ttf?t=1631165132958') format('truetype');
       }
       font-family:"iconfont" !important;
       font-size:16px;
@@ -163,7 +163,7 @@ const ChatInputBox = styled.div`
       color: #222222;
       width: 100%;
       text-align: center;
-      font-weight: 600;
+      // font-weight: 600;
       margin-top: 5px;
       margin-bottom: 12px;
   `
@@ -178,7 +178,18 @@ const ChatInputBox = styled.div`
       text-align: center;
       margin-top: 7px;
   `
-
+  const MessageBox = styled.div`
+      position:fixed;
+      left: calc(50% - 100px);
+      bottom: 116px;
+      width: 200px;
+      height: 32px;
+      background-color: rgba(34, 34, 34, 0.6);
+	    border-radius: 2px;
+      text-align: center;
+      line-height: 32px;
+      color: #fff;
+    `
 const RATE = styled.span`
 	font-family: iconfont;
 	font-size: 30px;
@@ -202,6 +213,8 @@ class TicketAdd extends React.Component {
       messageInvalid: false,
 
       showTip: false, // 最后一条聊天记录是不是用户的 是的话提示客服会在24h内回复
+      showMsg: false,
+      showMsgTxt: ''
     }
     this.handleImage = this.handleImage.bind(this)
     this.handleTicket = this.handleTicket.bind(this)
@@ -227,20 +240,33 @@ class TicketAdd extends React.Component {
       sendImage(formData).then(({result}) => {
         const file = files[0]
         const src = window.navigator.userAgent.indexOf('Chrome') >= 1 || window.navigator.userAgent.indexOf('Safari') >= 1 ? window.webkitURL.createObjectURL(file) : window.URL.createObjectURL(file)
-        let ticket = this.state.ticket
-        let replies = (ticket.ticketReplies || []).concat([])
+        let ticket = this.state.ticket || {}
+        let replies = []
+        replies = (ticket.ticketReplies || []).concat([])
+
         replies.push({
           sender: 'buyers',
           message: this.state.message,
           imageUrls: [src],
           date: new Date().getTime()
         })
-
         ticket.ticketReplies = replies
 
+        if(ticket){
+          if(ticket.ticketReplies.slice(-1)[ticket.ticketReplies.slice(-1).length - 1]['sender'] == "buyers"){
+            this.setState({
+              showTip:true
+            })
+          } else {
+            this.setState({
+              showTip: false
+            })
+          }
+        }
+        
         this.setState({
           ticket,
-          message: ''
+          message: '',
         })
 
         this.initScroll()
@@ -266,6 +292,9 @@ class TicketAdd extends React.Component {
       subject: this.state.subject,
       message: this.state.message
     }).then((data) => {
+      console.log('data,',data)
+      console.log('ticket,',this.state.ticket)
+      console.log(this.state)
       let ticket = this.state.ticket || {}
       let replies = (ticket.ticketReplies || []).concat([])
       replies.push({
@@ -274,12 +303,36 @@ class TicketAdd extends React.Component {
         date: new Date().getTime()
       })
 
+      
       ticket.ticketReplies = replies
+
+      if(ticket){
+        if(ticket.ticketReplies.slice(-1)[ticket.ticketReplies.slice(-1).length - 1]['sender'] == "buyers"){
+          this.setState({
+            showTip:true
+          })
+        } else {
+          this.setState({
+            showTip: false
+          })
+        }
+      }
 
       this.setState({
         ticket,
-        message: ''
+        message: '',
+        // showMsg: true,
+        // showMsgTxt: 'Submitted successfully!'
       })
+
+      // setTimeout(()=>{
+      //   this.setState({
+      //     showMsg: false,
+      //     showMsgTxt: ''
+      //   })
+      // },2000)
+
+
 
       this.initScroll()
     })
@@ -362,9 +415,9 @@ class TicketAdd extends React.Component {
     }
   }
 
-  componentWillUnmount(){
-    localStorage.__order = ''
-  }
+  // componentWillUnmount(){
+  //   localStorage.__order = ''
+  // }
 
   
 
@@ -420,6 +473,8 @@ class TicketAdd extends React.Component {
         </Link>
       </OrderSelector>
     )
+
+    
 
     const groupReplies = (replies) => {
       var groups = _.groupBy(replies, function (obj) {
@@ -508,7 +563,11 @@ class TicketAdd extends React.Component {
 
     return <div>
 
-      {isFromNotification ? <PageHeader1 href={'/'} label={intl.formatMessage({id: 'Ticket'})}/> : <PageHeader1 label={intl.formatMessage({id: 'Ticket'})}/>}
+      {
+         this.state.isNew? 
+        <PageHeader1 href={`${window.ctx || ''}/support/order`} label={intl.formatMessage({id: 'Ticket'})}/> : 
+        <PageHeader1 href={`${window.ctx || ''}/support/ticket`} label={intl.formatMessage({id: 'Ticket'})}
+      />}
 
       <PageContanier1 style={{background: '#f6f6f6'}}>
         { this.state.loading ? (
@@ -520,10 +579,10 @@ class TicketAdd extends React.Component {
 
           <ChatContainer className="x-flex __column" style={{height:"100%", paddingTop:"12px"}}>
             {/* 当前订单 */}
-            <SelectedOrderBox onClick={()=>this.props.history.push({pathname: `${(window.ctx || '')}/support/order`})}>
+            <SelectedOrderBox onClick={()=>this.props.history.push({pathname: `${(window.ctx || '')}/support/order`,state:{from:'ticketadd'}})}>
                 <OrderNo>
                     {intl.formatMessage({id:"orderno"})}
-                    <span>{this.state.ticket ? this.state.ticket.operaId : this.state.order.id}</span>
+                    <span>{this.state.ticket ? this.state.ticket.operaId ? this.state.ticket.operaId : this.state.order.id : this.state.order.id}</span>
                 </OrderNo>
                 <OrderCreateTime>
                     {intl.formatMessage({id:"paymenttime"})}
@@ -531,7 +590,7 @@ class TicketAdd extends React.Component {
                       this.state.ticket ?
                       this.state.ticket.openDate ? 
                         (new Date(this.state.ticket.openDate).toLocaleDateString() + " " + new Date(this.state.ticket.openDate).toTimeString().substr(0, 5)) : 
-                        "":
+                        "-":
                       "-"
                       }</span>
                 </OrderCreateTime>
@@ -545,7 +604,7 @@ class TicketAdd extends React.Component {
             </div>
             
             {/* 对话 */}
-            <Chat innerRef={(div) => { this.chatDiv = div }} style={{ height:'calc(100% - 230px)',overflow: 'hidden', overflowY: 'scroll', padding:'20px 0'}}>
+            <Chat innerRef={(div) => { this.chatDiv = div }} style={{ height:'calc(100% - 230px)',overflow: 'hidden', overflowY: 'scroll', padding:'20px'}}>
               {this.state.ticket && this.state.ticket.ticketReplies && _.map(groupReplies(this.state.ticket.ticketReplies), (group, index) => (
                 <div key={index}>
                   <div style={{textAlign: 'center', color: '#999', fontSize: '12px', height: '40px', lineHeight: '40px'}}>{index}</div>
@@ -570,6 +629,10 @@ class TicketAdd extends React.Component {
                 </div>
               }
             </Chat> 
+
+            {/* <MessageBox style={{display: this.state.showMsg ? '':'none'}}>
+                {this.state.showMsgTxt}
+            </MessageBox> */}
             
 
             {/* 输入提交 */}
