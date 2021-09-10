@@ -746,10 +746,18 @@
                 return true
             },
             goShopping(){
-                window.location.href = `${window.ctx || ''}/`
+                if(window.isApp = "true"){
+                    window.location.href = 'chic-me://chic.me/home';
+                } else {
+                    window.location.href = `${window.ctx || ''}/index`;
+                }
             },
             viewPoints(){
-                window.location.href = `${window.ctx || ''}/me/m/credits`
+                if(window.isApp = "true"){
+                    window.location.href = 'chic-me://chic.me/credits';
+                } else {
+                    window.location.href = `${window.ctx || ''}/me/m/credits`
+                }
             },
             getThatQuestion(id, answers){
                 // console.log(answers)

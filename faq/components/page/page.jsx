@@ -80,8 +80,9 @@ const PageContanier = (props) => {
     // console.log(props)
     const p = props.props ? props.props : props;
     // const bodyDom = useRef();
+    console.log(p.style)
 
-    const style = p.style ?  {
+    let style = p.style ?  {
         width: '100%',
         height: 'calc(100vh - 44px)',
         background: '#fff',
@@ -103,6 +104,12 @@ const PageContanier = (props) => {
         overflow: 'hidden',
         overflowY: 'scroll',
     }
+    
+    if(window.isApp == 'true'){
+        style = {...style, height:'100vh', marginTop:'0px'}
+    } else {
+        style = {...style, height:'calc(100vh - 44px)', marginTop:'44px'}
+    }
 
     return (
         <div style={style} id="pageScroll">
@@ -115,9 +122,13 @@ const PageContanier = (props) => {
 export const PageHeader1 = withRouter(PageHeader);
 
 const Page1 = (props) => {
+    console.log(window.isApp)
     // console.log(props)
     return <div>
-        <PageHeader1 props={props}/>
+        {
+            window.isApp !== 'true' &&
+            <PageHeader1 props={props}/>
+        }
         <PageContanier1 props={props}></PageContanier1>
     </div>
 }

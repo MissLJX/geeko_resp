@@ -55,6 +55,7 @@ messages['pt'] = pt_L
 // console.log = () =>{
 
 // }
+window.isApp = 'true'
 export default () => (
 
   <IntlProvider locale={lang} messages={messages[lang]}>

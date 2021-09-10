@@ -567,9 +567,10 @@ class TicketAdd extends React.Component {
     return <div>
 
       {
-         this.state.isNew? 
+        window.isApp !== 'true'&&
+        (this.state.isNew? 
         <PageHeader1 href={`${window.ctx || ''}/support/order`} label={intl.formatMessage({id: 'Ticket'})}/> : 
-        <PageHeader1 href={`${window.ctx || ''}/support/ticket`} label={intl.formatMessage({id: 'Ticket'})}/>
+        <PageHeader1 href={`${window.ctx || ''}/support/ticket`} label={intl.formatMessage({id: 'Ticket'})}/> )
       }
 
       <PageContanier1 style={{background: '#f6f6f6'}}>
