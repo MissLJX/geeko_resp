@@ -72,7 +72,7 @@
 
             <ul class="el-me-tool-list _b-top">
                 <li>
-                    <a href="/f/mobile/contact_us" class="el-me-tool-list-item">
+                    <a :href="GLOBAL.getUrl('/support')" class="el-me-tool-list-item">
                         <touch-go class="el-me-tool-list-touch" :label1="$t('index.contact_us')">
                         </touch-go>
                     </a>

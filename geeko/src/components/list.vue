@@ -64,7 +64,6 @@
                     window.screen.height
                 ]
 
-
                 if (scrollTop + windowHeight >= documentHeight - 171) {
                     if (!this.loading && !this.finished) {
                         this.$emit('listing')

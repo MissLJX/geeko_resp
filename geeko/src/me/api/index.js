@@ -276,6 +276,6 @@ export const getCurrencyList =() => {
 // https://www.chicme.xyz/L/1F4Q3Z7A81P7G8G3w3D5m9a4w/product/0/20/29b78253-be62-483a-9852-cbd23d5e7bf1/scp-show2
 // 通过productId获取相似产品
 export const getRelationProducts = ({productId,skip}) => {
-    return axios.get(`/L/1F4Q3Z7A81P7G8G3w3D5m9a4w/product/${skip}/20/${productId}/scp-show2`);
+    return axios.get(`/product/${skip}/20/${productId}/scp-show2`);
 }
 

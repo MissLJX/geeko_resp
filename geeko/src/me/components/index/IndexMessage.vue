@@ -153,14 +153,14 @@
                 </div>
 
                 <div class="service-bd">
-                    <a href="/f/mobile/contact_us" click-name="Support">
+                    <a :href="specificationLogin('/support')" click-name="Support">
                         <p class="iconfont">&#xe6e1;</p>
                         <p>{{$t("index.suport")}}</p>
                     </a>
-                    <a @click.prevent="specificationLogin('/me/m/survey',1)" click-name="Survey">
+                    <!-- <a @click.prevent="specificationLogin('/me/m/survey',1)" click-name="Survey">
                         <p class="iconfont">&#xe6e2;</p>
                         <p>{{$t("point.survey")}}</p>
-                    </a>
+                    </a> -->
                     <a @click.prevent="specificationLogin('/me/m/makeSug',1)" click-name="Suggestion">
                         <p class="iconfont">&#xe6e5;</p>
                         <p>{{$t("point.suggestion")}}</p>
