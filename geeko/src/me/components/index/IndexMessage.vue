@@ -153,7 +153,7 @@
                 </div>
 
                 <div class="service-bd">
-                    <a :href="GLOBAL.getUrl('/support')" click-name="Support">
+                    <a :href="specificationLogin('/support')" click-name="Support">
                         <p class="iconfont">&#xe6e1;</p>
                         <p>{{$t("index.suport")}}</p>
                     </a>
