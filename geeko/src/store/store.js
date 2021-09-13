@@ -65,6 +65,9 @@ export const mutations = {
     },
     [types.GLOBAL_UN_LIKE](state, productId){
         var wishlist = state.me.wishlist, index = _.indexOf(wishlist[0].productIds, productId)
+        // console.log(wishlist)
+        // console.log("state.me.wishProducts",state.me.wishProducts)
+        state.me.wishProducts.splice(index,1);
         api.unlike(productId).then(() => {
             wishlist[0].productIds.splice(index, 1)
         })

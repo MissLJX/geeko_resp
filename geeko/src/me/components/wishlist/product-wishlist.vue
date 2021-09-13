@@ -25,6 +25,8 @@
                             Delete
                         </div>
                     </div>
+
+                    <span class="new" v-if="product.isNew">NEW</span>
                 </div>
             </figure>
 
@@ -111,6 +113,39 @@
             }
         },
         methods: {
+            likeHandle(){
+                if(!this.isLogin){
+                    window.location.href = "/i/login?redirectUrl=/me/m";
+                }
+                var wishlist = this.$store.getters['me/wishlist']
+                var index = _.indexOf(wishlist[0].productIds, this.product.id)
+                if (index < 0) {
+                    this.$store.dispatch('like', this.product.id)
+                } else {
+                    this.$store.dispatch('unlike',  this.product.id)
+                }
+            },
+            deleteLikeProduct(){
+                let _this = this;
+                _this.$store.dispatch('confirmShow', {
+                    show: true,
+                    cfg: {
+                        btnFont:{
+                            yes:"Confirm",
+                            no:"Cancel"
+                        },
+                        message: "Are you sure you want to delete the item(s)?",
+                        yes: function () {
+                            _this.likeHandle();
+                            _this.suspendSumShow = false;
+                            _this.$store.dispatch('closeConfirm');
+                        },
+                        no: function () {
+                            _this.$store.dispatch('closeConfirm');
+                        }
+                    }
+                })
+            },
             addToCart(productId){
                 this.$store.dispatch("globalLoadingShow",true);
                 this.$store.dispatch("getProductDetailMessage",productId).then((product) => {
@@ -223,6 +258,22 @@
                     background-color: rgba(0, 0, 0, 0.5);
                     margin-top: 12px;
                 }
+            }
+
+            .new{
+                font-size: 12px;
+                display: inline-block;
+                left: 0;
+                top: 4px;
+                position: absolute;
+                min-width: 36px;
+                padding-left: 4px;
+                padding-right: 4px;
+                height: 16px;
+                color: #fff;
+                text-align: center;
+                line-height: 16px;
+                background-color: #5ad133;
             }
         }
 
