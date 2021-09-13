@@ -23,12 +23,12 @@
             </a> -->
         </div>
 
-        <div class="login-message" v-if="!isLogin" @click="specificationLogin('/me/m')">
+        <!-- <div class="login-message" v-if="!isLogin" @click="specificationLogin('/me/m')">
             <div class="iconfont">&#xe6ca;</div>
             <div class="_font">{{messageM1518}}</div>
             <div class="iconfont">&#xe694;</div>
-        </div>
-        <!-- <swiper></swiper> -->
+        </div> -->
+        <swiper></swiper>
 
         <div class="header-icon">
             <div class="st-table">
@@ -177,13 +177,13 @@
     import store from '../../../store/index.js';
     import * as utils from '../../../utils/geekoutils.js';
 
-    // import Swiper from "../../../components/swiper/swiper.vue"
+    import Swiper from "../../../components/swiper/swiper.vue"
 
     export default {
         name:"IndexMessage",
-        // components:{
-        //     "swiper":Swiper
-        // },
+        components:{
+            "swiper":Swiper
+        },
         computed:{
             ...mapGetters('me', [
                 'pointsAllSkip','me', "isLogin", 'feed', 'notificationCount', 'orderCountUnpaid',"shoppingCartCount","messageM1518"

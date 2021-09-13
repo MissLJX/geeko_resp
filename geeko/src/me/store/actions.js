@@ -14,7 +14,7 @@ const actions = {
                 commit(types.ME_GET_NO_LOGIN,true);
                 return me
             }).then((me) => {
-                console.log(me)
+                // console.log(me)
                 return dispatch('getFeed', me.id)
             }).then((feed) => {
                 commit(types.ME_GET_FEED, feed)
