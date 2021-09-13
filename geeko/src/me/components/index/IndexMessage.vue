@@ -28,6 +28,7 @@
             <div class="_font">{{messageM1518}}</div>
             <div class="iconfont">&#xe694;</div>
         </div>
+        <!-- <swiper></swiper> -->
 
         <div class="header-icon">
             <div class="st-table">
@@ -131,7 +132,7 @@
                         </p>
                         <p>{{$t("point.review")}}</p>
                     </a>
-                    <a href="/" class="not-mar" @click.prevent="specificationLogin('/me/m/order/canceled')" click-name="Returns">
+                    <!-- <a href="/" class="not-mar" @click.prevent="specificationLogin('/me/m/order/canceled')" click-name="Returns">
                         <p class="iconfont">
                             <span>&#xe6e3;</span>
                             <span 
@@ -140,8 +141,8 @@
                                 v-if="getOrderNum(feed && feed.orderCancelCount)"
                             >{{getOrderNum(feed && feed.orderCancelCount)}}</span>
                         </p>
-                        <p>{{$t("index.returns")}}</p>
-                    </a>
+                        <p>{{$t("label.canceled")}}</p>
+                    </a> -->
                 </div>
             </div>
         </div>
@@ -153,7 +154,7 @@
                 </div>
 
                 <div class="service-bd">
-                    <a :href="specificationLogin('/support')" click-name="Support">
+                    <a @click.prevent="specificationLogin('/support')" click-name="Support">
                         <p class="iconfont">&#xe6e1;</p>
                         <p>{{$t("index.suport")}}</p>
                     </a>
@@ -176,8 +177,13 @@
     import store from '../../../store/index.js';
     import * as utils from '../../../utils/geekoutils.js';
 
+    // import Swiper from "../../../components/swiper/swiper.vue"
+
     export default {
         name:"IndexMessage",
+        // components:{
+        //     "swiper":Swiper
+        // },
         computed:{
             ...mapGetters('me', [
                 'pointsAllSkip','me', "isLogin", 'feed', 'notificationCount', 'orderCountUnpaid',"shoppingCartCount","messageM1518"
@@ -467,7 +473,7 @@
                         color: #222222;
                         display: inline-block;
                         width: calc(25% - 10px);
-                        margin-bottom: 24px;
+                        // margin-bottom: 24px;
                         text-align: center;
 
                         & > p{

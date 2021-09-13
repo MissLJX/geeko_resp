@@ -228,13 +228,19 @@ const Me = [
         component:() => import(/* webpackChunkName: "relation-products" */ "../pages/relation-products.vue"),
         name:"relation-products",
         meta:{title:"Relation Products"}
-    }
+    },
     // {
     //     path:ROUTER_PATH_ME + "/point-guide",
     //     component:() => import("../pages/point-guide.vue"),
     //     name:"point-guide",
     //     meta:{title:"My Points"}
     // }
+    {
+        path:ROUTER_PATH_ME + "/test",
+        component:() => import("../pages/Test.vue"),
+        name:"Test",
+        meta:{title:"Test"}
+    }
 ]
 
 export default Me

@@ -5,6 +5,7 @@ import routes from "./route.js"
 import store from "../store/index.js"
 
 import { ROUTER_PATH_ME_M } from "../utils/geekoutil.js"
+import { PROJECT } from "../utils/geekoutil.js"
 
 Vue.use(VueRouter)
 
@@ -18,7 +19,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
     if(!window.__is_login__){
-        window.location.href = "/i/login?redirectUrl=/me/m";
+        window.location.href = PROJECT + "/i/login?redirectUrl=/me/m";
     }
 
     store.dispatch('paging', {paging: true})
