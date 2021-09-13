@@ -651,6 +651,11 @@
         },
         computed:{
         },
+        created(){
+            console.log=()=>{
+                
+            }
+        },
         mounted(){
             this.$nextTick(this.getData())
         },
@@ -722,7 +727,6 @@
 
                 if(this.checkData()){
                     store.dispatch('me/updateSurvey', params).then(res => {
-                        // console.log(res)
                         if(res.code == 200){
                             this.getData();
                             this.maskShow = true;

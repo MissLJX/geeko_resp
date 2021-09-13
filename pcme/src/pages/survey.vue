@@ -645,6 +645,9 @@
         computed:{
         },
         created(){
+            console.log=()=>{
+                
+            }
         },
         mounted(){
             this.$nextTick(() => {
@@ -714,6 +717,7 @@
                     }
                 }
                 params.answers = JSON.stringify(this.questionObject)
+                console.log(params);
                 if(this.checkData()){
                     this.$store.dispatch('updateSurvey', params).then(res => {
                         console.log(res)

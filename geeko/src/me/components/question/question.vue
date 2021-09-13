@@ -118,7 +118,7 @@
                 return this.$store.getters.countries
             },
             selectedValue:function(){
-                return this.defaultV ? this.countries.find(cty => cty.value == this.defaultV).label : 'Country'
+                return this.defaultV ? this.countries.length>0 ? this.countries.find(cty => cty.value == this.defaultV).label : 'Country' : 'Country'
             }
         },
         watch:{
