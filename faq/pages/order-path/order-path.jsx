@@ -1,5 +1,5 @@
 import React from 'react'
-import {getOrders} from '../../api'
+import {getOrders,getOrdersNew} from '../../api'
 import {withScroll} from '../../HoCs/list.jsx'
 import {gloabvars} from '../../commons/instance.js'
 import styled from 'styled-components'
@@ -60,11 +60,14 @@ export default class Orders extends React.Component {
       let suffix = 'get-orders2'
       switch (page) {
         case 'processing':
-          suffix = 'get-unpaid-orders2'
+          suffix = 'get-proccessing-orders'
           break
         case 'unpaid':
           suffix = 'get-unpaid-orders2'
           break
+        case 'paid':
+          suffix = 'get-paid-orders'
+          break  
         case 'confirmed':
           suffix = 'get-receipt-orders'
           break
@@ -77,17 +80,18 @@ export default class Orders extends React.Component {
         default:
           suffix = 'get-orders2'
       }
+      console.log(suffix)
       return suffix
     }
     if (!this.state.loading && !this.state.finished) {
       this.setState({loading: true})
-      getOrders(getsuffix(page), this.state.skip, this.state.limit).then(({result: orders}) => {
+      getOrdersNew(getsuffix(page), this.state.skip, this.state.limit).then(({result: orders}) => {
         const _orders = orders ? orders.map(order => ({
           selected: this.state.selectedOrderId === order.id,
           id: order.id,
           detail: order
         })) : []
-
+        console.log(_orders)
         this.setState({
           orders: (this.state.orders || []).concat(_orders),
           skip: this.state.skip + this.state.limit,
@@ -100,7 +104,11 @@ export default class Orders extends React.Component {
           loading: false
         })
         if(err.code == 300){
-          window.location.href = "/i/login"
+          if(window.isApp=="true"){
+            window.location.href = "chic-me://chic.me/loginRoot"
+          } else {
+            window.location.href = `/i/login?redirectUrl=${(window.ctx || '')}/support`
+          }
         }
       })
     }
@@ -108,6 +116,42 @@ export default class Orders extends React.Component {
 
   componentWillMount () {
     this.getData(this.state.page)
+  }
+
+  handleScroll (evt,that) {
+    // console.log(that)
+    let [scrollTop, documentHeight, windowHeight] = [
+      document.documentElement.scrollTop || document.body.scrollTop,
+      document.body.clientHeight,
+      window.screen.height
+    ]
+     // 滚动的高度
+    const scrollTop1 = (evt.srcElement ? evt.srcElement.scrollTop : false) || window.pageYOffset || (evt.srcElement ? evt.srcElement.body.scrollTop : 0)
+    // 视窗高度
+    const clientHeight = (evt.srcElement && evt.srcElement.clientHeight) || document.body.clientHeight
+    // 页面高度
+    const scrollHeight = (evt.srcElement && evt.srcElement.scrollHeight) || document.body.scrollHeight
+    // 距离页面底部的高度
+    const height = scrollHeight - scrollTop1 - clientHeight
+    // console.log(scrollTop1, clientHeight, scrollHeight, height)
+    if(height < 200){
+      that.scrollHandler(evt)
+    }
+    // if (scrollTop + windowHeight >= documentHeight - 200) {
+    //   this.props.scrollHandler(evt)
+      
+    // }
+  }
+
+  componentDidMount () {
+    // console.log('34',document.getElementById("pageScroll"))
+    let that = this;
+    document.getElementById("orderScroll").addEventListener('scroll', (evt)=>this.handleScroll(evt, that))
+  }
+
+  componentWillUnmount () {
+    let that = this;
+    document.getElementById("orderScroll").removeEventListener('scroll', (evt)=>this.handleScroll(evt, that))
   }
 
   render () {

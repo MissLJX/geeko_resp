@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import {withRouter} from 'react-router-dom'
 
@@ -39,7 +39,7 @@ const IconStyle = styled.i`
     position: absolute;
     left: 13px;
     color: #222;
-    font-weight: 600;
+    font-weight: 500;
 `
 
 const PageContanierDiv = styled.div`
@@ -56,7 +56,7 @@ const PageContanierDiv = styled.div`
 
 
 const PageHeader = (props) => {
-    console.log(props)
+    // console.log(props)
     const p = props.props ? props.props : props;
     return <PageHeaderDiv >
         <span>{p.label}</span>
@@ -66,30 +66,69 @@ const PageHeader = (props) => {
   		 	} else if (p.href) {
   		 		// window.location.href = props.props.href
                 props.history.push({pathname:p.href})
-  		 	} else {
+  		 	} else if(p.outApp){
+                window.location.href = p.outApp;
+            } else {
+                   console.log('go back')
   		 		props.history.goBack()
   		 	}
-  		 }}>&#xe760;</IconStyle>
+  		 }}>&#xe7c7;</IconStyle>
     </PageHeaderDiv>
 }
 
 const PageContanier = (props) => {
-    console.log(props)
+    // console.log(props)
     const p = props.props ? props.props : props;
+    // const bodyDom = useRef();
+    console.log(p.style)
+
+    let style = p.style ?  {
+        width: '100%',
+        height: 'calc(100vh - 44px)',
+        background: '#fff',
+        maxWidth: '500px',
+        margin:'0 auto',
+        // border: 1px solid;
+        marginTop: '44px',
+        overflow: 'hidden',
+        overflowY: 'scroll',
+        ...p.style
+    } : {
+        width: '100%',
+        height: 'calc(100vh - 44px)',
+        background: '#fff',
+        maxWidth: '500px',
+        margin:'0 auto',
+        // border: 1px solid;
+        marginTop: '44px',
+        overflow: 'hidden',
+        overflowY: 'scroll',
+    }
+    
+    if(window.isApp == 'true'){
+        style = {...style, height:'100vh', marginTop:'0px'}
+    } else {
+        style = {...style, height:'calc(100vh - 44px)', marginTop:'44px'}
+    }
+
     return (
-        <PageContanierDiv style={p.style}>
+        <div style={style} id="pageScroll">
             {p.children}
 
-        </PageContanierDiv>
+        </div>
     )
 }
 
 export const PageHeader1 = withRouter(PageHeader);
 
 const Page1 = (props) => {
-    console.log(props)
+    console.log(window.isApp)
+    // console.log(props)
     return <div>
-        <PageHeader1 props={props}/>
+        {
+            window.isApp !== 'true' &&
+            <PageHeader1 props={props}/>
+        }
         <PageContanier1 props={props}></PageContanier1>
     </div>
 }

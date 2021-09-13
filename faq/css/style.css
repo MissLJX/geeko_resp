@@ -82,6 +82,24 @@ input:-webkit-autofill{
   -moz-osx-font-smoothing: grayscale;
 }
 
+@font-face {
+  font-family: "Roboto-Regular";
+  src: url("https://s3.geeko.ltd/fonts/Roboto-Regular.ttf");
+  font-display: swap
+}
+
+@font-face {
+  font-family: "Roboto-Medium";
+  src: url("https://s3.geeko.ltd/fonts/Roboto-Medium.ttf");
+  font-display: swap
+}
+
+@font-face {
+  font-family: "Roboto-Bold";
+  src: url("https://s3.geeko.ltd/fonts/Roboto-Bold.ttf");
+  font-display: swap
+}
+
 body{
   font-size: 14px;
   color: #222;

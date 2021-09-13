@@ -64,7 +64,8 @@ export default {
   account:"Account Issues",
   // contact:
   Ticket:'Ticket',
-  within:'Within 24H',
+  TicketTime:'ONLY for After-Sale Issue（Cancel/Edit Order/Shipping Status/Return/Exchange etc.)',
+  OnlineTime: 'ONLY for Pre-Sale Issue. Online sales do not have access to order information.',
   online:'Online Help',
   // faq
   search: "Search Results",

@@ -1,9 +1,9 @@
 @font-face {
     font-family: 'iconfont';  /* Project id 384296 */
     src: url('//at.alicdn.com/t/font_384296_ea5pedcgl35.woff2?t=1629961872918') format('woff2'),
-         url('//at.alicdn.com/t/font_384296_ea5pedcgl35.woff?t=1629961872918') format('woff'),
-         url('//at.alicdn.com/t/font_384296_ea5pedcgl35.ttf?t=1629961872918') format('truetype');
-  }
+        url('//at.alicdn.com/t/font_384296_ea5pedcgl35.woff?t=1629961872918') format('woff'),
+        url('//at.alicdn.com/t/font_384296_ea5pedcgl35.ttf?t=1629961872918') format('truetype');
+}
 .iconfont {
     font-family:"iconfont" !important;
     font-size:16px;

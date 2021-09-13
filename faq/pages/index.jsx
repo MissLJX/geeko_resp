@@ -52,9 +52,10 @@ messages['fr'] = fr_L
 messages['es'] = es_L
 messages['pt'] = pt_L
 // 清空打印
-console.log = () =>{
+// console.log = () =>{
 
-}
+// }
+window.isApp = 'true'
 export default () => (
 
   <IntlProvider locale={lang} messages={messages[lang]}>
@@ -73,8 +74,8 @@ export default () => (
 
         
         <Route path={`${window.ctx || ''}/support/faq`} component={FAQ}/>
-        <Route path={`${window.ctx || ''}/support/question1/:id`} component={Question1}/>
-        <Route path={`${window.ctx || ''}/support/question1`} component={Question1}/>
+        <Route path={`${window.ctx || ''}/support/question/:id`} component={Question1}/>
+        <Route path={`${window.ctx || ''}/support/question`} component={Question1}/>
         <Route path={`${window.ctx || ''}/support/contact-us`} component={ContactUs}/>
         <Route path={`${window.ctx || ''}/support/ticket`} component={Ticket1}/>
         <Route path={`${window.ctx || ''}/support/order`} component={Order}/>

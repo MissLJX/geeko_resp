@@ -63,7 +63,8 @@ export default {
   account:"Problèmes de compte",
   // contact:
   Ticket:'Billet',
-  within:'Sous 24H',
+  TicketTime : "UNIQUEMENT pour les problèmes après-vente (Annuler/Modifier la commande/État d'expédition/Retour/Échange, etc.) ",
+  OnlineTime :"UNIQUEMENT pour le numéro de pré-vente. Les ventes en ligne n'ont pas accès aux informations de commande.",
   online:'Aide en ligne',
   // faq
   search: "Résultats de la recherche",

@@ -1,13 +1,14 @@
 import React, { createRef } from 'react';
-// import style from './question.module.css';
+import style from './question.module.css';
 import {FormattedMessage, injectIntl} from 'react-intl';
 // import SearchBar from '../../components/search/search-bar';
 import {secondaries, questions} from '../../data'
 import { Page } from '../../components/page/page';
 import {SearchBar} from '../../components/newComponents/new-components';
 import styled from 'styled-components';
+import {list} from '../../api';
 
-let style = {}
+// let style = {}
 
 const ResultBox = styled.div`
     width: 100%;
@@ -38,6 +39,10 @@ const ResultNum = styled.div`
     font-stretch: normal;
     letter-spacing: 0px;
     color: #666666;
+    strong{
+        font-weight: 500;
+        color: #222;
+    }
 `
 
 const SearchBarBox = styled.div`
@@ -89,9 +94,9 @@ const ResultItemTitle = styled.div`
     span:nth-child(2){
         @font-face {
             font-family: 'iconfont';  /* Project id 384296 */
-            src: url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.woff2?t=1630652306181') format('woff2'),
-                url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.woff?t=1630652306181') format('woff'),
-                url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.ttf?t=1630652306181') format('truetype');
+            src: url('//at.alicdn.com/t/font_384296_waimmey03x.woff2?t=1631165132958') format('woff2'),
+                url('//at.alicdn.com/t/font_384296_waimmey03x.woff?t=1631165132958') format('woff'),
+                url('//at.alicdn.com/t/font_384296_waimmey03x.ttf?t=1631165132958') format('truetype');
         }
         font-family:"iconfont" !important;
         font-size:16px;
@@ -126,11 +131,11 @@ const NoResult = styled.div`
 `
 const NoResultImg = styled.div`
     @font-face {
-        font-family: 'iconfont';  /* Project id 384296 */
-        src: url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.woff2?t=1630652306181') format('woff2'),
-            url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.woff?t=1630652306181') format('woff'),
-            url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.ttf?t=1630652306181') format('truetype');
-    }
+  font-family: 'iconfont';  /* Project id 384296 */
+  src: url('//at.alicdn.com/t/font_384296_waimmey03x.woff2?t=1631165132958') format('woff2'),
+       url('//at.alicdn.com/t/font_384296_waimmey03x.woff?t=1631165132958') format('woff'),
+       url('//at.alicdn.com/t/font_384296_waimmey03x.ttf?t=1631165132958') format('truetype');
+}
     font-family:"iconfont" !important;
     font-size:16px;
     font-style:normal;
@@ -191,7 +196,7 @@ const QuestionDetail = styled.div`
 `
 
 const QuestionDetailContent = styled.div`
-    line-height: 1.25;
+    line-height: 1.4;
     img{
         width: 100%;
         margin: 10px 0;
@@ -237,38 +242,35 @@ const QuestionRateIcon = styled.div`
     justify-content: space-around;
     margin-bottom: 20px;
 `
-
 const Liked = styled.span`
     @font-face {
         font-family: 'iconfont';  /* Project id 384296 */
-        src: url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.woff2?t=1630652306181') format('woff2'),
-            url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.woff?t=1630652306181') format('woff'),
-            url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.ttf?t=1630652306181') format('truetype');
+        src: url('//at.alicdn.com/t/font_384296_waimmey03x.woff2?t=1631165132958') format('woff2'),
+            url('//at.alicdn.com/t/font_384296_waimmey03x.woff?t=1631165132958') format('woff'),
+            url('//at.alicdn.com/t/font_384296_waimmey03x.ttf?t=1631165132958') format('truetype');
     }
     font-family:"iconfont" !important;
     font-size:16px;
     font-style:normal;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    color: #57b936;
+    // color: #57b936;
 `
-const Unlike = styled.span`
+const Unliked = styled.span`{
     @font-face {
         font-family: 'iconfont';  /* Project id 384296 */
-        src: url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.woff2?t=1630652306181') format('woff2'),
-            url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.woff?t=1630652306181') format('woff'),
-            url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.ttf?t=1630652306181') format('truetype');
+        src: url('//at.alicdn.com/t/font_384296_waimmey03x.woff2?t=1631165132958') format('woff2'),
+            url('//at.alicdn.com/t/font_384296_waimmey03x.woff?t=1631165132958') format('woff'),
+            url('//at.alicdn.com/t/font_384296_waimmey03x.ttf?t=1631165132958') format('truetype');
     }
     font-family:"iconfont" !important;
     font-size:16px;
     font-style:normal;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    transform: rotate(180deg);
+    // color: #e64545;
 `
-const Unliked = styled.span`
-    color: #e64545;
-`
+
 
 const NoResultTxt = styled.div`
     font-family: Roboto-Regular;
@@ -278,6 +280,7 @@ const NoResultTxt = styled.div`
     letter-spacing: 0px;
     color: #999999;
     line-height: 48px;
+    // margin-bottom: 20px;
 
     span{
         margin-left: 5px;
@@ -312,7 +315,8 @@ class Question1 extends React.PureComponent{
             richText:'',
             parent:{},
             stopSearch: false, // 如果是选择下拉框里提示跳转过来的为true
-            headerRef: createRef()
+            headerRef: createRef(),
+            initTime: 0,
         }
     }
 
@@ -329,7 +333,9 @@ class Question1 extends React.PureComponent{
         })
     }
 
+
     replaceStr(str){
+        console.log('replace: ',str)
         str = decodeURI(str).split("\"");
         for(let i in str){
             if(str[i] != ''){
@@ -339,15 +345,20 @@ class Question1 extends React.PureComponent{
     }
 
     initPage(){
-        console.log(this.state)
+        // console.log(this.state)
         let search = this.props.history.location.state ? this.props.history.location.state.search : 
                      this.props.location.search ? this.props.location.search : 0;
         let id = this.props.history.location.state ? this.props.history.location.state.id : 
                 this.props.match.params.id ? this.props.match.params.id : 0;
-        if(lastSearchId !== id){
+        let fromFAQ = this.props.history.location.state.fromFAQ;
+        console.log('s:',search, 'd:', id)
+        if(lastSearchId !== id || (fromFAQ&&this.state.initTime==0)){
+            this.setState({
+                initTime:1
+            })
             // return
             lastSearchId = id;
-            this.changeShow(search,id)
+            this.changeShow(search ,id)
         }
     }
 
@@ -366,11 +377,13 @@ class Question1 extends React.PureComponent{
                 this.show3(id)
                 return;
             default:
+                console.log('default')
                 return;
         }
     }
 
     show1(search,id){
+        console.log(1)
         this.setState({
             detailShow:true,
             searchShow:false,
@@ -378,22 +391,24 @@ class Question1 extends React.PureComponent{
             secondary: secondaries.find(q => q.id === id),
             richText:  secondaries.find(q => q.id === id).richText,
             parent: questions.find(q => q.id ===  secondaries.find(q => q.id === id).parentId),
-            searchValue: this.replaceStr(search),
+            searchValue: search,
             stopSearch: true
         })
     }
 
     show2(search){
+        console.log(2)
         this.setState({
             detailShow: false,
             searchShow: true,
-            searchValue: this.replaceStr(search),
+            searchValue: search,
             stopSearch:false,
             // parent: questions.find(q => q.id === secondary.parentId)
         })
     }
 
     show3(id){
+        console.log(3)
         this.setState({
             detailShow:true,
             searchShow:false,
@@ -401,7 +416,8 @@ class Question1 extends React.PureComponent{
             secondary: secondaries.find(q => q.id === id),
             richText:  secondaries.find(q => q.id === id).richText,
             parent: questions.find(q => q.id ===  secondaries.find(q => q.id === id).parentId),
-            stopSearch: false
+            stopSearch: false,
+            searchValue: ''
         })
     }
 
@@ -427,7 +443,7 @@ class Question1 extends React.PureComponent{
 
         const search = (e) => {
             let searchAbout = []
-            console.log(e)
+            console.log('start:',e)
             let reg = new RegExp(e, 'ig')
             if(e){
                 questions.forEach((q) => {
@@ -437,6 +453,7 @@ class Question1 extends React.PureComponent{
                     searchAbout = searchAbout.concat(s)
                 })
                 console.log(searchAbout)
+
                 // 搜索请求
                 this.setState({
                     defaultShow: false,
@@ -445,12 +462,19 @@ class Question1 extends React.PureComponent{
                     searchValue: e,
                     resultList: searchAbout
                 })
+            }else {
+                console.log('no e')
             }
         }
 
         const showDetail = (e) => {
             lastSearchId = 0
-            history.push({pathname:`${(window.ctx || '')}/support/question1`,state:{id:e.id,search:e.title}})
+            this.setState({
+                searchValue: 0
+            },()=>{
+                history.push({pathname:`${(window.ctx || '')}/support/question`,state:{id:e.id}})
+            })
+            
         }
 
         const removeHeader = (text) => {
@@ -462,9 +486,11 @@ class Question1 extends React.PureComponent{
         const clickItem = (e) => {
             console.log(e)
             this.setState({
-                searchValue: e.title
+                searchValue: 0
+            },()=>{
+                history.push({pathname:`${(window.ctx || '')}/support/question`,state:{id:e.id}})
             })
-            history.push({pathname:`${(window.ctx || '')}/support/question1`,state:{id:e.id,search:e.title}})
+            
         }
 
         const highLightSearch = (title) => {
@@ -472,8 +498,22 @@ class Question1 extends React.PureComponent{
             return title.replace(reg, (e)=>{return '<strong>'+e+"</strong>"})
         }
 
-        
+        const toContact = () => {
+            list(0,20).then(({result: items}) => {
+                this.props.history.push({pathname: `${(window.ctx || '')}/support/contact-us`})
+            }).catch((err)=>{
+                // console.log(err)
+                if(err.code == 300){
+                    if(window.isApp=="true"){
+                        window.location.href = "chic-me://chic.me/loginRoot"
+                    } else {
+                        window.location.href = `/i/login?redirectUrl=${(window.ctx || '')}/support/contact-us`
+                    }
+                }
+            })
+        }
 
+        
         
         return (
             <div className={style.faqPage}>
@@ -505,8 +545,8 @@ class Question1 extends React.PureComponent{
                                                 <span dangerouslySetInnerHTML={{__html:highLightSearch(item.title)}}>
                                                     
                                                 </span>
-                                                <span>&#xe7af;</span>
-                                                <span>{item.likes}</span>
+                                                {/* <span style={{fontWeight:'500'}}>&#xe7af;</span>
+                                                <span>{item.likes ? item.likes : 0}</span> */}
                                             </ResultItemTitle>
                                             <ResultItemContent dangerouslySetInnerHTML={{__html: removeHeader(item.richText)}}>
 
@@ -527,7 +567,7 @@ class Question1 extends React.PureComponent{
                             </NoResultImg>
                             <NoResultTxt>
                                 {intl.formatMessage({id:"question"})}
-                                <span onClick={()=>this.props.history.push({pathname: `${(window.ctx || '')}/support/contact-us`})}>{intl.formatMessage({id: 'contact'})}</span>
+                                <span onClick={()=>toContact()}>{intl.formatMessage({id: 'contact'})}</span>
                             </NoResultTxt>
                         </NoResult>
                     }
@@ -541,14 +581,14 @@ class Question1 extends React.PureComponent{
                                 <QuestionDetailContent dangerouslySetInnerHTML={{__html:removeHeader(richText)}}></QuestionDetailContent>
                             </QuestionDetail>
                             <QuestionRateBox>
-                                {/* <QuestionRateTxt>{intl.formatMessage({id:"articleHelpful"})}</QuestionRateTxt>
-                                <QuestionRateIcon>
-                                    <span className={`${style.iconfont} ${style.like} ${likeQuestion==1?style.liked:""}`} onClick={()=>this.setState({likeQuestion: 1})}>&#xe7af;</span>
-                                    <span className={`${style.iconfont} ${style.unlike} ${likeQuestion==2?style.unliked:""}`} onClick={()=>this.setState({likeQuestion: 2})}>&#xe7af;</span>
+                                {/* <QuestionRateTxt>{intl.formatMessage({id:"articleHelpful"})}</QuestionRateTxt> */}
+                                {/* <QuestionRateIcon>
+                                    <Liked style={{color:likeQuestion==1?'#57b936':''}} onClick={()=>this.setState({likeQuestion: 1})}>&#xe7af;</Liked>
+                                    <Unliked style={{color:likeQuestion==2?'#e64545':'', transform: 'rotate(180deg)'}} onClick={()=>this.setState({likeQuestion: 2})}>&#xe7af;</Unliked>
                                 </QuestionRateIcon> */}
                                 <NoResultTxt>
                                     {intl.formatMessage({id:"question"})}
-                                    <span onClick={()=>this.props.history.push({pathname: `${(window.ctx || '')}/support/contact-us`})}>{intl.formatMessage({id: 'contact'})}</span>
+                                    <span onClick={()=>toContact()}>{intl.formatMessage({id: 'contact'})}</span>
                                 </NoResultTxt>
                             </QuestionRateBox>
                         </QuestionDetailBox>
@@ -560,7 +600,7 @@ class Question1 extends React.PureComponent{
                         <RelatedBox>
                             <RelatedTitle>{intl.formatMessage({id:"related"})}</RelatedTitle>
                             {
-                                parent.questions.map((item,index)=>{
+                                JSON.stringify(parent)!="{}" && parent.questions.map((item,index)=>{
                                     if(item.title != secondary.title){
                                         return <RelatedItem key={index} onClick={()=>clickItem(item)}>
                                             {item.title}

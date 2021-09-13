@@ -63,7 +63,8 @@ export default {
   account:"Kontoprobleme",
   // contact:
   Ticket:'Fahrkarte',
-  within:'Innerhalb von 24 Stunden',
+  TicketTime:'NUR für After-Sale-Ausgabe（Stornieren/Bearbeiten Sie Ihre Bestellung/Versandstatus/Rückgabe/Umtausch usw.)',
+  OnlineTime: 'NUR für Vorverkaufsausgaben. Online-Verkäufe haben keinen Zugriff auf Bestellinformationen.',
   online:'Online-Hilfe',
   // faq
   search: "Suchergebnisse",

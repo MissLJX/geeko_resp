@@ -133,44 +133,19 @@ class FAQ extends React.PureComponent{
 
     render(){
         const {intl} = this.props;
-        const {dropDownList, isSearched, searchValue, resultList, likeQuestion,questionDetail,defaultShow, detailShow, searchShow} = this.state;
+        const {dropDownList, defaultShow} = this.state;
 
         const search = (e) => {
             console.log(e)
             if(e){
-                // window.location.href = '/support/question1?search='+e;
-                this.props.history.push({pathname: `${(window.ctx || '')}/support/question1`, state:{search: e}})
-                // 搜索请求
-                // this.setState({
-                //     searchValue: e,
-                //     resultList: searchAbout
-                // })
+                this.props.history.push({pathname: `${(window.ctx || '')}/support/question`, state:{search: e, fromFAQ:true}})
             }
         }
 
-        const filter = (e, key) => {
-            if(e == searchValue){
-                return <strong key={key}>{e}</strong>
-            } else {
-                return <span key={key}>{e}</span>
-            }
-        }
-
-        const showDetail = () => {
-            // document.body.scrollIntoView({
-            //     top:0,
-            //     behavior:'smooth'
-            // })
-            // this.setState({
-            //     searchShow: false,
-            //     detailShow: true
-            // })
-        }
 
         const clickItem = (e) => {
-            console.log(e);
-            // window.location.href = "/support/question1/"+e.id+"?search="+e.title;
-            this.props.history.push({pathname:`${(window.ctx || '')}/support/question1`, state:{id:e.id,search: e.title}})
+            console.log("item:",e);
+            this.props.history.push({pathname:`${(window.ctx || '')}/support/question`, state:{id:e.id, fromFAQ:true}})
         }
         
         return (

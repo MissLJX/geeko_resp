@@ -1,12 +1,5 @@
 <template>
-    <div class="survey">
-        <div class="fixed-header">
-            <nav-bar>
-                <i class="iconfont el-back-font" slot="left" @click="$router.go(-1);">&#xe693;</i>
-                <span slot="center">{{$t("point.survey")}}</span>
-            </nav-bar>
-        </div>
-
+    <div class="survey">    
         <div v-if="false" class="empty-container">
             <div class="_hd">
                 <span class="iconfont">&#xe6d8;</span>
@@ -17,8 +10,10 @@
 
         <div class="survey-container">
             <div class="survey-info">
-                <div class="info-title">{{$t("survey.survey_title")}}</div>
-                <div class="info-content">{{$t("survey.survey_title_content")}}</div> 
+                <div class="info-box">
+                    <div class="info-title">Dear Customer</div>
+                    <div class="info-content">To thank you for your support, we will offer you 200 points to your ChicMe account.</div> 
+                </div>
             </div>
 
             <question-item v-for='(item,index) in questionList' 
@@ -29,39 +24,45 @@
                            :title='item.title' 
                            :type='item.type'
                            :answerList='item.answerList'
-                           @change="(e)=> questionChange(e)"
                            :hadDoneBefore="hadDoneBefore"
                            @otherChange="(e)=>questionInputChange(e)"
+                           @change="(e)=> questionChange(e)"
                            :question="item"
                            ></question-item>
 
             <div class="survey-info">
-                <div class="info-content">{{$t("survey.survey_to_help_us")}}</div> 
+                <div class="info-box">
+                    <div class="info-content">To help us better understand your needs, please kindly provide us some additional information. We guarantee the confidentiality and security in the treatment of your personal data. All your answers are guaranteed to remain anonymous.</div> 
+                </div>
             </div>
 
             <question-item v-for='(item,index) in questionList1' 
-                           :noBorder="index == questionList1.length-1"
-                           :defaultV="item.defaultValue?item.defaultValue:''"
-                           :inputValue="item.inputValue?item.inputValue:''"
-                           :hadDoneBefore="hadDoneBefore"
-                           :index="index"
-                           :key="item.title.split(' ')[-1]" 
-                           :title='item.title' 
-                           :type='item.type'
-                           :answerList='item.answerList'
-                           @change="(e)=> questionChange(e)"
-                           @otherChange="(e)=>questionInputChange(e)"
-                           :question="item"
-                           ></question-item>
+                            :index='index+questionList.length'
+                            :key="item.title.split(' ')[-1]"
+                            :noBorder="index == questionList1.length-1"
+                            :defaultV="item.defaultValue?item.defaultValue:''"
+                            :title='item.title' 
+                            :type='item.type'
+                            :answerList='item.answerList'
+                            :hadDoneBefore="hadDoneBefore"
+                            @otherChange="(e)=>questionInputChange(e)"
+                            @change="(e)=> questionChange(e)"
+                            :question="item"
+                            ></question-item>
+            
 
-            <submit-btn @toSubmit="submit()" title="submit" class="edit-footer" active-fixed="true"></submit-btn>
+            <!-- <button @click="()=>q1.reverse().reverse()">getData</button> -->
+            <div class="btnBox">
+                <div class="submitBtn" @click="()=>submit()">
+                    submit
+                </div>
+            </div>
 
             <div v-if="maskShow" class="maskBox">
                 <div class="maskInfo">
                     <i class="iconfont maskClose" @click="()=>this.maskShow=false">&#xe7c9;</i>
                     <img src="https://s3.us-west-2.amazonaws.com/image.chic-fusion.com/chicme/2021-9-7/2021-9-7-me-survey-points.png" alt="">
                     <div class="maskContent">
-                        {{$t("survey.survey_thanks")}}
                         Thank you for your time! You've got <strong>200 points</strong> in your account, have a look and enjoy shopping at ChicMe!
                     </div>
                     <div class="maskButton">
@@ -71,15 +72,12 @@
                 </div>
             </div>
         </div>
-
     </div>
 </template>
 
 <script>
-    import NavBar from '../components/nav-bar.vue'
     import Question from '../components/question/question.vue'
-    import SubmitBtn from "../../components/submit-btn.vue"
-    import store from "../../store/index";
+    import {mapGetters, mapActions} from 'vuex';
 
     let questionObject = [
         {
@@ -171,7 +169,6 @@
     ]
 
     export default {
-        name:"Survey",
         data(){
             return {
                 emptyShow:false,
@@ -641,18 +638,20 @@
                 questionObject:questionObject,
                 maskShow: false,
                 result_id: 0,
+                isUpdate:false,
                 hadDoneBefore: false,
             }
         },
-        components:{
-            'nav-bar':NavBar,
-            'question-item':Question,
-            'submit-btn': SubmitBtn
-        },
         computed:{
         },
+        created(){
+        },
         mounted(){
-            this.$nextTick(this.getData())
+            this.$nextTick(() => {
+                this.getData()
+            })
+        },
+        watch:{
         },
         methods:{
             questionChange(data){
@@ -661,7 +660,6 @@
                 const question1Select = this.questionList.find(q => q.id === data.question.id)
                 const question2Select = this.questionList1.find(q => q.id === data.question.id)
                 const selectedQuestion = question1Select ? question1Select : question2Select
-                console.log(selectedQuestion)
 
                 if(selectedQuestion.type == 'radio' || selectedQuestion.type == 'textarea' || selectedQuestion.type == 'select'){
                     selectedQuestion.defaultValue = data.selectedValue
@@ -687,16 +685,18 @@
                 selectedQuestion.inputValue = data.inputValue
             },
             submit(){
-                if(this.hadDoneBefore){
-                    return;
-                }
                 console.log('submit')
+
+                // this.maskShow = true
+                let params = {};
+                if(this.result_id){
+                    params.id = this.result_id
+                }
+
                 for(let i in this.questionObject){
                     let v = ''
-                    let inp = ''
+                    let inp;
                     this.questionList.forEach(q => {
-                        console.log(q)
-                        console.log(this.questionObject[i])
                         if(q.id == this.questionObject[i].id){
                             v = q.defaultValue
                             inp = q.inputValue
@@ -709,23 +709,17 @@
                         }
                     })
                     this.questionObject[i].answer = v
-                    if(v.indexOf('Others')!=-1){
+                    if(inp){
                         this.questionObject[i].input = inp
                     }
                 }
-                // console.log(this.questionObject)
-                // return
-                let params = {answers: JSON.stringify(this.questionObject)};
-                if(this.result_id){
-                    params.id = this.result_id
-                }
-
+                params.answers = JSON.stringify(this.questionObject)
                 if(this.checkData()){
-                    store.dispatch('me/updateSurvey', params).then(res => {
-                        // console.log(res)
+                    this.$store.dispatch('updateSurvey', params).then(res => {
+                        console.log(res)
                         if(res.code == 200){
-                            this.getData();
                             this.maskShow = true;
+                            this.getData()
                         }
                     })
                 }
@@ -736,7 +730,7 @@
                     if(!this.questionObject[i]['answer'] || 
                        JSON.stringify(this.questionObject[i]['answer'])=="[]" || 
                        JSON.stringify(this.questionObject[i]['answer'])=="{}"){ 
-                        //    console.log(i)
+                           console.log(i)
                         //    window.location.hash = ""
                         //    window.location.hash = "#question"+(Number(i)+1)
                            document.getElementById('question'+(Number(i)+1)).scrollIntoView(true)
@@ -746,21 +740,12 @@
                 return true
             },
             goShopping(){
-                if(window.isApp = "true"){
-                    window.location.href = 'chic-me://chic.me/home';
-                } else {
-                    window.location.href = `${window.ctx || ''}/index`;
-                }
+                window.location.href = `${window.ctx || ''}/`
             },
             viewPoints(){
-                if(window.isApp = "true"){
-                    window.location.href = 'chic-me://chic.me/credits';
-                } else {
-                    window.location.href = `${window.ctx || ''}/me/m/credits`
-                }
+                window.location.href = `${window.ctx || ''}/me/m/credits`
             },
             getThatQuestion(id, answers){
-                // console.log(answers)
                 let q;
                 answers.forEach(an => {
                     if(an.id == id){
@@ -770,13 +755,15 @@
                 return q
             },
             getData(){
-                store.dispatch("me/getSurvey",{}).then(data => data.result).then(result => {
+                this.$store.dispatch("getSurvey",{}).then(data => data.result).then(result => {
                     if(result){
                         const {answers:answersJSON,id} = result
                         const answers = JSON.parse(answersJSON)
+
                         if(answers){
                             this.hadDoneBefore = true;
                         }
+
                         if(id){
                             this.result_id = id;
                         }
@@ -796,15 +783,28 @@
                         console.log(this.questionList,this.questionList1)
                     }
                 })
-            },
-            
-        }
+            }
+        },
+        components:{
+            'question-item':Question,
+        },
     }
 </script>
 
 <style lang="scss" scoped>
-    body{
-        overflow: hidden;
+    @font-face {
+    font-family: 'iconfont';  /* Project id 384296 */
+    src: url('//at.alicdn.com/t/font_384296_i4gbs9w8xo.woff2?t=1630652306181') format('woff2'),
+        url('//at.alicdn.com/t/font_384296_i4gbs9w8xo.woff?t=1630652306181') format('woff'),
+        url('//at.alicdn.com/t/font_384296_i4gbs9w8xo.ttf?t=1630652306181') format('truetype');
+    }
+    .iconfont{
+    font-family:"iconfont" !important;
+    font-size:16px;
+    font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;
     }
     .edit-footer{
         position: fixed;
@@ -848,29 +848,63 @@
             width: 100%;
             background-color: #fff;
             margin-top: 44px;
-
+            
             .survey-info{
                 width: 100%;
-                min-height: 106px;
+                min-height: 79px;
 	            background-color: #fff4d9;
                 padding: 16px 12px 13px;
                 color: #222;
                 font-size: 13px;
 
-                .info-title{
-                    font-size: 14px;
-                    // text-shadow: 0 0 #222;
-                    font-weight: bold;
-                    line-height: 16px;
-                    margin-bottom: 11px;
-                }
+                .info-box{
+                    width: 65%;
+                    min-width: 800px;
+                    max-width: 1200px;
+                    margin: 0 auto;
 
-                .info-content{
-                    font-family: Roboto-Regular;
-                    line-height: 22px;
+                    .info-title{
+                        font-size: 16px;
+                        // text-shadow: 0 0 #222;
+                        font-weight: bold;
+                        line-height: 16px;
+                        width: 100%;
+                        margin-bottom: 13px;
+                    }
+
+                    .info-content{
+                        font-family: Roboto-Regular;
+                        line-height: 22px;
+                        width: 100%;
+                    }
                 }
             }
         }
+        .btnBox{
+            width: 65%;
+            min-width: 800px;
+            max-width: 1200px;
+            margin: 0 auto;
+
+             .submitBtn{
+                width: 240px;
+                height: 42px;
+                background-color: #000;
+                color: #fff;
+                border-radius: 2px;
+                margin-top: 26px;
+                text-transform: uppercase;
+                text-align: center;
+                line-height: 42px;
+                font-family: Roboto-Bold;
+                font-size: 14px;
+                font-weight: bold;
+                font-stretch: normal;   
+                letter-spacing: 0px;
+                cursor: pointer;
+            }
+        }
+       
 
         .maskBox{
             width: 100%;
@@ -884,30 +918,31 @@
             z-index: 10;
 
             .maskInfo{
-                width: 280px;
-                min-height: 273px;
+                width: 424px;
+                min-height: 330px;
                 background-color: #fff;
                 border-radius: 4px;
                 position: relative;
 
                 .maskClose{
                     position: absolute;
-                    right: 12px;
-                    font-size: 10px;
-                    top: 12px;
+                    right: 15px;
+                    font-size: 15px;
+                    top: 15px;
                     color: #999;
+                    cursor: pointer;
                 }
 
                 img{
                     display: block;
-                    width: 88px;
-                    height: 56px;
-                    margin: 18px auto 15px;
+                    width: 125px;
+                    height: 80px;
+                    margin: 28px auto 18px;
                 }
 
                 .maskContent{
-                    width: 249px;
-                    min-height: 56px;
+                    width: 368px;
+                    min-height: 63px;
                     font-family: Roboto-Regular;
                     font-size: 14px;
                     font-weight: normal;
@@ -923,8 +958,8 @@
                     margin-top: 26px;
 
                     .maskBtn{
-                        width: 240px;
-                        height: 32px;
+                        width: 360px;
+                        height: 42px;
                         background-color: #000000;
                         border-radius: 2px;
                         color: #fff;
@@ -932,12 +967,20 @@
                         display: flex;
                         align-items: center;
                         justify-content: center;
+                        font-family: Roboto-Bold;
+                        font-size: 16px;
+                        font-weight: normal;
+                        font-stretch: normal;
+                        line-height: 19px;
+                        letter-spacing: 0px;
+                        color: #ffffff;
+                        cursor: pointer;
                     }
                     .view{
                         background-color: #fff;
                         color: #222;
                         border: solid 1px #cacaca;
-                        margin-top: 14px;
+                        margin-top: 12px;
                         margin-bottom: 24px;
                     }
                 }
