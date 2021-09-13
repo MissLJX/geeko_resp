@@ -39,7 +39,7 @@
                     <del class="el-product-del">{{delPrice}}</del>
                 </div>
                 <div class="st-cell st-v-m st-t-r">
-                    <i @click.prevent="likeHandle" class="iconfont el-product-like" :class="{red:liked}">{{liked ? '&#xe677;' : '&#xe631;'}}</i>
+                    <i @click.prevent="addToCart(product.id)" class="iconfont el-product-like">&#xe6a8;</i>
                 </div>
             </div>
         </figcaption>
@@ -111,37 +111,11 @@
             }
         },
         methods: {
-            likeHandle(){
-                if(!this.isLogin){
-                    window.location.href = "/i/login?redirectUrl=/me/m";
-                }
-                var wishlist = this.$store.getters['me/wishlist']
-                var index = _.indexOf(wishlist[0].productIds, this.product.id)
-                if (index < 0) {
-                    this.$store.dispatch('like', this.product.id)
-                } else {
-                    this.$store.dispatch('unlike',  this.product.id)
-                }
-            },
-            deleteLikeProduct(){
-                let _this = this;
-                _this.$store.dispatch('confirmShow', {
-                    show: true,
-                    cfg: {
-                        btnFont:{
-                            yes:"Confirm",
-                            no:"Cancel"
-                        },
-                        message: "Are you sure you want to delete the item(s)?",
-                        yes: function () {
-                            _this.likeHandle();
-                            _this.suspendSumShow = false;
-                            _this.$store.dispatch('closeConfirm');
-                        },
-                        no: function () {
-                            _this.$store.dispatch('closeConfirm');
-                        }
-                    }
+            addToCart(productId){
+                this.$store.dispatch("globalLoadingShow",true);
+                this.$store.dispatch("getProductDetailMessage",productId).then((product) => {
+                    this.$store.dispatch("addToCartIsShow",true);
+                    this.$store.dispatch("globalLoadingShow",false);
                 });
             },
             findSimlar(productId){
@@ -272,7 +246,7 @@
         }
 
         .el-product-like {
-            font-size: 20px;
+            font-size: 18px;
             &.red {
                 color: #f00;
             }
