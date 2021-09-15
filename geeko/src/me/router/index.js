@@ -235,12 +235,12 @@ const Me = [
     //     name:"point-guide",
     //     meta:{title:"My Points"}
     // }
-    {
-        path:ROUTER_PATH_ME + "/test",
-        component:() => import("../pages/Test.vue"),
-        name:"Test",
-        meta:{title:"Test"}
-    }
+    // {
+    //     path:ROUTER_PATH_ME + "/test",
+    //     component:() => import("../pages/Test.vue"),
+    //     name:"Test",
+    //     meta:{title:"Test"}
+    // }
 ]
 
 export default Me
