@@ -3,7 +3,7 @@
         <list :items="products" :loading="loading" :scrollable="scrollable" :finished="finished" class="el-products" @listing="$emit('listing')">
             <template slot="li" slot-scope="props">
                 <li :key="props.item.id">
-                    <product :product="props.item" :index="props.index" :calssify-name="calssifyName"/>
+                    <product :product="props.item" :index="props.index" v-bind="$attrs"/>
                 </li>
             </template>
         </list>

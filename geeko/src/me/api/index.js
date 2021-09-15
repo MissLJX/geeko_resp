@@ -50,9 +50,7 @@ export const getCredits = (skip) => {
 export const creditcards = getCredits
 
 export const getYouLikeProducts = (skip) => {
-    return axios.get('/product/1/'+skip+'/20/show', {}, {}).then((data) => {
-        return data.result
-    })
+    return axios.get('/product/1/'+skip+'/20/show', {}, {});
 }
 
 export const getWishlist = () => {
@@ -78,9 +76,7 @@ export const countUnreadNotification = () => {
 }
 
 export const getWishProducts = (customerId, skip) => {
-    return axios.get(VPATH + '/wanna-list/anon/' + customerId + '/' + skip + '/20/all-products', {}, {}).then((data) => {
-        return data.result
-    })
+    return axios.get(VPATH + '/wanna-list/anon/' + customerId + '/' + skip + '/20/all-products', {}, {});
 }
 
 export const postProfile = (data) => {

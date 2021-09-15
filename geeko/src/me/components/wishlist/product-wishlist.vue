@@ -2,11 +2,20 @@
     <div class="el-list-product">
         <a 
             :href="productUrl" 
-            data-title="me" 
+            :data-title="eventTitle" 
             :data-column="calssifyName" 
             :data-product-position="index+1"
             data-product-list-source 
             :product-id="product.id"
+			:data-product-source="product.dataSource" 
+            :data-geeko-id="geekoId"
+            :data-geeko-experiment="experimentId"
+			:data-request-id="product.aliRequestId"
+            :data-experiment-id="product.aliExperimentId"
+			:type="eventTitle"
+			:data-type="eventTitle"
+            :data-content="eventTitle"
+            ref="oftenProduct"
         >
             <figure>
                 <div class="img">
@@ -64,7 +73,19 @@
             required: true,
             isSoldOut:true,
             index:Number,
-            calssifyName:String
+            calssifyName:String,
+            requestId:{
+                type:String,
+                default:""
+            },
+            experimentId:{
+                type:String,
+                default:""
+            },
+            eventTitle:{
+                type:String,
+                default:""
+            }
         },
         created(){
         },
@@ -110,6 +131,13 @@
             },
             isLogin(){
                 return this.$store.getters["me/isLogin"];
+            },
+            geekoId(){
+                if(this.product && this.product.geekoRequsestId){
+                    return this.product.geekoRequsestId;
+                }else{
+                    return this.requestId;
+                }
             }
         },
         methods: {
@@ -155,6 +183,12 @@
             },
             findSimlar(productId){
                 this.$router.push({name:"relation-products",params:{productId}});
+            }
+        },
+        mounted(){
+            let value = this.$refs.oftenProduct;
+            if (window.productListObserver) {
+                window.productListObserver.observe(value)
             }
         }
     }

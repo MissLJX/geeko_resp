@@ -200,6 +200,9 @@ const mutations = {
     },
     [types.GET_SURVEY_ANSWER](state, obj){
         state.survey = obj
+    },
+    [types.GET_RECORD_WISHLIST_EVENT](state,wishlist){
+        state.wishlistEvent = wishlist;
     }
 }
 
