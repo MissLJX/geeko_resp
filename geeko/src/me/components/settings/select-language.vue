@@ -74,11 +74,14 @@
                         locale:"fi"
                     }
                 ],
-                languageLocale:getLocalCookie("lang")
+                languageLocale:""
             }
         },
         components:{
             "nav-bar":NavBar
+        },
+        created(){
+            this.languageLocale = getLocalCookie("lang") ? getLocalCookie("lang") : "en";
         },
         methods:{
             toChangeLanguage(value){

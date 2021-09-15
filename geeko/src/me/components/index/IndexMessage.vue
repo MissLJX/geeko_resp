@@ -28,7 +28,7 @@
             <div class="_font">{{messageM1518}}</div>
             <div class="iconfont">&#xe694;</div>
         </div> -->
-        <swiper></swiper>
+        <swiper :notification-data.sync="swiperData" :email="email"></swiper>
 
         <div class="header-icon">
             <div class="st-table">
@@ -178,9 +178,15 @@
     import * as utils from '../../../utils/geekoutils.js';
 
     import Swiper from "../../../components/swiper/swiper.vue"
+    import _ from "lodash"
 
     export default {
         name:"IndexMessage",
+        data(){
+            return {
+                swiperData:[]
+            }
+        },
         components:{
             "swiper":Swiper
         },
@@ -210,6 +216,13 @@
             getHeaderImage(){
                 let headerIcon = store.getters["me/headerImage"];
                 return headerIcon ? headerIcon : this.baseHeaderUrl;
+            },
+            email(){
+                if(this.isLogin){
+                    return this.me.email;
+                }else{
+                    return "";
+                }
             }
         },
         methods:{
@@ -251,14 +264,30 @@
                 return value ? value : '';
             }
         },
-        created:function(){
+        created:async function(){
             store.dispatch('me/countNotifications');
 
             store.dispatch('me/getOrderCountUnpaid');
 
             // store.dispatch("me/getShoppingCartNum");
 
-            store.dispatch("me/getIndexLoginMessageCode","M1518");
+            let message1518 = await store.dispatch("me/getIndexLoginMessageCode","M1518");
+            let obj1 = {
+                id:'message1518',
+                icon:"&#xe6ca;",
+                icon2:"&#xe694;",
+                message:message1518,
+                isClick:false
+            };
+            let obj2 = {
+                id:'message1519',
+                icon:"&#xe6ca;",
+                icon2:"&#xe694;",
+                message:"Verify the email you can get 100 points!",
+                isClick:true
+            };
+            this.swiperData.push(obj1,obj2);
+            console.log("this.swiperData",this.swiperData)
         }
     }
 </script>
