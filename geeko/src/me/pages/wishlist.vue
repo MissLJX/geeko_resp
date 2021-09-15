@@ -11,7 +11,16 @@
             {{$t("label.manage_your_wishlist")}}
         </div>
 
-        <product-list v-if="ifEdit" :products="products" :loading="loading" :finished="finished" @listing="listingHandle" />
+        <product-list 
+            v-if="ifEdit" 
+            :products="products" 
+            :loading="loading" 
+            :finished="finished" 
+            @listing="listingHandle"
+            event-title="wishlist"
+            :request-id="wishlistEvent.requestId"
+            :experiment-id="wishlistEvent.experimentId"
+         />
         <product-wishlist v-if="!ifEdit" :products="products" :loading="loading" :finished="finished" @listing="listingHandle" @refresh="refreshHandle"/>
         <loading v-if="ifloding"></loading>
     </div>
@@ -89,6 +98,9 @@
             },
             skip(){
                 return store.getters['me/wishskip']
+            },
+            wishlistEvent(){
+                return store.getters["me/wishlistEvent"]
             }
         },
         methods: {

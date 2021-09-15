@@ -10,6 +10,9 @@
                 :finished="finished" 
                 @listing="listingHandle"
                 calssify-name="you may also like"
+                event-title="me"
+                :requestId="requestId"
+                :experimentId="experimentId"
             />
         </div>
     </div>
@@ -40,7 +43,9 @@
             return{
                 loading:false,
                 finished: false,
-                empty: false
+                empty: false,
+                requestId:"",
+                experimentId:""
             }
         },
         computed: {
@@ -55,11 +60,13 @@
         methods: {
             listingHandle(){
                 this.loading = true
-                store.dispatch("me/getYouLikeProducts", {skip: this.skip}).then(({empty, finished}) => {
+                store.dispatch("me/getYouLikeProducts", {skip: this.skip}).then(({empty, finished,requestId,experimentId}) => {
                     if(finished) this.finished = finished
                     if(empty) this.empty = empty
                     this.loading = false
-                    store.dispatch("me/getYouLikeSkip")
+                    store.dispatch("me/getYouLikeSkip");
+                    if(requestId) this.requestId = requestId;
+                    if(experimentId) this.experimentId = experimentId;
                 })
             }
         },
@@ -68,9 +75,12 @@
         },
         created(){
             this.loading = true;
-            store.dispatch("me/getYouLikeProducts", {skip: 0}).then(() => {
+            store.dispatch("me/getYouLikeProducts", {skip: 0}).then(({requestId,experimentId}) => {
                 this.loading = false
                 store.dispatch("me/getYouLikeSkip")
+
+                if(requestId) this.requestId = requestId;
+                if(experimentId) this.experimentId = experimentId;
             })
         }
     }

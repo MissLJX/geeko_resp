@@ -50,6 +50,8 @@ const getters = {
     relationProductsSkip:state => state.relationProductsSkip,
 
     survey: state => state.survey,
+
+    wishlistEvent:state => state.wishlistEvent
 }
 
 export default getters;
