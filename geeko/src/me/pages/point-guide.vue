@@ -8,7 +8,7 @@
             </a>
         </nav-bar>
 
-        <router-link :to="{name:item.name}" class="item" v-for="(item,index) in list" :key="index+item">
+        <router-link :to="{name:item.name}" class="item" v-for="(item,index) in list" :key="index+item" @click.native="!item.name && disposeEmail($event)">
             <p class="hd">
                 {{item.title}}
             </p>
@@ -34,7 +34,8 @@
                                 "We will keep the information you fill in strictly",
                                 "confidential."
                             ],
-                    name:"my-preference"
+                    name:"my-preference",
+                    isAllowClick:false
                 },
                 {
                     title:"Improve your preference  >",
@@ -44,7 +45,16 @@
                                 "We will keep the information you fill in strictly",
                                 "confidential."
                             ],
-                    name:"my-measurements"
+                    name:"my-measurements",
+                    isAllowClick:false
+                },
+                {
+                    title:"Verify the email  >",
+                    content:[
+                                "Verify the email you can earn 100 points."
+                            ],
+                    name:"",
+                    isAllowClick:true
                 }
             ];
 
@@ -54,6 +64,66 @@
         },
         components:{
             'nav-bar':NavBar,
+        },
+        computed:{
+            email(){
+                return this.$store.getters["me/me"].email;
+            },
+            isConfirmEmail(){
+                return this.$store.getters["me/me"].isConfirmEmail;
+            },
+            ifOwnEmail(){
+                if(this.email.endsWith("@chic-fusion.com") || this.email.endsWith("@ivrose.com") || this.email.endsWith("@boutiquefeel.com")){
+                    return true
+                }else{
+                    return false
+                }
+            }
+        },
+        methods:{
+            disposeEmail(e){
+                e.preventDefault();
+                this.disposeNotification();
+            },
+            disposeNotification(){
+                if(this.ifOwnEmail){
+                    this.$router.push({name:"change-email"});
+                }else{
+                    this.verifyEmail(this.email);
+                }
+            },
+            verifyEmail(email){
+                let _this = this;
+                if(this.isConfirmEmail){
+                    this.$store.dispatch("globalLoadingShow",true);
+                    this.$store.dispatch('me/confirmEmail', email).then((data)=>{
+                        this.$store.dispatch("globalLoadingShow",false);
+                        _this.modalShow("A verification link has been sent to your email address, please check your mailbox.");
+                    }).catch((e) => {
+                        console.log("This mailbox adress is already existed,please re-enter.");
+                    });
+                }else{
+                    _this.modalShow("Your email has been verified, please use other ways to get points.");
+                }
+            },
+            modalShow(message){
+                let _this = this;
+                _this.$store.dispatch('confirmShow', {
+                    show: true,
+                    cfg: {
+                        btnFont:{
+                            yes:"OK",
+                        },
+                        message: message,
+                        yes: function () {
+                            _this.$store.dispatch('closeConfirm');
+                            _this.$emit("update:notificationData",[]);
+                        },
+                        no: function () {
+                        }
+                    }
+                })
+            }
         }
     }
 </script>

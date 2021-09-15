@@ -381,6 +381,10 @@ const actions = {
 
     confirmEmail({commit},email){
         return api.confirmEmail(email)
+        // return new Promise((reslove,reject) => {
+        //     console.log("email",email);
+        //     reslove(true);
+        // });
     },
     getTrackOrderMessage({commit},{skip}){
         return api.getTrackOrderMessage(skip).then((track) => {

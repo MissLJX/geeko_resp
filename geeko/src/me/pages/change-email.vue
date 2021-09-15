@@ -10,17 +10,12 @@
                 <form @submit.prevent="changeAcountHandle">
                     <p class="_title">Your new account:</p>
                     <p class="st-control el-email-control">
-                        <input name="email" v-validate="'required|email'" v-model="account.email"
-                               :class="{'st-input':true, 'st-input-danger':errors.has('email')}" type="text"/>
-                        <span v-show="errors.has('email')" class="st-is-danger">{{errors.first('email')}}</span>
+                        <input name="email" v-model="account.email" type="text"/>
                     </p>
-
 
                     <p class="_title">password</p>
                     <p class="st-control el-email-control">
-                        <input name="password" v-validate="'required'" v-model="account.password"
-                               :class="{'st-input':true, 'st-input-danger':errors.has('password')}" type="password"/>
-                        <span v-show="errors.has('password')" class="st-is-danger">{{errors.first('password')}}</span>
+                        <input name="password" v-model="account.password" type="password"/>
                     </p>
 
                     <div class="el-email-send-container">
@@ -158,22 +153,61 @@
         },
         methods: {
             changeAcountHandle(){
-                this.$validator.validateAll({
-                    email: this.account.email,
-                    password: this.account.password
-                }).then((result) => {
-                    if (result) {
-                        this.$store.dispatch('me/changeAccountEmail', this.account).then(() => {
-                            alert('Successed!')
-                        }).catch((data) => {
-                            alert(data.result)
-                        })
-                    }
-                });
+                if(!this.account.email){
+                    this.modalShow("The email address cannot be empty, please enter the valid email address.");
+                    return;
+                }else if(!this.validataEmail(this.account.email)){
+                    this.modalShow("The email address is not available, please enter the valid email address.",() => {
+                        this.account.email = null;
+                    });
+                    return;
+                }
+
+                if(!this.account.password){
+                    this.modalShow("Password is incorrect, please enter a valid password for this account.");
+                    return;
+                }
+
+
+                console.log("all right");
+                this.$store.dispatch("globalLoadingShow",true);
+                this.$store.dispatch('me/changeAccountEmail', this.account).then(() => {
+                    alert('Successed!')
+                    this.$store.dispatch("globalLoadingShow",false);
+                }).catch((data) => {
+                    // alert(data.result)
+                    this.modalShow("The password cannot be empty, please enter the password for this account.",() => {
+                        this.account.password = null;
+                    });
+                    this.$store.dispatch("globalLoadingShow",false);
+                })
             },
             changeEmailHandle(){
                 this.$validator.validate('communicationEmail', this.subEmail.email).then((result) => {
                     this.$store.dispatch('me/changeEmail', this.subEmail)
+                })
+            },
+            validataEmail(email){
+                let rule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;
+                return rule.test(email);
+            },
+            modalShow(message,callback){
+                let _this = this;
+                _this.$store.dispatch('confirmShow', {
+                    show: true,
+                    cfg: {
+                        btnFont:{
+                            yes:"OK",
+                        },
+                        message: message,
+                        yes: function () {
+                            _this.$store.dispatch('closeConfirm').then(() => {
+                                if(callback) callback();
+                            });
+                        },
+                        no: function () {
+                        }
+                    }
                 })
             }
         },

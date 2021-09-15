@@ -229,12 +229,12 @@ const Me = [
         name:"relation-products",
         meta:{title:"Relation Products"}
     },
-    // {
-    //     path:ROUTER_PATH_ME + "/point-guide",
-    //     component:() => import("../pages/point-guide.vue"),
-    //     name:"point-guide",
-    //     meta:{title:"My Points"}
-    // }
+    {
+        path:ROUTER_PATH_ME + "/point-guide",
+        component:() => import("../pages/point-guide.vue"),
+        name:"point-guide",
+        meta:{title:"My Points"}
+    },
     // {
     //     path:ROUTER_PATH_ME + "/test",
     //     component:() => import("../pages/Test.vue"),
