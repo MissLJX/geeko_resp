@@ -25,6 +25,8 @@
                             Delete
                         </div>
                     </div>
+
+                    <span class="new" v-if="product.isNew">NEW</span>
                 </div>
             </figure>
 
@@ -39,7 +41,7 @@
                     <del class="el-product-del">{{delPrice}}</del>
                 </div>
                 <div class="st-cell st-v-m st-t-r">
-                    <i @click.prevent="likeHandle" class="iconfont el-product-like" :class="{red:liked}">{{liked ? '&#xe677;' : '&#xe631;'}}</i>
+                    <i @click.prevent="addToCart(product.id)" class="iconfont el-product-like">&#xe6a8;</i>
                 </div>
             </div>
         </figcaption>
@@ -142,6 +144,13 @@
                             _this.$store.dispatch('closeConfirm');
                         }
                     }
+                })
+            },
+            addToCart(productId){
+                this.$store.dispatch("globalLoadingShow",true);
+                this.$store.dispatch("getProductDetailMessage",productId).then((product) => {
+                    this.$store.dispatch("addToCartIsShow",true);
+                    this.$store.dispatch("globalLoadingShow",false);
                 });
             },
             findSimlar(productId){
@@ -250,6 +259,22 @@
                     margin-top: 12px;
                 }
             }
+
+            .new{
+                font-size: 12px;
+                display: inline-block;
+                left: 0;
+                top: 4px;
+                position: absolute;
+                min-width: 36px;
+                padding-left: 4px;
+                padding-right: 4px;
+                height: 16px;
+                color: #fff;
+                text-align: center;
+                line-height: 16px;
+                background-color: #5ad133;
+            }
         }
 
         img {
@@ -272,7 +297,7 @@
         }
 
         .el-product-like {
-            font-size: 20px;
+            font-size: 18px;
             &.red {
                 color: #f00;
             }

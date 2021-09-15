@@ -22,6 +22,8 @@ import './css/style.scss'
 
 Vue.use(VeeValidate)
 
+// Vue.config.devtools = true
+
 
 sync(store, router)
 
