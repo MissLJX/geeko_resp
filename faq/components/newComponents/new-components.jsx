@@ -388,7 +388,7 @@ const NewOrderList1 = class extends React.Component {
                       </New_order_list_img_box>
                       <New_order_list_total_box>
                           <FormattedMessage id="count_items" values={{count: detail.orderItems.length}}/>
-                          <LabelValue style={{color:"#222", fontWeight:'600'}} label={intl.formatMessage({id: 'ordertotal'})} value={getMoney(detail.orderTotal)}/>
+                          <LabelValue style={{color:"#222", fontWeight:'600', fontSize:'14px'}} label={intl.formatMessage({id: 'ordertotal'})} value={getMoney(detail.orderTotal)}/>
                       </New_order_list_total_box>
                     </New_order_list_li>
                 ))

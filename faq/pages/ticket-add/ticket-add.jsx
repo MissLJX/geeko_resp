@@ -215,7 +215,10 @@ class TicketAdd extends React.Component {
 
       showTip: false, // 最后一条聊天记录是不是用户的 是的话提示客服会在24h内回复
       showMsg: false,
-      showMsgTxt: ''
+      showMsgTxt: '',
+
+      isApp: "false",
+
     }
     this.handleImage = this.handleImage.bind(this)
     this.handleTicket = this.handleTicket.bind(this)
@@ -293,7 +296,7 @@ class TicketAdd extends React.Component {
       subject: this.state.subject,
       message: this.state.message
     }).then((data) => {
-      console.log('data,',data)
+      console.log('data,',data) 
       console.log('ticket,',this.state.ticket)
       console.log(this.state)
       let ticket = this.state.ticket || {}
@@ -346,70 +349,29 @@ class TicketAdd extends React.Component {
   }
   
   componentWillMount () {
-    console.log('pageIn')
-    const id = this.props.location.search.split('=')[1]
+    console.log(this.props.history.location.state)
+    // return
+    const params = this.props.history.location.state
+    let id;
+    console.log(this.props.location.search.split('=')[2])
+    if(params){
+      id = params.id ? params.id : ''
+      this.setState({
+        isApp: params.isShowApp ? params.isShowApp : 'false'
+      })
+      window.isShowApp = params.isShowApp ? params.isShowApp : 'false'
+    }
     if(!id && !localStorage.__order){
-      window.location.href = `${window.ctx || ''}/support/ticket`
+      this.props.history.push({pathname: `${window.ctx || ''}/support/ticket`})
     }
     console.log(id)
     if (id) {
       localStorage.__order = ""
-      get(id).then(({result}) => {
-        // console.log(result)
-        const {ticket, order, cusomerName, headSculptureUrl} = result
-        this.setState({
-          ticket,
-          order,
-          cusomerName,
-          headSculptureUrl,
-          loading: false,
-          subject: ticket.subject
-
-        })
-
-        this.initScroll()
-      }).catch((data) => {
-        alert(data.result)
-        if (data.code === 401) {
-          window.location.href = `${window.ctx || ''}/me/m`
-        }
-      })
+      this.getMsgByUrlId(id)
     } else {
       // console.log(localStorage.__order)
       if (localStorage.__order) {
-        
-        getByOrderId(JSON.parse(localStorage.__order).id).then(({result}) => {
-          const {ticket, order, cusomerName, headSculptureUrl} = result
-          // console.log(result)
-          // console.log(ticket.ticketReplies.slice(-1)[ticket.ticketReplies.slice(-1).length - 1]['sender'])
-          if(ticket){
-            if(ticket.ticketReplies.slice(-1)[ticket.ticketReplies.slice(-1).length - 1]['sender'] == "buyers"){
-              this.setState({
-                showTip:true
-              })
-            } else {
-              this.setState({
-                showTip: false
-              })
-            }
-          }
-          
-          this.setState({
-            isNew: true,
-            ticket,
-            order,
-            cusomerName,
-            headSculptureUrl,
-            loading: false,
-            subject: ticket ? ticket.subject : 0
-          })
-          this.initScroll()
-        }).catch((data) => {
-          alert(data)
-          if (data.code === 401) {
-            window.location.href = `${window.ctx || ''}/me/m`
-          }
-        })
+        this.getMsgByLocalData()
       } else {
         this.setState({
           isNew: true,
@@ -420,6 +382,64 @@ class TicketAdd extends React.Component {
     }
   }
 
+
+  getMsgByLocalData(){
+    getByOrderId(JSON.parse(localStorage.__order).id).then(({result}) => {
+      const {ticket, order, cusomerName, headSculptureUrl} = result
+      // console.log(result)
+      // console.log(ticket.ticketReplies.slice(-1)[ticket.ticketReplies.slice(-1).length - 1]['sender'])
+      if(ticket){
+        if(ticket.ticketReplies.slice(-1)[ticket.ticketReplies.slice(-1).length - 1]['sender'] == "buyers"){
+          this.setState({
+            showTip:true
+          })
+        } else {
+          this.setState({
+            showTip: false
+          })
+        }
+      }
+      
+      this.setState({
+        isNew: true,
+        ticket,
+        order,
+        cusomerName,
+        headSculptureUrl,
+        loading: false,
+        subject: ticket ? ticket.subject : 0
+      })
+      this.initScroll()
+    }).catch((data) => {
+      alert(data)
+      if (data.code === 401) {
+        window.location.href = `${window.ctx || ''}/me/m`
+      }
+    })
+  }
+
+  getMsgByUrlId(id){
+    get(id).then(({result}) => {
+      // console.log(result)
+      const {ticket, order, cusomerName, headSculptureUrl} = result
+      this.setState({
+        ticket,
+        order,
+        cusomerName,
+        headSculptureUrl,
+        loading: false,
+        subject: ticket.subject
+
+      })
+
+      this.initScroll()
+    }).catch((data) => {
+      alert(data.result)
+      if (data.code === 401) {
+        window.location.href = `${window.ctx || ''}/me/m`
+      }
+    })
+  }
   // componentWillUnmount(){
   //   localStorage.__order = ''
   // }
@@ -565,15 +585,18 @@ class TicketAdd extends React.Component {
     }
 
     return <div>
-
       {
-        window.isApp !== 'true'&&
+        console.log(this.state.isApp)
+      }
+      {
+        window.isShowApp !== 'true' ?
+        (this.state.isApp == 'false' &&
         (this.state.isNew? 
         <PageHeader1 href={`${window.ctx || ''}/support/order`} label={intl.formatMessage({id: 'Ticket'})}/> : 
-        <PageHeader1 href={`${window.ctx || ''}/support/ticket`} label={intl.formatMessage({id: 'Ticket'})}/> )
+        <PageHeader1 href={`${window.ctx || ''}/support/ticket`} label={intl.formatMessage({id: 'Ticket'})}/> )):<span></span>
       }
 
-      <PageContanier1 style={{background: '#f6f6f6'}}>
+      <PageContanier1 style={{background: '#f6f6f6'}} noHeader={this.state.isApp == 'false' ?false:true}>
         { this.state.loading ? (
           <div style={{height: '50px', lineHeight: '50px', fontSize: '12px', textAlign: 'center', color: '#666'}}>
             <FormattedMessage id="loading"/>
@@ -586,7 +609,10 @@ class TicketAdd extends React.Component {
             <SelectedOrderBox onClick={()=>this.props.history.push({pathname: `${(window.ctx || '')}/support/order`,state:{from:'ticketadd'}})}>
                 <OrderNo>
                     {intl.formatMessage({id:"orderno"})}
-                    <span>{this.state.ticket ? this.state.ticket.operaId ? this.state.ticket.operaId : this.state.order.id : this.state.order.id}</span>
+                    {
+                      console.log(this.state.ticket,this.state.order)
+                    }
+                    <span>{this.state.ticket ? this.state.ticket.id ? this.state.ticket.id : this.state.order.id : this.state.order.id}</span>
                 </OrderNo>
                 <OrderCreateTime>
                     {intl.formatMessage({id:"paymenttime"})}
@@ -608,7 +634,7 @@ class TicketAdd extends React.Component {
             </div>
             
             {/* 对话 */}
-            <Chat innerRef={(div) => { this.chatDiv = div }} style={{ height:'calc(100% - 230px)',overflow: 'hidden', overflowY: 'scroll', padding:'20px'}}>
+            <Chat innerRef={(div) => { this.chatDiv = div }} style={{ height:'calc(100% - 230px)',overflow: 'hidden', overflowY: 'scroll', padding:'20px',WebkitOverflowScrolling:'touch'}}>
               {this.state.ticket && this.state.ticket.ticketReplies && _.map(groupReplies(this.state.ticket.ticketReplies), (group, index) => (
                 <div key={index}>
                   <div style={{textAlign: 'center', color: '#999', fontSize: '12px', height: '40px', lineHeight: '40px'}}>{index}</div>
@@ -625,7 +651,7 @@ class TicketAdd extends React.Component {
               }
               
               {
-                this.state.ticket && this.state.ticket.canBeRated && <div style={{marginTop: 20, textAlign: 'center'}}>
+                false && this.state.ticket && this.state.ticket.canBeRated && <div style={{marginTop: 20, textAlign: 'center'}}>
                   <Link to={`/support/rate/${this.state.ticket.id}`} style={{color: '#3aa978', textDecoration: 'none'}}>
                     <RATE style={{verticalAlign: 'middle'}}>&#xe60d;</RATE>
                     <span style={{textDecoration: 'underline', verticalAlign: 'middle'}}>Rate My Service</span>

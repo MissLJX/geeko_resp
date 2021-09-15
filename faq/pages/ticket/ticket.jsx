@@ -7,6 +7,7 @@ import {list} from '../../api'
 import {withScroll} from '../../HoCs/list'
 import { Page } from '../../components/page/page';
 import styled from 'styled-components';
+import { withRouter } from 'react-router';
 
 const StatusCircle = styled.span`
     width: 8px;
@@ -67,6 +68,7 @@ const TicketLineOne = styled.div`
     font-stretch: normal;
     letter-spacing: 0px;
     color: #222222;
+    white-space: nowrap;
 `
 const TicketTime = styled.div`
     color: #999;
@@ -122,12 +124,11 @@ class TicketList extends React.PureComponent{
                                 <StatusCircle style={{backgroundColor:'#999'}}></StatusCircle>
                                 <StatusTxt style={{color:'#999'}}>{intl.formatMessage({id:'statusresolved'})}</StatusTxt>
                             </Resolved>)
-                
             }
         }
 
         const link = (item) => {
-            window.location.href = `${(window.ctx || '')}/support/ticketadd?id=${item.id}`
+            this.props.history.push({pathname:`${(window.ctx || '')}/support/ticketadd`,state:{id:item.id, isShowApp: window.isShowApp}})
         }
 
         return <TicketListBox>
@@ -136,8 +137,8 @@ class TicketList extends React.PureComponent{
                     
                     <TicketItemBox key={index} onClick={()=>link(item)}>
                         <TicketLineOne>
-                            <div>
-                                {intl.formatMessage({id:'ticketid'})} {item.operaId}
+                            <div style={{display:'flex'}}>
+                                {intl.formatMessage({id:'ticketid'})} <span style={{display:'inline-block',width:'65%',overflow:'hidden',marginLeft:'8px',textOverflow:'ellipsis'}}>{item.id}</span>
                             </div>
                             <TicketTime>
                                 {new Date(item.openDate).toLocaleDateString()}
@@ -251,10 +252,10 @@ class Ticket1 extends React.PureComponent{
                 isLoading = false
             }).catch((err)=>{
                 if(err.code == 300){
-                    if(window.isApp=="true"){
+                    if(window.isShowApp=="true"){
                         window.location.href = "chic-me://chic.me/loginRoot"
                      } else {
-                        window.location.href = `/i/login?redirectUrl=${(window.ctx || '')}/support`
+                        window.location.href = `${(window.ctx || '')}/i/login?redirectUrl=${(window.ctx || '')}/support`
                     }
                 }
             })
@@ -272,11 +273,11 @@ class Ticket1 extends React.PureComponent{
         const {intl} = this.props;
         const {tickets} = this.state;
         
-        const ListWidthScroll = injectIntl(withScroll(TicketList))
+        const ListWidthScroll = injectIntl(withScroll(withRouter(TicketList)))
 
         return (<div>
             {
-                this.state.finished && this.state.skip === this.state.limit && false ? <Redirect to={`${(window.ctx || '')}/support/ticketadd`}/> :
+                false && this.state.finished && this.state.skip === this.state.limit && false ? <Redirect to={`${(window.ctx || '')}/support/ticketadd`}/> :
                 <div style={{position:'relative'}}>
                     <Page label={intl.formatMessage({id: 'Ticket'})} href={`${(window.ctx || '')}/support/contact-us`} style={{backgroundColor:'#f6f6f6'}}>
                         

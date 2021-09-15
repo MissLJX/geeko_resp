@@ -105,7 +105,7 @@ const PageContanier = (props) => {
         overflowY: 'scroll',
     }
     
-    if(window.isApp == 'true'){
+    if(window.isShowApp == 'true' || p.noHeader){
         style = {...style, height:'100vh', marginTop:'0px'}
     } else {
         style = {...style, height:'calc(100vh - 44px)', marginTop:'44px'}
@@ -126,7 +126,7 @@ const Page1 = (props) => {
     // console.log(props)
     return <div>
         {
-            window.isApp !== 'true' &&
+            window.isShowApp !== 'true' &&
             <PageHeader1 props={props}/>
         }
         <PageContanier1 props={props}></PageContanier1>

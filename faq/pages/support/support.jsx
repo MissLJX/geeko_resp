@@ -127,8 +127,6 @@ class Support extends React.PureComponent{
     }
 
     componentWillMount(){
-        console.log(window.isApp)
-        // window.isApp = "true";
         if (window.zE) {
             zE('webWidget:on', 'open', function () {
               zE('webWidget', 'show')
@@ -153,24 +151,19 @@ class Support extends React.PureComponent{
             }).catch((err)=>{
                 // console.log(err)
                 if(err.code == 300){
-                    if(window.isApp=="true"){
+                    if(window.isShowApp=="true"){
                         window.location.href = "chic-me://chic.me/loginRoot"
                     } else {
-                        window.location.href = `/i/login?redirectUrl=${(window.ctx || '')}/support/contact-us`
+                        window.location.href = `${(window.ctx || '')}/i/login?redirectUrl=${(window.ctx || '')}/support/contact-us`
                     }
                 }
             })
         }
 
         const outAppUrl = () => {
-            // console.log(window.isApp)
-            if(window.isApp == 'true'){
-                // console.log('aa')
-                //loginRoot
+            if(window.isShowApp == 'true'){
                 return "chic-me://chic.me/index";
             } else {
-                console.log('ss')
-                // window.location.href = ctx + '/i/login';
                 return `${(window.ctx || '')}/index`;
             }
         }

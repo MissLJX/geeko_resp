@@ -504,10 +504,10 @@ class Question1 extends React.PureComponent{
             }).catch((err)=>{
                 // console.log(err)
                 if(err.code == 300){
-                    if(window.isApp=="true"){
+                    if(window.isShowApp=="true"){
                         window.location.href = "chic-me://chic.me/loginRoot"
                     } else {
-                        window.location.href = `/i/login?redirectUrl=${(window.ctx || '')}/support/contact-us`
+                        window.location.href = `${(window.ctx || '')}/i/login?redirectUrl=${(window.ctx || '')}/support/contact-us`
                     }
                 }
             })

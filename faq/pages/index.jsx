@@ -52,10 +52,16 @@ messages['fr'] = fr_L
 messages['es'] = es_L
 messages['pt'] = pt_L
 // 清空打印
-// console.log = () =>{
+console.log = () =>{
 
-// }
-window.isApp = 'true'
+}
+// window.isApp = 'true'
+if(window.isApp == 'true'){
+  window.isShowApp = 'true'
+} else {
+  window.isShowApp = 'false'
+}
+
 export default () => (
 
   <IntlProvider locale={lang} messages={messages[lang]}>

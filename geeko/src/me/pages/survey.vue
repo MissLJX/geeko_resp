@@ -62,7 +62,8 @@
                     <img src="https://s3.us-west-2.amazonaws.com/image.chic-fusion.com/chicme/2021-9-7/2021-9-7-me-survey-points.png" alt="">
                     <div class="maskContent">
                         {{$t("survey.survey_thanks")}}
-                        Thank you for your time! You've got <strong>200 points</strong> in your account, have a look and enjoy shopping at ChicMe!
+                        <strong>{{$t("survey.survey_thanks_points")}}</strong>
+                        {{$t("survey.survey_thanks_more")}}
                     </div>
                     <div class="maskButton">
                         <div class="maskBtn" @click="()=>goShopping()">Go Shopping</div>

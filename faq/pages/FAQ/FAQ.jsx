@@ -10,35 +10,35 @@ import styled from 'styled-components';
 
 
 const FaqPage = styled.div`
-            background-color: #fff;
-        `
+    background-color: #fff;
+`
 
-        const SearchBarBox = styled.div`
-            width: 100%;
-            border-top: 1px solid #e6e6e6;
-            max-height: 100px;
-            /* line-height: 42px; */
-            padding-top: 25px;
-        `
+const SearchBarBox = styled.div`
+    width: 100%;
+    border-top: 1px solid #e6e6e6;
+    max-height: 100px;
+    /* line-height: 42px; */
+    padding-top: 25px;
+`
 
-        const HowTxt = styled.div`
-            width: 100%;
-            text-align: center;
-            font-family: Roboto-Regular;
-            font-size: 14px;
-            font-weight: normal;
-            font-stretch: normal;
-            letter-spacing: 0px;
-            color: #222222;
-            margin-bottom: 13px;
-        `
+const HowTxt = styled.div`
+    width: 100%;
+    text-align: center;
+    font-family: Roboto-Regular;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #222222;
+    margin-bottom: 13px;
+`
 
-        const DropDownList = styled.div`
-            width: 100%;
-            padding: 0 4%;
-            margin-top: 28px;
-            background-color: #fff;
-        `
+const DropDownList = styled.div`
+    width: 100%;
+    padding: 0 4%;
+    margin-top: 28px;
+    background-color: #fff;
+`
 
 class FAQ extends React.PureComponent{
     constructor(props){
