@@ -56,7 +56,7 @@
                             :ref="'question'+(index+questionList.length+1)"
                            ></question-item>
 
-            <submit-btn @toSubmit="submit()" title="submit" class="edit-footer" active-fixed="true"></submit-btn>
+            <submit-btn @toSubmit="submit()" :title='$t("label.submit")' class="edit-footer" active-fixed="true"></submit-btn>
 
             <div v-if="maskShow" class="maskBox">
                 <div class="maskInfo">
@@ -66,6 +66,7 @@
                         {{$t("survey.survey_thanks")}}
                         <strong>{{$t("survey.survey_thanks_points")}}</strong>
                         {{$t("survey.survey_thanks_more")}}
+                        <!-- You have already submitted this survey ！You’ve got 200 points in your account, have a look and enjoy shopping at ChicMe! -->
                     </div>
                     <div class="maskButton">
                         <div class="maskBtn" @click="()=>goShopping()">Go Shopping</div>
@@ -662,6 +663,9 @@
         mounted(){
             this.$nextTick(this.getData())
         },
+        beforeDestroy(){
+            document.body.style.position = 'static'
+        },
         methods:{
             questionChange(data){
                 console.log(data)
@@ -800,6 +804,8 @@
                         }
                         if(answers){
                             this.hadDoneBefore = true;
+                            this.maskShow = true;
+                            document.body.style.position = 'fixed';
                         }
                         if(id){
                             this.result_id = id;
@@ -885,20 +891,22 @@
         .maskBox{
             width: 100%;
             height: 100vh;
-            background-color: rgba(0,0,0,0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            // background-color: rgba(0,0,0,0.5);
+            background-color: #fff;
+            // display: flex;
+            // align-items: center;
+            // justify-content: center;
             position: fixed;
             top: 0;
-            z-index: 10;
+            // z-index: 10;
 
             .maskInfo{
-                width: 280px;
+                width: 100%;
                 min-height: 273px;
                 background-color: #fff;
                 border-radius: 4px;
                 position: relative;
+                margin-top: 80px;
 
                 .maskClose{
                     position: absolute;
@@ -906,19 +914,20 @@
                     font-size: 10px;
                     top: 12px;
                     color: #999;
+                    display: none;
                 }
 
                 img{
                     display: block;
                     width: 88px;
                     height: 56px;
-                    margin: 18px auto 15px;
+                    margin: 18px auto 26px;
                 }
 
                 .maskContent{
-                    width: 249px;
+                    width: 300px;
                     min-height: 56px;
-                    font-family: Roboto-Regular;
+                    // font-family: Roboto-Regular;
                     font-size: 14px;
                     font-weight: normal;
                     font-stretch: normal;
@@ -927,10 +936,15 @@
                     color: #222222;
                     margin: 0 auto;
                     text-align: center;
+
+                    strong{
+                        font-family: AcuminPro-Bold;
+                    }
                 }
 
                 .maskButton{
-                    margin-top: 26px;
+                    margin-top: 34px;
+                    font-family: AcuminPro-Bold;
 
                     .maskBtn{
                         width: 240px;

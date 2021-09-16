@@ -1,5 +1,5 @@
 <template>
-    <div class="survey">    
+    <div class="survey" id="surveyBody">    
         <div v-if="false" class="empty-container">
             <div class="_hd">
                 <span class="iconfont">&#xe6d8;</span>
@@ -11,8 +11,8 @@
         <div class="survey-container">
             <div class="survey-info">
                 <div class="info-box">
-                    <div class="info-title">Dear Customer</div>
-                    <div class="info-content">To thank you for your support, we will offer you 200 points to your ChicMe account.</div> 
+                    <div class="info-title">{{$t("survey.survey_title")}}</div>
+                    <div class="info-content">To thank you for your support, we will offer you 200 points to your ChicMe account.{{$t("survey.survey_title_content")}}</div> 
                 </div>
             </div>
 
@@ -33,7 +33,7 @@
 
             <div class="survey-info">
                 <div class="info-box">
-                    <div class="info-content">To help us better understand your needs, please kindly provide us some additional information. We guarantee the confidentiality and security in the treatment of your personal data. All your answers are guaranteed to remain anonymous.</div> 
+                    <div class="info-content">{{$t("survey.survey_to_help_us")}}</div> 
                 </div>
             </div>
 
@@ -56,17 +56,18 @@
             <!-- <button @click="()=>q1.reverse().reverse()">getData</button> -->
             <div class="btnBox">
                 <div class="submitBtn" @click="()=>submit()">
-                    submit
+                    {{$t("submit")}}
                 </div>
             </div>
 
-            <div v-if="maskShow" class="maskBox">
+            <div v-if="maskShow" class="maskBox" id="maskBody">
                 <div class="maskInfo">
                     <i class="iconfont maskClose" @click="()=>this.maskShow=false">&#xe7c9;</i>
                     <img src="https://s3.us-west-2.amazonaws.com/image.chic-fusion.com/chicme/2021-9-7/2021-9-7-me-survey-points.png" alt="">
                     <div class="maskContent">
-                        Thank you for your time! You've got <strong>200 points</strong> in your account, have a look and enjoy shopping at ChicMe!
-                    </div>
+                        {{$t("survey.survey_thanks")}}
+                        <strong>{{$t("survey.survey_thanks_points")}}</strong>
+                        {{$t("survey.survey_thanks_more")}}                    </div>
                     <div class="maskButton">
                         <div class="maskBtn" @click="()=>goShopping()">Go Shopping</div>
                         <div class="maskBtn view" @click="()=>viewPoints()">View Points</div>
@@ -647,12 +648,11 @@
         computed:{
         },
         created(){
-            // console.log=()=>{
+            console.log=()=>{
                 
-            // }
+            }
         },
         mounted(){
-            // console.log()
             this.$nextTick(() => {
                 this.getData()
             })
@@ -691,7 +691,6 @@
             submit(){
                 console.log('submit')
 
-                // this.maskShow = true
                 let params = {};
                 if(this.result_id){
                     params.id = this.result_id
@@ -784,6 +783,12 @@
 
                         if(answers){
                             this.hadDoneBefore = true;
+                            this.maskShow = true;
+                            let body = document.getElementById("surveyBody")
+                            let mask = document.getElementById("maskBody")
+                            body.style.height = '600px';
+                            body.style.overflow = 'hidden';
+                            mask.style.height = '600px';
                         }
 
                         if(id){
@@ -822,6 +827,9 @@
         background-color: #fff !important;
     }
     .survey{
+        // height: 600px;
+        // overflow: hidden;
+        // border: 1px solid;
         .fixed-header{
             position: fixed;
             width: 100%;
@@ -918,17 +926,19 @@
 
         .maskBox{
             width: 100%;
-            height: 100vh;
-            background-color: rgba(0,0,0,0.5);
+            height: 100%;
+            // background-color: rgba(0,0,0,0.5);
+            background-color: #fff;
             display: flex;
             align-items: center;
             justify-content: center;
             position: fixed;
             top: 0;
             z-index: 10;
+            // border: 1px solid;
 
             .maskInfo{
-                width: 424px;
+                width: 568px;
                 min-height: 330px;
                 background-color: #fff;
                 border-radius: 4px;
@@ -941,13 +951,14 @@
                     top: 15px;
                     color: #999;
                     cursor: pointer;
+                    display: none;
                 }
 
                 img{
                     display: block;
                     width: 125px;
                     height: 80px;
-                    margin: 28px auto 18px;
+                    margin: 28px auto 15px;
                 }
 
                 .maskContent{
@@ -965,7 +976,7 @@
                 }
 
                 .maskButton{
-                    margin-top: 26px;
+                    margin-top: 45px;
 
                     .maskBtn{
                         width: 360px;

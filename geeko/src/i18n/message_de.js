@@ -163,9 +163,9 @@ export default {
         survey_title: 'Sehr geehrter Kunde',
         survey_title_content: 'Als Dankeschön für Ihre Unterstützung bieten wir 200 Punkte für Ihr ChicMe-Konto.',
         survey_to_help_us: 'Um uns zu helfen, Ihre Bedürfnisse besser zu verstehen, geben Sie uns bitte einige zusätzliche Informationen. Wir garantieren die Vertraulichkeit und Sicherheit bei der Behandlung Ihrer personenbezogenen Daten. Alle Ihre Antworten bleiben garantiert anonym.',
-        survey_thanks: "Vielen Dank für Ihre Zeit! Sie haben ",
+        survey_thanks: "Du hast diese Umfrage bereits abgeschickt ！Du hast ",
         survey_thanks_points: '200 Punkte ',
-        survey_thanks_more: 'auf Ihrem Konto, schauen Sie rein und genießen Sie es, bei ChicMe einzukaufen!',
+        survey_thanks_more: 'auf deinem Konto, schau rein und viel Spaß beim Shoppen bei ChicMe!',
         survey_question_1: {
             title: '*Treffen Sie beim Einkaufen von Modeartikeln normalerweise eine Entscheidung im Voraus oder beim Einkaufen?',
             answer1: 'Vorher',

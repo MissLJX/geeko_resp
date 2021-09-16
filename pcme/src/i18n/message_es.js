@@ -255,9 +255,9 @@ export default {
         survey_title: 'Estimado cliente',
         survey_title_content: 'Para agradecerle su apoyo, le ofreceremos 200 puntos a su cuenta ChicMe.',
         survey_to_help_us: 'Para ayudarnos a comprender mejor sus necesidades, por favor bríndenos información adicional. Garantizamos la confidencialidad y seguridad en el tratamiento de sus datos personales. Se garantiza que todas sus respuestas permanecerán en el anonimato.',
-        survey_thanks: "¡Gracias por su tiempo! ¡Tiene ",
+        survey_thanks: "Ya enviaste esta encuesta！ ¡Tienes ",
         survey_thanks_points: '200 puntos ',
-        survey_thanks_more: 'en su cuenta, eche un vistazo y disfrute comprando en ChicMe!',
+        survey_thanks_more: 'en tu cuenta, échale un vistazo y disfruta comprando en ChicMe!',
         survey_question_1: {
             title: '*Con respecto a la compra de artículos de moda, ¿suele tomar una decisión de antemano o en el momento de la compra?',
             answer1: 'De antemano',

@@ -163,9 +163,9 @@ export default {
         survey_title: 'Cher client',
         survey_title_content: 'Pour vous remercier de votre soutien, nous vous offrirons 200 points sur votre compte ChicMe.',
         survey_to_help_us: 'Pour nous aider à mieux comprendre vos besoins, veuillez nous fournir des informations supplémentaires. Nous garantissons la confidentialité et la sécurité dans le traitement de vos données personnelles. Toutes vos réponses sont garanties pour rester anonymes.',
-        survey_thanks: "Merci pour votre temps ! Vous avez ",
+        survey_thanks: "Vous avez déjà soumis cette enquête ！Vous avez ",
         survey_thanks_points: '200 points',
-        survey_thanks_more: ' sur votre compte, jetez un œil et profitez de vos achats sur ChicMe!',
+        survey_thanks_more: ' sur votre compte, jetez un œil et bon shopping sur ChicMe !',
         survey_question_1: {
             title: "*En ce qui concerne les achats d'articles de mode, prenez-vous généralement une décision à l'avance ou au moment de l'achat ?",
             answer1: 'Avant',
