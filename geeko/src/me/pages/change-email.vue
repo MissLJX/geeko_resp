@@ -154,9 +154,11 @@
         methods: {
             changeAcountHandle(){
                 if(!this.account.email){
+                    // 邮箱为空
                     this.modalShow("The email address cannot be empty, please enter the valid email address.");
                     return;
                 }else if(!this.validataEmail(this.account.email)){
+                    // 邮箱格式错误
                     this.modalShow("The email address is not available, please enter the valid email address.",() => {
                         this.account.email = null;
                     });
@@ -164,27 +166,35 @@
                 }
 
                 if(!this.account.password){
-                    this.modalShow("Password is incorrect, please enter a valid password for this account.");
+                    // 密码为空
+                    this.modalShow("The password cannot be empty, please enter the password for this account.");
                     return;
                 }
 
 
                 console.log("all right");
                 this.$store.dispatch("globalLoadingShow",true);
-                this.$store.dispatch('me/changeAccountEmail', this.account).then(() => {
-                    alert('Successed!')
-                    this.$store.dispatch("globalLoadingShow",false);
-                }).catch((data) => {
-                    // alert(data.result)
-                    this.modalShow("The password cannot be empty, please enter the password for this account.",() => {
+                this.$store.dispatch('me/changeAccountEmail', this.account).then((data) => {
+                    // 发送邮件成功
+                    this.modalShow("A verification link has been sent to your email address, please check your mailbox.",() => {
+                        this.account.email = null;
                         this.account.password = null;
                     });
                     this.$store.dispatch("globalLoadingShow",false);
+                }).catch((data) => {
+                    let code = data.code;
+                    this.errorValidataMessage(code,data.result);
+                    
                 })
             },
             changeEmailHandle(){
+                let _this = this;
+                this.$store.dispatch("globalLoadingShow",true);
                 this.$validator.validate('communicationEmail', this.subEmail.email).then((result) => {
-                    this.$store.dispatch('me/changeEmail', this.subEmail)
+                    _this.$store.dispatch('me/changeEmail', this.subEmail).then(() => {
+                        _this.$store.dispatch("globalLoadingShow",false);
+                        _this.modalShow("Success! We will send our latest newsletter to your new email address.");
+                    });
                 })
             },
             validataEmail(email){
@@ -209,6 +219,25 @@
                         }
                     }
                 })
+            },
+            errorValidataMessage(code,errorMessage){
+                let message = "";
+                let name = "";
+                if(code === 401){
+                    // 邮箱已经被注册的错误提示  401
+                    message = "This email address is already registered, please change to another valid email address.";
+                    name = "email";
+                }else if(code === 402){
+                    // 密码错误的错误提示              402
+                    message = "Password is incorrect, please enter a valid password for this account.";
+                    name = "password";
+                }else{
+                    message = errorMessage;
+                }
+                this.modalShow(message,() => {
+                    if(name) this.account[name] = null;
+                });
+                this.$store.dispatch("globalLoadingShow",false);
             }
         },
         components: {

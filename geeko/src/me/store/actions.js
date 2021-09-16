@@ -266,7 +266,9 @@ const actions = {
     },
 
     changeAccountEmail(context, data){
-        return api.changeAccountEmail(data)
+        return api.changeAccountEmail(data).then((result) => {
+            return result;
+        })
     },
 
     changeEmail({commit}, data){

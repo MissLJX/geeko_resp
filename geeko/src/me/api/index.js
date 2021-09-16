@@ -96,7 +96,7 @@ export const changePassword = (data) => {
 }
 
 export const changeAccountEmail = (data) => {
-    return axios.post(VPATH + '/customer/send-change-account-email', qs.stringify(data), {'Content-Type': http_infos.default_post_content_type}).then(data => data.result)
+    return axios.post(VPATH + '/customer/send-change-account-email', qs.stringify(data), {'Content-Type': http_infos.default_post_content_type});
 }
 
 export const changeEmail = (data) => {
