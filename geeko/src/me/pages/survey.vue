@@ -33,6 +33,7 @@
                            :hadDoneBefore="hadDoneBefore"
                            @otherChange="(e)=>questionInputChange(e)"
                            :question="item"
+                           :ref="'question'+(index+1)"
                            ></question-item>
 
             <div class="survey-info">
@@ -52,6 +53,7 @@
                            @change="(e)=> questionChange(e)"
                            @otherChange="(e)=>questionInputChange(e)"
                            :question="item"
+                            :ref="'question'+(index+questionList.length+1)"
                            ></question-item>
 
             <submit-btn @toSubmit="submit()" title="submit" class="edit-footer" active-fixed="true"></submit-btn>
@@ -744,7 +746,8 @@
                         //    console.log(i)
                         //    window.location.hash = ""
                         //    window.location.hash = "#question"+(Number(i)+1)
-                           document.getElementById('question'+(Number(i)+1)).scrollIntoView(true)
+                        //    document.getElementById('question'+(Number(i)+1)).scrollIntoView(true)
+                           this.$refs['question'+(Number(i)+1)][0].$el.scrollIntoView(true)
                            return false
                     }
                 }
@@ -778,27 +781,29 @@
                 store.dispatch("me/getSurvey",{}).then(data => data.result).then(result => {
                     if(result){
                         const {answers:answersJSON,id} = result
-                        const answers = JSON.parse(answersJSON)
+                        let answers;
+                        if(answersJSON){
+                            answers = JSON.parse(answersJSON)
+                            this.questionList.forEach(question => {
+                            const selectedQuestion = this.getThatQuestion(question.id, answers)
+                                if(selectedQuestion)
+                                    question.defaultValue = selectedQuestion.answer
+                                    question.inputValue = selectedQuestion.input
+                            })
+                            this.questionList1.forEach(question1 => {
+                                const selectedQuestion = this.getThatQuestion(question1.id, answers)
+                                if(selectedQuestion)
+                                    question1.defaultValue = selectedQuestion.answer
+                                    question1.inputValue = selectedQuestion.input
+                            })
+                            console.log(this.questionList,this.questionList1)
+                        }
                         if(answers){
                             this.hadDoneBefore = true;
                         }
                         if(id){
                             this.result_id = id;
                         }
-
-                        this.questionList.forEach(question => {
-                            const selectedQuestion = this.getThatQuestion(question.id, answers)
-                            if(selectedQuestion)
-                                question.defaultValue = selectedQuestion.answer
-                                question.inputValue = selectedQuestion.input
-                        })
-                        this.questionList1.forEach(question1 => {
-                            const selectedQuestion = this.getThatQuestion(question1.id, answers)
-                            if(selectedQuestion)
-                                question1.defaultValue = selectedQuestion.answer
-                                question1.inputValue = selectedQuestion.input
-                        })
-                        console.log(this.questionList,this.questionList1)
                     }
                 })
             },

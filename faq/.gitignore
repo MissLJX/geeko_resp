@@ -1,3 +1,6 @@
 node_modules/
 dist/
 .svn/
+dist_faq_bq/
+dist_faq_chicme/
+dist_faq_ivrose/

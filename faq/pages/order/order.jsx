@@ -112,7 +112,7 @@ const Order = class extends React.Component {
     }
 
     return <div style={{overflow:'hidden'}}>
-      <Page label={intl.formatMessage({id: 'Ticket'})} href={this.state.from == 'ticket' ? `${window.ctx || ''}/support/ticket` : ''}>
+      <Page label={intl.formatMessage({id: 'Ticket'})}>
         <Header>{intl.formatMessage({id: 'selectorder'})}</Header>
           <SelectType itemList={this.paths} selectChange={(e)=>selectChange(e)}/>
 

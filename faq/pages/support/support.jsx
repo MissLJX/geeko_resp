@@ -72,6 +72,20 @@ const ContactUs = styled.div`
     }
 `
 
+const ContactUsStyle = {
+    width: '140px',
+    height: '32px',
+    backgroundColor: '#222',
+    borderRadius: '2px',
+    color: '#fff',
+    textAlign: 'center',
+    margin: '0 auto',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontFamily: 'Roboto-Regular'
+}
+
 const ContactIcon = styled.span`
     @font-face {
         font-family: 'iconfont';  /* Project id 384296 */
@@ -95,34 +109,47 @@ class Support extends React.PureComponent{
                 {
                     imgUrl: "&#xe6ee;",
                     txt: this.props.intl.formatMessage({id:"orderProcessing"}),
-                    to: `${(window.ctx || '')}/support/faq`
+                    to: `${(window.ctx || '')}/support/faq`,
+                    content:"order",
+                    type:""
                 },
                 {
                     imgUrl: "&#xe6f1;",
                     txt: this.props.intl.formatMessage({id:"tracking"}),
-                    to: `${(window.ctx || '')}/support/faq`
+                    to: `${(window.ctx || '')}/support/faq`,
+                    content:"logistics",
+                    type:""
                 },
                 {
                     imgUrl: "&#xe6ed;",
                     txt: this.props.intl.formatMessage({id:"return"}),
-                    to:`${(window.ctx || '')}/support/faq`
+                    to:`${(window.ctx || '')}/support/faq`,
+                    content:"refund",
+                    type:""
                 },
                 {
                     imgUrl: "&#xe6ec;",
                     txt: this.props.intl.formatMessage({id:"product"}),
-                    to: `${(window.ctx || '')}/support/faq`
+                    to: `${(window.ctx || '')}/support/faq`,
+                    content:"payment",
+                    type:""
                 },
                 {
                     imgUrl: "&#xe6ef;",
                     txt: this.props.intl.formatMessage({id:"payment"}),
-                    to: `${(window.ctx || '')}/support/faq`
+                    to: `${(window.ctx || '')}/support/faq`,
+                    content:"product",
+                    type:""
                 },
                 {
                     imgUrl: "&#xe6f2;",
                     txt: this.props.intl.formatMessage({id:"account"}),
-                    to: `${(window.ctx || '')}/support/faq`
+                    to: `${(window.ctx || '')}/support/faq`,
+                    content:"account",
+                    type:""
                 },
             ]
+
         }
     }
 
@@ -138,6 +165,14 @@ class Support extends React.PureComponent{
       
             zE('webWidget', 'helpCenter:setSuggestions', { search: 'FAQ' })
         }
+    }
+
+    // contact us 
+    contactRef(dom){
+        if (dom && window.sourceObserver && !this.contactrf) {
+			window.sourceObserver.observe(dom)
+			this.contactrf = dom
+		}
     }
 
     render(){
@@ -168,14 +203,27 @@ class Support extends React.PureComponent{
             }
         }
 
+        const linkTo = (url,title) => {
+            this.props.history.push({pathname:url, params:{title: title}})
+        }
+
         return(
             <div>
                 {/* outApp={outAppUrl()} */}
-                <Page label={intl.formatMessage({id: 'support'})}  outApp={outAppUrl()}>
+                <Page label={intl.formatMessage({id: 'support'})}>
                     <EntryButtonBox>
                         {
                             buttonList.map((item, index)=>{
-                                return <EntryButton key={index} imgUrl={item.imgUrl} to={item.to} txt={item.txt}/>
+                                return <EntryButton 
+                                            key={index} 
+                                            imgUrl={item.imgUrl} 
+                                            to={item.to} 
+                                            txt={item.txt} 
+                                            data-title={'support'}
+                                            data-content={item.content}
+                                            data-type={'supportClick'}
+                                            linkTo={(url,title)=>linkTo(url,title)}
+                                            />
                             })
                         }
                     </EntryButtonBox>
@@ -187,7 +235,15 @@ class Support extends React.PureComponent{
                     <FindMore>
                         {intl.formatMessage({id:"findNothing"})}
                     </FindMore>
-                    <ContactUs onClick={()=>toContact()}>
+                    <ContactUs
+                        innerRef={this.contactRef.bind(this)}
+                        onClick={()=>toContact()}
+                        data-title={'ContactUs'}
+                        data-content={'contactUs'}
+                        data-type={'contactUsClick'}
+                        data-source
+                        data-source-click
+                        >
                         <ContactIcon>&#xe6e9;</ContactIcon>
                         {intl.formatMessage({id:"contact"})}
                     </ContactUs>

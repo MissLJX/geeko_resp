@@ -5,25 +5,12 @@ import styled from 'styled-components';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import {questions} from '../../data/index';
 
-export const DropDownItem = (props) => {
-    // console.log(props)
-    const [showMore, setShowMore] = useState(false);
 
-    const toDetail = (item) => {
-        props.clickItem(item)
-    }
-
-    useEffect(()=>{
-        if(props.open){
-            setShowMore(true)
-        }
-    },[props.open])
-
-    const DropDownPositionBox = styled.div`
+const DropDownPositionBox = styled.div`
         border-bottom: 1px solid #e6e6e6;
     `
 
-    const DropDownItem = styled.div`
+    const DropDownItem1 = styled.div`
         display: flex;
         align-items: center;
         font-family: Roboto-Medium;
@@ -99,10 +86,25 @@ export const DropDownItem = (props) => {
             text-overflow: ellipsis;
         }
     `
+export const DropDownItem = (props) => {
+    // console.log(props)
+    const [showMore, setShowMore] = useState(false);
+
+    const toDetail = (item) => {
+        props.clickItem(item)
+    }
+
+    useEffect(()=>{
+        if(props.open){
+            setShowMore(true)
+        }
+    },[props.open])
+
+    
 
     return (
         <DropDownPositionBox>
-            <DropDownItem onClick={()=>setShowMore(!showMore)}>
+            <DropDownItem1 onClick={()=>setShowMore(!showMore)}>
                 <DropDownIcon dangerouslySetInnerHTML={{__html:props.iconImg}}></DropDownIcon>
                 <DropDownTxt>{props.title}</DropDownTxt>
                 {
@@ -110,7 +112,7 @@ export const DropDownItem = (props) => {
                     <DropDownShow>&#xe77f;</DropDownShow> :
                     <DropDownShow>&#xe77e;</DropDownShow>
                 }
-            </DropDownItem>
+            </DropDownItem1>
             {
                 (showMore && props.questionList && props.questionList.length > 0) &&  
                 <MoreQuestion>
@@ -127,95 +129,101 @@ export const DropDownItem = (props) => {
     )
 }
 
-export const EntryButton = (props) => {
-    // console.log(props);
-    const history = useHistory();
-    const pageEntry = (url, title) => {
+
+const EntryButton1 = styled.div`
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 169px;
+            height: 88px;
+            /* border: 1px solid; */
+            background: #f6f6f6;
+            font-family: Roboto-Regular;
+            font-size: 12px;
+            font-weight: normal;
+            font-stretch: normal;
+            line-height: 14px;
+            letter-spacing: 0px;
+            color: #222222;
+            border-radius: 4px;
+            margin-bottom: 12px;
+        ` 
+
+        // const style ={
+        //     display: 'flex',
+        //     flexDirection: 'column',
+        //     alignItems: 'center',
+        //     justifyContent: 'center',
+        //     width: '169px',
+        //     height: '88px',
+        //     /* border: 1px solid; */
+        //     background: '#f6f6f6',
+        //     fontFamily: 'Roboto-Regular',
+        //     fontSize: '12px',
+        //     fontWeight: 'normal',
+        //     fontStretch: 'normal',
+        //     lineHeight: '14px',
+        //     letterSpacing: '0px',
+        //     color: '#222222',
+        //     borderRadius: '4px',
+        //     marginBottom: '12px',
+        // }
+
+        const EntryIcon = styled.span`
+            @font-face {
+                font-family: 'iconfont';  /* Project id 384296 */
+                src: url('//at.alicdn.com/t/font_384296_waimmey03x.woff2?t=1631165132958') format('woff2'),
+                    url('//at.alicdn.com/t/font_384296_waimmey03x.woff?t=1631165132958') format('woff'),
+                    url('//at.alicdn.com/t/font_384296_waimmey03x.ttf?t=1631165132958') format('truetype');
+            }
+            font-family:"iconfont" !important;
+            font-size:16px;
+            font-style:normal;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            fontSize:24px;
+            display:inline-block;
+            line-height: 20px;
+        `       
+export const EntryButton = class extends React.Component{
+    constructor(props){
+        super(props)
+    }
+
+    pageEntry(url, title){
+        console.log(this.props)
         console.log(url)
-        history.push({pathname:url, params:{title: title}})
+        this.props.linkTo(url,title)
     }
 
-    const EntryButton = styled.div`
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 169px;
-        height: 88px;
-        /* border: 1px solid; */
-        background: #f6f6f6;
-        font-family: Roboto-Regular;
-        font-size: 12px;
-        font-weight: normal;
-        font-stretch: normal;
-        line-height: 14px;
-        letter-spacing: 0px;
-        color: #222222;
-        border-radius: 4px;
-        margin-bottom: 12px;
-    ` 
-
-    const EntryIcon = styled.span`
-        @font-face {
-            font-family: 'iconfont';  /* Project id 384296 */
-            src: url('//at.alicdn.com/t/font_384296_waimmey03x.woff2?t=1631165132958') format('woff2'),
-                url('//at.alicdn.com/t/font_384296_waimmey03x.woff?t=1631165132958') format('woff'),
-                url('//at.alicdn.com/t/font_384296_waimmey03x.ttf?t=1631165132958') format('truetype');
-        }
-        font-family:"iconfont" !important;
-        font-size:16px;
-        font-style:normal;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        fontSize:24px;
-        display:inline-block;
-        line-height: 20px;
-    `
-
-    return (
-        <EntryButton onClick={()=> pageEntry(props.to,props.txt)}>
-            {/* <img className={style.buttonImg} src={props.imgUrl} alt="" /> */}
-            <EntryIcon style={{fontSize:'24px',marginBottom:'12px'}} dangerouslySetInnerHTML={{__html:props.imgUrl}}/>
-            <span>{props.txt}</span>
-        </EntryButton>
-    )
-}
-
-const NewOrderList1 = class extends React.Component {
-    constructor (props) {
-      super(props)
-      this.state = {
-  
-      }
+    buttonRef(dom){
+        if (dom && window.sourceObserver) {
+			window.sourceObserver.observe(dom)
+		}
     }
-  
-    render () {
-      const STATUS_PENDING = 1
-      const STATUS_REVIEWING = 2
-      const STATUS_PROCESSING = 3
-      const STATUS_SHIPPED = 4
-      const STATUS_PARTIALLY_REFUNDED = 5
-      const STATUS_REFUNDED = 6
-      const STATUS_CANCELED = 7
-      const STATUS_HELD = 8
-      const STATUS_CONFIRMED = 10
 
-      // ToTal Order Status
-      const TOTAL_STATUS_UNPAID = 0;       //未付款订单
-      const TOTAL_STATUS_PROCCESSING = 1;      //仓库正在打包与包含废弃状态paid一起存在的订单
-      const TOTAL_STATUS_SHIPPED = 2;      //运送中的订单
-      const TOTAL_STATUS_CANCELED = 3;     //已取消订单
-      const TOTAL_STATUS_REVIEW = 4;        //已完成订单
-  
-      const {intl} = this.props
 
-      const OrderStatus = styled.span`
-            color: #999;
-        `
+    render(){
+            
+        return (
+            <EntryButton1
+                innerRef={this.buttonRef.bind(this)}
+                onClick={()=> this.pageEntry(this.props.to,this.props.txt)} 
+                data-title={this.props['data-title']} 
+                data-source
+                data-source-click
+                data-content={this.props['data-content']}
+                data-type={this.props['data-type']}
+                >
+                <EntryIcon style={{fontSize:'24px',marginBottom:'12px'}} dangerouslySetInnerHTML={{__html:this.props.imgUrl}}/>
+                <span>{this.props.txt}</span>
+            </EntryButton1>
+        )
+    }
+} 
 
-  const getMoney = money => money ? (money.unit + money.amount) : ''
-
-  const New_order_list_li = styled.li`
+const New_order_list_li = styled.li`
     //   margin-top: 10px;
       background-color: #fff;
       padding-left: 10px;
@@ -288,6 +296,42 @@ const NewOrderList1 = class extends React.Component {
       font-size:12px;
       /* border-bottom: 10px solid #f6f6f6; */
   `
+
+const NewOrderList1 = class extends React.Component {
+    constructor (props) {
+      super(props)
+      this.state = {
+  
+      }
+    }
+  
+    render () {
+      const STATUS_PENDING = 1
+      const STATUS_REVIEWING = 2
+      const STATUS_PROCESSING = 3
+      const STATUS_SHIPPED = 4
+      const STATUS_PARTIALLY_REFUNDED = 5
+      const STATUS_REFUNDED = 6
+      const STATUS_CANCELED = 7
+      const STATUS_HELD = 8
+      const STATUS_CONFIRMED = 10
+
+      // ToTal Order Status
+      const TOTAL_STATUS_UNPAID = 0;       //未付款订单
+      const TOTAL_STATUS_PROCCESSING = 1;      //仓库正在打包与包含废弃状态paid一起存在的订单
+      const TOTAL_STATUS_SHIPPED = 2;      //运送中的订单
+      const TOTAL_STATUS_CANCELED = 3;     //已取消订单
+      const TOTAL_STATUS_REVIEW = 4;        //已完成订单
+  
+      const {intl} = this.props
+
+      const OrderStatus = styled.span`
+            color: #999;
+        `
+
+  const getMoney = money => money ? (money.unit + money.amount) : ''
+
+  
   
     const status = (value) => {
         let label
@@ -397,8 +441,8 @@ const NewOrderList1 = class extends React.Component {
     }
 }
 
-export const NewOrderList = injectIntl(NewOrderList1)
 
+export const NewOrderList = injectIntl(NewOrderList1)
 
 const QuestionInputBox = styled.div`
         display: flex;
@@ -450,6 +494,7 @@ const QuestionInputBox = styled.div`
         -moz-osx-font-smoothing: grayscale;
         margin: 0 13px;
         color:rgba(34, 34, 34, 0.3);
+        cursor: pointer;
     `
 
     const InputIconBox = styled.div`
@@ -503,7 +548,6 @@ const QuestionInputBox = styled.div`
             color:#222;
         }
     `
-
 const SearchBar1 = (props) => {
     console.log('searchbar:',props)
     const [showClear, setShowClear] = useState(false);
@@ -518,7 +562,6 @@ const SearchBar1 = (props) => {
                     list = list.concat(questions[i]['questions'])
                 }
             }
-            // console.log(list)
             setSearchTips(list)
         }
     },[])
@@ -538,23 +581,23 @@ const SearchBar1 = (props) => {
     const inputChange = (e) => {
         console.log(e.target.value)
         setInputValue(e.target.value)
+        // setTimeout(()=>{
+        //     document.getElementById("textInput").focus()
+        // },100)
+    
     }
 
     const clear = () => {
-        // console.log('clear');
         setInputValue("");
     }
 
     const search = () => {
-        // console.log('com o=input', inputValue)
         props.search(inputValue)
     }
 
     const relatedSearch = (item) => {
-        // console.log(item)
-        setInputValue(item.title)
-        props.history.push({pathname: `${(window.ctx || '')}/support/question/`, state:{id: item.id}})
-        
+        setInputValue("")
+        props.history.replace({pathname: `${(window.ctx || '')}/support/question/`, state:{id: item.id, fromFAQ:true}})
     }
 
     const filter = (e) => {
@@ -574,10 +617,20 @@ const SearchBar1 = (props) => {
     return(
         <QuestionInputBox>
             <InputPositionBox>
-                <input type="text" 
+                <input id='textInput' type="text" 
                        placeholder="Popular Searches:Refund,Return,Shipping" 
-                       onFocus={()=>setShowClear(true)} 
-                       onBlur={()=>{setTimeout(()=>{setShowClear(false)},100)}}
+                       onFocus={(e)=>{
+                           console.log(e)
+                           setShowClear(true)
+                        //    setTimeout(()=>{
+                        //         document.getElementById("textInput").focus()
+                        //     },100)
+                        }
+                        } 
+                       onBlur={()=>{
+                           console.log('sss');
+                           setTimeout(()=>{setShowClear(false)},100)}
+                        }
                        value={inputValue}
                        onChange={(e)=>inputChange(e)}
                        style={{paddingRight:showClear?'0px':'12px'}}
@@ -608,39 +661,11 @@ const SearchBar1 = (props) => {
         </QuestionInputBox>
     )
 }
-
 export const SearchBar = withRouter(SearchBar1)
 
-export const SelectType = (props) => {
-    // console.log(props)
 
-    const [select, setSelect] = useState(false)
-    const [open, setOpen] = useState(false)
 
-    const [type, setType] = useState(props ? props.type ? props.type : "order" : "order") // chat
-    
-
-    useEffect(()=>{
-        if(props.type == "chat"){
-            if(props.value){
-                setSelect(props.itemList[props.value-0].label)
-            } else {
-                setSelect("Please select your question type")
-            }
-           
-        } else if(props.itemList.length > 0){
-            setSelect(props.itemList[0].label)
-        }
-    },[])
-    
-
-    const itemClick = (item) => {
-        setSelect(item.label);
-        setOpen(false);
-        props.selectChange(item.value)
-    }
-
-    const SelectTypeBox = styled.div`
+const SelectTypeBox = styled.div`
         width: 100%;
         padding: 0 4%;
         height: 38px;
@@ -722,6 +747,36 @@ export const SelectType = (props) => {
             z-index: 1;
         }
     `
+export const SelectType = (props) => {
+    // console.log(props)
+
+    const [select, setSelect] = useState(false)
+    const [open, setOpen] = useState(false)
+
+    const [type, setType] = useState(props ? props.type ? props.type : "order" : "order") // chat
+    
+
+    useEffect(()=>{
+        if(props.type == "chat"){
+            if(props.value){
+                setSelect(props.itemList[props.value-0].label)
+            } else {
+                setSelect("Please select your question type")
+            }
+           
+        } else if(props.itemList.length > 0){
+            setSelect(props.itemList[0].label)
+        }
+    },[])
+    
+
+    const itemClick = (item) => {
+        setSelect(item.label);
+        setOpen(false);
+        props.selectChange(item.value)
+    }
+
+    
     return(
         
         <SelectTypeBox>

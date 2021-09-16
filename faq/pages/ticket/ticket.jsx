@@ -158,8 +158,6 @@ class TicketList extends React.PureComponent{
     }
 }
 
-
-
 const NoDataBox = styled.div`
     display: flex;
     flex-direction: column;
@@ -168,7 +166,6 @@ const NoDataBox = styled.div`
     justify-content: center;
     color: #999;
 `
-
 const NoDataImg = styled.span`
     @font-face {
         font-family: 'iconfont';  /* Project id 384296 */
@@ -198,7 +195,6 @@ const NoDataTxt = styled.span`
     letter-spacing: 0px;
     color: #999999;
 `
-
 const SubmitBtn = styled.div`
     font-family: Roboto-Bold;
     position: fixed;
@@ -264,6 +260,10 @@ class Ticket1 extends React.PureComponent{
   
     componentWillMount () {
         this.scrollHandler()
+        // document.body.scrollIntoView({
+        //     top: 0,
+        // })
+        document.documentElement.scrollTop = document.body.scrollTop = 0
     }
     componentWillUpdate(){
         this.scrollHandler()
@@ -279,7 +279,7 @@ class Ticket1 extends React.PureComponent{
             {
                 false && this.state.finished && this.state.skip === this.state.limit && false ? <Redirect to={`${(window.ctx || '')}/support/ticketadd`}/> :
                 <div style={{position:'relative'}}>
-                    <Page label={intl.formatMessage({id: 'Ticket'})} href={`${(window.ctx || '')}/support/contact-us`} style={{backgroundColor:'#f6f6f6'}}>
+                    <Page label={intl.formatMessage({id: 'Ticket'})} style={{backgroundColor:'#f6f6f6'}}>
                         
                         {/* 列表 */}
                         {

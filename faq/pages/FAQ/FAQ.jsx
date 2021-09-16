@@ -124,13 +124,6 @@ class FAQ extends React.PureComponent{
         })
     }
 
-    componentDidMount(){
-        document.body.scrollIntoView({
-            top: 100,
-            behavior: 'smooth'
-        })
-    }
-
     render(){
         const {intl} = this.props;
         const {dropDownList, defaultShow} = this.state;
@@ -142,7 +135,6 @@ class FAQ extends React.PureComponent{
             }
         }
 
-
         const clickItem = (e) => {
             console.log("item:",e);
             this.props.history.push({pathname:`${(window.ctx || '')}/support/question`, state:{id:e.id, fromFAQ:true}})
@@ -150,7 +142,7 @@ class FAQ extends React.PureComponent{
         
         return (
             <FaqPage>
-                <Page label={intl.formatMessage({id: 'faq'})} href={`${(window.ctx || '')}/support`}>
+                <Page label={intl.formatMessage({id: 'faq'})}>
                     {/* 搜索框 */}
                     <SearchBarBox>
                         {

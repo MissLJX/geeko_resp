@@ -592,8 +592,8 @@ class TicketAdd extends React.Component {
         window.isShowApp !== 'true' ?
         (this.state.isApp == 'false' &&
         (this.state.isNew? 
-        <PageHeader1 href={`${window.ctx || ''}/support/order`} label={intl.formatMessage({id: 'Ticket'})}/> : 
-        <PageHeader1 href={`${window.ctx || ''}/support/ticket`} label={intl.formatMessage({id: 'Ticket'})}/> )):<span></span>
+        <PageHeader1 label={intl.formatMessage({id: 'Ticket'})}/> : 
+        <PageHeader1 label={intl.formatMessage({id: 'Ticket'})}/> )):<span></span>
       }
 
       <PageContanier1 style={{background: '#f6f6f6'}} noHeader={this.state.isApp == 'false' ?false:true}>

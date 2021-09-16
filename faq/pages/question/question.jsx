@@ -352,7 +352,11 @@ class Question1 extends React.PureComponent{
                 this.props.match.params.id ? this.props.match.params.id : 0;
         let fromFAQ = this.props.history.location.state.fromFAQ;
         console.log('s:',search, 'd:', id)
+        console.log(lastSearchId !== id)
+        console.log(fromFAQ)
+        console.log(this.state.initTime==0)
         if(lastSearchId !== id || (fromFAQ&&this.state.initTime==0)){
+            console.log('in')
             this.setState({
                 initTime:1
             })
@@ -402,7 +406,7 @@ class Question1 extends React.PureComponent{
             detailShow: false,
             searchShow: true,
             searchValue: search,
-            stopSearch:false,
+            stopSearch: false,
             // parent: questions.find(q => q.id === secondary.parentId)
         })
     }
@@ -499,7 +503,9 @@ class Question1 extends React.PureComponent{
         }
 
         const toContact = () => {
+            document.documentElement.scrollTop = document.body.scrollTop = 0
             list(0,20).then(({result: items}) => {
+                lastSearchId = 1;
                 this.props.history.push({pathname: `${(window.ctx || '')}/support/contact-us`})
             }).catch((err)=>{
                 // console.log(err)
@@ -512,8 +518,6 @@ class Question1 extends React.PureComponent{
                 }
             })
         }
-
-        
         
         return (
             <div className={style.faqPage}>

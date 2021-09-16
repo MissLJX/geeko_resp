@@ -69,7 +69,7 @@ const PageHeader = (props) => {
   		 	} else if(p.outApp){
                 window.location.href = p.outApp;
             } else {
-                   console.log('go back')
+                console.log('go back')
   		 		props.history.goBack()
   		 	}
   		 }}>&#xe7c7;</IconStyle>
