@@ -210,8 +210,12 @@ const actions = {
     },
 
     getWishproducts({commit, state}, {skip}){
-        return api.getWishProducts(state.me.id, skip).then((products) => {
+        return api.getWishProducts(state.me.id, skip).then((data) => {
+            let products = data.result;
+
             if (products && products.length) {
+                let wishlistEvent = {"requestId":data.requestId,"experimentId":data.experimentId};
+                commit(types.GET_RECORD_WISHLIST_EVENT,wishlistEvent);
                 if (skip === 0){
                     state.wishProducts = [];
                     commit(types.ME_GET_WISH_PRODUCTS, products)
@@ -231,16 +235,17 @@ const actions = {
         })
     },
     getYouLikeProducts({commit}, {skip}){
-        return api.getYouLikeProducts(skip).then((products) => {
+        return api.getYouLikeProducts(skip).then((data) => {
+            let products = data.result;
             if (products && products.length) {
                 commit(types.ME_GET_YOU_LIKE_PRODUCTS, products)
             } else {
                 if (skip === 0) {
-                    return {empty: true, finished: true}
+                    return {empty: true, finished: true,"requestId":data.requestId,"experimentId":data.experimentId}
                 }
-                return {finished: true}
+                return {finished: true,"requestId":data.requestId,"experimentId":data.experimentId}
             }
-            return {}
+            return {"requestId":data.requestId,"experimentId":data.experimentId}
         })
     },
 

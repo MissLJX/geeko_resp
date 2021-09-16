@@ -47,7 +47,8 @@ const state = {
     messageM1521:null,
     relationProducts:[],
     relationProductsSkip:0,
-    survey: {}
+    survey: {},
+    wishlistEvent:{"requestId":"","experimentId":""}
 }
 
 export default state;

@@ -8,6 +8,9 @@
             @listing="listingHandle" 
             v-if="isLogin"
             calssify-name="wishlist"
+            event-title="me"
+            :request-id="wishlistEvent.requestId"
+            :experiment-id="wishlistEvent.experimentId"
         />
 
         <div class="_bd" v-if="goShoppingShow || !isLogin">
@@ -39,7 +42,7 @@
                 finished: false,
                 empty: false,
                 scrollable:true,
-                goShoppingShow:false
+                goShoppingShow:false,
             }
         },
         computed: {
@@ -49,6 +52,9 @@
             },
             skip(){
                 return store.getters['me/wishskip']
+            },
+            wishlistEvent(){
+                return store.getters["me/wishlistEvent"]
             }
         },
         methods: {
@@ -60,7 +66,7 @@
                     if(empty) this.empty = empty
                     this.loading = false;
                     this.scrollable = true;
-                    store.dispatch("me/getWishskip")
+                    store.dispatch("me/getWishskip");
                 })
             },
             selectGo(href){
