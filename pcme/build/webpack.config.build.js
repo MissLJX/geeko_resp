@@ -26,7 +26,7 @@ const config = {
     output: {
         path: setPath('dist'),
         publicPath: '/resources/vue/pcme/',
-        filename:'[name].[hash].js'
+        filename:'[name].[chunkhash].js'
     },
 
     optimization: {
