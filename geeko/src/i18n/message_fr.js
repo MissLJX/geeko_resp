@@ -165,7 +165,7 @@ export default {
         survey_to_help_us: 'Pour nous aider à mieux comprendre vos besoins, veuillez nous fournir des informations supplémentaires. Nous garantissons la confidentialité et la sécurité dans le traitement de vos données personnelles. Toutes vos réponses sont garanties pour rester anonymes.',
         survey_thanks_done: "Merci pour votre temps! Vous avez ",
         survey_thanks: "Vous avez déjà soumis cette enquête ！Vous avez ",
-        survey_thanks_points: '200 points',
+        survey_thanks_points: '100 points',
         survey_thanks_more: ' sur votre compte, jetez un œil et bon shopping sur ChicMe !',
         survey_question_1: {
             title: "*En ce qui concerne les achats d'articles de mode, prenez-vous généralement une décision à l'avance ou au moment de l'achat ?",
