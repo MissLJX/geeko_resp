@@ -8,7 +8,7 @@
             <p class="_title">{{$t("point.sorry_empty_here_not")}}</p>
         </div>
 
-        <div class="survey-container">
+        <div class="survey-container" v-if="!maskShow">
             <div class="survey-info">
                 <div class="info-box">
                     <div class="info-title">{{$t("survey.survey_title")}}</div>
@@ -60,18 +60,19 @@
                 </div>
             </div>
 
-            <div v-if="maskShow" class="maskBox" id="maskBody">
-                <div class="maskInfo">
-                    <i class="iconfont maskClose" @click="()=>this.maskShow=false">&#xe7c9;</i>
-                    <img src="https://s3.us-west-2.amazonaws.com/image.chic-fusion.com/chicme/2021-9-7/2021-9-7-me-survey-points.png" alt="">
-                    <div class="maskContent">
-                        {{$t("survey.survey_thanks")}}
-                        <strong>{{$t("survey.survey_thanks_points")}}</strong>
-                        {{$t("survey.survey_thanks_more")}}                    </div>
-                    <div class="maskButton">
-                        <div class="maskBtn" @click="()=>goShopping()">Go Shopping</div>
-                        <div class="maskBtn view" @click="()=>viewPoints()">View Points</div>
-                    </div>
+            
+        </div>
+        <div v-if="maskShow" class="maskBox" id="maskBody">
+            <div class="maskInfo">
+                <i class="iconfont maskClose" @click="()=>this.maskShow=false">&#xe7c9;</i>
+                <img src="https://s3.us-west-2.amazonaws.com/image.chic-fusion.com/chicme/2021-9-7/2021-9-7-me-survey-points.png" alt="">
+                <div class="maskContent">
+                    {{$t("survey.survey_thanks")}}
+                    <strong>{{$t("survey.survey_thanks_points")}}</strong>
+                    {{$t("survey.survey_thanks_more")}}                    </div>
+                <div class="maskButton">
+                    <div class="maskBtn" @click="()=>goShopping()">Go Shopping</div>
+                    <div class="maskBtn view" @click="()=>viewPoints()">View Points</div>
                 </div>
             </div>
         </div>
@@ -784,11 +785,6 @@
                         if(answers){
                             this.hadDoneBefore = true;
                             this.maskShow = true;
-                            let body = document.getElementById("surveyBody")
-                            let mask = document.getElementById("maskBody")
-                            body.style.height = '600px';
-                            body.style.overflow = 'hidden';
-                            mask.style.height = '600px';
                         }
 
                         if(id){
@@ -925,14 +921,14 @@
        
 
         .maskBox{
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 600px;
             // background-color: rgba(0,0,0,0.5);
             background-color: #fff;
             display: flex;
             align-items: center;
             justify-content: center;
-            position: fixed;
+            // position: fixed;
             top: 0;
             z-index: 10;
             // border: 1px solid;

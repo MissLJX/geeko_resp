@@ -257,7 +257,7 @@ export const updateCustomerSave = (customer) => {
 }
 
 export const surveySave = (params) => {
-    return axios.post('/questionnaire-answer/anon/save',params,{}).then(data => data);
+    return axios.cpost('/questionnaire-answer/anon/save',params,{}).then(data => data);
 }
 
 export const surveyGet = () => {

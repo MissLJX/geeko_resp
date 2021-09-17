@@ -1,5 +1,5 @@
 <template>
-    <div class="survey">
+    <div class="survey" id="surveyBody">
         <div class="fixed-header">
             <nav-bar>
                 <i class="iconfont el-back-font" slot="left" @click="$router.go(-1);">&#xe693;</i>
@@ -15,7 +15,7 @@
             <p class="_title">{{$t("point.sorry_empty_here_not")}}</p>
         </div>
 
-        <div class="survey-container">
+        <div class="survey-container" v-if="!maskShow">
             <div class="survey-info">
                 <div class="info-title">{{$t("survey.survey_title")}}</div>
                 <div class="info-content">{{$t("survey.survey_title_content")}}</div> 
@@ -58,20 +58,21 @@
 
             <submit-btn @toSubmit="submit()" :title='$t("label.submit")' class="edit-footer" active-fixed="true"></submit-btn>
 
-            <div v-if="maskShow" class="maskBox">
-                <div class="maskInfo">
-                    <i class="iconfont maskClose" @click="()=>this.maskShow=false">&#xe7c9;</i>
-                    <img src="https://s3.us-west-2.amazonaws.com/image.chic-fusion.com/chicme/2021-9-7/2021-9-7-me-survey-points.png" alt="">
-                    <div class="maskContent">
-                        {{$t("survey.survey_thanks")}}
-                        <strong>{{$t("survey.survey_thanks_points")}}</strong>
-                        {{$t("survey.survey_thanks_more")}}
-                        <!-- You have already submitted this survey ！You’ve got 200 points in your account, have a look and enjoy shopping at ChicMe! -->
-                    </div>
-                    <div class="maskButton">
-                        <div class="maskBtn" @click="()=>goShopping()">Go Shopping</div>
-                        <div class="maskBtn view" @click="()=>viewPoints()">View Points</div>
-                    </div>
+            
+        </div>
+        <div v-if="maskShow" class="maskBox">
+            <div class="maskInfo">
+                <i class="iconfont maskClose" @click="()=>this.maskShow=false">&#xe7c9;</i>
+                <img src="https://s3.us-west-2.amazonaws.com/image.chic-fusion.com/chicme/2021-9-7/2021-9-7-me-survey-points.png" alt="">
+                <div class="maskContent">
+                    {{$t("survey.survey_thanks")}}
+                    <strong>{{$t("survey.survey_thanks_points")}}</strong>
+                    {{$t("survey.survey_thanks_more")}}
+                    <!-- You have already submitted this survey ！You’ve got 200 points in your account, have a look and enjoy shopping at ChicMe! -->
+                </div>
+                <div class="maskButton">
+                    <div class="maskBtn" @click="()=>goShopping()">Go Shopping</div>
+                    <div class="maskBtn view" @click="()=>viewPoints()">View Points</div>
                 </div>
             </div>
         </div>
@@ -643,7 +644,7 @@
                     },
                 ],
                 questionObject:questionObject,
-                maskShow: false,
+                maskShow: true,
                 result_id: 0,
                 hadDoneBefore: false,
             }
@@ -662,6 +663,7 @@
         },
         mounted(){
             this.$nextTick(this.getData())
+            // document.body.style.position = 'fixed'
         },
         beforeDestroy(){
             document.body.style.position = 'static'
@@ -731,12 +733,14 @@
                 if(this.result_id){
                     params.id = this.result_id
                 }
-
+                // console.log(JSON.stringify(this.questionObject))
+                // params = {answers: '[{"id":0,"title":"*Regarding shopping fashion items, do you typically make a decision beforehand or at the time of shopping?","answer":"Beforehand","input":""},{"id":1,"title":"*Which factors are important to you when you make the decision to purchase a product?（You can choose one or more）","answer":["Customer services"],"input":""},{"id":2,"title":"*How often do you shop for fashion items?","answer":"Several times a month","input":""},{"id":3,"title":"*What promotion would you prefer?","answer":["Exclusive code"]},{"id":4,"title":"*Which kind of style would you prefer?","answer":"Oversize","input":""},{"id":5,"title":"*How did you know ChicMe?（You can choose one or more）","answer":["Recommend by friends"],"input":""},{"id":6,"title":"*How familiar are you with ChicMe?","answer":"Not at all familiar","input":""},{"id":7,"title":"*How well does our website & APP meet your needs?","answer":"Not at all well","input":""},{"id":8,"title":"*How easy was it to find what you were looking for on our website & APP？","answer":"Not at all easy","input":""},{"id":9,"title":"*Would you recommend ChicMe website and APP to friends or colleagues?","answer":"No","input":""},{"id":10,"title":"*What are the brands that you typically buy ? Please list three of your favorite.","answer":"da","input":""},{"id":11,"title":"*Do you have any comments about how we can improve our website & APP?","answer":"sa","input":""},{"id":12,"title":"*What is your age?","answer":"35-44","input":""},{"id":13,"title":"*What is your gender?","answer":"Others","input":""},{"id":14,"title":"*Which country do you live in?","answer":"FR","input":""},{"id":15,"title":"*What kind of occupation are you in?","answer":["Others"],"input":""},{"id":16,"title":"*On average, how much do you spend on fashion items each month?","answer":"$100-$200","input":""}]'}
                 if(this.checkData()){
                     store.dispatch('me/updateSurvey', params).then(res => {
                         if(res.code == 200){
                             this.getData();
                             this.maskShow = true;
+                            document.body.style.position = 'fixed'
                         }
                     })
                 }
@@ -758,14 +762,14 @@
                 return true
             },
             goShopping(){
-                if(window.isApp = "true"){
+                if(window.isApp == "true"){
                     window.location.href = 'chic-me://chic.me/home';
                 } else {
                     window.location.href = `${window.ctx || ''}/index`;
                 }
             },
             viewPoints(){
-                if(window.isApp = "true"){
+                if(window.isApp == "true"){
                     window.location.href = 'chic-me://chic.me/credits';
                 } else {
                     window.location.href = `${window.ctx || ''}/me/m/credits`
@@ -786,7 +790,8 @@
                     if(result){
                         const {answers:answersJSON,id} = result
                         let answers;
-                        if(answersJSON){
+                        if(result.answers){
+                            console.log(result)
                             answers = JSON.parse(answersJSON)
                             this.questionList.forEach(question => {
                             const selectedQuestion = this.getThatQuestion(question.id, answers)
@@ -889,16 +894,11 @@
         }
 
         .maskBox{
-            width: 100%;
+            width: 100vw;
             height: 100vh;
-            // background-color: rgba(0,0,0,0.5);
             background-color: #fff;
-            // display: flex;
-            // align-items: center;
-            // justify-content: center;
-            position: fixed;
             top: 0;
-            // z-index: 10;
+            padding-top: 80px;
 
             .maskInfo{
                 width: 100%;
@@ -906,7 +906,7 @@
                 background-color: #fff;
                 border-radius: 4px;
                 position: relative;
-                margin-top: 80px;
+                // margin-top: 80px;
 
                 .maskClose{
                     position: absolute;
