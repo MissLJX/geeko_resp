@@ -255,12 +255,12 @@ export default {
     },
     survey:{
         survey_title: 'Prezado cliente',
-        survey_title_content: 'Para agradecer o seu apoio, iremos oferecer-lhe 100 pontos para a sua conta ChicMe.',
+        survey_title_content: 'Para agradecer o seu apoio, iremos oferecer-lhe 100 pontos para a sua conta {website}.',
         survey_to_help_us: 'Para nos ajudar a entender melhor suas necessidades, por favor, forneça algumas informações adicionais. Garantimos a confidencialidade e segurança no tratamento dos seus dados pessoais. Todas as suas respostas permanecerão anônimas.',
         survey_thanks_done: "Obrigado pelo seu tempo! Você tem ",
         survey_thanks: "Você já enviou esta pesquisa！ Você tem ",
         survey_thanks_points: '100 pontos ',
-        survey_thanks_more: 'em sua conta, dê uma olhada e faça compras no ChicMe!',
+        survey_thanks_more: 'em sua conta, dê uma olhada e faça compras no {website}!',
         survey_question_1: {
             title: '*Em relação a compras de itens de moda, você costuma tomar uma decisão com antecedência ou na hora de fazer as compras?',
             answer1: 'Antecipadamente',
@@ -301,7 +301,7 @@ export default {
             answer4: "Estou disposto a tentar estilos diferentes",
         },
         survey_question_6: {
-            title: '*Como você conheceu ChicMe? （Você pode escolher um ou mais）',
+            title: '*Como você conheceu {website}? （Você pode escolher um ou mais）',
             answer1: 'Google',
             answer2: 'Facebook',
             answer3: 'Instagram',
@@ -312,7 +312,7 @@ export default {
             answer8: 'Outros',
         },
         survey_question_7: {
-            title: '*Qual é o seu grau de familiaridade com o ChicMe?',
+            title: '*Qual é o seu grau de familiaridade com o {website}?',
             answer1: 'Extremamente familiar',
             answer2: 'Muito familiar',
             answer3: 'Um pouco familiar',
@@ -336,7 +336,7 @@ export default {
             answer5: 'Nem um pouco fácil',
         },
         survey_question_10: {
-            title: '*Você recomendaria o site ChicMe e o APP para amigos ou colegas?',
+            title: '*Você recomendaria o site {website} e o APP para amigos ou colegas?',
             answer1: 'Sim',
             answer2: 'Não'
         },

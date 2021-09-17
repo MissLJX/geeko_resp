@@ -12,7 +12,7 @@
             <div class="survey-info">
                 <div class="info-box">
                     <div class="info-title">{{$t("survey.survey_title")}}</div>
-                    <div class="info-content">To thank you for your support, we will offer you 200 points to your ChicMe account.{{$t("survey.survey_title_content")}}</div> 
+                    <div class="info-content">{{$t("survey.survey_title_content", {website: GLOBAL.sitename})}}</div> 
                 </div>
             </div>
 
@@ -69,7 +69,8 @@
                 <div class="maskContent">
                      {{clickSubmit ? $t("survey.survey_thanks_done"):$t("survey.survey_thanks")}}
                     <strong>{{$t("survey.survey_thanks_points")}}</strong>
-                    {{$t("survey.survey_thanks_more")}}                    </div>
+                    {{$t("survey.survey_thanks_more",{website: GLOBAL.sitename})}}                    
+                </div>
                 <div class="maskButton">
                     <div class="maskBtn" @click="()=>goShopping()">Go Shopping</div>
                     <div class="maskBtn view" @click="()=>viewPoints()">View Points</div>
@@ -315,7 +316,7 @@
                             },
                         ]
                     },{
-                        title:this.$t('survey.survey_question_6.title'),
+                        title:this.$t('survey.survey_question_6.title', {website: this.GLOBAL.sitename}),
                         type: 'checkbox', // checkbox & textarea
                         defaultValue:'',
                         inputValue:'',
@@ -355,7 +356,7 @@
                             },
                         ]
                     },{
-                        title:this.$t('survey.survey_question_7.title'),
+                        title:this.$t('survey.survey_question_7.title', {website: this.GLOBAL.sitename}),
                         type: 'radio', // checkbox & textarea
                         defaultValue:'',
                         inputValue:'',
@@ -439,7 +440,7 @@
                             },
                         ]
                     },{
-                        title:this.$t('survey.survey_question_10.title'),
+                        title:this.$t('survey.survey_question_10.title', {website: this.GLOBAL.sitename}),
                         type: 'radio', // checkbox & textarea
                         defaultValue:'',
                         inputValue:'',

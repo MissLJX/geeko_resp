@@ -253,12 +253,12 @@ export default {
     },
     survey:{
         survey_title: 'Cher client',
-        survey_title_content: 'Pour vous remercier de votre soutien, nous vous offrirons 100 points sur votre compte ChicMe.',
+        survey_title_content: 'Pour vous remercier de votre soutien, nous vous offrirons 100 points sur votre compte {website}.',
         survey_to_help_us: 'Pour nous aider à mieux comprendre vos besoins, veuillez nous fournir des informations supplémentaires. Nous garantissons la confidentialité et la sécurité dans le traitement de vos données personnelles. Toutes vos réponses sont garanties pour rester anonymes.',
         survey_thanks_done: "Merci pour votre temps! Vous avez ",
         survey_thanks: "Vous avez déjà soumis cette enquête ！Vous avez ",
         survey_thanks_points: '100 points',
-        survey_thanks_more: ' sur votre compte, jetez un œil et bon shopping sur ChicMe !',
+        survey_thanks_more: ' sur votre compte, jetez un œil et bon shopping sur {website} !',
         survey_question_1: {
             title: "*En ce qui concerne les achats d'articles de mode, prenez-vous généralement une décision à l'avance ou au moment de l'achat ?",
             answer1: 'Avant',
@@ -299,7 +299,7 @@ export default {
             answer4: "Je suis prêt à essayer des styles différents",
         },
         survey_question_6: {
-            title: '*Comment avez-vous connu ChicMe ?（Vous pouvez en choisir un ou plusieurs）',
+            title: '*Comment avez-vous connu {website} ?（Vous pouvez en choisir un ou plusieurs）',
             answer1: 'Google',
             answer2: 'Facebook',
             answer3: 'Instagram',
@@ -310,7 +310,7 @@ export default {
             answer8: 'Autres',
         },
         survey_question_7: {
-            title: '*Dans quelle mesure êtes-vous familier avec ChicMe?',
+            title: '*Dans quelle mesure êtes-vous familier avec {website}?',
             answer1: 'Extrêmement familier',
             answer2: 'Très familier',
             answer3: 'Plutôt familier',
@@ -334,7 +334,7 @@ export default {
             answer5: 'Pas facile du tout',
         },
         survey_question_10: {
-            title: "*Recommanderiez-vous le site Web et l'application ChicMe à des amis ou des collègues?",
+            title: "*Recommanderiez-vous le site Web et l'application {website} à des amis ou des collègues?",
             answer1: 'Oui',
             answer2: 'Non'
         },
