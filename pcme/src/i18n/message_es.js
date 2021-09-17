@@ -255,6 +255,7 @@ export default {
         survey_title: 'Estimado cliente',
         survey_title_content: 'Para agradecerle su apoyo, le ofreceremos 200 puntos a su cuenta ChicMe.',
         survey_to_help_us: 'Para ayudarnos a comprender mejor sus necesidades, por favor bríndenos información adicional. Garantizamos la confidencialidad y seguridad en el tratamiento de sus datos personales. Se garantiza que todas sus respuestas permanecerán en el anonimato.',
+        survey_thanks_done: "¡Gracias por tu tiempo! ¡Tienes ",
         survey_thanks: "Ya enviaste esta encuesta！ ¡Tienes ",
         survey_thanks_points: '200 puntos ',
         survey_thanks_more: 'en tu cuenta, échale un vistazo y disfruta comprando en ChicMe!',

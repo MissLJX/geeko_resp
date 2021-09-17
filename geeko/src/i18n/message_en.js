@@ -85,7 +85,7 @@ export default {
         submit:"submit",
         wu_have_success:"We have successfully received your suggestion and it will take few days to process this issue, we will reach out to you if we need any information. Please check our reply at your email address. Thank you for your cooperation.",
         submit_success:"Submit Successfully",
-        sorry_empty_here_not:"Sorry, it’s empty here now.",
+        sorry_empty_here_not:"Sorry, it's empty here now.",
         all:"All",
         recived:"Recived",
         used:"Used",
@@ -163,7 +163,8 @@ export default {
         survey_title: 'Dear Customer',
         survey_title_content: 'To thank you for your support, we will offer you 200 points to your ChicMe account.',
         survey_to_help_us: 'To help us better understand your needs, please kindly provide us some additional information. We guarantee the confidentiality and security in the treatment of your personal data. All your answers are guaranteed to remain anonymous.',
-        survey_thanks: "You have already submitted this survey ！You’ve got ",
+        survey_thanks_done: "Thank you for your time! You've got ",
+        survey_thanks: "You have already submitted this survey！You've got ",
         survey_thanks_points: '200 points',
         survey_thanks_more: ' in your account, have a look and enjoy shopping at ChicMe!',
         survey_question_1: {

@@ -65,9 +65,9 @@
         <div v-if="maskShow" class="maskBox" id="maskBody">
             <div class="maskInfo">
                 <i class="iconfont maskClose" @click="()=>this.maskShow=false">&#xe7c9;</i>
-                <img src="https://s3.us-west-2.amazonaws.com/image.chic-fusion.com/chicme/2021-9-7/2021-9-7-me-survey-points.png" alt="">
+                <img src="https://image.geeko.ltd/chicme/2021-9-7/2021-9-7-me-survey-points.png" alt="">
                 <div class="maskContent">
-                    {{$t("survey.survey_thanks")}}
+                     {{clickSubmit ? $t("survey.survey_thanks_done"):$t("survey.survey_thanks")}}
                     <strong>{{$t("survey.survey_thanks_points")}}</strong>
                     {{$t("survey.survey_thanks_more")}}                    </div>
                 <div class="maskButton">
@@ -644,6 +644,7 @@
                 result_id: 0,
                 isUpdate:false,
                 hadDoneBefore: false,
+                clickSubmit: false,
             }
         },
         computed:{
@@ -724,6 +725,7 @@
                         console.log(res)
                         if(res.code == 200){
                             this.maskShow = true;
+                            this.clickSubmit = true;
                             this.getData()
                         }
                     })
@@ -764,7 +766,7 @@
                 this.$store.dispatch("getSurvey",{}).then(data => data.result).then(result => {
                     if(result){
                         const {answers:answersJSON,id} = result
-                        let answers = JSON.parse(answersJSON)
+                        let answers;
                         if(answersJSON){
                             answers = JSON.parse(answersJSON)
                             this.questionList.forEach(question => {
@@ -780,6 +782,22 @@
                                     question1.inputValue = selectedQuestion.input
                             })
                             console.log(this.questionList,this.questionList1)
+                        } else {
+                            console.error(new Date()+"  问卷信息丢失 cid："+ result.customerId+" id："+result.id+"")
+                            let errorlog = {
+                                time: new Date(),
+                                msg: '问卷信息丢失',
+                                cid: result.customerId,
+                                id: result.id
+                            }
+                            let log;
+                            if(localStorage.errorlogs){
+                                log = JSON.parse(localStorage.errorlogs)
+                                log.push(errorlog)
+                            } else {
+                                log  = [errorlog]
+                            }
+                            localStorage.errorlogs = JSON.stringify(log)
                         }
 
                         if(answers){

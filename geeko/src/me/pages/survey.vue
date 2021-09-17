@@ -54,7 +54,8 @@
                            @otherChange="(e)=>questionInputChange(e)"
                            :question="item"
                             :ref="'question'+(index+questionList.length+1)"
-                           ></question-item>
+                           >
+                           </question-item>
 
             <submit-btn @toSubmit="submit()" :title='$t("label.submit")' class="edit-footer" active-fixed="true"></submit-btn>
 
@@ -63,9 +64,10 @@
         <div v-if="maskShow" class="maskBox">
             <div class="maskInfo">
                 <i class="iconfont maskClose" @click="()=>this.maskShow=false">&#xe7c9;</i>
-                <img src="https://s3.us-west-2.amazonaws.com/image.chic-fusion.com/chicme/2021-9-7/2021-9-7-me-survey-points.png" alt="">
+                <!-- https://image.geeko.ltd/chicme/2021-9-7/2021-9-13-home.png -->
+                <img src="https://image.geeko.ltd/chicme/2021-9-7/2021-9-7-me-survey-points.png" alt="">
                 <div class="maskContent">
-                    {{$t("survey.survey_thanks")}}
+                    {{clickSubmit ? $t("survey.survey_thanks_done") : $t("survey.survey_thanks")}}
                     <strong>{{$t("survey.survey_thanks_points")}}</strong>
                     {{$t("survey.survey_thanks_more")}}
                     <!-- You have already submitted this survey ！You’ve got 200 points in your account, have a look and enjoy shopping at ChicMe! -->
@@ -644,9 +646,10 @@
                     },
                 ],
                 questionObject:questionObject,
-                maskShow: true,
+                maskShow: false,
                 result_id: 0,
                 hadDoneBefore: false,
+                clickSubmit: false,
             }
         },
         components:{
@@ -740,6 +743,7 @@
                         if(res.code == 200){
                             this.getData();
                             this.maskShow = true;
+                            this.clickSubmit = true;
                             document.body.style.position = 'fixed'
                         }
                     })
@@ -790,7 +794,7 @@
                     if(result){
                         const {answers:answersJSON,id} = result
                         let answers;
-                        if(result.answers){
+                        if(answersJSON){
                             console.log(result)
                             answers = JSON.parse(answersJSON)
                             this.questionList.forEach(question => {
@@ -806,6 +810,22 @@
                                     question1.inputValue = selectedQuestion.input
                             })
                             console.log(this.questionList,this.questionList1)
+                        } else {
+                            console.error(new Date()+"  问卷信息丢失 cid："+ result.customerId+" id："+result.id+"")
+                            let errorlog = {
+                                time: new Date(),
+                                msg: '问卷信息丢失',
+                                cid: result.customerId,
+                                id: result.id
+                            }
+                            let log;
+                            if(localStorage.errorlogs){
+                                log = JSON.parse(localStorage.errorlogs)
+                                log.push(errorlog)
+                            } else {
+                                log  = [errorlog]
+                            }
+                            localStorage.errorlogs = JSON.stringify(log)
                         }
                         if(answers){
                             this.hadDoneBefore = true;
