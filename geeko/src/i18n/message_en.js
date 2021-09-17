@@ -161,12 +161,12 @@ export default {
     },
     survey:{
         survey_title: 'Dear Customer',
-        survey_title_content: 'To thank you for your support, we will offer you 100 points to your ChicMe account.',
+        survey_title_content: 'To thank you for your support, we will offer you 100 points to your {website} account.',
         survey_to_help_us: 'To help us better understand your needs, please kindly provide us some additional information. We guarantee the confidentiality and security in the treatment of your personal data. All your answers are guaranteed to remain anonymous.',
         survey_thanks_done: "Thank you for your time! You've got ",
         survey_thanks: "You have already submitted this survey！You've got ",
         survey_thanks_points: '100 points',
-        survey_thanks_more: ' in your account, have a look and enjoy shopping at ChicMe!',
+        survey_thanks_more: ' in your account, have a look and enjoy shopping at {website}!',
         survey_question_1: {
             title: '*Regarding shopping fashion items, do you typically make a decision beforehand or at the time of shopping?',
             answer1: 'Beforehand',
@@ -207,7 +207,7 @@ export default {
             answer4: "I'm willing to try differnet styles",
         },
         survey_question_6: {
-            title: '*How did you know ChicMe?（You can choose one or more）',
+            title: '*How did you know {website}?（You can choose one or more）',
             answer1: 'Google',
             answer2: 'Facebook',
             answer3: 'Instagram',
@@ -218,7 +218,7 @@ export default {
             answer8: 'Others',
         },
         survey_question_7: {
-            title: '*How familiar are you with ChicMe?',
+            title: '*How familiar are you with {website}?',
             answer1: 'Extremely familiar',
             answer2: 'Very familiar',
             answer3: 'Somewhat familiar',
@@ -242,7 +242,7 @@ export default {
             answer5: 'Not at all easy',
         },
         survey_question_10: {
-            title: '*Would you recommend ChicMe website and APP to friends or colleagues?',
+            title: '*Would you recommend {website} website and APP to friends or colleagues?',
             answer1: 'Yes',
             answer2: 'No'
         },
