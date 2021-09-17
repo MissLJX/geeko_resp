@@ -34,6 +34,8 @@ module.exports = {
         },
         minimizer: [new TerserPlugin({
             parallel: true,
+            // 禁止生成lilicense.txt
+            extractComments: true
         })],
         chunkIds: 'named',
     },
@@ -78,8 +80,8 @@ module.exports = {
     plugins: [
         // new VueLoaderPlugin(),
         new MiniCssExtractPlugin({
-            filename: "css/[name].[hash].css",
-            chunkFilename: 'css/[id].[hash].css',
+            filename: "css/[name].[contenthash].css",
+            chunkFilename: 'css/[id].[contenthash].css',
             linkType: 'text/css',
         }),
         new HtmlWebpackPlugin({

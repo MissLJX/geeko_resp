@@ -80,6 +80,10 @@
                 }
             }
         },
+        created: async function(){
+            let list = await this.$store.dispatch("me/getPointsRulesGuide","M1538");
+            console.log("list",list);
+        },
         methods:{
             disposeEmail(e){
                 e.preventDefault();

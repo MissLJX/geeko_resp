@@ -486,7 +486,9 @@ const actions = {
             });
         });
     },
-
+    getPointsRulesGuide({commit},code){
+        return api.getMessageToArray(code);
+    }
 }
 
 export default actions;
