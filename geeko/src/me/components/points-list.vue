@@ -10,6 +10,7 @@
                 :finished="finished" 
                 @listing="listingHandle"
                 calssify-name="points"
+                
             />
         </div>
     </div>
