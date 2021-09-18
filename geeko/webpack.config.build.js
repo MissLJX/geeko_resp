@@ -34,6 +34,8 @@ module.exports = {
         },
         minimizer: [new TerserPlugin({
             parallel: true,
+            // 禁止生成license.txt
+            extractComments: false
         })],
         chunkIds: 'named',
     },
@@ -82,6 +84,7 @@ module.exports = {
             chunkFilename: 'css/[id].[chunkhash].css',
             linkType: 'text/css',
         }),
+        // 去掉index.html
         new HtmlWebpackPlugin({
             title: 'index',
             template: 'index.ejs',
