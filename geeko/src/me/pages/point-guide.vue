@@ -8,15 +8,17 @@
             </a>
         </nav-bar>
 
-        <router-link :to="{name:item.name}" class="item" v-for="(item,index) in list" :key="index+item" @click.native="!item.name && disposeEmail($event)">
-            <p class="hd">
-                {{item.title}}
-            </p>
+        <template v-for="(item,index) in list">
+            <router-link v-if="!item.isApp" :to="{name:disposePath(item.type)}" class="item" :key="index+item"  @click.native="item.isClick && disposeEmail($event)">
+                <p class="hd">
+                    {{item.title}}
+                </p>
 
-            <div class="bd">
-                <p class="font" v-for="(item2,index2) in item.content" :key="index2+item2">{{item2}}</p>
-            </div>
-        </router-link>
+                <div class="bd">
+                    <p class="font">{{item.content}}</p>
+                </div>
+            </router-link>
+        </template>
     </div>
 </template>
 
@@ -25,41 +27,41 @@
     export default {
         name:"PointGuide",
         data(){
-            let list = [
-                {
-                    title:"Improve your size information  >",
-                    content:[
-                                "Complete your personal size information and you",
-                                "will earn 100 points.",
-                                "We will keep the information you fill in strictly",
-                                "confidential."
-                            ],
-                    name:"my-preference",
-                    isAllowClick:false
-                },
-                {
-                    title:"Improve your preference  >",
-                    content:[
-                                "Complete your personal preference and you will",
-                                "earn 100 points.",
-                                "We will keep the information you fill in strictly",
-                                "confidential."
-                            ],
-                    name:"my-measurements",
-                    isAllowClick:false
-                },
-                {
-                    title:"Verify the email  >",
-                    content:[
-                                "Verify the email you can earn 100 points."
-                            ],
-                    name:"",
-                    isAllowClick:true
-                }
-            ];
+            // let list = [
+            //     {
+            //         title:"Improve your size information  >",
+            //         content:[
+            //                     "Complete your personal size information and you",
+            //                     "will earn 100 points.",
+            //                     "We will keep the information you fill in strictly",
+            //                     "confidential."
+            //                 ],
+            //         name:"my-preference",
+            //         isAllowClick:false
+            //     },
+            //     {
+            //         title:"Improve your preference  >",
+            //         content:[
+            //                     "Complete your personal preference and you will",
+            //                     "earn 100 points.",
+            //                     "We will keep the information you fill in strictly",
+            //                     "confidential."
+            //                 ],
+            //         name:"my-measurements",
+            //         isAllowClick:false
+            //     },
+            //     {
+            //         title:"Verify the email  >",
+            //         content:[
+            //                     "Verify the email you can earn 100 points."
+            //                 ],
+            //         name:"",
+            //         isAllowClick:true
+            //     }
+            // ];
 
             return {
-                list:list
+                list:[]
             }
         },
         components:{
@@ -82,7 +84,7 @@
         },
         created: async function(){
             let list = await this.$store.dispatch("me/getPointsRulesGuide","M1538");
-            console.log("list",list);
+            this.list = list;
         },
         methods:{
             disposeEmail(e){
@@ -98,7 +100,7 @@
             },
             verifyEmail(email){
                 let _this = this;
-                if(this.isConfirmEmail){
+                if(!this.isConfirmEmail){
                     this.$store.dispatch("globalLoadingShow",true);
                     this.$store.dispatch('me/confirmEmail', email).then((data)=>{
                         this.$store.dispatch("globalLoadingShow",false);
@@ -127,6 +129,20 @@
                         }
                     }
                 })
+            },
+            disposePath(type){
+                let str = "";
+                switch(type){
+                    case 1:
+                        str = "my-measurements";
+                        break;
+                    case 2:
+                        str = "my-preference";
+                        break;
+                    default:
+                }
+
+                return str;
             }
         }
     }
