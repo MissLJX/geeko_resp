@@ -236,9 +236,7 @@ export const getCustomerPointsNum = () => {
 // menuId   APP0010
 // product/anon/{skip}/{limit}/{groupNo}/{menuId}/list-by-menu
 export const getPointsProductList = (skip) => {
-    return axios.get(VPATH+"/product/anon/"+ skip+"/20/0/APP0010/list-by-menu",{},{}).then((data) => {
-        return data.result;
-    });
+    return axios.get(VPATH+"/product/anon/"+ skip+"/20/0/APP0010/list-by-menu",{},{});
 }
 
 //make-suggestion
