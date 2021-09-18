@@ -26,6 +26,7 @@
     import Product from './product.vue'
 
     export default{
+        inheritAttrs:false,
         props: {
             products: {
                 type: Array,
