@@ -30,7 +30,7 @@ export default class extends React.Component {
         // },
         {
           id: this.getId(),
-          value: 'Sleeve Type:'
+          value: 'Pad Style:'
         },
         // {
         //   id: this.getId(),
@@ -38,19 +38,27 @@ export default class extends React.Component {
         // },
         {
           id: this.getId(),
-          value: 'Neckline:'
+          value: 'Strap Style:'
         },
         {
           id: this.getId(),
-          value: 'Length:'
+          value: 'NeckLine:'
         },
         {
           id: this.getId(),
-          value: 'Fit Type:'
+          value: 'Waist Type:'
         },
         {
           id: this.getId(),
-          value: 'Elastic:'
+          value: 'Washing Instructions:'
+        },
+        {
+          id: this.getId(),
+          value: 'Package Contents:'
+        },
+        {
+          id: this.getId(),
+          value: 'Material:'
         }
       ],
       sizeheaders: [{
@@ -71,7 +79,8 @@ export default class extends React.Component {
         rate: 20
       }],
       sizes: [],
-      changeType: 1// 1 不转换    2 cm-> inch  
+      changeType: 1,// 1 不转换    2 cm-> inch  ,
+      useSize: true
     }
 
   }
@@ -361,35 +370,45 @@ export default class extends React.Component {
       this.state.details.map(d => (`<li style="margin-bottom: 0.4em;"><span >${d.value}</span></li>`)).join('')
       }
     </ul>
-    <div class="table-wrapper">
+    
+    ${
+        this.state.useSize ? `
+        
+        <div class="table-wrapper">
       <table class="table table table-bordered ke-zeroborder" border="0" style="font-size:12px;" allsxlist="${this.state.sizes ? this.state.sizes.map(h => h[this.state.sizeheaders[0].id]).join(' ') : ''}">
         <tbody>
         <tr style="border-top: 1px solid #DDDDDD;">
 
         ${
-      this.state.sizeheaders.map(h => (`
+            this.state.sizeheaders.map(h => (`
             <td width="70" scope="col" style="border: none; padding-left: 0px; padding-bottom: 24px;">${h.value}</td>
           `)).join('')
-      }
+        }
 
         </tr>
 
 
         ${
-      this.state.sizes.map(s => (`
+            this.state.sizes.map(s => (`
           <tr style="border-top: 1px solid #DDDDDD;">
             ${//TODO
-        this.state.sizeheaders.map(h => (`
+                this.state.sizeheaders.map(h => (`
                 <td style="border: none; padding-left: 0px; padding-bottom: 24px;">${this.convertInch(s[h.id])}</td>
               `)).join('')
-        }
+            }
           </tr>
           `)).join('')
-      }
+        }
         
         </tbody>
       </table>
     </div>
+        
+        `:''
+    }
+    
+    
+    
     <p><span style="font-family: Arial; font-size: 13px; font-weight: bold;">Tips:</span></p>
 
     ${
@@ -414,7 +433,7 @@ export default class extends React.Component {
         <ul>
           {
             this.state.details.map(detail => <li key={detail.id}>
-              <input onChange={evt => { this.onInputHandle(evt.target.value, __Type_Detail__, detail.id) }} value={detail.value} />
+              <input style={{width: 400}} onChange={evt => { this.onInputHandle(evt.target.value, __Type_Detail__, detail.id) }} value={detail.value} />
               <button className="delete" style={{ marginLeft: 10 }} onClick={evt => { this.deleteDetail(detail.id) }}>Delete Detail</button>
             </li>)
           }
@@ -429,6 +448,9 @@ export default class extends React.Component {
 
       <fieldset style={{ marginTop: 40 }}>
         <legend>Size Chart</legend>
+        <div>
+          <label><span style={{ fontSize: 12, verticalAlign: 'middle' }}>启用尺码表</span><input onChange={() => { this.setState({ useSize: !this.state.useSize }) }} checked={this.state.useSize} style={{ verticalAlign: 'middle' }} type="checkbox" /></label>
+        </div>
         <label><span style={{ fontSize: 12, verticalAlign: 'middle' }}>是否cm转inch</span><input onChange={() => { this.setState({ changeType: this.state.changeType + 1 }) }} checked={this.state.changeType % 2 === 1} style={{ verticalAlign: 'middle' }} type="checkbox" /></label>
         <table style={{ width: 'auto' }}>
           <thead>
