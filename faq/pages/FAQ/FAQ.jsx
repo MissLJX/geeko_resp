@@ -6,7 +6,39 @@ import {FormattedMessage, injectIntl} from 'react-intl';
 import {secondaries, questions} from '../../data'
 import { Page } from '../../components/page/page';
 import {SearchBar, DropDownItem} from '../../components/newComponents/new-components';
+import styled from 'styled-components';
 
+
+const FaqPage = styled.div`
+    background-color: #fff;
+`
+
+const SearchBarBox = styled.div`
+    width: 100%;
+    border-top: 1px solid #e6e6e6;
+    max-height: 100px;
+    /* line-height: 42px; */
+    padding-top: 25px;
+`
+
+const HowTxt = styled.div`
+    width: 100%;
+    text-align: center;
+    font-family: Roboto-Regular;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #222222;
+    margin-bottom: 13px;
+`
+
+const DropDownList = styled.div`
+    width: 100%;
+    padding: 0 4%;
+    margin-top: 28px;
+    background-color: #fff;
+`
 
 class FAQ extends React.PureComponent{
     constructor(props){
@@ -92,71 +124,38 @@ class FAQ extends React.PureComponent{
         })
     }
 
-    componentDidMount(){
-        document.body.scrollIntoView({
-            top: 100,
-            behavior: 'smooth'
-        })
-    }
-
     render(){
         const {intl} = this.props;
-        const {dropDownList, isSearched, searchValue, resultList, likeQuestion,questionDetail,defaultShow, detailShow, searchShow} = this.state;
+        const {dropDownList, defaultShow} = this.state;
 
         const search = (e) => {
             console.log(e)
             if(e){
-                // window.location.href = '/supportnew/question1?search='+e;
-                this.props.history.push({pathname: '/supportnew/question1', state:{search: e}})
-                // 搜索请求
-                this.setState({
-                    searchValue: e,
-                    resultList: searchAbout
-                })
+                this.props.history.push({pathname: `${(window.ctx || '')}/support/question`, state:{search: e, fromFAQ:true}})
             }
-        }
-
-        const filter = (e, key) => {
-            if(e == searchValue){
-                return <strong key={key}>{e}</strong>
-            } else {
-                return <span key={key}>{e}</span>
-            }
-        }
-
-        const showDetail = () => {
-            // document.body.scrollIntoView({
-            //     top:0,
-            //     behavior:'smooth'
-            // })
-            // this.setState({
-            //     searchShow: false,
-            //     detailShow: true
-            // })
         }
 
         const clickItem = (e) => {
-            console.log(e);
-            // window.location.href = "/supportnew/question1/"+e.id+"?search="+e.title;
-            this.props.history.push({pathname: '/supportnew/question1', state:{id:e.id,search: e.title}})
+            console.log("item:",e);
+            this.props.history.push({pathname:`${(window.ctx || '')}/support/question`, state:{id:e.id, fromFAQ:true}})
         }
-
+        
         return (
-            <div className={style.faqPage}>
-                <Page label={intl.formatMessage({id: 'faq'})} href="/supportnew">
+            <FaqPage>
+                <Page label={intl.formatMessage({id: 'faq'})}>
                     {/* 搜索框 */}
-                    <div className={style.searchBar}>
+                    <SearchBarBox>
                         {
                             defaultShow &&
-                            <div className={style.howTxt}>{intl.formatMessage({id:"helpyou"})}</div>
+                            <HowTxt>{intl.formatMessage({id:"helpyou"})}</HowTxt>
                         }
                         <SearchBar search={(e)=>search(e)}></SearchBar>
-                    </div>
+                    </SearchBarBox>
 
                     {/* 问题分类下拉列表 */}
                     {
                         defaultShow && 
-                        <div className={style.dropDownList}>
+                        <DropDownList>
                             {
                                 dropDownList.map((item, index) => {
                                     return <DropDownItem 
@@ -169,97 +168,13 @@ class FAQ extends React.PureComponent{
                                            </DropDownItem>
                                 })
                             }
-                        </div>
+                        </DropDownList>
                     }
                     
 
-                    {/* 搜素结果 */}
-                    {
-                        searchShow &&
-                        <div className={style.resultBox}>
-                            <div className={style.resultTitle}>{intl.formatMessage({id:'search'})}</div>
-                            <div className={style.resultNum}>{resultList.length}&nbsp;<span dangerouslySetInnerHTML={{__html:intl.formatMessage({id:"resultFor"}, {result:searchValue})}}></span></div>
-                        </div>
-                    }
-                    
-                    {/* 结果列表 */}
-                    {
-                        searchShow &&
-                        <div className={style.resultListBox}>
-                            {
-                                resultList.map((item, index) => {
-                                    return <div className={style.resultItemBox} onClick={()=> showDetail()} key={index}>
-                                            <div className={style.resultItemTitle}>
-                                                <span className={style.resultTitleTxt}>
-                                                    {
-                                                        item.title.split(" ").map((item, index) => {
-                                                            return filter(item, index)
-                                                        })
-                                                    }
-
-                                                </span>
-                                                <span className={`${style.iconfont} ${style.resultlike}`}>&#xe7af;</span>
-                                                <span className={style.likes}>{item.likes}</span>
-                                            </div>
-                                            <div className={style.resultItemContent} dangerouslySetInnerHTML={{__html: item.content}}>
-
-                                            </div>
-                                    </div>
-                                })
-                            }
-                        </div>
-                    }
-                    
-
-                    {/* 暂无资料 */}
-                    {
-                        searchShow && resultList.length == 0 && 
-                        <div className={style.noResult}>
-                            <div className={style.noResultImg}>
-                                <span className={`${style.iconfont} ${style.noResultIcon}`}>&#xe7c6;</span>
-                            </div>
-                            <div className={style.noResultTxt}>
-                                {intl.formatMessage({id:"question"})}
-                                <span onClick={()=>this.props.history.push({pathname: '/contact-us'})}>{intl.formatMessage({id: 'contact'})}</span>
-                            </div>
-                        </div>
-                    }
-
-                    {/* 问题详情 */}
-                    {
-                        detailShow && 
-                        <div className={style.questionDetailBox}>
-                            <div className={style.questionDetail} >
-                                <div className={style.questionDetailTitle}>How can I change or modify my order? How can I place an order？</div>
-                                <div className={style.questionDetailContent} dangerouslySetInnerHTML={{__html:questionDetail}}></div>
-                            </div>
-                            <div className={style.questionRateBox}>
-                                <div className={style.questionRateTxt}>{intl.formatMessage({id:"articleHelpful"})}</div>
-                                <div className={style.questionRateIcon}>
-                                    <span className={`${style.iconfont} ${style.like} ${likeQuestion==1?style.liked:""}`} onClick={()=>this.setState({likeQuestion: 1})}>&#xe7af;</span>
-                                    <span className={`${style.iconfont} ${style.unlike} ${likeQuestion==2?style.unliked:""}`} onClick={()=>this.setState({likeQuestion: 2})}>&#xe7af;</span>
-                                </div>
-                                <div className={style.noResultTxt}>
-                                    {intl.formatMessage({id:"question"})}
-                                    <span onClick={()=>window.location.href = "contact-us"}>{intl.formatMessage({id: 'contact'})}</span>
-                                </div>
-                            </div>
-                        </div>
-                    }
-
-                    {/* 相似推荐 */}
-                    {
-                        detailShow &&
-                        <div className={style.relatedBox}>
-                            <div className={style.relatedTitle}>{intl.formatMessage({id:"related"})}</div>
-                            <div className={style.relatedItem}>
-                                How can I change or modify my order?
-                            </div>
-                        </div>
-                    }
                 </Page>
 
-            </div>
+            </FaqPage>
         )
     }
 }

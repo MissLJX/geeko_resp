@@ -53,7 +53,7 @@
                 </p>
                 <p>{{$t("review")}}</p>
             </a>
-            <a href="/" class="not-mar" @click.prevent="changeOrdStatus('6')">
+            <!-- <a href="/" class="not-mar" @click.prevent="changeOrdStatus('6')">
                 <p class="iconfont">
                     <span>&#xe6e3;</span>
                     <span 
@@ -63,7 +63,7 @@
                     >{{getOrderNum(feed && feed.orderCancelCount)}}</span>
                 </p>
                 <p>{{$t("index.returns")}}</p>
-            </a>
+            </a> -->
         </div>
     </div>
 </template>
@@ -133,7 +133,7 @@
             & > a{
                 color: #222222;
                 display: inline-block;
-                width: calc(20% - 10px);
+                width: calc(25% - 10px);
                 text-align: center;
 
                 & > p{

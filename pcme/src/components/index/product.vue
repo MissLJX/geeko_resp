@@ -50,10 +50,23 @@
     .product{
         ._image{
             a{
+                position: relative;
+                overflow: hidden;
+                display: block;
+                background-color: #f1f1f1;
                 img{
                     display: block;
                     width: 100%;
                     height: 100%;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                }
+
+                &::after{
+                    content: '';
+                    display: block;
+                    margin-top: 125%;
                 }
             }
         }

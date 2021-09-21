@@ -2,11 +2,20 @@
     <div class="el-list-product">
         <a 
             :href="productUrl" 
-            data-title="me" 
+            :data-title="eventTitle" 
             :data-column="calssifyName" 
             :data-product-position="index+1"
             data-product-list-source 
             :product-id="product.id"
+			:data-product-source="product.dataSource" 
+            :data-geeko-id="geekoId"
+            :data-geeko-experiment="experimentId"
+			:data-request-id="product.aliRequestId"
+            :data-experiment-id="product.aliExperimentId"
+			:type="eventTitle"
+			:data-type="eventTitle"
+            :data-content="eventTitle"
+            ref="oftenProduct"
         >
             <figure>
                 <div class="img">
@@ -25,6 +34,8 @@
                             Delete
                         </div>
                     </div>
+
+                    <span class="new" v-if="product.isNew">NEW</span>
                 </div>
             </figure>
 
@@ -39,7 +50,7 @@
                     <del class="el-product-del">{{delPrice}}</del>
                 </div>
                 <div class="st-cell st-v-m st-t-r">
-                    <i @click.prevent="likeHandle" class="iconfont el-product-like" :class="{red:liked}">{{liked ? '&#xe677;' : '&#xe631;'}}</i>
+                    <i @click.prevent="addToCart(product.id)" class="iconfont el-product-like">&#xe6a8;</i>
                 </div>
             </div>
         </figcaption>
@@ -62,7 +73,19 @@
             required: true,
             isSoldOut:true,
             index:Number,
-            calssifyName:String
+            calssifyName:String,
+            requestId:{
+                type:String,
+                default:""
+            },
+            experimentId:{
+                type:String,
+                default:""
+            },
+            eventTitle:{
+                type:String,
+                default:""
+            }
         },
         created(){
         },
@@ -108,6 +131,13 @@
             },
             isLogin(){
                 return this.$store.getters["me/isLogin"];
+            },
+            geekoId(){
+                if(this.product && this.product.geekoRequsestId){
+                    return this.product.geekoRequsestId;
+                }else{
+                    return this.requestId;
+                }
             }
         },
         methods: {
@@ -142,10 +172,23 @@
                             _this.$store.dispatch('closeConfirm');
                         }
                     }
+                })
+            },
+            addToCart(productId){
+                this.$store.dispatch("globalLoadingShow",true);
+                this.$store.dispatch("getProductDetailMessage",productId).then((product) => {
+                    this.$store.dispatch("addToCartIsShow",true);
+                    this.$store.dispatch("globalLoadingShow",false);
                 });
             },
             findSimlar(productId){
                 this.$router.push({name:"relation-products",params:{productId}});
+            }
+        },
+        mounted(){
+            let value = this.$refs.oftenProduct;
+            if (window.productListObserver) {
+                window.productListObserver.observe(value)
             }
         }
     }
@@ -250,6 +293,22 @@
                     margin-top: 12px;
                 }
             }
+
+            .new{
+                font-size: 12px;
+                display: inline-block;
+                left: 0;
+                top: 4px;
+                position: absolute;
+                min-width: 36px;
+                padding-left: 4px;
+                padding-right: 4px;
+                height: 16px;
+                color: #fff;
+                text-align: center;
+                line-height: 16px;
+                background-color: #5ad133;
+            }
         }
 
         img {
@@ -272,7 +331,7 @@
         }
 
         .el-product-like {
-            font-size: 20px;
+            font-size: 18px;
             &.red {
                 color: #f00;
             }

@@ -10,20 +10,25 @@
                 :finished="finished" 
                 @listing="listingHandle"
                 calssify-name="points"
+                event-title="me_points"
+                :requestId="requestId"
+                :experimentId="experimentId"
             />
         </div>
     </div>
 </template>
 
 <script type="text/ecmascript-6">
-    import PointProductList from './point/point-product-list.vue'
+    import ProductList from '../../components/product-list.vue'
     import store from '../../store/index.js'
     export default{
         data(){
             return{
                 loading:false,
                 finished: false,
-                empty: false
+                empty: false,
+                requestId:"",
+                experimentId:""
             }
         },
         computed: {
@@ -37,16 +42,19 @@
         methods: {
             listingHandle(){
                 this.loading = true
-                store.dispatch("me/getPointsProducts", {skip: this.skip}).then(({empty, finished}) => {
+                store.dispatch("me/getPointsProducts", {skip: this.skip}).then(({empty, finished,requestId,experimentId}) => {
                     if(finished) this.finished = finished
                     if(empty) this.empty = empty
                     this.loading = false
-                    store.dispatch("me/getPointsSkip")
+                    store.dispatch("me/getPointsSkip");
+
+                    if(requestId) this.requestId = requestId;
+                    if(experimentId) this.experimentId = experimentId;
                 })
             }
         },
         components: {
-            'product-list': PointProductList
+            'product-list': ProductList
         },
         created(){
             this.loading = true;
@@ -55,9 +63,12 @@
                 return;
             }
 
-            store.dispatch("me/getPointsProducts", {skip: 0}).then(() => {
+            store.dispatch("me/getPointsProducts", {skip: 0}).then(({requestId,experimentId}) => {
                 this.loading = false
-                store.dispatch("me/getPointsSkip")
+                store.dispatch("me/getPointsSkip");
+
+                if(requestId) this.requestId = requestId;
+                if(experimentId) this.experimentId = experimentId;
             })
         }
     }

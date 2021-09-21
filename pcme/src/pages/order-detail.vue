@@ -18,12 +18,12 @@
                 <p v-if="orderdetail.paymentTime"><span>{{$t('paymentTime')}}: </span>{{getDate}}</p>
                 <p v-if="orderdetail.payMethodName"><span>{{$t('paymentMethod')}}: </span>{{orderdetail.payMethodName}}</p>
             </div>
-            <div class="payNow" v-if="orderdetail.status === 0 && orderoffset >= 0">
+            <div class="payNow" v-if="orderdetail.fulfillmentStatus === constant.TOTAL_STATUS_UNPAID && orderoffset >= 0">
                 <div class="otherPay">
                     <div class="remain">{{$t("remaining")}}:<count-down :timeStyle="{color:'#fff'}" :timeLeft="orderoffset"></count-down></div>
-                    <a class="paybtn" :href="getPayUrl" v-if="getBtnText && getPayUrl && orderdetail.status === 0 && orderoffset >= 0">{{getBtnText}}</a>
-                    <a class="paybtn" :href="checkoutUrl(orderdetail.id)" v-if="getBtnText2 && getPayUrl && orderdetail.status === 0 && orderoffset >= 0">{{getBtnText2}}</a>
-                    <a class="paybtn" :href="checkoutUrl(orderdetail.id)" v-if="!orderdetail.mercadopagoPayURL && !orderdetail.boletoPayCodeURL && orderdetail.status === 0 && orderoffset >= 0">{{$t("paynow")}}</a>
+                    <a class="paybtn" :href="getPayUrl" v-if="getBtnText && getPayUrl && orderdetail.fulfillmentStatus === constant.TOTAL_STATUS_UNPAID && orderoffset >= 0">{{getBtnText}}</a>
+                    <a class="paybtn" :href="checkoutUrl(orderdetail.id)" v-if="getBtnText2 && getPayUrl && orderdetail.fulfillmentStatus === constant.TOTAL_STATUS_UNPAID && orderoffset >= 0">{{getBtnText2}}</a>
+                    <a class="paybtn" :href="checkoutUrl(orderdetail.id)" v-if="!orderdetail.mercadopagoPayURL && !orderdetail.boletoPayCodeURL && orderdetail.fulfillmentStatus === constant.TOTAL_STATUS_UNPAID && orderoffset >= 0">{{$t("paynow")}}</a>
                 </div>
             </div>
             <div class="payTip" v-if="orderdetail.unPayMessage && orderoffset >= 0">
@@ -71,7 +71,7 @@
                         <div v-if="confirmedOrder" class="review-btn" :class="{'b-btn':confirmedOrder,'black':shippedOrder || processingOrder}">
                             <span  @click="review(item.productId,item.variantId)">{{$t('review')}}</span>
                         </div>
-                        <div @click="addProduct(item.variantId)" v-if="item.variantId && orderdetail.status===4" class="review-btn">
+                        <div @click="addProduct(item.variantId)" v-if="item.variantId && orderdetail.fulfillmentStatus===constant.TOTAL_STATUS_CANCELED" class="review-btn">
                             <span>{{$t("repurchase")}}</span>
                         </div>
 
@@ -88,15 +88,15 @@
                 </div>
             </div>
             <div class="actionbtn">
-                <div class="r-btn" :class="{'b-btn':confirmedOrder,'black':shippedOrder || processingOrder}" v-if="shippedOrder || orderdetail.isCanCanceled || (orderdetail.id && orderdetail.status===4)">
+                <div class="r-btn" :class="{'b-btn':confirmedOrder,'black':shippedOrder || processingOrder}" v-if="shippedOrder || orderdetail.isCanCanceled || (orderdetail.id && orderdetail.fulfillmentStatus===constant.TOTAL_STATUS_CANCELED)">
                     <span v-if="shippedOrder" @click="() => {this.isConfirmAlert = true}">{{$t('confirmorder')}}</span>
                     <span v-if="orderdetail.isCanCanceled" @click="() => {this.isAlert = true}">{{$t('cancelorder2')}}</span>
-                    <span @click="addProducts(orderdetail.orderItems)" v-if="orderdetail.id && orderdetail.status===4">{{$t("repurchase")}}</span>
+                    <span @click="addProducts(orderdetail.orderItems)" v-if="orderdetail.id && orderdetail.fulfillmentStatus===constant.TOTAL_STATUS_CANCELED">{{$t("repurchase")}}</span>
                 </div>
                 <div class="r-btn black" v-if="orderdetail.hasReturnLabel">
                     <a :href="getReturnLabel()">{{$t('returnlabel')}}</a>
                 </div>
-                <div class="r-btn w-btn" v-if="orderdetail.id && (orderdetail.status===2 || orderdetail.status===3) ">
+                <div class="r-btn w-btn" v-if="orderdetail.id && orderdetail.isTrackingBtnShow && orderdetail.fulfillmentStatus === constant.TOTAL_STATUS_SHIPPED">
                     <span  @click="checkLogistics(orderdetail.id)">{{$t('track')}}</span>
                 </div>
 
@@ -121,7 +121,7 @@
             <select-order v-if="isShowSelect" v-on:closeSelect="closeSelect1" v-on:showTicket="showTicket"></select-order>
             <order-ticket  v-if="isShowTicket" v-on:closeSelect="closeSelect1" v-on:selectOrder="selectorder"></order-ticket>
 
-            <div v-if="getBtnText==='Imprimir boleto' && orderdetail.status == 0 && orderoffset >= 0 && couponshow && getPayUrl">
+            <div v-if="getBtnText==='Imprimir boleto' && orderdetail.fulfillmentStatus == constant.TOTAL_STATUS_UNPAID && orderoffset >= 0 && couponshow && getPayUrl">
                 <div class="mask"></div>
                 <div class="coupon-window">
                     <span class="coupon-close" @click="() => {this.couponshow = false}"><i class="iconfont">&#xe69a;</i></span>
@@ -141,7 +141,7 @@
                 </div>
             </div>
 
-            <div v-if="(getBtnText==='Generar Ticket' || getBtnText==='Gerar Ticket') && orderdetail.status === 0 && orderoffset >= 0 && couponshow && getPayUrl">
+            <div v-if="(getBtnText==='Generar Ticket' || getBtnText==='Gerar Ticket') && orderdetail.fulfillmentStatus === constant.TOTAL_STATUS_UNPAID && orderoffset >= 0 && couponshow && getPayUrl">
                 <div class="mask"></div>
                 <div class="coupon-window">
                     <span class="coupon-close" @click="() => {this.couponshow = false}"><i class="iconfont">&#xe69a;</i></span>
@@ -199,6 +199,7 @@
 <script>
     import {mapGetters} from 'vuex';
     import * as utils from '../utils/geekoutil';
+    import * as constant from "../utils/constant.js"
     import LinkImage from '../components/link-image.vue';
     import selectOrder from '../components/select-order.vue';
     import orderTicket from '../components/order-ticket.vue';
@@ -225,7 +226,8 @@
                 isAddProductstTip:'',
                 selected:0,
                 isRequired:false,
-                isReturnLogistics:false
+                isReturnLogistics:false,
+                constant:constant
             }
         },
         components: {
@@ -323,9 +325,9 @@
                     return '-'
                 }
             },
-            getStatus(){
-                return utils.STATUS_LABEL(this.orderdetail.status)
-            },
+            // getStatus(){
+            //     return utils.STATUS_LABEL(this.orderdetail.fulfillmentStatus)
+            // },
             paymentItemTotal(){
                 if(this.order && this.orderdetail.paymentItemTotal){
                     return utils.unitprice(this.orderdetail.paymentItemTotal);
@@ -347,17 +349,17 @@
                 }
             },
             confirmedOrder(){
-                if(this.orderdetail && this.orderdetail.status===5){
+                if(this.orderdetail && this.orderdetail.fulfillmentStatus===constant.TOTAL_STATUS_REVIEW){
                     return true
                 }
             },
             shippedOrder(){
-                if(this.order && this.orderdetail.status===3){
+                if(this.order && this.orderdetail.isConfirmBtnShow && this.orderdetail.fulfillmentStatus === constant.TOTAL_STATUS_SHIPPED){
                     return true
                 }
             },
             processingOrder(){
-                if(this.order && this.orderdetail.status===2){
+                if(this.order && this.orderdetail.fulfillmentStatus===constant.TOTAL_STATUS_PROCCESSING){
                     return true
                 }
             },
@@ -394,7 +396,7 @@
                     this.isloding = true;
                     this.$store.dispatch('confirmOrder',this.orderdetail.id).then(()=>{
                         this.isloding = false
-                        _this.orderdetail.status = 10
+                        _this.orderdetail.fulfillmentStatus = constant.TOTAL_STATUS_REVIEW;
                         alert("success")
                     }).catch((e) => {
                         alert(e);

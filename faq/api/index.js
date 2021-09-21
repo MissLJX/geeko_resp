@@ -7,3 +7,14 @@ export const sendImage = (ticket) => axios.cpost('/ticket/order/add', ticket)
 export const sendTicket = (ticket) => axios.post('/ticket/order/add', ticket)
 export const getOrders = (suffix, skip, limit) => axios.get(`${VPATH}/order/${skip}/${limit}/${suffix}`)
 export const sendRate = (rate) => axios.post('/ticket/rate-service', rate)
+
+export const getOrdersNew = (suffix, skip) => axios.get('/v9/order/' + skip + '/20/' + suffix)
+
+/**
+ * 
+ * axios.get('/v9/order/' + skip + '/20/' + api_suffix).then((orders) => {
+            callBack(orders)
+        }).catch((e) => {
+            console.log(e)
+        });
+ */

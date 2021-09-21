@@ -20,6 +20,7 @@ import LogisticsDetail from '../pages/logistics-detail.vue'
 import PackageLogisticsDetail from '../pages/package-logistics-detail.vue'
 import OrderReview from '../pages/order-review.vue'
 import uploadAvatar from '../components/upload-avatar.vue'
+import Survey from '../pages/survey.vue'
 
 const __Base_Path__ = window.ctx || ''
 
@@ -207,6 +208,11 @@ const routes = [
         path:__Base_Path__+'/me/m/load',
         component: uploadAvatar,
         meta: {title:'LogisticsDetail'},
+    },
+    {
+        path:__Base_Path__+'/me/m/survey',
+        component: Survey,
+        meta: {title:'Survey'},
     }
 ];
 

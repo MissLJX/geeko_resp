@@ -26,7 +26,7 @@ const config = {
     output: {
         path: setPath('dist'),
         publicPath: '/resources/vue/pcme/',
-        filename:'[name].js'
+        filename:'[name].[chunkhash].js'
     },
 
     optimization: {
@@ -44,6 +44,7 @@ const config = {
         extractHTML,
         new VueLoaderPlugin()
     ],
+    devtool: 'source-map',
     module: {
         rules: [
             {

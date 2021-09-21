@@ -50,9 +50,7 @@ export const getCredits = (skip) => {
 export const creditcards = getCredits
 
 export const getYouLikeProducts = (skip) => {
-    return axios.get('/product/1/'+skip+'/20/show', {}, {}).then((data) => {
-        return data.result
-    })
+    return axios.get('/product/1/'+skip+'/20/show', {}, {});
 }
 
 export const getWishlist = () => {
@@ -78,9 +76,7 @@ export const countUnreadNotification = () => {
 }
 
 export const getWishProducts = (customerId, skip) => {
-    return axios.get(VPATH + '/wanna-list/anon/' + customerId + '/' + skip + '/20/all-products', {}, {}).then((data) => {
-        return data.result
-    })
+    return axios.get(VPATH + '/wanna-list/anon/' + customerId + '/' + skip + '/20/all-products', {}, {});
 }
 
 export const postProfile = (data) => {
@@ -240,9 +236,7 @@ export const getCustomerPointsNum = () => {
 // menuId   APP0010
 // product/anon/{skip}/{limit}/{groupNo}/{menuId}/list-by-menu
 export const getPointsProductList = (skip) => {
-    return axios.get(VPATH+"/product/anon/"+ skip+"/20/0/APP0010/list-by-menu",{},{}).then((data) => {
-        return data.result;
-    });
+    return axios.get(VPATH+"/product/anon/"+ skip+"/20/0/APP0010/list-by-menu",{},{});
 }
 
 //make-suggestion
@@ -260,6 +254,14 @@ export const updateCustomerSave = (customer) => {
     return axios.post(VPATH + "/customer/save",customer,{}).then(data => data.result);
 }
 
+export const surveySave = (params) => {
+    return axios.cpost('/questionnaire-answer/anon/save',params,{}).then(data => data);
+}
+
+export const surveyGet = () => {
+    return axios.get('/questionnaire-answer/anon/get',{},{}).then(data => data)
+}
+
 // /context/anon/get-currency-list
 export const getCurrencyList =() => {
     return axios.get("/context/anon/get-currency-list",{},{}).then(data => data.result);
@@ -268,6 +270,6 @@ export const getCurrencyList =() => {
 // https://www.chicme.xyz/L/1F4Q3Z7A81P7G8G3w3D5m9a4w/product/0/20/29b78253-be62-483a-9852-cbd23d5e7bf1/scp-show2
 // 通过productId获取相似产品
 export const getRelationProducts = ({productId,skip}) => {
-    return axios.get(`/L/1F4Q3Z7A81P7G8G3w3D5m9a4w/product/${skip}/20/${productId}/scp-show2`);
+    return axios.get(`/product/${skip}/20/${productId}/scp-show2`);
 }
 

@@ -63,7 +63,8 @@ export default {
   account:"帐户问题",
   // contact:
   Ticket:'处理记录',
-  within:'24小时内',
+  TicketTime:'仅限售后问题（取消/编辑订单/发货状态/退货/换货等）',
+  OnlineTime:'仅适用于预售问题。 在线销售无权访问订单信息。',
   online:'在线帮助',
   // faq
   search: "搜索结果",

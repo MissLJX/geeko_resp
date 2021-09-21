@@ -28,6 +28,8 @@
             <div class="_font">{{messageM1518}}</div>
             <div class="iconfont">&#xe694;</div>
         </div>
+        
+        <!-- <swiper :notification-data.sync="swiperData" :email="email"></swiper> -->
 
         <div class="header-icon">
             <div class="st-table">
@@ -131,7 +133,7 @@
                         </p>
                         <p>{{$t("point.review")}}</p>
                     </a>
-                    <a href="/" class="not-mar" @click.prevent="specificationLogin('/me/m/order/canceled')" click-name="Returns">
+                    <!-- <a href="/" class="not-mar" @click.prevent="specificationLogin('/me/m/order/canceled')" click-name="Returns">
                         <p class="iconfont">
                             <span>&#xe6e3;</span>
                             <span 
@@ -140,8 +142,8 @@
                                 v-if="getOrderNum(feed && feed.orderCancelCount)"
                             >{{getOrderNum(feed && feed.orderCancelCount)}}</span>
                         </p>
-                        <p>{{$t("index.returns")}}</p>
-                    </a>
+                        <p>{{$t("label.canceled")}}</p>
+                    </a> -->
                 </div>
             </div>
         </div>
@@ -153,7 +155,7 @@
                 </div>
 
                 <div class="service-bd">
-                    <a href="/f/mobile/contact_us" click-name="Support">
+                    <a @click.prevent="specificationLogin('/support')" click-name="Support">
                         <p class="iconfont">&#xe6e1;</p>
                         <p>{{$t("index.suport")}}</p>
                     </a>
@@ -176,8 +178,19 @@
     import store from '../../../store/index.js';
     import * as utils from '../../../utils/geekoutils.js';
 
+    import Swiper from "../../../components/swiper/swiper.vue"
+    import _ from "lodash"
+
     export default {
         name:"IndexMessage",
+        data(){
+            return {
+                swiperData:[]
+            }
+        },
+        components:{
+            "swiper":Swiper
+        },
         computed:{
             ...mapGetters('me', [
                 'pointsAllSkip','me', "isLogin", 'feed', 'notificationCount', 'orderCountUnpaid',"shoppingCartCount","messageM1518"
@@ -204,6 +217,13 @@
             getHeaderImage(){
                 let headerIcon = store.getters["me/headerImage"];
                 return headerIcon ? headerIcon : this.baseHeaderUrl;
+            },
+            email(){
+                if(this.isLogin){
+                    return this.me.email;
+                }else{
+                    return "";
+                }
             }
         },
         methods:{
@@ -245,14 +265,30 @@
                 return value ? value : '';
             }
         },
-        created:function(){
+        created:async function(){
             store.dispatch('me/countNotifications');
 
             store.dispatch('me/getOrderCountUnpaid');
 
             // store.dispatch("me/getShoppingCartNum");
 
-            store.dispatch("me/getIndexLoginMessageCode","M1518");
+            let message1518 = await store.dispatch("me/getIndexLoginMessageCode","M1518");
+            // let obj1 = {
+            //     id:'message1518',
+            //     icon:"&#xe6ca;",
+            //     icon2:"&#xe694;",
+            //     message:message1518,
+            //     isClick:false
+            // };
+            // let obj2 = {
+            //     id:'message1519',
+            //     icon:"&#xe6ca;",
+            //     icon2:"&#xe694;",
+            //     message:"Verify the email you can get 100 points!",
+            //     isClick:true
+            // };
+            // this.swiperData.push(obj1,obj2);
+            // console.log("this.swiperData",this.swiperData)
         }
     }
 </script>
@@ -467,7 +503,7 @@
                         color: #222222;
                         display: inline-block;
                         width: calc(25% - 10px);
-                        margin-bottom: 24px;
+                        // margin-bottom: 24px;
                         text-align: center;
 
                         & > p{

@@ -5,6 +5,294 @@ import {FormattedMessage, injectIntl} from 'react-intl';
 import {secondaries, questions} from '../../data'
 import { Page } from '../../components/page/page';
 import {SearchBar} from '../../components/newComponents/new-components';
+import styled from 'styled-components';
+import {list} from '../../api';
+
+// let style = {}
+
+const ResultBox = styled.div`
+    width: 100%;
+    height: 82px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+`
+
+const ResultTitle = styled.div`
+    font-family: Roboto-Medium;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #222222;
+    margin: 0 auto;
+    text-shadow: 0 0 #222;
+    margin-bottom: 10px;
+`
+
+const ResultNum = styled.div`
+    margin: 0 auto;
+    font-family: Roboto-Regular;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #666666;
+    strong{
+        font-weight: 500;
+        color: #222;
+    }
+`
+
+const SearchBarBox = styled.div`
+    width: 100%;
+    border-top: 1px solid #e6e6e6;
+    max-height: 100px;
+    /* line-height: 42px; */
+    padding-top: 25px;
+`
+
+const ResultListBox = styled.div`
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px 4% 20px;
+    border-top: 1px solid #e6e6e6;
+    margin-top: 10px;
+    background-color: #fff;
+    img {
+        width: 100%;
+        margin: 10px 0;
+    }
+`
+
+const ResultItemBox = styled.div`
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #e6e6e6;
+    max-height: 300px;
+    overflow: hidden;
+`
+
+const ResultItemTitle = styled.div`
+    font-family: Roboto-Bold;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #222222;
+    font-weight: 600;
+    margin-bottom: 13px;
+    span:nth-child(1){
+        span {
+            margin-right: 15px;
+        }
+        strong {
+            color: #3483f4;
+        }
+    }
+    span:nth-child(2){
+        @font-face {
+            font-family: 'iconfont';  /* Project id 384296 */
+            src: url('//at.alicdn.com/t/font_384296_waimmey03x.woff2?t=1631165132958') format('woff2'),
+                url('//at.alicdn.com/t/font_384296_waimmey03x.woff?t=1631165132958') format('woff'),
+                url('//at.alicdn.com/t/font_384296_waimmey03x.ttf?t=1631165132958') format('truetype');
+        }
+        font-family:"iconfont" !important;
+        font-size:16px;
+        font-style:normal;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        color: #999;
+        margin-left: 15px;
+    }
+    span:nth-child(3){
+        color: #999;
+        margin-left: 3px;
+    }
+`
+
+const ResultItemContent = styled.div`
+    // width: 100%;
+    // padding: 0 4%;
+    // margin-top: 27px;
+    // background-color: #fff;
+    line-height: 1.5;
+`
+
+const NoResult = styled.div`
+    width: 92%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 30px;
+`
+const NoResultImg = styled.div`
+    @font-face {
+  font-family: 'iconfont';  /* Project id 384296 */
+  src: url('//at.alicdn.com/t/font_384296_waimmey03x.woff2?t=1631165132958') format('woff2'),
+       url('//at.alicdn.com/t/font_384296_waimmey03x.woff?t=1631165132958') format('woff'),
+       url('//at.alicdn.com/t/font_384296_waimmey03x.ttf?t=1631165132958') format('truetype');
+}
+    font-family:"iconfont" !important;
+    font-size:16px;
+    font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 61px;
+    color: #999;
+`
+
+const RelatedBox = styled.div`
+    width: 100%;
+    /* margin: 0 auto; */
+    border-top: 10px solid #f6f6f6;
+    padding: 0 4% 20px;
+    font-family: Roboto-Bold;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #222222;
+    text-shadow: 0 0 #222;
+    background-color: #fff;
+`
+const RelatedTitle = styled.div`
+    line-height: 48px;
+    line-height: 48px;
+    font-weight: 600;
+    text-shadow: none;
+`
+const RelatedItem = styled.div`
+    width: 100%;
+    /* border: 1px solid; */
+    height: 40px;
+    line-height: 40px;
+    background: #f6f6f6;
+    padding: 0 16px;
+    font-family: Roboto-Regular;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #222222;
+    text-shadow: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 8px;
+`
+
+const QuestionDetailBox = styled.div`
+    width: 100%;
+    padding: 0 4%;
+    margin-top: 27px;
+    background-color: #fff;
+`
+
+const QuestionDetail = styled.div`
+    padding-bottom: 32px;
+`
+
+const QuestionDetailContent = styled.div`
+    line-height: 1.4;
+    img{
+        width: 100%;
+        margin: 10px 0;
+    }
+`
+
+const QuestionDetailTitle = styled.div`
+    font-family: Roboto-Bold;
+    font-size: 16px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #222222;
+    font-weight: bold;
+    margin-bottom: 13px;
+`
+
+const QuestionRateBox = styled.div`
+    width: 100%;
+    max-height: 130px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    border-top: 1px solid #e6e6e6;
+`
+
+const QuestionRateTxt = styled.div`
+    margin-top: 20px;
+    margin-bottom: 16px;
+    font-family: Roboto-Regular;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #222222;
+`
+const QuestionRateIcon = styled.div`
+    font-size: 16px;
+    width: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin-bottom: 20px;
+`
+const Liked = styled.span`
+    @font-face {
+        font-family: 'iconfont';  /* Project id 384296 */
+        src: url('//at.alicdn.com/t/font_384296_waimmey03x.woff2?t=1631165132958') format('woff2'),
+            url('//at.alicdn.com/t/font_384296_waimmey03x.woff?t=1631165132958') format('woff'),
+            url('//at.alicdn.com/t/font_384296_waimmey03x.ttf?t=1631165132958') format('truetype');
+    }
+    font-family:"iconfont" !important;
+    font-size:16px;
+    font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    // color: #57b936;
+`
+const Unliked = styled.span`{
+    @font-face {
+        font-family: 'iconfont';  /* Project id 384296 */
+        src: url('//at.alicdn.com/t/font_384296_waimmey03x.woff2?t=1631165132958') format('woff2'),
+            url('//at.alicdn.com/t/font_384296_waimmey03x.woff?t=1631165132958') format('woff'),
+            url('//at.alicdn.com/t/font_384296_waimmey03x.ttf?t=1631165132958') format('truetype');
+    }
+    font-family:"iconfont" !important;
+    font-size:16px;
+    font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    // color: #e64545;
+`
+
+
+const NoResultTxt = styled.div`
+    font-family: Roboto-Regular;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #999999;
+    line-height: 48px;
+    // margin-bottom: 20px;
+
+    span{
+        margin-left: 5px;
+        text-decoration: underline;
+        font-family: Roboto-Regular;
+        font-size: 12px;
+        font-weight: normal;
+        font-stretch: normal;
+        letter-spacing: 0px;
+        color: #222222;
+    }
+`
 
 let lastSearchId = 0
 class Question1 extends React.PureComponent{
@@ -27,7 +315,8 @@ class Question1 extends React.PureComponent{
             richText:'',
             parent:{},
             stopSearch: false, // 如果是选择下拉框里提示跳转过来的为true
-            headerRef: createRef()
+            headerRef: createRef(),
+            initTime: 0,
         }
     }
 
@@ -37,13 +326,16 @@ class Question1 extends React.PureComponent{
 
     componentWillUpdate(){
         this.initPage()
+        console.log(this.state.headerRef)
         this.state.headerRef.current.scrollIntoView({
             top: 0,
             behavior:'smooth'
         })
     }
 
+
     replaceStr(str){
+        console.log('replace: ',str)
         str = decodeURI(str).split("\"");
         for(let i in str){
             if(str[i] != ''){
@@ -53,15 +345,24 @@ class Question1 extends React.PureComponent{
     }
 
     initPage(){
-        console.log(this.state)
+        // console.log(this.state)
         let search = this.props.history.location.state ? this.props.history.location.state.search : 
                      this.props.location.search ? this.props.location.search : 0;
         let id = this.props.history.location.state ? this.props.history.location.state.id : 
                 this.props.match.params.id ? this.props.match.params.id : 0;
-        if(lastSearchId !== id){
+        let fromFAQ = this.props.history.location.state.fromFAQ;
+        console.log('s:',search, 'd:', id)
+        console.log(lastSearchId !== id)
+        console.log(fromFAQ)
+        console.log(this.state.initTime==0)
+        if(lastSearchId !== id || (fromFAQ&&this.state.initTime==0)){
+            console.log('in')
+            this.setState({
+                initTime:1
+            })
             // return
             lastSearchId = id;
-            this.changeShow(search,id)
+            this.changeShow(search ,id)
         }
     }
 
@@ -80,11 +381,13 @@ class Question1 extends React.PureComponent{
                 this.show3(id)
                 return;
             default:
+                console.log('default')
                 return;
         }
     }
 
     show1(search,id){
+        console.log(1)
         this.setState({
             detailShow:true,
             searchShow:false,
@@ -92,22 +395,24 @@ class Question1 extends React.PureComponent{
             secondary: secondaries.find(q => q.id === id),
             richText:  secondaries.find(q => q.id === id).richText,
             parent: questions.find(q => q.id ===  secondaries.find(q => q.id === id).parentId),
-            searchValue: this.replaceStr(search),
+            searchValue: search,
             stopSearch: true
         })
     }
 
     show2(search){
+        console.log(2)
         this.setState({
             detailShow: false,
             searchShow: true,
-            searchValue: this.replaceStr(search),
-            stopSearch:false,
+            searchValue: search,
+            stopSearch: false,
             // parent: questions.find(q => q.id === secondary.parentId)
         })
     }
 
     show3(id){
+        console.log(3)
         this.setState({
             detailShow:true,
             searchShow:false,
@@ -115,7 +420,8 @@ class Question1 extends React.PureComponent{
             secondary: secondaries.find(q => q.id === id),
             richText:  secondaries.find(q => q.id === id).richText,
             parent: questions.find(q => q.id ===  secondaries.find(q => q.id === id).parentId),
-            stopSearch: false
+            stopSearch: false,
+            searchValue: ''
         })
     }
 
@@ -141,7 +447,7 @@ class Question1 extends React.PureComponent{
 
         const search = (e) => {
             let searchAbout = []
-            console.log(e)
+            console.log('start:',e)
             let reg = new RegExp(e, 'ig')
             if(e){
                 questions.forEach((q) => {
@@ -151,6 +457,7 @@ class Question1 extends React.PureComponent{
                     searchAbout = searchAbout.concat(s)
                 })
                 console.log(searchAbout)
+
                 // 搜索请求
                 this.setState({
                     defaultShow: false,
@@ -159,12 +466,19 @@ class Question1 extends React.PureComponent{
                     searchValue: e,
                     resultList: searchAbout
                 })
+            }else {
+                console.log('no e')
             }
         }
 
         const showDetail = (e) => {
             lastSearchId = 0
-            history.push({pathname:"/supportnew/question1",state:{id:e.id,search:e.title}})
+            this.setState({
+                searchValue: 0
+            },()=>{
+                history.push({pathname:`${(window.ctx || '')}/support/question`,state:{id:e.id}})
+            })
+            
         }
 
         const removeHeader = (text) => {
@@ -176,9 +490,11 @@ class Question1 extends React.PureComponent{
         const clickItem = (e) => {
             console.log(e)
             this.setState({
-                searchValue: e.title
+                searchValue: 0
+            },()=>{
+                history.push({pathname:`${(window.ctx || '')}/support/question`,state:{id:e.id}})
             })
-            history.push({pathname:"/supportnew/question1",state:{id:e.id,search:e.title}})
+            
         }
 
         const highLightSearch = (title) => {
@@ -186,99 +502,118 @@ class Question1 extends React.PureComponent{
             return title.replace(reg, (e)=>{return '<strong>'+e+"</strong>"})
         }
 
+        const toContact = () => {
+            document.documentElement.scrollTop = document.body.scrollTop = 0
+            list(0,20).then(({result: items}) => {
+                lastSearchId = 1;
+                this.props.history.push({pathname: `${(window.ctx || '')}/support/contact-us`})
+            }).catch((err)=>{
+                // console.log(err)
+                if(err.code == 300){
+                    if(window.isShowApp=="true"){
+                        window.location.href = "chic-me://chic.me/loginRoot"
+                    } else {
+                        window.location.href = `${(window.ctx || '')}/i/login?redirectUrl=${(window.ctx || '')}/support/contact-us`
+                    }
+                }
+            })
+        }
+        
         return (
             <div className={style.faqPage}>
                 <Page label={intl.formatMessage({id: 'faq'})} >
+                    <div ref={headerRef}></div>
                     {/* 搜索框 */}
-                    <div className={style.searchBar} ref={headerRef}>
+                    <SearchBarBox >
                         <SearchBar search={(e)=>search(e)} value={searchValue} stopSearch={stopSearch}></SearchBar>
-                    </div>                    
+                    </SearchBarBox>                    
 
+                    
                     {/* 搜素结果 */}
                     {
                         searchShow &&
-                        <div className={style.resultBox}>
-                            <div className={style.resultTitle}>{intl.formatMessage({id:'search'})}</div>
-                            <div className={style.resultNum}>{resultList.length}&nbsp;<span dangerouslySetInnerHTML={{__html:intl.formatMessage({id:"resultFor"}, {result:searchValue})}}></span></div>
-                        </div>
+                        <ResultBox>
+                            <ResultTitle>{intl.formatMessage({id:'search'})}</ResultTitle>
+                            <ResultNum>{resultList.length}&nbsp;<span dangerouslySetInnerHTML={{__html:intl.formatMessage({id:"resultFor"}, {result:searchValue})}}></span></ResultNum>
+                        </ResultBox>
                     }
                     
                     {/* 结果列表 */}
                     {
                         searchShow &&
-                        <div className={style.resultListBox}>
+                        <ResultListBox>
                             {
                                 resultList.map((item, index) => {
-                                    return <div className={style.resultItemBox} onClick={()=> showDetail(item)} key={index}>
-                                            <div className={style.resultItemTitle}>
-                                                <span className={style.resultTitleTxt} dangerouslySetInnerHTML={{__html:highLightSearch(item.title)}}>
+                                    return <ResultItemBox onClick={()=> showDetail(item)} key={index}>
+                                            <ResultItemTitle>
+                                                <span dangerouslySetInnerHTML={{__html:highLightSearch(item.title)}}>
                                                     
                                                 </span>
-                                                <span className={`${style.iconfont} ${style.resultlike}`}>&#xe7af;</span>
-                                                <span className={style.likes}>{item.likes}</span>
-                                            </div>
-                                            <div className={style.resultItemContent} dangerouslySetInnerHTML={{__html: removeHeader(item.richText)}}>
+                                                {/* <span style={{fontWeight:'500'}}>&#xe7af;</span>
+                                                <span>{item.likes ? item.likes : 0}</span> */}
+                                            </ResultItemTitle>
+                                            <ResultItemContent dangerouslySetInnerHTML={{__html: removeHeader(item.richText)}}>
 
-                                            </div>
-                                    </div>
+                                            </ResultItemContent>
+                                    </ResultItemBox>
                                 })
                             }
-                        </div>
+                        </ResultListBox>
                     }
                     
 
                     {/* 暂无资料 */}
                     {
                         searchShow && resultList.length == 0 && 
-                        <div className={style.noResult}>
-                            <div className={style.noResultImg}>
-                                <span className={`${style.iconfont} ${style.noResultIcon}`}>&#xe7c6;</span>
-                            </div>
-                            <div className={style.noResultTxt}>
+                        <NoResult>
+                            <NoResultImg>
+                                <span>&#xe7c6;</span>
+                            </NoResultImg>
+                            <NoResultTxt>
                                 {intl.formatMessage({id:"question"})}
-                                <span onClick={()=>this.props.history.push({pathname: "contact-us"})}>{intl.formatMessage({id: 'contact'})}</span>
-                            </div>
-                        </div>
+                                <span onClick={()=>toContact()}>{intl.formatMessage({id: 'contact'})}</span>
+                            </NoResultTxt>
+                        </NoResult>
                     }
 
                     {/* 问题详情 */}
                     {
                         detailShow && 
-                        <div className={style.questionDetailBox}>
-                            <div className={style.questionDetail} >
-                                <div className={style.questionDetailTitle}>{secondary.title}</div>
-                                <div className={style.questionDetailContent} dangerouslySetInnerHTML={{__html:removeHeader(richText)}}></div>
-                            </div>
-                            <div className={style.questionRateBox}>
-                                {/* <div className={style.questionRateTxt}>{intl.formatMessage({id:"articleHelpful"})}</div>
-                                <div className={style.questionRateIcon}>
-                                    <span className={`${style.iconfont} ${style.like} ${likeQuestion==1?style.liked:""}`} onClick={()=>this.setState({likeQuestion: 1})}>&#xe7af;</span>
-                                    <span className={`${style.iconfont} ${style.unlike} ${likeQuestion==2?style.unliked:""}`} onClick={()=>this.setState({likeQuestion: 2})}>&#xe7af;</span>
-                                </div> */}
-                                <div className={style.noResultTxt}>
+                        <QuestionDetailBox>
+                            <QuestionDetail>
+                                <QuestionDetailTitle>{secondary.title}</QuestionDetailTitle>
+                                <QuestionDetailContent dangerouslySetInnerHTML={{__html:removeHeader(richText)}}></QuestionDetailContent>
+                            </QuestionDetail>
+                            <QuestionRateBox>
+                                {/* <QuestionRateTxt>{intl.formatMessage({id:"articleHelpful"})}</QuestionRateTxt> */}
+                                {/* <QuestionRateIcon>
+                                    <Liked style={{color:likeQuestion==1?'#57b936':''}} onClick={()=>this.setState({likeQuestion: 1})}>&#xe7af;</Liked>
+                                    <Unliked style={{color:likeQuestion==2?'#e64545':'', transform: 'rotate(180deg)'}} onClick={()=>this.setState({likeQuestion: 2})}>&#xe7af;</Unliked>
+                                </QuestionRateIcon> */}
+                                <NoResultTxt>
                                     {intl.formatMessage({id:"question"})}
-                                    <span onClick={()=>window.location.href = "/supportnew/contact-us"}>{intl.formatMessage({id: 'contact'})}</span>
-                                </div>
-                            </div>
-                        </div>
+                                    <span onClick={()=>toContact()}>{intl.formatMessage({id: 'contact'})}</span>
+                                </NoResultTxt>
+                            </QuestionRateBox>
+                        </QuestionDetailBox>
                     }
 
                     {/* 相似推荐 */}
                     {
                         detailShow &&
-                        <div className={style.relatedBox}>
-                            <div className={style.relatedTitle}>{intl.formatMessage({id:"related"})}</div>
+                        <RelatedBox>
+                            <RelatedTitle>{intl.formatMessage({id:"related"})}</RelatedTitle>
                             {
-                                parent.questions.map((item,index)=>{
+                                JSON.stringify(parent)!="{}" && parent.questions.map((item,index)=>{
                                     if(item.title != secondary.title){
-                                        return <div className={style.relatedItem} key={index} onClick={()=>clickItem(item)}>
+                                        return <RelatedItem key={index} onClick={()=>clickItem(item)}>
                                             {item.title}
-                                        </div>
+                                        </RelatedItem>
                                     }
                                 })
                             }
                             
-                        </div>
+                        </RelatedBox>
                     }
                 </Page>
             </div>

@@ -63,7 +63,8 @@ export default {
   account:"Problemas con la cuenta",
   // contact:
   Ticket:'Ticket',
-  within:'Dentro de 24 horas',
+  TicketTime: 'SÓLO para problemas de posventa （Cancelar / Editar pedido / Estado de envío / Devolución / Cambio, etc.)',
+   OnlineTime: 'SOLO para la edición de preventa. Las ventas en línea no tienen acceso a la información del pedido. ',
   online:'Ayuda en línea',
   // faq
   search: "Resultados de la búsqueda",

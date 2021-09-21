@@ -121,6 +121,8 @@ const state = {
     youlikeskip:0,
     messageM1521:null,
     orderStatus:0,
+    
+    survey: {}
 };
 const getters = {
     me: state => state.me,
@@ -226,6 +228,8 @@ const getters = {
     youlikeskip:state => state.youlikeskip,
     messageM1521:state => state.messageM1521,
     orderStatus:state => state.orderStatus,
+    
+    survey: state => state.survey,
 };
 const mutations = {
     [types.INIT_ME](state, me){
@@ -587,6 +591,9 @@ const mutations = {
     },
     [types.CHANGE_ORDER_ACTIVE_STATUS](state,status){
         state.orderStatus = status;
+    },
+    [types.GET_SURVEY_ANSWER](state, obj){
+      state.survey = obj
     }
 }
 const actions = {
@@ -1221,7 +1228,26 @@ const actions = {
     },
     changeOrderStatus({commit},status){
         commit(types.CHANGE_ORDER_ACTIVE_STATUS,status);
-    }
+    },
+    updateSurvey({commit},params){
+        console.log(params)
+        return new Promise((reslove,reject) => {
+            api.surveySave(params).then((result) => {
+                reslove(result);
+                commit(types.GET_SURVEY_ANSWER, params);
+            });
+        });
+      },
+      getSurvey({commit},params){
+          // console.log(params)
+          return new Promise((reslove,reject) => {
+              api.surveyGet(params).then((result) => {
+                  console.log(result)
+                  reslove(result);
+                  commit(types.GET_SURVEY_ANSWER, params);
+              });
+          });
+      },
 }
 export default new Vuex.Store({
     state,

@@ -135,19 +135,19 @@ const actions = {
             });
         });
     },
-    getPointsProducts({commit}, {skip}){
-        return api.getPointsProductList(skip).then((products) => {
-            if (products && products.length) {
-                commit(types.ME_GET_POINTS_PRODUCTS, products)
-            } else {
-                if (skip === 0) {
-                    return {empty: true, finished: true}
-                }
-                return {finished: true}
-            }
-            return {}
-        })
-    },
+    // getPointsProducts({commit}, {skip}){
+    //     return api.getPointsProductList(skip).then((products) => {
+    //         if (products && products.length) {
+    //             commit(types.ME_GET_POINTS_PRODUCTS, products)
+    //         } else {
+    //             if (skip === 0) {
+    //                 return {empty: true, finished: true}
+    //             }
+    //             return {finished: true}
+    //         }
+    //         return {}
+    //     })
+    // },
     getPointsSkip({commit}){
         commit(types.ME_GET_POINTS_PRODUCT_SKIP)
     },

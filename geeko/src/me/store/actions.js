@@ -14,6 +14,7 @@ const actions = {
                 commit(types.ME_GET_NO_LOGIN,true);
                 return me
             }).then((me) => {
+                // console.log(me)
                 return dispatch('getFeed', me.id)
             }).then((feed) => {
                 commit(types.ME_GET_FEED, feed)
@@ -209,8 +210,12 @@ const actions = {
     },
 
     getWishproducts({commit, state}, {skip}){
-        return api.getWishProducts(state.me.id, skip).then((products) => {
+        return api.getWishProducts(state.me.id, skip).then((data) => {
+            let products = data.result;
+
             if (products && products.length) {
+                let wishlistEvent = {"requestId":data.requestId,"experimentId":data.experimentId};
+                commit(types.GET_RECORD_WISHLIST_EVENT,wishlistEvent);
                 if (skip === 0){
                     state.wishProducts = [];
                     commit(types.ME_GET_WISH_PRODUCTS, products)
@@ -230,16 +235,17 @@ const actions = {
         })
     },
     getYouLikeProducts({commit}, {skip}){
-        return api.getYouLikeProducts(skip).then((products) => {
+        return api.getYouLikeProducts(skip).then((data) => {
+            let products = data.result;
             if (products && products.length) {
                 commit(types.ME_GET_YOU_LIKE_PRODUCTS, products)
             } else {
                 if (skip === 0) {
-                    return {empty: true, finished: true}
+                    return {empty: true, finished: true,"requestId":data.requestId,"experimentId":data.experimentId}
                 }
-                return {finished: true}
+                return {finished: true,"requestId":data.requestId,"experimentId":data.experimentId}
             }
-            return {}
+            return {"requestId":data.requestId,"experimentId":data.experimentId}
         })
     },
 
@@ -431,6 +437,7 @@ const actions = {
     getIndexLoginMessageCode({commit},code){
         return api.getMessage(code).then(result => {
             commit(types.GET_INDEX_MESSAGE_CODE_LOGIN,result.message);
+            return result.message;
         });
     },
     getMyPreferenceMessageCode({commit},code){
@@ -458,7 +465,27 @@ const actions = {
     },
     getRelationProductsSkip({commit}){
         commit(types.GET_RELATION_PRODUCTS_SKIP);
-    }
+    },
+    updateSurvey({commit},params){
+        console.log(params)
+        return new Promise((reslove,reject) => {
+            api.surveySave(params).then((result) => {
+                reslove(result);
+                commit(types.GET_SURVEY_ANSWER, params);
+            });
+        });
+    },
+    getSurvey({commit},params){
+        // console.log(params)
+        return new Promise((reslove,reject) => {
+            api.surveyGet(params).then((result) => {
+                console.log(result)
+                reslove(result);
+                commit(types.GET_SURVEY_ANSWER, params);
+            });
+        });
+    },
+
 }
 
 export default actions;

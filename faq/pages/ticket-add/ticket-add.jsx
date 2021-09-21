@@ -5,7 +5,8 @@ import styled from 'styled-components'
 import _ from 'lodash'
 import {FormattedMessage, injectIntl} from 'react-intl'
 import HtmlImageCompress from 'html-image-compress'
-import style from './ticket-add.module.css';
+// import style from './ticket-add.module.css';
+import {gloabvars} from '../../commons/instance.js'
 
 import {PageHeader1, PageContanier1} from '../../components/page/page';
 
@@ -23,6 +24,173 @@ import {
 } from '../../components/styled-ticket.jsx'
 import {SelectType} from '../../components/newComponents/new-components'
 
+const ChatInputBox = styled.div`
+      width: 100%;
+      /* border: 1px solid; */
+      height: 64px;
+      display: flex;
+      align-items: center;
+      background: #fff;
+      position: fixed;
+      bottom: 0;
+      box-shadow: 0px 2px 20px 0px 
+      rgba(204, 204, 204, 0.5);
+  
+      padding-left: 4%;
+    `
+  const ChatInput = styled.div`
+      background: #fff;
+      flex: 1;
+  `
+  const UploadBtn = styled.div`
+      font-size: 22px;
+      color: #999;
+      margin-right: 30px;
+      margin-left: 15px;
+  `
+  const Upload = styled.span`
+      @font-face {
+        font-family: 'iconfont';  /* Project id 384296 */
+        src: url('//at.alicdn.com/t/font_384296_waimmey03x.woff2?t=1631165132958') format('woff2'),
+            url('//at.alicdn.com/t/font_384296_waimmey03x.woff?t=1631165132958') format('woff'),
+            url('//at.alicdn.com/t/font_384296_waimmey03x.ttf?t=1631165132958') format('truetype');
+      }
+      font-family:"iconfont" !important;
+      font-size:16px;
+      font-style:normal;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-size: 18px;
+  `
+  const SendBtn = styled.div`
+      color: #999;
+      margin-right: 20px;
+  `
+  const Send = styled.span`
+      @font-face {
+        font-family: 'iconfont';  /* Project id 384296 */
+        src: url('//at.alicdn.com/t/font_384296_waimmey03x.woff2?t=1631165132958') format('woff2'),
+            url('//at.alicdn.com/t/font_384296_waimmey03x.woff?t=1631165132958') format('woff'),
+            url('//at.alicdn.com/t/font_384296_waimmey03x.ttf?t=1631165132958') format('truetype');
+      }
+      font-family:"iconfont" !important;
+      font-size:16px;
+      font-style:normal;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-size: 18px;
+  `
+  const Invalid = styled.textarea`
+      box-shadow: inset 0 0 1px red !important;
+      border-color: red !important;
+  `
+  
+  const TextInput = styled.textarea`
+      width: 100%;
+      height: 40px;
+      line-height: 20px;
+      overflow-y: visible;
+      padding-top: 10px;
+      border: none;
+      resize: none;
+      &::-webkit-scrollbar{
+          display: none;
+      }
+  `
+  
+  const SelectedOrderBox = styled.div`
+      width: 92%;
+      margin: 0 auto;
+      background: #fff;
+      height: 75px;
+      overflow: hidden;
+      /* line-height: 37.5px; */
+      position: relative;
+      padding-left: 12px;
+      /* margin-top: 12px; */
+      margin-bottom: 20px;
+  `
+  const OrderNo = styled.div`
+      margin-top: 14px;
+      margin-bottom: 12px;
+      font-family: Roboto-Regular;
+      font-size: 14px;
+      font-weight: normal;
+      font-stretch: normal;
+      letter-spacing: 0px;
+      color: #999999;
+      span{
+          color: #222;
+          margin-left: 12px;
+      }
+  `
+  const OrderCreateTime = styled.div`
+      font-family: Roboto-Regular;
+      font-size: 14px;
+      font-weight: normal;
+      font-stretch: normal;
+      letter-spacing: 0px;
+      color: #999999;
+      span{
+          color: #222;
+          margin-left: 12px;
+      }
+  `
+  const ChangeOrder = styled.span`
+      @font-face {
+        font-family: 'iconfont';  /* Project id 384296 */
+        src: url('//at.alicdn.com/t/font_384296_waimmey03x.woff2?t=1631165132958') format('woff2'),
+            url('//at.alicdn.com/t/font_384296_waimmey03x.woff?t=1631165132958') format('woff'),
+            url('//at.alicdn.com/t/font_384296_waimmey03x.ttf?t=1631165132958') format('truetype');
+      }
+      font-family:"iconfont" !important;
+      font-size:16px;
+      font-style:normal;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      position: absolute;
+      right: 16px;
+      top: calc(50% - 7px);
+      font-size: 12px;
+      color: #666;
+  `
+  
+  const HelpTxt = styled.div`
+      font-family: Roboto-Medium;
+      font-size: 14px;
+      font-weight: normal;
+      font-stretch: normal;
+      letter-spacing: 0px;
+      color: #222222;
+      width: 100%;
+      text-align: center;
+      // font-weight: 600;
+      margin-top: 5px;
+      margin-bottom: 12px;
+  `
+  
+  const ResponseTip = styled.div`
+      font-family: Roboto-Regular;
+      font-size: 12px;
+      font-weight: normal;
+      font-stretch: normal;
+      letter-spacing: 0px;
+      color: #999999;
+      text-align: center;
+      margin-top: 7px;
+  `
+  const MessageBox = styled.div`
+      position:fixed;
+      left: calc(50% - 100px);
+      bottom: 116px;
+      width: 200px;
+      height: 32px;
+      background-color: rgba(34, 34, 34, 0.6);
+	    border-radius: 2px;
+      text-align: center;
+      line-height: 32px;
+      color: #fff;
+    `
 const RATE = styled.span`
 	font-family: iconfont;
 	font-size: 30px;
@@ -46,6 +214,11 @@ class TicketAdd extends React.Component {
       messageInvalid: false,
 
       showTip: false, // 最后一条聊天记录是不是用户的 是的话提示客服会在24h内回复
+      showMsg: false,
+      showMsgTxt: '',
+
+      isApp: "false",
+
     }
     this.handleImage = this.handleImage.bind(this)
     this.handleTicket = this.handleTicket.bind(this)
@@ -71,20 +244,33 @@ class TicketAdd extends React.Component {
       sendImage(formData).then(({result}) => {
         const file = files[0]
         const src = window.navigator.userAgent.indexOf('Chrome') >= 1 || window.navigator.userAgent.indexOf('Safari') >= 1 ? window.webkitURL.createObjectURL(file) : window.URL.createObjectURL(file)
-        let ticket = this.state.ticket
-        let replies = (ticket.ticketReplies || []).concat([])
+        let ticket = this.state.ticket || {}
+        let replies = []
+        replies = (ticket.ticketReplies || []).concat([])
+
         replies.push({
           sender: 'buyers',
           message: this.state.message,
           imageUrls: [src],
           date: new Date().getTime()
         })
-
         ticket.ticketReplies = replies
 
+        if(ticket){
+          if(ticket.ticketReplies.slice(-1)[ticket.ticketReplies.slice(-1).length - 1]['sender'] == "buyers"){
+            this.setState({
+              showTip:true
+            })
+          } else {
+            this.setState({
+              showTip: false
+            })
+          }
+        }
+        
         this.setState({
           ticket,
-          message: ''
+          message: '',
         })
 
         this.initScroll()
@@ -110,6 +296,9 @@ class TicketAdd extends React.Component {
       subject: this.state.subject,
       message: this.state.message
     }).then((data) => {
+      console.log('data,',data) 
+      console.log('ticket,',this.state.ticket)
+      console.log(this.state)
       let ticket = this.state.ticket || {}
       let replies = (ticket.ticketReplies || []).concat([])
       replies.push({
@@ -118,12 +307,36 @@ class TicketAdd extends React.Component {
         date: new Date().getTime()
       })
 
+      
       ticket.ticketReplies = replies
+
+      if(ticket){
+        if(ticket.ticketReplies.slice(-1)[ticket.ticketReplies.slice(-1).length - 1]['sender'] == "buyers"){
+          this.setState({
+            showTip:true
+          })
+        } else {
+          this.setState({
+            showTip: false
+          })
+        }
+      }
 
       this.setState({
         ticket,
-        message: ''
+        message: '',
+        // showMsg: true,
+        // showMsgTxt: 'Submitted successfully!'
       })
+
+      // setTimeout(()=>{
+      //   this.setState({
+      //     showMsg: false,
+      //     showMsgTxt: ''
+      //   })
+      // },2000)
+
+
 
       this.initScroll()
     })
@@ -136,66 +349,29 @@ class TicketAdd extends React.Component {
   }
   
   componentWillMount () {
-    const id = this.props.location.search.split('=')[1]
-    // console.log(id)
+    console.log(this.props.history.location.state)
+    // return
+    const params = this.props.history.location.state
+    let id;
+    console.log(this.props.location.search.split('=')[2])
+    if(params){
+      id = params.id ? params.id : ''
+      this.setState({
+        isApp: params.isShowApp ? params.isShowApp : 'false'
+      })
+      window.isShowApp = params.isShowApp ? params.isShowApp : 'false'
+    }
+    if(!id && !localStorage.__order){
+      this.props.history.push({pathname: `${window.ctx || ''}/support/ticket`})
+    }
+    console.log(id)
     if (id) {
       localStorage.__order = ""
-      get(id).then(({result}) => {
-        // console.log(result)
-        const {ticket, order, cusomerName, headSculptureUrl} = result
-        this.setState({
-          ticket,
-          order,
-          cusomerName,
-          headSculptureUrl,
-          loading: false,
-          subject: ticket.subject
-
-        })
-
-        this.initScroll()
-      }).catch((data) => {
-        alert(data.result)
-        if (data.code === 401) {
-          window.location.href = `${window.ctx || ''}/me/m`
-        }
-      })
+      this.getMsgByUrlId(id)
     } else {
       // console.log(localStorage.__order)
       if (localStorage.__order) {
-        
-        getByOrderId(JSON.parse(localStorage.__order).id).then(({result}) => {
-          const {ticket, order, cusomerName, headSculptureUrl} = result
-          // console.log(result)
-          // console.log(ticket.ticketReplies.slice(-1)[ticket.ticketReplies.slice(-1).length - 1]['sender'])
-          if(ticket){
-            if(ticket.ticketReplies.slice(-1)[ticket.ticketReplies.slice(-1).length - 1]['sender'] == "buyers"){
-              this.setState({
-                showTip:true
-              })
-            } else {
-              this.setState({
-                showTip: false
-              })
-            }
-          }
-          
-          this.setState({
-            isNew: true,
-            ticket,
-            order,
-            cusomerName,
-            headSculptureUrl,
-            loading: false,
-            subject: ticket ? ticket.subject : 0
-          })
-          this.initScroll()
-        }).catch((data) => {
-          alert(data)
-          if (data.code === 401) {
-            window.location.href = `${window.ctx || ''}/me/m`
-          }
-        })
+        this.getMsgByLocalData()
       } else {
         this.setState({
           isNew: true,
@@ -206,9 +382,67 @@ class TicketAdd extends React.Component {
     }
   }
 
-  componentWillUnmount(){
-    localStorage.__order = ''
+
+  getMsgByLocalData(){
+    getByOrderId(JSON.parse(localStorage.__order).id).then(({result}) => {
+      const {ticket, order, cusomerName, headSculptureUrl} = result
+      // console.log(result)
+      // console.log(ticket.ticketReplies.slice(-1)[ticket.ticketReplies.slice(-1).length - 1]['sender'])
+      if(ticket){
+        if(ticket.ticketReplies.slice(-1)[ticket.ticketReplies.slice(-1).length - 1]['sender'] == "buyers"){
+          this.setState({
+            showTip:true
+          })
+        } else {
+          this.setState({
+            showTip: false
+          })
+        }
+      }
+      
+      this.setState({
+        isNew: true,
+        ticket,
+        order,
+        cusomerName,
+        headSculptureUrl,
+        loading: false,
+        subject: ticket ? ticket.subject : 0
+      })
+      this.initScroll()
+    }).catch((data) => {
+      alert(data)
+      if (data.code === 401) {
+        window.location.href = `${window.ctx || ''}/me/m`
+      }
+    })
   }
+
+  getMsgByUrlId(id){
+    get(id).then(({result}) => {
+      // console.log(result)
+      const {ticket, order, cusomerName, headSculptureUrl} = result
+      this.setState({
+        ticket,
+        order,
+        cusomerName,
+        headSculptureUrl,
+        loading: false,
+        subject: ticket.subject
+
+      })
+
+      this.initScroll()
+    }).catch((data) => {
+      alert(data.result)
+      if (data.code === 401) {
+        window.location.href = `${window.ctx || ''}/me/m`
+      }
+    })
+  }
+  // componentWillUnmount(){
+  //   localStorage.__order = ''
+  // }
 
   
 
@@ -264,6 +498,8 @@ class TicketAdd extends React.Component {
         </Link>
       </OrderSelector>
     )
+
+    
 
     const groupReplies = (replies) => {
       var groups = _.groupBy(replies, function (obj) {
@@ -349,10 +585,18 @@ class TicketAdd extends React.Component {
     }
 
     return <div>
+      {
+        console.log(this.state.isApp)
+      }
+      {
+        window.isShowApp !== 'true' ?
+        (this.state.isApp == 'false' &&
+        (this.state.isNew? 
+        <PageHeader1 label={intl.formatMessage({id: 'Ticket'})}/> : 
+        <PageHeader1 label={intl.formatMessage({id: 'Ticket'})}/> )):<span></span>
+      }
 
-      {isFromNotification ? <PageHeader1 href={'/'} label={intl.formatMessage({id: 'Ticket'})}/> : <PageHeader1 label={intl.formatMessage({id: 'Ticket'})}/>}
-
-      <PageContanier1 style={{background: '#f6f6f6'}}>
+      <PageContanier1 style={{background: '#f6f6f6'}} noHeader={this.state.isApp == 'false' ?false:true}>
         { this.state.loading ? (
           <div style={{height: '50px', lineHeight: '50px', fontSize: '12px', textAlign: 'center', color: '#666'}}>
             <FormattedMessage id="loading"/>
@@ -362,32 +606,35 @@ class TicketAdd extends React.Component {
 
           <ChatContainer className="x-flex __column" style={{height:"100%", paddingTop:"12px"}}>
             {/* 当前订单 */}
-            <div className={style.selectedOrderBox} onClick={()=>this.props.history.push({pathname: "/supportnew/order"})}>
-                <div className={style.orderNo}>
+            <SelectedOrderBox onClick={()=>this.props.history.push({pathname: `${(window.ctx || '')}/support/order`,state:{from:'ticketadd'}})}>
+                <OrderNo>
                     {intl.formatMessage({id:"orderno"})}
-                    <span>{this.state.ticket ? this.state.ticket.operaId : this.state.order.id}</span>
-                </div>
-                <div className={style.orderCreateTime}>
+                    {
+                      console.log(this.state.ticket,this.state.order)
+                    }
+                    <span>{this.state.ticket ? this.state.ticket.id ? this.state.ticket.id : this.state.order.id : this.state.order.id}</span>
+                </OrderNo>
+                <OrderCreateTime>
                     {intl.formatMessage({id:"paymenttime"})}
                     <span>{
                       this.state.ticket ?
                       this.state.ticket.openDate ? 
                         (new Date(this.state.ticket.openDate).toLocaleDateString() + " " + new Date(this.state.ticket.openDate).toTimeString().substr(0, 5)) : 
-                        "":
+                        "-":
                       "-"
                       }</span>
-                </div>
-                <span className={`${style.iconfont} ${style.changeOrder}`}>&#xe66b;</span>
-            </div>
+                </OrderCreateTime>
+                <ChangeOrder>&#xe66b;</ChangeOrder>
+            </SelectedOrderBox>
 
             {/* 选择帮助项 */}
-            <div className={style.chooseHelpBox}>
-                <div className={style.helpTxt}><FormattedMessage id="helpyou"/></div>
+            <div>
+                <HelpTxt><FormattedMessage id="helpyou"/></HelpTxt>
                 <SelectType itemList={questions} selectChange={(e)=>selectChange(e)} type={"chat"} value={this.state.subject}/>
             </div>
             
             {/* 对话 */}
-            <Chat innerRef={(div) => { this.chatDiv = div }} style={{ height:'calc(100% - 230px)',overflow: 'hidden', overflowY: 'scroll', padding:'20px 0'}}>
+            <Chat innerRef={(div) => { this.chatDiv = div }} style={{ height:'calc(100% - 230px)',overflow: 'hidden', overflowY: 'scroll', padding:'20px',WebkitOverflowScrolling:'touch'}}>
               {this.state.ticket && this.state.ticket.ticketReplies && _.map(groupReplies(this.state.ticket.ticketReplies), (group, index) => (
                 <div key={index}>
                   <div style={{textAlign: 'center', color: '#999', fontSize: '12px', height: '40px', lineHeight: '40px'}}>{index}</div>
@@ -397,14 +644,14 @@ class TicketAdd extends React.Component {
               {/* 提示 */}
               {
                 this.state.ticket && this.state.ticket.ticketReplies && this.state.showTip && (
-                  <div className={style.responseTip}>
+                  <ResponseTip>
                     {intl.formatMessage({id:"responseTime"})}
-                  </div>
+                  </ResponseTip>
                 )
               }
               
               {
-                this.state.ticket && this.state.ticket.canBeRated && <div style={{marginTop: 20, textAlign: 'center'}}>
+                false && this.state.ticket && this.state.ticket.canBeRated && <div style={{marginTop: 20, textAlign: 'center'}}>
                   <Link to={`/support/rate/${this.state.ticket.id}`} style={{color: '#3aa978', textDecoration: 'none'}}>
                     <RATE style={{verticalAlign: 'middle'}}>&#xe60d;</RATE>
                     <span style={{textDecoration: 'underline', verticalAlign: 'middle'}}>Rate My Service</span>
@@ -412,32 +659,35 @@ class TicketAdd extends React.Component {
                 </div>
               }
             </Chat> 
+
+            {/* <MessageBox style={{display: this.state.showMsg ? '':'none'}}>
+                {this.state.showMsgTxt}
+            </MessageBox> */}
             
 
             {/* 输入提交 */}
-            <div className={style.chatInputBox}>
-                <div className={style.chatInput}>
-                    <textarea className={`${this.state.messageInvalid ? style.invalid : ''} ${style.textInput}`} 
+            <ChatInputBox>
+                <ChatInput>
+                    <TextInput style={{boxShadow: this.state.messageInvalid&&'inset 0 0 1px red !important',borderColor: this.state.messageInvalid&&'red !important'}}
                               placeholder={intl.formatMessage({id:"textareaPlaceHolder"})}
                               onChange={(evt) => {textareaChange(evt) }} 
                               value={this.state.message} 
-                              // disabled={typeof(this.state.subject)==='number'}
                               >
-                    </textarea>
-                </div>
-                <div className={style.uploadBtn}>
+                    </TextInput>
+                </ChatInput>
+                <UploadBtn>
                     <label htmlFor="imageFiles">
-                        <span className={`${style.iconfont} ${style.upload}`}>&#xe788;</span>
+                        <Upload>&#xe788;</Upload>
                     </label>
                     <input style={{display:'none'}} id="imageFiles" name="imageFiles"
                           multiple="multiple" type="file"
                           accept="image/jpg,image/jpeg,image/png,image/gif"
                           onChange={this.handleImage}/>
-                </div>
-                <div className={style.sendBtn} onClick={this.handleTicket}>
-                    <span className={`${style.iconfont} ${style.send}`}>&#xe789;</span>
-                </div>
-            </div>
+                </UploadBtn>
+                <SendBtn onClick={this.handleTicket}>
+                    <Send>&#xe789;</Send>
+                </SendBtn>
+            </ChatInputBox>
           </ChatContainer>
 
         ) }

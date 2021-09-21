@@ -9,9 +9,9 @@
                 <div class="el-tbl-cell" @click="getData(1,'Unpaid','click')" :class="{active:1===orderStatus}">
                     {{$t('unpaid')}}<span>{{orderCountUnpaid}}</span>
                 </div>
-                <div class="el-tbl-cell" @click="getData(2,'Paid','click')" :class="{active:2===orderStatus}">
+                <!-- <div class="el-tbl-cell" @click="getData(2,'Paid','click')" :class="{active:2===orderStatus}">
                     {{$t('paid')}}<span>{{orderCountPaid}}</span>
-                </div>
+                </div> -->
                 <div class="el-tbl-cell" @click="getData(3,'Processing','click')" :class="{active:3===orderStatus}">
                     {{$t('processing')}}<span>{{orderCountProcessing}}</span>
                 </div>
@@ -57,19 +57,19 @@
                             </div>
                         </div>
                         <div class="tbl-cell v-m w-180 tx-c">
-                            <p>{{item.statusView}}</p>
+                            <p>{{item.fulfillmentStatusView}}</p>
                             <p class="detail cur-p" @click="checkDetail(item.id)">{{$t('detail')}}</p>
-                            <p class="detail cur-p" v-if="item.id && item.status === 2 || item.status === 3"  @click="checkLogistics(item.id)">{{$t('track')}}</p>
+                            <p class="detail cur-p" v-if="item.id && item.isTrackingBtnShow && item.fulfillmentStatus === constant.TOTAL_STATUS_SHIPPED"  @click="checkLogistics(item.id)">{{$t('track')}}</p>
                         </div>
                         <div class="tbl-cell v-m w-190 tx-c">
                             <div class="pos-rel">
-                                <a class="r-btn" :href="getPayUrl(item)" target="_blank" v-if="getPayUrl(item) && item.status === 0">{{getBtnText(item)}}</a>
-                                <div class="offTip" v-if="orderoffset(item) >= 0 && getBtnText(item)==='Imprimir boleto' && item.status === 0 && getPayUrl(item)">
+                                <a class="r-btn" :href="getPayUrl(item)" target="_blank" v-if="getPayUrl(item) && item.fulfillmentStatus === constant.TOTAL_STATUS_UNPAID">{{getBtnText(item)}}</a>
+                                <div class="offTip" v-if="orderoffset(item) >= 0 && getBtnText(item)==='Imprimir boleto' && item.fulfillmentStatus === constant.TOTAL_STATUS_UNPAID && getPayUrl(item)">
                                     <div class="triangle"></div>
                                     <span class="label">Presente de cupão expirs</span>
                                     <count-down :timeStyle="{color:'#fff'}" :timeLeft="orderoffset(item)"></count-down>
                                 </div>
-                                <div class="offTip" v-if="orderoffset(item) >= 0 && (getBtnText(item)==='Generar Ticket' || getBtnText(item)==='Gerar Ticket') && item.status === 0 && getPayUrl(item)">
+                                <div class="offTip" v-if="orderoffset(item) >= 0 && (getBtnText(item)==='Generar Ticket' || getBtnText(item)==='Gerar Ticket') && item.fulfillmentStatus === constant.TOTAL_STATUS_UNPAID && getPayUrl(item)">
                                     <div class="triangle"></div>
                                     <span class="label" >Tiempo restante para realizar el pago</span>
                                     <count-down :timeStyle="{color:'#fff'}" :timeLeft="orderoffset(item)"></count-down>
@@ -77,15 +77,15 @@
                             </div>
                             <!--线上其他支付按钮+倒计时-->
                             <div class="pos-rel">
-                                <a class="b-btn" :href="checkoutUrl(item.id)"  v-if="item.id && item.status===0 && !item.mercadopagoPayURL && !item.boletoPayCodeURL && orderoffset(item) >= 0">{{$t("paynow")}}</a>
-                                <div class="offTip" v-if="item.id && item.status===0 && !item.mercadopagoPayURL && !item.boletoPayCodeURL && orderoffset(item) >= 0">
+                                <a class="b-btn" :href="checkoutUrl(item.id)"  v-if="item.id && item.fulfillmentStatus===constant.TOTAL_STATUS_UNPAID && !item.mercadopagoPayURL && !item.boletoPayCodeURL && orderoffset(item) >= 0">{{$t("paynow")}}</a>
+                                <div class="offTip" v-if="item.id && item.fulfillmentStatus===constant.TOTAL_STATUS_UNPAID && !item.mercadopagoPayURL && !item.boletoPayCodeURL && orderoffset(item) >= 0">
                                     <div class="triangle"></div>
                                     <span class="label">{{$t("remaining")}}:</span>
                                     <count-down :timeStyle="{color:'#fff'}" :timeLeft="orderoffset(item)"></count-down>
                                 </div>
                             </div>
-                            <!--重新加入购物车-->
-                            <div class="b-btn" @click="addProducts(item.orderItems)" v-if="item.id && item.status===4">{{$t("repurchase")}}</div>
+                            <!-- 重新加入购物车  -->
+                            <div class="b-btn" @click="addProducts(item.orderItems)" v-if="item.id && item.fulfillmentStatus===constant.TOTAL_STATUS_CANCELED">{{$t("repurchase")}}</div>
                         </div>
                     </div>
                 </div>
@@ -106,6 +106,7 @@
 <script>
     import {mapGetters, mapActions} from 'vuex';
     import * as utils from '../utils/geekoutil';
+    import * as constant from "../utils/constant.js"
     import LinkImage from './link-image.vue';
     import orderTicket from './order-ticket.vue';
     import selectOrder from './select-order.vue';
@@ -121,7 +122,8 @@
                 isloded:false,
                 finished:false,
                 isAddProducts:false,
-                isAddProductstTip:''
+                isAddProductstTip:'',
+                constant:constant
             }
         },
         components: {
@@ -133,7 +135,7 @@
         computed: {
             ...mapGetters([
                 'orderCountUnpaid',
-                'orderCountPaid',
+                // 'orderCountPaid',
                 'orderCountProcessing',
                 'orderCountShipped',
                 'orderCountReceipt',
@@ -189,7 +191,6 @@
         },
         watch:{
             orderStatus(newStatus){
-                console.log("newStatus",newStatus);
                 let orderName =  this.getOrderStatusName(this.orderStatus);
                 this.getData(newStatus,orderName,"click");
             }
@@ -201,7 +202,7 @@
             this.$store.dispatch('getOrderCountReceipt');
             this.$store.dispatch('getOrderCountCanceled');
             this.$store.dispatch('getOrderCountUnpaid');
-            this.$store.dispatch('getOrderCountPaid');
+            // this.$store.dispatch('getOrderCountPaid');
 
             let orderName =  this.getOrderStatusName(this.orderStatus);
             // this.loadAll(20).then(()=> {

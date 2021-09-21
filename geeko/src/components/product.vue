@@ -2,11 +2,20 @@
     <div class="el-list-product">
         <a 
             :href="productUrl" 
-            data-title="me" 
+            :data-title="eventTitle" 
             :data-column="calssifyName" 
             :data-product-position="index+1"
             data-product-list-source 
             :product-id="product.id"
+			:data-product-source="product.dataSource" 
+            :data-geeko-id="geekoId"
+            :data-geeko-experiment="experimentId"
+			:data-request-id="product.aliRequestId"
+            :data-experiment-id="product.aliExperimentId"
+			:type="eventTitle"
+			:data-type="eventTitle"
+            :data-content="eventTitle"
+            ref="oftenProduct"
         >
             <figure>
                 <div class="img">
@@ -85,7 +94,7 @@
         }
 
         .el-product-like {
-            font-size: 20px;
+            font-size: 18px;
             &.red {
                 color: #f00;
             }
@@ -119,7 +128,19 @@
             required: true,
             isSoldOut:true,
             index:Number,
-            calssifyName:String
+            calssifyName:String,
+            requestId:{
+                type:String,
+                default:""
+            },
+            experimentId:{
+                type:String,
+                default:""
+            },
+            eventTitle:{
+                type:String,
+                default:""
+            }
         },
         computed: {
             imageUrl(){
@@ -150,6 +171,13 @@
             },
             isLogin(){
                 return this.$store.getters["me/isLogin"];
+            },
+            geekoId(){
+                if(this.product && this.product.geekoRequsestId){
+                    return this.product.geekoRequsestId;
+                }else{
+                    return this.requestId;
+                }
             }
         },
         methods: {
@@ -159,6 +187,12 @@
                     this.$store.dispatch("addToCartIsShow",true);
                     this.$store.dispatch("globalLoadingShow",false);
                 });
+            }
+        },
+        mounted(){
+            let value = this.$refs.oftenProduct;
+            if (window.productListObserver) {
+                window.productListObserver.observe(value)
             }
         }
     }
