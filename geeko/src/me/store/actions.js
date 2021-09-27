@@ -271,7 +271,9 @@ const actions = {
     },
 
     changeAccountEmail(context, data){
-        return api.changeAccountEmail(data)
+        return api.changeAccountEmail(data).then((result) => {
+            return result;
+        })
     },
 
     changeEmail({commit}, data){
@@ -386,6 +388,10 @@ const actions = {
 
     confirmEmail({commit},email){
         return api.confirmEmail(email)
+        // return new Promise((reslove,reject) => {
+        //     console.log("email",email);
+        //     reslove(true);
+        // });
     },
     getTrackOrderMessage({commit},{skip}){
         return api.getTrackOrderMessage(skip).then((track) => {
@@ -485,7 +491,9 @@ const actions = {
             });
         });
     },
-
+    getPointsRulesGuide({commit},code){
+        return api.getMessageToArray(code);
+    }
 }
 
 export default actions;

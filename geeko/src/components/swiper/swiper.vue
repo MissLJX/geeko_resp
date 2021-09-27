@@ -1,6 +1,6 @@
 <template>
     <div class="swiper">
-        <div v-swiper:mySwiper="swiperOption" :class="{'swiper-no-swiping' : notificationData && notificationData.length <= 1}">
+        <div class="swiper-container" v-swiper:mySwiper="swiperOption" :class="{'swiper-no-swiping' : notificationData && notificationData.length <= 1}">
             <div class="swiper-wrapper">
                 <div class="swiper-slide" :key="id+index" v-for="({id,icon,icon2,message,isClick},index) in notificationData">
                     <div class="notification-container" @click="isClick && disposeNotification(id)">
@@ -68,7 +68,9 @@
             }
         },
         created:function(){
-            // this.swiperOption = {};
+            if(this.notificationData && this.notificationData.length <= 1){
+                this.swiperOption = {};
+            }
             // console.log("this.swiperOption",this.swiperOption)
         },
         mounted() {
@@ -80,16 +82,39 @@
         },
         methods:{
             disposeNotification(id){
-                console.log("id",id);
-                console.log("this.email",this.email);
                 if(this.ifOwnEmail){
                     this.$router.push({name:"change-email"});
                 }else{
-
+                    this.verifyEmail(this.email);
                 }
             },
-            verifyEmail(){
-                
+            verifyEmail(email){
+                let _this = this;
+                this.$store.dispatch("globalLoadingShow",true);
+                this.$store.dispatch('me/confirmEmail', email).then((data)=>{
+                    this.$store.dispatch("globalLoadingShow",false);
+                    _this.modalShow();
+                }).catch((e) => {
+                    console.log("This mailbox adress is already existed,please re-enter.");
+                });
+            },
+            modalShow(){
+                let _this = this;
+                _this.$store.dispatch('confirmShow', {
+                    show: true,
+                    cfg: {
+                        btnFont:{
+                            yes:"OK",
+                        },
+                        message: "A verification link has been sent to your email address, please check your mailbox.",
+                        yes: function () {
+                            _this.$store.dispatch('closeConfirm');
+                            _this.$emit("update:notificationData",[]);
+                        },
+                        no: function () {
+                        }
+                    }
+                })
             }
         }
     }

@@ -4,8 +4,8 @@
             <p>{{cfg.message}}</p>
         </div>
         <div class="fd">
-            <button class="btn" @click="cfg.yes">{{cfg.btnFont.yes}}</button>
-            <button class="btn no" @click="cfg.no">{{cfg.btnFont.no}}</button>
+            <button class="btn" @click="cfg.yes" v-if="cfg.btnFont && cfg.btnFont.yes">{{cfg.btnFont.yes}}</button>
+            <button class="btn no" @click="cfg.no" v-if="cfg.btnFont && cfg.btnFont.no">{{cfg.btnFont.no}}</button>
         </div>
     </div>
 </template>
