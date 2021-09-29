@@ -65,6 +65,9 @@
                 }else{
                     return false
                 }
+            },
+            isLogin(){
+                return this.$store.getters["me/isLogin"];
             }
         },
         created:function(){
@@ -82,6 +85,11 @@
         },
         methods:{
             disposeNotification(id){
+                if(!this.isLogin){
+                    window.location.href = this.GLOBAL.getUrl(`/i/login?redirectUrl=/me/m`);
+                    return false;
+                }
+
                 if(this.ifOwnEmail){
                     this.$router.push({name:"change-email"});
                 }else{
@@ -93,12 +101,13 @@
                 this.$store.dispatch("globalLoadingShow",true);
                 this.$store.dispatch('me/confirmEmail', email).then((data)=>{
                     this.$store.dispatch("globalLoadingShow",false);
-                    _this.modalShow();
+                    _this.modalShow("A verification link has been sent to your email address, please check your mailbox.",true);
                 }).catch((e) => {
-                    console.log("This mailbox adress is already existed,please re-enter.");
+                    this.$store.dispatch("globalLoadingShow",false);
+                    _this.modalShow(e.result,false);
                 });
             },
-            modalShow(){
+            modalShow(message,flag){
                 let _this = this;
                 _this.$store.dispatch('confirmShow', {
                     show: true,
@@ -106,10 +115,10 @@
                         btnFont:{
                             yes:"OK",
                         },
-                        message: "A verification link has been sent to your email address, please check your mailbox.",
+                        message: message,
                         yes: function () {
                             _this.$store.dispatch('closeConfirm');
-                            _this.$emit("update:notificationData",[]);
+                            flag && _this.$emit("update:notificationData",[]);
                         },
                         no: function () {
                         }

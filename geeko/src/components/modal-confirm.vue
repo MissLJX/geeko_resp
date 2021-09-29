@@ -3,6 +3,11 @@
         <div class="bd">
             <p>{{cfg.message}}</p>
         </div>
+
+        <div class="message2" v-if="cfg.message2">
+            <p>{{cfg.message2}}</p>
+        </div>
+
         <div class="fd">
             <button class="btn" @click="cfg.yes" v-if="cfg.btnFont && cfg.btnFont.yes">{{cfg.btnFont.yes}}</button>
             <button class="btn no" @click="cfg.no" v-if="cfg.btnFont && cfg.btnFont.no">{{cfg.btnFont.no}}</button>
@@ -59,6 +64,13 @@
         border: solid 1px #222222;
         color: #222222;
         background-color: #ffffff;
+    }
+
+    .st-confirm .message2{
+        margin-top: 5px;
+        color: #999999;
+        font-size: 12px;
+        text-align: center;
     }
 </style>
 

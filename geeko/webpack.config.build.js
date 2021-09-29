@@ -35,7 +35,7 @@ module.exports = {
         minimizer: [new TerserPlugin({
             parallel: true,
             // 禁止生成lilicense.txt
-            extractComments: true
+            extractComments: false
         })],
         chunkIds: 'named',
     },

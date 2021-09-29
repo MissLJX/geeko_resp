@@ -155,11 +155,11 @@
             changeAcountHandle(){
                 if(!this.account.email){
                     // 邮箱为空
-                    this.modalShow("The email address cannot be empty, please enter the valid email address.");
+                    this.modalShow("The email address cannot be empty, please enter the valid email address.","");
                     return;
                 }else if(!this.validataEmail(this.account.email)){
                     // 邮箱格式错误
-                    this.modalShow("The email address is not available, please enter the valid email address.",() => {
+                    this.modalShow("The email address is not available, please enter the valid email address.","",() => {
                         this.account.email = null;
                     });
                     return;
@@ -167,16 +167,18 @@
 
                 if(!this.account.password){
                     // 密码为空
-                    this.modalShow("The password cannot be empty, please enter the password for this account.");
+                    this.modalShow(
+                        "The password cannot be empty, please enter the password for this account.",
+                        "Temporarily do not support other accounts (Google, Facebook, Apple, etc.) to change email."
+                    );
                     return;
                 }
 
 
-                console.log("all right");
                 this.$store.dispatch("globalLoadingShow",true);
                 this.$store.dispatch('me/changeAccountEmail', this.account).then((data) => {
                     // 发送邮件成功
-                    this.modalShow("A verification link has been sent to your email address, please check your mailbox.",() => {
+                    this.modalShow("A verification link has been sent to your email address, please check your mailbox.","",() => {
                         this.account.email = null;
                         this.account.password = null;
                     });
@@ -193,7 +195,7 @@
                 this.$validator.validate('communicationEmail', this.subEmail.email).then((result) => {
                     _this.$store.dispatch('me/changeEmail', this.subEmail).then(() => {
                         _this.$store.dispatch("globalLoadingShow",false);
-                        _this.modalShow("Success! We will send our latest newsletter to your new email address.");
+                        _this.modalShow("Success! We will send our latest newsletter to your new email address.","");
                     });
                 })
             },
@@ -201,7 +203,7 @@
                 let rule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;
                 return rule.test(email);
             },
-            modalShow(message,callback){
+            modalShow(message,message2,callback){
                 let _this = this;
                 _this.$store.dispatch('confirmShow', {
                     show: true,
@@ -210,6 +212,7 @@
                             yes:"OK",
                         },
                         message: message,
+                        message2:message2,
                         yes: function () {
                             _this.$store.dispatch('closeConfirm').then(() => {
                                 if(callback) callback();
@@ -223,6 +226,7 @@
             errorValidataMessage(code,errorMessage){
                 let message = "";
                 let name = "";
+                let message2 = "";
                 if(code === 401){
                     // 邮箱已经被注册的错误提示  401
                     message = "This email address is already registered, please change to another valid email address.";
@@ -230,11 +234,12 @@
                 }else if(code === 402){
                     // 密码错误的错误提示              402
                     message = "Password is incorrect, please enter a valid password for this account.";
+                    message2 = "Temporarily do not support other accounts (Google, Facebook, Apple, etc.) to change email.";
                     name = "password";
                 }else{
                     message = errorMessage;
                 }
-                this.modalShow(message,() => {
+                this.modalShow(message,message2,() => {
                     if(name) this.account[name] = null;
                 });
                 this.$store.dispatch("globalLoadingShow",false);

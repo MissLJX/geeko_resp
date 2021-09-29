@@ -23,11 +23,11 @@
             </a> -->
         </div>
 
-        <div class="login-message" v-if="!isLogin" @click="specificationLogin('/me/m')">
+        <!-- <div class="login-message" v-if="!isLogin" @click="specificationLogin('/me/m')">
             <div class="iconfont">&#xe6ca;</div>
             <div class="_font">{{messageM1518}}</div>
             <div class="iconfont">&#xe694;</div>
-        </div>
+        </div> -->
         
         <swiper v-if="swiperData && swiperData.length > 0" :notification-data.sync="swiperData" :email="email"></swiper>
 
@@ -253,7 +253,7 @@
                         window.location.href = utils.PROJECT + path;
                     }
                 }else{
-                    window.location.href = `/i/login?redirectUrl=${path}`;
+                    window.location.href = utils.PROJECT + `/i/login?redirectUrl=${path}`;
                 }
             },
             changeToLogin(){
@@ -278,15 +278,16 @@
                     icon:"&#xe6ca;",
                     icon2:"&#xe694;",
                     message:message1518,
-                    isClick:false
+                    isClick:true
                 };
                 this.swiperData.push(obj1);
             }else if(this.isLogin && !this.me.isConfirmEmail){
+                let message1543 = await store.dispatch("me/getIndexLoginMessageCode","M1543");
                 let obj2 = {
                     id:'message1519',
                     icon:"&#xe6ca;",
                     icon2:"&#xe694;",
-                    message:"Verify the email you can get 100 points!",
+                    message:message1543,
                     isClick:true
                 };
                 this.swiperData.push(obj2);

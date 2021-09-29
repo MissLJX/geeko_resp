@@ -78,12 +78,51 @@
                     </a>
                 </li>
 
+                <!-- <li>
+                    <a class="el-me-tool-list-item" @click.prevent="isShow = true;">
+                        <touch-go class="el-me-tool-list-touch" label1="Delete Account">
+                        </touch-go>
+                    </a>
+                </li> -->
+
                 <li>
                     <router-link class="el-me-tool-list-item" :to="{name: 'about-policy'}">
                         <touch-go class="el-me-tool-list-touch" :label1="$t('index.about') + ' ' +  GLOBAL.sitename">
                         </touch-go>
                     </router-link>
                 </li>
+            </ul>
+        </div>
+
+        <div v-show="isShow" class="del-reason">
+            <ul class="reason-select">
+                <li>
+                    <input type="radio" id="one" value="Too many marketing mails" v-model="pickedReason">
+                    <label for="one">Too many marketing mails</label>
+                </li>
+                <li>
+                    <input type="radio" id="two" value="For privacy reason" v-model="pickedReason">
+                    <label for="two">For privacy reason</label>
+                </li>
+                <li>
+                    <input type="radio" id="three" value="No products favord on the website" v-model="pickedReason">
+                    <label for="three">No products favord on the website</label>
+                </li>
+                <li>
+                    <input type="radio" id="four" value="Dissatisfied with the product" v-model="pickedReason">
+                    <label for="four">Dissatisfied with the product</label>
+                </li>
+                <li>
+                    <input type="radio" id="five" value="Dissatisfied with the shipping " v-model="pickedReason">
+                    <label for="five">Dissatisfied with the shipping</label>
+                </li>
+                <li>
+                    <input type="radio" id="six" value="Others" v-model="pickedReason">
+                    <label for="six">Others</label>
+                </li>
+                <textarea v-if="(this.pickedReason=='Others')" v-model="inputReason" class="inputReason" placeholder="Would you please tell us why?" required></textarea>
+                <button class="cancel-btn" @click="isShow = false">Cancel</button>
+                <button class="del-btn" @click="delAccount">Delete</button>
             </ul>
         </div>
 
@@ -133,7 +172,10 @@
         data(){
             return {
                 selectLanguageShow:false,
-                selectCurrencyShow:false
+                selectCurrencyShow:false,
+                isShow:false,
+                pickedReason: 'Too many marketing mails',
+                inputReason:""
             }
         },
         methods:{
@@ -175,7 +217,15 @@
                 this.$store.dispatch('logout').then(() => {
                     window.location.href = "/";
                 });
-            }
+            },
+            delAccount:function(){
+                if(this.pickedReason === 'Others'){
+                    this.pickedReason = this.inputReason
+                }
+                this.$store.dispatch('logoff',this.pickedReason).then(() => {
+                    window.location.href = '/'
+                })
+            },
         }
     }
 </script>
@@ -248,5 +298,48 @@
             color: #ffffff;
             text-transform: uppercase;
         }
+    }
+
+    .del-reason{
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        padding: 20px 0;
+        background-color: rgba(0,0,0,0.3);
+    }
+    .del-reason ul li input{
+        -webkit-appearance:radio;
+        -moz-appearance:radio;
+    }
+    .reason-select{
+        width: 85%;
+        padding: 10px;
+        background-color: #fff;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    .reason-select li{
+        width: 100%;
+        font-size: 14px;
+        height: 50px;
+        line-height: 50px;
+        border-bottom: 1px solid #eeeeee;
+    }
+    li:nth-child(6){
+        border-bottom: none;
+    }
+    .cancel-btn,.del-btn{
+        width: 49%;
+        height: 30px;
+        line-height: 30px;
+        margin-top: 20px;
+    }
+    .inputReason{
+        width: 100%;
+        height: 50px;
     }
 </style>
