@@ -10,17 +10,12 @@
                 <form @submit.prevent="changeAcountHandle">
                     <p class="_title">Your new account:</p>
                     <p class="st-control el-email-control">
-                        <input name="email" v-validate="'required|email'" v-model="account.email"
-                               :class="{'st-input':true, 'st-input-danger':errors.has('email')}" type="text"/>
-                        <span v-show="errors.has('email')" class="st-is-danger">{{errors.first('email')}}</span>
+                        <input name="email" v-model="account.email" type="text"/>
                     </p>
-
 
                     <p class="_title">password</p>
                     <p class="st-control el-email-control">
-                        <input name="password" v-validate="'required'" v-model="account.password"
-                               :class="{'st-input':true, 'st-input-danger':errors.has('password')}" type="password"/>
-                        <span v-show="errors.has('password')" class="st-is-danger">{{errors.first('password')}}</span>
+                        <input name="password" v-model="account.password" type="password"/>
                     </p>
 
                     <div class="el-email-send-container">
@@ -158,23 +153,96 @@
         },
         methods: {
             changeAcountHandle(){
-                this.$validator.validateAll({
-                    email: this.account.email,
-                    password: this.account.password
-                }).then((result) => {
-                    if (result) {
-                        this.$store.dispatch('me/changeAccountEmail', this.account).then(() => {
-                            alert('Successed!')
-                        }).catch((data) => {
-                            alert(data.result)
-                        })
-                    }
-                });
+                if(!this.account.email){
+                    // 邮箱为空
+                    this.modalShow("The email address cannot be empty, please enter the valid email address.","");
+                    return;
+                }else if(!this.validataEmail(this.account.email)){
+                    // 邮箱格式错误
+                    this.modalShow("The email address is not available, please enter the valid email address.","",() => {
+                        this.account.email = null;
+                    });
+                    return;
+                }
+
+                if(!this.account.password){
+                    // 密码为空
+                    this.modalShow(
+                        "The password cannot be empty, please enter the password for this account.",
+                        "Temporarily do not support other accounts (Google, Facebook, Apple, etc.) to change email."
+                    );
+                    return;
+                }
+
+
+                this.$store.dispatch("globalLoadingShow",true);
+                this.$store.dispatch('me/changeAccountEmail', this.account).then((data) => {
+                    // 发送邮件成功
+                    this.modalShow("A verification link has been sent to your email address, please check your mailbox.","",() => {
+                        this.account.email = null;
+                        this.account.password = null;
+                    });
+                    this.$store.dispatch("globalLoadingShow",false);
+                }).catch((data) => {
+                    let code = data.code;
+                    this.errorValidataMessage(code,data.result);
+                    
+                })
             },
             changeEmailHandle(){
+                let _this = this;
+                this.$store.dispatch("globalLoadingShow",true);
                 this.$validator.validate('communicationEmail', this.subEmail.email).then((result) => {
-                    this.$store.dispatch('me/changeEmail', this.subEmail)
+                    _this.$store.dispatch('me/changeEmail', this.subEmail).then(() => {
+                        _this.$store.dispatch("globalLoadingShow",false);
+                        _this.modalShow("Success! We will send our latest newsletter to your new email address.","");
+                    });
                 })
+            },
+            validataEmail(email){
+                let rule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;
+                return rule.test(email);
+            },
+            modalShow(message,message2,callback){
+                let _this = this;
+                _this.$store.dispatch('confirmShow', {
+                    show: true,
+                    cfg: {
+                        btnFont:{
+                            yes:"OK",
+                        },
+                        message: message,
+                        message2:message2,
+                        yes: function () {
+                            _this.$store.dispatch('closeConfirm').then(() => {
+                                if(callback) callback();
+                            });
+                        },
+                        no: function () {
+                        }
+                    }
+                })
+            },
+            errorValidataMessage(code,errorMessage){
+                let message = "";
+                let name = "";
+                let message2 = "";
+                if(code === 401){
+                    // 邮箱已经被注册的错误提示  401
+                    message = "This email address is already registered, please change to another valid email address.";
+                    name = "email";
+                }else if(code === 402){
+                    // 密码错误的错误提示              402
+                    message = "Password is incorrect, please enter a valid password for this account.";
+                    message2 = "Temporarily do not support other accounts (Google, Facebook, Apple, etc.) to change email.";
+                    name = "password";
+                }else{
+                    message = errorMessage;
+                }
+                this.modalShow(message,message2,() => {
+                    if(name) this.account[name] = null;
+                });
+                this.$store.dispatch("globalLoadingShow",false);
             }
         },
         components: {

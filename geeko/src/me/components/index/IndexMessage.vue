@@ -23,13 +23,13 @@
             </a> -->
         </div>
 
-        <div class="login-message" v-if="!isLogin" @click="specificationLogin('/me/m')">
+        <!-- <div class="login-message" v-if="!isLogin" @click="specificationLogin('/me/m')">
             <div class="iconfont">&#xe6ca;</div>
             <div class="_font">{{messageM1518}}</div>
             <div class="iconfont">&#xe694;</div>
-        </div>
+        </div> -->
         
-        <!-- <swiper :notification-data.sync="swiperData" :email="email"></swiper> -->
+        <swiper v-if="swiperData && swiperData.length > 0" :notification-data.sync="swiperData" :email="email"></swiper>
 
         <div class="header-icon">
             <div class="st-table">
@@ -253,7 +253,7 @@
                         window.location.href = utils.PROJECT + path;
                     }
                 }else{
-                    window.location.href = `/i/login?redirectUrl=${path}`;
+                    window.location.href = utils.PROJECT + `/i/login?redirectUrl=${path}`;
                 }
             },
             changeToLogin(){
@@ -271,24 +271,27 @@
             store.dispatch('me/getOrderCountUnpaid');
 
             // store.dispatch("me/getShoppingCartNum");
-
-            let message1518 = await store.dispatch("me/getIndexLoginMessageCode","M1518");
-            // let obj1 = {
-            //     id:'message1518',
-            //     icon:"&#xe6ca;",
-            //     icon2:"&#xe694;",
-            //     message:message1518,
-            //     isClick:false
-            // };
-            // let obj2 = {
-            //     id:'message1519',
-            //     icon:"&#xe6ca;",
-            //     icon2:"&#xe694;",
-            //     message:"Verify the email you can get 100 points!",
-            //     isClick:true
-            // };
-            // this.swiperData.push(obj1,obj2);
-            // console.log("this.swiperData",this.swiperData)
+            if(!this.isLogin){
+                let message1518 = await store.dispatch("me/getIndexLoginMessageCode","M1518");
+                let obj1 = {
+                    id:'message1518',
+                    icon:"&#xe6ca;",
+                    icon2:"&#xe694;",
+                    message:message1518,
+                    isClick:true
+                };
+                this.swiperData.push(obj1);
+            }else if(this.isLogin && !this.me.isConfirmEmail){
+                let message1543 = await store.dispatch("me/getIndexLoginMessageCode","M1543");
+                let obj2 = {
+                    id:'message1519',
+                    icon:"&#xe6ca;",
+                    icon2:"&#xe694;",
+                    message:message1543,
+                    isClick:true
+                };
+                this.swiperData.push(obj2);
+            }
         }
     }
 </script>
