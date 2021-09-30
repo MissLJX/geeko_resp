@@ -161,11 +161,11 @@ export default {
     },
     survey:{
         survey_title: 'Prezado cliente',
-        survey_title_content: 'Para agradecer o seu apoio, iremos oferecer-lhe 100 pontos para a sua conta {website}.',
+        survey_title_content: 'Para agradecer o seu apoio, iremos oferecer-lhe {point} pontos para a sua conta {website}.',
         survey_to_help_us: 'Para nos ajudar a entender melhor suas necessidades, por favor, forneça algumas informações adicionais. Garantimos a confidencialidade e segurança no tratamento dos seus dados pessoais. Todas as suas respostas permanecerão anônimas.',
         survey_thanks_done: "Obrigado pelo seu tempo! Você tem ",
         survey_thanks: "Você já enviou esta pesquisa！ Você tem ",
-        survey_thanks_points: '100 pontos ',
+        survey_thanks_points: '{point} pontos ',
         survey_thanks_more: 'em sua conta, dê uma olhada e faça compras no {website}!',
         survey_question_1: {
             title: '*Em relação a compras de itens de moda, você costuma tomar uma decisão com antecedência ou na hora de fazer as compras?',

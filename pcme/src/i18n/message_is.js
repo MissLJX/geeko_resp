@@ -256,11 +256,11 @@ export default {
     },
     survey:{
         survey_title: 'Dear Customer',
-        survey_title_content: 'To thank you for your support, we will offer you 100 points to your {website} account.',
+        survey_title_content: 'To thank you for your support, we will offer you {point} points to your {website} account.',
         survey_to_help_us: 'To help us better understand your needs, please kindly provide us some additional information. We guarantee the confidentiality and security in the treatment of your personal data. All your answers are guaranteed to remain anonymous.',
         survey_thanks_done: "Thank you for your time! You've got ",
         survey_thanks: "You have already submitted this survey ！You’ve got ",
-        survey_thanks_points: '100 points',
+        survey_thanks_points: '{point} points',
         survey_thanks_more: ' in your account, have a look and enjoy shopping at {website}!',
         survey_question_1: {
             title: '*Regarding shopping fashion items, do you typically make a decision beforehand or at the time of shopping?',

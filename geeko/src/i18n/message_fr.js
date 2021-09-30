@@ -161,11 +161,11 @@ export default {
     },
     survey:{
         survey_title: 'Cher client',
-        survey_title_content: 'Pour vous remercier de votre soutien, nous vous offrirons 100 points sur votre compte {website}.',
+        survey_title_content: 'Pour vous remercier de votre soutien, nous vous offrirons {point} points sur votre compte {website}.',
         survey_to_help_us: 'Pour nous aider à mieux comprendre vos besoins, veuillez nous fournir des informations supplémentaires. Nous garantissons la confidentialité et la sécurité dans le traitement de vos données personnelles. Toutes vos réponses sont garanties pour rester anonymes.',
         survey_thanks_done: "Merci pour votre temps! Vous avez ",
         survey_thanks: "Vous avez déjà soumis cette enquête ！Vous avez ",
-        survey_thanks_points: '100 points',
+        survey_thanks_points: '{point} points',
         survey_thanks_more: ' sur votre compte, jetez un œil et bon shopping sur {website}!',
         survey_question_1: {
             title: "*En ce qui concerne les achats d'articles de mode, prenez-vous généralement une décision à l'avance ou au moment de l'achat ?",
