@@ -12,7 +12,7 @@
                         <i class="iconfont">&#xe638;</i>
                     </div>
                 </label>
-                <input :disabled="hadDoneBefore" type="radio" :name="title" :value='item.value' :id='title+item.value' @change="changeHandle($event)"/>
+                <input :disabled="hadDoneBefore" type="radio" :name="title" :value='item.value' :id='title+item.value' @change="changeHandle($event, 'input')"/>
                 <div class="checkboxTextArea" v-if="item.value=='Others'&&defaultV.indexOf(item.value) != -1 ">
                     <textarea :disabled="hadDoneBefore" :value='inputValue' @change="othersChange($event)"></textarea>
                 </div>
@@ -30,7 +30,7 @@
                         <i class="iconfont">&#xe638;</i>
                     </div>
                 </label>
-                <input :disabled="hadDoneBefore" type="checkbox" :name="title" :value='item.value' :id='title+item.value' @change="changeHandle($event)"/>
+                <input :disabled="hadDoneBefore" type="checkbox" :name="title" :value='item.value' :id='title+item.value' @change="changeHandle($event, 'input')"/>
                 <div class="checkboxTextArea" v-if="item.value=='Others'&&defaultV.indexOf(item.value) != -1 ">
                     <textarea :disabled="hadDoneBefore" :value='inputValue' @change="othersChange($event)"></textarea>
                 </div>
@@ -38,11 +38,11 @@
         </div>
 
         <div v-if="type == 'textarea'" class="question-answer-list">
-            <textarea :disabled="hadDoneBefore" cols="30" rows="10" :value='defaultV' @change="changeHandle($event)"></textarea>
+            <textarea :disabled="hadDoneBefore" cols="30" rows="10" :value='defaultV' @change="changeHandle($event,'textarea')"></textarea>
         </div>
 
         <div v-if="type == 'select'" class="question-answer-list">
-            <div class="selectBox">
+            <!-- <div class="selectBox">
                 <div class="selectInputBox" @click="openSelect()">
                     <span>{{selectedValue}}</span>
                     <div v-if="selectOpen == true" class="selectOptionBox">
@@ -59,14 +59,18 @@
                 </div>
                 
                 <span :class="{'iconfont selectIcon': true, 'option-open': selectOpen}">&#xe692;</span>
-            </div>
-            
+            </div> -->
+            <m-select :defaultV="selectItem" 
+                      :countries="countries"
+                      @optionClick="optionClick"
+                    ></m-select>
         </div>
     </div>
 </template>
 
 <script type="text/ecmascript-6">
-    import _ from 'lodash'
+    import _ from 'lodash';
+    import Select from '../countrySelect/select.vue'
 
     export default{
         data(){
@@ -128,8 +132,7 @@
         },
         created(){
             if(this.type == 'select'){
-               // 点击其他区域关闭弹窗
-                document.addEventListener("click",this.closeItem,false)     
+                
                 // this.$store.dispatch('getCountries');
             } else if(this.type == 'radio' || this.type == 'textarea'){
             } else if(this.type == 'checkbox'){
@@ -140,12 +143,7 @@
         deactivated(){
             // this.suspendShow = false;
         },
-        beforeDestroy(){
-            if(this.type == 'select'){
-               // 页面销毁前移除监听
-                document.removeEventListener("click",this.closeItem,false);   
-            }
-        },
+        
         watch:{
         },
         methods: {
@@ -156,20 +154,23 @@
                 }
             },
             optionClick(item){
+                console.log(item)
                 if(!this.hadDoneBefore){
                     this.selectItem = item.label;
                     this.selectOpen = !this.selectOpen;
                     this.$emit("change", {question: this.question, selectedValue: item.value})
                 }
             },
-            closeItem(e){
-                if(!this.$el.contains(e.target)){
-                    this.selectOpen = false;
-                }
-            },
-            changeHandle(e ){
+            
+            changeHandle(e, type){
                 console.log(e)
                 if(!this.hadDoneBefore){
+                    if(type=='textarea'){
+                        this.$emit("otherChange",{
+                            question: this.question,
+                            inputValue: e.target.value
+                        })
+                    }
                     this.$emit("change", {
                         question: this.question,
                         selectedValue: e.target.value
@@ -186,6 +187,9 @@
                     })
                 }
             }
+        },
+        components:{
+            "m-select": Select
         }
     }
 </script>

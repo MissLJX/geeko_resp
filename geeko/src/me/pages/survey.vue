@@ -1,6 +1,6 @@
 <template>
     <div class="survey" id="surveyBody">
-        <div class="fixed-header">
+        <div v-if="!isApp" class="fixed-header" >
             <nav-bar>
                 <i class="iconfont el-back-font" slot="left" @click="$router.go(-1);">&#xe693;</i>
                 <span slot="center">{{$t("point.survey")}}</span>
@@ -15,10 +15,10 @@
             <p class="_title">{{$t("point.sorry_empty_here_not")}}</p>
         </div>
 
-        <div class="survey-container" v-if="!maskShow">
+        <div :class="{'survey-container':true, 'noHeader':isApp}" v-if="!maskShow">
             <div class="survey-info">
                 <div class="info-title">{{$t("survey.survey_title")}}</div>
-                <div class="info-content">{{$t("survey.survey_title_content", {website: GLOBAL.sitename})}}</div> 
+                <div class="info-content">{{$t("survey.survey_title_content", {website: GLOBAL.sitename,point:points})}}</div> 
             </div>
 
             <question-item v-for='(item,index) in questionList' 
@@ -68,7 +68,7 @@
                 <img src="https://image.geeko.ltd/chicme/2021-9-7/2021-9-7-me-survey-points.png" alt="">
                 <div class="maskContent">
                     {{clickSubmit ? $t("survey.survey_thanks_done") : $t("survey.survey_thanks")}}
-                    <strong>{{$t("survey.survey_thanks_points")}}</strong>
+                    <strong>{{$t("survey.survey_thanks_points", {point: points})}}</strong>
                     {{$t("survey.survey_thanks_more", {website: GLOBAL.sitename})}}
                     <!-- You have already submitted this survey ！You’ve got 200 points in your account, have a look and enjoy shopping at ChicMe! -->
                 </div>
@@ -87,6 +87,7 @@
     import Question from '../components/question/question.vue'
     import SubmitBtn from "../../components/submit-btn.vue"
     import store from "../../store/index";
+    import {mapGetters} from 'vuex'
 
     let questionObject = [
         {
@@ -174,7 +175,6 @@
             answer:'',
             input: ''
         },
-        
     ]
 
     export default {
@@ -658,20 +658,40 @@
             'submit-btn': SubmitBtn
         },
         computed:{
+            ...mapGetters('me', ['message']),
+            points(){
+                if(this.message.message){
+                    let m = JSON.parse(this.message.message).point;
+                    return m
+                }
+            },
+            isApp(){
+                if(window.isApp !== 'true'){
+                    return false;
+                } else {
+                    return true;
+                }
+            }
         },
         created(){
+            // this.getPoints()
+            this.$store.dispatch('me/getMessage', 'M1545')
             console.log=()=>{
                 
             }
         },
         mounted(){
             this.$nextTick(this.getData())
-            // document.body.style.position = 'fixed'
         },
         beforeDestroy(){
             document.body.style.position = 'static'
         },
         methods:{
+            getPoints(){
+                store.dispatch("/me/getMessage", 'M1545').then(res => {
+                    console.log(res)
+                })
+            },
             questionChange(data){
                 console.log(data)
 
@@ -911,6 +931,9 @@
                     line-height: 22px;
                 }
             }
+        }
+        .noHeader{
+            margin-top: 0;
         }
 
         .maskBox{

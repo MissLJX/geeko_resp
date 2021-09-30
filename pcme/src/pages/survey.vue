@@ -12,7 +12,8 @@
             <div class="survey-info">
                 <div class="info-box">
                     <div class="info-title">{{$t("survey.survey_title")}}</div>
-                    <div class="info-content">{{$t("survey.survey_title_content", {website: GLOBAL.sitename})}}</div> 
+                    <!-- 加 points参数： -->
+                    <div class="info-content">{{$t("survey.survey_title_content", {website: GLOBAL.sitename, point: points})}}</div> 
                 </div>
             </div>
 
@@ -51,16 +52,13 @@
                             :question="item"
                             :ref="'question'+(index+questionList.length+1)"
                             ></question-item>
-            
-
-            <!-- <button @click="()=>q1.reverse().reverse()">getData</button> -->
+        
             <div class="btnBox">
                 <div class="submitBtn" @click="()=>submit()">
                     {{$t("submit")}}
                 </div>
             </div>
 
-            
         </div>
         <div v-if="maskShow" class="maskBox" id="maskBody">
             <div class="maskInfo">
@@ -68,7 +66,8 @@
                 <img src="https://image.geeko.ltd/chicme/2021-9-7/2021-9-7-me-survey-points.png" alt="">
                 <div class="maskContent">
                      {{clickSubmit ? $t("survey.survey_thanks_done"):$t("survey.survey_thanks")}}
-                    <strong>{{$t("survey.survey_thanks_points")}}</strong>
+                     <!-- ,{points: ...} -->
+                    <strong>{{$t("survey.survey_thanks_points", {point: points})}}</strong>
                     {{$t("survey.survey_thanks_more",{website: GLOBAL.sitename})}}                    
                 </div>
                 <div class="maskButton">
@@ -646,11 +645,23 @@
                 isUpdate:false,
                 hadDoneBefore: false,
                 clickSubmit: false,
+                selectOpen: false,
+                selectItem: {label:'Country',value: ''}
             }
         },
         computed:{
+            ...mapGetters(['message']),
+            points(){
+                if(this.message.message){
+                    let m = JSON.parse(this.message.message).point;
+                    return m
+                }
+            }
         },
         created(){
+            this.$store.dispatch('getMessage', 'M1545')
+            // 点击其他区域关闭弹窗
+            document.addEventListener("click",this.closeItem,false) 
             console.log=()=>{
                 
             }
@@ -813,7 +824,7 @@
                        
                     }
                 })
-            }
+            },
         },
         components:{
             'question-item':Question,
@@ -977,10 +988,10 @@
                 }
 
                 .maskContent{
-                    width: 368px;
+                    width: 568px;
                     min-height: 63px;
                     font-family: Roboto-Regular;
-                    font-size: 14px;
+                    font-size: 16px;
                     font-weight: normal;
                     font-stretch: normal;
                     line-height: 20px;
@@ -1024,4 +1035,79 @@
         }
 
     }
+    .selectBox{
+                min-width: 351px;
+                max-width: 500px;
+                position: relative;
+                .selectInputBox {
+                    width: 100%;
+                    height: 32px;
+                    background-color: #f6f6f6;
+                    border: none;
+                    outline: none;
+                    line-height: 32px;
+                    // padding: 0 10px;
+                    appearance: none;
+                    -webkit-appearance: none;
+                    -moz-appearance: none;
+                    cursor: pointer;
+
+                    span{
+                        padding: 15px;
+                    }
+
+                    .selectOptionBox{
+                        position: absolute;
+                        top: 32px;
+                        left: 0px;
+                        background: #efefef;
+                        width: 100%;
+                        /* border: 1px solid; */
+                        height: 200px;
+                        overflow: hidden;
+                        overflow-y: scroll;
+                        z-index: 1;
+                        
+                        .selectOption{
+                            padding: 0 15px;
+                            cursor: pointer;
+                        }
+
+                        .selectOption-select{
+                            background: #fff;
+                        }
+
+                        .gray{
+                            color: #aaa;
+                        }
+                    }
+                    /*滚动条样式*/
+                    .selectOptionBox::-webkit-scrollbar {
+                        width: 4px;    
+                        /*height: 4px;*/
+                    }
+                    .selectOptionBox::-webkit-scrollbar-thumb {
+                        border-radius: 10px;
+                        -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+                        background: rgba(0,0,0,0.2);
+                    }
+                    .selectOptionBox::-webkit-scrollbar-track {
+                        -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+                        border-radius: 0;
+                        background: rgba(0,0,0,0.1);
+
+                    }
+                }
+                .selectIcon{
+                    position: absolute;
+                    right: 10px;
+                    top: calc(50% - 9px);
+                    transition: all 0.3s linear;
+                    color: #cacaca;
+                }
+                .option-open{
+                    transform: rotate(180deg);
+                    transition: all 0.3s linear;
+                }
+            }
 </style>

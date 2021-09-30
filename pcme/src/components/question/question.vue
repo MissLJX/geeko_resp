@@ -43,7 +43,7 @@
         </div>
 
         <div v-if="type == 'select'" class="question-answer-list">
-            <div class="selectBox">
+            <!-- <div class="selectBox">
                 <div class="selectInputBox" @click="openSelect()">
                     <span>{{selectedValue}}</span>
                     <div v-if="selectOpen == true" class="selectOptionBox">
@@ -60,8 +60,11 @@
                 </div>
                 
                 <span :class="{'iconfont selectIcon': true, 'option-open': selectOpen}">&#xe692;</span>
-            </div>
-            
+            </div> -->
+            <m-select :defaultV="selectItem" 
+                      :countries="countries"
+                      @optionClick="optionClick"
+                    ></m-select>
         </div>
     </div>
 </template>
@@ -69,6 +72,7 @@
 <script type="text/ecmascript-6">
     import _ from 'lodash'
     import {createLogger, mapGetters} from 'vuex'
+    import Select from '../countrySelect/select.vue'
 
     export default{
         data(){
@@ -114,10 +118,8 @@
             }
         },
         created(){
-
             if(this.type == 'select'){
                // 点击其他区域关闭弹窗
-                document.addEventListener("click",this.closeItem,false)     
                 this.$store.dispatch('getCountries');
             } else if(this.type == 'radio' || this.type == 'textarea'){
             } else if(this.type == 'checkbox'){
@@ -129,12 +131,7 @@
         },
         deactivated(){
         },
-        beforeDestroy(){
-            if(this.type == 'select'){
-               // 页面销毁前移除监听
-                document.removeEventListener("click",this.closeItem,false);   
-            }
-        },
+        
         computed: {
             ...mapGetters(['countries']),
             selectedValue:function(){
@@ -162,7 +159,7 @@
                     this.selectOpen = false;
                 }
             },
-            changeHandle(e ){
+            changeHandle(e){
                 if(!this.hadDoneBefore){
                     this.$emit("change", {
                         question: this.question,
@@ -178,6 +175,9 @@
                     })
                 }
             }
+        },
+        components:{
+            "m-select": Select
         }
     }
 </script>
@@ -196,7 +196,8 @@
         font-size:16px;font-style:normal;
         -webkit-font-smoothing: antialiased;
         -webkit-text-stroke-width: 0.2px;
-        -moz-osx-font-smoothing: grayscale;}
+        -moz-osx-font-smoothing: grayscale;
+    }
     .question{
         width: 65%;
         min-width: 800px;
