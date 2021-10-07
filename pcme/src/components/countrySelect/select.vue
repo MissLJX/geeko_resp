@@ -202,7 +202,7 @@ export default {
         sameCountry(){
             let includeCountry = this.countries;
             if(this.searchValue){
-                let reg = new RegExp(this.searchValue, 'ig')
+                let reg = new RegExp(this.searchValue+'', 'ig')
                 includeCountry = this.countries.filter(c => {
                     return reg.test(c.label)
                 })
