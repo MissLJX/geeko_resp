@@ -170,6 +170,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 </template>
 
@@ -185,7 +186,8 @@
         name:"IndexMessage",
         data(){
             return {
-                swiperData:[]
+                swiperData:[],
+                noCommentedMaskShow: false,
             }
         },
         components:{
@@ -193,7 +195,7 @@
         },
         computed:{
             ...mapGetters('me', [
-                'pointsAllSkip','me', "isLogin", 'feed', 'notificationCount', 'orderCountUnpaid',"shoppingCartCount","messageM1518"
+                'pointsAllSkip','me', "isLogin", 'feed', 'notificationCount', 'orderCountUnpaid',"shoppingCartCount","messageM1518","hasNoCommentOrder"
             ]),
             baseHeaderUrl() {
                 if (window.name === 'chicme') {
@@ -224,7 +226,8 @@
                 }else{
                     return "";
                 }
-            }
+            },
+
         },
         methods:{
             getFeedNum(num,icon){
@@ -263,7 +266,49 @@
             },
             getName(value){
                 return value ? value : '';
-            }
+            },
+            showMask(){
+                // this.noCommentedMaskShow = true
+                // this.fixedBody('hidden')
+                let that = this
+                this.modalShow(this.$t("index.no_comment_order"),'',()=>{
+                    that.specificationLogin('/me/m/order/confirmed')
+                })
+            },
+            
+            modalShow(message,message2,callback){
+                let _this = this;
+                _this.$store.dispatch('confirmShow', {
+                    show: true,
+                    cfg: {
+                        btnFont:{
+                            yes:"OK",
+                        },
+                        btnClose: true,
+                        message: message,
+                        message2:message2,
+                        yes: function () {
+                            _this.$store.dispatch('closeConfirm').then(() => {
+                                utils.saveUserHasNoCommentOrderState(false)
+                                if(callback) callback();
+                            });
+                        },
+                        no: function () {
+                            _this.$store.dispatch('closeConfirm').then(()=>{
+                                utils.saveUserHasNoCommentOrderState(false)
+                            });
+                        },
+                        style:{
+                            box:{
+                                width: '250px',
+                                borderRadius: '2px',
+                                padding: '26px 25px',
+                                boxShadow: 'none'
+                            },
+                        }
+                    }
+                })
+            },
         },
         created:async function(){
             store.dispatch('me/countNotifications');
@@ -272,6 +317,9 @@
 
             // store.dispatch("me/getShoppingCartNum");
             if(!this.isLogin){
+                // 未登录 清除这个cookie
+                utils.removeLocalCookie('_has_no_comment_order')
+
                 let message1518 = await store.dispatch("me/getIndexLoginMessageCode","M1518");
                 let obj1 = {
                     id:'message1518',
@@ -292,7 +340,15 @@
                 };
                 this.swiperData.push(obj2);
             }
-        }
+        },
+        mounted(){
+            let cookie = utils.getLocalCookie('_has_no_comment_order')
+            if(!cookie && this.isLogin){
+                if(!this.hasNoCommentOrder){
+                    this.showMask()
+                }
+            }
+        },
     }
 </script>
 

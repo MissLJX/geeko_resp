@@ -56,7 +56,7 @@ const SubmitBtn = styled.div`
 const Order = class extends React.Component {
   constructor (props) {
     super(props)
-    console.log(props)
+    // console.log(props)
     this.state = {
       currentPage: this.getPath(this.props.location.pathname),
       selected: true,
@@ -89,7 +89,7 @@ const Order = class extends React.Component {
   }
 
   componentWillMount(){
-    console.log('order from:',this.props.history.location.state)
+    // console.log('order from:',this.props.history.location.state)
     this.setState({
       from: this.props.history.location.state ? this.props.history.location.state.from : 'ticket'
     })
@@ -99,7 +99,7 @@ const Order = class extends React.Component {
     const {intl} = this.props
 
     const selectChange = (e) => {
-        console.log(e)
+        // console.log(e)
         this.props.history.replace(`${(window.ctx || '')}/support/order/${e}`)
     }
 

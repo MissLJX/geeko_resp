@@ -44,7 +44,7 @@ const Orders = class extends React.Component {
       <PageHeader label={intl.formatMessage({id: 'orders'})} tool={intl.formatMessage({id: 'submit'})}/>
       <PageContanier>
       	<div style={{backgroundColor: '#fff', boxShadow: '0 0 5px rgba(0, 0, 0, .1)', padding: '10px', position: 'fixed', zIndex: 10, top: '50px', width: '100%'}}>
-          <GeekoSelect value={this.state.currentPage} onChange={(evt) => { console.log(evt);this.setState({currentPage: evt.currentTarget.value}); this.props.history.replace(`/support/orders/${evt.currentTarget.value}`) }} style={{width: '100%', height: '40px', marginTop: '10px'}}>
+          <GeekoSelect value={this.state.currentPage} onChange={(evt) => {this.setState({currentPage: evt.currentTarget.value}); this.props.history.replace(`/support/orders/${evt.currentTarget.value}`) }} style={{width: '100%', height: '40px', marginTop: '10px'}}>
             {this.paths.map(p => (
               <option key={p.value} value={p.value}>{p.label}</option>
             ))}

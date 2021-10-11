@@ -102,7 +102,7 @@ class FAQ extends React.PureComponent{
     }
 
     componentWillMount(){
-        console.log(this.props.location.params)
+        // console.log(this.props.location.params)
         let list = JSON.parse(JSON.stringify(this.state.dropDownList))
         if(this.props.location.params){
             for(let i =0 ;i < list.length; i++){
@@ -111,7 +111,7 @@ class FAQ extends React.PureComponent{
                 }
             }
         }
-        console.log(questions)
+        // console.log(questions)
         for(let i = 0; i < questions.length; i++){
             for(let j = 0; j < list.length; j++){
                 if(questions[i]['id'] == list[j]['rootId']){
@@ -129,14 +129,14 @@ class FAQ extends React.PureComponent{
         const {dropDownList, defaultShow} = this.state;
 
         const search = (e) => {
-            console.log(e)
+            // console.log(e)
             if(e){
                 this.props.history.push({pathname: `${(window.ctx || '')}/support/question`, state:{search: e, fromFAQ:true}})
             }
         }
 
         const clickItem = (e) => {
-            console.log("item:",e);
+            // console.log("item:",e);
             this.props.history.push({pathname:`${(window.ctx || '')}/support/question`, state:{id:e.id, fromFAQ:true}})
         }
         

@@ -98,7 +98,7 @@ class TicketList extends React.PureComponent{
         this.state={
             tickets:[],
         }
-        console.log('ppp',this.props);
+        // console.log('ppp',this.props);
     }
 
     render(){
@@ -222,7 +222,7 @@ let isLoading = false;
 class Ticket1 extends React.PureComponent{
     constructor(props){
         super(props);
-        console.log(this.props)
+        // console.log(this.props)
         this.state = {
             loading: false,
             skip: 0,

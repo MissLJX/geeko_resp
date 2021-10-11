@@ -69,7 +69,7 @@ const PageHeader = (props) => {
   		 	} else if(p.outApp){
                 window.location.href = p.outApp;
             } else {
-                console.log('go back')
+                // console.log('go back')
   		 		props.history.goBack()
   		 	}
   		 }}>&#xe7c7;</IconStyle>
@@ -80,7 +80,7 @@ const PageContanier = (props) => {
     // console.log(props)
     const p = props.props ? props.props : props;
     // const bodyDom = useRef();
-    console.log(p.style)
+    // console.log(p.style)
 
     let style = p.style ?  {
         width: '100%',
@@ -122,7 +122,7 @@ const PageContanier = (props) => {
 export const PageHeader1 = withRouter(PageHeader);
 
 const Page1 = (props) => {
-    console.log(window.isApp)
+    // console.log(window.isApp)
     // console.log(props)
     return <div>
         {

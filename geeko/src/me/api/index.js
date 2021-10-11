@@ -273,3 +273,7 @@ export const getRelationProducts = ({productId,skip}) => {
     return axios.get(`/product/${skip}/20/${productId}/scp-show2`);
 }
 
+// 获取是否存在未评论的订单
+export const getNoCommentOrder = () => {
+    return axios.get(VPATH+`/order/exists-order-without-comment`,{},{}).then(data => data)
+}

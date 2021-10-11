@@ -1,3 +1,4 @@
+// 没有copy的是性能版
 import React from 'react'
 import {Link} from 'react-router-dom'
 import {get, getByOrderId, sendImage, sendTicket} from '../../api'
@@ -195,332 +196,6 @@ const RATE = styled.span`
 	font-family: iconfont;
 	font-size: 30px;
 `
-
-const SubmitQuestionMask = styled.div`
-  position: fixed;
-  top: 0;
-  z-index: 11;
-  height: 100vh;
-  width: 100%;
-  background: rgba(0,0,0,0.6);
-  display: ${props => props.show ? 'block':'none'};
-`
-
-const SubmitQuestionContent = styled.div`
-  width: 100%;
-  height: 484px;
-  position: absolute;
-  bottom: 0;
-  background: #fff;
-  // text-align: right;
-`
-
-const SubmitQuestionClose = styled.span`
-  @font-face {
-    font-family: 'iconfont';  /* Project id 384296 */
-    src: url('//at.alicdn.com/t/font_384296_waimmey03x.woff2?t=1631165132958') format('woff2'),
-        url('//at.alicdn.com/t/font_384296_waimmey03x.woff?t=1631165132958') format('woff'),
-        url('//at.alicdn.com/t/font_384296_waimmey03x.ttf?t=1631165132958') format('truetype');
-  }
-  font-family:"iconfont" !important;
-  font-size:16px;
-  font-style:normal;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color:#666;
-  line-height: 12px;
-  font-size: 12px;
-  display: inline-block;
-  position: absolute;
-  right: 8px;
-  top: 6px;
-`
-
-const SubmitTips = styled.div`
-  background-color: #e6e6e6;
-  font-family: Roboto-Regular;
-	font-size: 10px;
-	font-weight: normal;
-	font-stretch: normal;
-	letter-spacing: 0px;
-	color: #666666;
-  padding: 8px 11px;
-  text-align: left;
-  // margin-top: 20px;
-  &>span{
-    transform:scale(0.83);
-  }
-`
-
-const SubmitSelectReason = styled.div`
-  width: 100%;
-  min-height: 72px;
-  padding: 6px 12px;
-  border-bottom: 10px solid #f6f6f6;
-`
-
-const SelectReasonTitle = styled.div`
-  font-family: Roboto-Medium;
-  font-size: 14px;
-  font-weight: normal;
-  font-stretch: normal;
-  letter-spacing: 0px;
-  color:#222;
-  & > span{
-    color: #e64545;
-  }
-`
-
-const SelectReasonBox = styled.div`
-  
-`
-
-const SelectReasonInput = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 10px;
-  cursor: pointer;
-
-  & > span:first-child{
-    font-family: Roboto-Regular;
-    font-size: 12px;
-    font-weight: normal;
-    font-stretch: normal;
-    letter-spacing: 0px;
-    color: #666666;
-    margin-left: 10px;
-  }
-
-  & > .selectReasonIcon{
-    @font-face {
-      font-family: 'iconfont';  /* Project id 384296 */
-      src: url('//at.alicdn.com/t/font_384296_waimmey03x.woff2?t=1631165132958') format('woff2'),
-          url('//at.alicdn.com/t/font_384296_waimmey03x.woff?t=1631165132958') format('woff'),
-          url('//at.alicdn.com/t/font_384296_waimmey03x.ttf?t=1631165132958') format('truetype');
-    }
-    font-family:"iconfont" !important;
-    font-size:14px;
-    font-style:normal;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    color: #222222;
-    font-weight: 600;
-    transform: rotate(0deg);
-    transition: transform 0.3s;
-  }
-
-  & > .selected{
-    transform: rotate(180deg);
-    transition: transform 0.3s;
-  }
-`
-
-const SelectReasonItemBox = styled.div`
-  // display: none;
-  margin: 12px 0 16px;
-`
-
-const SelectReasonItem = styled.div`
-  // display: flex;
-  // align-items: center;
-  // justify-content: flex-start;
-  width: 96%;
-  min-height: 36px;
-  line-height: 36px;
-  background-color: #f5f5f5;
-  border-radius: 2px;
-  padding-left: 10px;
-  padding-bottom: ${props => props.showTextArea ? '17px':'0'};
-  margin-left: 10px;
-  margin-bottom: 2px;
-  position: relative;
-
-  &> div{
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-  }
-`
-
-const ReasonItemIcon = styled.span`
-  display: inline-block;
-  border: 1px solid ${props => props.select?'#222':'#999'};
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-
-  & > span{
-    width: 6px;
-    height: 6px;
-    display: ${props => props.select?'block':'none'};
-    border: 1px solid #222;
-    background: #222;
-    border-radius: 50%;
-    margin: 2px;
-  }
-`
-
-const ReasonItem = styled.div`
-  margin-left: 10px;
-  color: ${props => props.select?'#222':'#666'};
-`
-
-const ReasonTextArea = styled.textarea`
-  // position:absolute;
-  display: ${props => props.show ? 'block':'none'};
-  width: 332px;
-	height: 36px;
-	background-color: #ffffff;
-	border-radius: 2px;
-	border: solid 1px #e6e6e6;
-  width: 97%;
-  resize: none;
-  padding: 5px;
-  // margin-bottom:17px;
-`
-
-const SubmitDescriptionBox = styled.div`
-  width: 100%;
-  min-height: 72px;
-  padding: 6px 12px;
-  border-bottom: 10px solid #f6f6f6;
-`
-
-const DescriptionTextArea = styled.textarea`
-  width: 351px;
-  height: 100px;
-  background-color: #f5f5f5;
-  border-radius: 2px;
-  border: solid 1px #eeeeee;
-  outline: none;
-  resize: none;
-  padding: 12px 10px;
-  margin-top:12px;
-
-  &::-webkit-input-placeholder{
-    font-family: Roboto-Regular;
-    font-size: 12px;
-    font-weight: normal;
-    font-stretch: normal;
-    letter-spacing: 0px;
-    color: #bbbbbb;
-  }
-`
-
-const TextAreaInputLength = styled.div`
-  width: 100%;
-  text-align: right;
-  font-family: Roboto-Regular;
-	font-size: 12px;
-	font-weight: normal;
-	font-stretch: normal;
-	letter-spacing: 0px;
-	color: #999999;
-  margin-top: 10px;
-  margin-bottom: 16px;
-`
-
-const SubmitImageBox = styled.div`
-  width: 100%;
-  min-height: 72px;
-  padding: 16px 12px;
-`
-const UploadTips = styled.div`
-  font-family: Roboto-Regular;
-  font-size: 12px;
-  font-weight: normal;
-  font-stretch: normal;
-  letter-spacing: 0px;
-  color: #999999;
-  margin-top: 8px;
-`
-const UploadBox = styled.div`
-  height: 80px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  margin-top: 12px;
-`
-const UploadItem = styled.div`
-  width: 80px;
-  height: 80px;
-  background-color: #f5f5f5;
-  border: solid 1px #eeeeee;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 5px;
-  position:relative;
-  cursor: pointer;
-
-  & > span{
-    @font-face {
-      font-family: 'iconfont';  /* Project id 384296 */
-      src: url('//at.alicdn.com/t/font_384296_waimmey03x.woff2?t=1631165132958') format('woff2'),
-          url('//at.alicdn.com/t/font_384296_waimmey03x.woff?t=1631165132958') format('woff'),
-          url('//at.alicdn.com/t/font_384296_waimmey03x.ttf?t=1631165132958') format('truetype');
-    }
-    font-family:"iconfont" !important;
-    font-size:14px;
-    font-style:normal;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    color: #bbb;
-    font-size: 32px;
-    line-height: 32px;
-  }
-
-  & > .deleteImg{
-    position: absolute;
-    right: 0;
-    top: 0;
-    font-size: 18px;
-    line-height: 16px;
-    color: #fff;
-    background: #222;
-    display: block;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    text-align: center;
-    cursor: pointer;
-  }
-
-  & > img {
-    width: 80px;
-    height: 80px;
-    display: inline-block;
-  }
-`
-const QuestionSubmitBtnBox = styled.div`
-  width: 100%;
-  height: 72px;
-  background: #fff;
-  // box-shadow:
-  position: fixed;
-  bottom: 0;
-  z-index: 1;
-  padding: 12px 0;
-  box-shadow: 0px 2px 10px 0px rgb(0 0 0 / 50%);
-`
-const QuestionSubmitBtn = styled.div`
-  width: 351px;
-  height: 38px;
-  background-color: #222222;
-  border-radius: 2px;
-  text-transform: uppercase;
-  font-family: Roboto-Bold;
-	font-size: 14px;
-	font-weight: normal;
-	font-stretch: normal;
-	letter-spacing: 0px;
-	color: #ffffff;
-  text-align: center;
-  line-height: 38px;
-  margin: 0 auto;
-`
-
 class TicketAdd extends React.Component {
   constructor (props) {
     super(props)
@@ -544,20 +219,6 @@ class TicketAdd extends React.Component {
       showMsgTxt: '',
 
       isApp: "false",
-      questionMaskShow:false,
-      questionObject: {
-        questionTypeList:[
-          {id:0,title:'Size is small',isSelected:false},
-          {id:1,title:'Size is large',isSelected:false},
-          {id:2,title:'Others',isSelected:false},
-        ],
-        questionTypeInput: '',
-        showSelectItem: false,
-        descriptionInput: '',
-        uploadImgList: [],
-        uploadImgFileList: []
-      }
-      
 
     }
     this.handleImage = this.handleImage.bind(this)
@@ -693,7 +354,7 @@ class TicketAdd extends React.Component {
     const params = this.props.history.location.state
     let id;
     // 接受url传值的参数
-    const urlParams = this.props.history.location.pathname ? this.props.history.location.pathname.split("/")[3] : '';
+    const urlParams = this.props.history.location.pathname ? this.props.history.location.pathname.split("/")[this.props.history.location.pathname.split("/").length -1] : '';
     console.log(this.props.location, urlParams)
     // 链接中有传值-ticket列表点击过来的
     if(params){
@@ -727,6 +388,7 @@ class TicketAdd extends React.Component {
       }
     }
   }
+
 
   getMsgByLocalData(){
     getByOrderId(JSON.parse(localStorage.__order).id).then(({result}) => {
@@ -822,18 +484,36 @@ class TicketAdd extends React.Component {
       }
     })
   }
+  // componentWillUnmount(){
+  //   localStorage.__order = ''
+  // }
+
+  
 
   render () {
     const {intl, location} = this.props
-    const {questionObject, questionMaskShow} = this.state
 
     const isFromNotification = location.search && location.search.indexOf('utm_source=pcnotification') >= 0
+    // console.log(this.state.subject)
+
+    //   subjectsizecolor: '尺码相关',
+    // subjectaddress: '更改收货地址',
+    // subjectshipping: '物流以及预计到达日期',
+    // subjectwrong: '物品收错',
+    // subjectshippingmethod: '更改物流方式',
+    // subjectreturn: '退货或调换',
+    // subjectrefund: '退款 / 取消订单',
+    // subjectother: '其他'
+
     const questions = [
-      {label: "Cancel the order", value: '0', selected: false},
-      {label: "Modify the order", value: '2', selected: false},
-      {label: "Shipping status", value: '3', selected: false},
-      {label: "Return the order", value: '4', selected: false},
-      {label: "Others", value: '5', selected: false},
+      {label: intl.formatMessage({id: 'subjectsizecolor'}), value: '0', selected: false},
+      {label: intl.formatMessage({id: 'subjectaddress'}), value: '2', selected: false},
+      {label: intl.formatMessage({id: 'subjectshipping'}), value: '3', selected: false},
+      {label: intl.formatMessage({id: 'subjectwrong'}), value: '4', selected: false},
+      {label: intl.formatMessage({id: 'subjectshippingmethod'}), value: '5', selected: false},
+      {label: intl.formatMessage({id: 'subjectreturn'}), value: '6', selected: false},
+      {label: intl.formatMessage({id: 'subjectrefund'}), value: '8', selected: false},
+      {label: intl.formatMessage({id: 'subjectother'}), value: '7', selected: false}
     ]
 
     const LabelValue = (props) => {
@@ -862,6 +542,8 @@ class TicketAdd extends React.Component {
         </Link>
       </OrderSelector>
     )
+
+    
 
     const groupReplies = (replies) => {
       var groups = _.groupBy(replies, function (obj) {
@@ -930,7 +612,7 @@ class TicketAdd extends React.Component {
 
     const selectChange= (e) => {
         // console.log(e)
-        this.setState({subject: e,questionMaskShow: true})
+        this.setState({subject: e})
     }
 
     const textareaChange = (evt) => {
@@ -944,152 +626,6 @@ class TicketAdd extends React.Component {
           })
         }
       }
-    }
-
-    const questionTypeChange = (item) => {
-      let copyList = questionObject.questionTypeList.slice(0);
-      let selectItem = copyList.find(e => e.id == item.id);
-      copyList.forEach(item => {
-        item.isSelected = false;
-      })
-      selectItem.isSelected = true;
-      this.setState({
-        questionObject:{...questionObject, questionTypeList: copyList}
-      })
-    }
-
-    const questionImgUpload = (e) => {
-      let file = e.target.files
-      let fileList = [...questionObject.uploadImgList].concat([...file])
-      let imgSrcList = [];
-      if(fileList.length > 3){
-        fileList = fileList.splice(0,3);
-      }
-      
-      console.log(fileList)
-      fileList.forEach(item => {
-        var src = typeof item == 'string' ?
-                  item:
-                  window.navigator.userAgent.indexOf("Chrome") >= 1 || 
-                  window.navigator.userAgent.indexOf("Safari") >= 1 ? window.webkitURL.createObjectURL(item) : window.URL.createObjectURL(item);
-        imgSrcList.push(src);
-      })
-      this.setState({
-        questionObject: {
-          ...questionObject, 
-          uploadImgFileList:fileList,
-          uploadImgList:imgSrcList
-        }
-      })
-    }
-
-    const deleteImg = (index) => {
-      let fileList = questionObject.uploadImgFileList.slice(0);
-      let imgList = questionObject.uploadImgList.slice(0);
-      fileList.splice(index,1);
-      imgList.splice(index,1);
-      this.setState({
-        questionObject: {
-          ...questionObject,
-          uploadImgFileList: fileList,
-          uploadImgList: imgList
-        }
-      })
-    }
-
-    const checkParams = (params) => {
-
-    }
-
-    const questionSubmit = () => {
-      console.log('submit')
-      let params = {};
-      // 选了什么问题
-      params.question = this.state.subject;
-      // 选择的原因（有的问题没有）
-      params.selectReason = questionObject.questionTypeList.find(i => i.isSelected == true);
-      // 原因描述 仅限Others
-      if(params.selectReason && params.selectReason.title == 'Others'){
-        params.selectReasonInput = questionObject.questionTypeInput
-      }
-      // 描述
-      params.descriptionInput = questionObject.descriptionInput
-      // 上传的图片
-      let imgFileList = questionObject.uploadImgFileList.map(img => {
-        return new HtmlImageCompress(img, {quality: 0.7, imageType: img.type})
-      })
-      Promise.all(imgFileList).then(results => {
-        console.log(results)
-      })
-      // 需要添加一条数据 传富文本
-      let richTxt = `
-        <div style="color:#222;font-size: 14px;border-bottom:2px solid #999;padding-bottom:5px;">
-          Size is small
-        </div>
-        <div style="color:#222;font-size: 14px;border-bottom:2px solid #999;padding:5px 0;">
-          Facilitate return process and when scrolling and selecting an item to see description and returning to previous page; it does not return to last item veiwed,but to the first item.
-        </div> 
-        <div style="display: flex; align-items:center; justify-content:flex-start;">
-          <img style="width:60px;height: 60px;border:1px solid;margin: 7px 12px 0 0;" src="" /> 
-          <img style="width:60px;height: 60px;border:1px solid;margin: 7px 12px 0 0;" src="" /> 
-          <img style="width:60px;height: 60px;border:1px solid;margin: 7px 12px 0 0;" src="" /> 
-        </div> 
-      ` 
-
-      let ticket = this.state.ticket || {}
-      let replies = (ticket.ticketReplies || []).concat([])
-      replies.push({
-        sender: 'buyers',
-        message: richTxt,
-        date: new Date().getTime()
-      })
-
-      
-      ticket.ticketReplies = replies
-
-      if(ticket){
-        if(ticket.ticketReplies.slice(-1)[ticket.ticketReplies.slice(-1).length - 1]['sender'] == "buyers"){
-          this.setState({
-            showTip:true
-          })
-        } else {
-          this.setState({
-            showTip: false
-          })
-        }
-      }
-
-      this.setState({
-        showMsg: true,
-        message: '',
-        showMsgTxt: 'Submitted successfully!'
-      })
-
-      setTimeout(()=>{
-        this.setState({
-          showMsg: false,
-          showMsgTxt: ''
-        })
-      },2000)
-      
-      // let imgFileList = questionObject.uploadImgFileList.length > 0 ?
-      //                   questionObject.uploadImgFileList : '';
-      // console.log(imgFileList)
-      // if(imgFileList){
-      //   imgFileList.then((res)=>{
-      //     console.log(res)
-          // params.uploadImg = imgFileList
-
-          // // 请求接口上传文件
-          // const {file, fileSize} = result
-
-          // const formData = new FormData()
-          // formData.append('operaId', this.state.order.id)
-          // formData.append('subject', this.state.subject)
-          // formData.append('message', this.state.message || '-')
-          // formData.append('imageFiles', file)
-        // })
-      // }                  
     }
 
     return <div>
@@ -1108,6 +644,7 @@ class TicketAdd extends React.Component {
           </div>
 
         ) : (
+
           <ChatContainer className="x-flex __column" style={{height:"100%", paddingTop:"12px"}}>
             {/* 当前订单 */}
             <SelectedOrderBox onClick={()=>this.props.history.push({pathname: `${(window.ctx || '')}/support/order`,state:{from:'ticketadd'}})}>
@@ -1161,9 +698,9 @@ class TicketAdd extends React.Component {
               }
             </Chat> 
 
-            <MessageBox style={{display: this.state.showMsg ? '':'none'}}>
+            {/* <MessageBox style={{display: this.state.showMsg ? '':'none'}}>
                 {this.state.showMsgTxt}
-            </MessageBox>
+            </MessageBox> */}
             
 
             {/* 输入提交 */}
@@ -1190,141 +727,9 @@ class TicketAdd extends React.Component {
                 </SendBtn>
             </ChatInputBox>
           </ChatContainer>
+
         ) }
       </PageContanier1>
-      {/* 选择问题类型后的弹窗 */}
-      <SubmitQuestionMask show={questionMaskShow} onClick={()=>this.setState({questionMaskShow: false})}>
-          <SubmitQuestionContent>
-            {/* 关闭按钮 */}
-            <span style={{display:'block',width:'100%',textAlign:'right',backgroundColor:"#fff"}} onClick={()=>this.setState({questionMaskShow: false})}>
-              <SubmitQuestionClose>&#xe69a;</SubmitQuestionClose>
-            </span>
-
-            <div style={{height: '464px',overflow:'auto',marginTop:'20px',paddingBottom:'102px'}}>
-                {/* 提示语 */}
-                <SubmitTips>
-                  <span>The reasons below are optional. You can click “X” if you don't want to choose any of them.</span> 
-                </SubmitTips>
-
-                {/* 原因选择 */}
-                <SubmitSelectReason>
-                    {/* 选择标题 */}
-                    <SelectReasonTitle>
-                      <span>*</span> Select a reason
-                    </SelectReasonTitle>
-
-                    {/* 选择下拉框 */}
-                    <SelectReasonBox>
-                      <SelectReasonInput onClick={()=>this.setState({questionObject:{...questionObject, showSelectItem:!questionObject.showSelectItem}})}>
-                        <span>Select a reason</span>
-                        <span className={`iconfont selectReasonIcon ${questionObject.showSelectItem?'selected':''}`}>&#xe692;</span>
-                      </SelectReasonInput>
-                      
-                      {/* 选项框 */}
-                      <SelectReasonItemBox>
-                        {/* 选项 */}
-                        {
-                          questionObject.showSelectItem && 
-                          (questionObject.questionTypeList.length > 0) &&
-                          questionObject.questionTypeList.map((item, index)=>(
-                            <SelectReasonItem key={index} showTextArea={item.title === 'Others' && item.isSelected} onClick={()=>questionTypeChange(item)}>
-                              <div>
-                                <ReasonItemIcon select={item.isSelected}>
-                                  <span className="reasonItemIconSelected"></span>
-                                </ReasonItemIcon>
-                                <ReasonItem select={item.isSelected}>{item.title}</ReasonItem>
-                              </div>
-                                
-                              <ReasonTextArea 
-                                  show={item.title === 'Others' && item.isSelected} 
-                                  onChange={(e)=>{
-                                    this.setState({
-                                      questionObject:{
-                                        ...questionObject, 
-                                        questionTypeInput: e.target.value
-                                      }
-                                    })
-                                  }}>
-                              </ReasonTextArea>
-                            </SelectReasonItem>
-                          ))
-                        }
-                      </SelectReasonItemBox>
-                    </SelectReasonBox>
-                </SubmitSelectReason>
-
-                {/* 文字描述 */}
-                <SubmitDescriptionBox>
-                    {/* 标题 */}
-                    <SelectReasonTitle>
-                      <span>*</span> Description
-                    </SelectReasonTitle>
-
-                    {/* 输入框 */}
-                    <DescriptionTextArea 
-                        placeholder="Please describe your problem as much as possible so that customer service can respond faster…"
-                        onChange={(e)=>{
-                          this.setState({
-                            questionObject: {...questionObject, descriptionInput: e.target.value}
-                          })
-                        }}
-                        ></DescriptionTextArea>
-                    <TextAreaInputLength>
-                      { (questionObject.descriptionInput ? questionObject.descriptionInput.length : '0')+'/1000'}
-                    </TextAreaInputLength>
-                </SubmitDescriptionBox>
-
-                {/* 图片上传 */}
-                <SubmitImageBox>
-                  {/* 标题 */}
-                  <SelectReasonTitle>
-                    Upload image
-                  </SelectReasonTitle>
-
-                  {/* 上传提示 */}
-                  <UploadTips>Maximum of 3 photos, only JPEG, GIF or PNG. </UploadTips>
-
-                  {/* 上传盒子 */}
-                  <UploadBox>
-                    {
-                      questionObject.uploadImgList.map((item,index) => (
-                        <UploadItem key={index}>
-                          <span className="deleteImg" onClick={()=>deleteImg(index)}>&times;</span>
-                          <img src={item} alt="" />
-                        </UploadItem>
-                      ))
-                    }
-                    {
-                      questionObject.uploadImgList.length < 3 &&
-                      // <label htmlFor="imageFiles">
-                        <UploadItem>
-                          <span>&#xe6d3;</span>
-                          <input style={{opacity:0,position:'absolute',width:'80px',height:'80px'}} 
-                            type="file" 
-                            id="imageFiles" 
-                            multiple="multiple" 
-                            onChange={(e)=>questionImgUpload(e)}
-                            accept="image/jpg,image/jpeg,image/png,image/gif"></input>
-                        </UploadItem>
-                        
-                      // </label>
-                    }
-                    
-                    
-                  </UploadBox>
-                </SubmitImageBox>
-            </div>
-
-            {/* 提交按钮 */}
-            <QuestionSubmitBtnBox>
-              <QuestionSubmitBtn onClick={()=>questionSubmit()}>
-                sumbit
-              </QuestionSubmitBtn>
-            </QuestionSubmitBtnBox>
-            
-            
-          </SubmitQuestionContent>
-      </SubmitQuestionMask>
     </div>
   }
 }

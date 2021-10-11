@@ -51,7 +51,9 @@ const getters = {
 
     survey: state => state.survey,
 
-    wishlistEvent:state => state.wishlistEvent
+    wishlistEvent:state => state.wishlistEvent,
+
+    hasNoCommentOrder: state => state.hasNoCommentOrder
 }
 
 export default getters;

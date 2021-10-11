@@ -80,7 +80,7 @@ export default class Orders extends React.Component {
         default:
           suffix = 'get-orders2'
       }
-      console.log(suffix)
+      // console.log(suffix)
       return suffix
     }
     if (!this.state.loading && !this.state.finished) {
@@ -91,7 +91,7 @@ export default class Orders extends React.Component {
           id: order.id,
           detail: order
         })) : []
-        console.log(_orders)
+        // console.log(_orders)
         this.setState({
           orders: (this.state.orders || []).concat(_orders),
           skip: this.state.skip + this.state.limit,

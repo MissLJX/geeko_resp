@@ -940,7 +940,7 @@ El envío demora aproximadamente de 7 a 25 días hábiles para llegar a los paí
 				 Tenga en cuenta: Tiempo de entrega total = Tiempo de procesamiento + Tiempo de envío
                 </p>
                 <p>
-                Para conocer la fecha estimada de llegada, consulte <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">http://www.chicme.com/fs/shipping-policy-pc</a>
+                Para conocer la fecha estimada de llegada, consulte <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a>
                 </p>
 			</section>
 		</article>
@@ -960,7 +960,7 @@ const question46 = {
 					Después de que le enviemos el paquete, la información de envío se ATUALIZARá en el próximo centro de clasificación, que puede demorar unos días. Luego puede iniciar sesión en el estado y seguimiento de la orden.
 				</p>
 				<p>
-				  Para conocer la fecha estimada de llegada, consulte  <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">http://www.chicme.com/fs/shipping-policy-pc</a>
+				  Para conocer la fecha estimada de llegada, consulte  <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a>
                 </p>
 			</section>
 		</article>
@@ -1132,7 +1132,7 @@ const question55 = {
 El envío demora aproximadamente de 3 a 25 días hábiles para llegar a los países de destino.
 				</p>
 				<p>Tenga en cuenta: Tiempo de entrega total = Tiempo de procesamiento + Tiempo de envío</p>
-				<p>Para conocer la fecha estimada de llegada, consulte  <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">http://www.chicme.com/fs/shipping-policy-pc</a></p>
+				<p>Para conocer la fecha estimada de llegada, consulte  <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
 			</section>
 		</article>
 	`
@@ -1186,7 +1186,7 @@ const question58 = {
 El envío demora aproximadamente de 3 a 25 días hábiles para llegar a los países de destino.
 				</p>
 				<p>Tenga en cuenta: Tiempo de entrega total = Tiempo de procesamiento + Tiempo de envío</p>
-				<p>Para conocer la fecha estimada de llegada, consulte  <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">http://www.chicme.com/fs/shipping-policy-pc</a></p>
+				<p>Para conocer la fecha estimada de llegada, consulte  <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
 			</section>
 		</article>
 	`
@@ -1206,7 +1206,7 @@ const question59 = {
 El envío demora aproximadamente de 3 a 25 días hábiles para llegar a los países de destino.
 				</p>
 				<p>Tenga en cuenta: Tiempo de entrega total = Tiempo de procesamiento + Tiempo de envío</p>
-				<p>Para conocer la fecha estimada de llegada, consulte <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">http://www.chicme.com/fs/shipping-policy-pc</a></p>
+				<p>Para conocer la fecha estimada de llegada, consulte <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
 			</section>
 		</article>
 	`
@@ -1227,7 +1227,7 @@ const question60 = {
 El envío demora aproximadamente de 3 a 25 días hábiles para llegar a los países de destino.
 				</p>
 				<p>Tenga en cuenta: Tiempo de entrega total = Tiempo de procesamiento + Tiempo de envío</p>
-				<p>Para conocer la fecha estimada de llegada, consulte <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">http://www.chicme.com/fs/shipping-policy-pc</a></p>
+				<p>Para conocer la fecha estimada de llegada, consulte <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
 			</section>
 		</article>
 	`
@@ -1775,7 +1775,7 @@ const question88 = {
 				</p>
 				<p>El envío demora aproximadamente de 3 a 25 días hábiles para llegar a los países de destino.</p>
 				<p>Tenga en cuenta: Tiempo de entrega total = Tiempo de procesamiento + Tiempo de envío</p>
-				<p>Para conocer la fecha estimada de llegada, consulte <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">http://www.chicme.com/fs/shipping-policy-pc</a></p>
+				<p>Para conocer la fecha estimada de llegada, consulte <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
 			</section>
 		</article>
 	`
@@ -1791,7 +1791,7 @@ const question89 = {
 			</header>
 			<section>
 				<p>
-					Hola, tenemos la política de venta al por mayor: http://www.chicme.com/fs/wholesale-program-pc you can have a look
+					Hola, tenemos la política de venta al por mayor: <a href="https://www.chicme.com/fs/wholesale-program">https://www.chicme.com/fs/wholesale-program-pc</a> you can have a look
 				</p>
 			</section>
 		</article>

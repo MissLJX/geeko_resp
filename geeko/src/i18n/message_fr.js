@@ -130,7 +130,8 @@ export default {
         my_measurements:"Mes mesures",
         whitch_are_your_favorite:"Quelles sont vos catégories préférées?",
         who_do_you_ususlly:"Pour qui achetez-vous habituellement des vêtements?",
-        whitch_are_your_styles:"Quels sont vos styles préférés?"
+        whitch_are_your_styles:"Quels sont vos styles préférés?",
+        no_comment_order: "Vous avez des commandes non vérifiées, allez partager votre expérience pour gagner plus de points !",
     },
     measurements:{
         mea_title : "Mes mesures",

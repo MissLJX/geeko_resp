@@ -26,6 +26,4 @@ if(!root){
   document.body.appendChild(root)
 }
 
-
-
 ReactDOM.render(<App/>, root)

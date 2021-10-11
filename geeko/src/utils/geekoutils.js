@@ -131,4 +131,13 @@ export const getLocalCookie = function(name){
     return Cookie.get(name);
 }
 
+export const saveUserHasNoCommentOrderState = function(state){
+    return Cookie.set('_has_no_comment_order', state, {expires: 1})
+}
+
+export const removeLocalCookie = function(name){
+    return Cookie.remove(name);
+}
+
+
 

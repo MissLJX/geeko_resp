@@ -203,6 +203,9 @@ const mutations = {
     },
     [types.GET_RECORD_WISHLIST_EVENT](state,wishlist){
         state.wishlistEvent = wishlist;
+    },
+    [types.GET_HAS_NO_COMMENT_ORDER](state, status){
+        state.hasNoCommentOrder = status
     }
 }
 

@@ -298,7 +298,7 @@ let lastSearchId = 0
 class Question1 extends React.PureComponent{
     constructor(props){
         super(props);
-        console.log(props)
+        // console.log(props)
         this.state = {
             isSearched: false,
             searchValue: "",
@@ -326,7 +326,7 @@ class Question1 extends React.PureComponent{
 
     componentWillUpdate(){
         this.initPage()
-        console.log(this.state.headerRef)
+        // console.log(this.state.headerRef)
         this.state.headerRef.current.scrollIntoView({
             top: 0,
             behavior:'smooth'
@@ -335,7 +335,7 @@ class Question1 extends React.PureComponent{
 
 
     replaceStr(str){
-        console.log('replace: ',str)
+        // console.log('replace: ',str)
         str = decodeURI(str).split("\"");
         for(let i in str){
             if(str[i] != ''){
@@ -351,12 +351,12 @@ class Question1 extends React.PureComponent{
         let id = this.props.history.location.state ? this.props.history.location.state.id : 
                 this.props.match.params.id ? this.props.match.params.id : 0;
         let fromFAQ = this.props.history.location.state.fromFAQ;
-        console.log('s:',search, 'd:', id)
-        console.log(lastSearchId !== id)
-        console.log(fromFAQ)
-        console.log(this.state.initTime==0)
+        // console.log('s:',search, 'd:', id)
+        // console.log(lastSearchId !== id)
+        // console.log(fromFAQ)
+        // console.log(this.state.initTime==0)
         if(lastSearchId !== id || (fromFAQ&&this.state.initTime==0)){
-            console.log('in')
+            // console.log('in')
             this.setState({
                 initTime:1
             })
@@ -381,13 +381,13 @@ class Question1 extends React.PureComponent{
                 this.show3(id)
                 return;
             default:
-                console.log('default')
+                // console.log('default')
                 return;
         }
     }
 
     show1(search,id){
-        console.log(1)
+        // console.log(1)
         this.setState({
             detailShow:true,
             searchShow:false,
@@ -401,7 +401,7 @@ class Question1 extends React.PureComponent{
     }
 
     show2(search){
-        console.log(2)
+        // console.log(2)
         this.setState({
             detailShow: false,
             searchShow: true,
@@ -412,7 +412,7 @@ class Question1 extends React.PureComponent{
     }
 
     show3(id){
-        console.log(3)
+        // console.log(3)
         this.setState({
             detailShow:true,
             searchShow:false,
@@ -447,7 +447,7 @@ class Question1 extends React.PureComponent{
 
         const search = (e) => {
             let searchAbout = []
-            console.log('start:',e)
+            // console.log('start:',e)
             let reg = new RegExp(e, 'ig')
             if(e){
                 questions.forEach((q) => {
@@ -456,7 +456,7 @@ class Question1 extends React.PureComponent{
                     })
                     searchAbout = searchAbout.concat(s)
                 })
-                console.log(searchAbout)
+                // console.log(searchAbout)
 
                 // 搜索请求
                 this.setState({
@@ -467,7 +467,7 @@ class Question1 extends React.PureComponent{
                     resultList: searchAbout
                 })
             }else {
-                console.log('no e')
+                // console.log('no e')
             }
         }
 
@@ -481,14 +481,32 @@ class Question1 extends React.PureComponent{
             
         }
 
+        // 去掉头部 将链接改成相对链接
         const removeHeader = (text) => {
             let before = text.split("<header>")[0];
             let after = text.split("</header>")[1];
-            return before + after;
+            let noHeader = before + after;
+            if(window.isShowApp == "true"){
+                // 1. <a href="https://www.chicme.com/... 替换成 <a href="/...或者 <a href="wanna/...
+                noHeader = noHeader.replace(/(<a href="https:\/\/www.chicme.com)/g, ()=>{return `<a href="chic-me://chic.me/web?href=https://${window.location.host? window.location.host: 'www.chicme.com'}`});
+            } else {
+                // 1. <a href="https://www.chicme.com/... 替换成 <a href="/...或者 <a href="wanna/...
+                noHeader = noHeader.replace(/(<a href="https:\/\/www.chicme.com)/g, ()=>{return `<a href="${(window.ctx || '')}`});
+            }
+            // 2. >https://www.chicme.com/fs/shipping-policy-pc 替换成 shipping-policy
+            noHeader = noHeader.replace(/(>https:\/\/www.chicme.com\/fs\/shipping-policy-pc)/g, ()=>{return '>shipping-policy'});
+            // 3. >https://www.chicme.com/fs/shipping-policy-pc 替换成 shipping-policy
+            noHeader = noHeader.replace(/(>https:\/\/www.chicme.com\/fs\/wholesale-program-pc)/, ()=>{return '>wholesale-program'});
+            // 4. chicme、Chicme、chic me、Chic me 替换为 window.floderName
+            noHeader = noHeader.replace(/(chicme|Chicme|Chic me|chic me|Chic Me|chic Me|ChicMe|chicMe)/g, ()=>{return window.floderName? window.floderName: 'Chicme'})
+            
+            // console.log(noHeader)
+            
+            return noHeader;
         }
 
         const clickItem = (e) => {
-            console.log(e)
+            // console.log(e)
             this.setState({
                 searchValue: 0
             },()=>{

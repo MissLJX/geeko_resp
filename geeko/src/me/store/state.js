@@ -48,7 +48,8 @@ const state = {
     relationProducts:[],
     relationProductsSkip:0,
     survey: {},
-    wishlistEvent:{"requestId":"","experimentId":""}
+    wishlistEvent:{"requestId":"","experimentId":""},
+    hasNoCommentOrder: false,
 }
 
 export default state;

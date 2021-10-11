@@ -941,7 +941,7 @@ L'expédition prend environ 7 à 25 jours ouvrables pour atteindre les pays de d
 				   S'il vous plaît noter: Temps total de livraison = temps de traitement + temps d'expédition
                 </p>
                 <p>
-                Pour la date d'arrivée prévue, veuillez vous référer à <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">http://www.chicme.com/fs/shipping-policy-pc</a>
+                Pour la date d'arrivée prévue, veuillez vous référer à <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a>
                 </p>
 			</section>
 		</article>
@@ -961,7 +961,7 @@ const question46 = {
 					Après l'expédition du colis, les informations d'expédition seront mises à jour au centre de tri suivant, ce qui peut prendre quelques jours. Ensuite, vous pouvez vous connecter au statut de la commande et suivre.
 				</p>
 				<p>
-				  Pour la date d'arrivée prévue, veuillez vous référer à  <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">http://www.chicme.com/fs/shipping-policy-pc</a>
+				  Pour la date d'arrivée prévue, veuillez vous référer à  <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a>
                 </p>
 			</section>
 		</article>
@@ -1133,7 +1133,7 @@ const question55 = {
 L'expédition prend environ 3 à 25 jours ouvrables pour atteindre les pays de destination.
 				</p>
 				<p>S'il vous plaît noter: Temps total de livraison = temps de traitement + temps d'expédition</p>
-				<p>Pour la date d'arrivée prévue, veuillez vous référer à <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">http://www.chicme.com/fs/shipping-policy-pc</a></p>
+				<p>Pour la date d'arrivée prévue, veuillez vous référer à <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
 			</section>
 		</article>
 	`
@@ -1187,7 +1187,7 @@ const question58 = {
 L'expédition prend environ 3 à 25 jours ouvrables pour atteindre les pays de destination.
                 </p>
 				<p>S'il vous plaît noter: Temps total de livraison = temps de traitement + temps d'expédition</p>
-				<p>Pour la date d'arrivée prévue, veuillez vous référer à <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">http://www.chicme.com/fs/shipping-policy-pc</a></p>
+				<p>Pour la date d'arrivée prévue, veuillez vous référer à <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
 			</section>
 		</article>
 	`
@@ -1207,7 +1207,7 @@ const question59 = {
 L'expédition prend environ 3 à 25 jours ouvrables pour atteindre les pays de destination.
                 </p>
 				<p>S'il vous plaît noter: Temps total de livraison = temps de traitement + temps d'expédition</p>
-				<p>Pour la date d'arrivée prévue, veuillez vous référer à  <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">http://www.chicme.com/fs/shipping-policy-pc</a></p>
+				<p>Pour la date d'arrivée prévue, veuillez vous référer à  <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
 			</section>
 		</article>
 	`
@@ -1228,7 +1228,7 @@ const question60 = {
 L'expédition prend environ 3 à 25 jours ouvrables pour atteindre les pays de destination.
 				</p>
 				<p>S'il vous plaît noter: Temps total de livraison = temps de traitement + temps d'expédition</p>
-				<p>Pour la date d'arrivée prévue, veuillez vous référer à <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">http://www.chicme.com/fs/shipping-policy-pc</a></p>
+				<p>Pour la date d'arrivée prévue, veuillez vous référer à <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
 			</section>
 		</article>
 	`
@@ -1774,7 +1774,7 @@ const question88 = {
 				</p>
 				<p>L'expédition prend environ 3 à 25 jours ouvrables pour atteindre les pays de destination.</p>
 				<p>S'il vous plaît noter: Temps total de livraison = temps de traitement + temps d'expédition</p>
-				<p>Pour la date d'arrivée prévue, veuillez vous référer à  <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">http://www.chicme.com/fs/shipping-policy-pc</a></p>
+				<p>Pour la date d'arrivée prévue, veuillez vous référer à  <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
 			</section>
 		</article>
 	`
@@ -1790,7 +1790,7 @@ const question89 = {
 			</header>
 			<section>
 				<p>
-					Bonjour, nous avons la politique de vente en gros: http://www.chicme.com/fs/wholesale-program-pc you can have a look
+					Bonjour, nous avons la politique de vente en gros: <a href="https://www.chicme.com/fs/wholesale-program">https://www.chicme.com/fs/wholesale-program-pc</a> you can have a look
 				</p>
 			</section>
 		</article>

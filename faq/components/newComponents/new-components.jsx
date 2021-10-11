@@ -192,8 +192,8 @@ export const EntryButton = class extends React.Component{
     }
 
     pageEntry(url, title){
-        console.log(this.props)
-        console.log(url)
+        // console.log(this.props)
+        // console.log(url)
         this.props.linkTo(url,title)
     }
 
@@ -549,7 +549,7 @@ const QuestionInputBox = styled.div`
         }
     `
 const SearchBar1 = (props) => {
-    console.log('searchbar:',props)
+    // console.log('searchbar:',props)
     const [showClear, setShowClear] = useState(false);
     const [inputValue, setInputValue] = useState("");
     const [searchTips, setSearchTips] = useState([]);
@@ -579,7 +579,7 @@ const SearchBar1 = (props) => {
     }, [props.value])
 
     const inputChange = (e) => {
-        console.log(e.target.value)
+        // console.log(e.target.value)
         setInputValue(e.target.value)
         // setTimeout(()=>{
         //     document.getElementById("textInput").focus()
@@ -620,15 +620,11 @@ const SearchBar1 = (props) => {
                 <input id='textInput' type="text" 
                        placeholder="Popular Searches:Refund,Return,Shipping" 
                        onFocus={(e)=>{
-                           console.log(e)
                            setShowClear(true)
-                        //    setTimeout(()=>{
-                        //         document.getElementById("textInput").focus()
-                        //     },100)
                         }
                         } 
                        onBlur={()=>{
-                           console.log('sss');
+                        //    console.log('sss');
                            setTimeout(()=>{setShowClear(false)},100)}
                         }
                        value={inputValue}
