@@ -164,8 +164,16 @@
                             name:this.$t("index.support"),
                             routerName:"",
                             routerPath:"/fs/contact-us-pc",
+                            // routerPath: "/me/m/support",
                             pushButton:true
                         },
+                        // {
+                        //     name:this.$t("index.support"),
+                        //     routerName:"",
+                        //     // routerPath:"/fs/contact-us-pc",
+                        //     routerPath: "/me/m/support",
+                        //     pushButton:true
+                        // },
                         {
                             name:this.$t("mymessages"),
                             routerName:"notification",

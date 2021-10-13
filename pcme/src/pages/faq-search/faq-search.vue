@@ -1,0 +1,277 @@
+<template>
+    <div class="faqPage">
+        <div class="searchHeader">
+            <div class="breadCrumb">
+                <span @click="back()">FAQ</span>
+                <span>> Search Results</span>
+            </div>
+            <div class="searchInputBox">
+                <faq-input
+                    :inputValue="searchValue"
+                    :searchList="searchList"
+                    @inputChange="(e)=>inputChange(e)"
+                    @relatedSearch="(e)=>relatedSearch(e)"
+                    @inputSearch="inputSearch()"
+                    ></faq-input>
+            </div>
+        </div>
+
+        <div class="searchResultBox">
+            <div class="resultTxt">
+                <div>Search Results</div>
+                <div class="result">{{searchAboutList.length}} results for "{{searchValueFromUrl}}"</div>
+            </div>
+
+            <div class="resultList">
+                <div class="resultListItem" v-for="(item,index) in searchAboutList" :key="index" @click="toDetail(item)">
+                    <div class="resultItemTitle" v-html="item.title"></div>
+                    <div class="resultItemContent" v-html="removeHeader(item.richText)"></div>
+                </div>
+
+                <div class="noData">
+                    <div class="contactUsBox">
+                        <span>Have more questions?</span>
+                        <span class="click">Contact Us</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+import FaqInput  from '../../components/faq/faq-input.vue'
+import {questions, secondaries} from '../../faqData/index'
+import * as utils from '../../utils/geekoutil'
+import _ from 'lodash'
+
+export default {
+    data(){
+        return{
+            searchValue: '',
+            searchValueFromUrl: '',
+            secondaries,
+            questions,
+            searchList: [],
+            groupQuestions: [],
+            groupSelectQuestions: [],
+            questionType: 'order',
+            questionsOfType:[],
+            // searchAboutList: []
+        }
+    },
+    created(){
+        
+        
+    },
+    mounted(){
+        console.log(this.$router.currentRoute.query.search)
+        if(JSON.stringify(this.$router.currentRoute.query) != '{}' && this.$router.currentRoute.query){
+            this.searchValue = this.$router.currentRoute.query.search
+            this.searchValueFromUrl = this.$router.currentRoute.query.search
+        }
+        let reg = new RegExp(''+this.searchValueFromUrl+'', "ig")
+        if(this.questions.length > 0){
+            let list = [];
+            for(let i = 0; i < this.questions.length; i++){
+                if(this.questions[i].id!='root-7' && this.questions[i].id != 'root-8'){
+                    list = list.concat(this.questions[i]['questions'])
+                }
+            }
+            this.searchList = list
+        }
+    },
+    computed:{
+        searchAboutList(){
+            let reg = new RegExp(''+this.searchValueFromUrl+'', "ig")
+            let list = _.cloneDeep(this.searchList)
+            let searchAbout = list.map(s => {
+                s.title = s.title.replace(reg, (e)=>{return '<strong style="color:#3483f4;">'+e+'</strong>'})
+                return s
+            })
+            let searchAboutList = []
+            searchAbout.forEach(s => {
+                if(s.title.indexOf("<strong")!=-1){
+                    searchAboutList.push(s)
+                }
+            })
+            return searchAboutList
+        }
+    },
+    components:{
+        'faq-input': FaqInput
+    },
+    methods:{
+        inputChange(e){
+            this.searchValue = e;
+        },
+        changeType(e){
+            console.log(e)
+            this.questionType = e
+            this.groupSelectQuestions = this.groupQuestions.find(q => q.title.toLowerCase() == e).questions
+            // console.log(this.groupSelectQuestions)
+        },
+        relatedSearch(e){
+            console.log("F: ",e)
+        },
+        inputSearch(){
+            var pageSearch = window.location.href.split("=")[1];
+            if(pageSearch != this.searchValue){
+                 this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/faq/search-result', query: {search: this.searchValue}})
+            }
+           
+        },
+        back(){
+            // this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/faq/faq'})
+            window.history.back()
+        },
+        // 去掉头部 将链接改成相对链接
+        removeHeader(text) {
+            if(!text){
+                return
+            }
+            let before = text.split("<header>")[0];
+            let after = text.split("</header>")[1];
+            let noHeader = before + after;
+            if(window.isShowApp == "true"){
+                // 1. <a href="https://www.chicme.com/... 替换成 <a href="/...或者 <a href="wanna/...
+                noHeader = noHeader.replace(/(<a href="https:\/\/www.chicme.com)/g, ()=>{return `<a href="chic-me://chic.me/web?href=https://${window.location.host? window.location.host: 'www.chicme.com'}`});
+            } else {
+                // 1. <a href="https://www.chicme.com/... 替换成 <a href="/...或者 <a href="wanna/...
+                noHeader = noHeader.replace(/(<a href="https:\/\/www.chicme.com)/g, ()=>{return `<a href="${(window.ctx || '')}`});
+            }
+            // 2. >https://www.chicme.com/fs/shipping-policy-pc 替换成 shipping-policy
+            noHeader = noHeader.replace(/(>https:\/\/www.chicme.com\/fs\/shipping-policy-pc)/g, ()=>{return '>shipping-policy'});
+            // 3. >https://www.chicme.com/fs/shipping-policy-pc 替换成 shipping-policy
+            noHeader = noHeader.replace(/(>https:\/\/www.chicme.com\/fs\/wholesale-program-pc)/, ()=>{return '>wholesale-program'});
+            // 4. chicme、Chicme、chic me、Chic me 替换为 window.floderName
+            noHeader = noHeader.replace(/(chicme|Chicme|Chic me|chic me|Chic Me|chic Me|ChicMe|chicMe)/g, ()=>{return window.floderName? window.floderName: 'Chicme'})
+            
+            // console.log(noHeader)
+            
+            return noHeader;
+        },
+        toDetail(item){
+            console.log(item)
+            this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/faq/search-result-detail', query: {search: this.searchValue, showId: item.id}})
+        }
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+.faqPage{
+    max-width: 1200px;
+    margin: 0 auto;
+
+    .searchHeader{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 22px;
+
+        .breadCrumb{
+            font-family: SlatePro-Regular;
+            font-size: 16px;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0px;
+            color: #666666;
+            text-transform:capitalize;
+
+            span{
+                cursor: pointer;
+            }
+        }
+
+        .searchInputBox{
+            width: 230px;
+        }
+    }
+
+    .searchResultBox{
+        width: 100%;
+        margin-top: 35px;
+
+        .resultTxt{
+            font-family: SlatePro-Bold;
+            font-size: 24px;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0px;
+            color: #222222;
+            text-align: center;
+
+            .result{
+                font-family: SlatePro-Regular;
+                font-size: 14px;
+                font-weight: normal;
+                font-stretch: normal;
+                letter-spacing: 0px;
+                color: #666666;
+                text-align: center;
+                margin-top: 8px;
+            }
+        }
+
+        .resultList{
+            margin-top: 23px;
+
+            .resultListItem{
+                border-top: solid 1px #e6e6e6;
+                height: 123px;
+                overflow: hidden;
+                cursor: pointer;
+
+                .resultItemTitle{
+                    font-family: SlatePro-Medium;
+                    font-size: 16px;
+                    font-weight: normal;
+                    font-stretch: normal;
+                    letter-spacing: 0px;
+                    color: #222222;
+                    margin-top: 21px;
+                }
+                
+                .resultItemContent{
+                    font-family: SlatePro-Regular;
+                    font-size: 14px;
+                    font-weight: normal;
+                    font-stretch: normal;
+                    line-height: 18px;
+                    letter-spacing: 0px;
+                    color: #222222;
+                    line-height: 35px;
+                }
+            }
+
+            .noData{
+
+
+                .contactUsBox{
+                    font-family: SlatePro-Regular;
+                    font-size: 14px;
+                    font-weight: normal;
+                    font-stretch: normal;
+                    letter-spacing: 0px;
+                    color: #999999;
+                    margin-top: 65px;
+                    text-align: center;
+
+                    .click{
+                        font-family: SlatePro-Regular;
+                        text-decoration: underline;
+                        font-size: 14px;
+                        font-weight: normal;
+                        font-stretch: normal;
+                        letter-spacing: 0px;
+                        color: #222222;
+                        margin-left: 10px;
+                    }
+                }
+            }
+        }
+    }
+}
+    
+</style>

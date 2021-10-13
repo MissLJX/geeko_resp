@@ -42,6 +42,7 @@ const SubmitBtn = styled.div`
   align-items: center;
   justify-content: center;
   opacity: 1;
+  font-family: Roboto-Bold;
   span{
     width: 92%;
     height: 38px;

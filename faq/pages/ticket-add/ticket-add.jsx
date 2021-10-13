@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { createRef } from 'react'
 import {Link} from 'react-router-dom'
 import {get, getByOrderId, sendImage, sendTicket} from '../../api'
 import styled from 'styled-components'
@@ -556,10 +556,11 @@ class TicketAdd extends React.Component {
         descriptionInput: '',
         uploadImgList: [],
         uploadImgFileList: []
-      }
+      },
       
 
     }
+    this.questionRef = createRef();
     this.handleImage = this.handleImage.bind(this)
     this.handleTicket = this.handleTicket.bind(this)
   }
@@ -731,7 +732,7 @@ class TicketAdd extends React.Component {
   getMsgByLocalData(){
     getByOrderId(JSON.parse(localStorage.__order).id).then(({result}) => {
       const {ticket, order, cusomerName, headSculptureUrl} = result
-      // console.log(result)
+      console.log(result)
       // console.log(ticket.ticketReplies.slice(-1)[ticket.ticketReplies.slice(-1).length - 1]['sender'])
       if(ticket){
         if(ticket.ticketReplies.slice(-1)[ticket.ticketReplies.slice(-1).length - 1]['sender'] == "buyers"){
@@ -895,9 +896,37 @@ class TicketAdd extends React.Component {
           imageUrls && imageUrls.map(image => (
             <img key={image} src={getImageUrl(image)} />
           ))
-
         }
-        <p style={{whiteSpace: 'pre-line', wordBreak: 'break-all', wordWrap: 'break-word'}} dangerouslySetInnerHTML={{__html: message}}/>
+        {/* whiteSpace: 'pre-line', */}
+        <div style={{ wordBreak: 'break-all', wordWrap: 'break-word'}} dangerouslySetInnerHTML={{__html: message}}></div>
+
+      </ChatTip>
+    }
+
+    const QuestionTip = (props) => {
+      const imageUrls = props.reply.imageUrls
+      let message = props.reply.message === '-' ? '' : props.reply.message
+
+      let messages = (message || '').split(/[\s|\n]/)
+
+      message = messages.map(m => {
+        if (m.indexOf('https://') === 0 || m.indexOf('http://') === 0) {
+          return `<a style="text-decoration:underline;" href="${m}">${m}</a>`
+        }
+        return m
+      }).join(' ')
+
+      return <ChatTip className={props.reply.sender === 'buyers' ? 'buyer' : 'seller'}>
+        
+        <div style={{ wordBreak: 'break-all', wordWrap: 'break-word',minWidth: '205px'}} dangerouslySetInnerHTML={{__html: message}}></div>
+        
+        <div style={{display: 'flex', alignItems:'center',justifyContent:'flex-start'}}>
+          {
+            imageUrls && imageUrls.map(image => (
+              <img key={image} style={{width:'60px',height: '60px',margin: '7px 12px 0 0'}} src={image} /> 
+            ))
+          }
+        </div> 
 
       </ChatTip>
     }
@@ -921,7 +950,12 @@ class TicketAdd extends React.Component {
           replies.map((reply, index) => (
             <ChatRow className={reply.sender === 'buyers' ? 'buyer' : 'seller'} key={index}>
               <HeaderImage image={props.headSculptureUrl} sender={reply.sender} />
-              <ReplyTip reply={reply} />
+              {
+                reply.showType == 1 ?
+                <QuestionTip reply={reply}></QuestionTip>:
+                <ReplyTip reply={reply} />
+              }
+              
             </ChatRow>
           ))
         }
@@ -930,7 +964,17 @@ class TicketAdd extends React.Component {
 
     const selectChange= (e) => {
         // console.log(e)
-        this.setState({subject: e,questionMaskShow: true})
+        this.setState({
+          subject: e,
+          questionMaskShow: true
+        })
+        console.log(this.questionRef)
+        setTimeout(()=>{
+          var top = document.getElementById("top")
+          top.scrollIntoView()
+          top = null
+        })
+          
     }
 
     const textareaChange = (evt) => {
@@ -959,8 +1003,18 @@ class TicketAdd extends React.Component {
     }
 
     const questionImgUpload = (e) => {
-      let file = e.target.files
-      let fileList = [...questionObject.uploadImgList].concat([...file])
+      let file = [...e.target.files]
+      // 判断是否有重复项
+      file.forEach((files, index) => {
+        let sameFile = questionObject.uploadImgFileList.find(f => f.name === files.name);
+        if(sameFile){
+          file.splice(index, 1)
+        }
+      })
+      if(file.length == 0){
+        return
+      }
+      let fileList = [...questionObject.uploadImgFileList].concat(file)
       let imgSrcList = [];
       if(fileList.length > 3){
         fileList = fileList.splice(0,3);
@@ -998,11 +1052,20 @@ class TicketAdd extends React.Component {
     }
 
     const checkParams = (params) => {
-
+      if(!params.descriptionInput){
+        var des = document.getElementById("description")
+        des.style.border = '1px solid red'
+        des.scrollIntoView()
+        return false
+      }
+      return true
     }
 
     const questionSubmit = () => {
       console.log('submit')
+      console.log(this.state.subject)
+      
+      if(!checkParams(questionObject)) return
       let params = {};
       // 选了什么问题
       params.question = this.state.subject;
@@ -1024,15 +1087,10 @@ class TicketAdd extends React.Component {
       // 需要添加一条数据 传富文本
       let richTxt = `
         <div style="color:#222;font-size: 14px;border-bottom:2px solid #999;padding-bottom:5px;">
-          Size is small
+          ${params.selectReason && params.selectReason.title }
         </div>
         <div style="color:#222;font-size: 14px;border-bottom:2px solid #999;padding:5px 0;">
-          Facilitate return process and when scrolling and selecting an item to see description and returning to previous page; it does not return to last item veiwed,but to the first item.
-        </div> 
-        <div style="display: flex; align-items:center; justify-content:flex-start;">
-          <img style="width:60px;height: 60px;border:1px solid;margin: 7px 12px 0 0;" src="" /> 
-          <img style="width:60px;height: 60px;border:1px solid;margin: 7px 12px 0 0;" src="" /> 
-          <img style="width:60px;height: 60px;border:1px solid;margin: 7px 12px 0 0;" src="" /> 
+          ${questionObject.descriptionInput}
         </div> 
       ` 
 
@@ -1041,7 +1099,9 @@ class TicketAdd extends React.Component {
       replies.push({
         sender: 'buyers',
         message: richTxt,
-        date: new Date().getTime()
+        date: new Date().getTime(),
+        imageUrls: questionObject.uploadImgList,
+        showType: 1
       })
 
       
@@ -1058,11 +1118,25 @@ class TicketAdd extends React.Component {
           })
         }
       }
-
+      console.log(ticket)
       this.setState({
+        ticket,
         showMsg: true,
+        questionMaskShow: false,
         message: '',
-        showMsgTxt: 'Submitted successfully!'
+        showMsgTxt: 'Submitted successfully!',
+        questionObject: {
+          questionTypeList:[
+            {id:0,title:'Size is small',isSelected:false},
+            {id:1,title:'Size is large',isSelected:false},
+            {id:2,title:'Others',isSelected:false},
+          ],
+          questionTypeInput: '',
+          showSelectItem: false,
+          descriptionInput: '',
+          uploadImgList: [],
+          uploadImgFileList: []
+        }
       })
 
       setTimeout(()=>{
@@ -1192,17 +1266,18 @@ class TicketAdd extends React.Component {
           </ChatContainer>
         ) }
       </PageContanier1>
-      {/* 选择问题类型后的弹窗 */}
-      <SubmitQuestionMask show={questionMaskShow} onClick={()=>this.setState({questionMaskShow: false})}>
+
+      {/* 选择问题类型后的弹窗*/}
+      <SubmitQuestionMask show={questionMaskShow} >
           <SubmitQuestionContent>
             {/* 关闭按钮 */}
             <span style={{display:'block',width:'100%',textAlign:'right',backgroundColor:"#fff"}} onClick={()=>this.setState({questionMaskShow: false})}>
               <SubmitQuestionClose>&#xe69a;</SubmitQuestionClose>
             </span>
 
-            <div style={{height: '464px',overflow:'auto',marginTop:'20px',paddingBottom:'102px'}}>
+            <div style={{height: '464px',overflow:'auto',marginTop:'20px',paddingBottom:'102px'}} >
                 {/* 提示语 */}
-                <SubmitTips>
+                <SubmitTips id="top">
                   <span>The reasons below are optional. You can click “X” if you don't want to choose any of them.</span> 
                 </SubmitTips>
 
@@ -1214,7 +1289,7 @@ class TicketAdd extends React.Component {
                     </SelectReasonTitle>
 
                     {/* 选择下拉框 */}
-                    <SelectReasonBox>
+                    <SelectReasonBox id="selectReason">
                       <SelectReasonInput onClick={()=>this.setState({questionObject:{...questionObject, showSelectItem:!questionObject.showSelectItem}})}>
                         <span>Select a reason</span>
                         <span className={`iconfont selectReasonIcon ${questionObject.showSelectItem?'selected':''}`}>&#xe692;</span>
@@ -1254,7 +1329,7 @@ class TicketAdd extends React.Component {
                 </SubmitSelectReason>
 
                 {/* 文字描述 */}
-                <SubmitDescriptionBox>
+                <SubmitDescriptionBox id="description">
                     {/* 标题 */}
                     <SelectReasonTitle>
                       <span>*</span> Description
@@ -1263,6 +1338,7 @@ class TicketAdd extends React.Component {
                     {/* 输入框 */}
                     <DescriptionTextArea 
                         placeholder="Please describe your problem as much as possible so that customer service can respond faster…"
+                        value={questionObject.descriptionInput}
                         onChange={(e)=>{
                           this.setState({
                             questionObject: {...questionObject, descriptionInput: e.target.value}
@@ -1275,7 +1351,7 @@ class TicketAdd extends React.Component {
                 </SubmitDescriptionBox>
 
                 {/* 图片上传 */}
-                <SubmitImageBox>
+                <SubmitImageBox id="imgUpload">
                   {/* 标题 */}
                   <SelectReasonTitle>
                     Upload image

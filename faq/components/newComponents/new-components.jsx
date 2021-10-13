@@ -558,7 +558,7 @@ const SearchBar1 = (props) => {
         if(questions.length > 0){
             let list = [];
             for(let i = 0; i < questions.length; i++){
-                if(questions.id!='root-7' && questions.id != 'root-8'){
+                if(questions[i].id!='root-7' && questions[i].id != 'root-8'){
                     list = list.concat(questions[i]['questions'])
                 }
             }

@@ -1,24 +1,35 @@
 <template>
     <div class="orderTicket" v-if="ticket">
         <div class="s-hd">
-            <h3 >{{$t('ticket')}}</h3>
+            <h3>{{$t('ticket')}}</h3>
             <i @click="close" class="iconfont">&#xe7c9;</i>
         </div>
         <div class="s-bd">
             <div class="orderInfo">
+                
+                <div>
+                    <p><span>{{$t('orderno')}} </span>{{ticket.id}}</p>
+                    <p><span>{{$t('timeofpayment')}} </span>{{getDate(ticket.paymentTime)}}</p>
+                </div>
                 <i @click="selectorder" class="iconfont">&#xe66b;</i>
-                <p><span>{{$t('orderno')}} </span>{{ticket.id}}</p>
-                <p><span>{{$t('timeofpayment')}} </span>{{getDate(ticket.paymentTime)}}</p>
             </div>
             <div class="help">
-                <h3>{{$t('howcanwehelp')}}</h3>
-                <select v-model="selected" :class="{'redBorder':isRequired}" @change="isRequired=false">
+                <!-- {{$t('howcanwehelp')}} -->
+                <h3>How can I help you?</h3>
+                <faq-select class="faqSelect"
+                            :selectValue="selected" 
+                            :selectList="ticket_sub?ticket_sub:[]" 
+                            :isRadius="true" 
+                            @selectChange="selectChange($event)">
+                            </faq-select>
+
+                <!-- <select v-model="selected" :class="{'redBorder':isRequired}" @change="isRequired=false">
                     <option disabled="disabled" value="666">Please select your question type</option>
                     <option v-for="option in ticket_sub" :value="option.value">
                         {{ option.label }}
                     </option>
-                </select>
-                <span>{{$t('Expectedtime')}}</span>
+                </select> -->
+                <!-- <span>{{$t('Expectedtime')}}</span> -->
             </div>
         </div>
         <div class="s-cd" >
@@ -103,8 +114,9 @@
 
 <script>
     import {mapGetters,mapActions } from 'vuex';
-    import * as utils from '../utils/geekoutil';
-    import StarList from '../components/star-list.vue';
+    import * as utils from '../../utils/geekoutil';
+    import StarList from '../star-list.vue';
+    import faqSelect from'./faq-select.vue';
 
     export default {
         data (){
@@ -126,6 +138,10 @@
         },
         components: {
             'star-list': StarList,
+            'faq-select': faqSelect,
+        },
+        mounted(){
+            console.log(this.ticket_sub)
         },
         computed: {
             ...mapGetters(['ticket','ticket_con','ticketid','ticket_sub']),
@@ -168,6 +184,10 @@
             }
         },
         methods: {
+            selectChange(e){
+                console.log(e)
+                this.selected = e.value
+            },
             getDate(paymentTime){
                 if(paymentTime == null){
                     return '-'
@@ -299,6 +319,8 @@
         border-right: none;
         padding-top: 50px;
         z-index: 30000000;
+        // padding: 10px 24px;
+
         .s-hd{
             width: 100%;
             height: 50px;
@@ -311,46 +333,69 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+
             h3{
                 line-height: 50px;
                 font-size: 18px;
             }
+
             i{
                 margin-right: 20px;
                 cursor: pointer;
-                display: inline-block;
-                transform: rotateY(180deg);
+                font-size: 14px;
+                line-height: 14px;
+                color: #999;
             }
         }
+
         .s-bd{
             background-color: #fff;
             text-align: left;
             color: #222;
-            padding:24px 24px;
+            // padding:24px 24px;
             position: relative;
+            padding: 10px 24px;
+
             .orderInfo{
                 height: 80px;
-                border-bottom: 1px solid #e6e6e6;
+                // border-bottom: 1px solid #e6e6e6;
                 cursor: pointer;
+                font-family: SlatePro-Regular;
+                padding: 16px 17px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
                 i{
-                    position: absolute;
-                    right: 20px;
-                    top:35px;
+                    font-size: 14px;
                 }
+
                 p{
                     line-height: 30px;
                     span{
                         color: #999;
+                        margin-right: 10px;
                     }
                 }
             }
+
             .help{
                 width: 100%;
-                padding-top: 23px;
+                padding-top: 27px;
                 text-align: center;
+
                 h3{
                     text-align: center;
+                    text-transform: capitalize;
+                    margin-bottom: 11px;
                 }
+
+                .faqSelect{
+                    width: 351px;
+                    margin: 0 auto;
+                    text-align: left;
+                }
+
                 select{
                     width: 452px;
                     margin: 24px auto 9px auto;
@@ -376,10 +421,11 @@
             .buyer{
                 margin: 20px 0;
                 .cet{
-                   float: right;
+                    float: right;
                     position: relative;
                     padding: 15px 10px;
-                    background-color: rgb(26, 149, 211);
+                    background-color: #549ad5;
+	                border-radius: 4px;
                     border-radius: 4px;
                     color: #fff;
                     margin-right: 15px;
