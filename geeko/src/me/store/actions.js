@@ -497,7 +497,7 @@ const actions = {
     getHasNoCommentOrder({commit},params){
         return new Promise((resolve, reject) => {
             api.getNoCommentOrder().then(result => {
-                console.log(result)
+                // console.log(result)
                 resolve(result)
                 commit(types.GET_HAS_NO_COMMENT_ORDER, result.result?result.result:false)
             })
