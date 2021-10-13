@@ -227,7 +227,17 @@
                     return "";
                 }
             },
-
+        },
+        watch:{
+            hasNoCommentOrder(newV, oldV){
+                let cookie = utils.getLocalCookie('_has_no_comment_order')
+                // console.log(newV)
+                if(!cookie && newV){
+                    if(!this.hasNoCommentOrder){
+                        this.showMask()
+                    }
+                }
+            }
         },
         methods:{
             getFeedNum(num,icon){
@@ -315,6 +325,8 @@
 
             store.dispatch('me/getOrderCountUnpaid');
 
+            store.dispatch('me/getHasNoCommentOrder')
+
             // store.dispatch("me/getShoppingCartNum");
             if(!this.isLogin){
                 // 未登录 清除这个cookie
@@ -342,12 +354,13 @@
             }
         },
         mounted(){
-            let cookie = utils.getLocalCookie('_has_no_comment_order')
-            if(!cookie && this.isLogin){
-                if(!this.hasNoCommentOrder){
-                    this.showMask()
-                }
-            }
+            // let cookie = utils.getLocalCookie('_has_no_comment_order')
+            // console.log(this.hasNoCommentOrder)
+            // if(!cookie && this.isLogin){
+            //     if(!this.hasNoCommentOrder){
+            //         this.showMask()
+            //     }
+            // }
         },
     }
 </script>

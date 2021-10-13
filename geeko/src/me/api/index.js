@@ -275,5 +275,6 @@ export const getRelationProducts = ({productId,skip}) => {
 
 // 获取是否存在未评论的订单
 export const getNoCommentOrder = () => {
-    return axios.get(VPATH+`/order/exists-order-without-comment`,{},{}).then(data => data)
+    // console.log('api 请求')
+    return axios.get("/v9/order/exists-order-without-comment",{},{}).then(data => data)
 }
