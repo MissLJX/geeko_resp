@@ -122,7 +122,9 @@ const state = {
     messageM1521:null,
     orderStatus:0,
     
-    survey: {}
+    survey: {},
+
+    questionType: [],
 };
 const getters = {
     me: state => state.me,
@@ -230,6 +232,7 @@ const getters = {
     orderStatus:state => state.orderStatus,
     
     survey: state => state.survey,
+    questionType: state => state.questionType,
 };
 const mutations = {
     [types.INIT_ME](state, me){
@@ -594,6 +597,9 @@ const mutations = {
     },
     [types.GET_SURVEY_ANSWER](state, obj){
       state.survey = obj
+    },
+    [types.GET_QUESTION_TYPE](state, list){
+        state.questionType = list
     }
 }
 const actions = {
@@ -1248,6 +1254,14 @@ const actions = {
               });
           });
       },
+      getQuestionType({commit}, params){
+          return new Promise((reslove, reject) => {
+              api.getQuestionType(params).then(res => {
+                  reslove(res);
+                  commit(types.GET_QUESTION_TYPE, res.result? res.result : [])
+              })
+          })
+      }
 }
 export default new Vuex.Store({
     state,

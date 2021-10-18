@@ -19,7 +19,7 @@
         <div class="searchResultBox">
             <div class="resultTxt">
                 <div>Search Results</div>
-                <div class="result">{{searchAboutList.length}} results for "{{searchValueFromUrl}}"</div>
+                <div class="result">{{searchAboutList.length}} results for "<span>{{searchValueFromUrl}}</span>"</div>
             </div>
 
             <div class="resultList">
@@ -28,10 +28,14 @@
                     <div class="resultItemContent" v-html="removeHeader(item.richText)"></div>
                 </div>
 
-                <div class="noData">
+                <dir v-if="searchAboutList.length == 0" class="noResultBox">
+                    <span class="iconfont">&#xe7c6;</span>
+                </dir>
+
+                <div :class="{'noData':true, 'noMarginTop': searchAboutList.length == 0}">
                     <div class="contactUsBox">
                         <span>Have more questions?</span>
-                        <span class="click">Contact Us</span>
+                        <span class="click" @click="toContact()">Contact Us</span>
                     </div>
                 </div>
             </div>
@@ -111,8 +115,9 @@ export default {
             this.groupSelectQuestions = this.groupQuestions.find(q => q.title.toLowerCase() == e).questions
             // console.log(this.groupSelectQuestions)
         },
-        relatedSearch(e){
-            console.log("F: ",e)
+        relatedSearch(item){
+            console.log("F: ",item)
+            this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/faq/search-result-detail', query: {showId: item}})
         },
         inputSearch(){
             var pageSearch = window.location.href.split("=")[1];
@@ -152,8 +157,11 @@ export default {
             return noHeader;
         },
         toDetail(item){
-            console.log(item)
+            // console.log(item)
             this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/faq/search-result-detail', query: {search: this.searchValue, showId: item.id}})
+        },
+        toContact(){
+
         }
     }
 }
@@ -211,6 +219,10 @@ export default {
                 color: #666666;
                 text-align: center;
                 margin-top: 8px;
+
+                span{
+                    color: #222;
+                }
             }
         }
 
@@ -245,8 +257,20 @@ export default {
                 }
             }
 
-            .noData{
+            .noResultBox{
+                text-align: center;
+                padding-left: 0;
+                margin-top: 121px;
+                margin-bottom: 24px;
 
+                & > span{
+                    font-size: 80px !important;
+                    line-height: 80px;
+                    color: #b2b2b2;
+                }
+            }
+
+            .noData{
 
                 .contactUsBox{
                     font-family: SlatePro-Regular;
@@ -267,7 +291,13 @@ export default {
                         letter-spacing: 0px;
                         color: #222222;
                         margin-left: 10px;
+                        cursor: pointer;
                     }
+                }
+            }
+            .noMarginTop{
+                .contactUsBox{
+                    margin-top: 0;
                 }
             }
         }

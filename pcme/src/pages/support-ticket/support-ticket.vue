@@ -18,11 +18,11 @@
                     <td class="_th">{{$t('status')}}</td>
                 </tr>
             </table>
-            <div class="ticket-data">
+            <div class="ticket-data" ref="scrollBox">
                 <table>
                     <tr v-if="!tickets">{{$t('nomoredata')}}</tr>
                     <template  >
-                        <tr v-for="(ticket, index) in tickets" v-if="ticket.type != 3" :key="index">
+                        <tr v-for="(ticket, index) in ticketList" v-if="ticket.type != 3" :key="index">
                             <td @click="showTicket(ticket.operaId)"><span>{{ticket.id}}</span></td>
                             <td>{{getlastmsg(ticket.ticketReplies)}}</td>
                             <td>{{getDate(ticket.openDate)}}</td>
@@ -35,10 +35,19 @@
 
         <div class="v-btn" @click="subTicket">{{$t('submitticket')}}</div>
 
-        
+        <transition name="selectOrder">
+            <select-order v-if="isShowSelect" 
+                      v-on:closeSelect="closeSelect1" 
+                      v-on:showTicket="showTicket"></select-order>
+        </transition>
 
-        <select-order v-if="isShowSelect" v-on:closeSelect="closeSelect1" v-on:showTicket="showTicket"></select-order>
-        <order-ticket  v-if="isShowTicket" v-on:closeSelect="closeSelect1" v-on:selectOrder="selectorder" :ticket="selectedTicket"></order-ticket>
+        <transition name="orderTicket">
+            <order-ticket v-if="isShowTicket"
+                          v-on:closeSelect="closeSelect1" 
+                          v-on:selectOrder="selectorder" 
+                          :ticket="selectedTicket"></order-ticket>
+        </transition>
+        
     </div>
 </template>
 
@@ -74,17 +83,25 @@
                         value: '2',
                     }
               ],
-              selectType: '-1'
-
+              selectType: '-1',
+              page: 1,
+              listDefault: [],
           }
         },
         components:{
-            'select-order':selectOrder,
-            'order-ticket':orderTicket,
+            'select-order': selectOrder,
+            'order-ticket': orderTicket,
             'faq-select': faqSelect
         },
         computed: {
             ...mapGetters(['tickets']),
+            ticketList(){
+                if(this.tickets.length > 0){
+                    this.listDefault = this.listDefault.concat(this.tickets)
+                    return this.listDefault.concat(this.tickets)
+                }
+                return this.listDefault
+            }
         },
         methods: {
             selectChange(e){
@@ -137,10 +154,27 @@
             selectorder:function(){
                 this.isShowSelect = true;
                 this.isShowTicket = false;
+            },
+            boxScroll(e){
+                let scrollWay = this.$refs.scrollBox.scrollTop;
+                // console.log(e.target.offsetTop + this.$refs.scrollBox.scrollTop)
+                if((scrollWay + 100) > (580 * 2 * this.page - 580)){
+                    this.$store.dispatch('getTickets', (this.page+1)*20)
+                    this.page += 1
+                }
             }
         },
         created(){
-            this.$store.dispatch('getTickets',0)
+            this.$store.dispatch('getTickets', 0)
+        },
+        mounted(){
+            console.log(this.$refs.scrollBox)
+            let scrollBox = this.$refs.scrollBox;
+            scrollBox.addEventListener("scroll", (e)=>this.boxScroll(e), true)
+        },
+        beforeDestroy(){
+            let scrollBox = this.$refs.scrollBox;
+            scrollBox.removeEventListener("scroll", (e)=>this.boxScroll(e), true)
         }
     }
 </script>
@@ -322,5 +356,20 @@
             color: #ffffff;
             cursor: pointer;
         }
+
+        .selectOrder-enter-active, 
+        .selectOrder-leave-active,
+        .orderTicket-enter-active, 
+        .orderTicket-leave-active{
+            transition: all 0.5s ease;
+        }
+        .selectOrder-enter, 
+        .selectOrder-leave-to,
+        .orderTicket-enter, 
+        .orderTicket-leave-to{
+            opacity: 0;
+            right: -500px;
+        }
+
     }
 </style>

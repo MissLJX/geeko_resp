@@ -82,4 +82,12 @@ export default {
   responseTime:"Expected response time：Within 24h",
   selectTip: 'Please select your question type',
   statuswating: 'Wating for Replied',
+  // question ticket
+  defaultSelect: 'Please select your question type',
+  submitSuccess: 'Submitted successfully!',
+  submitTips: "The reasons below are optional. You can click “X” if you don't want to choose any of them.",
+  selectReason: 'Select a reason',
+  description: 'Description',
+  uploadImage: 'Upload image',
+  uploadTips: 'Maximum of 3 photos, only JPEG, GIF or PNG.',
 }

@@ -151,3 +151,5 @@ export const CHANGE_ORDER_ACTIVE_STATUS = "";
 
 // survey
 export const GET_SURVEY_ANSWER = "GET_SURVEY_ANSWER";
+
+export const GET_QUESTION_TYPE = 'GET_QUESTION_TYPE';

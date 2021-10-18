@@ -351,10 +351,6 @@ class Question1 extends React.PureComponent{
         let id = this.props.history.location.state ? this.props.history.location.state.id : 
                 this.props.match.params.id ? this.props.match.params.id : 0;
         let fromFAQ = this.props.history.location.state.fromFAQ;
-        // console.log('s:',search, 'd:', id)
-        // console.log(lastSearchId !== id)
-        // console.log(fromFAQ)
-        // console.log(this.state.initTime==0)
         if(lastSearchId !== id || (fromFAQ&&this.state.initTime==0)){
             // console.log('in')
             this.setState({
@@ -478,7 +474,6 @@ class Question1 extends React.PureComponent{
             },()=>{
                 history.push({pathname:`${(window.ctx || '')}/support/question`,state:{id:e.id}})
             })
-            
         }
 
         // 去掉头部 将链接改成相对链接

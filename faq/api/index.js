@@ -10,6 +10,8 @@ export const sendRate = (rate) => axios.post('/ticket/rate-service', rate)
 
 export const getOrdersNew = (suffix, skip) => axios.get('/v9/order/' + skip + '/20/' + suffix)
 
+export const getQuestionType = () => axios.get("/message/anon/get-list/M1551")
+
 /**
  * 
  * axios.get('/v9/order/' + skip + '/20/' + api_suffix).then((orders) => {

@@ -313,3 +313,8 @@ export const surveySave = (params) => {
 export const surveyGet = () => {
     return axios.get('/questionnaire-answer/anon/get',{},{}).then(data => data)
 }
+
+// ticket 获取问题类型
+export const getQuestionType = () => {
+    return axios.get('/message/anon/get-list/M1551',{},{}).then(data => data)
+}

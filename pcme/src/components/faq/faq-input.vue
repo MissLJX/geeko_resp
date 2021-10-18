@@ -12,15 +12,18 @@
         <div class="searchIconBox">
             <span class="iconfont searchIcon" @click="inputSearch()">&#xe61e;</span>
         </div>
-        <div v-if="showClear" class="searchTipsBox">
-            <div :title="item.title" :class="{'searchTipItem':true}" 
-                 v-for="(item, index) in searchList" 
-                 :key="index"
-                 @click="serachItemClick(item)"
-                 v-html="regTxt(item.title)"
-                 >
+        <transition name="searchTipsBox">
+            <div v-if="showClear" class="searchTipsBox">
+                <div :title="item.title" :class="{'searchTipItem':true}" 
+                    v-for="(item, index) in searchList" 
+                    :key="index"
+                    @click="serachItemClick(item)"
+                    v-html="regTxt(item.title)"
+                    >
+                </div>
             </div>
-        </div>
+        </transition>
+        
     </div>
 </template>
 
@@ -59,10 +62,13 @@ export default {
             this.$emit("inputChange", e.target.value)
         },
         serachItemClick(e){
+            console.log(e)
             this.$emit("relatedSearch",e.id)
         },
         inputSearch(){
-            this.$emit("inputSearch")
+            if(this.inputValue){
+                this.$emit("inputSearch")
+            }
         },
         inputBlur(){
             setTimeout(()=>{
@@ -194,15 +200,27 @@ export default {
                 background-color: #f6f6f6;
             }
         }
+
         .searchTipsBox::-webkit-scrollbar{
             width: 4px;
             border-radius: 2px;
             // background-color: #efefef;
             margin-right: 4px;
         }
+
         .searchTipsBox::-webkit-scrollbar-thumb{
             background-color: #888;
             border-radius: 2px;
+        }
+
+        .searchTipsBox-enter-active,
+        .searchTipsBox-leave-active{
+            transition: all 0.5s ease;
+        }
+        .searchTipsBox-enter,
+        .searchTipsBox-leave-to{
+            opacity: 0;
+            max-height: 0;
         }
     }
                 

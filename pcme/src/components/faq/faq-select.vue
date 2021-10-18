@@ -4,11 +4,14 @@
             {{value}}
             <img :class="{'selectIcon':true,'selected':open}" src="https://image.geeko.ltd/site/pc/icon137.png" alt="" />
         </div>
-        <div class="selectOptionBox" v-if="open">
-            <div class="selectOption" v-for="(item, index) in selectList" :key="index" @click="optionClick(item)">
-                {{item.label}}
+        <transition name="selectOptionBox">
+            <div class="selectOptionBox" v-if="open">
+                <div class="selectOption" v-for="(item, index) in selectList" :key="index" @click="optionClick(item)">
+                    {{item.label}}
+                </div>
             </div>
-        </div>
+        </transition>
+        
     </div>
 </template>
 
@@ -47,7 +50,7 @@ export default {
         value(){
             console.log(this.selectValue)
             if(!this.selectList || this.selectList.length == 0){
-                return ''
+                return 'Please select your question type'
             } else {
                 if(this.selectValue){
                     let item = this.selectList.find(s => s.value == this.selectValue);
@@ -55,10 +58,10 @@ export default {
                     if(item){
                         return item.label
                     } else {
-                        return this.selectList[0]['label']
+                        return 'Please select your question type'
                     }
                 } else {
-                    return this.selectList[0]['label']
+                    return 'Please select your question type'
                 }
             }
             
@@ -159,6 +162,16 @@ export default {
             z-index: 1;
             margin: 0 4%;
         }
+    }
+
+    .selectOptionBox-enter-active,
+    .selectOptionBox-leave-active{
+        transition: all 0.5s ease;
+    }
+    .selectOptionBox-enter,
+    .selectOptionBox-leave-to{
+        opacity: 0;
+        // max-height: 0;
     }
     
 </style>

@@ -28,9 +28,12 @@
         <div class="questionsOfType">
             <div class="questionsItem" v-for="(item,index) in groupSelectQuestions" :key="index" @click="goToDetail(item)">
                 {{item.title}}
-                <div class="questionContent" v-if="item.id == questionContent.id" v-html="questionContent.richText"> 
+                <transition name="q-content">
+                    <div class="questionContent" v-if="item.id == questionContent.id" v-html="questionContent.richText"> 
 
-                </div>
+                    </div>
+                </transition>
+                
             </div>
         </div>
     </div>
@@ -174,6 +177,7 @@ export default {
 .faqPage{
     max-width: 1200px;
     margin: 0 auto;
+    padding-bottom: 200px;
 
     .questionInput{
         display: flex;
@@ -223,6 +227,7 @@ export default {
             color: #222222;
             cursor: pointer;
             position: relative;
+            transition: all 0.3s;
 
             .entryIcon{
                 color: #000;
@@ -242,6 +247,7 @@ export default {
         }
         .questionTypeItemSelect{
             background-color: #222;
+            transition: all 0.3s;
             color: #fff;
 
             .entryIcon{
@@ -288,6 +294,19 @@ export default {
                 line-height: 30px;
             }
         }
+
+        .q-content-enter-active{
+            transition: opacity 0.5s;
+        }
+        .q-content-enter{
+            opacity: 0;
+        }
+        // .q-content-leave-active{
+        //     transition: opacity 0.5s;
+        // }
+        // .q-content-leave{
+        //     opacity: 0;
+        // }
     }
 }
     

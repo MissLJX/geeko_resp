@@ -4,19 +4,17 @@
         <div class="faqHeader">
             <div class="headerContent">
                 <div class="headerLogo">
-                    <div class="logo">
+                    <div class="logo" @click="backHome()">
                         <img src="https://dgzfssf1la12s.cloudfront.net/site/pc/logo03_.png" alt="Chic Me">
                     </div>
-                    <div class="support">support</div>
+                    <div class="support" @click="backSupport()">support</div>
                 </div>
 
                 <div class="tabControl">
                     <div :class="{'tabItem':true, 'tabItemSelect':item.url == tabChoose}" 
                          v-for="(item, index) in tabList" 
                          :key="index"
-                         
                          >
-                         <!-- /@click="tabChange(item)" -->
                          <router-link :to="getUrl(`/me/m/faq/${item.url}/`)">{{item.txt}}</router-link>
                         
                     </div>
@@ -33,7 +31,7 @@
 </template>
 
 <script>
-import { PROJECT } from '../../utils/geekoutil'
+import * as utils from '../../utils/geekoutil'
 let tabList = [
     {
         id: 0,
@@ -59,6 +57,13 @@ export default {
         }
     },
     mounted(){
+        console.log(window.location.href.split('faq/')[1].split('/')[0])
+        let routeNow = window.location.href.split('faq/')[1].split('/')[0]
+        if(routeNow != 'online-help' && routeNow != 'support-ticket'){
+            this.tabChoose = 'faq'
+        } else {
+            this.tabChoose = routeNow
+        }
     },
     watch:{
         '$route': 'tabChange'
@@ -68,13 +73,24 @@ export default {
     methods:{
         tabChange(item){
             console.log(item.path.split('faq/')[1].split('/')[0])
-            if(this.tabChoose != item.path.split('faq/')[1].split('/')[0]){
-                this.tabChoose = item.path.split('faq/')[1].split('/')[0] ? item.path.split('faq/')[1].split('/')[0] : 'faq';
+            if(item.path.split('faq/')[1].split('/')[0] != 'online-help' && item.path.split('faq/')[1].split('/')[0] != 'support-ticket'){
+                this.tabChoose = 'faq'
+            } else {
+                this.tabChoose = item.path.split('faq/')[1].split('/')[0]
             }
+            // if(this.tabChoose != item.path.split('faq/')[1].split('/')[0]){
+            //     this.tabChoose = item.path.split('faq/')[1].split('/')[0] ? item.path.split('faq/')[1].split('/')[0] : 'faq';
+            // }
         },
         getUrl(suffix){
             // console.log(PROJECT + suffix)
-            return PROJECT + suffix;
+            return utils.PROJECT + suffix;
+        },
+        backHome(){
+            this.$router.push({ path: '/'})
+        },
+        backSupport(){
+            this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/support'})
         }
     }
 }
@@ -100,6 +116,7 @@ export default {
                 
                 .logo{
                     margin-right: 19px;
+                    cursor: pointer;
 
                     img{
                         width: 131px;
@@ -115,6 +132,7 @@ export default {
                     letter-spacing: 0px;
                     color: #222222;
                     text-transform: uppercase;
+                    cursor: pointer;
                 }
             }
 

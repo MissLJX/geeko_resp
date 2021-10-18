@@ -50,6 +50,10 @@ export const enMonth = (date) => {
     return month_names[date.getMonth()]
 }
 
+export const slashTime = (date) => {
+    return (new Date(date).toLocaleDateString() + " " + new Date(date).toTimeString().substr(0, 5)) 
+}
+
 
 //order status
 export const STATUS_PENDING = 1

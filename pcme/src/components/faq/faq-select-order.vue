@@ -56,7 +56,7 @@
                 ifloding:true,
                 finished:false,
                 isloded:false,
-                selectValue:'',
+                selectValue:'home-all',
                 tabList: [
                     {
                         label: 'All',

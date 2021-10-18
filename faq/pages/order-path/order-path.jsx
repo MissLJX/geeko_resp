@@ -4,6 +4,7 @@ import {withScroll} from '../../HoCs/list.jsx'
 import {gloabvars} from '../../commons/instance.js'
 import styled from 'styled-components'
 import {NewOrderList} from '../../components/newComponents/new-components'
+import _ from 'lodash'
 
 export default class Orders extends React.Component {
   constructor (props) {

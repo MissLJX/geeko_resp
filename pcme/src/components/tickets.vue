@@ -17,7 +17,7 @@
                         <td @click="showTicket(ticket.operaId)"><a>{{ticket.id}}</a></td>
                         <td>{{getlastmsg(ticket.ticketReplies)}}</td>
                         <td>{{getDate(ticket.openDate)}}</td>
-                        <td :class="{'noreply':ticket.state===1,'replay':ticket.state===2}">{{getStatus(ticket.state)}}</td>
+                        <td :class="{'noreply':ticket.state===1,'reply':ticket.state===2}">{{getStatus(ticket.state)}}</td>
                     </tr>
                 </table>
             </div>
@@ -75,7 +75,7 @@
             getStatus(ticketstatus){
                 switch (ticketstatus) {
                     case 1:
-                        return 'No replay'
+                        return 'No reply'
                     case 2:
                         return 'Replied'
                     case 3:

@@ -80,5 +80,13 @@ export default {
   orderNo:"order NO",
   responseTime:"Tiempo de respuesta esperado: en 24 horas",
   selectTip: 'Seleccione su tipo de pregunta',
-  statuswating: 'Esperando respuestas'
+  statuswating: 'Esperando respuestas',
+  // question ticket
+  defaultSelect: 'Seleccione su tipo de pregunta',
+  submitSuccess: '¡Enviado satisfactoriamente!',
+  submitTips: "Las siguientes razones son opcionales. Puede hacer clic en “X” si no desea elegir ninguno de ellos.  ",
+  selectReason: 'Seleccione una razón',
+  description: 'Descripción',
+  uploadImage: 'Cargar imagen',
+  uploadTips: 'Máximo de 3 fotos, solo JPEG, GIF o PNG',
 }

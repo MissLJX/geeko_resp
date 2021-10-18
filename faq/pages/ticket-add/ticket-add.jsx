@@ -1,6 +1,6 @@
 import React, { createRef } from 'react'
 import {Link} from 'react-router-dom'
-import {get, getByOrderId, sendImage, sendTicket} from '../../api'
+import {get, getByOrderId, sendImage, sendTicket, getQuestionType} from '../../api'
 import styled from 'styled-components'
 import _ from 'lodash'
 import {FormattedMessage, injectIntl} from 'react-intl'
@@ -23,6 +23,7 @@ import {
   ImageLoader
 } from '../../components/styled-ticket.jsx'
 import {SelectType} from '../../components/newComponents/new-components'
+import { questions } from '../../data'
 
 const ChatInputBox = styled.div`
       width: 100%;
@@ -519,6 +520,7 @@ const QuestionSubmitBtn = styled.div`
   text-align: center;
   line-height: 38px;
   margin: 0 auto;
+  cursor: pointer;
 `
 
 class TicketAdd extends React.Component {
@@ -545,28 +547,30 @@ class TicketAdd extends React.Component {
 
       isApp: "false",
       questionMaskShow:false,
-      questionObject: {
-        questionTypeList:[
-          {id:0,title:'Size is small',isSelected:false},
-          {id:1,title:'Size is large',isSelected:false},
-          {id:2,title:'Others',isSelected:false},
-        ],
+      questionObject: { // 信息收集弹窗的数据obj
         questionTypeInput: '',
         showSelectItem: false,
         descriptionInput: '',
         uploadImgList: [],
         uploadImgFileList: []
       },
-      
-
+      questionTypeList:[], // how can i help you 下面的类型选择
+      questions:[], // 上面的内容格式化
+      questionsReason:[], // 问题对应原因的列表,
+      questionSubmitLoading:false, // 问题接口正在上传
     }
     this.questionRef = createRef();
     this.handleImage = this.handleImage.bind(this)
     this.handleTicket = this.handleTicket.bind(this)
+    this.getQuestionType = this.getQuestionType.bind(this)
   }
 
   handleImage (evt) {
     evt.preventDefault()
+    if(!this.state.questions.find(q => q.selected)){
+      alert(this.props.intl.formatMessage({id:"selectTip"}));
+      return false
+    }
     if (!this.validate(true)) {
       return false
     }
@@ -579,7 +583,7 @@ class TicketAdd extends React.Component {
 
       const formData = new FormData()
       formData.append('operaId', this.state.order.id)
-      formData.append('subject', this.state.subject)
+      formData.append('questionTypeCode', this.state.subject)
       formData.append('message', this.state.message || '-')
       formData.append('imageFiles', file)
       sendImage(formData).then(({result}) => {
@@ -628,16 +632,21 @@ class TicketAdd extends React.Component {
   }
 
   handleTicket (evt) {
+    console.log(this.state.questions)
+    if(!this.state.questions.find(q => q.selected)){
+      alert(this.props.intl.formatMessage({id:"selectTip"}));
+      return false
+    }
     if (!this.validate()) {
       return false
     }
 
     sendTicket({
       operaId: this.state.order.id,
-      subject: this.state.subject,
+      questionTypeCode: this.state.subject,
       message: this.state.message
     }).then((data) => {
-      // console.log('data,',data) 
+      console.log('data,',data) 
       // console.log('ticket,',this.state.ticket)
       // console.log(this.state)
       let ticket = this.state.ticket || {}
@@ -647,7 +656,6 @@ class TicketAdd extends React.Component {
         message: this.state.message,
         date: new Date().getTime()
       })
-
       
       ticket.ticketReplies = replies
 
@@ -690,6 +698,7 @@ class TicketAdd extends React.Component {
   }
   
   componentWillMount () {
+    this.getQuestionType()
     // 接受传值的参数
     const params = this.props.history.location.state
     let id;
@@ -710,8 +719,8 @@ class TicketAdd extends React.Component {
     }
     // console.log(id)
     if(urlParams){
-      localStorage.__order = ""
-      this.getMsgByLinkId(id)
+      // localStorage.__order = ""
+      this.getMsgByLinkId(urlParams)
     } else if (id) {
       localStorage.__order = ""
       this.getMsgByUrlId(id)
@@ -745,7 +754,7 @@ class TicketAdd extends React.Component {
           })
         }
       }
-      
+      let subject = ticket ? ticket.questionTypeCode : 0
       this.setState({
         isNew: true,
         ticket,
@@ -753,7 +762,14 @@ class TicketAdd extends React.Component {
         cusomerName,
         headSculptureUrl,
         loading: false,
-        subject: ticket ? ticket.subject : 0
+        subject: subject,
+        questions: this.state.questions.map(q => {
+          q.selected = false
+          if(q.value == subject){
+            q.selected = true
+          }
+          return q
+        })
       })
       this.initScroll()
     }).catch((data) => {
@@ -767,16 +783,25 @@ class TicketAdd extends React.Component {
   // history传参里的id
   getMsgByUrlId(id){
     get(id).then(({result}) => {
-      // console.log(result)
+      console.log(result)
       const {ticket, order, cusomerName, headSculptureUrl} = result
+
+      let subject = ticket ? ticket.questionTypeCode : 0
       this.setState({
         ticket,
         order,
         cusomerName,
         headSculptureUrl,
         loading: false,
-        subject: ticket.subject
-
+        subject: subject,
+        questions: this.state.questions.map(q => {
+          q.selected = false
+          if(q.value == subject){
+            q.selected = true
+          }
+          
+          return q
+        })
       })
 
       this.initScroll()
@@ -805,7 +830,7 @@ class TicketAdd extends React.Component {
           })
         }
       }
-      
+      let subject = ticket ? ticket.questionTypeCode : 0
       this.setState({
         isNew: true,
         ticket,
@@ -813,29 +838,129 @@ class TicketAdd extends React.Component {
         cusomerName,
         headSculptureUrl,
         loading: false,
-        subject: ticket ? ticket.subject : 0
+        subject: subject,
+        questionMaskShow: true,
+        questions: this.state.questions.map(q => {
+          q.selected = false
+          if(q.value == subject){
+            q.selected = true
+          }
+          return q
+        })
       })
       this.initScroll()
     }).catch((data) => {
-      alert(data)
+      alert(JSON.stringify(data))
       if (data.code === 401) {
         window.location.href = `${window.ctx || ''}/me/m`
       }
     })
   }
 
+  // 获取question type以及它的子项
+  getQuestionType(){
+    getQuestionType().then((res) => {
+      console.log(res)
+      let list = [{
+        "value":"01",
+        "label":"Cancel the order"
+    },{
+        "value":"02",
+        "label":"Modify the order"
+    },{
+        "value":"03",
+        "label":"Shipping status",
+        "reasons" : [{
+            "value":"01",
+          "label":"Can't track my order",
+        },{
+            "value":"02",
+          "label":"Shipping time is too long",
+        },{
+            "value":"03",
+          "label":"Not receive the order",
+        },{
+            "value":"04",
+          "label":"Don't want to pay for customs",
+        },{
+            "value":"05",
+          "label":"Delivery shows returned",
+        },{
+            "value":"06",
+          "label":"Only part of the order received",
+        },{
+            "value":"09",
+          "label":"Others"
+        }]
+    },{
+        "value":"04",
+        "label":"Return the order",
+        "reasons" : [{
+            "value":"01",
+          "label":"Size is small",
+        },{
+            "value":"02",
+          "label":"Size is large",
+        },{
+            "value":"03",
+          "label":"Size is not as discribed",
+        },{
+            "value":"04",
+          "label":"Received a wrong item",
+        },{
+            "value":"05",
+          "label":"Received a defected item",
+        },{
+            "value":"06",
+          "label":"Item is not as discribed",
+        },{
+            "value":"07",
+          "label":"Received a stained item",
+        },{
+            "value":"08",
+          "label":"Received different colord",
+        },{
+            "value":"09",
+          "label":"Material is transparent",
+        },{
+            "value":"10",
+          "label":"Others"
+        }]
+    },{
+        "value":"09",
+        "label":"Others"
+      }]
+      if(res.result && res.result.length > 0){
+        list = res.result
+      }
+      let qTList = list.map(l => {
+        return {
+          ...l,
+          selected:false
+        }
+      })
+      let qTReasonList = qTList.find(q => q.selected == true)&&qTList.find(q => q.selected == true).reasons ?
+                         qTList.find(q => q.selected == true).reasons:[]
+      this.setState({
+        questionTypeList: list,
+        questions: qTList,
+        questionsReason: qTReasonList
+      })
+    })
+  }
+
   render () {
     const {intl, location} = this.props
-    const {questionObject, questionMaskShow} = this.state
+    const {questionObject, questionMaskShow, questions, questionTypeList, questionsReason} = this.state
 
     const isFromNotification = location.search && location.search.indexOf('utm_source=pcnotification') >= 0
-    const questions = [
-      {label: "Cancel the order", value: '0', selected: false},
-      {label: "Modify the order", value: '2', selected: false},
-      {label: "Shipping status", value: '3', selected: false},
-      {label: "Return the order", value: '4', selected: false},
-      {label: "Others", value: '5', selected: false},
-    ]
+    // const questions = [
+    //   {label: "Cancel the order", value: '0', selected: false},
+    //   {label: "Modify the order", value: '2', selected: false},
+    //   {label: "Shipping status", value: '3', selected: false},
+    //   {label: "Return the order", value: '4', selected: false},
+    //   {label: "Others", value: '5', selected: false},
+    // ]
 
     const LabelValue = (props) => {
       return <div>
@@ -905,8 +1030,8 @@ class TicketAdd extends React.Component {
 
     const QuestionTip = (props) => {
       const imageUrls = props.reply.imageUrls
+      console.log()
       let message = props.reply.message === '-' ? '' : props.reply.message
-
       let messages = (message || '').split(/[\s|\n]/)
 
       message = messages.map(m => {
@@ -916,14 +1041,37 @@ class TicketAdd extends React.Component {
         return m
       }).join(' ')
 
+      let richTxt = '';
+      let reasonList = questionTypeList.find(qt => qt.value == props.reply.questionTypeCode) && questionTypeList.find(qt => qt.value == props.reply.questionTypeCode).reasons ? 
+                       questionTypeList.find(qt => qt.value == props.reply.questionTypeCode).reasons :
+                       []
+      if(props.reply.reasonCode){
+        let reason = reasonList.find(q => q.value == props.reply.reasonCode)
+        richTxt = `
+          <div style="color:#222;font-size: 14px;border-bottom:2px solid #999;padding-bottom:5px;">
+            ${reason.label == 'Others' ? props.reply.reason : reason.label}
+          </div>
+          <div style="color:#222;font-size: 14px;border-bottom:2px solid #999;padding:5px 0;">
+            ${message}
+          </div> 
+        ` 
+      } else {
+        richTxt = `
+        <div style="color:#222;font-size: 14px;border-bottom:2px solid #999;padding:5px 0;">
+          ${message}
+        </div> 
+        `
+      }
+
+
       return <ChatTip className={props.reply.sender === 'buyers' ? 'buyer' : 'seller'}>
         
-        <div style={{ wordBreak: 'break-all', wordWrap: 'break-word',minWidth: '205px'}} dangerouslySetInnerHTML={{__html: message}}></div>
+        <div style={{ wordBreak: 'break-all', wordWrap: 'break-word',minWidth: '205px'}} dangerouslySetInnerHTML={{__html: richTxt}}></div>
         
         <div style={{display: 'flex', alignItems:'center',justifyContent:'flex-start'}}>
           {
             imageUrls && imageUrls.map(image => (
-              <img key={image} style={{width:'60px',height: '60px',margin: '7px 12px 0 0'}} src={image} /> 
+              <img key={image} style={{width:'60px',height: '60px',margin: '7px 12px 0 0'}} src={getImageUrl(image)} /> 
             ))
           }
         </div> 
@@ -944,14 +1092,13 @@ class TicketAdd extends React.Component {
 
     const GroupReplyHtmls = (props) => {
       const replies = props.replies
-      // console.log(replies)
       return <ChatRows>
         {
           replies.map((reply, index) => (
             <ChatRow className={reply.sender === 'buyers' ? 'buyer' : 'seller'} key={index}>
               <HeaderImage image={props.headSculptureUrl} sender={reply.sender} />
               {
-                reply.showType == 1 ?
+                reply.questionType&& reply.questionTypeCode ?
                 <QuestionTip reply={reply}></QuestionTip>:
                 <ReplyTip reply={reply} />
               }
@@ -963,10 +1110,13 @@ class TicketAdd extends React.Component {
     }
 
     const selectChange= (e) => {
-        // console.log(e)
+        console.log(e)
+        let qTReasonList = questions.find(q => q.value == e) && questions.find(q => q.value == e).reasons ? 
+                           questions.find(q => q.value == e).reasons : []
         this.setState({
           subject: e,
-          questionMaskShow: true
+          questionMaskShow: true,
+          questionsReason: qTReasonList
         })
         console.log(this.questionRef)
         setTimeout(()=>{
@@ -981,24 +1131,22 @@ class TicketAdd extends React.Component {
       if(!this.state.subject){
         alert(intl.formatMessage({id:"selectTip"}));
       } else {
-        if(typeof(this.state.subject)!=='number'){
-          this.setState({
-            message: evt.currentTarget.value, 
-            messageInvalid: false
-          })
-        }
+        this.setState({
+          message: evt.currentTarget.value, 
+          messageInvalid: false
+        })
       }
     }
 
     const questionTypeChange = (item) => {
-      let copyList = questionObject.questionTypeList.slice(0);
-      let selectItem = copyList.find(e => e.id == item.id);
+      let copyList = questionsReason.slice(0);
+      let selectItem = copyList.find(e => e.value == item.value);
       copyList.forEach(item => {
         item.isSelected = false;
       })
       selectItem.isSelected = true;
       this.setState({
-        questionObject:{...questionObject, questionTypeList: copyList}
+        questionsReason: copyList
       })
     }
 
@@ -1052,84 +1200,140 @@ class TicketAdd extends React.Component {
     }
 
     const checkParams = (params) => {
+      // console.log(params)
+      // console.log(questionsReason.length > 0 && params.selectReason)
+      if(questionsReason.length > 0 && !params.selectReason){
+        // console.log('ss')
+        var subS = document.getElementById("submitSelect")
+        subS.style.border = '1px solid red'
+        subS.scrollIntoView()
+        subS = null
+        return false
+      }
+      if(params.selectReason && params.selectReason.label == 'Others' && !params.selectReasonInput){
+        // console.log('ri')
+        var reaI = document.getElementById("reasonInputOthers")
+        reaI.style.border = '1px solid red'
+        console.log(reaI)
+        reaI.scrollIntoView()
+        reaI = null
+        return false
+      }
       if(!params.descriptionInput){
         var des = document.getElementById("description")
         des.style.border = '1px solid red'
         des.scrollIntoView()
+        des = null
         return false
       }
+      var subS = document.getElementById("submitSelect") ? document.getElementById("submitSelect") : ''
+      subS && (subS.style.border = 'none')
+      
+      var reaI = document.getElementById("reasonInputOthers") ? document.getElementById("reasonInputOthers") : ''
+      reaI && (reaI.style.border = 'none')
+      
+      var des = document.getElementById("description") ? document.getElementById("description") : ''
+      des && (des.style.border = 'none')
+      reaI = null
+      des = null
+      subS = null
       return true
     }
 
     const questionSubmit = () => {
-      console.log('submit')
-      console.log(this.state.subject)
-      
-      if(!checkParams(questionObject)) return
+      if(this.state.questionSubmitLoading) return;
+      this.setState({
+        questionSubmitLoading: true
+      })
       let params = {};
       // 选了什么问题
       params.question = this.state.subject;
       // 选择的原因（有的问题没有）
-      params.selectReason = questionObject.questionTypeList.find(i => i.isSelected == true);
+      params.selectReason = questionsReason.find(i => i.isSelected == true);
       // 原因描述 仅限Others
-      if(params.selectReason && params.selectReason.title == 'Others'){
+      if(params.selectReason && params.selectReason.label == 'Others'){
         params.selectReasonInput = questionObject.questionTypeInput
       }
       // 描述
       params.descriptionInput = questionObject.descriptionInput
+
+      if(!checkParams(params)) return
       // 上传的图片
       let imgFileList = questionObject.uploadImgFileList.map(img => {
         return new HtmlImageCompress(img, {quality: 0.7, imageType: img.type})
       })
+      
       Promise.all(imgFileList).then(results => {
         console.log(results)
-      })
-      // 需要添加一条数据 传富文本
-      let richTxt = `
-        <div style="color:#222;font-size: 14px;border-bottom:2px solid #999;padding-bottom:5px;">
-          ${params.selectReason && params.selectReason.title }
-        </div>
-        <div style="color:#222;font-size: 14px;border-bottom:2px solid #999;padding:5px 0;">
-          ${questionObject.descriptionInput}
-        </div> 
-      ` 
-
-      let ticket = this.state.ticket || {}
-      let replies = (ticket.ticketReplies || []).concat([])
-      replies.push({
-        sender: 'buyers',
-        message: richTxt,
-        date: new Date().getTime(),
-        imageUrls: questionObject.uploadImgList,
-        showType: 1
-      })
-
-      
-      ticket.ticketReplies = replies
-
-      if(ticket){
-        if(ticket.ticketReplies.slice(-1)[ticket.ticketReplies.slice(-1).length - 1]['sender'] == "buyers"){
-          this.setState({
-            showTip:true
+        const formData = new FormData()
+        formData.append('operaId', this.state.order.id)
+        formData.append('questionTypeCode', this.state.subject)
+        formData.append('questionType', questions.find(q=>q.value == this.state.subject).label)
+        formData.append('reasonCode', params.selectReason ? params.selectReason.value : '')
+        // 如果原因选择了others 那么reason传others输入的值
+        formData.append('reason', params.selectReason ? params.selectReasonInput ? params.selectReasonInput:params.selectReason.label:'')
+        formData.append('message', questionObject.descriptionInput)
+        results.forEach(item => {
+          const {file} = item
+          formData.append('imageFiles', file)
+        })
+        
+        sendImage(formData).then(({result}) => {
+          let ticket = this.state.ticket || {}
+          let replies = (ticket.ticketReplies || []).concat([])
+          replies.push({
+            sender: 'buyers',
+            message: questionObject.descriptionInput,
+            date: new Date().getTime(),
+            imageUrls: questionObject.uploadImgList,
+            questionTypeCode: this.state.subject,
+            questionType: questions.find(q=>q.value == this.state.subject).label,
+            reasonCode: params.selectReason ? params.selectReason.value : ''
           })
-        } else {
+
+          ticket.ticketReplies = replies
+
+          if(ticket){
+            if(ticket.ticketReplies.slice(-1)[ticket.ticketReplies.slice(-1).length - 1]['sender'] == "buyers"){
+              this.setState({
+                showTip:true
+              })
+            } else {
+              this.setState({
+                showTip: false
+              })
+            }
+          }
+          
           this.setState({
-            showTip: false
+            ticket,
+            showMsg: true,
+            message: '',
+            showMsgTxt: intl.formatMessage({id:'submitSuccess'}),
+            questionSubmitLoading: false
           })
-        }
-      }
-      console.log(ticket)
+    
+          clearTicketData();
+    
+          setTimeout(()=>{
+            this.setState({
+              showMsg: false,
+              showMsgTxt: ''
+            })
+          },2000)
+  
+          this.initScroll()
+        })
+
+      })             
+    }
+
+    // 清除收集信息弹窗的数据
+    const clearTicketData = () => {
       this.setState({
-        ticket,
-        showMsg: true,
         questionMaskShow: false,
-        message: '',
-        showMsgTxt: 'Submitted successfully!',
         questionObject: {
           questionTypeList:[
-            {id:0,title:'Size is small',isSelected:false},
-            {id:1,title:'Size is large',isSelected:false},
-            {id:2,title:'Others',isSelected:false},
           ],
           questionTypeInput: '',
           showSelectItem: false,
@@ -1138,32 +1342,6 @@ class TicketAdd extends React.Component {
           uploadImgFileList: []
         }
       })
-
-      setTimeout(()=>{
-        this.setState({
-          showMsg: false,
-          showMsgTxt: ''
-        })
-      },2000)
-      
-      // let imgFileList = questionObject.uploadImgFileList.length > 0 ?
-      //                   questionObject.uploadImgFileList : '';
-      // console.log(imgFileList)
-      // if(imgFileList){
-      //   imgFileList.then((res)=>{
-      //     console.log(res)
-          // params.uploadImg = imgFileList
-
-          // // 请求接口上传文件
-          // const {file, fileSize} = result
-
-          // const formData = new FormData()
-          // formData.append('operaId', this.state.order.id)
-          // formData.append('subject', this.state.subject)
-          // formData.append('message', this.state.message || '-')
-          // formData.append('imageFiles', file)
-        // })
-      // }                  
     }
 
     return <div>
@@ -1192,9 +1370,9 @@ class TicketAdd extends React.Component {
                 <OrderCreateTime>
                     {intl.formatMessage({id:"paymenttime"})}
                     <span>{
-                      this.state.ticket ?
-                      this.state.ticket.openDate ? 
-                        (new Date(this.state.ticket.openDate).toLocaleDateString() + " " + new Date(this.state.ticket.openDate).toTimeString().substr(0, 5)) : 
+                      this.state.order ?
+                      this.state.order.orderTime ? 
+                        (new Date(this.state.order.orderTime).toLocaleDateString() + " " + new Date(this.state.order.orderTime).toTimeString().substr(0, 5)) : 
                         "-":
                       "-"
                       }</span>
@@ -1205,7 +1383,7 @@ class TicketAdd extends React.Component {
             {/* 选择帮助项 */}
             <div>
                 <HelpTxt><FormattedMessage id="helpyou"/></HelpTxt>
-                <SelectType itemList={questions} selectChange={(e)=>selectChange(e)} type={"chat"} value={this.state.subject}/>
+                <SelectType itemList={questions} selectChange={(e)=>selectChange(e)} type={"chat"} value={this.state.subject} intl={intl}/>
             </div>
             
             {/* 对话 */}
@@ -1271,68 +1449,74 @@ class TicketAdd extends React.Component {
       <SubmitQuestionMask show={questionMaskShow} >
           <SubmitQuestionContent>
             {/* 关闭按钮 */}
-            <span style={{display:'block',width:'100%',textAlign:'right',backgroundColor:"#fff"}} onClick={()=>this.setState({questionMaskShow: false})}>
+            <span style={{display:'block',width:'100%',textAlign:'right',backgroundColor:"#fff"}} onClick={()=>clearTicketData()}>
               <SubmitQuestionClose>&#xe69a;</SubmitQuestionClose>
             </span>
 
             <div style={{height: '464px',overflow:'auto',marginTop:'20px',paddingBottom:'102px'}} >
                 {/* 提示语 */}
                 <SubmitTips id="top">
-                  <span>The reasons below are optional. You can click “X” if you don't want to choose any of them.</span> 
+                  <span>{intl.formatMessage({id: 'submitTips'})}</span> 
                 </SubmitTips>
 
                 {/* 原因选择 */}
-                <SubmitSelectReason>
-                    {/* 选择标题 */}
-                    <SelectReasonTitle>
-                      <span>*</span> Select a reason
-                    </SelectReasonTitle>
+                {
+                  questionsReason.length > 0 &&
+                  <SubmitSelectReason id="submitSelect">
+                      {/* 选择标题 */}
+                      <SelectReasonTitle>
+                        <span>*</span> {intl.formatMessage({id: 'selectReason'})}
+                      </SelectReasonTitle>
 
-                    {/* 选择下拉框 */}
-                    <SelectReasonBox id="selectReason">
-                      <SelectReasonInput onClick={()=>this.setState({questionObject:{...questionObject, showSelectItem:!questionObject.showSelectItem}})}>
-                        <span>Select a reason</span>
-                        <span className={`iconfont selectReasonIcon ${questionObject.showSelectItem?'selected':''}`}>&#xe692;</span>
-                      </SelectReasonInput>
-                      
-                      {/* 选项框 */}
-                      <SelectReasonItemBox>
-                        {/* 选项 */}
-                        {
-                          questionObject.showSelectItem && 
-                          (questionObject.questionTypeList.length > 0) &&
-                          questionObject.questionTypeList.map((item, index)=>(
-                            <SelectReasonItem key={index} showTextArea={item.title === 'Others' && item.isSelected} onClick={()=>questionTypeChange(item)}>
-                              <div>
-                                <ReasonItemIcon select={item.isSelected}>
-                                  <span className="reasonItemIconSelected"></span>
-                                </ReasonItemIcon>
-                                <ReasonItem select={item.isSelected}>{item.title}</ReasonItem>
-                              </div>
-                                
-                              <ReasonTextArea 
-                                  show={item.title === 'Others' && item.isSelected} 
-                                  onChange={(e)=>{
-                                    this.setState({
-                                      questionObject:{
-                                        ...questionObject, 
-                                        questionTypeInput: e.target.value
-                                      }
-                                    })
-                                  }}>
-                              </ReasonTextArea>
-                            </SelectReasonItem>
-                          ))
-                        }
-                      </SelectReasonItemBox>
-                    </SelectReasonBox>
-                </SubmitSelectReason>
+                      {/* 选择下拉框 */}                      
+                        <SelectReasonBox id="selectReason">
+                          <SelectReasonInput onClick={()=>this.setState({questionObject:{...questionObject, showSelectItem:!questionObject.showSelectItem}})}>
+                            <span>{questionsReason.find(q => q.isSelected) ? questionsReason.find(q => q.isSelected).label: intl.formatMessage({id: 'selectReason'})}</span>
+                            <span className={`iconfont selectReasonIcon ${questionObject.showSelectItem?'selected':''}`}>&#xe692;</span>
+                          </SelectReasonInput>
+                          
+                          {/* 选项框 */}
+                          <SelectReasonItemBox>
+                            {/* 选项 */}
+                            {
+                              questionObject.showSelectItem &&
+                              questionsReason.length > 0 && 
+                              questionsReason.map((item, index)=>(
+                                <SelectReasonItem key={index} showTextArea={item.label === 'Others' && item.isSelected} onClick={()=>questionTypeChange(item)}>
+                                  <div>
+                                    <ReasonItemIcon select={item.isSelected}>
+                                      <span className="reasonItemIconSelected"></span>
+                                    </ReasonItemIcon>
+                                    <ReasonItem select={item.isSelected}>{item.label}</ReasonItem>
+                                  </div>
+                                  
+                                  <ReasonTextArea 
+                                      show={item.label === 'Others' && item.isSelected} 
+                                      id={"reasonInput"+item.label}
+                                      onChange={(e)=>{
+                                        this.setState({
+                                          questionObject:{
+                                            ...questionObject, 
+                                            questionTypeInput: e.target.value
+                                          }
+                                        })
+                                      }}>
+                                  </ReasonTextArea>
+                                </SelectReasonItem>
+                              ))
+                            }
+                          </SelectReasonItemBox>
+                        </SelectReasonBox>
+                      </SubmitSelectReason>
+                    }
+                    
+                
 
                 {/* 文字描述 */}
                 <SubmitDescriptionBox id="description">
                     {/* 标题 */}
                     <SelectReasonTitle>
-                      <span>*</span> Description
+                      <span>*</span> {intl.formatMessage({id: 'description'})}
                     </SelectReasonTitle>
 
                     {/* 输入框 */}
@@ -1354,11 +1538,11 @@ class TicketAdd extends React.Component {
                 <SubmitImageBox id="imgUpload">
                   {/* 标题 */}
                   <SelectReasonTitle>
-                    Upload image
+                  {intl.formatMessage({id: 'uploadImage'})}
                   </SelectReasonTitle>
 
                   {/* 上传提示 */}
-                  <UploadTips>Maximum of 3 photos, only JPEG, GIF or PNG. </UploadTips>
+                  <UploadTips>{intl.formatMessage({id: 'uploadTips'})}</UploadTips>
 
                   {/* 上传盒子 */}
                   <UploadBox>
@@ -1394,7 +1578,7 @@ class TicketAdd extends React.Component {
             {/* 提交按钮 */}
             <QuestionSubmitBtnBox>
               <QuestionSubmitBtn onClick={()=>questionSubmit()}>
-                sumbit
+                    {intl.formatMessage({id: 'submit'})}
               </QuestionSubmitBtn>
             </QuestionSubmitBtnBox>
             

@@ -8,84 +8,84 @@ import {questions} from '../../data/index';
 
 const DropDownPositionBox = styled.div`
         border-bottom: 1px solid #e6e6e6;
-    `
+`
 
-    const DropDownItem1 = styled.div`
-        display: flex;
-        align-items: center;
-        font-family: Roboto-Medium;
-        font-size: 14px;
+const DropDownItem1 = styled.div`
+    display: flex;
+    align-items: center;
+    font-family: Roboto-Medium;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #222222;
+    height: 48px;
+    line-height: 48px;
+`
+
+const DropDownIcon = styled.span`
+    @font-face {
+        font-family: 'iconfont';  /* Project id 384296 */
+        src: url('//at.alicdn.com/t/font_384296_waimmey03x.woff2?t=1631165132958') format('woff2'),
+            url('//at.alicdn.com/t/font_384296_waimmey03x.woff?t=1631165132958') format('woff'),
+            url('//at.alicdn.com/t/font_384296_waimmey03x.ttf?t=1631165132958') format('truetype');
+    }
+    font-family:"iconfont" !important;
+    font-size:16px;
+    font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 20px;
+    margin-right: 16px;
+    color: #000;
+    text-shadow: 0 0 black;
+`
+
+const DropDownTxt = styled.span`
+    flex: 1;
+    // text-shadow: 0 0 #222;
+`
+
+const DropDownShow = styled.span`
+    @font-face {
+        font-family: 'iconfont';  /* Project id 384296 */
+        src: url('//at.alicdn.com/t/font_384296_9jjvzuj4fxt.woff2?t=1631168925174') format('woff2'),
+            url('//at.alicdn.com/t/font_384296_9jjvzuj4fxt.woff?t=1631168925174') format('woff'),
+            url('//at.alicdn.com/t/font_384296_9jjvzuj4fxt.ttf?t=1631168925174') format('truetype');
+    }
+    font-family:"iconfont" !important;
+    font-size:16px;
+    font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 14px;
+    margin-right: 14px;
+    color: #666;
+    // text-shadow: 0 0 black;
+`
+
+const MoreQuestion = styled.div`
+    width: 100%;
+    padding: 9px 21px;
+    line-height: 32px;
+    background: #f6f6f6;
+    margin-bottom: 12px;
+
+    &>span{
+        width: 100%;
+        line-height: 32px;
+        font-family: Roboto-Regular;
+        font-size: 12px;
         font-weight: normal;
         font-stretch: normal;
         letter-spacing: 0px;
         color: #222222;
-        height: 48px;
-        line-height: 48px;
-    `
-
-    const DropDownIcon = styled.span`
-        @font-face {
-            font-family: 'iconfont';  /* Project id 384296 */
-            src: url('//at.alicdn.com/t/font_384296_waimmey03x.woff2?t=1631165132958') format('woff2'),
-                url('//at.alicdn.com/t/font_384296_waimmey03x.woff?t=1631165132958') format('woff'),
-                url('//at.alicdn.com/t/font_384296_waimmey03x.ttf?t=1631165132958') format('truetype');
-        }
-        font-family:"iconfont" !important;
-        font-size:16px;
-        font-style:normal;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        font-size: 20px;
-        margin-right: 16px;
-        color: #000;
-        text-shadow: 0 0 black;
-    `
-
-    const DropDownTxt = styled.span`
-        flex: 1;
-        // text-shadow: 0 0 #222;
-    `
-
-    const DropDownShow = styled.span`
-        @font-face {
-            font-family: 'iconfont';  /* Project id 384296 */
-            src: url('//at.alicdn.com/t/font_384296_9jjvzuj4fxt.woff2?t=1631168925174') format('woff2'),
-                url('//at.alicdn.com/t/font_384296_9jjvzuj4fxt.woff?t=1631168925174') format('woff'),
-                url('//at.alicdn.com/t/font_384296_9jjvzuj4fxt.ttf?t=1631168925174') format('truetype');
-        }
-        font-family:"iconfont" !important;
-        font-size:16px;
-        font-style:normal;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        font-size: 14px;
-        margin-right: 14px;
-        color: #666;
-        // text-shadow: 0 0 black;
-    `
-
-    const MoreQuestion = styled.div`
-        width: 100%;
-        padding: 9px 21px;
-        line-height: 32px;
-        background: #f6f6f6;
-        margin-bottom: 12px;
-
-        &>span{
-            width: 100%;
-            line-height: 32px;
-            font-family: Roboto-Regular;
-            font-size: 12px;
-            font-weight: normal;
-            font-stretch: normal;
-            letter-spacing: 0px;
-            color: #222222;
-            display: block;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-    `
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+`
 export const DropDownItem = (props) => {
     // console.log(props)
     const [showMore, setShowMore] = useState(false);
@@ -129,63 +129,48 @@ export const DropDownItem = (props) => {
     )
 }
 
-
 const EntryButton1 = styled.div`
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 169px;
-            height: 88px;
-            /* border: 1px solid; */
-            background: #f6f6f6;
-            font-family: Roboto-Regular;
-            font-size: 12px;
-            font-weight: normal;
-            font-stretch: normal;
-            line-height: 14px;
-            letter-spacing: 0px;
-            color: #222222;
-            border-radius: 4px;
-            margin-bottom: 12px;
-        ` 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 169px;
+    height: 88px;
+    /* border: 1px solid; */
+    background: #f6f6f6;
+    font-family: Roboto-Regular;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 14px;
+    letter-spacing: 0px;
+    color: #222222;
+    border-radius: 4px;
+    margin-bottom: 12px;
 
-        // const style ={
-        //     display: 'flex',
-        //     flexDirection: 'column',
-        //     alignItems: 'center',
-        //     justifyContent: 'center',
-        //     width: '169px',
-        //     height: '88px',
-        //     /* border: 1px solid; */
-        //     background: '#f6f6f6',
-        //     fontFamily: 'Roboto-Regular',
-        //     fontSize: '12px',
-        //     fontWeight: 'normal',
-        //     fontStretch: 'normal',
-        //     lineHeight: '14px',
-        //     letterSpacing: '0px',
-        //     color: '#222222',
-        //     borderRadius: '4px',
-        //     marginBottom: '12px',
-        // }
+    &:active{
+        background-color: #eee;
+        transform: scale(0.9);
+        transition: all 0.3s;
+    }
+` 
 
-        const EntryIcon = styled.span`
-            @font-face {
-                font-family: 'iconfont';  /* Project id 384296 */
-                src: url('//at.alicdn.com/t/font_384296_waimmey03x.woff2?t=1631165132958') format('woff2'),
-                    url('//at.alicdn.com/t/font_384296_waimmey03x.woff?t=1631165132958') format('woff'),
-                    url('//at.alicdn.com/t/font_384296_waimmey03x.ttf?t=1631165132958') format('truetype');
-            }
-            font-family:"iconfont" !important;
-            font-size:16px;
-            font-style:normal;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            fontSize:24px;
-            display:inline-block;
-            line-height: 20px;
-        `       
+const EntryIcon = styled.span`
+    @font-face {
+        font-family: 'iconfont';  /* Project id 384296 */
+        src: url('//at.alicdn.com/t/font_384296_waimmey03x.woff2?t=1631165132958') format('woff2'),
+            url('//at.alicdn.com/t/font_384296_waimmey03x.woff?t=1631165132958') format('woff'),
+            url('//at.alicdn.com/t/font_384296_waimmey03x.ttf?t=1631165132958') format('truetype');
+    }
+    font-family:"iconfont" !important;
+    font-size:16px;
+    font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    fontSize:24px;
+    display:inline-block;
+    line-height: 20px;
+`       
 export const EntryButton = class extends React.Component{
     constructor(props){
         super(props)
@@ -237,65 +222,65 @@ const New_order_list_li = styled.li`
       &:first-child{
           margin-top: 0;
       }
-  `
-  const New_order_list_item_title_box = styled.div`
-      height: 42px;
-      /* border-bottom: 1px solid #cacaca; */
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-  `
-  const New_order_list_img_box = styled.div`
-    //   margin-top: 6px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid #e6e6e6;
-  `
-  const New_order_list_select = styled.div`
-      display: inline-block;
-      /* height: 80px; */
-      top: -30px;
-      position: relative;
-  `
-  const New_order_list_item = styled.div`
-      /* flex: 1; */
-      display: inline-block;
-      width: calc(100% - 28px);
-      ul{
-          white-space: nowrap;
-          overflow: hidden;
-          overflow-x: scroll;
-          width: 100%;
-          height: 80px;
-          /* border: 1px solid; */
-      }
-      ul::-webkit-scrollbar{
-          display: none;
-      }
-      li{
-          display: inline-block;
-          margin-right: 8px;
-      }
-      img{
-          width: 64px;
-          height: 80px;
-      }
-  `
-  const New_order_list_select_span = styled.div`
-      font-size: 20px;
-      display: inline-block;
-      font-family: iconfont;
-      font-style: normal;
-      margin-right: 8px;
-  `
-  const New_order_list_total_box = styled.div`
-      height: 42px;
-      line-height: 42px;
-      display: flex;
-      justify-content: space-between;
-      color: #999;
-      font-size:12px;
-      /* border-bottom: 10px solid #f6f6f6; */
-  `
+`
+const New_order_list_item_title_box = styled.div`
+    height: 42px;
+    /* border-bottom: 1px solid #cacaca; */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+`
+const New_order_list_img_box = styled.div`
+//   margin-top: 6px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e6e6e6;
+`
+const New_order_list_select = styled.div`
+    display: inline-block;
+    /* height: 80px; */
+    top: -30px;
+    position: relative;
+`
+const New_order_list_item = styled.div`
+    /* flex: 1; */
+    display: inline-block;
+    width: calc(100% - 28px);
+    ul{
+        white-space: nowrap;
+        overflow: hidden;
+        overflow-x: scroll;
+        width: 100%;
+        height: 80px;
+        /* border: 1px solid; */
+    }
+    ul::-webkit-scrollbar{
+        display: none;
+    }
+    li{
+        display: inline-block;
+        margin-right: 8px;
+    }
+    img{
+        width: 64px;
+        height: 80px;
+    }
+`
+const New_order_list_select_span = styled.div`
+    font-size: 20px;
+    display: inline-block;
+    font-family: iconfont;
+    font-style: normal;
+    margin-right: 8px;
+`
+const New_order_list_total_box = styled.div`
+    height: 42px;
+    line-height: 42px;
+    display: flex;
+    justify-content: space-between;
+    color: #999;
+    font-size:12px;
+    /* border-bottom: 10px solid #f6f6f6; */
+`
 
 const NewOrderList1 = class extends React.Component {
     constructor (props) {
@@ -441,7 +426,6 @@ const NewOrderList1 = class extends React.Component {
     }
 }
 
-
 export const NewOrderList = injectIntl(NewOrderList1)
 
 const QuestionInputBox = styled.div`
@@ -473,81 +457,99 @@ const QuestionInputBox = styled.div`
             letter-spacing: 0px;
             color: #999999;
         }
-    `
-    const InputPositionBox = styled.div`
-        flex: 1;
-        position: relative;
-        display: flex;
-    `
+`
+const InputPositionBox = styled.div`
+    flex: 1;
+    position: relative;
+    display: flex;
+`
 
-    const ClearIcon = styled.span`
-        @font-face {
-            font-family: 'iconfont';  /* Project id 384296 */
-            src: url('//at.alicdn.com/t/font_384296_waimmey03x.woff2?t=1631165132958') format('woff2'),
-                url('//at.alicdn.com/t/font_384296_waimmey03x.woff?t=1631165132958') format('woff'),
-                url('//at.alicdn.com/t/font_384296_waimmey03x.ttf?t=1631165132958') format('truetype');
+const ClearIcon = styled.span`
+    @font-face {
+        font-family: 'iconfont';  /* Project id 384296 */
+        src: url('//at.alicdn.com/t/font_384296_waimmey03x.woff2?t=1631165132958') format('woff2'),
+            url('//at.alicdn.com/t/font_384296_waimmey03x.woff?t=1631165132958') format('woff'),
+            url('//at.alicdn.com/t/font_384296_waimmey03x.ttf?t=1631165132958') format('truetype');
+    }
+    font-family:"iconfont" !important;
+    font-size:16px;
+    font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    margin: 0 13px;
+    color:rgba(34, 34, 34, 0.3);
+    cursor: pointer;
+`
+
+const InputIconBox = styled.div`
+    @font-face {
+        font-family: 'iconfont';  /* Project id 384296 */
+        src: url('//at.alicdn.com/t/font_384296_waimmey03x.woff2?t=1631165132958') format('woff2'),
+            url('//at.alicdn.com/t/font_384296_waimmey03x.woff?t=1631165132958') format('woff'),
+            url('//at.alicdn.com/t/font_384296_waimmey03x.ttf?t=1631165132958') format('truetype');
+    }
+    @keyframes shaking{
+        0%{
+            transform: rotate(0deg) scale(1.0);
         }
+        50%{
+            transform: rotate(70deg) scale(1.2);
+        }
+        100%{
+            transform: rotate(0deg) scale(1.0);
+        }
+    }
+    width: 15%;
+    background: #222;
+    color: #fff;
+    text-align: center;
+    span{
         font-family:"iconfont" !important;
         font-size:16px;
         font-style:normal;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-        margin: 0 13px;
-        color:rgba(34, 34, 34, 0.3);
-        cursor: pointer;
-    `
-
-    const InputIconBox = styled.div`
-        @font-face {
-            font-family: 'iconfont';  /* Project id 384296 */
-            src: url('//at.alicdn.com/t/font_384296_waimmey03x.woff2?t=1631165132958') format('woff2'),
-                url('//at.alicdn.com/t/font_384296_waimmey03x.woff?t=1631165132958') format('woff'),
-                url('//at.alicdn.com/t/font_384296_waimmey03x.ttf?t=1631165132958') format('truetype');
+        display: inline-block;
+        transform: rotate(0deg);
+        &:active{
+            animation: shaking 1.2s ease;
         }
-        width: 15%;
-        background: #222;
-        color: #fff;
-        text-align: center;
-        span{
-            font-family:"iconfont" !important;
-            font-size:16px;
-            font-style:normal;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-    `
+    }
+    
+`
 
-    const SearchTipsBox = styled.div`
-        width: 100.5%;
-        max-height: 182px;
+const SearchTipsBox = styled.div`
+    width: 100.5%;
+    max-height: 182px;
+    overflow: hidden;
+    overflow-y: scroll;
+    position: absolute;
+    left: -1px;
+    top: 38px;
+    border: 1px solid #cacaca;
+    border-top: none;
+    font-family: Roboto-Regular;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #666666;
+    padding: 2px 15px 16px;
+    background: #fff;
+    z-index: 1;
+    
+    div{
+        line-height: 29px;
+        width: calc(100%);
+        white-space: nowrap;
         overflow: hidden;
-        overflow-y: scroll;
-        position: absolute;
-        left: -1px;
-        top: 38px;
-        border: 1px solid #cacaca;
-        border-top: none;
-        font-family: Roboto-Regular;
-        font-size: 12px;
-        font-weight: normal;
-        font-stretch: normal;
-        letter-spacing: 0px;
-        color: #666666;
-        padding: 2px 15px 16px;
-        background: #fff;
-        z-index: 1;
-        div{
-            line-height: 29px;
-            width: calc(100%);
-            white-space: nowrap;
-            overflow: hidden;
-            display: block;
-            text-overflow: ellipsis;
-        }
-        strong{
-            color:#222;
-        }
-    `
+        display: block;
+        text-overflow: ellipsis;
+    }
+    strong{
+        color:#222;
+    }
+`
 const SearchBar1 = (props) => {
     // console.log('searchbar:',props)
     const [showClear, setShowClear] = useState(false);
@@ -744,7 +746,7 @@ const SelectTypeBox = styled.div`
         }
     `
 export const SelectType = (props) => {
-    // console.log(props)
+    console.log(props)
 
     const [select, setSelect] = useState(false)
     const [open, setOpen] = useState(false)
@@ -755,9 +757,9 @@ export const SelectType = (props) => {
     useEffect(()=>{
         if(props.type == "chat"){
             if(props.value){
-                setSelect(props.itemList[props.value-0].label)
+                setSelect(props.itemList.find(i => i.value == props.value) ? props.itemList.find(i => i.value == props.value).label : props.intl.formatMessage({id: 'defaultSelect'}))
             } else {
-                setSelect("Please select your question type")
+                setSelect(props.intl.formatMessage({id: 'defaultSelect'}))
             }
            
         } else if(props.itemList.length > 0){

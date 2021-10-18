@@ -35,6 +35,13 @@ const ClickToFAQ = styled.div`
         font-weight: normal;
         letter-spacing: 0px;
         color: #222222;
+        display: inline-block;
+
+        &:active{
+            color: #000;
+            transform: scale(0.9);
+            transition: all 0.3s;
+        }
     }
 `
 
@@ -66,6 +73,12 @@ const ContactUs = styled.div`
     align-items: center;
     justify-content: center;
     font-family: Roboto-Regular;
+
+    &:active{
+        transform: scale(0.9);
+        transition: all 0.3s;
+    }
+
     & > span{
         margin-right: 8px;
         font-size:18px;
@@ -149,7 +162,6 @@ class Support extends React.PureComponent{
                     type:""
                 },
             ]
-
         }
     }
 

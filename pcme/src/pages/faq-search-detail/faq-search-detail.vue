@@ -27,7 +27,7 @@
             <div class="questionRelatedBox">
                 <div class="relatedTitle">Related Articles</div>
                 <div class="relatedListBox">
-                    <div class="relatedItem" v-for="(item, index) in relatedList" v-if="index<3" :key="index" @click="relatArticleSearch(item)">
+                    <div class="relatedItem" v-for="(item, index) in relatedList" v-if="index<4 && item.id != showId" :key="index" @click="relatArticleSearch(item)">
                         {{item.title}}
                     </div>
                 </div>

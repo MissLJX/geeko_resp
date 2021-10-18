@@ -34,7 +34,7 @@
                                 :name="item.slotTitle"
                                 :value="item2"
                                 :checked="item1.slotDefaultV == item2"
-                                >
+                                />
                                 {{item2}}
                          </label>
                          
@@ -163,6 +163,7 @@ input[type=radio]{
             width: 160px;
             border: 1px solid;
             height: 32px;
+            overflow: hidden;
 
             .m-m-input-input{
                 // min-width: 111px;

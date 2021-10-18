@@ -80,5 +80,13 @@ export default {
   orderNo:"订单号",
   responseTime:"预期响应时间：24小时内",
   selectTip: '请选择您的问题类型',
-  statuswating: '等待回复'
+  statuswating: '等待回复',
+  // question ticket
+  defaultSelect: '请选择您的问题类型',
+  submitSuccess: '提交成功！',
+  submitTips: "以下原因是可选的。 如果您不想选择其中任何一个，可以单击“X”。",
+  selectReason: '选择原因',
+  description: '问题描述',
+  uploadImage: '上传图片',
+  uploadTips: '最多3张图片，仅限JPEG、GIF或PNG格式',
 }

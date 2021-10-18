@@ -145,7 +145,9 @@ class TicketList extends React.PureComponent{
                             </TicketTime>
                         </TicketLineOne>
                         <TicketContent>
-                            {item.ticketReplies.slice(-1)[item.ticketReplies.slice(-1).length - 1].message}
+                            {
+                                item.ticketReplies.slice(-1)[item.ticketReplies.slice(-1).length - 1].message
+                            }
                         </TicketContent>
                         {
                             StatusBox(item.state)

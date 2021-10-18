@@ -174,12 +174,12 @@ const routes = [
                 component:() => import("../pages/editmessage/MyMeasurements.vue"),
                 meta:{title:"My Measurements"}
             },
-            // {
-            //     path:"support",
-            //     name: "support",
-            //     component: () => import("../pages/support/support.vue"),
-            //     meta:{title:"Support"}
-            // }
+            {
+                path:"support",
+                name: "support",
+                component: () => import("../pages/support/support.vue"),
+                meta:{title:"Support"}
+            }
         ]
         },
     {
@@ -222,50 +222,50 @@ const routes = [
         component: Survey,
         meta: {title:'Survey'},
     },
-    // {
-    //     path:__Base_Path__+'/me/m/faq',
-    //     component: FaqIndex,
-    //     meta: {title:'FAQ'},
-    //     children:[
-    //         {
-    //             path:"",
-    //             component:() => import("../pages/faq/faq.vue"),
-    //             name:"FAQ",
-    //             meta:{title:"FAQ",depth:1,keepAlive:true}
-    //         },
-    //         {
-    //             path:"faq",
-    //             component:() => import("../pages/faq/faq.vue"),
-    //             name:"FAQ",
-    //             meta:{title:"FAQ",depth:1,keepAlive:true}
-    //         },
-    //         {
-    //             path:"search-result",
-    //             component:() => import("../pages/faq-search/faq-search.vue"),
-    //             name:"search-result",
-    //             meta:{title:"Search Results",depth:1,keepAlive:true}
-    //         },
-    //         {
-    //             path:"search-result-detail",
-    //             component:() => import("../pages/faq-search-detail/faq-search-detail.vue"),
-    //             name:"search-result-detail",
-    //             meta:{title:"Search Results",depth:1,keepAlive:true}
-    //         },
-    //         {
-    //             path:"online-help",
-    //             name:"online-help",
-    //             component:() => import("../pages/online-help/online-help.vue"),
-    //             meta:{title:"OnlineHelp",depth:1,keepAlive:true}
-    //         },
-    //         {
-    //             path:"support-ticket",
-    //             name: "support-ticket",
-    //             component: () => import("../pages/support-ticket/support-ticket.vue"),
-    //             // component: () => import("../components/tickets.vue"),
-    //             meta:{title:"Tickets",depth:1,keepAlive:true}
-    //         }
-    //     ]
-    // }
+    {
+        path:__Base_Path__+'/me/m/faq',
+        component: FaqIndex,
+        meta: {title:'FAQ'},
+        children:[
+            {
+                path:"",
+                component:() => import("../pages/faq/faq.vue"),
+                name:"FAQ",
+                meta:{title:"FAQ",depth:1,keepAlive:true}
+            },
+            {
+                path:"faq",
+                component:() => import("../pages/faq/faq.vue"),
+                name:"FAQ",
+                meta:{title:"FAQ",depth:1,keepAlive:true}
+            },
+            {
+                path:"search-result",
+                component:() => import("../pages/faq-search/faq-search.vue"),
+                name:"search-result",
+                meta:{title:"Search Results",depth:1,keepAlive:true}
+            },
+            {
+                path:"search-result-detail",
+                component:() => import("../pages/faq-search-detail/faq-search-detail.vue"),
+                name:"search-result-detail",
+                meta:{title:"Search Results",depth:1,keepAlive:true}
+            },
+            {
+                path:"online-help",
+                name:"online-help",
+                component:() => import("../pages/online-help/online-help.vue"),
+                meta:{title:"OnlineHelp",depth:1,keepAlive:true}
+            },
+            {
+                path:"support-ticket",
+                name: "support-ticket",
+                component: () => import("../pages/support-ticket/support-ticket.vue"),
+                // component: () => import("../components/tickets.vue"),
+                meta:{title:"Tickets",depth:1,keepAlive:true}
+            }
+        ]
+    }
 ];
 
 export default routes;
