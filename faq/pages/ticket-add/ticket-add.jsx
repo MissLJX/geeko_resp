@@ -558,6 +558,7 @@ class TicketAdd extends React.Component {
       questions:[], // 上面的内容格式化
       questionsReason:[], // 问题对应原因的列表,
       questionSubmitLoading:false, // 问题接口正在上传
+      descriptionRequired: false, // 弹窗问题描述是否必填
     }
     this.questionRef = createRef();
     this.handleImage = this.handleImage.bind(this)
@@ -830,7 +831,6 @@ class TicketAdd extends React.Component {
           })
         }
       }
-      let subject = ticket ? ticket.questionTypeCode : 0
       this.setState({
         isNew: true,
         ticket,
@@ -838,21 +838,32 @@ class TicketAdd extends React.Component {
         cusomerName,
         headSculptureUrl,
         loading: false,
-        subject: subject,
-        questionMaskShow: true,
-        questions: this.state.questions.map(q => {
-          q.selected = false
-          if(q.value == subject){
-            q.selected = true
-          }
-          return q
+        subject: '04',
+      })
+      let e = '04'
+      let qTReasonList = this.state.questions.find(q => q.value == e) && this.state.questions.find(q => q.value == e).reasons ? 
+                         this.state.questions.find(q => q.value == e).reasons : []
+      // 保证每个问题只展示一次
+      let isShowed = ticket ? ticket.ticketReplies.find(t => t.questionTypeCode == e) : false
+      if((qTReasonList.length > 0 || e == '09') && !isShowed){
+        this.setState({
+          questionMaskShow: true,
+          questionsReason: qTReasonList
         })
+      }
+      
+      setTimeout(()=>{
+        var top = document.getElementById("top")
+        top.scrollIntoView()
+        top = null
       })
       this.initScroll()
     }).catch((data) => {
-      alert(JSON.stringify(data))
+      alert('Order does not exist')
       if (data.code === 401) {
         window.location.href = `${window.ctx || ''}/me/m`
+      } else {
+        this.props.history.goBack()
       }
     })
   }
@@ -872,7 +883,7 @@ class TicketAdd extends React.Component {
         "label":"Shipping status",
         "reasons" : [{
             "value":"01",
-          "label":"Can't track my order",
+            "label":"Can't track my order",
         },{
             "value":"02",
           "label":"Shipping time is too long",
@@ -890,14 +901,14 @@ class TicketAdd extends React.Component {
           "label":"Only part of the order received",
         },{
             "value":"09",
-          "label":"Others"
+            "label":"Others"
         }]
     },{
         "value":"04",
         "label":"Return the order",
         "reasons" : [{
             "value":"01",
-          "label":"Size is small",
+            "label":"Size is small",
         },{
             "value":"02",
           "label":"Size is large",
@@ -924,7 +935,7 @@ class TicketAdd extends React.Component {
           "label":"Material is transparent",
         },{
             "value":"10",
-          "label":"Others"
+            "label":"Others"
         }]
     },{
         "value":"09",
@@ -941,10 +952,12 @@ class TicketAdd extends React.Component {
       })
       let qTReasonList = qTList.find(q => q.selected == true)&&qTList.find(q => q.selected == true).reasons ?
                          qTList.find(q => q.selected == true).reasons:[]
+                         console.log(qTReasonList)
+                         console.log(qTReasonList[qTReasonList.length - 1])
       this.setState({
         questionTypeList: list,
         questions: qTList,
-        questionsReason: qTReasonList
+        questionsReason: qTReasonList,
       })
     })
   }
@@ -1030,10 +1043,8 @@ class TicketAdd extends React.Component {
 
     const QuestionTip = (props) => {
       const imageUrls = props.reply.imageUrls
-      console.log()
       let message = props.reply.message === '-' ? '' : props.reply.message
       let messages = (message || '').split(/[\s|\n]/)
-
       message = messages.map(m => {
         if (m.indexOf('https://') === 0 || m.indexOf('http://') === 0) {
           return `<a style="text-decoration:underline;" href="${m}">${m}</a>`
@@ -1045,16 +1056,23 @@ class TicketAdd extends React.Component {
       let reasonList = questionTypeList.find(qt => qt.value == props.reply.questionTypeCode) && questionTypeList.find(qt => qt.value == props.reply.questionTypeCode).reasons ? 
                        questionTypeList.find(qt => qt.value == props.reply.questionTypeCode).reasons :
                        []
-      if(props.reply.reasonCode){
+      if(props.reply.reasonCode && !message){
         let reason = reasonList.find(q => q.value == props.reply.reasonCode)
         richTxt = `
           <div style="color:#222;font-size: 14px;border-bottom:2px solid #999;padding-bottom:5px;">
-            ${reason.label == 'Others' ? props.reply.reason : reason.label}
+            ${reason ? reason.value == reasonList[reasonList.length - 1].value ? props.reply.reason : reason.label : '-'}
+          </div>
+        ` 
+      } else if(props.reply.reasonCode && message) {
+        let reason = reasonList.find(q => q.value == props.reply.reasonCode)
+        richTxt = `
+          <div style="color:#222;font-size: 14px;border-bottom:2px solid #999;padding-bottom:5px;">
+            ${reason ? reason.value == reasonList[reasonList.length - 1].value ? props.reply.reason : reason.label : '-'}
           </div>
           <div style="color:#222;font-size: 14px;border-bottom:2px solid #999;padding:5px 0;">
             ${message}
           </div> 
-        ` 
+        `
       } else {
         richTxt = `
         <div style="color:#222;font-size: 14px;border-bottom:2px solid #999;padding:5px 0;">
@@ -1113,18 +1131,27 @@ class TicketAdd extends React.Component {
         console.log(e)
         let qTReasonList = questions.find(q => q.value == e) && questions.find(q => q.value == e).reasons ? 
                            questions.find(q => q.value == e).reasons : []
-        this.setState({
-          subject: e,
-          questionMaskShow: true,
-          questionsReason: qTReasonList
-        })
-        console.log(this.questionRef)
+        // 保证每个问题只展示一次
+        let isShowed = this.state.ticket ? this.state.ticket.ticketReplies.find(t => t.questionTypeCode == e) : false
+        if((qTReasonList.length > 0 || e == '09') && !isShowed){
+          // 判断description是否是必填
+          if(e == '09'){
+            this.setState({
+              descriptionRequired: true
+            })
+          }
+          this.setState({
+            subject: e,
+            questionMaskShow: true,
+            questionsReason: qTReasonList,
+          })
+        }
+        
         setTimeout(()=>{
           var top = document.getElementById("top")
           top.scrollIntoView()
           top = null
         })
-          
     }
 
     const textareaChange = (evt) => {
@@ -1136,19 +1163,7 @@ class TicketAdd extends React.Component {
           messageInvalid: false
         })
       }
-    }
-
-    const questionTypeChange = (item) => {
-      let copyList = questionsReason.slice(0);
-      let selectItem = copyList.find(e => e.value == item.value);
-      copyList.forEach(item => {
-        item.isSelected = false;
-      })
-      selectItem.isSelected = true;
-      this.setState({
-        questionsReason: copyList
-      })
-    }
+    }    
 
     const questionImgUpload = (e) => {
       let file = [...e.target.files]
@@ -1208,36 +1223,56 @@ class TicketAdd extends React.Component {
         subS.style.border = '1px solid red'
         subS.scrollIntoView()
         subS = null
+        this.setState({
+          questionSubmitLoading: false
+        })
         return false
+      } else {
+        hideNoInputTips()
       }
-      if(params.selectReason && params.selectReason.label == 'Others' && !params.selectReasonInput){
+      if(params.selectReason && params.selectReason.value == questionsReason[questionsReason.length - 1].value && !params.selectReasonInput){
         // console.log('ri')
         var reaI = document.getElementById("reasonInputOthers")
         reaI.style.border = '1px solid red'
         console.log(reaI)
         reaI.scrollIntoView()
         reaI = null
+        this.setState({
+          questionSubmitLoading: false
+        })
         return false
+      } else {
+        hideNoInputTips()
       }
-      if(!params.descriptionInput){
+      if(!params.descriptionInput && this.state.descriptionRequired){
         var des = document.getElementById("description")
         des.style.border = '1px solid red'
         des.scrollIntoView()
         des = null
+        this.setState({
+          questionSubmitLoading: false
+        })
         return false
+      } else {
+        hideNoInputTips()
       }
+      return true
+    }
+
+    const hideNoInputTips = () => {
       var subS = document.getElementById("submitSelect") ? document.getElementById("submitSelect") : ''
       subS && (subS.style.border = 'none')
       
       var reaI = document.getElementById("reasonInputOthers") ? document.getElementById("reasonInputOthers") : ''
       reaI && (reaI.style.border = 'none')
+      if(this.state.descriptionRequired){
+        var des = document.getElementById("description") ? document.getElementById("description") : ''
+        des && (des.style.border = 'none')
+        des = null
+      }
       
-      var des = document.getElementById("description") ? document.getElementById("description") : ''
-      des && (des.style.border = 'none')
-      reaI = null
-      des = null
       subS = null
-      return true
+      reaI = null
     }
 
     const questionSubmit = () => {
@@ -1251,7 +1286,7 @@ class TicketAdd extends React.Component {
       // 选择的原因（有的问题没有）
       params.selectReason = questionsReason.find(i => i.isSelected == true);
       // 原因描述 仅限Others
-      if(params.selectReason && params.selectReason.label == 'Others'){
+      if(params.selectReason && params.selectReason.value == questionsReason[questionsReason.length - 1].value){
         params.selectReasonInput = questionObject.questionTypeInput
       }
       // 描述
@@ -1288,7 +1323,8 @@ class TicketAdd extends React.Component {
             imageUrls: questionObject.uploadImgList,
             questionTypeCode: this.state.subject,
             questionType: questions.find(q=>q.value == this.state.subject).label,
-            reasonCode: params.selectReason ? params.selectReason.value : ''
+            reasonCode: params.selectReason ? params.selectReason.value : '',
+            reason: params.selectReason ? params.selectReasonInput ? params.selectReasonInput:params.selectReason.label:''
           })
 
           ticket.ticketReplies = replies
@@ -1310,7 +1346,7 @@ class TicketAdd extends React.Component {
             showMsg: true,
             message: '',
             showMsgTxt: intl.formatMessage({id:'submitSuccess'}),
-            questionSubmitLoading: false
+            questionSubmitLoading: false,
           })
     
           clearTicketData();
@@ -1330,6 +1366,9 @@ class TicketAdd extends React.Component {
 
     // 清除收集信息弹窗的数据
     const clearTicketData = () => {
+      hideNoInputTips()
+      let copyList = questionsReason.slice(0);
+      copyList.forEach(c => c.isSelected = false);
       this.setState({
         questionMaskShow: false,
         questionObject: {
@@ -1339,9 +1378,38 @@ class TicketAdd extends React.Component {
           showSelectItem: false,
           descriptionInput: '',
           uploadImgList: [],
-          uploadImgFileList: []
-        }
+          uploadImgFileList: [],
+        },
+        descriptionRequired: false,
+        questionSubmitLoading: false,
+        questionReason: copyList,
       })
+    }
+
+    // select a reason 切换原因
+    const questionReasonChange = (item) => {
+      let copyList = questionsReason.slice(0);
+      let lastItem = questionsReason.slice(0).pop();
+      let selectItem = copyList.find(e => e.value == item.value);
+      copyList.forEach(item => {
+        item.isSelected = false;
+      })
+      selectItem.isSelected = true;
+      if(selectItem.value == lastItem.value){
+        this.setState({
+          descriptionRequired: true,
+          questionsReason: copyList,
+        })
+      } else {
+        this.setState({
+          descriptionRequired: false,
+          questionObject:{
+            ...questionObject,
+            questionTypeInput: ''
+          },
+          questionsReason: copyList
+        })
+      }
     }
 
     return <div>
@@ -1365,7 +1433,7 @@ class TicketAdd extends React.Component {
             <SelectedOrderBox onClick={()=>this.props.history.push({pathname: `${(window.ctx || '')}/support/order`,state:{from:'ticketadd'}})}>
                 <OrderNo>
                     {intl.formatMessage({id:"orderno"})}
-                    <span>{this.state.ticket ? this.state.ticket.id ? this.state.ticket.id : this.state.order.id : this.state.order.id}</span>
+                    <span>{this.state.order ? this.state.order.id ? this.state.order.id : '-' : '-'}</span>
                 </OrderNo>
                 <OrderCreateTime>
                     {intl.formatMessage({id:"paymenttime"})}
@@ -1482,7 +1550,7 @@ class TicketAdd extends React.Component {
                               questionObject.showSelectItem &&
                               questionsReason.length > 0 && 
                               questionsReason.map((item, index)=>(
-                                <SelectReasonItem key={index} showTextArea={item.label === 'Others' && item.isSelected} onClick={()=>questionTypeChange(item)}>
+                                <SelectReasonItem key={index} showTextArea={item.value === questionsReason[questionsReason.length - 1].value && item.isSelected} onClick={()=>questionReasonChange(item)}>
                                   <div>
                                     <ReasonItemIcon select={item.isSelected}>
                                       <span className="reasonItemIconSelected"></span>
@@ -1491,7 +1559,8 @@ class TicketAdd extends React.Component {
                                   </div>
                                   
                                   <ReasonTextArea 
-                                      show={item.label === 'Others' && item.isSelected} 
+                                      show={item.value === questionsReason[questionsReason.length - 1].value && item.isSelected} 
+                                      value={questionObject.questionTypeInput}
                                       id={"reasonInput"+item.label}
                                       onChange={(e)=>{
                                         this.setState({
@@ -1510,18 +1579,20 @@ class TicketAdd extends React.Component {
                       </SubmitSelectReason>
                     }
                     
-                
-
                 {/* 文字描述 */}
                 <SubmitDescriptionBox id="description">
                     {/* 标题 */}
                     <SelectReasonTitle>
-                      <span>*</span> {intl.formatMessage({id: 'description'})}
+                      {
+                        this.state.descriptionRequired &&
+                        <span>*</span>
+                      }
+                      {intl.formatMessage({id: 'description'})}
                     </SelectReasonTitle>
 
                     {/* 输入框 */}
                     <DescriptionTextArea 
-                        placeholder="Please describe your problem as much as possible so that customer service can respond faster…"
+                        placeholder={intl.formatMessage({id:'description_ph'})}
                         value={questionObject.descriptionInput}
                         onChange={(e)=>{
                           this.setState({
@@ -1566,10 +1637,7 @@ class TicketAdd extends React.Component {
                             onChange={(e)=>questionImgUpload(e)}
                             accept="image/jpg,image/jpeg,image/png,image/gif"></input>
                         </UploadItem>
-                        
-                      // </label>
                     }
-                    
                     
                   </UploadBox>
                 </SubmitImageBox>
@@ -1581,7 +1649,6 @@ class TicketAdd extends React.Component {
                     {intl.formatMessage({id: 'submit'})}
               </QuestionSubmitBtn>
             </QuestionSubmitBtnBox>
-            
             
           </SubmitQuestionContent>
       </SubmitQuestionMask>

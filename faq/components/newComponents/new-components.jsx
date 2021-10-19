@@ -669,84 +669,84 @@ const SelectTypeBox = styled.div`
         height: 38px;
         /* border: 1px solid; */
         position: relative;
-    `
-    const SelectInputBox = styled.div`
-        width: 100%;
-        height: 38px;
-        border-radius: 2px;
-        border: solid 1px #cacaca;
-        /* background: url("https://image.geeko.ltd/site/pc/icon137.png") no-repeat scroll calc(100% - 10px) center transparent; */
-        position: relative;
-        -webkit-appearance: none; /*for chrome*/
-        padding-left: 10px;
-        line-height: 38px;
-    `
-    const SelectIcon = styled.img`
-        position: absolute;
-        right: 10px;
-        top: calc(50% - 4px);
-        width: 13px;
-        height: 8px;
-        transform: rotate(0);
-        transition: all 0.2s linear;
-    `
-    const SelectOpen = styled.span`
-        transform: rotate(180deg);
-        transition: all 0.2s linear;
-    `
-    const SelectOptionBox = styled.div`
+`
+const SelectInputBox = styled.div`
+    width: 100%;
+    height: 38px;
+    border-radius: 2px;
+    border: solid 1px #cacaca;
+    /* background: url("https://image.geeko.ltd/site/pc/icon137.png") no-repeat scroll calc(100% - 10px) center transparent; */
+    position: relative;
+    -webkit-appearance: none; /*for chrome*/
+    padding-left: 10px;
+    line-height: 38px;
+`
+const SelectIcon = styled.img`
+    position: absolute;
+    right: 10px;
+    top: calc(50% - 4px);
+    width: 13px;
+    height: 8px;
+    transform: rotate(0);
+    transition: all 0.2s linear;
+`
+const SelectOpen = styled.span`
+    transform: rotate(180deg);
+    transition: all 0.2s linear;
+`
+const SelectOptionBox = styled.div`
+    background-color: #fff;
+    position: absolute;
+    top: 38px;
+    left: 4%;
+    width: 92%;
+    min-height: 38px;
+    line-height: 38px;
+    border: 1px solid #cacaca;
+    border-top: none;
+    z-index: 1;
+    /* padding: 0 10px; */
+`
+const SelectOption = styled.div`
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 0 10px;
+`
+const Hover = styled.div`
+    background-color: #f6f6f6;
+`
+const Radious = styled.div`
+    width: 100%;
+    height: 38px;
+    border-radius: 2px;
+    border: solid 1px #cacaca;
+    /* background: url("https://image.geeko.ltd/site/pc/icon137.png") no-repeat scroll calc(100% - 10px) center transparent; */
+    position: relative;
+    -webkit-appearance: none; /*for chrome*/
+    padding-left: 10px;
+    line-height: 38px;
+    border-radius: 19px;
+    padding-left: 20px;
+    .selectIcon{
+        right: 20px;
+    }
+    &+.selectOptionBox{
         background-color: #fff;
         position: absolute;
         top: 38px;
-        left: 4%;
-        width: 92%;
+        left: 8%;
+        width: 84%;
         min-height: 38px;
         line-height: 38px;
         border: 1px solid #cacaca;
         border-top: none;
         z-index: 1;
-        /* padding: 0 10px; */
-    `
-    const SelectOption = styled.div`
-        width: 100%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        padding: 0 10px;
-    `
-    const Hover = styled.div`
-        background-color: #f6f6f6;
-    `
-    const Radious = styled.div`
-        width: 100%;
-        height: 38px;
-        border-radius: 2px;
-        border: solid 1px #cacaca;
-        /* background: url("https://image.geeko.ltd/site/pc/icon137.png") no-repeat scroll calc(100% - 10px) center transparent; */
-        position: relative;
-        -webkit-appearance: none; /*for chrome*/
-        padding-left: 10px;
-        line-height: 38px;
-        border-radius: 19px;
-        padding-left: 20px;
-        .selectIcon{
-            right: 20px;
-        }
-        &+.selectOptionBox{
-            background-color: #fff;
-            position: absolute;
-            top: 38px;
-            left: 8%;
-            width: 84%;
-            min-height: 38px;
-            line-height: 38px;
-            border: 1px solid #cacaca;
-            border-top: none;
-            z-index: 1;
-        }
-    `
+    }
+`
 export const SelectType = (props) => {
-    console.log(props)
+    // console.log(props)
 
     const [select, setSelect] = useState(false)
     const [open, setOpen] = useState(false)

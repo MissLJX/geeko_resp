@@ -113,6 +113,7 @@ const ContactIcon = styled.span`
     -moz-osx-font-smoothing: grayscale;
 `
 
+let checkLogin = false;
 class Support extends React.PureComponent{
     constructor(props){
         super(props)
@@ -193,18 +194,23 @@ class Support extends React.PureComponent{
         
 
         const toContact = () => {
-            list(0,20).then(({result: items}) => {
-                this.props.history.push({pathname: `${(window.ctx || '')}/support/contact-us`})
-            }).catch((err)=>{
-                // console.log(err)
-                if(err.code == 300){
-                    if(window.isShowApp=="true"){
-                        window.location.href = "chic-me://chic.me/loginRoot"
-                    } else {
-                        window.location.href = `${(window.ctx || '')}/i/login?redirectUrl=${(window.ctx || '')}/support/contact-us`
+            if(!checkLogin){
+                checkLogin = true
+                list(0,20).then(({result: items}) => {
+                    this.props.history.push({pathname: `${(window.ctx || '')}/support/contact-us`})
+                }).catch((err)=>{
+                    // console.log(err)
+                    if(err.code == 300){
+                        if(window.isShowApp=="true"){
+                            window.location.href = "chic-me://chic.me/loginRoot"
+                        } else {
+                            window.location.href = `${(window.ctx || '')}/i/login?redirectUrl=${(window.ctx || '')}/support/contact-us`
+                        }
                     }
-                }
-            })
+                    checkLogin = false
+                })
+            }
+            
         }
 
         const outAppUrl = () => {

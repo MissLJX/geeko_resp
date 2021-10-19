@@ -87,6 +87,7 @@ export default {
   submitTips: "以下原因是可选的。 如果您不想选择其中任何一个，可以单击“X”。",
   selectReason: '选择原因',
   description: '问题描述',
+  description_ph: '请尽量详细描述您的问题，以便客服更快响应……',
   uploadImage: '上传图片',
   uploadTips: '最多3张图片，仅限JPEG、GIF或PNG格式',
 }

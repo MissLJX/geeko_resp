@@ -87,6 +87,7 @@ export default {
   submitTips: "Die folgenden Gründe sind optional. Sie können auf „X“ klicken, wenn Sie keines davon auswählen möchten.",
   selectReason: 'Einen Grund wählen',
   description: 'Beschreibung',
+  description_ph: 'Bitte beschreiben Sie Ihr Problem so genau wie möglich, damit der Kundenservice schneller reagieren kann...',
   uploadImage: 'Bild hochladen',
   uploadTips: 'Maximal 3 Fotos, nur JPEG, GIF oder PNG. ',
 }
