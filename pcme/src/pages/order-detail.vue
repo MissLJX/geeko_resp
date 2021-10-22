@@ -118,8 +118,10 @@
             >
             </return-logistics> -->
 
-            <select-order v-if="isShowSelect" v-on:closeSelect="closeSelect1" v-on:showTicket="showTicket"></select-order>
-            <order-ticket  v-if="isShowTicket" v-on:closeSelect="closeSelect1" v-on:selectOrder="selectorder"></order-ticket>
+            <!-- <select-order v-if="isShowSelect" v-on:closeSelect="closeSelect1" v-on:showTicket="showTicket"></select-order>
+            <order-ticket  v-if="isShowTicket" v-on:closeSelect="closeSelect1" v-on:selectOrder="selectorder"></order-ticket> -->
+            <faq-select-order v-if="isShowSelect" v-on:closeSelect="closeSelect1" v-on:showTicket="showTicket"></faq-select-order>
+            <faq-order-ticket  v-if="isShowTicket" v-on:closeSelect="closeSelect1" v-on:selectOrder="selectorder"></faq-order-ticket>
 
             <div v-if="getBtnText==='Imprimir boleto' && orderdetail.fulfillmentStatus == constant.TOTAL_STATUS_UNPAID && orderoffset >= 0 && couponshow && getPayUrl">
                 <div class="mask"></div>
@@ -203,6 +205,8 @@
     import LinkImage from '../components/link-image.vue';
     import selectOrder from '../components/select-order.vue';
     import orderTicket from '../components/order-ticket.vue';
+    import faqSelectOrder from '../components/faq/faq-select-order.vue';
+    import faqOrderTicket from '../components/faq/faq-order-ticket.vue';
     import CountDown from '../components/countdow.vue';
     import loding from '../components/loding.vue';
     // import ReturnLogistics from '../components/return-logistics.vue'
@@ -235,6 +239,8 @@
             'order-ticket':orderTicket,
             'select-order':selectOrder,
             'count-down': CountDown,
+            'faq-select-order': faqSelectOrder,
+            'faq-order-ticket': faqOrderTicket,
             'loding':loding,
             // 'return-logistics':ReturnLogistics
         },

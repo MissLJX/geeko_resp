@@ -49,7 +49,7 @@
                     <div class="tbl">
                         <div class="tbl-cell w-523">
                             <div class="proimg" v-if="item.orderItems && index < 4" v-for="(img,index) in item.orderItems">
-                                <link-image   :href="productUrl(img.productName,img.sku,img.productId)" :src="img.productImageUrl" :title="img.productName"/>
+                                <link-image :href="productUrl(img.productName,img.sku,img.productId)" :src="img.productImageUrl" :title="img.productName"/>
                             </div>
                             <div v-if="item.orderItems && item.orderItems.length > 4" class="viewmore" @click="checkDetail(item.id)">
                                 <div class="bg"></div>

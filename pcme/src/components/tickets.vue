@@ -25,8 +25,10 @@
 
         <div class="v-btn" @click="subTicket">{{$t('submitticket')}}</div>
 
-        <select-order v-if="isShowSelect" v-on:closeSelect="closeSelect1" v-on:showTicket="showTicket"></select-order>
-        <order-ticket  v-if="isShowTicket" v-on:closeSelect="closeSelect1" v-on:selectOrder="selectorder" :ticket="selectedTicket"></order-ticket>
+        <!-- <select-order v-if="isShowSelect" v-on:closeSelect="closeSelect1" v-on:showTicket="showTicket"></select-order>
+        <order-ticket  v-if="isShowTicket" v-on:closeSelect="closeSelect1" v-on:selectOrder="selectorder" :ticket="selectedTicket"></order-ticket> -->
+        <faq-select-order v-if="isShowSelect" v-on:closeSelect="closeSelect1" v-on:showTicket="showTicket"></faq-select-order>
+        <faq-order-ticket  v-if="isShowTicket" v-on:closeSelect="closeSelect1" v-on:selectOrder="selectorder" :ticket="selectedTicket"></faq-order-ticket>
     </div>
 </template>
 
@@ -34,7 +36,9 @@
     import {mapGetters, mapActions} from 'vuex';
     import * as utils from '../utils/geekoutil';
     import selectOrder from './select-order.vue';
-    import orderTicket from './order-ticket.vue'
+    import orderTicket from './order-ticket.vue';
+    import faqSelectOrder from './faq/faq-select-order.vue';
+    import faqOrderTicket from './faq/faq-order-ticket.vue';
 
     export default {
         data(){
@@ -47,7 +51,9 @@
         },
         components:{
             'select-order':selectOrder,
-            'order-ticket':orderTicket
+            'order-ticket':orderTicket,
+            'faq-select-order':faqSelectOrder,
+            'faq-order-ticket':faqOrderTicket,
         },
         computed: {
             ...mapGetters(['tickets']),
