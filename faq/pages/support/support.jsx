@@ -162,7 +162,7 @@ class Support extends React.PureComponent{
                     content:"account",
                     type:""
                 },
-            ]
+            ],
         }
     }
 

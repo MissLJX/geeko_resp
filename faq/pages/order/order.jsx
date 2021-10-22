@@ -105,7 +105,7 @@ const Order = class extends React.Component {
     }
 
     const linkTo = () => {
-      if(JSON.stringify(localStorage.__order)=='null' || JSON.stringify(localStorage.__order)=='{}' || !localStorage.__order){
+      if(!localStorage.__order || localStorage.__order=='null' || localStorage.__order=='{}'){
         // this.props.history.push({pathname: `${(window.ctx || '')}/support/ticket`})
       } else {
         this.props.history.push({pathname: `${(window.ctx || '')}/support/ticketadd`})

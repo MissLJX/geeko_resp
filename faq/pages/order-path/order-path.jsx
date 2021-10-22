@@ -15,7 +15,7 @@ export default class Orders extends React.Component {
       limit: 20,
       loading: false,
       finished: false,
-      selectedOrderId: gloabvars.selectedOrder ? gloabvars.selectedOrder.id : null,
+      selectedOrderId: localStorage.__order ? JSON.parse(localStorage.__order) ? JSON.parse(localStorage.__order).id : null : null,
       page: this.props.match.params.page
     }
     this.scrollHandler = this.scrollHandler.bind(this)
@@ -40,8 +40,9 @@ export default class Orders extends React.Component {
 
   handleClick (evt, _detail) {
     gloabvars.selectedOrder = this.state.selectedOrderId === _detail.id ? null : _detail
-    // console.log(gloabvars)
-    localStorage.__order=this.state.selectedOrderId === _detail.id ? null : JSON.stringify(_detail)
+    // console.log(this.state.selectedOrderId, _detail.id)
+    localStorage.__order = this.state.selectedOrderId === _detail.id ? null : JSON.stringify(_detail)
+    // console.log
     this.setState({
       selectedOrderId: this.state.selectedOrderId === _detail.id ? null : _detail.id,
       orders: this.state.orders.map(({detail, selected}) => ({

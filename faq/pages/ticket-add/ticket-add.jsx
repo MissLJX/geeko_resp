@@ -1,6 +1,6 @@
-import React, { createRef } from 'react'
+import React, { createRef, Fragment } from 'react'
 import {Link} from 'react-router-dom'
-import {get, getByOrderId, sendImage, sendTicket, getQuestionType} from '../../api'
+import {get, getByOrderId, sendImage, sendTicket, getQuestionType, questionTypeChange} from '../../api'
 import styled from 'styled-components'
 import _ from 'lodash'
 import {FormattedMessage, injectIntl} from 'react-intl'
@@ -38,165 +38,160 @@ const ChatInputBox = styled.div`
       rgba(204, 204, 204, 0.5);
   
       padding-left: 4%;
-    `
-  const ChatInput = styled.div`
-      background: #fff;
-      flex: 1;
+`
+const ChatInput = styled.div`
+    background: #fff;
+    flex: 1;
+`
+const UploadBtn = styled.div`
+    font-size: 22px;
+    color: #999;
+    margin-right: 30px;
+    margin-left: 15px;
+`
+const Upload = styled.span`
+    @font-face {
+      font-family: 'iconfont';  /* Project id 384296 */
+      src: url('//at.alicdn.com/t/font_384296_waimmey03x.woff2?t=1631165132958') format('woff2'),
+          url('//at.alicdn.com/t/font_384296_waimmey03x.woff?t=1631165132958') format('woff'),
+          url('//at.alicdn.com/t/font_384296_waimmey03x.ttf?t=1631165132958') format('truetype');
+    }
+    font-family:"iconfont" !important;
+    font-size:16px;
+    font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 18px;
+`
+const SendBtn = styled.div`
+    color: #999;
+    margin-right: 20px;
+`
+const Send = styled.span`
+    @font-face {
+      font-family: 'iconfont';  /* Project id 384296 */
+      src: url('//at.alicdn.com/t/font_384296_waimmey03x.woff2?t=1631165132958') format('woff2'),
+          url('//at.alicdn.com/t/font_384296_waimmey03x.woff?t=1631165132958') format('woff'),
+          url('//at.alicdn.com/t/font_384296_waimmey03x.ttf?t=1631165132958') format('truetype');
+    }
+    font-family:"iconfont" !important;
+    font-size:16px;
+    font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 18px;
+`
+const Invalid = styled.textarea`
+    box-shadow: inset 0 0 1px red !important;
+    border-color: red !important;
+`
+const TextInput = styled.textarea`
+    width: 100%;
+    height: 40px;
+    line-height: 20px;
+    overflow-y: visible;
+    padding-top: 10px;
+    border: none;
+    resize: none;
+    &::-webkit-scrollbar{
+        display: none;
+    }
+`
+const SelectedOrderBox = styled.div`
+    width: 92%;
+    margin: 0 auto;
+    background: #fff;
+    height: 75px;
+    overflow: hidden;
+    /* line-height: 37.5px; */
+    position: relative;
+    padding-left: 12px;
+    /* margin-top: 12px; */
+    margin-bottom: 20px;
+`
+const OrderNo = styled.div`
+    margin-top: 14px;
+    margin-bottom: 12px;
+    font-family: Roboto-Regular;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #999999;
+    span{
+        color: #222;
+        margin-left: 12px;
+    }
+`
+const OrderCreateTime = styled.div`
+    font-family: Roboto-Regular;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #999999;
+    span{
+        color: #222;
+        margin-left: 12px;
+    }
+`
+const ChangeOrder = styled.span`
+    @font-face {
+      font-family: 'iconfont';  /* Project id 384296 */
+      src: url('//at.alicdn.com/t/font_384296_waimmey03x.woff2?t=1631165132958') format('woff2'),
+          url('//at.alicdn.com/t/font_384296_waimmey03x.woff?t=1631165132958') format('woff'),
+          url('//at.alicdn.com/t/font_384296_waimmey03x.ttf?t=1631165132958') format('truetype');
+    }
+    font-family:"iconfont" !important;
+    font-size:16px;
+    font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    position: absolute;
+    right: 16px;
+    top: calc(50% - 7px);
+    font-size: 12px;
+    color: #666;
+`
+const HelpTxt = styled.div`
+    font-family: Roboto-Medium;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #222222;
+    width: 100%;
+    text-align: center;
+    // font-weight: 600;
+    margin-top: 5px;
+    margin-bottom: 12px;
+`
+const ResponseTip = styled.div`
+    font-family: Roboto-Regular;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #999999;
+    text-align: center;
+    margin-top: 7px;
+`
+const MessageBox = styled.div`
+    position:fixed;
+    left: calc(50% - 100px);
+    bottom: 116px;
+    width: 200px;
+    height: 32px;
+    background-color: rgba(34, 34, 34, 0.6);
+    border-radius: 2px;
+    text-align: center;
+    line-height: 32px;
+    color: #fff;
   `
-  const UploadBtn = styled.div`
-      font-size: 22px;
-      color: #999;
-      margin-right: 30px;
-      margin-left: 15px;
-  `
-  const Upload = styled.span`
-      @font-face {
-        font-family: 'iconfont';  /* Project id 384296 */
-        src: url('//at.alicdn.com/t/font_384296_waimmey03x.woff2?t=1631165132958') format('woff2'),
-            url('//at.alicdn.com/t/font_384296_waimmey03x.woff?t=1631165132958') format('woff'),
-            url('//at.alicdn.com/t/font_384296_waimmey03x.ttf?t=1631165132958') format('truetype');
-      }
-      font-family:"iconfont" !important;
-      font-size:16px;
-      font-style:normal;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      font-size: 18px;
-  `
-  const SendBtn = styled.div`
-      color: #999;
-      margin-right: 20px;
-  `
-  const Send = styled.span`
-      @font-face {
-        font-family: 'iconfont';  /* Project id 384296 */
-        src: url('//at.alicdn.com/t/font_384296_waimmey03x.woff2?t=1631165132958') format('woff2'),
-            url('//at.alicdn.com/t/font_384296_waimmey03x.woff?t=1631165132958') format('woff'),
-            url('//at.alicdn.com/t/font_384296_waimmey03x.ttf?t=1631165132958') format('truetype');
-      }
-      font-family:"iconfont" !important;
-      font-size:16px;
-      font-style:normal;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      font-size: 18px;
-  `
-  const Invalid = styled.textarea`
-      box-shadow: inset 0 0 1px red !important;
-      border-color: red !important;
-  `
-  
-  const TextInput = styled.textarea`
-      width: 100%;
-      height: 40px;
-      line-height: 20px;
-      overflow-y: visible;
-      padding-top: 10px;
-      border: none;
-      resize: none;
-      &::-webkit-scrollbar{
-          display: none;
-      }
-  `
-  
-  const SelectedOrderBox = styled.div`
-      width: 92%;
-      margin: 0 auto;
-      background: #fff;
-      height: 75px;
-      overflow: hidden;
-      /* line-height: 37.5px; */
-      position: relative;
-      padding-left: 12px;
-      /* margin-top: 12px; */
-      margin-bottom: 20px;
-  `
-  const OrderNo = styled.div`
-      margin-top: 14px;
-      margin-bottom: 12px;
-      font-family: Roboto-Regular;
-      font-size: 14px;
-      font-weight: normal;
-      font-stretch: normal;
-      letter-spacing: 0px;
-      color: #999999;
-      span{
-          color: #222;
-          margin-left: 12px;
-      }
-  `
-  const OrderCreateTime = styled.div`
-      font-family: Roboto-Regular;
-      font-size: 14px;
-      font-weight: normal;
-      font-stretch: normal;
-      letter-spacing: 0px;
-      color: #999999;
-      span{
-          color: #222;
-          margin-left: 12px;
-      }
-  `
-  const ChangeOrder = styled.span`
-      @font-face {
-        font-family: 'iconfont';  /* Project id 384296 */
-        src: url('//at.alicdn.com/t/font_384296_waimmey03x.woff2?t=1631165132958') format('woff2'),
-            url('//at.alicdn.com/t/font_384296_waimmey03x.woff?t=1631165132958') format('woff'),
-            url('//at.alicdn.com/t/font_384296_waimmey03x.ttf?t=1631165132958') format('truetype');
-      }
-      font-family:"iconfont" !important;
-      font-size:16px;
-      font-style:normal;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      position: absolute;
-      right: 16px;
-      top: calc(50% - 7px);
-      font-size: 12px;
-      color: #666;
-  `
-  
-  const HelpTxt = styled.div`
-      font-family: Roboto-Medium;
-      font-size: 14px;
-      font-weight: normal;
-      font-stretch: normal;
-      letter-spacing: 0px;
-      color: #222222;
-      width: 100%;
-      text-align: center;
-      // font-weight: 600;
-      margin-top: 5px;
-      margin-bottom: 12px;
-  `
-  
-  const ResponseTip = styled.div`
-      font-family: Roboto-Regular;
-      font-size: 12px;
-      font-weight: normal;
-      font-stretch: normal;
-      letter-spacing: 0px;
-      color: #999999;
-      text-align: center;
-      margin-top: 7px;
-  `
-  const MessageBox = styled.div`
-      position:fixed;
-      left: calc(50% - 100px);
-      bottom: 116px;
-      width: 200px;
-      height: 32px;
-      background-color: rgba(34, 34, 34, 0.6);
-	    border-radius: 2px;
-      text-align: center;
-      line-height: 32px;
-      color: #fff;
-    `
 const RATE = styled.span`
 	font-family: iconfont;
 	font-size: 30px;
 `
-
 const SubmitQuestionMask = styled.div`
   position: fixed;
   top: 0;
@@ -206,7 +201,6 @@ const SubmitQuestionMask = styled.div`
   background: rgba(0,0,0,0.6);
   display: ${props => props.show ? 'block':'none'};
 `
-
 const SubmitQuestionContent = styled.div`
   width: 100%;
   height: 484px;
@@ -215,7 +209,6 @@ const SubmitQuestionContent = styled.div`
   background: #fff;
   // text-align: right;
 `
-
 const SubmitQuestionClose = styled.span`
   @font-face {
     font-family: 'iconfont';  /* Project id 384296 */
@@ -236,7 +229,6 @@ const SubmitQuestionClose = styled.span`
   right: 8px;
   top: 6px;
 `
-
 const SubmitTips = styled.div`
   background-color: #e6e6e6;
   font-family: Roboto-Regular;
@@ -252,14 +244,12 @@ const SubmitTips = styled.div`
     transform:scale(0.83);
   }
 `
-
 const SubmitSelectReason = styled.div`
   width: 100%;
   min-height: 72px;
   padding: 6px 12px;
   border-bottom: 10px solid #f6f6f6;
 `
-
 const SelectReasonTitle = styled.div`
   font-family: Roboto-Medium;
   font-size: 14px;
@@ -271,11 +261,8 @@ const SelectReasonTitle = styled.div`
     color: #e64545;
   }
 `
-
-const SelectReasonBox = styled.div`
-  
+const SelectReasonBox = styled.div` 
 `
-
 const SelectReasonInput = styled.div`
   display: flex;
   align-items: center;
@@ -316,12 +303,10 @@ const SelectReasonInput = styled.div`
     transition: transform 0.3s;
   }
 `
-
 const SelectReasonItemBox = styled.div`
   // display: none;
   margin: 12px 0 16px;
 `
-
 const SelectReasonItem = styled.div`
   // display: flex;
   // align-items: center;
@@ -343,7 +328,6 @@ const SelectReasonItem = styled.div`
     justify-content: flex-start;
   }
 `
-
 const ReasonItemIcon = styled.span`
   display: inline-block;
   border: 1px solid ${props => props.select?'#222':'#999'};
@@ -361,12 +345,10 @@ const ReasonItemIcon = styled.span`
     margin: 2px;
   }
 `
-
 const ReasonItem = styled.div`
   margin-left: 10px;
   color: ${props => props.select?'#222':'#666'};
 `
-
 const ReasonTextArea = styled.textarea`
   // position:absolute;
   display: ${props => props.show ? 'block':'none'};
@@ -380,14 +362,12 @@ const ReasonTextArea = styled.textarea`
   padding: 5px;
   // margin-bottom:17px;
 `
-
 const SubmitDescriptionBox = styled.div`
   width: 100%;
   min-height: 72px;
   padding: 6px 12px;
   border-bottom: 10px solid #f6f6f6;
 `
-
 const DescriptionTextArea = styled.textarea`
   width: 351px;
   height: 100px;
@@ -408,7 +388,6 @@ const DescriptionTextArea = styled.textarea`
     color: #bbbbbb;
   }
 `
-
 const TextAreaInputLength = styled.div`
   width: 100%;
   text-align: right;
@@ -421,7 +400,6 @@ const TextAreaInputLength = styled.div`
   margin-top: 10px;
   margin-bottom: 16px;
 `
-
 const SubmitImageBox = styled.div`
   width: 100%;
   min-height: 72px;
@@ -568,7 +546,7 @@ class TicketAdd extends React.Component {
 
   handleImage (evt) {
     evt.preventDefault()
-    if(!this.state.questions.find(q => q.selected)){
+    if(!this.state.subject){
       alert(this.props.intl.formatMessage({id:"selectTip"}));
       return false
     }
@@ -584,7 +562,7 @@ class TicketAdd extends React.Component {
 
       const formData = new FormData()
       formData.append('operaId', this.state.order.id)
-      formData.append('questionTypeCode', this.state.subject)
+      // formData.append('questionTypeCode', this.state.subject)
       formData.append('message', this.state.message || '-')
       formData.append('imageFiles', file)
       sendImage(formData).then(({result}) => {
@@ -633,8 +611,8 @@ class TicketAdd extends React.Component {
   }
 
   handleTicket (evt) {
-    console.log(this.state.questions)
-    if(!this.state.questions.find(q => q.selected)){
+    // console.log(this.state.subject)
+    if(!this.state.subject){
       alert(this.props.intl.formatMessage({id:"selectTip"}));
       return false
     }
@@ -644,10 +622,10 @@ class TicketAdd extends React.Component {
 
     sendTicket({
       operaId: this.state.order.id,
-      questionTypeCode: this.state.subject,
+      // questionTypeCode: this.state.subject,
       message: this.state.message
     }).then((data) => {
-      console.log('data,',data) 
+      // console.log('data,',data) 
       // console.log('ticket,',this.state.ticket)
       // console.log(this.state)
       let ticket = this.state.ticket || {}
@@ -705,10 +683,11 @@ class TicketAdd extends React.Component {
     let id;
     // 接受url传值的参数
     const urlParams = this.props.history.location.pathname ? this.props.history.location.pathname.split("/")[3] : '';
-    console.log(this.props.location, urlParams)
+    // console.log(this.props.location, urlParams)
     // 链接中有传值-ticket列表点击过来的
     if(params){
       id = params.id ? params.id : ''
+      console.log(params?.id)
       this.setState({
         isApp: params.isShowApp ? params.isShowApp : 'false'
       })
@@ -742,7 +721,7 @@ class TicketAdd extends React.Component {
   getMsgByLocalData(){
     getByOrderId(JSON.parse(localStorage.__order).id).then(({result}) => {
       const {ticket, order, cusomerName, headSculptureUrl} = result
-      console.log(result)
+      // console.log(result)
       // console.log(ticket.ticketReplies.slice(-1)[ticket.ticketReplies.slice(-1).length - 1]['sender'])
       if(ticket){
         if(ticket.ticketReplies.slice(-1)[ticket.ticketReplies.slice(-1).length - 1]['sender'] == "buyers"){
@@ -784,7 +763,7 @@ class TicketAdd extends React.Component {
   // history传参里的id
   getMsgByUrlId(id){
     get(id).then(({result}) => {
-      console.log(result)
+      // console.log(result)
       const {ticket, order, cusomerName, headSculptureUrl} = result
 
       let subject = ticket ? ticket.questionTypeCode : 0
@@ -845,7 +824,7 @@ class TicketAdd extends React.Component {
                          this.state.questions.find(q => q.value == e).reasons : []
       // 保证每个问题只展示一次
       let isShowed = ticket ? ticket.ticketReplies.find(t => t.questionTypeCode == e) : false
-      if((qTReasonList.length > 0 || e == '09') && !isShowed){
+      if((qTReasonList.length > 0) && !isShowed){
         this.setState({
           questionMaskShow: true,
           questionsReason: qTReasonList
@@ -871,7 +850,7 @@ class TicketAdd extends React.Component {
   // 获取question type以及它的子项
   getQuestionType(){
     getQuestionType().then((res) => {
-      console.log(res)
+      // console.log(res)
       let list = [{
         "value":"01",
         "label":"Cancel the order"
@@ -952,8 +931,6 @@ class TicketAdd extends React.Component {
       })
       let qTReasonList = qTList.find(q => q.selected == true)&&qTList.find(q => q.selected == true).reasons ?
                          qTList.find(q => q.selected == true).reasons:[]
-                         console.log(qTReasonList)
-                         console.log(qTReasonList[qTReasonList.length - 1])
       this.setState({
         questionTypeList: list,
         questions: qTList,
@@ -1110,51 +1087,79 @@ class TicketAdd extends React.Component {
 
     const GroupReplyHtmls = (props) => {
       const replies = props.replies
-      return <ChatRows>
-        {
-          replies.map((reply, index) => (
-            <ChatRow className={reply.sender === 'buyers' ? 'buyer' : 'seller'} key={index}>
-              <HeaderImage image={props.headSculptureUrl} sender={reply.sender} />
-              {
-                reply.questionType&& reply.questionTypeCode ?
-                <QuestionTip reply={reply}></QuestionTip>:
-                <ReplyTip reply={reply} />
-              }
-              
-            </ChatRow>
-          ))
-        }
-      </ChatRows>
+      return <Fragment>
+          
+          <ChatRows>
+          {
+            replies.map((reply, index) => {
+              return (reply.message || reply.imageUrls || reply.reasonCode || reply.reason) && <Fragment key={index}>
+                {
+                  index == 0 &&
+                  <div style={{textAlign: 'center', color: '#999', fontSize: '12px', height: '40px', lineHeight: '40px'}}>{props.index}</div>
+                }
+                <ChatRow className={reply.sender === 'buyers' ? 'buyer' : 'seller'} >
+                  <HeaderImage image={props.headSculptureUrl} sender={reply.sender} />
+                  {
+                    reply.questionType && reply.questionTypeCode ?
+                    <QuestionTip reply={reply}></QuestionTip>:
+                    <ReplyTip reply={reply} />
+                  }
+                  
+                </ChatRow>
+              </Fragment>
+            })
+          }
+        </ChatRows>
+      </Fragment>
+      
     }
 
     const selectChange= (e) => {
-        console.log(e)
-        let qTReasonList = questions.find(q => q.value == e) && questions.find(q => q.value == e).reasons ? 
-                           questions.find(q => q.value == e).reasons : []
-        // 保证每个问题只展示一次
-        let isShowed = this.state.ticket ? this.state.ticket.ticketReplies.find(t => t.questionTypeCode == e) : false
-        if((qTReasonList.length > 0 || e == '09') && !isShowed){
-          // 判断description是否是必填
-          if(e == '09'){
+        // console.log(e)
+        questionTypeChange({
+          operaId: this.state.order.id,
+          questionTypeCode: this.state.subject,
+          questionType: questionTypeList.find(q => q.value == this.state.subject)?.label
+        }).then(res => {
+          // console.log(res)
+          if(res && res.code == 200){
             this.setState({
-              descriptionRequired: true
+              subject: e
+            })
+            let qTReasonList = questions.find(q => q.value == e) && questions.find(q => q.value == e).reasons ? 
+                               questions.find(q => q.value == e).reasons : []
+            // 保证每个问题只展示一次
+            let isShowed = this.state.ticket ? this.state.ticket.ticketReplies.find(t => t.questionTypeCode == e) : false
+            if((qTReasonList.length > 0 || e == questions[questions.length - 1].value) && !isShowed){
+              // 判断description是否是必填
+              if(e == questions[questions.length - 1].value){
+                this.setState({
+                  descriptionRequired: true
+                })
+              } else {
+                this.setState({
+                  descriptionRequired: false
+                })
+              }
+              this.setState({
+                questionMaskShow: true,
+                questionsReason: qTReasonList,
+              })
+            }
+            
+            
+            setTimeout(()=>{
+              var top = document.getElementById("top")
+              top.scrollIntoView()
+              top = null
             })
           }
-          this.setState({
-            subject: e,
-            questionMaskShow: true,
-            questionsReason: qTReasonList,
-          })
-        }
-        
-        setTimeout(()=>{
-          var top = document.getElementById("top")
-          top.scrollIntoView()
-          top = null
         })
+        
     }
 
     const textareaChange = (evt) => {
+      // console.log(this.state.subject)
       if(!this.state.subject){
         alert(intl.formatMessage({id:"selectTip"}));
       } else {
@@ -1183,7 +1188,7 @@ class TicketAdd extends React.Component {
         fileList = fileList.splice(0,3);
       }
       
-      console.log(fileList)
+      // console.log(fileList)
       fileList.forEach(item => {
         var src = typeof item == 'string' ?
                   item:
@@ -1234,7 +1239,7 @@ class TicketAdd extends React.Component {
         // console.log('ri')
         var reaI = document.getElementById("reasonInputOthers")
         reaI.style.border = '1px solid red'
-        console.log(reaI)
+        // console.log(reaI)
         reaI.scrollIntoView()
         reaI = null
         this.setState({
@@ -1299,7 +1304,7 @@ class TicketAdd extends React.Component {
       })
       
       Promise.all(imgFileList).then(results => {
-        console.log(results)
+        // console.log(results)
         const formData = new FormData()
         formData.append('operaId', this.state.order.id)
         formData.append('questionTypeCode', this.state.subject)
@@ -1405,7 +1410,8 @@ class TicketAdd extends React.Component {
           descriptionRequired: false,
           questionObject:{
             ...questionObject,
-            questionTypeInput: ''
+            questionTypeInput: '',
+            showSelectItem: false
           },
           questionsReason: copyList
         })
@@ -1457,9 +1463,8 @@ class TicketAdd extends React.Component {
             {/* 对话 */}
             <Chat innerRef={(div) => { this.chatDiv = div }} style={{ height:'calc(100% - 230px)',overflow: 'hidden', overflowY: 'scroll', padding:'20px',WebkitOverflowScrolling:'touch'}}>
               {this.state.ticket && this.state.ticket.ticketReplies && _.map(groupReplies(this.state.ticket.ticketReplies), (group, index) => (
-                <div key={index}>
-                  <div style={{textAlign: 'center', color: '#999', fontSize: '12px', height: '40px', lineHeight: '40px'}}>{index}</div>
-                  <GroupReplyHtmls headSculptureUrl={this.state.headSculptureUrl} replies={group}/>
+                <div key={index}>                  
+                  <GroupReplyHtmls headSculptureUrl={this.state.headSculptureUrl} replies={group} index={index}/>
                 </div>
               ))}
               {/* 提示 */}
@@ -1490,9 +1495,9 @@ class TicketAdd extends React.Component {
             <ChatInputBox>
                 <ChatInput>
                     <TextInput style={{boxShadow: this.state.messageInvalid&&'inset 0 0 1px red !important',borderColor: this.state.messageInvalid&&'red !important'}}
-                              placeholder={intl.formatMessage({id:"textareaPlaceHolder"})}
-                              onChange={(evt) => {textareaChange(evt) }} 
-                              value={this.state.message} 
+                               placeholder={intl.formatMessage({id:"textareaPlaceHolder"})}
+                               onChange={(evt) => {textareaChange(evt) }} 
+                               value={this.state.message} 
                               >
                     </TextInput>
                 </ChatInput>
