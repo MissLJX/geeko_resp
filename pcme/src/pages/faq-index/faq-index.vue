@@ -94,7 +94,7 @@ export default {
             this.$router.push({ path: '/'})
         },
         backSupport(){
-            this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/support'})
+            this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/tickets'})
         }
     }
 }

@@ -23,6 +23,7 @@ import uploadAvatar from '../components/upload-avatar.vue'
 import Survey from '../pages/survey.vue'
 import FaqIndex from '../pages/faq-index/faq-index.vue'
 import Faq from '../pages/faq/faq.vue'
+import Support from "../pages/support/support.vue"
 
 const __Base_Path__ = window.ctx || ''
 
@@ -44,11 +45,17 @@ const routes = [
                 name:'orders',
                 meta: { keepAlive: true ,title:"My Orders"}
             },
+            // {
+            //     path:'tickets',
+            //     component:Tickets,
+            //     name:"tickets",
+            //     meta: {title:'My Tickets'},
+            // },
             {
-                path:'tickets',
-                component:Tickets,
-                name:"tickets",
-                meta: {title:'My Tickets'},
+                path: 'tickets',
+                component: Support,
+                name: 'support',
+                meta: {title: 'Support'}
             },
             {
                 path:'notification',
