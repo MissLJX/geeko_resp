@@ -94,8 +94,11 @@
             <div class="el-no-more" v-show="ifDone">{{$t('nomoredata')}}</div>
         </div>
 
-        <select-order v-if="isShowSelect" v-on:closeSelect="closeSelect1" v-on:showTicket="showTicket"></select-order>
-        <order-ticket  v-if="isShowTicket" v-on:closeSelect="closeSelect1" v-on:selectOrder="selectorder"></order-ticket>
+        <!-- <select-order v-if="isShowSelect" v-on:closeSelect="closeSelect1" v-on:showTicket="showTicket"></select-order>
+        <order-ticket  v-if="isShowTicket" v-on:closeSelect="closeSelect1" v-on:selectOrder="selectorder"></order-ticket> -->
+
+        <faq-select-order v-if="isShowSelect" v-on:closeSelect="closeSelect1" v-on:showTicket="showTicket"></faq-select-order>
+        <faq-order-ticket  v-if="isShowTicket" v-on:closeSelect="closeSelect1" v-on:selectOrder="selectorder"></faq-order-ticket>
 
         <transition name="fade">
             <div v-if="isAddProducts" class="addProductsMask">{{isAddProductstTip}}</div>
@@ -111,6 +114,9 @@
     import orderTicket from './order-ticket.vue';
     import selectOrder from './select-order.vue';
     import CountDown from './countdow.vue';
+    import FaqSelectOrder from './faq/faq-select-order.vue';
+    import FaqOrderTicket from './faq/faq-order-ticket.vue';
+    
     export default {
         data (){
             return{
@@ -130,7 +136,9 @@
             'link-image': LinkImage,
             'order-ticket':orderTicket,
             'select-order':selectOrder,
-            'count-down': CountDown
+            'count-down': CountDown,
+            'faq-select-order':FaqSelectOrder,
+            'faq-order-ticket':FaqOrderTicket
         },
         computed: {
             ...mapGetters([

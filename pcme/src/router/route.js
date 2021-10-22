@@ -240,6 +240,12 @@ const routes = [
                 meta:{title:"FAQ",depth:1,keepAlive:true}
             },
             {
+                path:"faq-new",
+                component:() => import("../pages/faq/faq_new.vue"),
+                name:"FAQ_new",
+                meta:{title:"FAQ_new",depth:1,keepAlive:true}
+            },
+            {
                 path:"search-result",
                 component:() => import("../pages/faq-search/faq-search.vue"),
                 name:"search-result",
@@ -250,12 +256,6 @@ const routes = [
                 component:() => import("../pages/faq-search-detail/faq-search-detail.vue"),
                 name:"search-result-detail",
                 meta:{title:"Search Results",depth:1,keepAlive:true}
-            },
-            {
-                path:"online-help",
-                name:"online-help",
-                component:() => import("../pages/online-help/online-help.vue"),
-                meta:{title:"OnlineHelp",depth:1,keepAlive:true}
             },
             {
                 path:"support-ticket",

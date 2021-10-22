@@ -7,9 +7,13 @@
         <div class="s-bd" ref="viewBox">
             <!-- <geeko-select @change="changeHandle" :items="tabList"/> -->
             <div class="selectOrderInfo">
-                Please select your order
+                {{$t("support.s_select_order")}}
             </div>
-            <faq-select class="faqSelect" :selectValue="selectValue" :selectList="tabList" @selectChange="selectChange($event)"></faq-select>
+            <faq-select class="faqSelect" 
+                        :selectValue="selectValue" 
+                        :selectList="tabList" 
+                        :disabled="!isloded" 
+                        @selectChange="selectChange($event)"></faq-select>
 
             <div v-for="(item,index) in orderMethod" :key="index" class="item-order">
                 <div class="order-hd">
@@ -27,7 +31,7 @@
 
                 </div>
                 <div class="order-info">
-                    <span>{{item.orderItems.length}} items</span>
+                    <span>{{item.orderItems.length}} {{$t("support.s_items")}}</span>
                     <span class="i-price">
                         {{$t('total')}} <span >{{item.orderItems[0].price.unit}}{{item.orderItems[0].price.amount}}</span>
                     </span>
@@ -59,44 +63,44 @@
                 selectValue:'home-all',
                 tabList: [
                     {
-                        label: 'All',
+                        label: this.$t("support.s_all"),
                         value: 'home-all',
                         selected: 'home-all' === tab
                     },
                     {
-                        label: 'UNPAID',
+                        label: this.$t("support.s_unpaid"),
                         value: 'home-unpaid',
                         selected: 'home-unpaid' === tab
                     },
+                    // {
+                    //     label: this.$t("support.s_paid"),
+                    //     value: 'home-paid',
+                    //     selected: 'home-paid' === tab
+                    // },
                     {
-                        label: 'PAID',
-                        value: 'home-paid',
-                        selected: 'home-paid' === tab
-                    },
-                    {
-                        label: 'PROCESSING',
+                        label: this.$t("support.s_processing"),
                         value: 'home-processing',
                         selected: 'home-processing' === tab
                     },
                     {
-                        label: 'SHIPPED',
+                        label: this.$t("support.s_shipped"),
                         value: 'home-shipped',
                         selected: 'home-shipped' === tab
                     },
                     {
-                        label: 'CONFIRMED',
+                        label: this.$t("support.s_confirmed"),
                         value: 'home-confirmed',
                         selected: 'home-confirmed' === tab
                     },
                     {
-                        label: 'CANCELED',
+                        label: this.$t("support.s_canceled"),
                         value: 'home-canceled',
                         selected: 'home-canceled' === tab
                     }
                 ],
                 isSelectOrder:'',
                 pickedOrder:'',
-                method:'home-all'
+                method:'home-all',
             };
         },
 
@@ -166,8 +170,12 @@
                 this.changeList(tab);
             },
             selectChange(e){
-                console.log(e)
-                this.changeList(e.value);
+                if(this.isloded){
+                    console.log(e)
+                    this.selectValue = e.value;
+                    this.changeList(e.value);
+                    
+                }
             },
 
             changeList(tab) {
@@ -284,7 +292,7 @@
         }
         .s-bd{
             background-color: #fff;
-            max-height:calc(100vh - 125px);
+            height:calc(100vh - 125px);
             overflow-y: auto;
 
             &::-webkit-scrollbar{

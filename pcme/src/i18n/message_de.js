@@ -388,7 +388,56 @@ export default {
             answer5: '$300-$500',
             answer6: '$500 oder mehr',
         },
-
-
+    },
+    support:{
+        // Unterstützung
+        s_support: 'unterstützen',
+        s_onlineHelp: 'OnlineHilfe',
+        s_clickToFaq: 'Für alle Fragen und Antworten klicken Sie bitte auf unsere ',
+        s_faq: 'faq',
+        s_page: 'Seite',
+        s_not_found: "Kann die gesuchte Antwort nicht finden?",
+        s_customer_us: 'Kunde uns',
+        s_order: 'Auftragsbearbeitung',
+        s_logistics: 'Logistikverfolgung',
+        s_return: 'Rückgabe & Rückerstattung',
+        s_product: 'Produkt & Lager',
+        s_payment: 'Zahlung & Promos',
+        s_account: 'Kontoprobleme',
+        // FAQ
+        s_help_you: 'Wie kann ich Ihnen helfen?',
+        // FAQ-Index
+        s_tickets: 'Tickets',
+        // FAQ-Suche
+        s_search_results: 'Suchergebnisse',
+        s_result: "{num} Ergebnisse für",
+        // FAQ-Suche-Details
+        s_have_questions: 'Haben Sie weitere Fragen?',
+        s_contact_us: 'Kontaktieren Sie uns',
+        s_related: 'Ähnliche Artikel',
+        // FAQ-Auswahl
+        s_select_ph: 'Bitte wählen Sie Ihren Fragetyp',
+        // FAQ-Ticket bestellen
+        s_textarea_ph: 'Geben Sie hier eine Nachricht ein...',
+        s_submit_success: 'Erfolgreich übermittelt!',
+        s_submit_tips: "Die folgenden Gründe sind optional. Sie können auf “X” klicken, wenn Sie keine davon auswählen möchten.",
+        s_select_reason: 'Wählen Sie einen Grund',
+        s_description: 'Beschreibung',
+        s_description_ph: 'Bitte beschreiben Sie Ihr Problem so genau wie möglich, damit der Kundenservice schneller reagieren kann...',
+        s_upload_image: 'Bild hochladen',
+        s_upload_tips: 'Maximal 3 Fotos, nur JPEG, GIF oder PNG.',
+        s_sumbit: "senden",
+        s_img_upload: 'Ein einzelnes Bild sollte 10M nicht überschreiten',
+        s_response_time: 'Erwartete Reaktionszeit: Innerhalb von 24 Stunden',
+        // faq-select-order
+        s_select_order: 'Bitte wählen Sie Ihre Bestellung aus',
+        s_items: 'Artikel',
+        s_all: 'ALLE',
+        s_unbezahlt: 'UNBEZAHLT',
+        s_paid:"BEZAHLT",
+        s_processing: "VERARBEITUNG",
+        s_versandt: 'VERSENDET',
+        s_confirmed: 'BESTÄTIGT',
+        s_storniert: 'ABGESAGT',
     }
 }

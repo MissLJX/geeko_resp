@@ -15,27 +15,19 @@
             </div>
             <div class="help">
                 <!-- {{$t('howcanwehelp')}} -->
-                <h3>How can I help you?</h3>
+                <h3>{{$t("support.s_help_you")}}</h3>
                 <faq-select :class="{'faqSelect':true, 'redBorder':isRequired}"
                             :selectValue="selected" 
                             :selectList="usedQuestionType" 
                             :isRadius="true" 
                             @selectChange="selectChange($event)">
                             </faq-select>
-
-                <!-- <select v-model="selected" :class="{'redBorder':isRequired}" @change="isRequired=false">
-                    <option disabled="disabled" value="666">Please select your question type</option>
-                    <option v-for="option in ticket_sub" :value="option.value">
-                        {{ option.label }}
-                    </option>
-                </select> -->
-                <!-- <span>{{$t('Expectedtime')}}</span> -->
             </div>
         </div>
         <div class="s-cd" >
             <div v-if="ticket_con">
                 <div v-for="(item, index) in ticket_con.ticketReplies" :key="index">
-                    <div class="buyer" v-if="item.sender === 'buyers'">
+                    <div class="buyer" v-if="item.sender === 'buyers' && (item.message || item.imageUrls)">
                         <div class="el-me-headerImage" :style="{'background-image': 'url('+headerImage+'),url('+baseHeaderUrl+')' }"></div>
                         <div class="cet" >
                             <div class="sanjiao-right"></div>
@@ -43,16 +35,15 @@
                             <div v-if="!(item.questionType && item.questionTypeCode) && item.imageUrls" class="imgarea">
                                 <img v-for="(img, index) in item.imageUrls" :key="index" :src="imgUrl(img)">
                             </div>
-                            <div v-if="item.questionType && item.questionTypeCode" class="">
+                            <div v-if="item.questionType && item.questionTypeCode && item.reasonCode">
                                 <div v-if="item.reason" style="color:#222;font-size: 14px;border-bottom:2px solid #999;padding-bottom:5px;text-align:left;">
                                     {{item.reason}}
                                 </div>
-                                <div style="color:#222;font-size: 14px;border-bottom:2px solid #999;padding:5px 0;text-align:left;">
+                                <div v-if="item.message" style="color:#222;font-size: 14px;border-bottom:2px solid #999;padding:5px 0;text-align:left;">
                                     {{item.message}}
                                 </div> 
-                                <div style="display: flex; align-items:center;justify-content:flex-start;">
-                                    
-                                    <template v-if="item.imageUrls">
+                                <div v-if="item.imageUrls" style="display: flex; align-items:center;justify-content:flex-start;">
+                                    <template >
                                         <img v-for="(img, index) in item.imageUrls" 
                                             :key="index" 
                                             :src="imgUrl(img)" 
@@ -61,12 +52,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- <div class="cet" v-if="item.imageUrls">
-                            <div class="sanjiao-right"></div>
-                            <div class="imgarea">
-                                <img v-for="img in item.imageUrls" :src="imgUrl(img)">
-                            </div>
-                        </div> -->
                     </div>
                     <div class="buyer" v-if="item.sender === 'sellers'">
                         <div class="el-me-headerImage fl" :style="{'background-image': 'url('+sellerheaderImage+'' }" style="margin-right: 10px"></div>
@@ -80,6 +65,10 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <!-- 预计回复时间 -->
+                <div class="responseTime" v-if="ticket_con.ticketReplies && ticket_con.ticketReplies[ticket_con.ticketReplies.length - 1].sender === 'buyers'">
+                    {{$t("support.s_response_time")}}
                 </div>
                 <!--客服评价对话框-->
                 <div class="buyer" v-if="addRated && showAddRate && false">
@@ -104,10 +93,8 @@
         <div class="s-sd">
             <div class="chatInputBox">
                 <div class="chatInput">
-                      <!-- style={{boxShadow: this.state.messageInvalid&&'inset 0 0 1px red !important',borderColor: this.state.messageInvalid&&'red !important'}} -->
-
                     <textarea class="textInput" 
-                              placeholder="Type a message here..."
+                              :placeholder="$t('support.s_textarea_ph')"
                               v-model="msg"
                               >
                     </textarea>
@@ -127,6 +114,10 @@
                 <div class="sendBtnBox" @click="sendticket">
                     <span class="iconfont send">&#xe789;</span>
                 </div>
+
+                <dir class="submitSuccessTip" v-if="successShow || (canBeRated && true)">
+                    {{$t("support.s_submit_success")}}
+                </dir>
             </div>
             <!-- <textarea placeholder="Type a message..." v-model="msg"></textarea>
             <div class="upimg">
@@ -166,27 +157,27 @@
             <div class="userInputBox">
                 <!-- {/* 提示语 */} -->
                 <div class="submitTips" id="top">
-                  <span>The reasons below are optional. You can click “X” if you don't want to choose any of them.</span> 
+                  <span>{{$t("support.s_submit_tips")}}</span> 
                 </div>
 
                 <!-- {/* 原因选择 */} -->
                 <div class="submitSelectReason" id="submitSelect" v-if="questionsReason && questionsReason.length > 0">
                     <!-- {/* 选择标题 */} -->
                     <div class="selectReasonTitle">
-                    <span>*</span> Select a reason
+                    <span>*</span> {{$t("support.s_select_reason")}}
                     </div>
 
                     <!-- {/* 选择下拉框 */} -->
                     <div class="selectReasonBox" id="selectReason">
                         <div class="selectReasonInput" @click="()=>questionObject={...questionObject, showSelectItem:!questionObject.showSelectItem}">
-                            <span>Select a reason</span>
+                            <span>{{questionsReason.find(q => q.isSelected == true) ? questionsReason.find(q => q.isSelected == true).label : $t("support.s_select_reason")}}</span>
                             <span :class="{'iconfont selectReasonIcon':true, 'selected':questionObject.showSelectItem}">&#xe692;</span>
                         </div>
                         
                         <!-- {/* 选项框 */} -->
                         <div class="selectReasonItemBox" v-if="questionObject.showSelectItem">
                             <!-- {/* 选项 */} -->
-                            <div :class="{'selectReasonItem':true,'showTextArea':item.label === 'Others' && item.isSelected}" 
+                            <div :class="{'selectReasonItem':true,'showTextArea':item.value === questionsReason[questionsReason.length - 1].value && item.isSelected}" 
                                  :key="index" 
                                  @click="()=>questionTypeChange(item)"
                                  v-for="(item,index) in questionsReason"
@@ -199,7 +190,7 @@
                                 </div>
                                 
                                 <textarea 
-                                    v-if="item.label === 'Others' && item.isSelected"
+                                    v-if="item.value === questionsReason[questionsReason.length - 1].value && item.isSelected"
                                     :class="{'reasonTextArea':true}"
                                     :id="'reasonInput'+item.label"
                                     @change="(e)=>{
@@ -218,12 +209,12 @@
                 <div class="submitDescriptionBox" id="description">
                     <!-- {/* 标题 */} -->
                     <div class="selectReasonTitle">
-                      <span>*</span> Description
+                      <span v-if="descriptionRequired">*</span> {{$t("support.s_description")}}
                     </div>
 
                     <!-- {/* 输入框 */} -->
                     <textarea class="descriptionTextArea" 
-                        placeholder="Please describe your problem as much as possible so that customer service can respond faster…"
+                        :placeholder="$t('support.s_description_ph')"
                         :value="questionObject.descriptionInput"
                         @input="(e)=>descriptionTextAreaChange(e)"
                         ></textarea>
@@ -236,11 +227,11 @@
                 <div class="submitImageBox" id="imgUpload">
                   <!-- {/* 标题 */} -->
                   <div class="selectReasonTitle">
-                    Upload image
+                    {{$t("support.s_upload_image")}}
                   </div>
 
                   <!-- {/* 上传提示 */} -->
-                  <div class="uploadTips">Maximum of 3 photos, only JPEG, GIF or PNG. </div>
+                  <div class="uploadTips">{{$t("support.s_upload_tips")}} </div>
 
                   <div class="uploadBox">
                     <div class="uploadItem" v-for="(item,index) in questionObject.uploadImgList" :key="index">
@@ -266,7 +257,7 @@
 
             <div class="questionSubmitBtnBox">
               <div class="questionSubmitBtn" @click="questionSubmit()">
-                sumbit
+                {{$t("support.s_sumbit")}}
               </div>
             </div>
             
@@ -355,6 +346,12 @@
       }]
 
     export default {
+        props:{
+            fromOrder:{
+                type: Boolean,
+                default: false
+            }
+        },
         data (){
             return{
                 selected: '666',
@@ -383,6 +380,8 @@
                 questions:[], // 上面的内容格式化
                 questionsReason:[], // 问题对应原因的列表
                 questionSubmitLoading: false, // 正在上传
+                successShow: false, // 上传成功提示
+                descriptionRequired: false, // description是否必填
             }
         },
         components: {
@@ -392,8 +391,25 @@
         mounted(){
             console.log(this.ticket_sub)
             this.$store.dispatch("getQuestionType")
+            if(this.fromOrder){
+                this.selectChange({value:'04'})
+            }
         },
         watch:{
+            successShow:function(newV, oldV){
+                if(newV){
+                    setTimeout(()=>{
+                        this.successShow = false
+                    }, 2000)
+                }
+            },
+            msg:function(newV, oldV){
+                if((this.selected == '666' || !this.selected) && newV){
+                    this.msg = ''
+                    this.isRequired = true
+                    alert(this.$t("support.s_select_ph"))
+                }
+            }
         },
         computed: {
             ...mapGetters(['ticket','ticket_con','ticketid','ticket_sub','questionType']),
@@ -410,10 +426,10 @@
             },
             canBeRated(){
                 if(this.ticket_con && this.ticket_con.questionTypeCode){
+                    console.log(this.ticket_con)
                     this.selected = this.ticket_con.questionTypeCode
-                    this.questionsReason = this.usedQuestionType.find(q => q.value == this.selected).reasons ? 
-                                            this.usedQuestionType.find(q => q.value == this.selected).reasons :
-                                            []
+                } else {
+                    this.selected = '666'
                 }
                 if(this.ticket_con && this.ticket_con.canBeRated){
                     this.rateData.rate = this.ticket_con && this.ticket_con.ticketRateService ? this.ticket_con.ticketRateService.rate : 5;
@@ -454,14 +470,30 @@
         methods: {
             selectChange(e){
                 console.log(e)
-                this.selected = e.value
-                this.questionMaskShow = true
+                this.$store.dispatch("addTicket",{
+                    operaId: this.ticket_con.operaId,
+                    questionType: e.label,
+                    questionTypeCode: e.value
+                }).then(res=>{
+                    this.selected = e.value
+                    this.isRequired = false
+                    let qTReasonList = this.usedQuestionType.find(q => q.value == e.value).reasons ? 
+                                    this.usedQuestionType.find(q => q.value == e.value).reasons :
+                                    []
+                    let showed = this.ticket_con ? 
+                                this.ticket_con?.ticketReplies ? this.ticket_con?.ticketReplies.find(t => t.questionTypeCode == e.value) : false : false
+                    if((qTReasonList.length > 0 || e.value == this.usedQuestionType[this.usedQuestionType.length - 1].value) && !showed){
+                        if(e.value == this.usedQuestionType[this.usedQuestionType.length - 1].value){
+                            this.descriptionRequired = true
+                        } else {
+                            this.descriptionRequired = false
+                        }
+                        this.questionsReason = qTReasonList
+                        this.questionMaskShow = true
+                        console.log(this.questionsReason) 
+                    }
+                })
                 
-                this.questionsReason = this.usedQuestionType.find(q => q.value == e.value).reasons ? 
-                                       this.usedQuestionType.find(q => q.value == e.value).reasons :
-                                       []
-                console.log(this.questionsReason)
-                this.isRequired = false
             },
             getDate(paymentTime){
                 console.log(paymentTime)
@@ -472,6 +504,11 @@
             },
             imghandle(evt){
                 evt.preventDefault()
+                if(this.selected == '666' || !this.selected){
+                    alert(this.$t("support.s_select_ph"))
+                    this.isRequired = true
+                    return
+                }
                 var files = this.files;
                 var myFiles = evt.target.files;
                 console.log("myFiles",myFiles);
@@ -486,7 +523,7 @@
                     }
 
                     if(this.selected && this.selected !== '666'){
-                        formData.append("questionType",this.selected)
+                        // formData.append("questionTypeCode",this.selected)
                     }else{
                         this.isRequired = true
                         return ''
@@ -499,9 +536,8 @@
                         alert(e.result)
                     })
                 }else{
-                    alert("A single image should not exceed 10M");
+                    alert(this.$t("support.s_img_upload"));
                 }
-                
             },
             close(){
                 this.$emit('closeSelect');
@@ -525,7 +561,7 @@
                 }
                 console.log(this.selected)
                 if(this.selected && this.selected !== '666'){
-                    formData.append("questionType",this.selected)
+                    // formData.append("questionTypeCode",this.selected)
                 }else{
                     this.isRequired = true
                     return ''
@@ -568,7 +604,7 @@
                 // 选择的原因（有的问题没有）
                 params.selectReason = this.questionsReason.find(i => i.isSelected == true);
                 // 原因描述 仅限Others
-                if(params.selectReason && params.selectReason.label == 'Others'){
+                if(params.selectReason && params.selectReason.value == this.questionsReason[this.questionsReason.length - 1].value){
                     params.selectReasonInput = this.questionObject.questionTypeInput
                 }
                 // 描述
@@ -579,7 +615,7 @@
                 let imgFileList = this.questionObject.uploadImgFileList.map(img => {
                     return new HtmlImageCompress(img, {quality: 0.7, imageType: img.type})
                 })
-                if(!this.checkUploadData(params))return
+                if(!this.checkUploadData(params)) return
                 // message 传 description数据
 
                 Promise.all(imgFileList).then(results => {
@@ -590,13 +626,13 @@
                         formData.append("operaId",this.ticketid)
                     }
                     formData.append('questionTypeCode', params.question)
-                    formData.append('questionType', this.usedQuestionType.find(q=>q.value == params.question).label ? this.usedQuestionType.find(q=>q.value == params.question).label : '')
+                    formData.append('questionType', this.usedQuestionType.find(q=>q.value == params.question)?.label ? this.usedQuestionType.find(q=>q.value == params.question).label : '')
                     formData.append('reasonCode', params.selectReason ? params.selectReason.value : '')
                     // 如果原因选择了others 那么reason传others输入的值
                     formData.append('reason', params.selectReason ? params.selectReasonInput ? params.selectReasonInput:params.selectReason.label:'')
                     formData.append('message', this.questionObject.descriptionInput)
                     results.forEach(item => {
-                    const {file} = item
+                        const {file} = item
                         formData.append('imageFiles', file)
                     })
                     console.log(formData)
@@ -616,6 +652,7 @@
                         this.questions = [] // 上面的内容格式化
                         this.questionsReason = [] // 问题对应原因的列表
                         this.questionSubmitLoading = false
+                        this.successShow = true
                     }).catch(e => {
                         alert(e.result)
                     })
@@ -655,6 +692,21 @@
             },
             clearTicketData(){
                 this.questionMaskShow = false
+                let obj = {
+                    // 信息收集弹窗的数据obj
+                    questionTypeInput: '',
+                    showSelectItem: false,
+                    descriptionInput: '',
+                    uploadImgList: [],
+                    uploadImgFileList: []
+                }
+                this.questionObject = {...obj}
+                this.questionTypeList =[] // how can i help you 下面的类型选择
+                this.questions = [] // 上面的内容格式化
+                this.questionsReason = [] // 问题对应原因的列表
+                this.questionSubmitLoading = false // 正在上传
+                this.successShow = false // 上传成功提示
+                this.descriptionRequired = false // description是否必填
             },
             questionTypeChange(e){
                 let qList = _.cloneDeep(this.questionsReason)
@@ -663,6 +715,13 @@
                 })
                 let qr = qList.find(q => q.value == e.value)
                 qr.isSelected = true
+                console.log(this.questionsReason[this.questionsReason.length - 1].value)
+                if(qr.value == this.questionsReason[this.questionsReason.length - 1].value) {
+                    this.descriptionRequired = true
+                } else {
+                    this.descriptionRequired = false
+                    this.questionObject.showSelectItem = false
+                }
                 this.questionsReason = qList
             },
             descriptionTextAreaChange(e){
@@ -689,35 +748,48 @@
                     subS.style.border = '1px solid red'
                     subS.scrollIntoView()
                     subS = null
+                    this.questionSubmitLoading = false
                     return false
+                } else {
+                    this.clearRedLines()
                 }
-                if(params.selectReason && params.selectReason.label == 'Others' && !params.selectReasonInput){
+                if(params.selectReason && params.selectReason.value == this.questionsReason[this.questionsReason.length - 1].value && !params.selectReasonInput){
                     // console.log('ri')
                     var reaI = document.getElementById("reasonInputOthers")
                     reaI.style.border = '1px solid red'
                     reaI.scrollIntoView()
                     reaI = null
+                    this.questionSubmitLoading = false
                     return false
+                } else {
+                    this.clearRedLines()
                 }
-                if(!params.descriptionInput){
+                if(!params.descriptionInput && this.descriptionRequired){
                     var des = document.getElementById("description")
                     des.style.border = '1px solid red'
                     des.scrollIntoView()
                     des = null
+                    this.questionSubmitLoading = false
                     return false
+                } else {
+                    this.clearRedLines()
                 }
+                return true
+            },
+            clearRedLines(){
                 var subS = document.getElementById("submitSelect") ? document.getElementById("submitSelect") : ''
                 subS && (subS.style.border = 'none')
+                subS = null
                 
                 var reaI = document.getElementById("reasonInputOthers") ? document.getElementById("reasonInputOthers") : ''
                 reaI && (reaI.style.border = 'none')
-                
-                var des = document.getElementById("description") ? document.getElementById("description") : ''
-                des && (des.style.border = 'none')
                 reaI = null
-                des = null
-                subS = null
-                return true
+                
+                if(this.descriptionRequired){
+                    var des = document.getElementById("description") ? document.getElementById("description") : ''
+                    des && (des.style.border = 'none')
+                    des = null
+                }
             }
         },
     };
@@ -1447,6 +1519,20 @@
                 }
             }
         }
+
+        .submitSuccessTip{
+            position: absolute;
+            left: calc(50% - 100px);
+            bottom: 116px;
+            width: 200px;
+            height: 32px;
+            background-color: rgba(34, 34, 34, 0.6);
+            border-radius: 2px;
+            text-align: center;
+            line-height: 32px;
+            color: #fff;
+            padding: 0;
+        }
     }
 .rate-flex{
     display: flex;
@@ -1483,6 +1569,16 @@
     border:1px solid #e5004f !important;
 }
 
+.responseTime{
+    font-family: SlatePro-Regular;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #999999;
+    text-align: center;
+    margin-top: 7px;
+}
 
 
 </style>

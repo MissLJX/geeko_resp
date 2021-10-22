@@ -97,7 +97,7 @@
             }
         },
         created(){
-            this.$store.dispatch('getTickets',0)
+            this.$store.dispatch('getTickets',0,0)
         }
     }
 </script>

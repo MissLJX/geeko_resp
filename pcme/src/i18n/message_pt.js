@@ -390,7 +390,56 @@ export default {
             answer5: '$300-$500',
             answer6: '$500 ou mais',
         },
-
-
+    },
+    support:{
+        // Apoio, suporte
+        s_support: 'suporte',
+        s_onlineHelp: 'OnlineHelp',
+        s_clickToFaq: 'Para todas as perguntas e respostas, clique em nosso',
+        s_faq: 'faq',
+        s_page: 'página',
+        s_not_found: "Não consegue encontrar a resposta que procura?",
+        s_customer_us: 'Cliente-nos',
+        s_order: 'Processamento de pedido',
+        s_logistics: 'Logistics Tracking',
+        s_return: 'Devolução e reembolso',
+        s_product: 'Produto e estoque',
+        s_payment: 'Payment & Promos',
+        s_account: 'Problemas de conta',
+        // Perguntas frequentes
+        s_help_you: 'Como posso ajudá-lo?',
+        // faq-index
+        s_tickets: 'tickets',
+        // faq-search
+        s_search_results: 'Resultados da pesquisa',
+        s_result: "{num} resultados para",
+        // faq-search-detail
+        s_have_questions: 'Tem mais perguntas?',
+        s_contact_us: 'Fale conosco',
+        s_related: 'Artigos Relacionados',
+        // faq-select
+        s_select_ph: 'Por favor, selecione o seu tipo de pergunta',
+        // faq-order-ticket
+        s_textarea_ph: 'Digite uma mensagem aqui ...',
+        s_submit_success: 'Enviado com sucesso!',
+        s_submit_tips: "Os motivos abaixo são opcionais. Você pode clicar no“ X ”se não quiser escolher nenhum deles.",
+        s_select_reason: 'Selecione um motivo',
+        s_description: 'Descrição',
+        s_description_ph: 'Descreva o seu problema o máximo possível para que o atendimento ao cliente possa responder mais rápido…',
+        s_upload_image: 'Carregar imagem',
+        s_upload_tips: 'Máximo de 3 fotos, apenas JPEG, GIF ou PNG.',
+        s_sumbit: "enviar",
+        s_img_upload: 'Uma única imagem não deve exceder 10M',
+        s_response_time: 'Tempo de resposta esperado: Dentro de 24h',
+        // faq-select-order
+        s_select_order: 'Selecione seu pedido',
+        s_items: 'items',
+        s_all: 'ALL',
+        s_unpaid: 'UNPAID',
+        s_paid: "PAGO",
+        s_processing: "PROCESSING",
+        s_shipped: 'SHIPPED',
+        s_confirmed: 'CONFIRMED',
+        s_canceled: 'CANCELED',
     }
 }

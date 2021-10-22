@@ -388,7 +388,56 @@ export default {
             answer5: '300$-500$',
             answer6: '500$ ou plus',
         },
-
-
+    },
+    support:{
+        // Support
+        s_support: 'support',
+        s_onlineHelp : 'Aide en ligne',
+        s_clickToFaq: 'Pour toutes les questions/réponses, veuillez cliquer sur notre ',
+        s_faq: 'faq',
+        s_page : 'page',
+        s_not_found : "Vous ne trouvez pas la réponse que vous recherchez ?",
+        s_customer_us : "Nous client",
+        s_order : 'Traitement de la commande',
+        s_logistics : 'Suivi Logistique',
+        s_return : 'Retour et remboursement',
+        s_product : 'Produit & Stock',
+        s_payment : 'Paiement & Promos',
+        s_account : 'Problèmes de compte',
+        // FAQ
+        s_help_you : "Comment puis-je vous aider ?",
+        // faq-index
+        s_tickets : 'billets',
+        // recherche de FAQ
+        s_search_results : 'Résultats de la recherche',
+        s_result : "{num} résultats pour",
+        // faq-recherche-détail
+        s_have_questions : "Vous avez d'autres questions ?",
+        s_contact_us : 'Contactez-nous',
+        s_related : 'Articles connexes',
+        // faq-select
+        s_select_ph : 'Veuillez sélectionner votre type de question',
+        // faq-commande-ticket
+        s_textarea_ph: 'Tapez un message ici...',
+        s_submit_success : 'Envoyé avec succès !',
+        s_submit_tips : "Les raisons ci-dessous sont facultatives. Vous pouvez cliquer sur « X » si vous ne souhaitez en choisir aucune.",
+        s_select_reason : 'Sélectionnez une raison',
+        s_description : 'Description',
+        s_description_ph : "Veuillez décrire votre problème autant que possible afin que le service client puisse répondre plus rapidement… ",
+        s_upload_image : "Télécharger l'image",
+        s_upload_tips : 'Maximum de 3 photos, uniquement JPEG, GIF ou PNG.',
+        s_sumbit : "soumettre",
+        s_img_upload : 'Une seule image ne doit pas dépasser 10M',
+        s_response_time: 'Temps de réponse attendu：Dans les 24h',
+        // faq-select-order
+        s_select_order: 'Veuillez sélectionner votre commande',
+        s_items : 'éléments',
+        s_all : 'TOUS',
+        s_unpaid : 'UNPAID',
+        s_paid:"PAYÉ",
+        s_processing : "TRAITEMENT",
+        s_expédié : 'EXPÉDIÉ',
+        s_confirmed : 'CONFIRMÉ',
+        s_canneled : 'ANNULÉ',
     }
 }

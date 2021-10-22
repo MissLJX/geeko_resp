@@ -7,15 +7,17 @@
                     <div class="logo" @click="backHome()">
                         <img src="https://dgzfssf1la12s.cloudfront.net/site/pc/logo03_.png" alt="Chic Me">
                     </div>
-                    <div class="support" @click="backSupport()">support</div>
+                    <div class="support" @click="backSupport()">{{$t("support.s_support")}}</div>
                 </div>
 
                 <div class="tabControl">
-                    <div :class="{'tabItem':true, 'tabItemSelect':item.url == tabChoose}" 
+                    <div :class="{'tabItem':true, 'tabItemSelect':item.url == tabChoose, 'upper':item.url == 'faq'}" 
                          v-for="(item, index) in tabList" 
                          :key="index"
                          >
-                         <router-link :to="getUrl(`/me/m/faq/${item.url}/`)">{{item.txt}}</router-link>
+                         <router-link :to="getUrl(`/me/m/faq/${item.url}/`)">
+                            {{item.txt}}
+                        </router-link>
                         
                     </div>
                 </div> 
@@ -32,32 +34,37 @@
 
 <script>
 import * as utils from '../../utils/geekoutil'
-let tabList = [
-    {
-        id: 0,
-        txt: 'OnlineHelp',
-        url:'online-help',
-    },
-    {
-        id: 1,
-        txt: 'Tickets',
-        url: 'support-ticket',
-    },
-    {
-        id: 2,
-        txt: 'FAQ',
-        url: 'faq',
-    },
-]
+
 export default {
     data(){
         return{
-            tabList,
+            tabList:[
+                // {
+                //     id: 0,
+                //     txt: this.$t("support.s_onlineHelp"),
+                //     url:'online-help',
+                // },
+                {
+                    id: 1,
+                    txt: this.$t("support.s_tickets"),
+                    url: 'support-ticket',
+                },
+                {
+                    id: 2,
+                    txt: this.$t("support.s_faq"),
+                    url: 'faq',
+                },
+                // {
+                //     id: 3,
+                //     txt: this.$t("support.s_faq"),
+                //     url: 'faq-new',
+                // },
+            ],
             tabChoose:'faq',
         }
     },
     mounted(){
-        console.log(window.location.href.split('faq/')[1].split('/')[0])
+        // console.log(window.location.href.split('faq/')[1].split('/')[0])
         let routeNow = window.location.href.split('faq/')[1].split('/')[0]
         if(routeNow != 'online-help' && routeNow != 'support-ticket'){
             this.tabChoose = 'faq'
@@ -72,15 +79,12 @@ export default {
     },
     methods:{
         tabChange(item){
-            console.log(item.path.split('faq/')[1].split('/')[0])
-            if(item.path.split('faq/')[1].split('/')[0] != 'online-help' && item.path.split('faq/')[1].split('/')[0] != 'support-ticket'){
+            // console.log(item.path.split('faq/')[1].split('/')[0])
+            if(item?.path?.split('faq/')[1].split('/')[0] && item?.path?.split('faq/')[1].split('/')[0] != 'online-help' && item?.path?.split('faq/')[1].split('/')[0] != 'support-ticket'){
                 this.tabChoose = 'faq'
             } else {
                 this.tabChoose = item.path.split('faq/')[1].split('/')[0]
             }
-            // if(this.tabChoose != item.path.split('faq/')[1].split('/')[0]){
-            //     this.tabChoose = item.path.split('faq/')[1].split('/')[0] ? item.path.split('faq/')[1].split('/')[0] : 'faq';
-            // }
         },
         getUrl(suffix){
             // console.log(PROJECT + suffix)
@@ -153,6 +157,7 @@ export default {
                     color: #666;
                     line-height: 80px;
                     cursor: pointer;
+                    text-transform: capitalize;
 
                     a{
                         color: #666;
@@ -164,6 +169,11 @@ export default {
                     }
                     
                     border-bottom: 2px solid #0c2220;
+                }
+                .upper{
+                    a{
+                        text-transform: uppercase;
+                    }
                 }
             }
         }

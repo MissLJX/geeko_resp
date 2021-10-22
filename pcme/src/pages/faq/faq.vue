@@ -3,7 +3,7 @@
         <!-- faqzzz -->
         <!--  -->
         <div class="questionInput">
-            <div class="howTxt">How Can I Help You? </div>
+            <div class="howTxt">{{$t("support.s_help_you")}}</div>
             <div class="howInput">
                 <faq-input
                     :inputValue="searchValue"
@@ -44,50 +44,7 @@ import FaqInput  from '../../components/faq/faq-input.vue'
 import {questions, secondaries} from '../../faqData/index'
 import * as utils from '../../utils/geekoutil'
 import _ from 'lodash'
-let buttonList = [
-    {
-        imgUrl: "&#xe6ee;",
-        txt: "Order Processing",
-        to: `${(window.ctx || '')}/support/faq`,
-        content:"order",
-        type:""
-    },
-    {
-        imgUrl: "&#xe6f1;",
-        txt: "Logistics Tracking",
-        to: `${(window.ctx || '')}/support/faq`,
-        content:"delivery",
-        type:""
-    },
-    {
-        imgUrl: "&#xe6ed;",
-        txt: "Return & Refund",
-        to:`${(window.ctx || '')}/support/faq`,
-        content:"return",
-        type:""
-    },
-    {
-        imgUrl: "&#xe6ec;",
-        txt: "Product & Stock",
-        to: `${(window.ctx || '')}/support/faq`,
-        content:"payment",
-        type:""
-    },
-    {
-        imgUrl: "&#xe6ef;",
-        txt: "Payment & Promos",
-        to: `${(window.ctx || '')}/support/faq`,
-        content:"products",
-        type:""
-    },
-    {
-        imgUrl: "&#xe6f2;",
-        txt: "Account Issues",
-        to: `${(window.ctx || '')}/support/faq`,
-        content:"account",
-        type:""
-    },
-]
+
 export default {
     data(){
         return{
@@ -98,10 +55,53 @@ export default {
             searchList: [],
             groupQuestions: [],
             groupSelectQuestions: [],
-            buttonList,
             questionType: 'order',
             questionsOfType:[],
-            questionContent: {}
+            questionContent: {},
+            buttonList:[
+                {
+                    imgUrl: "&#xe6ee;",
+                    txt: this.$t("support.s_order"),
+                    to: `${(window.ctx || '')}/support/faq`,
+                    content:"order",
+                    type:""
+                },
+                {
+                    imgUrl: "&#xe6f1;",
+                    txt: this.$t("support.s_logistics"),
+                    to: `${(window.ctx || '')}/support/faq`,
+                    content:"delivery",
+                    type:""
+                },
+                {
+                    imgUrl: "&#xe6ed;",
+                    txt: this.$t("support.s_return"),
+                    to:`${(window.ctx || '')}/support/faq`,
+                    content:"return",
+                    type:""
+                },
+                {
+                    imgUrl: "&#xe6ec;",
+                    txt:this.$t("support.s_product"),
+                    to: `${(window.ctx || '')}/support/faq`,
+                    content:"products",
+                    type:""
+                },
+                {
+                    imgUrl: "&#xe6ef;",
+                    txt: this.$t("support.s_payment"), 
+                    to: `${(window.ctx || '')}/support/faq`,
+                    content:"payment",
+                    type:""
+                },
+                {
+                    imgUrl: "&#xe6f2;",
+                    txt: this.$t("support.s_account"),
+                    to: `${(window.ctx || '')}/support/faq`,
+                    content:"account",
+                    type:""
+                },
+            ],
         }
     },
     mounted(){
@@ -135,16 +135,16 @@ export default {
             this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/faq/search-result', query: {search: this.searchValue} })
         },
         changeType(e){
-            console.log(e)
+            // console.log(e)
             this.questionType = e
-            this.groupSelectQuestions = this.groupQuestions.find(q => q.title.toLowerCase() == e).questions
+            this.groupSelectQuestions = this.groupQuestions.find(q => q.title.toLowerCase() == e)?.questions || []
         },
         relatedSearch(e){
             console.log("F: ",e)
             this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/faq/search-result-detail', query: {showId: e} })
         },
         goToDetail(item){
-            if(item.id !== this.questionContent.id){
+            if(item?.id !== this.questionContent?.id){
                 this.questionContent = _.cloneDeep(item);
                 this.questionContent.richText = this.removeHeader(item.richText);
                 // console.log(this.questionContent.richText)
@@ -161,7 +161,7 @@ export default {
             // 3. >https://www.chicme.com/fs/shipping-policy-pc 替换成 shipping-policy
             noHeader = noHeader.replace(/(>https:\/\/www.chicme.com\/fs\/wholesale-program-pc)/, ()=>{return '>wholesale-program'});
             // 4. chicme、Chicme、chic me、Chic me 替换为 window.floderName
-            noHeader = noHeader.replace(/(chicme|Chicme|Chic me|chic me|Chic Me|chic Me|ChicMe|chicMe)/g, ()=>{return window.floderName? window.floderName: 'Chicme'});
+            noHeader = noHeader.replace(/(chicme|Chicme|Chic me|chic me|Chic Me|chic Me|ChicMe|chicMe)/g, ()=>{return window?.floderName || 'Chicme'});
             // 5. 图片宽度设为最宽300px
             noHeader = noHeader.replace(/(<img)/g, ()=>{return "<img style='width: 300px;'"})
             // 文字字体设置

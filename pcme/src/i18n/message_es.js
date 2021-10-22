@@ -388,7 +388,52 @@ export default {
             answer5: '$300-$500',
             answer6: '$500 o más',
         },
-
-
+    },
+    support:{
+        s_faq: 'faq',
+        s_page: 'página',
+        s_not_found: "¿No encuentra la respuesta que busca?",
+        s_customer_us: 'Customer Us',
+        s_order: 'Procesamiento de pedidos',
+        s_logistics: 'Seguimiento logístico',
+        s_return: 'Devolución y reembolso',
+        s_product: 'Producto y existencias',
+        s_payment: 'Pago y promociones',
+        s_account: 'Problemas con la cuenta',
+        // Preguntas más frecuentes
+        s_help_you: '¿Cómo puedo ayudarte?',
+        // índice de preguntas frecuentes
+        s_tickets: 'tickets',
+        // faq-búsqueda
+        s_search_results: 'Resultados de la búsqueda',
+        s_result: "{num} resultados para",
+        // faq-search-detail
+        s_have_questions: '¿Tienes más preguntas?',
+        s_contact_us: 'Contáctenos',
+        s_related: 'Artículos relacionados',
+        // faq-select
+        s_select_ph: 'Seleccione su tipo de pregunta',
+        // faq-order-ticket
+        s_textarea_ph: 'Escriba un mensaje aquí ...',
+        s_submit_success: '¡Enviado con éxito!',
+        s_submit_tips: "Los motivos a continuación son opcionales. Puede hacer clic en “X” si no desea elegir ninguno de ellos.",
+        s_select_reason: 'Seleccione un motivo',
+        s_description: 'Descripción',
+        s_description_ph: 'Describe tu problema tanto como sea posible para que el servicio al cliente pueda responder más rápido ...',
+        s_upload_image: 'Subir imagen',
+        s_upload_tips: 'Máximo de 3 fotos, solo JPEG, GIF o PNG.',
+        s_sumbit: "enviar",
+        s_img_upload: 'Una sola imagen no debe exceder los 10 M',
+        s_response_time: 'Tiempo de respuesta esperado: dentro de las 24 horas.',
+        // faq-select-order
+        s_select_order: 'Seleccione su pedido',
+        s_items: 'elementos',
+        s_all: 'TODOS',
+        s_unpaid: 'UNPAID',
+        s_paid: "PAGADO",
+        s_processing: "PROCESANDO",
+        s_shipped: 'ENVIADO',
+        s_confirmed: 'CONFIRMADO',
+        s_canceled: 'CANCELADO',
     }
 }

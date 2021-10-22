@@ -2,8 +2,8 @@
     <div class="faqPage">
         <div class="searchHeader">
             <div class="breadCrumb">
-                <span @click="back()">FAQ</span>
-                <span>> Search Results</span>
+                <span @click="back()">{{$t("support.s_faq")}}</span>
+                <span>> {{$t("support.s_search_results")}}</span>
             </div>
             <div class="searchInputBox">
                 <faq-input
@@ -19,15 +19,15 @@
         <div class="questionInfoBox">
             <div class="questionContentBox">
                 <div class="questionContent" v-html="removeHeader(content)"></div>
-                <div class="contactUsBox">
-                    <span>Have more questions?</span>
-                    <span class="click">Contact Us</span>
+                <div class="contactUsBox" id="pc_support_question_detail_contact_us">
+                    <span>{{$t("support.s_have_questions")}}</span>
+                    <span class="click">{{$t("support.s_contact_us")}}</span>
                 </div>
             </div>
             <div class="questionRelatedBox">
-                <div class="relatedTitle">Related Articles</div>
+                <div class="relatedTitle">{{$t("support.s_related")}}</div>
                 <div class="relatedListBox">
-                    <div class="relatedItem" v-for="(item, index) in relatedList" v-if="index<4 && item.id != showId" :key="index" @click="relatArticleSearch(item)">
+                    <div class="relatedItem" v-for="(item, index) in relatedList" :key="index" @click="relatArticleSearch(item)">
                         {{item.title}}
                     </div>
                 </div>
@@ -52,7 +52,7 @@ export default {
             questions,
             searchList: [],
             content: '',
-            relatedList: [],
+            // relatedList: [],
         }
     },
     created(){
@@ -63,10 +63,10 @@ export default {
             this.searchValueFromUrl = this.$router.currentRoute.query.search
             let id = this.$router.currentRoute.query.showId
             this.showId = id
-            let question = secondaries.find((q) => q.id == id)
+            let question = this.secondaries.find((q) => q.id == id)
             this.content = question.richText
-            console.log(question)
-            this.relatedList = questions.find(q => q.id == question.parentId).questions
+            // console.log(question)
+            // this.relatedList = this.questions.find(q => q.id == question.parentId).questions
         }
         if(this.questions.length > 0){
             let list = [];
@@ -79,6 +79,22 @@ export default {
         }
     },
     computed:{
+        relatedList(){
+            let question = this.secondaries.find((q) => q.id == this.showId)
+            if(question){
+                let list = this.questions.find(q => q.id == question.parentId).questions
+                let showList = []
+                list.forEach((l,index) => {
+                    if(index < 4 && l.id != this.showId){
+                        showList.push(l)
+                    }
+                })
+                return showList
+            } else {
+                return []
+            }
+            
+        }
     },
     components:{
         'faq-input': FaqInput
@@ -88,7 +104,7 @@ export default {
             this.searchValue = e;
         },
         relatedSearch(e){
-            console.log("F: ",e)
+            // console.log("F: ",e)
             if(this.showId != e){
                 this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/faq/search-result-detail', query: {showId: e} })
             }

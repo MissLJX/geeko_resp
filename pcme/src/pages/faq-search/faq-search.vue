@@ -2,8 +2,8 @@
     <div class="faqPage">
         <div class="searchHeader">
             <div class="breadCrumb">
-                <span @click="back()">FAQ</span>
-                <span>> Search Results</span>
+                <span @click="back()">{{$t("support.s_faq")}}</span>
+                <span>> {{$t("support.s_search_results")}}</span>
             </div>
             <div class="searchInputBox">
                 <faq-input
@@ -18,8 +18,8 @@
 
         <div class="searchResultBox">
             <div class="resultTxt">
-                <div>Search Results</div>
-                <div class="result">{{searchAboutList.length}} results for "<span>{{searchValueFromUrl}}</span>"</div>
+                <div>{{$t("support.s_search_results")}}</div>
+                <div class="result">{{$t("support.s_result",{num: searchAboutList.length})}} "<span>{{searchValueFromUrl}}</span>"</div>
             </div>
 
             <div class="resultList">
@@ -34,8 +34,8 @@
 
                 <div :class="{'noData':true, 'noMarginTop': searchAboutList.length == 0}">
                     <div class="contactUsBox">
-                        <span>Have more questions?</span>
-                        <span class="click" @click="toContact()">Contact Us</span>
+                        <span>{{$t("support.s_have_questions")}}</span>
+                        <span class="click" @click="toContact()">{{$t("support.s_contact_us")}}</span>
                     </div>
                 </div>
             </div>
@@ -61,7 +61,6 @@ export default {
             groupSelectQuestions: [],
             questionType: 'order',
             questionsOfType:[],
-            // searchAboutList: []
         }
     },
     created(){
@@ -69,7 +68,7 @@ export default {
         
     },
     mounted(){
-        console.log(this.$router.currentRoute.query.search)
+        // console.log(this.$router.currentRoute.query.search)
         if(JSON.stringify(this.$router.currentRoute.query) != '{}' && this.$router.currentRoute.query){
             this.searchValue = this.$router.currentRoute.query.search
             this.searchValueFromUrl = this.$router.currentRoute.query.search
@@ -110,24 +109,26 @@ export default {
             this.searchValue = e;
         },
         changeType(e){
-            console.log(e)
+            // console.log(e)
             this.questionType = e
             this.groupSelectQuestions = this.groupQuestions.find(q => q.title.toLowerCase() == e).questions
-            // console.log(this.groupSelectQuestions)
         },
         relatedSearch(item){
-            console.log("F: ",item)
+            // console.log("F: ",item)
             this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/faq/search-result-detail', query: {showId: item}})
         },
         inputSearch(){
             var pageSearch = window.location.href.split("=")[1];
             if(pageSearch != this.searchValue){
-                 this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/faq/search-result', query: {search: this.searchValue}})
+                this.$router.push({ 
+                    path: utils.ROUTER_PATH_ME + '/m/faq/search-result', 
+                    query: {
+                        search: this.searchValue
+                    }
+                })
             }
-           
         },
         back(){
-            // this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/faq/faq'})
             window.history.back()
         },
         // 去掉头部 将链接改成相对链接
@@ -152,13 +153,17 @@ export default {
             // 4. chicme、Chicme、chic me、Chic me 替换为 window.floderName
             noHeader = noHeader.replace(/(chicme|Chicme|Chic me|chic me|Chic Me|chic Me|ChicMe|chicMe)/g, ()=>{return window.floderName? window.floderName: 'Chicme'})
             
-            // console.log(noHeader)
-            
             return noHeader;
         },
         toDetail(item){
             // console.log(item)
-            this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/faq/search-result-detail', query: {search: this.searchValue, showId: item.id}})
+            this.$router.push({ 
+                path: utils.ROUTER_PATH_ME + '/m/faq/search-result-detail', 
+                query: {
+                    search: this.searchValue, 
+                    showId: item.id
+                }
+            })
         },
         toContact(){
 
@@ -186,7 +191,10 @@ export default {
             letter-spacing: 0px;
             color: #666666;
             text-transform:capitalize;
-
+            
+            span:first-child{
+                text-transform: uppercase;
+            }
             span{
                 cursor: pointer;
             }

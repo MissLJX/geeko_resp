@@ -179,8 +179,8 @@ export const updateComment = (comment) => {
     return axios.post('/product-comment/update', comment, {'Content-Type': http_infos.upload_image_content_type}).then(data => data.result)
 }
 //tickets
-export const getTickets = (skip) => {
-    return axios.get('/ticket/'+ skip + '/20/show').then(data => data.result)
+export const getTickets = (skip,state) => {
+    return axios.get('/ticket/'+ skip + '/20/show?state='+state).then(data => data.result)
 }
 export const getTicket = (id) => {
     return axios.get('/ticket/'+id+'/order/get').then(data => data.result)

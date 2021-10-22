@@ -389,7 +389,56 @@ export default {
             answer5: '$300-$500',
             answer6: '$500 or more',
         },
-
-
+    },
+    support:{
+        // support
+        s_support: 'support',
+        s_onlineHelp: 'OnlineHelp',
+        s_clickToFaq: 'For all Q&As Please Click on our ',
+        s_faq: 'faq',
+        s_page: ' page',
+        s_not_found: "Can't find the answer you are looking for?",
+        s_customer_us: 'Customer Us',
+        s_order: 'Order Processing',
+        s_logistics: 'Logistics Tracking',
+        s_return: 'Return & Refund',
+        s_product: 'Product & Stock',
+        s_payment: 'Payment & Promos',
+        s_account: 'Account Issues',
+        // faq
+        s_help_you: 'How Can I Help You?',
+        // faq-index
+        s_tickets: 'tickets',
+        // faq-search
+        s_search_results: 'Search Results',
+        s_result: "{num} results for",
+        // faq-search-detail
+        s_have_questions: 'Have more questions?',
+        s_contact_us: 'Contact Us',
+        s_related: 'Related Articles',
+        // faq-select
+        s_select_ph: 'Please select your question type',
+        // faq-order-ticket
+        s_textarea_ph: 'Type a message here...',
+        s_submit_success: 'Submitted successfully!',
+        s_submit_tips: "The reasons below are optional. You can click “X” if you don't want to choose any of them.",
+        s_select_reason: 'Select a reason',
+        s_description: 'Description',
+        s_description_ph: 'Please describe your problem as much as possible so that customer service can respond faster…',
+        s_upload_image: 'Upload image',
+        s_upload_tips: 'Maximum of 3 photos, only JPEG, GIF or PNG.',
+        s_sumbit: "submit",
+        s_img_upload: 'A single image should not exceed 10M',
+        s_response_time: 'Expected response time：Within 24h',
+        // faq-select-order
+        s_select_order: 'Please select your order',
+        s_items: 'items',
+        s_all: 'ALL',
+        s_unpaid: 'UNPAID',
+        s_paid:"PAID",
+        s_processing: "PROCESSING",
+        s_shipped: 'SHIPPED',
+        s_confirmed: 'CONFIRMED',
+        s_canceled: 'CANCELED',
     }
 }

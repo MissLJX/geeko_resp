@@ -505,6 +505,7 @@ const mutations = {
         state.ticket =  _.cloneDeep(ticket)
     },
     [types.GLOBAL_GET_TICKET_CON](state,ticket){
+        console.log(ticket)
         state.ticket_con =  _.cloneDeep(ticket)
     },
     [types.GLOBAL_GET_TICKET_ID](state,ticketid){
@@ -1089,20 +1090,31 @@ const actions = {
             });
         });
     },
-    getTickets({commit},skip){
-        api.getTickets(skip).then((tickets) => {
+    getTickets({commit},params){
+        api.getTickets(params.skip,params.state).then((tickets) => {
             commit(types.GLOBAL_GET_TICKETS, tickets)
         })
+    },
+    clearTickets({commit},id){
+        console.log('ss')
+        commit(types.GLOBAL_GET_TICKETS, [])
     },
     getTicket({commit},id){
         api.getTicket(id).then((ticket) => {
             if(ticket){
+                console.log(ticket)
                 commit(types.GLOBAL_GET_TICKET, ticket.order)
-                commit(types.GLOBAL_GET_TICKET_CON, ticket.ticket)
+                commit(types.GLOBAL_GET_TICKET_CON, ticket.ticket?ticket.ticket:{})
                 commit(types.GLOBAL_GET_TICKET_ID, ticket.order.id)
                 commit(types.GLOBAL_GET_TICKET_SUB, ticket.subjectSelections)
             }
         })
+    },
+    clearTicket({commit},id){
+        commit(types.GLOBAL_GET_TICKET, {})
+        commit(types.GLOBAL_GET_TICKET_CON, {})
+        commit(types.GLOBAL_GET_TICKET_ID, '')
+        commit(types.GLOBAL_GET_TICKET_SUB, '')
     },
     addTicket({commit},formData){
         return api.addTicket(formData)

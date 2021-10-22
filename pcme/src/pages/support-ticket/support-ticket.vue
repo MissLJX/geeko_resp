@@ -2,11 +2,16 @@
     <div class="tickets">
         <!-- <p class="t-hd">Any questions or concerns? Chat with us now!</p> -->
         <div class="ticketsHeader">
-            <div class="headerText">Tickets</div>
+            <div class="headerText">{{$t("support.s_tickets")}}</div>
             <div class="statusSelect">
-                <div class="statusTxt">status</div>
+                <div class="statusTxt">{{$t("status")}}</div>
                 <!-- <geeko-select @change="changeHandle" :items="tabList"/> -->
-                <faq-select class="faqSelect" :selectValue="selectType" :selectList="tabList" @selectChange="selectChange($event)"></faq-select>
+                <faq-select class="faqSelect" 
+                            :selectValue="selectType" 
+                            :selectList="tabList" 
+                            @selectChange="selectChange($event)"
+                            :placeholder="tabList[0]['label']"
+                            ></faq-select>
             </div>
         </div>
         <div class="ticket-table">
@@ -22,7 +27,7 @@
                 <table>
                     <tr v-if="!tickets">{{$t('nomoredata')}}</tr>
                     <template  >
-                        <tr v-for="(ticket, index) in ticketList" v-if="ticket.type != 3" :key="index">
+                        <tr v-for="(ticket, index) in ticketList" :key="index">
                             <td @click="showTicket(ticket.operaId)"><span>{{ticket.id}}</span></td>
                             <td>{{getlastmsg(ticket.ticketReplies)}}</td>
                             <td>{{getDate(ticket.openDate)}}</td>
@@ -45,7 +50,9 @@
             <order-ticket v-if="isShowTicket"
                           v-on:closeSelect="closeSelect1" 
                           v-on:selectOrder="selectorder" 
-                          :ticket="selectedTicket"></order-ticket>
+                          :ticket="selectedTicket"
+                          :fromOrder="fromOrder"
+                          ></order-ticket>
         </transition>
         
     </div>
@@ -68,10 +75,6 @@
               tabList: [
                     {
                         label: 'All',
-                        value: '-1',
-                    },
-                    {
-                        label: 'Resolved',
                         value: '0',
                     },
                     {
@@ -81,11 +84,16 @@
                     {
                         label: 'Replied',
                         value: '2',
-                    }
+                    },
+                    {
+                        label: 'Resolved',
+                        value: '3',
+                    },
               ],
-              selectType: '-1',
+              selectType: '0',
               page: 1,
               listDefault: [],
+              fromOrder: false, // 从order跳转过来
           }
         },
         components:{
@@ -97,17 +105,37 @@
             ...mapGetters(['tickets']),
             ticketList(){
                 if(this.tickets.length > 0){
+                    // console.log(this.tickets,this.listDefault)
                     this.listDefault = this.listDefault.concat(this.tickets)
-                    return this.listDefault.concat(this.tickets)
+                    this.listDefault = this.listDefault.map(l => {
+                        if(l.type != 3){
+                            return l
+                        }
+                    })
+                    return this.listDefault
                 }
                 return this.listDefault
             }
         },
+
+        watch:{
+            // tickets:function(newV, oldV){
+            //     if(newV.length > 0){
+            //         console.log(newV,this.listDefault)
+            //         this.listDefault = this.listDefault.concat(newV)
+            //         // return this.listDefault.concat(newV)
+            //     }
+            //     // return this.listDefault
+            // }
+        },
         methods: {
             selectChange(e){
-                // console.log(e)
                 let item = this.tabList.find(t => t.value == e.value)
-                this.selectType = item.value
+                this.selectType = item?.value || '0'
+                this.listDefault = []
+                this.$store.dispatch('clearTickets', 0)
+                this.page = 1
+                this.$store.dispatch('getTickets', {skip:0, state: this.selectType})
             },
             changeHandle(evt) {
                 var tab = evt.target.value;
@@ -128,6 +156,7 @@
             },
             showTicket:function(data){
                 this.isShowSelect = false
+                this.$store.dispatch('clearTicket')
                 this.$store.dispatch('getTicket',data).then(()=>{
                     this.isShowTicket = true;
                 })
@@ -144,10 +173,11 @@
             },
             getlastmsg(replies){
                 if(replies){
-                    if(replies[replies.length-1].message === '-'){
+                    // console.log(replies[replies.length-1])
+                    if(replies?.[replies?.length-1]?.message === '-'){
                         return '[image]'
                     }else{
-                        return replies[replies.length-1].message
+                        return replies?.[replies?.length-1]?.message || '-'
                     }
                 }
             },
@@ -158,17 +188,25 @@
             boxScroll(e){
                 let scrollWay = this.$refs.scrollBox.scrollTop;
                 // console.log(e.target.offsetTop + this.$refs.scrollBox.scrollTop)
-                if((scrollWay + 100) > (580 * 2 * this.page - 580)){
-                    this.$store.dispatch('getTickets', (this.page+1)*20)
+                if((scrollWay + 100) > ( 580 * 2 * this.page - 580)){
+                    this.$store.dispatch('getTickets',  {skip:(this.page)*20,state:this.selectType})
                     this.page += 1
                 }
             }
         },
         created(){
-            this.$store.dispatch('getTickets', 0)
+            this.$store.dispatch('getTickets', {skip:0,state:0})
+            // 
+            // console.log(this.$router.currentRoute.query?.id)
+            if(this.$router.currentRoute.query?.id){
+                this.showTicket(this.$router.currentRoute.query?.id)
+                this.fromOrder = true
+            } else {
+                this.fromOrder = false
+            }
         },
         mounted(){
-            console.log(this.$refs.scrollBox)
+            // console.log(this.$refs.scrollBox)
             let scrollBox = this.$refs.scrollBox;
             scrollBox.addEventListener("scroll", (e)=>this.boxScroll(e), true)
         },
@@ -210,6 +248,7 @@
                 font-stretch: normal;
                 letter-spacing: 0px;
                 color: #222222;
+                text-transform: capitalize;
             }
 
             .statusSelect{

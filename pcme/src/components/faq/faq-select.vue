@@ -31,6 +31,14 @@ export default {
         isRadius:{
             type:Boolean,
             default:false
+        },
+        disabled:{
+            type:Boolean,
+            default:false
+        },
+        placeholder:{
+            type:String,
+            default:''
         }
     },
     data(){
@@ -48,20 +56,20 @@ export default {
     },
     computed:{
         value(){
-            console.log(this.selectValue)
+            // console.log(this.selectValue)
             if(!this.selectList || this.selectList.length == 0){
-                return 'Please select your question type'
+                return this.placeholder ? this.placeholder: this.$t("support.s_select_ph")
             } else {
                 if(this.selectValue){
                     let item = this.selectList.find(s => s.value == this.selectValue);
-                    console.log(item)
+                    // console.log(item)
                     if(item){
                         return item.label
                     } else {
-                        return 'Please select your question type'
+                        return this.placeholder ? this.placeholder: this.$t("support.s_select_ph")
                     }
                 } else {
-                    return 'Please select your question type'
+                    return this.placeholder ? this.placeholder: this.$t("support.s_select_ph")
                 }
             }
             
@@ -70,7 +78,9 @@ export default {
     methods:{
         selectOpen(){
             // console.log(this.open)
-            this.open = !this.open
+            if(!this.disabled){
+                this.open = !this.open
+            }
         },
         optionClick(item){
             // console.log(item)
