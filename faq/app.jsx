@@ -1,4 +1,4 @@
-import './css/style.css'
+import './css/base.css'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {BrowserRouter} from 'react-router-dom'
@@ -13,12 +13,13 @@ class App extends React.Component {
     return (
 		 	<BrowserRouter>
 		 		<Index/>
+         <div className="x-fw" style={{display:'none'}}></div>
 		 	</BrowserRouter>
     )
   }
 }
 
-window.accessToken = 'f4e768ec-b61b-4afe-ba4e-8fb87d52a040'
+// window.accessToken = 'f4e768ec-b61b-4afe-ba4e-8fb87d52a040'
 
 let root = document.getElementById('root')
 

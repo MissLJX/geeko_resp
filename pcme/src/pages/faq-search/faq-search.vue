@@ -24,7 +24,7 @@
 
             <div class="resultList">
                 <div class="resultListItem" v-for="(item,index) in searchAboutList" :key="index" @click="toDetail(item)">
-                    <div class="resultItemTitle" v-html="item.title"></div>
+                    <div class="resultItemTitle" v-html="checkHeader(item.title)"></div>
                     <div class="resultItemContent" v-html="removeHeader(item.richText)"></div>
                 </div>
 
@@ -130,6 +130,10 @@ export default {
         },
         back(){
             window.history.back()
+        },
+        checkHeader(text){
+            text = text.replace(/(chicme|Chicme|Chic me|chic me|Chic Me|chic Me|ChicMe|chicMe)/g, ()=>{return window?.floderName || 'Chicme'});
+            return text
         },
         // 去掉头部 将链接改成相对链接
         removeHeader(text) {

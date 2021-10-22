@@ -3,9 +3,9 @@ const webpack = require('webpack')
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 
 const ROOT_PATH = path.resolve(__dirname)
-// const BUILD_PATH = path.resolve(ROOT_PATH, 'dist_faq_chicme')
+const BUILD_PATH = path.resolve(ROOT_PATH, 'dist_faq_chicme')
 // const BUILD_PATH = path.resolve(ROOT_PATH, 'dist_faq_ivrose')
-const BUILD_PATH = path.resolve(ROOT_PATH, 'dist_faq_bq')
+// const BUILD_PATH = path.resolve(ROOT_PATH, 'dist_faq_bq')
 
 
 module.exports = {
@@ -47,7 +47,7 @@ module.exports = {
       // IVRose ivrose
       // 'messageId': JSON.stringify('317606285243994')
       // Boutiquefeel bq
-      'messageId': JSON.stringify('1197317563662685')
+      // 'messageId': JSON.stringify('1197317563662685')
     }),
     new webpack.DefinePlugin({
       'site': JSON.stringify('chiquedoll')

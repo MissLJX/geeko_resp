@@ -28,7 +28,7 @@
                 <div class="relatedTitle">{{$t("support.s_related")}}</div>
                 <div class="relatedListBox">
                     <div class="relatedItem" v-for="(item, index) in relatedList" :key="index" @click="relatArticleSearch(item)">
-                        {{item.title}}
+                        {{checkHeader(item.title)}}
                     </div>
                 </div>
             </div>
@@ -118,6 +118,10 @@ export default {
         back(){
             // window.history.back()
             this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/faq/faq'})
+        },
+        checkHeader(text){
+            text = text.replace(/(chicme|Chicme|Chic me|chic me|Chic Me|chic Me|ChicMe|chicMe)/g, ()=>{return window?.floderName || 'Chicme'});
+            return text
         },
         // 去掉头部 将链接改成相对链接
         removeHeader(text) {

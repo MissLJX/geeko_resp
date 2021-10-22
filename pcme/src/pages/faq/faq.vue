@@ -27,7 +27,7 @@
 
         <div class="questionsOfType">
             <div class="questionsItem" v-for="(item,index) in groupSelectQuestions" :key="index" @click="goToDetail(item)">
-                {{item.title}}
+                {{checkHeader(item.title)}}
                 <transition name="q-content">
                     <div class="questionContent" v-if="item.id == questionContent.id" v-html="questionContent.richText"> 
 
@@ -149,6 +149,10 @@ export default {
                 this.questionContent.richText = this.removeHeader(item.richText);
                 // console.log(this.questionContent.richText)
             }
+        },
+        checkHeader(text){
+            text = text.replace(/(chicme|Chicme|Chic me|chic me|Chic Me|chic Me|ChicMe|chicMe)/g, ()=>{return window?.floderName || 'Chicme'});
+            return text
         },
         removeHeader(text){
             let before = text.split("<header>")[0];

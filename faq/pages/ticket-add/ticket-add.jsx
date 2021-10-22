@@ -687,7 +687,6 @@ class TicketAdd extends React.Component {
     // 链接中有传值-ticket列表点击过来的
     if(params){
       id = params.id ? params.id : ''
-      console.log(params?.id)
       this.setState({
         isApp: params.isShowApp ? params.isShowApp : 'false'
       })
@@ -1119,7 +1118,7 @@ class TicketAdd extends React.Component {
         questionTypeChange({
           operaId: this.state.order.id,
           questionTypeCode: this.state.subject,
-          questionType: questionTypeList.find(q => q.value == this.state.subject)?.label
+          questionType: questionTypeList.find(q => q.value == this.state.subject).label
         }).then(res => {
           // console.log(res)
           if(res && res.code == 200){

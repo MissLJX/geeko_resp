@@ -6,7 +6,7 @@ import Accordion from '../components/accordion.jsx'
 import {questions} from '../data'
 import {Link} from 'react-router-dom'
 import {FormattedMessage, injectIntl} from 'react-intl'
-import '../css/style.css'
+// import '../css/style.css'
 
 const Support = class extends React.Component {
 	constructor (props) {
