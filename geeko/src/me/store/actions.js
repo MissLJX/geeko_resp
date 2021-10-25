@@ -443,7 +443,7 @@ const actions = {
     getIndexLoginMessageCode({commit},code){
         return api.getMessage(code).then(result => {
             // commit(types.GET_INDEX_MESSAGE_CODE_LOGIN,result.message);
-            return result.message;
+            return result && result.message;
         });
     },
     getMyPreferenceMessageCode({commit},code){

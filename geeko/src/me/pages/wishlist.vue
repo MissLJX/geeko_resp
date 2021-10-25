@@ -21,7 +21,7 @@
             :request-id="wishlistEvent.requestId"
             :experiment-id="wishlistEvent.experimentId"
          />
-        <product-wishlist v-if="!ifEdit" :products="products" :loading="loading" :finished="finished" @listing="listingHandle" @refresh="refreshHandle"/>
+        <product-wishlist v-if="!ifEdit" :scrollable="false" :products="products" :loading="loading" :finished="finished" @listing="listingHandle" @refresh="refreshHandle"/>
         <loading v-if="ifloding"></loading>
     </div>
 </template>
@@ -92,6 +92,16 @@
                 this.fdMessageShow = false;
             },3000);
         },
+        mounted(){
+            // 全选曝光
+            if(window.GeekoSensors){
+                window.GeekoSensors.Track('ELExpose', {
+                    page_sort:"wish list",
+                    page_type: "收藏夹页",
+                    button_pv:"all",
+                })
+            }
+        },
         computed: {
             products(){
                 return store.getters['me/wishProducts']
@@ -144,9 +154,28 @@
             },
             editHandle(){
                 this.ifEdit = false;
+
+                // 全选点击
+                if(window.GeekoSensors){
+                    window.GeekoSensors.Track('ELClick', {
+                        page_sort:"wish list",
+                        page_type: "收藏夹页",
+                        button_pv:"all",
+                    })
+                }
             },
             cancelHandle(){
                 this.ifEdit = true;
+
+                // 多选取消点击
+                if(window.GeekoSensors){
+                    window.GeekoSensors.Track('ELClick', {
+                        page_sort:"wish list",
+                        page_type: "收藏夹页",
+                        button_pv:"cancel_multi",
+                        is_success:true
+                    })
+                }
             }
         },
         components: {

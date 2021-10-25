@@ -21,7 +21,7 @@
                 <div class="img">
                     <img :src="imageUrl" :class="{'gray':isSoldOutProduct}"/>
 
-                    <span class="view-more" @click.prevent="suspendShow = true;" v-if="!suspendShow && suspendSumShow">
+                    <span class="view-more" @click.prevent="clickViewMore" v-if="!suspendShow && suspendSumShow">
                         <span>...</span>
                     </span>
 
@@ -167,12 +167,41 @@
                             _this.likeHandle();
                             _this.suspendSumShow = false;
                             _this.$store.dispatch('closeConfirm');
+
+                            // 单删确认点击
+                            if(window.GeekoSensors){
+                                window.GeekoSensors.Track('ELClick', {
+                                    page_sort:"wish list",
+                                    page_type: "收藏夹页",
+                                    button_pv:"delete_confirm",
+                                    is_success:true
+                                })
+                            }
                         },
                         no: function () {
                             _this.$store.dispatch('closeConfirm');
+
+                            // 单删取消点击
+                            if(window.GeekoSensors){
+                                window.GeekoSensors.Track('ELClick', {
+                                    page_sort:"wish list",
+                                    page_type: "收藏夹页",
+                                    button_pv:"cancel",
+                                    is_success:true
+                                })
+                            }
                         }
                     }
                 })
+
+                // 单删点击
+                if(window.GeekoSensors){
+                    window.GeekoSensors.Track('ELClick', {
+                        page_sort:"wish list",
+                        page_type: "收藏夹页",
+                        button_pv:"delete",
+                    })
+                }
             },
             addToCart(productId){
                 this.$store.dispatch("globalLoadingShow",true);
@@ -182,13 +211,60 @@
                 });
             },
             findSimlar(productId){
+                // 相似款点击
+                if(window.GeekoSensors){
+                    window.GeekoSensors.Track('ELClick', {
+                        page_sort:"wish list",
+                        page_type: "收藏夹页",
+                        button_pv:"findsimilar",
+                    })
+                }
                 this.$router.push({name:"relation-products",params:{productId}});
+            },
+            clickViewMore(){
+                this.suspendShow = true;
+
+                // 更多选择点击
+                if(window.GeekoSensors){
+                    window.GeekoSensors.Track('ELClick', {
+                        page_sort:"wish list",
+                        page_type: "收藏夹页",
+                        button_pv:"more_choice",
+                    })
+                }
+
+                // 相似款曝光
+                if(window.GeekoSensors){
+                    window.GeekoSensors.Track('ELExpose', {
+                        page_sort:"wish list",
+                        page_type: "收藏夹页",
+                        button_pv:"findsimilar",
+                    })
+                }
+
+                // 单删曝光
+                if(window.GeekoSensors){
+                    window.GeekoSensors.Track('ELExpose', {
+                        page_sort:"wish list",
+                        page_type: "收藏夹页",
+                        button_pv:"delete",
+                    })
+                }
             }
         },
         mounted(){
             let value = this.$refs.oftenProduct;
             if (window.productListObserver) {
                 window.productListObserver.observe(value)
+            }
+
+            // 更多选择曝光
+            if(window.GeekoSensors){
+                window.GeekoSensors.Track('ELExpose', {
+                    page_sort:"wish list",
+                    page_type: "收藏夹页",
+                    button_pv:"more_choice",
+                })
             }
         }
     }

@@ -245,6 +245,7 @@
                 let arr = [];
                 let num = 0;
                 let index = 0;
+                console.log("this.result",this.result);
                 for (let i=0;i<this.result.length;i++){
                     if(typeof this.result[i][2] === 'object'){
                         let count = 0;
@@ -258,6 +259,7 @@
                         }
                     }
                 }
+                console.log("index",index);
                 // 最少有一个尺码
                 if(this.result[index]){
                     var i = 0;

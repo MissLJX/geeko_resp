@@ -38,7 +38,8 @@ const config = {
   resolveLoader: {
     modules: [setPath('../node_modules')]
   },
-  mode: 'production',
+  // mode: 'production',
+  mode:"development",
   devServer: {
     historyApiFallback: true,
     hot: true,

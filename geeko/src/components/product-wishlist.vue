@@ -39,7 +39,7 @@
             padding: 5px;
             float:left;
         }
-        margin-bottom: 56px;
+        margin-bottom: 66px;
         padding: 0 5px;
     }
     .b-relative{
@@ -140,6 +140,10 @@
             finished:{
                 type: Boolean,
                 default: false
+            },
+            scrollable:{
+                type:Boolean,
+                default:true
             }
         },
         components: {
@@ -166,6 +170,16 @@
                         }
                     }
                 });
+
+                // 多选确认点击
+                if(window.GeekoSensors){
+                    window.GeekoSensors.Track('ELClick', {
+                        page_sort:"wish list",
+                        page_type: "收藏夹页",
+                        button_pv:"delete_multi",
+                        is_success:true
+                    })
+                }
             },
             clearAllHandle(){
                 this.tipMsg = 'Are you sure you want to remove all expired products?'

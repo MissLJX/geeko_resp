@@ -340,7 +340,7 @@
                     message:message1518,
                     isClick:true
                 };
-                this.swiperData.push(obj1);
+                message1518 && this.swiperData.push(obj1);
             }else if(this.isLogin && !this.me.isConfirmEmail){
                 let message1543 = await store.dispatch("me/getIndexLoginMessageCode","M1543");
                 let obj2 = {
