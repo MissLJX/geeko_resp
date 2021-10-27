@@ -37,7 +37,7 @@
             <ul v-else style="display: flex;margin-top: 20px;">
                 <li><span class="statusColor" :style="{backgroundColor : status_color}"></span>{{orderdetail.statusView}}</li>
                 <li v-if="orderpro.trackingId && !orderpro.logisticsSupplierWebsiteURL" style="line-height: 30px;margin-left: 20px;cursor:pointer;" ><a style="text-decoration: underline" @click="checkPackageLogistics(orderpro.status,orderpro.trackingId)">{{$t('track')}} ></a></li>
-                <li v-if="orderpro.logisticsSupplierWebsiteURL" style="line-height: 30px;margin-left: 20px;cursor:pointer;" ><a style="text-decoration: underline" :href="orderpro.logisticsSupplierWebsiteURL"></a></li>
+                <li v-if="orderpro.logisticsSupplierWebsiteURL" style="line-height: 30px;margin-left: 20px;cursor:pointer;" ><a style="text-decoration: underline" :href="orderpro.logisticsSupplierWebsiteURL">{{$t('track')}} ></a></li>
             </ul>
             <div v-if="orderdetail && orderdetail.logistics && orderdetail.logistics.packages && orderdetail.logistics.packages.length > 1" class="packageStatus">
                 <p><span class="statusColor" :style="{backgroundColor : status_color}"></span>{{orderpro.statusView}}</p>
@@ -75,8 +75,8 @@
                             <span>{{$t("repurchase")}}</span>
                         </div>
 
-                        <!-- <div v-if="confirmedOrder" class="returns-btn" @click="showTicket(orderdetail.id)">Return</div> -->
-                        <div v-if="orderpro.status === constant.PACKAGE_STATUS_DELIVERED" class="returns-btn" @click="showTicket(orderdetail.id)">Return</div>
+                        <div v-if="confirmedOrder" class="returns-btn" @click="showTicket(orderdetail.id)">Return</div>
+                        <!-- <div v-if="orderpro.status === constant.PACKAGE_STATUS_DELIVERED && isNormalOrder" class="returns-btn" @click="showTicket(orderdetail.id)">Return</div> -->
                     </td>
                 </tr>
             </table>
@@ -232,7 +232,8 @@
                 selected:0,
                 isRequired:false,
                 isReturnLogistics:false,
-                constant:constant
+                constant:constant,
+                isNormalOrder: true,
             }
         },
         components: {
@@ -533,6 +534,7 @@
                 this.shipping = this.orderdetail.shippingDetail
                 this.shippingstate = this.orderdetail.shippingDetail.state
                 this.shippingcountry =this.orderdetail.shippingDetail.country
+                // this.isNormalOrder = this.orderdetail.type !== 1
                 this.isloding = false
             }).catch((e) => {
                 console.error(e);

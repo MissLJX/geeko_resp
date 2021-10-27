@@ -7,7 +7,7 @@ const setPath = function (folderName) {
     return path.join(__dirname, folderName);
 };
 
-
+const {CleanWebpackPlugin} = require('clean-webpack-plugin')
 
 const extractHTML = new HtmlWebpackPlugin({
     title: 'Me',
@@ -42,7 +42,8 @@ const config = {
     devtool: '#eval-source-map',
     plugins: [
         extractHTML,
-        new VueLoaderPlugin()
+        new VueLoaderPlugin(),
+        new CleanWebpackPlugin()
     ],
     devtool: 'source-map',
     module: {
@@ -67,6 +68,6 @@ const config = {
                 use: ['vue-style-loader','css-loader', 'sass-loader']
             }
         ]
-    }
+    },
 };
 module.exports = config;
