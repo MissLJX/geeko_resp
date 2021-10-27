@@ -435,5 +435,9 @@ export default {
         s_shipped: 'ENVIADO',
         s_confirmed: 'CONFIRMADO',
         s_canceled: 'CANCELADO',
+        s_all_c: 'Kaikki',
+        s_wating_for_replied: 'Odotetaan vastausta',
+        s_replied: 'Vastattu',
+        s_resolved: 'Ratkaistu'
     }
 }

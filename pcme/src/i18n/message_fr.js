@@ -439,5 +439,9 @@ export default {
         s_expédié : 'EXPÉDIÉ',
         s_confirmed : 'CONFIRMÉ',
         s_canneled : 'ANNULÉ',
+        s_all_c: 'Tous',
+        s_wating_for_replied: 'En attente de réponse',
+        s_replied: 'Répondu',
+        s_resolved: 'Résolu'
     }
 }

@@ -355,7 +355,7 @@ const question16 = {
 					In our system, the billing address will be automatically generated to the same as shipping address.
 				</p>
 				<p>
-					In our system, the billing address will be automatically generated to the same as shipping address.
+					We will only ship the order to the shipping address you left on our website.
 				</p>
 				<p>
 					Therefore, the shipping address should be same with the billing address, if you want to change the billing address, you need call your ban for a  check.
@@ -1244,7 +1244,7 @@ const question61 = {
 					Our Return Policy is as follows:
 				</p>
 				<p>
-					You may return all products within 30 days(from the date you receive the items) of delivery for exchange or refund. The original bag and tag should be intact , not be damaged.
+					You may return all products within 14 days(from the date you receive the items) of delivery for exchange or refund. The original bag and tag should be intact , not be damaged.
 				</p>
 				<p>
 					For the returned item(s), we will arrange a replacement or issue a refund after we have checked your return tracking number or receipt.
@@ -1394,7 +1394,7 @@ const question68 = {
 			</header>
 			<section>
 				<p>
-					If you received a defective item, please log into your Chic Me account and submit a ticket within 30 days of delivery. When submitting the ticket, please provide a description of the defected item and a few pictures. Please make sure to submit a ticket before returning anything so we can process the trouble for you.
+					If you received a defective item, please log into your Chic Me account and submit a ticket within 14 days of delivery. When submitting the ticket, please provide a description of the defected item and a few pictures. Please make sure to submit a ticket before returning anything so we can process the trouble for you.
 				</p>
 			</section>
 		</article>
@@ -1411,7 +1411,7 @@ const question69 = {
 			</header>
 			<section>
 				<p>
-					If you have received a stained, defective item or an item you did not order, please contact Customer Support by submitting a ticket within 30 days of delivery. Please make sure to submit a ticket before returning anything so we can process the trouble for you,When submitting the ticket, please provide a description of the item, SKU number and a few pictures.
+					If you have received a stained, defective item or an item you did not order, please contact Customer Support by submitting a ticket within 14 days of delivery. Please make sure to submit a ticket before returning anything so we can process the trouble for you,When submitting the ticket, please provide a description of the item, SKU number and a few pictures.
 				</p>
 			</section>
 		</article>

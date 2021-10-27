@@ -440,5 +440,9 @@ export default {
         s_shipped: 'SHIPPED',
         s_confirmed: 'CONFIRMED',
         s_canceled: 'CANCELED',
+        s_all_c: 'All',
+        s_wating_for_replied: 'Wating for Replied',
+        s_replied: 'Replied',
+        s_resolved: 'Resolved'
     }
 }

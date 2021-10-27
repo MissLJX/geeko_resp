@@ -62,7 +62,7 @@ export default {
             this.$emit("inputChange", e.target.value)
         },
         serachItemClick(e){
-            console.log(e)
+            // console.log(e)
             this.$emit("relatedSearch",e.id)
         },
         inputSearch(){

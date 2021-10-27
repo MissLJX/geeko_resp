@@ -441,5 +441,9 @@ export default {
         s_shipped: 'SHIPPED',
         s_confirmed: 'CONFIRMED',
         s_canceled: 'CANCELED',
+        s_all_c: 'Todos',
+        s_wating_for_replied: 'Esperando por uma resposta',
+        s_replied: 'Replied',
+        s_resolved: 'Resolvido' 
     }
 }

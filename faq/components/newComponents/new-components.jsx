@@ -314,7 +314,12 @@ const NewOrderList1 = class extends React.Component {
             color: #999;
         `
 
-  const getMoney = money => money ? (money.unit + money.amount) : ''
+  const getMoney = money => money ?
+                            money.currency ? 
+                            money.currency == 'EUR' ? 
+                            (money.amount + money.unit) :
+                            (money.unit + money.amount) : 
+                            (money.unit + money.amount) : ''
 
   
   

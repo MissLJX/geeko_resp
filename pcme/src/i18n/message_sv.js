@@ -442,5 +442,9 @@ export default {
         s_shipped: 'SHIPPED',
         s_confirmed: 'CONFIRMED',
         s_canceled: 'CANCELED',
+        s_all_c: 'Alla',
+        s_wating_for_replied: 'Väntar på svar',
+        s_replied: 'Svarade',
+        s_resolved: 'Löstade'
     }
 }

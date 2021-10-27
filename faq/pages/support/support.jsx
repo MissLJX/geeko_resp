@@ -194,11 +194,14 @@ class Support extends React.PureComponent{
         
 
         const toContact = () => {
+            console.log(checkLogin)
             if(!checkLogin){
                 checkLogin = true
                 list(0,20).then(({result: items}) => {
+                    checkLogin = false
                     this.props.history.push({pathname: `${(window.ctx || '')}/support/contact-us`})
                 }).catch((err)=>{
+                    checkLogin = false
                     // console.log(err)
                     if(err.code == 300){
                         if(window.isShowApp=="true"){
@@ -207,7 +210,7 @@ class Support extends React.PureComponent{
                             window.location.href = `${(window.ctx || '')}/i/login?redirectUrl=${(window.ctx || '')}/support/contact-us`
                         }
                     }
-                    checkLogin = false
+                    
                 })
             }
             

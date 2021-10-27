@@ -501,6 +501,7 @@ const QuestionSubmitBtn = styled.div`
   cursor: pointer;
 `
 
+var bodyScrollTop = document.body.scrollTop;
 class TicketAdd extends React.Component {
   constructor (props) {
     super(props)
@@ -563,7 +564,8 @@ class TicketAdd extends React.Component {
       const formData = new FormData()
       formData.append('operaId', this.state.order.id)
       // formData.append('questionTypeCode', this.state.subject)
-      formData.append('message', this.state.message || '-')
+      // formData.append('message', this.state.message || '-')
+      formData.append('message', '-')
       formData.append('imageFiles', file)
       sendImage(formData).then(({result}) => {
         const file = files[0]
@@ -574,7 +576,7 @@ class TicketAdd extends React.Component {
 
         replies.push({
           sender: 'buyers',
-          message: this.state.message,
+          message: '',
           imageUrls: [src],
           date: new Date().getTime()
         })
@@ -594,7 +596,7 @@ class TicketAdd extends React.Component {
         
         this.setState({
           ticket,
-          message: '',
+          // message: '',
         })
 
         this.initScroll()
@@ -678,12 +680,14 @@ class TicketAdd extends React.Component {
   
   componentWillMount () {
     this.getQuestionType()
+    // this.iosPageUpListener()
     // 接受传值的参数
     const params = this.props.history.location.state
     let id;
     // 接受url传值的参数
-    const urlParams = this.props.history.location.pathname ? this.props.history.location.pathname.split("/")[3] : '';
+    const urlParams = this.props.history.location.pathname ? this.props.history.location.pathname.split("/")[1] != 'wanna' ? this.props.history.location.pathname.split("/")[3] : '' : '';
     // console.log(this.props.location, urlParams)
+    // console.log(this.props.history.location.pathname.split("/"))
     // 链接中有传值-ticket列表点击过来的
     if(params){
       id = params.id ? params.id : ''
@@ -716,6 +720,18 @@ class TicketAdd extends React.Component {
       }
     }
   }
+
+  pageScroll(){
+    console.log('sss')
+    setTimeout(()=>{
+      console.log(this.textAreaRef)
+    },200)
+  }
+  
+  // ios手机监听页面被顶起的情况
+  // iosPageUpListener(){
+  //   console.log(this.$ref)
+  // }
 
   getMsgByLocalData(){
     getByOrderId(JSON.parse(localStorage.__order).id).then(({result}) => {
@@ -796,7 +812,7 @@ class TicketAdd extends React.Component {
   getMsgByLinkId(id){
     getByOrderId(id).then(({result}) => {
       const {ticket, order, cusomerName, headSculptureUrl} = result
-      // console.log(result)
+      console.log(result)
       // console.log(ticket.ticketReplies.slice(-1)[ticket.ticketReplies.slice(-1).length - 1]['sender'])
       if(ticket){
         if(ticket.ticketReplies.slice(-1)[ticket.ticketReplies.slice(-1).length - 1]['sender'] == "buyers"){
@@ -1085,7 +1101,13 @@ class TicketAdd extends React.Component {
     }
 
     const GroupReplyHtmls = (props) => {
-      const replies = props.replies
+      const replies = [];
+      props.replies.forEach(r => {
+        if(r.message || r.imageUrls || r.reasonCode || r.reason){
+          replies.push(r)
+        }
+      })
+      console.log(replies)
       return <Fragment>
           
           <ChatRows>
@@ -1115,10 +1137,41 @@ class TicketAdd extends React.Component {
 
     const selectChange= (e) => {
         // console.log(e)
+        // return
+        if(this.state.subject == e){
+          let qTReasonList = questions.find(q => q.value == e) && questions.find(q => q.value == e).reasons ? 
+                               questions.find(q => q.value == e).reasons : []
+            // 保证每个问题只展示一次
+            let isShowed = this.state.ticket ? this.state.ticket.ticketReplies.find(t => t.questionTypeCode == e && (t.reasonCode || t.message || t.imageUrls)) : false
+            if((qTReasonList.length > 0 || e == questions[questions.length - 1].value) && !isShowed){
+              // 判断description是否是必填
+              if(e == questions[questions.length - 1].value){
+                this.setState({
+                  descriptionRequired: true
+                })
+              } else {
+                this.setState({
+                  descriptionRequired: false
+                })
+              }
+              this.setState({
+                questionMaskShow: true,
+                questionsReason: qTReasonList,
+              })
+            }
+            
+            
+            setTimeout(()=>{
+              var top = document.getElementById("top")
+              top.scrollIntoView()
+              top = null
+            })
+          return
+        }
         questionTypeChange({
           operaId: this.state.order.id,
-          questionTypeCode: this.state.subject,
-          questionType: questionTypeList.find(q => q.value == this.state.subject).label
+          questionTypeCode: e,
+          questionType: questionTypeList.find(q => q.value == e).label
         }).then(res => {
           // console.log(res)
           if(res && res.code == 200){
@@ -1128,7 +1181,7 @@ class TicketAdd extends React.Component {
             let qTReasonList = questions.find(q => q.value == e) && questions.find(q => q.value == e).reasons ? 
                                questions.find(q => q.value == e).reasons : []
             // 保证每个问题只展示一次
-            let isShowed = this.state.ticket ? this.state.ticket.ticketReplies.find(t => t.questionTypeCode == e) : false
+            let isShowed = this.state.ticket ? this.state.ticket.ticketReplies.find(t => t.questionTypeCode == e && (t.reasonCode || t.message || t.imageUrls)) : false
             if((qTReasonList.length > 0 || e == questions[questions.length - 1].value) && !isShowed){
               // 判断description是否是必填
               if(e == questions[questions.length - 1].value){
@@ -1493,10 +1546,15 @@ class TicketAdd extends React.Component {
             {/* 输入提交 */}
             <ChatInputBox>
                 <ChatInput>
-                    <TextInput style={{boxShadow: this.state.messageInvalid&&'inset 0 0 1px red !important',borderColor: this.state.messageInvalid&&'red !important'}}
+                    <TextInput innerRef={(ta)=>{this.textAreaRef=ta}}
+                               style={{boxShadow: this.state.messageInvalid&&'inset 0 0 1px red !important',borderColor: this.state.messageInvalid&&'red !important'}}
                                placeholder={intl.formatMessage({id:"textareaPlaceHolder"})}
                                onChange={(evt) => {textareaChange(evt) }} 
                                value={this.state.message} 
+                               onFocus={()=>{
+                                 document.body.scrollTop = document.body.scrollHeight
+                               }}
+                               onBlur={() => {document.body.scrollTop = bodyScrollTop}}
                               >
                     </TextInput>
                 </ChatInput>
@@ -1563,9 +1621,12 @@ class TicketAdd extends React.Component {
                                   </div>
                                   
                                   <ReasonTextArea 
+                                      innerRef={(ta)=>{this.reasonTextAreaRef=ta}}
                                       show={item.value === questionsReason[questionsReason.length - 1].value && item.isSelected} 
                                       value={questionObject.questionTypeInput}
                                       id={"reasonInput"+item.label}
+                                      onFocus={()=>{document.body.scrollTop = document.body.scrollHeight}}
+                                      onBlur={() => {document.body.scrollTop = bodyScrollTop}}
                                       onChange={(e)=>{
                                         this.setState({
                                           questionObject:{

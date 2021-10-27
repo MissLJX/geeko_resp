@@ -1250,7 +1250,7 @@ const question61 = {
 					Unsere Rückgaberecht ist wie folgt:
 				</p>
 				<p>
-				    Sie können alle Produkte innerhalb von 30 Tagen (ab dem Datum, an dem Sie die Artikel erhalten haben) der Lieferung zurückgeben, um sie umzutauschen oder zurück zu erstatten. Die originale Tasche und das Etikett sollten intakt sein, nicht beschädigt sein.
+				    Sie können alle Produkte innerhalb von 14 Tagen (ab dem Datum, an dem Sie die Artikel erhalten haben) der Lieferung zurückgeben, um sie umzutauschen oder zurück zu erstatten. Die originale Tasche und das Etikett sollten intakt sein, nicht beschädigt sein.
 			    </p>
 				<p>
 					Für die zurückgeschickten Artikel werden wir eine Ersatzlieferung arrangieren oder eine Rückerstattung veranlassen, nachdem wir Ihre Rückverfolgungsnummer oder Ihren Kaufbeleg überprüft haben.
@@ -1403,7 +1403,7 @@ const question68 = {
 			</header>
 			<section>
 				<p>
-					Wenn Sie einen defekten Artikel erhalten haben, melden Sie sich bitte in Ihrem Chic Me Account an und senden Sie innerhalb von 30 Tagen nach Lieferung ein Ticket. Bitte geben Sie bei der Einreichung des Tickets eine Beschreibung des defekten Artikels und ein paar Bilder an. Bitte stellen Sie sicher, dass Sie ein Ticket einreichen, bevor Sie etwas zurücksenden, damit wir das Problem für Sie lösen können.
+					Wenn Sie einen defekten Artikel erhalten haben, melden Sie sich bitte in Ihrem Chic Me Account an und senden Sie innerhalb von 14 Tagen nach Lieferung ein Ticket. Bitte geben Sie bei der Einreichung des Tickets eine Beschreibung des defekten Artikels und ein paar Bilder an. Bitte stellen Sie sicher, dass Sie ein Ticket einreichen, bevor Sie etwas zurücksenden, damit wir das Problem für Sie lösen können.
 				</p>
 			</section>
 		</article>
@@ -1420,7 +1420,7 @@ const question69 = {
 			</header>
 			<section>
 				<p>
-					Wenn Sie einen fleckigen, defekten Artikel oder einen Artikel erhalten haben, den Sie nicht bestellt haben, wenden Sie sich bitte an den Customer Support, indem Sie innerhalb von 30 Tagen nach Lieferung ein Ticket einreichen. Bitte senden Sie vor der Rücksendung ein Ticket, damit wir die Probleme für Sie beheben können. Bitte geben Sie bei der Übermittlung des Tickets eine Beschreibung des Artikels, die Artikelnummer und einige Bilder an.
+					Wenn Sie einen fleckigen, defekten Artikel oder einen Artikel erhalten haben, den Sie nicht bestellt haben, wenden Sie sich bitte an den Customer Support, indem Sie innerhalb von 14 Tagen nach Lieferung ein Ticket einreichen. Bitte senden Sie vor der Rücksendung ein Ticket, damit wir die Probleme für Sie beheben können. Bitte geben Sie bei der Übermittlung des Tickets eine Beschreibung des Artikels, die Artikelnummer und einige Bilder an.
 				</p>
 			</section>
 		</article>

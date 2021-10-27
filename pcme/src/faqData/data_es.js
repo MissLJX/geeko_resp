@@ -1246,7 +1246,7 @@ const question61 = {
 					Nuestra política de devolución es la siguiente:
 				</p>
 				<p>
-					Puede devolver todos los productos dentro de los 30 días (desde la fecha en que recibió los artículos). La bolsa y la etiqueta originales deben estar intactas, no deben dañarse.
+					Puede devolver todos los productos dentro de los 14 días (desde la fecha en que recibió los artículos). La bolsa y la etiqueta originales deben estar intactas, no deben dañarse.
 				</p>
 				<p>
 					Para los artículos devueltos, arreglaremos un reemplazo o emitiremos un reembolso.
@@ -1396,7 +1396,7 @@ const question68 = {
 			</header>
 			<section>
 				<p>
-					Si recibió un artículo defectuoso, inicie sesión en su cuenta de Chic Me y envíelo dentro de los 30 días posteriores a la entrega. Al enviar el ticket, proporcione una descripción del artículo defectuoso y algunas imágenes. Asegúrese de enviar un ticket para que podamos procesar el problema por usted.
+					Si recibió un artículo defectuoso, inicie sesión en su cuenta de Chic Me y envíelo dentro de los 14 días posteriores a la entrega. Al enviar el ticket, proporcione una descripción del artículo defectuoso y algunas imágenes. Asegúrese de enviar un ticket para que podamos procesar el problema por usted.
 				</p>
 			</section>
 		</article>
@@ -1413,7 +1413,7 @@ const question69 = {
 			</header>
 			<section>
 				<p>
-					Si recibió una entrega dentro de los 30 días posteriores a la entrega, comuníquese con el servicio al cliente. Número de SKU y algunas imágenes. Asegúrese de tener el problema para usted cuando envíe el boleto, el número de SKU y algunas fotos.
+					Si recibió una entrega dentro de los 14 días posteriores a la entrega, comuníquese con el servicio al cliente. Número de SKU y algunas imágenes. Asegúrese de tener el problema para usted cuando envíe el boleto, el número de SKU y algunas fotos.
 				</p>
 			</section>
 		</article>

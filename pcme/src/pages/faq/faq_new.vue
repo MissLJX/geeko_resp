@@ -3,7 +3,7 @@
         <!-- faqzzz -->
         <!--  -->
         <div class="questionInput">
-            <div class="howTxt">{{$t("support.s_help_you")}}</div>
+            <div class="howTxt">{{$t("support.s_help_you")}}--new</div>
             <div class="howInput">
                 <faq-input
                     :inputValue="searchValue"
@@ -27,7 +27,7 @@
 
         <div class="questionsOfType">
             <div class="questionsItem" v-for="(item,index) in groupSelectQuestions" :key="index" @click="goToDetail(item)">
-                {{checkHeader(item.title)}}
+                {{item.title}}
                 <transition name="q-content">
                     <div class="questionContent" v-if="item.id == questionContent.id" v-html="questionContent.richText"> 
 
@@ -42,6 +42,7 @@
 <script>
 import FaqInput  from '../../components/faq/faq-input.vue'
 import {questions, secondaries} from '../../faqData/index'
+import {questions_new} from '../../faqData/new_data'
 import * as utils from '../../utils/geekoutil'
 import _ from 'lodash'
 
@@ -52,6 +53,7 @@ export default {
             searchValue: '',
             secondaries,
             questions,
+            questions_new,
             searchList: [],
             groupQuestions: [],
             groupSelectQuestions: [],
@@ -110,13 +112,17 @@ export default {
                    this.$router.currentRoute.query.type :'order';
 
         if(this.questions.length > 0){
-            let list = [];
+            let list = [], list_new=[];
             for(let i = 0; i < this.questions.length; i++){
                 if(this.questions[i].id!='root-7' && this.questions[i].id != 'root-8'){
                     list = list.concat(this.questions[i]['questions'])
                     this.groupQuestions = this.groupQuestions.concat(this.questions[i])
                 }
             }
+            this.questions_new.forEach(q => {
+                list_new = list_new.concat(q.children)
+            })
+            console.log(list_new)
             this.searchList = list
             // console.log(this.groupQuestions)
             this.changeType(type)
@@ -137,28 +143,22 @@ export default {
         changeType(e){
             // console.log(e)
             this.questionType = e
-            this.groupSelectQuestions = this.groupQuestions.find(q => q.title.toLowerCase() == e)?.questions || []
+            this.groupSelectQuestions = this.groupQuestions.find(q => q.title.toLowerCase() == e).questions
         },
         relatedSearch(e){
-            // console.log("F: ",e)
-            // console.log(utils.ROUTER_PATH_ME)
-            // console.log(this.$router)
-            // window.location.href = '/me/m/faq/search-reasult-detail'
-            // return 
+            console.log("F: ",e)
             this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/faq/search-result-detail', query: {showId: e} })
         },
         goToDetail(item){
-            if(item?.id !== this.questionContent?.id){
+            if(item.id !== this.questionContent.id){
                 this.questionContent = _.cloneDeep(item);
                 this.questionContent.richText = this.removeHeader(item.richText);
                 // console.log(this.questionContent.richText)
             }
         },
-        checkHeader(text){
-            text = text.replace(/(chicme|Chicme|Chic me|chic me|Chic Me|chic Me|ChicMe|chicMe)/g, ()=>{return window?.floderName || 'Chicme'});
-            return text
-        },
         removeHeader(text){
+            // 1. 加上article和selection标签
+             
             let before = text.split("<header>")[0];
             let after = text.split("</header>")[1];
             let noHeader = before + after;
@@ -169,7 +169,7 @@ export default {
             // 3. >https://www.chicme.com/fs/shipping-policy-pc 替换成 shipping-policy
             noHeader = noHeader.replace(/(>https:\/\/www.chicme.com\/fs\/wholesale-program-pc)/, ()=>{return '>wholesale-program'});
             // 4. chicme、Chicme、chic me、Chic me 替换为 window.floderName
-            noHeader = noHeader.replace(/(chicme|Chicme|Chic me|chic me|Chic Me|chic Me|ChicMe|chicMe)/g, ()=>{return window?.floderName || 'Chicme'});
+            noHeader = noHeader.replace(/(chicme|Chicme|Chic me|chic me|Chic Me|chic Me|ChicMe|chicMe)/g, ()=>{return window.floderName? window.floderName: 'Chicme'});
             // 5. 图片宽度设为最宽300px
             noHeader = noHeader.replace(/(<img)/g, ()=>{return "<img style='width: 300px;'"})
             // 文字字体设置

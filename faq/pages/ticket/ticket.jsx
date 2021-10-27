@@ -138,15 +138,17 @@ class TicketList extends React.PureComponent{
                     <TicketItemBox key={index} onClick={()=>link(item)}>
                         <TicketLineOne>
                             <div style={{display:'flex'}}>
-                                {intl.formatMessage({id:'ticketid'})} <span style={{display:'inline-block',width:'65%',overflow:'hidden',marginLeft:'8px',textOverflow:'ellipsis'}}>{item.id}</span>
+                                {intl.formatMessage({id:'ticketid'})} 
                             </div>
+                            <span style={{display:'inline-block',flex:1,overflow:'hidden',marginLeft:'8px',textOverflow:'ellipsis'}}>{item.id}</span>
                             <TicketTime>
                                 {new Date(item.openDate).toLocaleDateString()}
                             </TicketTime>
                         </TicketLineOne>
                         <TicketContent>
                             {
-                                item.ticketReplies.slice(-1)[item.ticketReplies.slice(-1).length - 1].message
+                                item.ticketReplies.slice(-1)[item.ticketReplies.slice(-1).length - 1].message ? 
+                                item.ticketReplies.slice(-1)[item.ticketReplies.slice(-1).length - 1].message : '-'
                             }
                         </TicketContent>
                         {

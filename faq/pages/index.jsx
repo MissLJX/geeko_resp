@@ -40,11 +40,12 @@ import en_L from '../i18n/en'
 addLocaleData([...en, ...zh, ...fr, ...de, ...pt, ...es])
 
 const messages = {}
-// window.lang = 'en'
+// window.lang = 'abb'
 const lang = (window.lang || 'en').substring(0, 2)
+const langList = ['en', 'de', 'fr','es','pt']
 
 messages['en'] = en_L
-messages['zh'] = zh_L
+// messages['zh'] = zh_L
 
 messages['de'] = de_L
 messages['fr'] = fr_L
@@ -64,7 +65,7 @@ if(window.isApp == 'true'){
 
 export default () => (
 
-  <IntlProvider locale={lang} messages={messages[lang]}>
+  <IntlProvider locale={langList.indexOf(lang) === -1 ? 'en' :lang} messages={langList.indexOf(lang) === -1 ? messages['en'] :messages[lang]}>
     <div>
       <BrowserRouter>
       <Switch>

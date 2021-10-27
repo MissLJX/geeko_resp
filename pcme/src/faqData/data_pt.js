@@ -1248,7 +1248,7 @@ const question61 = {
 					Nossa Política de Devolução é a seguinte:
 				</p>
 				<p>
-					Você pode devolver todos os produtos dentro de 30 dias (a partir da data de recebimento dos itens) da entrega para troca ou reembolso. A embalagem original e a etiqueta devem estar intactas, não danificadas.
+					Você pode devolver todos os produtos dentro de 14 dias (a partir da data de recebimento dos itens) da entrega para troca ou reembolso. A embalagem original e a etiqueta devem estar intactas, não danificadas.
 				</p>
 				<p>
 					Para o (s) item (ns) devolvido (s), nós providenciaremos uma substituição ou emitiremos um reembolso após termos verificado o seu número de rastreamento de retorno ou recibo.
@@ -1398,7 +1398,7 @@ const question68 = {
 			</header>
 			<section>
 				<p>
-					Se você recebeu um item com defeito, faça o login na sua conta Chic Me e envie um ticket dentro de 30 dias da entrega. Ao enviar o ticket, forneça uma descrição do item com defeito e algumas fotos. Por favor, certifique-se de enviar um ticket antes de devolver qualquer coisa para que possamos resolver o problema para você.
+					Se você recebeu um item com defeito, faça o login na sua conta Chic Me e envie um ticket dentro de 14 dias da entrega. Ao enviar o ticket, forneça uma descrição do item com defeito e algumas fotos. Por favor, certifique-se de enviar um ticket antes de devolver qualquer coisa para que possamos resolver o problema para você.
 				</p>
 			</section>
 		</article>
@@ -1415,7 +1415,7 @@ const question69 = {
 			</header>
 			<section>
 				<p>
-					Se você recebeu um item defeituoso manchado ou um item que você não pediu, entre em contato com o Suporte ao Cliente enviando um ticket dentro de 30 dias da entrega. Por favor, certifique-se de enviar um ticket antes de devolver qualquer coisa para que possamos resolver o problema para você, Ao enviar o ticket, forneça uma descrição do item, número do SKU e algumas fotos.
+					Se você recebeu um item defeituoso manchado ou um item que você não pediu, entre em contato com o Suporte ao Cliente enviando um ticket dentro de 14 dias da entrega. Por favor, certifique-se de enviar um ticket antes de devolver qualquer coisa para que possamos resolver o problema para você, Ao enviar o ticket, forneça uma descrição do item, número do SKU e algumas fotos.
 				</p>
 			</section>
 		</article>

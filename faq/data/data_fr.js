@@ -1247,7 +1247,7 @@ const question61 = {
 					Notre politique de retour est la suivante:
 				</p>
 				<p>
-					Vous pouvez retourner tous les produits dans les 30 jours (à compter de la date à laquelle vous recevez les articles). Le sac et l'étiquette d'origine doivent être intacts et ne pas être endommagés.
+					Vous pouvez retourner tous les produits dans les 14 jours (à compter de la date à laquelle vous recevez les articles). Le sac et l'étiquette d'origine doivent être intacts et ne pas être endommagés.
 				</p>
 				<p>
 					Pour le (s) article (s) retourné (s), nous organiserons un remplacement ou un remboursement.
@@ -1397,7 +1397,7 @@ const question68 = {
 			</header>
 			<section>
 				<p>
-					Si vous avez reçu un article défectueux, veuillez vous connecter à votre compte Chic Me et le soumettre dans les 30 jours suivant la livraison. Lors de la soumission du billet, veuillez fournir une description de l'article défectueux et quelques photos. S'il vous plaît assurez-vous de soumettre à un billet afin que nous puissions traiter le problème pour vous.
+					Si vous avez reçu un article défectueux, veuillez vous connecter à votre compte Chic Me et le soumettre dans les 14 jours suivant la livraison. Lors de la soumission du billet, veuillez fournir une description de l'article défectueux et quelques photos. S'il vous plaît assurez-vous de soumettre à un billet afin que nous puissions traiter le problème pour vous.
 				</p>
 			</section>
 		</article>
@@ -1414,7 +1414,7 @@ const question69 = {
 			</header>
 			<section>
 				<p>
-					Si vous avez reçu une livraison dans les 30 jours suivant la livraison, veuillez contacter le service clientèle. Numéro de SKU et quelques photos Veuillez vous assurer que vous avez le problème pour vous, lors de la soumission du ticket, du numéro de SKU et de quelques photos.
+					Si vous avez reçu une livraison dans les 14 jours suivant la livraison, veuillez contacter le service clientèle. Numéro de SKU et quelques photos Veuillez vous assurer que vous avez le problème pour vous, lors de la soumission du ticket, du numéro de SKU et de quelques photos.
 				</p>
 			</section>
 		</article>

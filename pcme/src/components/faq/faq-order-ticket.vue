@@ -26,45 +26,50 @@
         </div>
         <div class="s-cd" >
             <div v-if="ticket_con">
-                <div v-for="(item, index) in ticket_con.ticketReplies" :key="index">
-                    <div class="buyer" v-if="item.sender === 'buyers' && (item.message || item.imageUrls)">
-                        <div class="el-me-headerImage" :style="{'background-image': 'url('+headerImage+'),url('+baseHeaderUrl+')' }"></div>
-                        <div class="cet" >
-                            <div class="sanjiao-right"></div>
-                            <div v-if="!(item.questionType && item.questionTypeCode) && item.message!=='-'" class="txtcontent">{{item.message}}</div>
-                            <div v-if="!(item.questionType && item.questionTypeCode) && item.imageUrls" class="imgarea">
-                                <img v-for="(img, index) in item.imageUrls" :key="index" :src="imgUrl(img)">
-                            </div>
-                            <div v-if="item.questionType && item.questionTypeCode && item.reasonCode">
-                                <div v-if="item.reason" style="color:#222;font-size: 14px;border-bottom:2px solid #999;padding-bottom:5px;text-align:left;">
-                                    {{item.reason}}
-                                </div>
-                                <div v-if="item.message" style="color:#222;font-size: 14px;border-bottom:2px solid #999;padding:5px 0;text-align:left;">
-                                    {{item.message}}
-                                </div> 
-                                <div v-if="item.imageUrls" style="display: flex; align-items:center;justify-content:flex-start;">
-                                    <template >
-                                        <img v-for="(img, index) in item.imageUrls" 
-                                            :key="index" 
-                                            :src="imgUrl(img)" 
-                                            style="width:60px;height: 60px;margin: 7px 12px 0 0;" />
-                                    </template>
+                <div v-for="(item1, index1) in groupReplies" :key="index1">
+                    <div v-for="(item, index) in item1['replies']" :key="index">
+                        <div v-if="index == 0" style="text-align:center;color:#999;font-size:12px;height:20px;line-height:40px;">{{item1['date']}}</div>
+                        <div class="buyer" v-if="item.sender === 'seller'">
+                            <div class="el-me-headerImage fl" :style="{'background-image': 'url('+sellerheaderImage+')' }" style="margin-right: 10px"></div>
+                            <div class="cet fl">
+                                <div class="sanjiao-left"></div>
+                                <div class="txtcontent">
+                                    <p>{{item.message}}</p>
+                                    <div class="imgarea" v-if="item.imageUrls">
+                                        <img v-for="(img, index) in item.imageUrls" :key="index" :src="imgUrl(img)">
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="buyer" v-if="item.sender === 'sellers'">
-                        <div class="el-me-headerImage fl" :style="{'background-image': 'url('+sellerheaderImage+'' }" style="margin-right: 10px"></div>
-                        <div class="cet fl">
-                            <div class="sanjiao-left"></div>
-                            <div class="txtcontent">
-                                <p>{{item.message}}</p>
-                                <div class="imgarea" v-if="item.imageUrls">
+                        <div class="buyer" v-if="item.sender === 'buyers' && (item.reasonCode || item.message || item.imageUrls)">
+                            <div class="el-me-headerImage" :style="{'background-image': 'url('+headerImage+'),url('+baseHeaderUrl+')' }"></div>
+                            <div class="cet" >
+                                <div class="sanjiao-right"></div>
+                                <div v-if="!(item.questionType && item.questionTypeCode) && item.message!=='-'" class="txtcontent">{{item.message}}</div>
+                                <div v-if="!(item.questionType && item.questionTypeCode) && item.imageUrls" class="imgarea">
                                     <img v-for="(img, index) in item.imageUrls" :key="index" :src="imgUrl(img)">
                                 </div>
+                                <div v-if="item.questionType && item.questionTypeCode && (item.reasonCode || item.message)">
+                                    <div v-if="item.reason" style="color:#222;font-size: 14px;border-bottom:2px solid #999;padding-bottom:5px;text-align:left;">
+                                        {{item.reason}}
+                                    </div>
+                                    <div v-if="item.message" style="color:#222;font-size: 14px;border-bottom:2px solid #999;padding:5px 0;text-align:left;">
+                                        {{item.message}}
+                                    </div> 
+                                    <div v-if="item.imageUrls" style="display: flex; align-items:center;justify-content:flex-start;">
+                                        <template >
+                                            <img v-for="(img, index) in item.imageUrls" 
+                                                :key="index" 
+                                                :src="imgUrl(img)" 
+                                                style="width:60px;height: 60px;margin: 7px 12px 0 0;" />
+                                        </template>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    
+                    
                 </div>
                 <!-- 预计回复时间 -->
                 <div class="responseTime" v-if="ticket_con.ticketReplies && ticket_con.ticketReplies[ticket_con.ticketReplies.length - 1].sender === 'buyers'">
@@ -344,7 +349,6 @@
         "value":"09",
         "label":"Others"
       }]
-
     export default {
         props:{
             fromOrder:{
@@ -389,10 +393,12 @@
             'faq-select': faqSelect,
         },
         mounted(){
-            console.log(this.ticket_sub)
             this.$store.dispatch("getQuestionType")
-            if(this.fromOrder){
-                this.selectChange({value:'04'})
+            if(localStorage._orderId){
+                setTimeout(()=>{
+                    this.selectChange({value:'04'})
+                }, 200)
+                localStorage.removeItem('_orderId')
             }
         },
         watch:{
@@ -426,7 +432,7 @@
             },
             canBeRated(){
                 if(this.ticket_con && this.ticket_con.questionTypeCode){
-                    console.log(this.ticket_con)
+                    // console.log(this.ticket_con)
                     this.selected = this.ticket_con.questionTypeCode
                 } else {
                     this.selected = '666'
@@ -436,7 +442,7 @@
                     this.rateData.message = this.ticket_con && this.ticket_con.ticketRateService ? this.ticket_con.ticketRateService.message : ''
                     this.rateData.id = this.ticket_con ? this.ticket_con.id: null
                 }
-                return this.ticket_con && this.ticket_con.canBeRated
+                return false
             },
             addRated(){
                 if(this.ticket_con && this.ticket_con.reviewFlag === 1){
@@ -465,23 +471,51 @@
                 } else {
                     return this.questionType
                 }
+            },
+            groupReplies(){
+                var replies = this.ticket_con.ticketReplies
+                var groups = _.groupBy(replies, function (obj) {
+                    return new Date(obj.date).toLocaleDateString() + " " + new Date(obj.date).toTimeString().substr(0, 5);
+                })
+                // console.log(groups)
+                let output = []
+                Object.keys(groups).forEach(g => {
+                    let obj = {
+                        date: g,
+                        replies: []
+                    }
+                    groups[g].forEach(group => {
+                        if(group.message || group.imageUrls || group.reasonCode || group.reason){
+                            obj.replies.push(group)
+                        }
+                    })
+                    if(obj.replies.length > 0){
+                        output.push(obj)
+                    }   
+                    obj = ''
+                })
+                // console.log(output)
+                return output
             }
         },
         methods: {
             selectChange(e){
-                console.log(e)
-                this.$store.dispatch("addTicket",{
-                    operaId: this.ticket_con.operaId,
-                    questionType: e.label,
-                    questionTypeCode: e.value
-                }).then(res=>{
-                    this.selected = e.value
+                if(!this.ticket_con.operaId && !this.ticketid){
+                    this.questionMaskShow = false
+                    return
+                }
+                // console.log(e.value)
+                // console.log(this.selected)
+                if(this.selected == e.value){
                     this.isRequired = false
                     let qTReasonList = this.usedQuestionType.find(q => q.value == e.value).reasons ? 
                                     this.usedQuestionType.find(q => q.value == e.value).reasons :
                                     []
                     let showed = this.ticket_con ? 
-                                this.ticket_con?.ticketReplies ? this.ticket_con?.ticketReplies.find(t => t.questionTypeCode == e.value) : false : false
+                                this.ticket_con?.ticketReplies ? 
+                                this.ticket_con?.ticketReplies.find(t => 
+                                        t.questionTypeCode == e.value && (t.reasonCode || t.message || t.imageUrls)
+                                ) : false : false
                     if((qTReasonList.length > 0 || e.value == this.usedQuestionType[this.usedQuestionType.length - 1].value) && !showed){
                         if(e.value == this.usedQuestionType[this.usedQuestionType.length - 1].value){
                             this.descriptionRequired = true
@@ -490,13 +524,45 @@
                         }
                         this.questionsReason = qTReasonList
                         this.questionMaskShow = true
-                        console.log(this.questionsReason) 
+                        // console.log(this.questionsReason) 
+                    }
+                    return
+                }
+                var fData = new FormData();
+                if(this.ticket_con?.operaId){
+                    fData.append("operaId",this.ticket_con.operaId)
+                }else{
+                    fData.append("operaId",this.ticketid)
+                }
+                // console.log(fData.operaId)
+                fData.append("questionType",e.label)
+                fData.append("questionTypeCode",e.value)
+                this.$store.dispatch("addTicket",fData).then(res=>{
+                    this.selected = e.value
+                    this.isRequired = false
+                    let qTReasonList = this.usedQuestionType.find(q => q.value == e.value).reasons ? 
+                                    this.usedQuestionType.find(q => q.value == e.value).reasons :
+                                    []
+                    let showed = this.ticket_con ? 
+                                this.ticket_con?.ticketReplies ? 
+                                this.ticket_con?.ticketReplies.find(t => 
+                                        t.questionTypeCode == e.value && (t.reasonCode || t.message || t.imageUrls)
+                                ) : false : false
+                    if((qTReasonList.length > 0 || e.value == this.usedQuestionType[this.usedQuestionType.length - 1].value) && !showed){
+                        if(e.value == this.usedQuestionType[this.usedQuestionType.length - 1].value){
+                            this.descriptionRequired = true
+                        } else {
+                            this.descriptionRequired = false
+                        }
+                        this.questionsReason = qTReasonList
+                        this.questionMaskShow = true
+                        // console.log(this.questionsReason) 
                     }
                 })
                 
             },
             getDate(paymentTime){
-                console.log(paymentTime)
+                // console.log(paymentTime)
                 if(paymentTime == null){
                     return '-'
                 }
@@ -511,12 +577,12 @@
                 }
                 var files = this.files;
                 var myFiles = evt.target.files;
-                console.log("myFiles",myFiles);
+                // console.log("myFiles",myFiles);
                 var maxSize = 10485760;
                 if(myFiles[0].size<maxSize){
                     var formData = new FormData(this.$refs.imageLoader);
                     formData.append("message", '-')
-                    if(this.ticket_con){
+                    if(this.ticket_con?.operaId){
                         formData.append("operaId",this.ticket_con.operaId)
                     }else{
                         formData.append("operaId",this.ticketid)
@@ -531,7 +597,7 @@
 
                     this.$store.dispatch('addTicket', formData).then(() => {
                         this.$store.dispatch('getTicket',this.ticketid)
-                        this.msg = ''
+                        // this.msg = ''
                     }).catch(e => {
                         alert(e.result)
                     })
@@ -547,7 +613,7 @@
             },
             sendticket(){
                 let formData = new FormData();
-                console.log(this.msg)
+                // console.log(this.msg)
                 if(!this.msg) {
                     return ''
                 }else{
@@ -559,7 +625,7 @@
                 }else{
                     formData.append("operaId",this.ticket.id)
                 }
-                console.log(this.selected)
+                // console.log(this.selected)
                 if(this.selected && this.selected !== '666'){
                     // formData.append("questionTypeCode",this.selected)
                 }else{
@@ -578,7 +644,7 @@
             },
             starClickHandle(data){
                 this.rateData.rate = data;
-                console.log(this.rateData.rate)
+                // console.log(this.rateData.rate)
             },
             sendRateData(flag){
                 let formData = new FormData();
@@ -620,7 +686,7 @@
 
                 Promise.all(imgFileList).then(results => {
                     const formData = new FormData()
-                    if(this.ticket_con){
+                    if(this.ticket_con?.operaId){
                         formData.append("operaId",this.ticket_con.operaId)
                     }else{
                         formData.append("operaId",this.ticketid)
@@ -635,7 +701,7 @@
                         const {file} = item
                         formData.append('imageFiles', file)
                     })
-                    console.log(formData)
+                    // console.log(formData)
                     this.$store.dispatch('addTicket', formData).then(() => {
                         this.$store.dispatch('getTicket',this.ticketid)
                         this.msg = ''
@@ -676,7 +742,7 @@
                     fileList = fileList.splice(0,3);
                 }
                 
-                console.log(fileList)
+                // console.log(fileList)
                 fileList.forEach(item => {
                     var src = typeof item == 'string' ?
                             item:
@@ -715,7 +781,7 @@
                 })
                 let qr = qList.find(q => q.value == e.value)
                 qr.isSelected = true
-                console.log(this.questionsReason[this.questionsReason.length - 1].value)
+                // console.log(this.questionsReason[this.questionsReason.length - 1].value)
                 if(qr.value == this.questionsReason[this.questionsReason.length - 1].value) {
                     this.descriptionRequired = true
                 } else {
@@ -828,6 +894,7 @@
     .orderTicket{
         width: 500px;
         height: 100vh;
+        background: #fff;
         position: fixed;
         right: 0;
         top: 0;

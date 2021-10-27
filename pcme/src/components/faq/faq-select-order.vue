@@ -33,7 +33,7 @@
                 <div class="order-info">
                     <span>{{item.orderItems.length}} {{$t("support.s_items")}}</span>
                     <span class="i-price">
-                        {{$t('total')}} <span >{{item.orderItems[0].price.unit}}{{item.orderItems[0].price.amount}}</span>
+                        {{$t('total')}} <span >{{unitFormate(item.orderTotal)}}</span>
                     </span>
                 </div>
             </div>
@@ -51,6 +51,8 @@
     import {mapGetters,mapActions } from 'vuex';
     import * as utils from '../../utils/geekoutil';
     import faqSelect from './faq-select.vue';
+
+    let a = 1;
 
     export default {
         data() {
@@ -156,12 +158,16 @@
             })
         },
         mounted(){
+            // console.log(a)
             this.$refs.viewBox.addEventListener('scroll',this.scrollHandle)
         },
         methods: {
             ...mapActions([
                 'changeTab','getM1135','loadAll'
             ]),
+            unitFormate(price){
+                return utils.unitprice(price)
+            },
             status_color(status) {
                 return utils.STATUS_COLOR(status)
             },
@@ -171,7 +177,7 @@
             },
             selectChange(e){
                 if(this.isloded){
-                    console.log(e)
+                    // console.log(e)
                     this.selectValue = e.value;
                     this.changeList(e.value);
                     
@@ -233,6 +239,7 @@
             },
             submitTicket(){
                 if(this.pickedOrder){
+                    a+=1;
                     this.$emit('showTicket',this.pickedOrder)
                 }else{
                     alert("please choose an order");

@@ -31,7 +31,10 @@
                             <td @click="showTicket(ticket.operaId)"><span>{{ticket.id}}</span></td>
                             <td>{{getlastmsg(ticket.ticketReplies)}}</td>
                             <td>{{getDate(ticket.openDate)}}</td>
-                            <td :class="{'resolved':ticket.state==0,'waiting':ticket.state===1,'replied':ticket.state===2}">{{getStatus(ticket.state)}}</td>
+                            <td :class="{'statusTr':true,'resolved':ticket.state==3,'waiting':ticket.state===1,'replied':ticket.state===2}">
+                                <span :class="{'statusCircle': true, 'resolvedC':ticket.state==3,'waitingC':ticket.state===1,'repliedC':ticket.state===2}"></span>
+                                {{getStatus(ticket.state)}}
+                            </td>
                         </tr>
                     </template>
                 </table>
@@ -65,6 +68,7 @@
     import orderTicket from '../../components/faq/faq-order-ticket.vue';
     import faqSelect from '../../components/faq/faq-select.vue';
 
+    let urlIdShowed = false;
     export default {
         data(){
           return{
@@ -74,19 +78,19 @@
               showHelp:false,
               tabList: [
                     {
-                        label: 'All',
+                        label: this.$t("support.s_all_c"),
                         value: '0',
                     },
                     {
-                        label: 'Wating for Replied',
+                        label: this.$t("support.s_wating_for_replied"),
                         value: '1',
                     },
                     {
-                        label: 'Replied',
+                        label: this.$t("support.s_replied"),
                         value: '2',
                     },
                     {
-                        label: 'Resolved',
+                        label: this.$t("support.s_resolved"),
                         value: '3',
                     },
               ],
@@ -160,15 +164,18 @@
                 this.$store.dispatch('getTicket',data).then(()=>{
                     this.isShowTicket = true;
                 })
+                // this.$router.replace({name: '/me/m/faq/support-ticket'})
             },
             getStatus(ticketstatus){
                 switch (ticketstatus) {
                     case 1:
-                        return 'Wating for Replied'
+                        return this.$t("support.s_wating_for_replied")
                     case 2:
-                        return 'Replied'
-                    case 0:
-                        return 'Resolved'
+                        return this.$t("support.s_replied")
+                    case 3:
+                        return this.$t("support.s_resolved")
+                    default:
+                        return this.$t("support.s_wating_for_replied")
                 }
             },
             getlastmsg(replies){
@@ -198,14 +205,13 @@
             this.$store.dispatch('getTickets', {skip:0,state:0})
             // 
             // console.log(this.$router.currentRoute.query?.id)
-            if(this.$router.currentRoute.query?.id){
-                this.showTicket(this.$router.currentRoute.query?.id)
-                this.fromOrder = true
-            } else {
-                this.fromOrder = false
-            }
+            
         },
         mounted(){
+            if(this.$router.currentRoute.query?.id && !urlIdShowed){
+                localStorage._orderId = this.$router.currentRoute.query?.id
+                this.showTicket(localStorage._orderId)
+            }
             // console.log(this.$refs.scrollBox)
             let scrollBox = this.$refs.scrollBox;
             scrollBox.addEventListener("scroll", (e)=>this.boxScroll(e), true)
@@ -218,6 +224,22 @@
 </script>
 
 <style scoped lang="scss">
+    .statusCircle{
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        margin-right: 8px;
+        border-radius: 50%;
+    }
+    .resolvedC{
+        background-color: #999 !important;
+    }
+    .repliedC{
+        background-color: #57b936 !important;
+    }
+    .waitingC{
+        background-color: #f9a646 !important;
+    }
     .resolved{
         color: #999 !important;
     }

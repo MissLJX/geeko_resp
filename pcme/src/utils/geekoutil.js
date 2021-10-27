@@ -40,10 +40,13 @@ export const enDate = (date) => {
     return month_names[date.getMonth()] + ' ' + date.getDate() + ',' + date.getFullYear()
 }
 export const enTime = (date) => {
-    return enDate(date) + ' '+ date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()
+    return enDate(date) + ' '+ addZero(date.getHours()) + ':' + addZero(date.getMinutes()) + ':' + addZero(date.getSeconds())
 }
 export const enYear = (date) => {
     return date.getFullYear()
+}
+export const addZero = (num) => {
+    return num > 9 ? num : '0'+num 
 }
 
 export const enMonth = (date) => {
