@@ -75,8 +75,8 @@
                             <span>{{$t("repurchase")}}</span>
                         </div>
 
-                        <div v-if="confirmedOrder" class="returns-btn" @click="showTicket(orderdetail.id)">Return</div>
-                        <!-- <div v-if="orderpro.status === constant.PACKAGE_STATUS_DELIVERED && isNormalOrder" class="returns-btn" @click="showTicket(orderdetail.id)">Return</div> -->
+                        <!-- <div v-if="confirmedOrder" class="returns-btn" @click="showTicket(orderdetail.id)">Return</div> -->
+                        <div v-if="orderpro.status === constant.PACKAGE_STATUS_DELIVERED && isNormalOrder" class="returns-btn" @click="showTicket(orderdetail.id)">Return</div>
                     </td>
                 </tr>
             </table>
