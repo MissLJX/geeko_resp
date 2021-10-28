@@ -37,7 +37,7 @@
             <ul v-else style="display: flex;margin-top: 20px;">
                 <li><span class="statusColor" :style="{backgroundColor : status_color}"></span>{{orderdetail.statusView}}</li>
                 <li v-if="orderpro.trackingId && !orderpro.logisticsSupplierWebsiteURL" style="line-height: 30px;margin-left: 20px;cursor:pointer;" ><a style="text-decoration: underline" @click="checkPackageLogistics(orderpro.status,orderpro.trackingId)">{{$t('track')}} ></a></li>
-                <li v-if="orderpro.logisticsSupplierWebsiteURL" style="line-height: 30px;margin-left: 20px;cursor:pointer;" ><a style="text-decoration: underline" :href="orderpro.logisticsSupplierWebsiteURL">{{$t('track')}} ></a></li>
+                <li v-if="orderpro.logisticsSupplierWebsiteURL" style="line-height: 30px;margin-left: 20px;cursor:pointer;" ><a style="text-decoration: underline" :href="orderpro.logisticsSupplierWebsiteURL"></a></li>
             </ul>
             <div v-if="orderdetail && orderdetail.logistics && orderdetail.logistics.packages && orderdetail.logistics.packages.length > 1" class="packageStatus">
                 <p><span class="statusColor" :style="{backgroundColor : status_color}"></span>{{orderpro.statusView}}</p>
@@ -80,7 +80,7 @@
                     </td>
                 </tr>
             </table>
-            <div class="pricecon">
+            <div class="pricecon" v-if="isNormalOrder">
                 <div class="pricecon1" v-if="orderdetail">
                     <p class="p-price">ItemTotal:<span class="price">{{paymentItemTotal}}</span></p>
                     <p class="p-price" v-if="orderdetail.shippingPrice && orderdetail.shippingPrice.amount!=='0'">{{$t('shipping')}}:<span class="price">{{shippingprice}}</span></p>
@@ -534,7 +534,7 @@
                 this.shipping = this.orderdetail.shippingDetail
                 this.shippingstate = this.orderdetail.shippingDetail.state
                 this.shippingcountry =this.orderdetail.shippingDetail.country
-                // this.isNormalOrder = this.orderdetail.type !== 1
+                this.isNormalOrder = this.orderdetail.type !== 1
                 this.isloding = false
             }).catch((e) => {
                 console.error(e);
