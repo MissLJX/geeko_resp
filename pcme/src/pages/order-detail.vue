@@ -97,7 +97,7 @@
                 <div class="r-btn black" v-if="orderdetail.hasReturnLabel">
                     <a :href="getReturnLabel()">{{$t('returnlabel')}}</a>
                 </div>
-                <div class="r-btn w-btn" v-if="orderdetail.id && orderdetail.isTrackingBtnShow && orderdetail.fulfillmentStatus === constant.TOTAL_STATUS_SHIPPED">
+                <div class="r-btn w-btn" v-if="orderdetail.fulfillmentStatus !== constant.TOTAL_STATUS_UNPAID">
                     <span  @click="checkLogistics(orderdetail.id)">{{$t('track')}}</span>
                 </div>
 

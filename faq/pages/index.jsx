@@ -52,6 +52,7 @@ messages['fr'] = fr_L
 
 messages['es'] = es_L
 messages['pt'] = pt_L
+
 // 清空打印
 console.log = () =>{
 

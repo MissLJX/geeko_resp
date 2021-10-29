@@ -5,7 +5,7 @@
         </div>
 
         <div class="_bd">
-            <router-link to="/me/m/tickets">
+            <router-link to="/me/m/faq/support-ticket">
                 <p style="font-size:25px;" class="iconfont">&#xe6e8;</p>
                 <p>{{$t("ticket")}}</p>
             </router-link>

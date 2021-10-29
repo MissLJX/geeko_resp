@@ -21,7 +21,7 @@
                 <div class="questionContent" v-html="removeHeader(content)"></div>
                 <div class="contactUsBox" id="pc_support_question_detail_contact_us">
                     <span>{{$t("support.s_have_questions")}}</span>
-                    <span class="click">{{$t("support.s_contact_us")}}</span>
+                    <span class="click">{{$t("support.s_onlineHelp")}}</span>
                 </div>
             </div>
             <div class="questionRelatedBox">

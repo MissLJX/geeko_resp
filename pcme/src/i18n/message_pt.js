@@ -394,7 +394,7 @@ export default {
     support:{
         // Apoio, suporte
         s_support: 'suporte',
-        s_onlineHelp: 'OnlineHelp',
+        s_onlineHelp: 'Online Help',
         s_clickToFaq: 'Para todas as perguntas e respostas, clique em nosso',
         s_faq: 'faq',
         s_page: 'página',

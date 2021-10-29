@@ -171,7 +171,7 @@
                             name:this.$t("index.support"),
                             routerName:"support",
                             // routerPath:"/fs/contact-us-pc",
-                            routerPath: "/me/m/tickets",
+                            routerPath: "/me/m/support",
                             // pushButton:true
                         },
                         {

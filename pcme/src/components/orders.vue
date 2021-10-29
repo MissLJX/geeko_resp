@@ -59,7 +59,7 @@
                         <div class="tbl-cell v-m w-180 tx-c">
                             <p>{{item.fulfillmentStatusView}}</p>
                             <p class="detail cur-p" @click="checkDetail(item.id)">{{$t('detail')}}</p>
-                            <p class="detail cur-p" v-if="item.id && item.isTrackingBtnShow && item.fulfillmentStatus === constant.TOTAL_STATUS_SHIPPED"  @click="checkLogistics(item.id)">{{$t('track')}}</p>
+                            <p class="detail cur-p" v-if="item.fulfillmentStatus !== constant.TOTAL_STATUS_UNPAID"  @click="checkLogistics(item.id)">{{$t('track')}}</p>
                         </div>
                         <div class="tbl-cell v-m w-190 tx-c">
                             <div class="pos-rel">

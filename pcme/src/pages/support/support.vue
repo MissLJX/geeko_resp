@@ -20,7 +20,7 @@
             <div class="contactTxt">{{$t("support.s_not_found")}}</div>
             <div class="contactBtn" id="pc_support_home_customer_us">
                 <span class="iconfont">&#xe6e9;</span>
-                <span >{{$t("support.s_customer_us")}}</span> 
+                <span >{{$t("support.s_onlineHelp")}}</span> 
             </div>
         </div>
   </div>

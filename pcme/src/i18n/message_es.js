@@ -390,6 +390,9 @@ export default {
         },
     },
     support:{
+        s_support: 'soporte',
+        s_onlineHelp: 'Ayuda en línea',
+        s_clickToFaq: 'Para todas las preguntas y respuestas, haga clic en nuestro',
         s_faq: 'faq',
         s_page: 'página',
         s_not_found: "¿No encuentra la respuesta que busca?",

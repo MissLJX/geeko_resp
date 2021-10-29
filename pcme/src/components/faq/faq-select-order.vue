@@ -298,7 +298,7 @@
             }
         }
         .s-bd{
-            background-color: #fff;
+            background-color: #f6f6f6;
             height:calc(100vh - 125px);
             overflow-y: auto;
 
@@ -322,14 +322,16 @@
                 letter-spacing: 0px;
                 color: #666666;
                 text-align: center;
-                margin-top: 24px;
-                margin-bottom: 12px;
+                padding-top: 24px;
+                background: #fff;
+                padding-bottom: 12px;
             }
 
             .faqSelect{
-                width: 428px;
+                width: 100%;
                 text-align: left;
-                margin: 0 auto;
+                padding: 0 36px 10px;
+                background: #fff;
             }
 
             .st-select{
@@ -341,15 +343,16 @@
             }
 
             .item-order{
-                margin-top: 30px;
                 overflow-x: auto;
-                overflow-y:hidden;
-                padding: 0 24px;
+                overflow-y: hidden;
+                padding: 20px 24px 0;
+                background: #fff;
+                margin-bottom: 6px;
 
                 .order-hd{
                     text-align: left;
                     // padding: 0 24px;
-                    line-height: 20px;
+                    line-height: 16px;
                     font-family: Roboto-Regular;
                     font-size: 14px;
                     font-weight: normal;
@@ -357,7 +360,7 @@
                     letter-spacing: 0px;
                     color: #222222;
                     p{
-                        line-height: 20px;
+                        line-height: 16px;
                     }
                     p:first-child{
                         float: left;
@@ -378,7 +381,7 @@
 
             .img-con{
                 // padding-left: 22px;
-                padding-top: 20px;
+                padding-top: 14px;
                 text-align: left;
                 border-bottom: 1px solid #e6e6e6;
                 padding-bottom: 20px;
@@ -425,7 +428,7 @@
                 label {
                     position: absolute;
                     // left: 20px;
-                    top: 60px;
+                    top: 50px;
                     width: 20px;
                     height: 20px;
                     border-radius: 50%;
@@ -455,7 +458,7 @@
             }
             .order-info{
                 // padding: 25px;
-                border-bottom: 6px solid #eeeeee;
+                // border-bottom: 6px solid #eeeeee;
                 display: flex;
                 align-items: center;
                 justify-content: space-between;

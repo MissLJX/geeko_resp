@@ -392,7 +392,7 @@ export default {
     support:{
         // Unterstützung
         s_support: 'unterstützen',
-        s_onlineHelp: 'OnlineHilfe',
+        s_onlineHelp: 'Online Hilfe',
         s_clickToFaq: 'Für alle Fragen und Antworten klicken Sie bitte auf unsere ',
         s_faq: 'faq',
         s_page: 'Seite',

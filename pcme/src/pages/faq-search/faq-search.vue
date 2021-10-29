@@ -35,7 +35,7 @@
                 <div :class="{'noData':true, 'noMarginTop': searchAboutList.length == 0}">
                     <div class="contactUsBox">
                         <span>{{$t("support.s_have_questions")}}</span>
-                        <span class="click" @click="toContact()">{{$t("support.s_contact_us")}}</span>
+                        <span class="click" @click="toContact()">{{$t("support.s_onlineHelp")}}</span>
                     </div>
                 </div>
             </div>
