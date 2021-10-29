@@ -173,7 +173,7 @@
 
                 // 多选确认点击
                 if(window.GeekoSensors){
-                    window.GeekoSensors.Track('ELClick', {
+                    window.GeekoSensors.Track('WishlistButtonClick', {
                         page_sort:"wish list",
                         page_type: "收藏夹页",
                         button_pv:"delete_multi",

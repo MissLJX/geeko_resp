@@ -170,7 +170,7 @@
 
                             // 单删确认点击
                             if(window.GeekoSensors){
-                                window.GeekoSensors.Track('ELClick', {
+                                window.GeekoSensors.Track('WishlistButtonClick', {
                                     page_sort:"wish list",
                                     page_type: "收藏夹页",
                                     button_pv:"delete_confirm",
@@ -183,7 +183,7 @@
 
                             // 单删取消点击
                             if(window.GeekoSensors){
-                                window.GeekoSensors.Track('ELClick', {
+                                window.GeekoSensors.Track('WishlistButtonClick', {
                                     page_sort:"wish list",
                                     page_type: "收藏夹页",
                                     button_pv:"cancel",
@@ -196,7 +196,7 @@
 
                 // 单删点击
                 if(window.GeekoSensors){
-                    window.GeekoSensors.Track('ELClick', {
+                    window.GeekoSensors.Track('WishlistButtonClick', {
                         page_sort:"wish list",
                         page_type: "收藏夹页",
                         button_pv:"delete",
@@ -213,7 +213,7 @@
             findSimlar(productId){
                 // 相似款点击
                 if(window.GeekoSensors){
-                    window.GeekoSensors.Track('ELClick', {
+                    window.GeekoSensors.Track('WishlistButtonClick', {
                         page_sort:"wish list",
                         page_type: "收藏夹页",
                         button_pv:"findsimilar",
@@ -226,7 +226,7 @@
 
                 // 更多选择点击
                 if(window.GeekoSensors){
-                    window.GeekoSensors.Track('ELClick', {
+                    window.GeekoSensors.Track('WishlistButtonClick', {
                         page_sort:"wish list",
                         page_type: "收藏夹页",
                         button_pv:"more_choice",
@@ -235,7 +235,7 @@
 
                 // 相似款曝光
                 if(window.GeekoSensors){
-                    window.GeekoSensors.Track('ELExpose', {
+                    window.GeekoSensors.Track('WishlistButtonExpose', {
                         page_sort:"wish list",
                         page_type: "收藏夹页",
                         button_pv:"findsimilar",
@@ -244,7 +244,7 @@
 
                 // 单删曝光
                 if(window.GeekoSensors){
-                    window.GeekoSensors.Track('ELExpose', {
+                    window.GeekoSensors.Track('WishlistButtonExpose', {
                         page_sort:"wish list",
                         page_type: "收藏夹页",
                         button_pv:"delete",
@@ -260,7 +260,7 @@
 
             // 更多选择曝光
             if(window.GeekoSensors){
-                window.GeekoSensors.Track('ELExpose', {
+                window.GeekoSensors.Track('WishlistButtonExpose', {
                     page_sort:"wish list",
                     page_type: "收藏夹页",
                     button_pv:"more_choice",

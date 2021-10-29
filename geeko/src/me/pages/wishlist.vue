@@ -95,7 +95,7 @@
         mounted(){
             // 全选曝光
             if(window.GeekoSensors){
-                window.GeekoSensors.Track('ELExpose', {
+                window.GeekoSensors.Track('WishlistButtonExpose', {
                     page_sort:"wish list",
                     page_type: "收藏夹页",
                     button_pv:"all",
@@ -157,7 +157,7 @@
 
                 // 全选点击
                 if(window.GeekoSensors){
-                    window.GeekoSensors.Track('ELClick', {
+                    window.GeekoSensors.Track('WishlistButtonClick', {
                         page_sort:"wish list",
                         page_type: "收藏夹页",
                         button_pv:"all",
@@ -169,7 +169,7 @@
 
                 // 多选取消点击
                 if(window.GeekoSensors){
-                    window.GeekoSensors.Track('ELClick', {
+                    window.GeekoSensors.Track('WishlistButtonClick', {
                         page_sort:"wish list",
                         page_type: "收藏夹页",
                         button_pv:"cancel_multi",
