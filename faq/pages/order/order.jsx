@@ -101,14 +101,14 @@ const Order = class extends React.Component {
 
     const selectChange = (e) => {
         // console.log(e)
-        this.props.history.replace(`${(window.ctx || '')}/support/order/${e}`)
+        this.props.history.replace(`${(window.ctx || '')}/me/m/faq/order/${e}`)
     }
 
     const linkTo = () => {
       if(!localStorage.__order || localStorage.__order=='null' || localStorage.__order=='{}'){
-        // this.props.history.push({pathname: `${(window.ctx || '')}/support/ticket`})
+        // this.props.history.push({pathname: `${(window.ctx || '')}/me/m/faq/ticket`})
       } else {
-        this.props.history.push({pathname: `${(window.ctx || '')}/support/ticketadd`})
+        this.props.history.push({pathname: `${(window.ctx || '')}/me/m/faq/support-ticket`})
       }
     }
 
@@ -119,8 +119,8 @@ const Order = class extends React.Component {
 
             <OrderList id="orderScroll">
                 <Switch>
-                    <Route path={`${window.ctx||''}/support/order/:page`} component={OrdersPath}/>
-                    <Route path={`${window.ctx||''}/support/order`} component={OrdersPath}/>
+                    <Route path={`${window.ctx||''}/me/m/faq/order/:page`} component={OrdersPath}/>
+                    <Route path={`${window.ctx||''}/me/m/faq/order`} component={OrdersPath}/>
                 </Switch>
             </OrderList> 
 

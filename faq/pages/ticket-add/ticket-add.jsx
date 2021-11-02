@@ -1,6 +1,6 @@
 import React, { createRef, Fragment } from 'react'
 import {Link} from 'react-router-dom'
-import {get, getByOrderId, sendImage, sendTicket, getQuestionType, questionTypeChange, sendRate} from '../../api'
+import {get, getByOrderId, sendImage, sendTicket, getQuestionType, questionTypeChange, sendRate, getByCode} from '../../api'
 import styled from 'styled-components'
 import _ from 'lodash'
 import {FormattedMessage, injectIntl} from 'react-intl'
@@ -711,13 +711,21 @@ class TicketAdd extends React.Component {
   
   componentWillMount () {
     this.getQuestionType()
-    // this.iosPageUpListener()
     // 接受传值的参数
     const params = this.props.history.location.state
     let id;
     // 接受url传值的参数
-    const urlParams = this.props.history.location.pathname ? this.props.history.location.pathname.split("/")[1] != 'wanna' ? this.props.history.location.pathname.split("/")[3] : '' : '';
-    // console.log(this.props.location, urlParams)
+    let urlParams = this.props.history.location.pathname ? this.props.history.location.pathname.split("/")[1] != 'wanna' ? this.props.history.location.pathname.split("/")[5] : '' : '';
+    if(!urlParams){
+      urlParams = this.props.history.location.search ? 
+                  this.props.history.location.search.indexOf('id') != -1 ?
+                  this.props.history.location.search.split('=')[1]:'':''
+    }
+    // 客服邮件跳转过来携带code
+    const customerCode = this.props.history.location.search ? 
+                         this.props.history.location.search.indexOf('code') != -1 ?
+                         this.props.history.location.search.split('=')[1]:'':''
+    // console.log(this.props.location, urlParams, customerCode)
     // console.log(this.props.history.location.pathname.split("/"))
     // 链接中有传值-ticket列表点击过来的
     if(params){
@@ -728,18 +736,18 @@ class TicketAdd extends React.Component {
       window.isShowApp = params.isShowApp ? params.isShowApp : 'false'
     }
     // 如果链接中没有传值 而且本地没有数据 则会跳转到ticket列表
-    if(!id && !localStorage.__order && !urlParams){
-      this.props.history.push({pathname: `${window.ctx || ''}/support/ticket`})
+    if(!id && !localStorage.__order && !urlParams && !customerCode){
+      this.props.history.push({pathname: `${window.ctx || ''}/me/m/faq/ticket`})
     }
     // console.log(id)
     if(urlParams){
-      // localStorage.__order = ""
       this.getMsgByLinkId(urlParams)
     } else if (id) {
       localStorage.__order = ""
       this.getMsgByUrlId(id)
+    } else if(customerCode){
+      this.getMsgByCode(customerCode)
     } else {
-      // console.log(localStorage.__order)
       if (localStorage.__order) {
         this.getMsgByLocalData()
       } else {
@@ -898,6 +906,50 @@ class TicketAdd extends React.Component {
     })
   }
 
+  // 客服code
+  getMsgByCode(code){
+    getByCode(code).then(({result}) => {
+      // console.log(result)
+      const {ticket, order, cusomerName, headSculptureUrl} = result
+
+      let subject = ticket ? ticket.questionTypeCode : 0
+      if(ticket){
+        if(ticket.ticketReplies.slice(0)[ticket.ticketReplies.slice(0).length - 1]['sender'] == "buyers"){
+          this.setState({
+            showTip:true
+          })
+        } else {
+          this.setState({
+            showTip: false
+          })
+        }
+      }
+      this.setState({
+        ticket,
+        order,
+        cusomerName,
+        headSculptureUrl,
+        loading: false,
+        subject: subject,
+        questions: this.state.questions.map(q => {
+          q.selected = false
+          if(q.value == subject){
+            q.selected = true
+          }
+          
+          return q
+        })
+      })
+
+      this.initScroll()
+    }).catch((data) => {
+      alert(data.result)
+      if (data.code === 401) {
+        window.location.href = `${window.ctx || ''}/me/m`
+      }
+    })
+  }
+
   // 获取question type以及它的子项
   getQuestionType(){
     getQuestionType().then((res) => {
@@ -1009,12 +1061,12 @@ class TicketAdd extends React.Component {
       <LabelValueContainer>
         <LabelValue label={intl.formatMessage({id: 'orderno'})} value={this.state.order.id}/>
         <LabelValue label={intl.formatMessage({id: 'paymenttime'})} value={paymentTime(this.state.order.paymentTime)}/>
-        {this.state.isNew && <Link to={`${window.ctx||''}/support/orders`} className="iconfont">&#xe66b;</Link>}
+        {this.state.isNew && <Link to={`${window.ctx||''}/me/m/faq/orders`} className="iconfont">&#xe66b;</Link>}
 
       </LabelValueContainer>
     ) : (
       <OrderSelector className={this.state.orderInvalid ? 'invalid' : ''}>
-        <Link to={`${window.ctx||''}/support/orders`}>
+        <Link to={`${window.ctx||''}/me/m/faq/orders`}>
           <FormattedMessage id="selectorder"/>
           <i className="iconfont">&#xe694;</i>
         </Link>
@@ -1134,7 +1186,7 @@ class TicketAdd extends React.Component {
         </div>
         <RateTextArea 
           defaultValue={rateTxt}
-          placeholder={intl.formatMessage({id: 'rateTextAreaPlaceHolder'})}
+          placeholder={intl.formatMessage({id: 'rateTextPlaceHolder'})}
           onBlur={(e)=>{
             console.log(e.target.value)
             rateTextAreaChange(e.target.value)
@@ -1179,7 +1231,7 @@ class TicketAdd extends React.Component {
           replies.push(r)
         }
       })
-      console.log(replies)
+      // console.log(replies)
       return <Fragment>
           
           <ChatRows>
@@ -1646,7 +1698,7 @@ class TicketAdd extends React.Component {
         ) : (
           <ChatContainer className="x-flex __column" style={{height:"100%", paddingTop:"12px"}}>
             {/* 当前订单 */}
-            <SelectedOrderBox onClick={()=>this.props.history.push({pathname: `${(window.ctx || '')}/support/order`,state:{from:'ticketadd'}})}>
+            <SelectedOrderBox onClick={()=>this.props.history.push({pathname: `${(window.ctx || '')}/me/m/faq/order`,state:{from:'ticketadd'}})}>
                 <OrderNo>
                     {intl.formatMessage({id:"orderno"})}
                     <span>{this.state.order ? this.state.order.id ? this.state.order.id : '-' : '-'}</span>

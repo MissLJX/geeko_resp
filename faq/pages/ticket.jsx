@@ -227,12 +227,12 @@ const Ticket = class extends React.Component {
       <LabelValueContainer>
         <LabelValue label={intl.formatMessage({id: 'orderno'})} value={this.state.order.id}/>
         <LabelValue label={intl.formatMessage({id: 'paymenttime'})} value={paymentTime(this.state.order.paymentTime)}/>
-        {this.state.isNew && <Link to={`${window.ctx||''}/support/orders`} className="iconfont">&#xe66b;</Link>}
+        {this.state.isNew && <Link to={`${window.ctx||''}/me/m/faq/orders`} className="iconfont">&#xe66b;</Link>}
 
       </LabelValueContainer>
     ) : (
       <OrderSelector className={this.state.orderInvalid ? 'invalid' : ''}>
-        <Link to={`${window.ctx||''}/support/orders`}>
+        <Link to={`${window.ctx||''}/me/m/faq/orders`}>
           <FormattedMessage id="selectorder"/>
           <i className="iconfont">&#xe694;</i>
         </Link>

@@ -161,10 +161,25 @@
             showTicket:function(data){
                 this.isShowSelect = false
                 this.$store.dispatch('clearTicket')
-                this.$store.dispatch('getTicket',data).then(()=>{
+                let reg = /^[0-9]*$/;
+                if(reg.test(data)){
+                    this.$store.dispatch('getTicket',data).then(()=>{
+                        this.isShowTicket = true;
+                    })
+                } else {
+                    this.$store.dispatch('getTicketByTicketId',data).then(()=>{
+                        this.isShowTicket = true;
+                    })
+                }
+                
+                // this.$router.replace({name: '/me/m/faq/support-ticket'})
+            },
+            showTicketByCode(code){
+                this.isShowSelect = false
+                this.$store.dispatch('clearTicket')
+                this.$store.dispatch('getTicketByCode',code).then(()=>{
                     this.isShowTicket = true;
                 })
-                // this.$router.replace({name: '/me/m/faq/support-ticket'})
             },
             getStatus(ticketstatus){
                 switch (ticketstatus) {
@@ -211,6 +226,10 @@
             if(this.$router.currentRoute.query?.id && !urlIdShowed){
                 localStorage._orderId = this.$router.currentRoute.query?.id
                 this.showTicket(localStorage._orderId)
+            }
+            if(this.$router.currentRoute.query?.code && !urlIdShowed){
+                localStorage._code = this.$router.currentRoute.query?.code
+                this.showTicketByCode(localStorage._code)
             }
             // console.log(this.$refs.scrollBox)
             let scrollBox = this.$refs.scrollBox;

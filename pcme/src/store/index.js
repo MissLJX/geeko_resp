@@ -1110,6 +1110,28 @@ const actions = {
             }
         })
     },
+    getTicketByTicketId({commit},id){
+        api.getTicketByTicketId(id).then((ticket) => {
+            if(ticket){
+                console.log(ticket)
+                commit(types.GLOBAL_GET_TICKET, ticket.order)
+                commit(types.GLOBAL_GET_TICKET_CON, ticket.ticket?ticket.ticket:{})
+                commit(types.GLOBAL_GET_TICKET_ID, ticket.order.id)
+                commit(types.GLOBAL_GET_TICKET_SUB, ticket.subjectSelections)
+            }
+        })
+    },
+    getTicketByCode({commit},code){
+        api.getTicketByCode(code).then((ticket) => {
+            if(ticket){
+                console.log(ticket)
+                commit(types.GLOBAL_GET_TICKET, ticket.order)
+                commit(types.GLOBAL_GET_TICKET_CON, ticket.ticket?ticket.ticket:{})
+                commit(types.GLOBAL_GET_TICKET_ID, ticket.order.id)
+                commit(types.GLOBAL_GET_TICKET_SUB, ticket.subjectSelections)
+            }
+        })
+    },
     clearTicket({commit},id){
         commit(types.GLOBAL_GET_TICKET, {})
         commit(types.GLOBAL_GET_TICKET_CON, {})

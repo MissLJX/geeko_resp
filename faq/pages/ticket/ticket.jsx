@@ -128,7 +128,7 @@ class TicketList extends React.PureComponent{
         }
 
         const link = (item) => {
-            this.props.history.push({pathname:`${(window.ctx || '')}/support/ticketadd`,state:{id:item.id, isShowApp: window.isShowApp}})
+            this.props.history.push({pathname:`${(window.ctx || '')}/me/m/faq/support-ticket`,state:{id:item.id, isShowApp: window.isShowApp}})
         }
 
         return <TicketListBox>
@@ -281,7 +281,7 @@ class Ticket1 extends React.PureComponent{
 
         return (<div>
             {
-                false && this.state.finished && this.state.skip === this.state.limit && false ? <Redirect to={`${(window.ctx || '')}/support/ticketadd`}/> :
+                false && this.state.finished && this.state.skip === this.state.limit && false ? <Redirect to={`${(window.ctx || '')}/me/m/faq/support-ticket`}/> :
                 <div style={{position:'relative'}}>
                     <Page label={intl.formatMessage({id: 'Ticket'})} style={{backgroundColor:'#f6f6f6'}}>
                         
@@ -302,7 +302,7 @@ class Ticket1 extends React.PureComponent{
 
                         {/* 提交按钮 */}
                         <SubmitBtn>
-                            <span onClick={()=>this.props.history.push({pathname:`${(window.ctx || '')}/support/order`,state:{from:'ticket'}})}>{intl.formatMessage({id: 'submit'})}</span>    
+                            <span onClick={()=>this.props.history.push({pathname:`${(window.ctx || '')}/me/m/faq/order`,state:{from:'ticket'}})}>{intl.formatMessage({id: 'submit'})}</span>    
                         </SubmitBtn>
                     </Page>
                 </div>

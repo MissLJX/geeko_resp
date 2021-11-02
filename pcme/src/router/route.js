@@ -51,12 +51,12 @@ const routes = [
             //     name:"tickets",
             //     meta: {title:'My Tickets'},
             // },
-            {
-                path: 'tickets',
-                component: Support,
-                name: 'support',
-                meta: {title: 'Support'}
-            },
+            // {
+            //     path: 'tickets',
+            //     component: Support,
+            //     name: 'support',
+            //     meta: {title: 'Support'}
+            // },
             {
                 path:'notification',
                 component:Notification,
@@ -185,7 +185,8 @@ const routes = [
                 path:"support",
                 name: "support",
                 component: () => import("../pages/support/support.vue"),
-                meta:{title:"Support"}
+                meta:{title:"Support"},
+                alias: "tickets"
             }
         ]
         },
@@ -272,7 +273,7 @@ const routes = [
                 meta:{title:"Tickets",depth:1,keepAlive:true}
             }
         ]
-    }
+    },
 ];
 
 export default routes;

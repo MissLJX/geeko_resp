@@ -409,6 +409,9 @@
                 }, 200)
                 localStorage.removeItem('_orderId')
             }
+            if(localStorage._code){
+                localStorage.removeItem('_code')
+            }
         },
         watch:{
             successShow:function(newV, oldV){

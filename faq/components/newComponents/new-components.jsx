@@ -604,7 +604,7 @@ const SearchBar1 = (props) => {
 
     const relatedSearch = (item) => {
         setInputValue("")
-        props.history.replace({pathname: `${(window.ctx || '')}/support/question/`, state:{id: item.id, fromFAQ:true}})
+        props.history.replace({pathname: `${(window.ctx || '')}/me/m/faq/question/`, state:{id: item.id, fromFAQ:true}})
     }
 
     const filter = (e) => {

@@ -123,42 +123,42 @@ class Support extends React.PureComponent{
                 {
                     imgUrl: "&#xe6ee;",
                     txt: this.props.intl.formatMessage({id:"orderProcessing"}),
-                    to: `${(window.ctx || '')}/support/faq`,
+                    to: `${(window.ctx || '')}/me/m/faq/faq`,
                     content:"order",
                     type:""
                 },
                 {
                     imgUrl: "&#xe6f1;",
                     txt: this.props.intl.formatMessage({id:"tracking"}),
-                    to: `${(window.ctx || '')}/support/faq`,
+                    to: `${(window.ctx || '')}/me/m/faq/faq`,
                     content:"logistics",
                     type:""
                 },
                 {
                     imgUrl: "&#xe6ed;",
                     txt: this.props.intl.formatMessage({id:"return"}),
-                    to:`${(window.ctx || '')}/support/faq`,
+                    to:`${(window.ctx || '')}/me/m/faq/faq`,
                     content:"refund",
                     type:""
                 },
                 {
                     imgUrl: "&#xe6ec;",
                     txt: this.props.intl.formatMessage({id:"product"}),
-                    to: `${(window.ctx || '')}/support/faq`,
+                    to: `${(window.ctx || '')}/me/m/faq/faq`,
                     content:"payment",
                     type:""
                 },
                 {
                     imgUrl: "&#xe6ef;",
                     txt: this.props.intl.formatMessage({id:"payment"}),
-                    to: `${(window.ctx || '')}/support/faq`,
+                    to: `${(window.ctx || '')}/me/m/faq/faq`,
                     content:"product",
                     type:""
                 },
                 {
                     imgUrl: "&#xe6f2;",
                     txt: this.props.intl.formatMessage({id:"account"}),
-                    to: `${(window.ctx || '')}/support/faq`,
+                    to: `${(window.ctx || '')}/me/m/faq/faq`,
                     content:"account",
                     type:""
                 },
@@ -199,7 +199,7 @@ class Support extends React.PureComponent{
                 checkLogin = true
                 list(0,20).then(({result: items}) => {
                     checkLogin = false
-                    this.props.history.push({pathname: `${(window.ctx || '')}/support/contact-us`})
+                    this.props.history.push({pathname: `${(window.ctx || '')}/me/m/faq/contact-us`})
                 }).catch((err)=>{
                     checkLogin = false
                     // console.log(err)
@@ -207,7 +207,7 @@ class Support extends React.PureComponent{
                         if(window.isShowApp=="true"){
                             window.location.href = "chic-me://chic.me/loginRoot"
                         } else {
-                            window.location.href = `${(window.ctx || '')}/i/login?redirectUrl=${(window.ctx || '')}/support/contact-us`
+                            window.location.href = `${(window.ctx || '')}/i/login?redirectUrl=${(window.ctx || '')}/me/m/faq/contact-us`
                         }
                     }
                     
@@ -250,7 +250,7 @@ class Support extends React.PureComponent{
                     </EntryButtonBox>
                     <ClickToFAQ>
                         {intl.formatMessage({id:"click"})}
-                        <span onClick={()=>this.props.history.push({pathname: `${(window.ctx || '')}/support/faq`})}>{intl.formatMessage({id:"faq"})}</span> 
+                        <span onClick={()=>this.props.history.push({pathname: `${(window.ctx || '')}/me/m/faq/faq`})}>{intl.formatMessage({id:"faq"})}</span> 
                         {intl.formatMessage({id:"page"})} 
                     </ClickToFAQ>
                     <FindMore>

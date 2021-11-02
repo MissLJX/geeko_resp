@@ -25,8 +25,9 @@ const config = {
     },
     output: {
         path: setPath('dist'),
-        publicPath: '/resources/vue/pcme/',
-        filename:'[name].[chunkhash].js'
+        // publicPath: '/resources/vue/pcme/', // 正式
+        publicPath: '/wanna/resources/vue/pcme/', // 本地
+        filename:'[name].[contenthash].js'
     },
 
     optimization: {

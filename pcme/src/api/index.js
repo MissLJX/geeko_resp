@@ -185,6 +185,12 @@ export const getTickets = (skip,state) => {
 export const getTicket = (id) => {
     return axios.get('/ticket/'+id+'/order/get').then(data => data.result)
 }
+export const getTicketByTicketId = (id) => {
+    return axios.get('/ticket/'+id+'/get').then(data => data.result)
+}
+export const getTicketByCode = (code) => {
+    return axios.get('/ticket/' + code + '/get-by-order').then(data => data.result)
+}
 export const addTicket = (ticket) => {
     return axios.post('/ticket/order/add', ticket, {'Content-Type': http_infos.upload_image_content_type}).then(data => data.result)
 }

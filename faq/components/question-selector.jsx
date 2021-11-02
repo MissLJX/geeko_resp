@@ -87,7 +87,7 @@ export default class QuestionSelector extends React.Component {
         <QuestionUL>
       	{this.props.items.map(item => (
       		<QuestionLi>
-      			<Link replace onClick={() => { this.setState({active: !this.state.active}) }} to={`${window.ctx||''}/support/question/${item.id}`}>{item.title}</Link>
+      			<Link replace onClick={() => { this.setState({active: !this.state.active}) }} to={`${window.ctx||''}/me/m/faq/question/${item.id}`}>{item.title}</Link>
       		</QuestionLi>
       	))}
         </QuestionUL>

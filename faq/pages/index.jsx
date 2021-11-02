@@ -69,25 +69,16 @@ export default () => (
   <IntlProvider locale={langList.indexOf(lang) === -1 ? 'en' :lang} messages={langList.indexOf(lang) === -1 ? messages['en'] :messages[lang]}>
     <div>
       <BrowserRouter>
-      <Switch>
-        {/* <Route path={`${window.ctx || ''}/support`} exact component={Support}/>
-        <Route path={`${window.ctx || ''}/support/online-help`} exact component={OnlineHelp}/>
-        <Route path={`${window.ctx || ''}/support/search`} component={SearchResult}/>
-        <Route path={`${window.ctx || ''}/support/question/:id`} component={Question}/>
-        <Route path={`${window.ctx || ''}/support/ticket/add`} component={Ticket}/>
-        <Route path={`${window.ctx || ''}/support/ticket/:id`} component={Ticket}/>
-        <Route path={`${window.ctx || ''}/support/ticket`} component={Tickets}/>
-        <Route path={`${window.ctx || ''}/support/orders`} component={Orders}/> */}
-        <Route path={`${window.ctx || ''}/support/rate/:id`} component={Rate}/>
-
-        
-        <Route path={`${window.ctx || ''}/support/faq`} component={FAQ}/>
-        <Route path={`${window.ctx || ''}/support/question/:id`} component={Question1}/>
-        <Route path={`${window.ctx || ''}/support/question`} component={Question1}/>
-        <Route path={`${window.ctx || ''}/support/contact-us`} component={ContactUs}/>
-        <Route path={`${window.ctx || ''}/support/ticket`} component={Ticket1}/>
-        <Route path={`${window.ctx || ''}/support/order`} component={Order}/>
-        <Route path={`${window.ctx || ''}/support/ticketadd`} component={TicketAdd}/>
+      <Switch>        
+        <Route path={`${window.ctx || ''}/me/m/faq/faq`} component={FAQ}/>
+        <Route path={`${window.ctx || ''}/me/m/faq/question/:id`} component={Question1}/>
+        <Route path={`${window.ctx || ''}/me/m/faq/question`} component={Question1}/>
+        <Route path={`${window.ctx || ''}/me/m/faq/contact-us`} component={ContactUs}/>
+        <Route path={`${window.ctx || ''}/me/m/faq/ticket`} component={Ticket1}/>
+        <Route path={`${window.ctx || ''}/me/m/faq/order`} component={Order}/>
+        <Route path={`${window.ctx || ''}/me/m/faq/support-ticket`} component={TicketAdd}/>
+        <Route path={`${window.ctx || ''}/me/m/faq/support-ticket/:code`} component={TicketAdd}/>
+        <Route path={`${window.ctx || ''}/me/m/support`} component={SupportNew}/>
         <Route path={`${window.ctx || ''}/support`} component={SupportNew}/>
       </Switch>
       </BrowserRouter>
