@@ -90,4 +90,9 @@ export default {
   description_ph: 'Bitte beschreiben Sie Ihr Problem so genau wie möglich, damit der Kundenservice schneller reagieren kann...',
   uploadImage: 'Bild hochladen',
   uploadTips: 'Maximal 3 Fotos, nur JPEG, GIF oder PNG. ',
+  rate:'Bewerten Sie meinen Service',
+  rateInfo: "Wir würden gerne hören, was Sie von unserem Kundenservice halten, damit wir Sie besser bedienen können.",
+  satisfied: 'Zufrieden',
+  unsatisfied: 'Unzufrieden',
+  rateTextPlaceHolder: 'Hier können Sie den Kundenservice kommentieren.',
 }

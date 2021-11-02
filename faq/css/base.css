@@ -61,7 +61,7 @@ input , select , textarea{
 }
 
 *, *::after, *::before{
-  box-sizing:border-box;
+  box-sizing: border-box;
 }
 
 input:-webkit-autofill{
@@ -70,9 +70,9 @@ input:-webkit-autofill{
 
 @font-face {
   font-family: 'iconfont';  /* Project id 384296 */
-  src: url('//at.alicdn.com/t/font_384296_i4gbs9w8xo.woff2?t=1630652306181') format('woff2'),
-       url('//at.alicdn.com/t/font_384296_i4gbs9w8xo.woff?t=1630652306181') format('woff'),
-       url('//at.alicdn.com/t/font_384296_i4gbs9w8xo.ttf?t=1630652306181') format('truetype');
+  src: url('//at.alicdn.com/t/font_384296_waimmey03x.woff2?t=1631165132958') format('woff2'),
+      url('//at.alicdn.com/t/font_384296_waimmey03x.woff?t=1631165132958') format('woff'),
+      url('//at.alicdn.com/t/font_384296_waimmey03x.ttf?t=1631165132958') format('truetype');
 }
 .iconfont {
   font-family:"iconfont" !important;

@@ -1,6 +1,6 @@
 import React, { createRef, Fragment } from 'react'
 import {Link} from 'react-router-dom'
-import {get, getByOrderId, sendImage, sendTicket, getQuestionType, questionTypeChange} from '../../api'
+import {get, getByOrderId, sendImage, sendTicket, getQuestionType, questionTypeChange, sendRate} from '../../api'
 import styled from 'styled-components'
 import _ from 'lodash'
 import {FormattedMessage, injectIntl} from 'react-intl'
@@ -500,6 +500,37 @@ const QuestionSubmitBtn = styled.div`
   margin: 0 auto;
   cursor: pointer;
 `
+const RateIconStyle = styled.span`
+  @font-face {
+    font-family: 'iconfont';  /* Project id 384296 */
+    src: url('//at.alicdn.com/t/font_384296_waimmey03x.woff2?t=1631165132958') format('woff2'),
+        url('//at.alicdn.com/t/font_384296_waimmey03x.woff?t=1631165132958') format('woff'),
+        url('//at.alicdn.com/t/font_384296_waimmey03x.ttf?t=1631165132958') format('truetype');
+  }
+  font-family:"iconfont" !important;
+  font-size:16px;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 16px;
+  margin-right: 4px;
+`
+const RateTextArea = styled.textarea`
+  width: 100%;
+  padding: 5px 10px;
+  height: 100px;
+  border: solid 1px #e6e6e6;
+  outline: none;
+  resize: none;
+  &::-webkit-input-placeholder{
+    font-family: Roboto-Regular;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #bbbbbb;
+  }
+`
 
 var bodyScrollTop = document.body.scrollTop;
 class TicketAdd extends React.Component {
@@ -538,6 +569,9 @@ class TicketAdd extends React.Component {
       questionsReason:[], // 问题对应原因的列表,
       questionSubmitLoading:false, // 问题接口正在上传
       descriptionRequired: false, // 弹窗问题描述是否必填
+      rateShow: false,
+      rateTxt: '',// 评价文字
+      rateType: '5',//评价好（5）不好（1）
     }
     this.questionRef = createRef();
     this.handleImage = this.handleImage.bind(this)
@@ -583,7 +617,7 @@ class TicketAdd extends React.Component {
         ticket.ticketReplies = replies
 
         if(ticket){
-          if(ticket.ticketReplies.slice(-1)[ticket.ticketReplies.slice(-1).length - 1]['sender'] == "buyers"){
+          if(ticket.ticketReplies.slice(0)[ticket.ticketReplies.slice(0).length - 1]['sender'] == "buyers"){
             this.setState({
               showTip:true
             })
@@ -641,7 +675,7 @@ class TicketAdd extends React.Component {
       ticket.ticketReplies = replies
 
       if(ticket){
-        if(ticket.ticketReplies.slice(-1)[ticket.ticketReplies.slice(-1).length - 1]['sender'] == "buyers"){
+        if(ticket.ticketReplies.slice(0)[ticket.ticketReplies.slice(0).length - 1]['sender'] == "buyers"){
           this.setState({
             showTip:true
           })
@@ -665,9 +699,6 @@ class TicketAdd extends React.Component {
       //     showMsgTxt: ''
       //   })
       // },2000)
-
-
-
       this.initScroll()
     })
   }
@@ -675,7 +706,7 @@ class TicketAdd extends React.Component {
   initScroll () {
     setTimeout(() => {
       this.chatDiv.scrollTop = this.chatDiv.scrollHeight
-    }, 200)
+    }, 500)
   }
   
   componentWillMount () {
@@ -722,16 +753,10 @@ class TicketAdd extends React.Component {
   }
 
   pageScroll(){
-    console.log('sss')
     setTimeout(()=>{
       console.log(this.textAreaRef)
     },200)
   }
-  
-  // ios手机监听页面被顶起的情况
-  // iosPageUpListener(){
-  //   console.log(this.$ref)
-  // }
 
   getMsgByLocalData(){
     getByOrderId(JSON.parse(localStorage.__order).id).then(({result}) => {
@@ -739,7 +764,7 @@ class TicketAdd extends React.Component {
       // console.log(result)
       // console.log(ticket.ticketReplies.slice(-1)[ticket.ticketReplies.slice(-1).length - 1]['sender'])
       if(ticket){
-        if(ticket.ticketReplies.slice(-1)[ticket.ticketReplies.slice(-1).length - 1]['sender'] == "buyers"){
+        if(ticket.ticketReplies.slice(0)[ticket.ticketReplies.slice(0).length - 1]['sender'] == "buyers"){
           this.setState({
             showTip:true
           })
@@ -782,6 +807,17 @@ class TicketAdd extends React.Component {
       const {ticket, order, cusomerName, headSculptureUrl} = result
 
       let subject = ticket ? ticket.questionTypeCode : 0
+      if(ticket){
+        if(ticket.ticketReplies.slice(0)[ticket.ticketReplies.slice(0).length - 1]['sender'] == "buyers"){
+          this.setState({
+            showTip:true
+          })
+        } else {
+          this.setState({
+            showTip: false
+          })
+        }
+      }
       this.setState({
         ticket,
         order,
@@ -815,7 +851,7 @@ class TicketAdd extends React.Component {
       console.log(result)
       // console.log(ticket.ticketReplies.slice(-1)[ticket.ticketReplies.slice(-1).length - 1]['sender'])
       if(ticket){
-        if(ticket.ticketReplies.slice(-1)[ticket.ticketReplies.slice(-1).length - 1]['sender'] == "buyers"){
+        if(ticket.ticketReplies.slice(0)[ticket.ticketReplies.slice(0).length - 1]['sender'] == "buyers"){
           this.setState({
             showTip:true
           })
@@ -958,15 +994,6 @@ class TicketAdd extends React.Component {
     const {intl, location} = this.props
     const {questionObject, questionMaskShow, questions, questionTypeList, questionsReason} = this.state
 
-    const isFromNotification = location.search && location.search.indexOf('utm_source=pcnotification') >= 0
-    // const questions = [
-    //   {label: "Cancel the order", value: '0', selected: false},
-    //   {label: "Modify the order", value: '2', selected: false},
-    //   {label: "Shipping status", value: '3', selected: false},
-    //   {label: "Return the order", value: '4', selected: false},
-    //   {label: "Others", value: '5', selected: false},
-    // ]
-
     const LabelValue = (props) => {
       return <div>
         <label style={{marginRight: '5px', color: '#999'}}>{props.label}</label>
@@ -1089,6 +1116,51 @@ class TicketAdd extends React.Component {
       </ChatTip>
     }
 
+    const RateTip = (props) => {
+      const {rateType, rateTxt} = props.reply
+      return <ChatTip className={'seller'}>
+        <div style={{fontFamily: 'Roboto-Regular',fontSize: '14px',	letterSpacing: '0px',	color: '#222222'}}>
+          {intl.formatMessage({id: 'rateInfo'})}
+        </div>
+        <div style={{display:'flex', alignItems:'center', justifyContent:'space-between', marginTop:'20px',marginBottom:'16px'}}>
+          <div style={{color: rateType == '5' ? '#57b936':'#999'}} onClick={()=>rateTypeChange('5')}>
+            <RateIconStyle>&#xe7af;</RateIconStyle>
+            {intl.formatMessage({id: 'satisfied'})}
+          </div>
+          <div style={{color: rateType == '1' ? '#e64545':'#999'}} onClick={()=>rateTypeChange('1')}>
+            <RateIconStyle style={{transform:'rotate(180deg)'}}>&#xe7af;</RateIconStyle>
+            {intl.formatMessage({id: 'unsatisfied'})}
+          </div>
+        </div>
+        <RateTextArea 
+          defaultValue={rateTxt}
+          placeholder={intl.formatMessage({id: 'rateTextAreaPlaceHolder'})}
+          onBlur={(e)=>{
+            console.log(e.target.value)
+            rateTextAreaChange(e.target.value)
+          }}
+        ></RateTextArea>
+        {/* this.setState({rateTxt:e.target.value}) */}
+        <div style={{
+                width: '84px',	
+                height: '28px',	
+                backgroundColor: '#222222',	
+                borderRadius: '2px',
+                color:'#fff',
+                display:'flex',
+                alignItems:'center',
+                justifyContent:'center',
+                marginTop: '12px',
+                float:'right',
+                cursor:'pointer'
+                }}
+             onMouseDown={()=>setTimeout(()=>rateConfirm(rateType,rateTxt),200)}>
+          {intl.formatMessage({id: 'confirm'})}
+        </div>
+
+    </ChatTip>
+    }
+
     const HeaderImage = ({image, sender}) => {
       return <div style={{
         backgroundImage: sender === 'buyers' ? `url(https://image.geeko.ltd/icon/${image}) ,url(https://image.geeko.ltd/site/pc/icon35.png)` : 'url(https://image.geeko.ltd/icon/support.jpg)',
@@ -1121,7 +1193,9 @@ class TicketAdd extends React.Component {
                 <ChatRow className={reply.sender === 'buyers' ? 'buyer' : 'seller'} >
                   <HeaderImage image={props.headSculptureUrl} sender={reply.sender} />
                   {
-                    reply.questionType && reply.questionTypeCode ?
+                    reply.isRate ?
+                    <RateTip reply={reply}></RateTip>
+                    :reply.questionType && reply.questionTypeCode ?
                     <QuestionTip reply={reply}></QuestionTip>:
                     <ReplyTip reply={reply} />
                   }
@@ -1387,7 +1461,7 @@ class TicketAdd extends React.Component {
           ticket.ticketReplies = replies
 
           if(ticket){
-            if(ticket.ticketReplies.slice(-1)[ticket.ticketReplies.slice(-1).length - 1]['sender'] == "buyers"){
+            if(ticket.ticketReplies.slice(0)[ticket.ticketReplies.slice(0).length - 1]['sender'] == "buyers"){
               this.setState({
                 showTip:true
               })
@@ -1470,6 +1544,90 @@ class TicketAdd extends React.Component {
       }
     }
 
+    // 添加评论
+    const addRate = () => {
+      if(!this.state.rateShow){
+        this.state.rateShow = true
+      } else {
+        return
+      }
+      let ticket = this.state.ticket || {}
+      let replies = []
+      replies = (ticket.ticketReplies || []).concat([])
+      let rateHistory = (ticket.ticketRateService || "")
+
+      replies.push({
+        sender: 'seller',
+        message: '',
+        imageUrls: [],
+        date: new Date().getTime(),
+        isRate: true,
+        rateType:rateHistory ? rateHistory.rate+'':'5',
+        rateTxt:rateHistory ? rateHistory.message :''
+      })
+      ticket.ticketReplies = replies
+      
+      this.setState({
+        ticket,
+      })
+
+      this.initScroll()
+    }
+
+    // 提交评价
+    const rateConfirm = (type,txt) => {
+      console.log(type,txt)
+      console.log(this.state.ticket.id)
+      let params = {
+        id: this.state.ticket ? this.state.ticket.id: '',
+        message: txt,
+        rate: +type,
+      }
+      console.log(params)
+      sendRate(params).then(res => {
+        let ticket = this.state.ticket || {}
+        ticket.ticketReplies.pop()
+        this.setState({
+          rateShow:false,
+          ticket
+        })
+      }).catch(err=>{
+        this.setState({
+          rateShow:false
+        })
+      })
+    }
+
+    // 
+    const rateTextAreaChange = (e) => {
+      let ticket = this.state.ticket || {}
+      let replies = []
+      replies = (ticket.ticketReplies || []).concat([])
+      replies[replies.length - 1] = {
+        ...replies[replies.length - 1],
+        rateTxt: e
+      }
+      ticket.ticketReplies = replies
+      this.setState({
+        ticket: ticket
+      })
+    }
+
+    // 
+    const rateTypeChange = (e) => {
+      let ticket = this.state.ticket || {}
+      let replies = []
+      replies = (ticket.ticketReplies || []).concat([])
+      replies[replies.length - 1] = {
+        ...replies[replies.length - 1],
+        rateType: e
+      }
+      ticket.ticketReplies = replies
+      this.setState({
+        ticket: ticket
+      })
+    }
+
     return <div>
       {
         window.isShowApp !== 'true' ?
@@ -1521,7 +1679,7 @@ class TicketAdd extends React.Component {
               ))}
               {/* 提示 */}
               {
-                this.state.ticket && this.state.ticket.ticketReplies && this.state.showTip && (
+                this.state.ticket && !this.state.rateShow  && this.state.ticket.ticketReplies && this.state.showTip && (
                   <ResponseTip>
                     {intl.formatMessage({id:"responseTime"})}
                   </ResponseTip>
@@ -1529,11 +1687,11 @@ class TicketAdd extends React.Component {
               }
               
               {
-                false && this.state.ticket && this.state.ticket.canBeRated && <div style={{marginTop: 20, textAlign: 'center'}}>
-                  <Link to={`/support/rate/${this.state.ticket.id}`} style={{color: '#3aa978', textDecoration: 'none'}}>
+                (true || this.state.ticket && this.state.ticket.canBeRated) && <div style={{marginTop: 20, textAlign: 'center'}}>
+                  <div onClick={()=>addRate()} style={{color: '#3aa978', textDecoration: 'none', cursor:'pointer',}}>
                     <RATE style={{verticalAlign: 'middle'}}>&#xe60d;</RATE>
-                    <span style={{textDecoration: 'underline', verticalAlign: 'middle'}}>Rate My Service</span>
-                  </Link>
+                    <span style={{textDecoration: 'underline', verticalAlign: 'middle'}}>{intl.formatMessage({id:"rate"})}</span>
+                  </div>
                 </div>
               }
             </Chat> 

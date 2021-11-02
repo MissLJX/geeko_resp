@@ -92,4 +92,9 @@ export default {
   s_description_ph: 'Please describe your problem as much as possible so that customer service can respond faster…',
   uploadImage: 'Upload image',
   uploadTips: 'Maximum of 3 photos, only JPEG, GIF or PNG.',
+  rate: 'Rate My Service',
+  rateInfo: "We'd love to hear what you think of our customer service to help us to serve you better.",
+  satisfied: 'Satisfied',
+  unsatisfied: 'Unsatisfied',
+  rateTextPlaceHolder: 'You can comment customer service here.',
 }

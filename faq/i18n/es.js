@@ -90,4 +90,9 @@ export default {
   description_ph: 'Describe tu problema tanto como sea posible para que el servicio al cliente pueda responder más rápido ...',
   uploadImage: 'Cargar imagen',
   uploadTips: 'Máximo de 3 fotos, solo JPEG, GIF o PNG',
+  rate:'Califica mi servicio',
+  rateInfo: "Nos encantaría saber qué piensa de nuestro servicio de atención al cliente para ayudarnos a brindarle un mejor servicio",
+  satisfied: 'Satisfecho',
+  unsatisfied: 'Insatisfecho',
+  rateTextPlaceHolder: 'Puede comentar el servicio al cliente aquí.',
 }

@@ -443,6 +443,10 @@ export default {
         s_all_c: 'All',
         s_wating_for_replied: 'Wating for Replied',
         s_replied: 'Replied',
-        s_resolved: 'Resolved'
+        s_resolved: 'Resolved',
+        s_rate_my_service: 'Rate My Service',
+        s_rate_info: "We'd love to hear what you think of our customer service to help us to serve you better.",
+        s_rate_satisfied: 'Satisfied',
+        s_rate_unsatisfied: 'Unsatisfied',
     }
 }

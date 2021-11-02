@@ -43,6 +43,7 @@
         computed: {
             url(){
                 var deepLink = this.model.deepLink, _url
+                var id =  deepLink.params[1] ? deepLink.params[1] : ''
                 switch (deepLink.type) {
                     case 1:
                         _url = '/i/collection/products?collectionId=' + deepLink.params[0]
@@ -60,7 +61,11 @@
                         _url = '/me/m/order/detail/' + deepLink.params[0]
                         break
                     case 9:
-                        _url = '/me/m/tickets'
+                        if(id){
+                            _url = '/me/m/faq/support-ticket?id='+id
+                        } else {
+                            _url = '/me/m/faq/support-ticket'
+                        }
                         break
                     case 10:
                         _url = '/i/lottery'

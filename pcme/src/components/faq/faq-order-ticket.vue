@@ -75,23 +75,31 @@
                 <div class="responseTime" v-if="ticket_con.ticketReplies && ticket_con.ticketReplies[ticket_con.ticketReplies.length - 1].sender === 'buyers'">
                     {{$t("support.s_response_time")}}
                 </div>
+
+                
                 <!--客服评价对话框-->
-                <div class="buyer" v-if="addRated && showAddRate && false">
+                <div class="buyer" v-if="(addRated && showAddRate) || showAddRate">
                     <div class="el-me-headerImage fl" :style="{'background-image': 'url('+sellerheaderImage+'' }" style="margin-right: 10px"></div>
                     <div class="cet fl">
                         <div class="sanjiao-left"></div>
-                        <div class="txtcontent">
-                            <p>{{addRated}}</p>
+                        <div class="txtcontent rateInfo">
+                            <p style="line-height: 1.25;">{{$t("support.s_rate_info")}}</p>
                             <div class="addRate">
                                 <div class="rate-flex">
-                                    <div class="box" :class="{'like-active': rateData.rate===5}" @click="starClickHandle(5)"><i class="iconfont">&#xe756;</i>Satisfied</div>
-                                    <div class="box" :class="{'unlike-active': rateData.rate===1}" @click="starClickHandle(1)"><i class="iconfont">&#xe757;</i>Unsatisfied</div>
+                                    <div class="box" :class="{'like-active': rateData.rate===5}" @click="starClickHandle(5)"><i class="iconfont">&#xe756;</i>{{$t("support.s_rate_satisfied")}}</div>
+                                    <div class="box" :class="{'unlike-active': rateData.rate===1}" @click="starClickHandle(1)"><i class="iconfont">&#xe757;</i>{{$t("support.s_rate_unsatisfied")}}</div>
                                 </div>
-                                <textarea v-model="initReviewMsg" style="resize:none;padding: 10px;height: 84px;" maxlength="500" placeholder="We'd love to hear what you think of our customer service to help us to serve you better."></textarea>
+                                <textarea v-model="initReviewMsg" maxlength="500" placeholder="You can comment customer service here."></textarea>
                                 <div class="rate-btn" @click="sendRateData(true)">{{$t("confirm")}}</div>
                             </div>
                         </div>
                     </div>
+                </div>
+
+                <!-- 展开客服评价 -->
+                <div class="rateTips" @click="addRate">
+                    <span class="iconfont " style="font-size: 30px;">&#xe60d;</span>
+                    <span style='text-decoration: underline; vertical-align: middle;'>{{$t("support.s_rate_my_service")}}</span> 
                 </div>
             </div>
         </div>
@@ -120,9 +128,10 @@
                     <span class="iconfont send">&#xe789;</span>
                 </div>
 
-                <dir class="submitSuccessTip" v-if="successShow || (canBeRated && true)">
+                <div class="submitSuccessTip" v-if="successShow || (canBeRated && true)">
                     {{$t("support.s_submit_success")}}
-                </dir>
+                </div>
+
             </div>
             <!-- <textarea placeholder="Type a message..." v-model="msg"></textarea>
             <div class="upimg">
@@ -369,7 +378,7 @@
                     id: '',
                     reviewMsg:[]
                 },
-                showAddRate:true,
+                showAddRate:false,
                 initReviewMsg:'',
                 list,
                 questionMaskShow: false,
@@ -437,7 +446,7 @@
                 } else {
                     this.selected = '666'
                 }
-                if(this.ticket_con && this.ticket_con.canBeRated){
+                if(this.ticket_con){
                     this.rateData.rate = this.ticket_con && this.ticket_con.ticketRateService ? this.ticket_con.ticketRateService.rate : 5;
                     this.rateData.message = this.ticket_con && this.ticket_con.ticketRateService ? this.ticket_con.ticketRateService.message : ''
                     this.rateData.id = this.ticket_con ? this.ticket_con.id: null
@@ -659,6 +668,9 @@
                 formData.append("reviewMsg",this.rateData.reviewMsg)
                 this.$store.dispatch('rate', formData).then(() => {
                     this.ticket_con.ticketRateService = this.rateData
+                    this.showAddRate = false
+                }).catch(err => {
+                    this.showAddRate = false
                 })
             },
             questionSubmit(){
@@ -856,6 +868,9 @@
                     des && (des.style.border = 'none')
                     des = null
                 }
+            },
+            addRate(){
+                this.showAddRate = true;
             }
         },
     };
@@ -870,24 +885,53 @@
         url('//at.alicdn.com/t/font_384296_utjiw4kvxj7.ttf') format('truetype'),
         url('//at.alicdn.com/t/font_384296_utjiw4kvxj7.svg#iconfont') format('svg');
     }
+    .rateTips{
+        margin-top: 20px; 
+        // text-align: center;
+        color: #3aa978;
+        text-decoration: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
     .addRate{
         textarea{
+            // width: 100%;
+            // height: 120px;
+            // border: 1px solid #cacaca;
+            // resize: none;
+            // margin: 14px 0;
+            // padding: 15px;
             width: 100%;
-            height: 120px;
-            border: 1px solid #cacaca;
+            padding: 5px 10px;
+            height: 100px;
+            border: solid 1px #e6e6e6;
+            outline: none;
             resize: none;
-            margin: 14px 0;
-            padding: 15px;
+            margin-top: 20px;
+            margin-bottom: 16px;
+
+            &::-webkit-input-placeholder{
+                font-family: Roboto-Regular;
+                font-size: 14px;
+                font-weight: normal;
+                font-stretch: normal;
+                letter-spacing: 0px;
+                color: #bbbbbb;
+            }
         }
         .rate-btn{
-            height: 26px;
-            line-height: 26px;
-            background-color: #222222;
+            width: 84px;
+            height: 28px;
+            background-color: #222222;	
             border-radius: 2px;
-            text-align: center;
             color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 12px;
             float: right;
-            padding: 0 25px;
             cursor: pointer;
         }
     }
@@ -1047,6 +1091,12 @@
                         white-space: pre-line;
                         word-break: break-all;
                         word-wrap: break-word;
+                    }
+                    .rateInfo{
+                        font-family: Roboto-Regular;
+                        font-size: 14px;
+                        letter-spacing: 0px;
+                        color: #222222;
                     }
                     .imgarea{
                         max-width: 280px;
@@ -1600,6 +1650,7 @@
             color: #fff;
             padding: 0;
         }
+        
     }
 .rate-flex{
     display: flex;
@@ -1611,25 +1662,26 @@
         text-align: center;
         height: 33px;
         line-height: 33px;
-        border: 1px solid #eee;
+        // border: 1px solid #eee;
         border-radius: 2px;
         display: -webkit-box;
         -webkit-box-orient: vertical;
         cursor: pointer;
+        color: #999;
         i{
             display: inline-block;
             margin-right: 5px;
         }
     }
     .unlike-active{
-        background-color: #f46e6d;
-        color: #fff;
-        border-color: #f46e6d;
+        // background-color: #f46e6d;
+        color: #f46e6d;
+        // border-color: #f46e6d;
     }
     .like-active{
-        background-color: #57b936;
-        color: #fff;
-        border-color: #57b936;
+        // background-color: #57b936;
+        color: #57b936;
+        // border-color: #57b936;
     }
 }
 .redBorder{

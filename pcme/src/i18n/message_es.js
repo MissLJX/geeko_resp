@@ -441,6 +441,10 @@ export default {
         s_all_c: 'Kaikki',
         s_wating_for_replied: 'Odotetaan vastausta',
         s_replied: 'Vastattu',
-        s_resolved: 'Ratkaistu'
+        s_resolved: 'Ratkaistu',
+        s_rate_my_service: 'Califica mi servicio',
+        s_rate_info: "Nos encantaría saber lo que piensa de nuestro servicio de atención al cliente para ayudarnos a brindarle un mejor servicio",
+        s_rate_satisfied: 'Satisfecho',
+        s_rate_unsatisfied: 'Insatisfecho',
     }
 }

@@ -442,6 +442,10 @@ export default {
         s_all_c: 'Tous',
         s_wating_for_replied: 'En attente de réponse',
         s_replied: 'Répondu',
-        s_resolved: 'Résolu'
+        s_resolved: 'Résolu',
+        s_rate_my_service: 'Évaluer mon service',
+        s_rate_info: "Nous aimerions savoir ce que vous pensez de notre service client pour nous aider à mieux vous servir.",
+        s_rate_satisfied: 'Satisfait',
+        s_rate_unsatisfied: 'Insatisfait',
     }
 }

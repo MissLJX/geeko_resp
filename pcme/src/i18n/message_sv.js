@@ -445,6 +445,10 @@ export default {
         s_all_c: 'Alla',
         s_wating_for_replied: 'Väntar på svar',
         s_replied: 'Svarade',
-        s_resolved: 'Löstade'
+        s_resolved: 'Löstade',
+        s_rate_my_service: 'Rate My Service',
+        s_rate_info: "We'd love to hear what you think of our customer service to help us to serve you better.",
+        s_rate_satisfied: 'Satisfied',
+        s_rate_unsatisfied: 'Unsatisfied',
     }
 }
