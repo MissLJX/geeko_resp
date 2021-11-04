@@ -103,7 +103,7 @@ class TicketList extends React.Component {
     			ticket.ticketReplies &&
     			<TicketLI key={ticket.id}>
 
-    				<Link to={`${window.ctx||''}/me/m/faq/ticket/${ticket.id}`}>
+    				<Link to={`${window.ctx||''}/support/ticket/${ticket.id}`}>
     			    	<TicketHD className="x-table __vm">
 	    					<div className="x-cell">
 	    						<TicketGrey><FormattedMessage id="ticketid"/>: </TicketGrey>
@@ -172,7 +172,7 @@ const Tickets = class extends React.Component {
   	const BottomText = this.state.finished ? <span>No more</span> : (this.state.loading ? <FormattedMessage id="loading"/> : null)
 
   	return <div>
-      {this.state.finished && this.state.skip === this.state.limit ? <Redirect to="/me/m/faq/ticket/add"/> : <div>
+      {this.state.finished && this.state.skip === this.state.limit ? <Redirect to="/support/ticket/add"/> : <div>
         <PageHeader label={intl.formatMessage({id: 'tickets'})} to="/support/"/>
         <PageContanier>
       				<ScrolledTicketList scrollHandler={this.scrollHandler} tickets={this.state.tickets}/>
@@ -190,7 +190,7 @@ const Tickets = class extends React.Component {
               textTransform: 'uppercase',
               textDecoration: 'none'
             }}
-            to={`${window.ctx||''}/me/m/faq/ticket/add`}><FormattedMessage id="submitticket"/></Link>
+            to={`${window.ctx||''}/support/ticket/add`}><FormattedMessage id="submitticket"/></Link>
           </div>
         </PageContanier>
       </div>

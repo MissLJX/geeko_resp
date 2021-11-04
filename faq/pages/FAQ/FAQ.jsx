@@ -131,13 +131,13 @@ class FAQ extends React.PureComponent{
         const search = (e) => {
             // console.log(e)
             if(e){
-                this.props.history.push({pathname: `${(window.ctx || '')}/me/m/faq/question`, state:{search: e, fromFAQ:true}})
+                this.props.history.push({pathname: `${(window.ctx || '')}/support/question`, state:{search: e, fromFAQ:true}})
             }
         }
 
         const clickItem = (e) => {
             // console.log("item:",e);
-            this.props.history.push({pathname:`${(window.ctx || '')}/me/m/faq/question`, state:{id:e.id, fromFAQ:true}})
+            this.props.history.push({pathname:`${(window.ctx || '')}/support/question`, state:{id:e.id, fromFAQ:true}})
         }
         
         return (

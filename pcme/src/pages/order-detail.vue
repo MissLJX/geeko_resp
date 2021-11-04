@@ -442,6 +442,7 @@
             },
             showTicket:function(data){
                 this.isShowSelect = false
+                localStorage._orderId = JSON.stringify(data);
                 this.$store.dispatch('getTicket',data).then(()=>{
                     this.isShowTicket = true;
                 })

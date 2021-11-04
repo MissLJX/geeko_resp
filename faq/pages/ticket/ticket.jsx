@@ -302,7 +302,7 @@ class Ticket1 extends React.PureComponent{
 
                         {/* 提交按钮 */}
                         <SubmitBtn>
-                            <span onClick={()=>this.props.history.push({pathname:`${(window.ctx || '')}/me/m/faq/order`,state:{from:'ticket'}})}>{intl.formatMessage({id: 'submit'})}</span>    
+                            <span onClick={()=>this.props.history.push({pathname:`${(window.ctx || '')}/support/order`,state:{from:'ticket'}})}>{intl.formatMessage({id: 'submit'})}</span>    
                         </SubmitBtn>
                     </Page>
                 </div>

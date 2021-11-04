@@ -26,7 +26,7 @@ const config = {
     output: {
         path: setPath('dist'),
         // publicPath: '/resources/vue/pcme/', // 正式
-        publicPath: '/wanna/resources/vue/pcme/', // 本地
+        publicPath: '/resources/vue/pcme/', // 本地
         filename:'[name].[contenthash].js'
     },
 

@@ -366,7 +366,7 @@ class TicketAdd extends React.Component {
     }
     // 如果链接中没有传值 而且本地没有数据 则会跳转到ticket列表
     if(!id && !localStorage.__order && !urlParams){
-      this.props.history.push({pathname: `${window.ctx || ''}/me/m/faq/ticket`})
+      this.props.history.push({pathname: `${window.ctx || ''}/support/ticket`})
     }
     // console.log(id)
     if(urlParams){
@@ -647,7 +647,7 @@ class TicketAdd extends React.Component {
 
           <ChatContainer className="x-flex __column" style={{height:"100%", paddingTop:"12px"}}>
             {/* 当前订单 */}
-            <SelectedOrderBox onClick={()=>this.props.history.push({pathname: `${(window.ctx || '')}/me/m/faq/order`,state:{from:'ticketadd'}})}>
+            <SelectedOrderBox onClick={()=>this.props.history.push({pathname: `${(window.ctx || '')}/support/order`,state:{from:'ticketadd'}})}>
                 <OrderNo>
                     {intl.formatMessage({id:"orderno"})}
                     <span>{this.state.ticket ? this.state.ticket.id ? this.state.ticket.id : this.state.order.id : this.state.order.id}</span>

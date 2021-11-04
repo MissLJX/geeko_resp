@@ -91,7 +91,7 @@ export default class SearchResult extends React.Component {
   	  		<ListWrapper className="x-rich __list">
 
   	  			{this.state.list.map(item => (
-  	  				<li key={item.id} onClick={() => { this.props.history.push(`/me/m/faq/question/${item.id}`) }}>
+  	  				<li key={item.id} onClick={() => { this.props.history.push(`/support/question/${item.id}`) }}>
   	  					<div dangerouslySetInnerHTML={{__html: item.richText}}/>
   	  				</li>
 

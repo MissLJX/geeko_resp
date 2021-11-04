@@ -737,7 +737,7 @@ class TicketAdd extends React.Component {
     }
     // 如果链接中没有传值 而且本地没有数据 则会跳转到ticket列表
     if(!id && !localStorage.__order && !urlParams && !customerCode){
-      this.props.history.push({pathname: `${window.ctx || ''}/me/m/faq/ticket`})
+      this.props.history.push({pathname: `${window.ctx || ''}/support/ticket`})
     }
     // console.log(id)
     if(urlParams){
@@ -878,6 +878,17 @@ class TicketAdd extends React.Component {
         loading: false,
         subject: '04',
       })
+      // console.log({
+      //   operaId: order.id,
+      //   questionTypeCode: '04',
+      //   questionType: 'Return the order'
+      // })
+      questionTypeChange({
+        operaId: order.id,
+        questionTypeCode: '04',
+        questionType: 'Return the order'
+      }).then(res => {})
+
       let e = '04'
       let qTReasonList = this.state.questions.find(q => q.value == e) && this.state.questions.find(q => q.value == e).reasons ? 
                          this.state.questions.find(q => q.value == e).reasons : []
@@ -1698,7 +1709,7 @@ class TicketAdd extends React.Component {
         ) : (
           <ChatContainer className="x-flex __column" style={{height:"100%", paddingTop:"12px"}}>
             {/* 当前订单 */}
-            <SelectedOrderBox onClick={()=>this.props.history.push({pathname: `${(window.ctx || '')}/me/m/faq/order`,state:{from:'ticketadd'}})}>
+            <SelectedOrderBox onClick={()=>this.props.history.push({pathname: `${(window.ctx || '')}/support/order`,state:{from:'ticketadd'}})}>
                 <OrderNo>
                     {intl.formatMessage({id:"orderno"})}
                     <span>{this.state.order ? this.state.order.id ? this.state.order.id : '-' : '-'}</span>

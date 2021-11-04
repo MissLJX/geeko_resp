@@ -104,7 +104,7 @@ class Search extends React.Component {
           <SearchResultWrapper>
             {this.state.searchResult.map((q) => (
               <li key={q.id}>
-                <Link to={`${window.ctx||''}/me/m/faq/question/${q.id}`}>{q.title}</Link>
+                <Link to={`${window.ctx||''}/support/question/${q.id}`}>{q.title}</Link>
               </li>
             ))}
           </SearchResultWrapper>

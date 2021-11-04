@@ -91,7 +91,7 @@ class ContactUs extends React.PureComponent{
         return (
             <ContactPage>
                 <Page label={intl.formatMessage({id: 'contact'})} style={{background:"#f6f6f6",border:'none',}}>
-                    <EntryItem onClick={()=> this.props.history.push({pathname:`${(window.ctx || '')}/me/m/faq/ticket`})}>
+                    <EntryItem onClick={()=> this.props.history.push({pathname:`${(window.ctx || '')}/support/ticket`})}>
                         <Icon>&#xe69c;</Icon>
                         <EntryInfoBox>
                             <span>{intl.formatMessage({id: 'Ticket'})}</span>
