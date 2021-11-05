@@ -650,6 +650,7 @@
                 result_id: 0,
                 hadDoneBefore: false,
                 clickSubmit: false,
+                points: 0,
             }
         },
         components:{
@@ -659,12 +660,12 @@
         },
         computed:{
             ...mapGetters('me', ['message']),
-            points(){
-                if(this.message.message && this.message.id == 'M1545'){
-                    let m = JSON.parse(this.message.message).point;
-                    return m
-                }
-            },
+            // points(){
+            //     if(this.message.message && this.message.id == 'M1545'){
+            //         let m = JSON.parse(this.message.message).point;
+            //         return m
+            //     }
+            // },
             isApp(){
                 if(window.isApp !== 'true'){
                     return false;
@@ -675,7 +676,13 @@
         },
         created(){
             // this.getPoints()
-            this.$store.dispatch('me/getMessage', 'M1545')
+            this.$store.dispatch('me/getMessage', 'M1545').then((res=>{
+                console.log(res)
+                if(res.message && res.id == 'M1545'){
+                    let m = JSON.parse(res.message).point;
+                    this.points = m;
+                }
+            }))
             console.log=()=>{
                 
             }

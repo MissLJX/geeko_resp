@@ -37,7 +37,7 @@
                     <p class="points-history">{{$t("point.points_history")}} ></p>
                 </router-link>
 
-                <div class="msg-tips" v-if="seen">{{message.message}}.</div>
+                <div class="msg-tips" v-if="seen">{{message}}.</div>
             </div>
         </div>
     </div>
@@ -51,11 +51,12 @@
         props: {
             me: {
                 type: Object,
-                required: true
+                required: true,
+                message: ''
             }
         },
         computed: {
-            ...mapGetters('me', ['message']),
+            ...mapGetters('me', []),
         },
         data(){
             return{
@@ -63,7 +64,12 @@
             }
         },
         created(){
-            this.$store.dispatch('me/getMessage', 'M1138')
+            this.$store.dispatch('me/getMessage', 'M1138').then((res)=>{
+                console.log(res)
+                if(res && res.message){
+                    this.message = res.message;
+                }
+            })
         }
     }
 </script>

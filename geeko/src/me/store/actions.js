@@ -347,9 +347,7 @@ const actions = {
     },
 
     getMessage({commit},code){
-        return api.getMessage(code).then((code) =>{
-            commit(types.ME_GET_MESSAGE,code)
-        })
+        return api.getMessage(code);
     },
 
     getCreditCards({commit}){
