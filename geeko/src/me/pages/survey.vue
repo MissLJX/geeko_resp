@@ -660,7 +660,7 @@
         computed:{
             ...mapGetters('me', ['message']),
             points(){
-                if(this.message.message){
+                if(this.message.message && this.message.id == 'M1545'){
                     let m = JSON.parse(this.message.message).point;
                     return m
                 }

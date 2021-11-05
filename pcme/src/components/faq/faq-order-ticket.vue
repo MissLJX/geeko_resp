@@ -452,6 +452,7 @@
                 if(this.ticket_con){
                     this.rateData.rate = this.ticket_con && this.ticket_con.ticketRateService ? this.ticket_con.ticketRateService.rate : 5;
                     this.rateData.message = this.ticket_con && this.ticket_con.ticketRateService ? this.ticket_con.ticketRateService.message : ''
+                    this.initReviewMsg = this.ticket_con && this.ticket_con.ticketRateService ? this.ticket_con.ticketRateService.message : ''
                     this.rateData.id = this.ticket_con ? this.ticket_con.id: null
                 }
                 return false

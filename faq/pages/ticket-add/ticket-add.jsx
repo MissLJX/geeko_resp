@@ -1775,7 +1775,7 @@ class TicketAdd extends React.Component {
                                onFocus={()=>{
                                  document.body.scrollTop = document.body.scrollHeight
                                }}
-                               onBlur={() => {document.body.scrollTop = bodyScrollTop}}
+                               onBlur={() => {window.scrollTo(0,0)}}
                               >
                     </TextInput>
                 </ChatInput>
