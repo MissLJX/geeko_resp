@@ -235,6 +235,18 @@ const Me = [
         name:"point-guide",
         meta:{title:"My Points"}
     },
+    {
+        path:ROUTER_PATH_ME + "/my-prizes",
+        component:() => import("../pages/lottery/my-prizes.vue"),
+        name:"my-prizes",
+        meta:{title:"My Prizes"}
+    },
+    {
+        path:ROUTER_PATH_ME + "/get-more-chances",
+        component:() => import("../pages/lottery/get-more-chances.vue"),
+        name:"get-more-chances",
+        meta:{title:"Get More Chances"}
+    },
     // {
     //     path:ROUTER_PATH_ME + "/test",
     //     component:() => import("../pages/Test.vue"),

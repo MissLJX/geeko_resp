@@ -272,9 +272,13 @@ export const getCurrencyList =() => {
 export const getRelationProducts = ({productId,skip}) => {
     return axios.get(`/product/${skip}/20/${productId}/scp-show2`);
 }
-
 // 获取是否存在未评论的订单
 export const getNoCommentOrder = () => {
     // console.log('api 请求')
     return axios.get("/v9/order/exists-order-without-comment",{},{}).then(data => data)
+}
+
+// 获取用户历史积分获得情况
+export const getPointsHistory = (start,end) => {
+    return axios.get("/v9/luck-draw/"+start+"/"+end+"/history")
 }

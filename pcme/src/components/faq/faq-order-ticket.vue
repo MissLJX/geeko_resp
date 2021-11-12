@@ -405,9 +405,8 @@
             this.$store.dispatch("getQuestionType")
             if(localStorage._orderId){
                 setTimeout(()=>{
-                    this.selectChange({value:'04'})
+                    this.selectChange({label:'Return the order',value:'04'})
                 }, 200)
-                localStorage.removeItem('_orderId')
             }
             if(localStorage._code){
                 localStorage.removeItem('_code')
@@ -446,6 +445,32 @@
                 if(this.ticket_con && this.ticket_con.questionTypeCode){
                     // console.log(this.ticket_con)
                     this.selected = this.ticket_con.questionTypeCode
+                    if(this.selected && (!this.ticket_con.subject || this.ticket_con.subject == 'undefined' || !this.ticket_con.subject.match(/[a-z]/ig))){
+                        var fData = new FormData();
+                        if(this.ticket_con?.operaId){
+                            fData.append("operaId",this.ticket_con.operaId)
+                        }else{
+                            fData.append("operaId",localStorage._orderId ? localStorage._orderId :this.ticketid)
+                        }
+                        // console.log(fData.operaId)
+                        fData.append("questionType",this.list.find(q => q.value == this.selected).label)
+                        fData.append("questionTypeCode",this.selected)
+                        this.$store.dispatch("addTicket",fData).then(res=>{})
+                    }
+                    if(!this.selected && this.ticket_con && this.ticket_con.subject && this.ticket_con.subject == '7'){
+                        let otherSubject = this.list[this.list.length-1].value;
+                        this.selected = otherSubject
+                        var fData = new FormData();
+                        if(this.ticket_con?.operaId){
+                            fData.append("operaId",this.ticket_con.operaId)
+                        }else{
+                            fData.append("operaId",localStorage._orderId ? localStorage._orderId :this.ticketid)
+                        }
+                        // console.log(fData.operaId)
+                        fData.append("questionType",this.question && this.question.length > 0 ?(this.questions.find(q=>q.value == otherSubject) ? (this.questions.find(q=>q.value == otherSubject).label) : '' ) : (list.find(l => l.value == otherSubject) ? list.find(l => l.value == otherSubject).label : ''))
+                        fData.append("questionTypeCode",otherSubject)
+                        this.$store.dispatch("addTicket",fData).then(res=>{})
+                    }
                 } else {
                     this.selected = '666'
                 }
@@ -513,7 +538,8 @@
         },
         methods: {
             selectChange(e){
-                if(!this.ticket_con.operaId && !this.ticketid){
+                // console.log(this.usedQuestionType,this.ticket_con.operaId, this.ticketid)
+                if((!this.ticket_con.operaId && !this.ticketid) && !localStorage._orderId){
                     this.questionMaskShow = false
                     return
                 }
@@ -545,7 +571,7 @@
                 if(this.ticket_con?.operaId){
                     fData.append("operaId",this.ticket_con.operaId)
                 }else{
-                    fData.append("operaId",this.ticketid)
+                    fData.append("operaId",localStorage._orderId ? localStorage._orderId :this.ticketid)
                 }
                 // console.log(fData.operaId)
                 fData.append("questionType",e.label)

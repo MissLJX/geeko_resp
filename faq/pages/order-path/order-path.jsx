@@ -113,6 +113,10 @@ export default class Orders extends React.Component {
           }
         }
       })
+      setTimeout(()=>{
+        getOrdersNew.abort()
+      },2000)
+      
     }
   }
 

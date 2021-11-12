@@ -163,7 +163,7 @@ input[type=radio]{
             width: 160px;
             border: 1px solid;
             height: 32px;
-            overflow: hidden;
+            // overflow: hidden;
 
             .m-m-input-input{
                 // min-width: 111px;
@@ -171,6 +171,7 @@ input[type=radio]{
                 align-items: center;
                 justify-content: flex-end;
                 display: inline-block;
+                
                 // width: 90%;
 
                 & > .m-m-input-input-text{
@@ -187,7 +188,7 @@ input[type=radio]{
                     font-stretch: normal;
                     letter-spacing: 0px;
                     color: #222222;
-                    line-height: 28px;
+                    line-height: 27px;
                     // border: 1px solid;
                 }
                 & > .m-m-input-input-text:last-child{

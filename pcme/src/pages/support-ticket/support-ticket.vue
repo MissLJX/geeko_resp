@@ -218,16 +218,15 @@
         },
         created(){
             this.$store.dispatch('getTickets', {skip:0,state:0})
-            // 
-            // console.log(this.$router.currentRoute.query?.id)
-            
         },
         mounted(){
             if(this.$router.currentRoute.query?.id && !urlIdShowed){
+                localStorage.removeItem("_code")
                 localStorage._orderId = this.$router.currentRoute.query?.id
                 this.showTicket(localStorage._orderId)
             }
             if(this.$router.currentRoute.query?.code && !urlIdShowed){
+                localStorage.removeItem("_orderId")
                 localStorage._code = this.$router.currentRoute.query?.code
                 this.showTicketByCode(localStorage._code)
             }

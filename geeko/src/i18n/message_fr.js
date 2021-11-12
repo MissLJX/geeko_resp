@@ -299,5 +299,13 @@ export default {
         },
 
 
+    },
+    my_prize:{
+        my_prizes:'Mes prix',
+        rules1: 'Les points bonus ChicMe sont valables ',
+        rules2: '15 jours',
+        rules3: ' après leur réception.',
+        rules4: "Utilisez les points pour déduire jusqu'à 50 % du montant total des produits lorsque vous passez à la caisse. Pour en savoir plus sur les points et leur utilisation, veuillez ",
+        click_here: 'cliquer ici.'
     }
 }

@@ -299,5 +299,13 @@ export default {
         },
 
 
+    },
+    my_prize:{
+        my_prizes:'Meine Preise',
+        rules1: 'ChicMe-Bonuspunkte sind nach Erhalt ',
+        rules2: '15 Tage',
+        rules3: ' lang gültig.',
+        rules4: 'Verwenden Sie Punkte an der Kasse, um bis zu 50% des Gesamtbetrags der Ware abzuziehen. Um mehr über Punkte und ihre Verwendung zu erfahren, ',
+        click_here: 'klicken Sie hier.'
     }
 }

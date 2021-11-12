@@ -532,6 +532,76 @@ const RateTextArea = styled.textarea`
   }
 `
 
+let list = [{
+  "value":"01",
+  "label":"Cancel the order"
+},{
+  "value":"02",
+  "label":"Modify the order"
+},{
+  "value":"03",
+  "label":"Shipping status",
+  "reasons" : [{
+      "value":"01",
+      "label":"Can't track my order",
+  },{
+      "value":"02",
+    "label":"Shipping time is too long",
+  },{
+      "value":"03",
+    "label":"Not receive the order",
+  },{
+      "value":"04",
+    "label":"Don't want to pay for customs",
+  },{
+      "value":"05",
+    "label":"Delivery shows returned",
+  },{
+      "value":"06",
+    "label":"Only part of the order received",
+  },{
+      "value":"09",
+      "label":"Others"
+  }]
+},{
+  "value":"04",
+  "label":"Return the order",
+  "reasons" : [{
+      "value":"01",
+      "label":"Size is small",
+  },{
+      "value":"02",
+    "label":"Size is large",
+  },{
+      "value":"03",
+    "label":"Size is not as discribed",
+  },{
+      "value":"04",
+    "label":"Received a wrong item",
+  },{
+      "value":"05",
+    "label":"Received a defected item",
+  },{
+      "value":"06",
+    "label":"Item is not as discribed",
+  },{
+      "value":"07",
+    "label":"Received a stained item",
+  },{
+      "value":"08",
+    "label":"Received different colord",
+  },{
+      "value":"09",
+    "label":"Material is transparent",
+  },{
+      "value":"10",
+      "label":"Others"
+  }]
+},{
+  "value":"09",
+  "label":"Others"
+}]
+
 var bodyScrollTop = document.body.scrollTop;
 class TicketAdd extends React.Component {
   constructor (props) {
@@ -782,7 +852,34 @@ class TicketAdd extends React.Component {
           })
         }
       }
+      
       let subject = ticket ? ticket.questionTypeCode : 0
+      if(subject && (!ticket.subject || ticket.subject == 'undefined' || !ticket.subject.match(/[a-z]/ig))){
+        questionTypeChange({
+          operaId: order.id,
+          questionTypeCode: subject,
+          questionType: this.questions.find(q=>q.value == subject) ? 
+                        this.questions.find(q=>q.value == subject).label ?
+                        this.questions.find(q=>q.value == subject).label :
+                        list.find(l => l.value == subject) ?
+                        list.find(l => l.value == subject).label :'': ''
+        }).then(res => {})
+      }
+      
+      // console.log(subject,ticket.subject)
+      if(!subject && ticket && ticket.subject && ticket.subject == '7'){
+        let otherSubject = list[list.length-1].value;
+        subject = otherSubject
+        questionTypeChange({
+          operaId: order.id,
+          questionTypeCode: otherSubject,
+          questionType: this.question && this.question.length > 0 ?
+                        (this.questions.find(q=>q.value == otherSubject) ? (this.questions.find(q=>q.value == otherSubject).label) : '' ) 
+                        : (list.find(l => l.value == otherSubject) ? list.find(l => l.value == otherSubject).label : '')
+        }).then(res => {
+          
+        })
+      }
       this.setState({
         isNew: true,
         ticket,
@@ -801,7 +898,7 @@ class TicketAdd extends React.Component {
       })
       this.initScroll()
     }).catch((data) => {
-      alert(data)
+      alert('000'+data)
       if (data.code === 401) {
         window.location.href = `${window.ctx || ''}/me/m`
       }
@@ -815,6 +912,30 @@ class TicketAdd extends React.Component {
       const {ticket, order, cusomerName, headSculptureUrl} = result
 
       let subject = ticket ? ticket.questionTypeCode : 0
+      if(subject && (!ticket.subject || ticket.subject == 'undefined' || !ticket.subject.match(/[a-z]/ig))){
+        questionTypeChange({
+          operaId: order.id,
+          questionTypeCode: subject,
+          questionType: this.questions.find(q=>q.value == subject) ? 
+                        this.questions.find(q=>q.value == subject).label ?
+                        this.questions.find(q=>q.value == subject).label :
+                        list.find(l => l.value == subject) ?
+                        list.find(l => l.value == subject).label :'': ''
+        }).then(res => {})
+      }
+      if(!subject && ticket.subject == '7'){
+        let otherSubject = list[list.length-1].value;
+        subject = otherSubject
+        questionTypeChange({
+          operaId: order.id,
+          questionTypeCode: otherSubject,
+          questionType: this.question && this.question.length > 0 ?
+                        (this.questions.find(q=>q.value == otherSubject) ? (this.questions.find(q=>q.value == otherSubject).label) : '' ) 
+                        : (list.find(l => l.value == otherSubject) ? list.find(l => l.value == otherSubject).label : '')
+        }).then(res => {
+          
+        })
+      }
       if(ticket){
         if(ticket.ticketReplies.slice(0)[ticket.ticketReplies.slice(0).length - 1]['sender'] == "buyers"){
           this.setState({
@@ -924,6 +1045,31 @@ class TicketAdd extends React.Component {
       const {ticket, order, cusomerName, headSculptureUrl} = result
 
       let subject = ticket ? ticket.questionTypeCode : 0
+      if(subject && (!ticket.subject || ticket.subject == 'undefined' || !ticket.subject.match(/[a-z]/ig))){
+        questionTypeChange({
+          operaId: order.id,
+          questionTypeCode: subject,
+          questionType: this.questions.find(q=>q.value == subject) ? 
+                        this.questions.find(q=>q.value == subject).label ?
+                        this.questions.find(q=>q.value == subject).label :
+                        list.find(l => l.value == subject) ?
+                        list.find(l => l.value == subject).label :'': ''
+        }).then(res => {})
+      }
+      console.log(subject,ticket.subject)
+      if(!subject && ticket.subject == '7'){
+        let otherSubject = list[list.length-1].value;
+        subject = otherSubject
+        questionTypeChange({
+          operaId: order.id,
+          questionTypeCode: otherSubject,
+          questionType: this.question && this.question.length > 0 ?
+                        (this.questions.find(q=>q.value == otherSubject) ? (this.questions.find(q=>q.value == otherSubject).label) : '' ) 
+                        : (list.find(l => l.value == otherSubject) ? list.find(l => l.value == otherSubject).label : '')
+        }).then(res => {
+          
+        })
+      }
       if(ticket){
         if(ticket.ticketReplies.slice(0)[ticket.ticketReplies.slice(0).length - 1]['sender'] == "buyers"){
           this.setState({
@@ -962,78 +1108,10 @@ class TicketAdd extends React.Component {
   }
 
   // 获取question type以及它的子项
-  getQuestionType(){
-    getQuestionType().then((res) => {
+   getQuestionType(){
+     getQuestionType().then((res) => {
       // console.log(res)
-      let list = [{
-        "value":"01",
-        "label":"Cancel the order"
-    },{
-        "value":"02",
-        "label":"Modify the order"
-    },{
-        "value":"03",
-        "label":"Shipping status",
-        "reasons" : [{
-            "value":"01",
-            "label":"Can't track my order",
-        },{
-            "value":"02",
-          "label":"Shipping time is too long",
-        },{
-            "value":"03",
-          "label":"Not receive the order",
-        },{
-            "value":"04",
-          "label":"Don't want to pay for customs",
-        },{
-            "value":"05",
-          "label":"Delivery shows returned",
-        },{
-            "value":"06",
-          "label":"Only part of the order received",
-        },{
-            "value":"09",
-            "label":"Others"
-        }]
-    },{
-        "value":"04",
-        "label":"Return the order",
-        "reasons" : [{
-            "value":"01",
-            "label":"Size is small",
-        },{
-            "value":"02",
-          "label":"Size is large",
-        },{
-            "value":"03",
-          "label":"Size is not as discribed",
-        },{
-            "value":"04",
-          "label":"Received a wrong item",
-        },{
-            "value":"05",
-          "label":"Received a defected item",
-        },{
-            "value":"06",
-          "label":"Item is not as discribed",
-        },{
-            "value":"07",
-          "label":"Received a stained item",
-        },{
-            "value":"08",
-          "label":"Received different colord",
-        },{
-            "value":"09",
-          "label":"Material is transparent",
-        },{
-            "value":"10",
-            "label":"Others"
-        }]
-    },{
-        "value":"09",
-        "label":"Others"
-      }]
+      
       if(res.result && res.result.length > 0){
         list = res.result
       }
@@ -1275,7 +1353,7 @@ class TicketAdd extends React.Component {
     const selectChange= (e) => {
         // console.log(e)
         // return
-        if(this.state.subject == e){
+        if(this.state.subject === e){
           let qTReasonList = questions.find(q => q.value == e) && questions.find(q => q.value == e).reasons ? 
                                questions.find(q => q.value == e).reasons : []
             // 保证每个问题只展示一次
