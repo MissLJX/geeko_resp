@@ -302,7 +302,7 @@ export default {
     },
     my_prize:{
         my_prizes:'Mis premios',
-        rules1: 'Los puntos de bonificación de ChicMe son válidos durante ',
+        rules1: 'Los puntos de bonificación de {website} son válidos durante ',
         rules2: '15 días',
         rules3: ' después de recibirlos.',
         rules4: 'Utilice los puntos para deducir hasta el 50% de la cantidad total de productos cuando realice el pago. Para obtener más información sobre los puntos y su uso, haga ',

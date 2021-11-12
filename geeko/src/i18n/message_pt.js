@@ -302,7 +302,7 @@ export default {
     },
     my_prize:{
         my_prizes:'My Prizes',
-        rules1: 'ChicMe Bonus Points are valid for ',
+        rules1: '{website} Bonus Points are valid for ',
         rules2: '15 days',
         rules3: ' after you receive them.',
         rules4: 'Use the points to deduct up to 50% of the total amount of products when you check out. To learn more about points and their usage, please ',

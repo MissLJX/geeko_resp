@@ -23,7 +23,7 @@
             </div>
             <div class="myPrizesInfo">
                 <div>
-                    {{$t("my_prize.rules1")}}
+                    {{$t("my_prize.rules1",{'website':GLOBAL.sitename})}}
                     <strong>{{$t("my_prize.rules2")}}</strong>
                     {{$t("my_prize.rules3")}}
                 </div>
