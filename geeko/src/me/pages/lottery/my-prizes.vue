@@ -1,7 +1,7 @@
 <template>
     <div id="myPrizesPage" class="myPrizesPage">
         <!-- 标题 -->
-        <nav-bar>
+        <nav-bar v-if="!window.isApp">
             <i class="iconfont el-back-font" slot="left" @click="$router.go(-1)">&#xe693;</i>
             <span slot="center">{{$t("my_prize.my_prizes")}}</span>
         </nav-bar>
@@ -62,36 +62,40 @@ export default {
                 // console.log(res)
                 if(res && res.result && res.result.length > 0){
                     for(let i = 0; i < res.result.length; i++){
+
                         let item = res.result[i];
-                        let date = new Date(item.luckDrawDate).toString().split(" GMT")[0];
-                        let dateList = date.split(" ");
-						date = dateList[1]+"."+dateList[2]+"."+dateList[3]+ " "+dateList[4];
-                        item['date'] = date;
-                        if(item.prize.type == 1){
-                            // 积分
-                            item['name'] = item.prize.name
-                            item['icon'] = '&#xe7e1;'
-                        } else if(item.prize.type == 2 || item.prize.type == 5){
-                            // 优惠券
-                            item['name'] = item.prize.name
-                            item['icon'] = '&#xe7e0;'
-                        } else if(item.prize.type == 6){
-                            // 美妆实物
-                            item['name'] = item.prize.name
-                            item['icon'] = '&#xe6f8;'
-                            item['url'] = window.ctx || '' + "/collection/lucky-draw-chicmex/" + item.prize.data + '.html?collectionId='+collecticonId+'&id='+collecticonId
-                        } else if(item.prize.type == 1){
-                            // 生活好物
-                             item['name'] = item.prize.name
-                            item['icon'] = '&#xe7df;'
-                        } else if(item.prize.type == 3){
-                            // iphone 13
-                            item['name'] = item.prize.name
-                            item['image'] = 'https://s3.us-west-2.amazonaws.com/image.chic-fusion.com/2021-11-01-lottery/2021-11-10-jiugongge-mask-iphone.png'
-                        } else {
-                            res.result.splice(i, 1)
-                            i--
+                        if(item.prize){
+                            let date = new Date(item.luckDrawDate).toString().split(" GMT")[0];
+                            let dateList = date.split(" ");
+                            date = dateList[1]+"."+dateList[2]+"."+dateList[3]+ " "+dateList[4];
+                            item['date'] = date;
+                            if(item.prize.type == 1){
+                                // 积分
+                                item['name'] = item.prize.name
+                                item['icon'] = '&#xe7e1;'
+                            } else if(item.prize.type == 2 || item.prize.type == 5){
+                                // 优惠券
+                                item['name'] = item.prize.name
+                                item['icon'] = '&#xe7e0;'
+                            } else if(item.prize.type == 6){
+                                // 美妆实物
+                                item['name'] = item.prize.name
+                                item['icon'] = '&#xe6f8;'
+                                item['url'] = window.ctx || '' + "/collection/lucky-draw-chicmex/" + item.prize.data + '.html?collectionId='+collecticonId+'&id='+collecticonId
+                            } else if(item.prize.type == 1){
+                                // 生活好物
+                                item['name'] = item.prize.name
+                                item['icon'] = '&#xe7df;'
+                            } else if(item.prize.type == 3){
+                                // iphone 13
+                                item['name'] = item.prize.name
+                                item['image'] = 'https://s3.us-west-2.amazonaws.com/image.chic-fusion.com/2021-11-01-lottery/2021-11-10-jiugongge-mask-iphone.png'
+                            } else {
+                                res.result.splice(i, 1)
+                                i--
+                            }
                         }
+                        
                     }
                     this.pointsHistoryList = res.result;
                 }
