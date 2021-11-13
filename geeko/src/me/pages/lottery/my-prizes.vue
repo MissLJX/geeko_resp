@@ -97,8 +97,8 @@ export default {
                                 item['name'] = item.prize.name
                                 item['image'] = 'https://s3.us-west-2.amazonaws.com/image.chic-fusion.com/2021-11-01-lottery/2021-11-10-jiugongge-mask-iphone.png'
                             } else {
-                                res.result.splice(i, 1)
-                                i--
+                                item['name'] = item.prize.name
+                                item['icon'] = '&#xe634;'
                             }
                         }
                         
