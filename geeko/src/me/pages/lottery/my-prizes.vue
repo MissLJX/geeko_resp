@@ -81,7 +81,13 @@ export default {
                                 // 美妆实物
                                 item['name'] = item.prize.name
                                 item['icon'] = '&#xe6f8;'
-                                item['url'] = window.ctx || '' + "/collection/lucky-draw-chicmex/" + item.prize.data + '.html?collectionId='+collecticonId+'&id='+collecticonId
+                                // item['url'] = window.ctx || '' + "/collection/lucky-draw-chicmex/" + item.prize.data + '.html?collectionId='+item.prize.data+'&id='+item.prize.data
+                                if(!window.isApp){
+                                    item['url'] = 'chic-me://chic.me/shoppingcart'
+                                } else {
+                                    item['url'] = window.ctx || '' + '/cart'
+                                }
+                                
                             } else if(item.prize.type == 1){
                                 // 生活好物
                                 item['name'] = item.prize.name
