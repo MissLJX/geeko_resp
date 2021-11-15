@@ -104,7 +104,7 @@ export default {
                                 item['image'] = 'https://s3.us-west-2.amazonaws.com/image.chic-fusion.com/2021-11-01-lottery/2021-11-10-jiugongge-mask-iphone.png'
                             } else {
                                 item['name'] = item.prize.name
-                                item['icon'] = '&#xe634;'
+                                item['icon'] = '&#xe7e3;'
                                 item['isThanks'] = true
                             }
                             
@@ -117,7 +117,12 @@ export default {
 
         },
         toNewPage(){
-            window.location.href = '/fs/points-policy'
+            if(this.isApp){
+                window.location.href = window.ctx||''+'/fs/points-policy?isApp=1'
+            } else {
+                window.location.href = window.ctx||''+'/fs/points-policy'
+            }
+            
         }
     }
 }
@@ -125,11 +130,11 @@ export default {
 
 <style scoped lang="scss">
     @font-face {
-        font-family: 'iconfont';  /* Project id 384296 */
-        src: url('//at.alicdn.com/t/font_384296_u4r30opi34s.woff2?t=1636698646527') format('woff2'),
-            url('//at.alicdn.com/t/font_384296_u4r30opi34s.woff?t=1636698646527') format('woff'),
-            url('//at.alicdn.com/t/font_384296_u4r30opi34s.ttf?t=1636698646527') format('truetype');
-        }
+  font-family: 'iconfont';  /* Project id 384296 */
+  src: url('//at.alicdn.com/t/font_384296_jwzi5i781r9.woff2?t=1636964763299') format('woff2'),
+       url('//at.alicdn.com/t/font_384296_jwzi5i781r9.woff?t=1636964763299') format('woff'),
+       url('//at.alicdn.com/t/font_384296_jwzi5i781r9.ttf?t=1636964763299') format('truetype');
+}
     .quanIcon{
         display: block;
         width: 26px;
