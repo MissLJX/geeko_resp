@@ -1,7 +1,7 @@
 <template>
     <div id="myPrizesPage" class="myPrizesPage">
         <!-- 标题 -->
-        <nav-bar v-if="!window.isApp">
+        <nav-bar v-if="!isApp">
             <i class="iconfont el-back-font" slot="left" @click="$router.go(-1)">&#xe693;</i>
             <span slot="center">{{$t("my_prize.my_prizes")}}</span>
         </nav-bar>
@@ -10,7 +10,8 @@
                 <ul class="myPrizesUl">
                     <li v-for="(item,index) in pointsHistoryList" :key="index">
                         <div class="getPoints" @click="toCollection(item.url?item.url:'')">
-                            <span class='quanIcon iconfont' v-if="item.icon" v-html="item.icon"></span>
+                            <span class='quanIcon iconfont' v-if="item.icon && !item.isThanks" v-html="item.icon"></span>
+                            <span class='quanIcon iconfont' style="font-size: 12px;" v-if="item.icon && item.isThanks" v-html="item.icon"></span>
                             <img class="quanIcon" style="background: none;" v-if="item.image" :src="item.image"/>
                             <div v-if="!item.url">{{item.name}}</div>
                             <div v-if="item.url" style="cursor:pointer;text-decoration:underline;">{{item.name}}</div>
@@ -46,10 +47,15 @@ export default {
     },
     created(){
         this.getList()
-        console.log(window.isApp)
+        // console.log("window.isApp",window.isApp);
     },
     components:{
         "nav-bar":NavBar
+    },
+    computed:{
+        isApp(){
+            return window.isApp == 'true'
+        }
     },
     methods:{
         toCollection(url){
@@ -82,10 +88,10 @@ export default {
                                 item['name'] = item.prize.name
                                 item['icon'] = '&#xe6f8;'
                                 // item['url'] = window.ctx || '' + "/collection/lucky-draw-chicmex/" + item.prize.data + '.html?collectionId='+item.prize.data+'&id='+item.prize.data
-                                if(!window.isApp){
+                                if(this.isApp){
                                     item['url'] = 'chic-me://chic.me/shoppingcart'
                                 } else {
-                                    item['url'] = window.ctx || '' + '/cart'
+                                    item['url'] = (window.ctx || '') + '/cart'
                                 }
                                 
                             } else if(item.prize.type == 1){
@@ -99,7 +105,9 @@ export default {
                             } else {
                                 item['name'] = item.prize.name
                                 item['icon'] = '&#xe634;'
+                                item['isThanks'] = true
                             }
+                            
                         }
                         
                     }
