@@ -75,6 +75,9 @@
                 <p class="iconfont">&#xe6da;</p>
                 <p>{{$t("index.get_discount")}}</p>
             </a>
+
+            <!-- 积分膨胀提示组件 -->
+            <index-points-modal></index-points-modal>
         </div>
 
         <div class="order">
@@ -179,6 +182,8 @@
     import store from '../../../store/index.js';
     import * as utils from '../../../utils/geekoutils.js';
 
+    import IndexPointsModal from "./IndexPointsModal.vue"
+
     import Swiper from "../../../components/swiper/swiper.vue"
     import _ from "lodash"
 
@@ -191,7 +196,8 @@
             }
         },
         components:{
-            "swiper":Swiper
+            "swiper":Swiper,
+            "index-points-modal":IndexPointsModal
         },
         computed:{
             ...mapGetters('me', [
@@ -511,6 +517,7 @@
             display: flex;
             margin-top: 20px;
             padding: 0px 5px;
+            position: relative;
 
             & > a{
                 flex: 1;
