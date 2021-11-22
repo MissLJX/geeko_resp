@@ -3,10 +3,11 @@
         <transition name="fade">
             <div class="points_message" v-if="isShowMessage">
                 <!-- Vue-i18n  组件插值语法 -->
-                <i18n path="index.the_countdown_begins" tag="span" for="index.the_countdown_begins_discount">
+                <!-- <i18n path="index.the_countdown_begins" tag="span" for="index.the_countdown_begins_discount">
                     <span class="_font">{{ $t('index.the_countdown_begins_discount') }}</span>
-                </i18n>
+                </i18n> -->
                 <!-- <span>The countdown begins. <span class="_font">100 points = US$2.</span> Grab it or regret it! </span> -->
+                <span v-html="this.indexMessage"></span>
             </div>
         </transition>
     </div>
@@ -21,11 +22,17 @@
                 isShowMessage:false
             }
         },
+        props:{
+            indexMessage:{
+                type:String,
+                default:""
+            }
+        },
         mounted:function(){
             let cacheName = "index_points_message";
             let index_point = Cache.get(cacheName);
             
-            if(!index_point){
+            if(!index_point && this.indexMessage){
                 this.isShowMessage = true;
                 Cache.set(cacheName,true);
                 setTimeout(() => {

@@ -77,7 +77,7 @@
             </a>
 
             <!-- 积分膨胀提示组件 -->
-            <index-points-modal></index-points-modal>
+            <index-points-modal :index-message="dobulePoints.me.message" v-if="dobulePoints && dobulePoints.me"></index-points-modal>
         </div>
 
         <div class="order">
@@ -201,7 +201,7 @@
         },
         computed:{
             ...mapGetters('me', [
-                'pointsAllSkip','me', "isLogin", 'feed', 'notificationCount', 'orderCountUnpaid',"shoppingCartCount","messageM1518","hasNoCommentOrder"
+                'pointsAllSkip','me', "isLogin", 'feed', 'notificationCount', 'orderCountUnpaid',"shoppingCartCount","messageM1518","hasNoCommentOrder","dobulePoints"
             ]),
             baseHeaderUrl() {
                 if (window.name === 'chicme') {
@@ -358,6 +358,8 @@
                 };
                 this.swiperData.push(obj2);
             }
+
+            !(this.dobulePoints && this.dobulePoints.me) && store.dispatch("me/getDobulePointsData","M1578");
         },
         mounted(){
             // let cookie = utils.getLocalCookie('_has_no_comment_order')

@@ -47,11 +47,17 @@
         const lefting = this.lefting;
         const day = Math.floor(lefting / __dayoffset);
         const _leftday = lefting % __dayoffset;
-        const hour = Math.floor(_leftday / __houroffset);
+        let hour = Math.floor(_leftday / __houroffset);
         const _lefthour = lefting % __houroffset;
         const minute = Math.floor(_lefthour / __minuteoffset);
         const second = Math.floor((lefting % __minuteoffset)/1000);
         // return `${this.getFullNumber(day)}:${this.getFullNumber(hour)}:${this.getFullNumber(minute)}:${this.getFullNumber(second)}`;
+
+        if(!this.showDay){
+          hour = hour + (day*24);
+        }
+
+
         return {
           day: this.getFullNumber(day),
           hour: this.getFullNumber(hour),

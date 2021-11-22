@@ -29,13 +29,13 @@
                     <span class="dobule-icon"></span>
                 </p>
 
-                <div class="points-message-modal">
-                    <p class="_hd">100 points = 2 USD</p>
+                <div class="points-message-modal" v-if="dobulePoints && dobulePoints.points">
+                    <p class="_hd">{{dobulePoints.points.discount}}</p>
                     <div class="_bd">
-                        <span class="_font">Se Termine Par</span>
+                        <span class="_font">{{dobulePoints.points.message}}</span>
                         <count-down 
-                            :timeLeft="79831085" 
-                            v-if="true" 
+                            :timeLeft="getTimeLeft" 
+                            v-if="getTimeLeft >= 1000" 
                             :timeStyle="{width:'16px',height:'16px',backgroundColor:'#222222',color:'#ffffff',padding:'2px',borderRadius:'2px',fontSize:'12px'}"
                             :show-hour="true"
                             class="countdown"
@@ -64,6 +64,7 @@
 
 <script type="text/ecmascript-6">
     import CountDown from "../../components/countdow.vue"
+    import {mapGetters} from "vuex"
 
     export default {
         props: {
@@ -78,13 +79,25 @@
                 seen:false
             }
         },
+        computed:{
+            ...mapGetters("me",["dobulePoints"]),
+            getTimeLeft(){
+                if(this.dobulePoints && this.dobulePoints.points){
+                    return this.dobulePoints.points.endTime - this.dobulePoints.points.startTime;
+                }
+                return 0;
+            }
+
+        },
         created(){
             this.$store.dispatch('me/getMessage', 'M1138').then((res)=>{
                 // console.log(res)
                 if(res && res.message){
                     this.message = res.message;
                 }
-            })
+            });
+
+            !(this.dobulePoints && this.dobulePoints.points) && this.$store.dispatch("me/getDobulePointsData","M1578");
         },
         components:{
             "count-down":CountDown
