@@ -14,6 +14,8 @@
                         {{$t("index.my_profile")}} >
                     </router-link>
                 </div>
+
+                <index-points-modal :index-message="dobulePoints.me.message" v-if="dobulePoints && dobulePoints.me"></index-points-modal>
             </div>
 
             <!-- order -->
@@ -111,6 +113,7 @@
     import IndexWishList from "../components/index/index-wishlist.vue"
     import IndexYouLikes from "../components/index/index-you-likes.vue"
     import IndexShare from "../components/index/index-share.vue"
+    import IndexPointsModal from "../components/index/index-points-modal.vue"
 
     export default {
         data(){
@@ -128,10 +131,11 @@
             "index-service-container":IndexServiceContainer,
             "index-wishlist":IndexWishList,
             "index-you-likes":IndexYouLikes,
-            "index-share":IndexShare
+            "index-share":IndexShare,
+            "index-points-modal":IndexPointsModal
         },
         computed:{
-            ...mapGetters(['me',"feed","copylink"]),
+            ...mapGetters(['me',"feed","copylink","dobulePoints"]),
             pointsCustomer(){
                 return this.$store.getters["point/pointsCustomerNum"];
             },
@@ -160,7 +164,8 @@
         },
         created(){
             store.dispatch("point/getCustomerPointsNum");
-            store.dispatch('getShareKey','copy')
+            store.dispatch('getShareKey','copy');
+            !(this.dobulePoints && this.dobulePoints.me) && store.dispatch("getDobulePointsData","M1578");
         }
     }
 

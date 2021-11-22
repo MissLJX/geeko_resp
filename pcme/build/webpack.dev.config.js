@@ -48,7 +48,7 @@ const config = {
     proxy: {
 			'/api': {
 				// target: 'https://www.chicme.xyz',
-				target: 'http://localhost:8080/wanna',
+				target: 'http://localhost:8080',
 				pathRewrite: { '^/api': '' },
 				cookieDomainRewrite: 'localhost',
 				cookiePathRewrite: {

@@ -11,7 +11,10 @@
         <div class="points">
             <div class="tot-credits fl-l">
                 <p><span class="p-red">{{pointsCustomer.points}}</span></p>
-                <p style="font-size: 12px;color: #222222;"><span>= {{pointsCustomer.exchangeAmount}}</span></p>
+                <p style="font-size: 12px;color: #222222;">
+                    <span>= {{pointsCustomer.exchangeAmount}}</span>
+                    <span class="dobule-icon"></span>
+                </p>
             </div>
             <div class="line fl-l"></div>
             <div class="overdue-credits fl-l">
@@ -21,6 +24,22 @@
                     <div class="tips" v-if="seen">{{message.message}}.</div>
                 </div>
             </div>
+
+
+            <div class="points-message-modal" v-if="dobulePoints && dobulePoints.points">
+                <p class="_hd">{{dobulePoints.points.discount}}</p>
+                <div class="_bd">
+                    <span class="_font">{{dobulePoints.points.message}}</span>
+                    <count-down 
+                        :timeLeft="getTimeLeft" 
+                        v-if="true" 
+                        :timeStyle="{width:'16px',height:'16px',backgroundColor:'#ffffff',color:'#222222',padding:'2px',borderRadius:'2px',fontSize:'16px',fontFamily: 'AcuminPro-Bold'}"
+                        :show-hour="true"
+                        class="countdown"
+                    />
+                </div>
+            </div>
+
         </div>
 
         <!-- <div class="r-u">
@@ -93,9 +112,11 @@
     import PointsContainer from './point/PointsContainer.vue'
     import loding from './loding.vue'
 
+    import CountDowns from "../components/countdowns.vue"
+
     export default {
         computed: {
-            ...mapGetters(['credits','message','me']),
+            ...mapGetters(['credits','message','me',"dobulePoints"]),
             indexUrl(){
                 return utils.PROJECT + '/'
             },
@@ -112,7 +133,13 @@
                 return this.$store.getters["point/pointsCustomerNum"];
             },
             getDownLoadImage(){
-                return window.downloadIcon ? downloadIcon : "";
+                return window.downloadIcon ? window.downloadIcon : "";
+            },
+            getTimeLeft(){
+                if(this.dobulePoints && this.dobulePoints.points){
+                    return this.dobulePoints.points.endTime - this.dobulePoints.points.startTime;
+                }
+                return 0;
             }
         },
         data(){
@@ -129,32 +156,12 @@
             isShow: function(){
                 this.seen = !this.seen;
 
-            },
-            // getDate(time){
-            //     if(time == null){
-            //         return ''
-            //     }
-            //     return utils.enTime(new Date(time))
-            // },
-            // getYear(time){
-            //     if(time == null){
-            //         return ''
-            //     }
-            //     return utils.enYear(new Date(time))
-            // },
-            // getMonth(time){
-            //     if(time == null){
-            //         return ''
-            //     }
-            //     return utils.enMonth(new Date(time))
-            // },
-            // changeMethod:function(){
-            //     this.isActive = !this.isActive
-            // },
+            }
         },
         components:{
             "points-container":PointsContainer,
-            "loding":loding
+            "loding":loding,
+            "count-down":CountDowns
         },
         created(){
             this.$store.dispatch('getMessage', 'M1138');
@@ -165,6 +172,8 @@
             this.$store.dispatch("point/getCustomerPointsNum").then(() => {
                 _this.isLoadingShow = false;
             });
+
+            !(this.dobulePoints && this.dobulePoints.points) && this.$store.dispatch("getDobulePointsData","M1578");
         }
     }
 </script>
@@ -220,6 +229,7 @@
         width: 915px;
         height: 145px;
         background-color: #f9f9f9;
+        position: relative;
         .fl-l{
             float: left;
         }
@@ -244,6 +254,19 @@
             color: #222;
             p{
                 margin-bottom: 5px;
+
+                & span{
+                    vertical-align: middle;
+                }
+
+                .dobule-icon{
+                    width: 16px;
+                    height: 16px;
+                    display: inline-block;
+                    background-image: url(https://s3.us-west-2.amazonaws.com/image.chic-fusion.com/chicme/2021111101/pengzhang.svg);
+                    background-size: cover;
+                    line-height: 20px;
+                }
             }
         }
         .overdue-credits{
@@ -279,6 +302,53 @@
                     padding: 20px 0 0 20px;
                     color: #666;
                 }
+            }
+        }
+
+        .points-message-modal{
+            background-color: #222222;
+            padding: 8px 10px;
+            position: absolute;
+            width: 190px;
+            left:106px;
+            top: 115px;
+            -os-box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.3);
+            -ms-box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.3);
+            box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.3);
+            color: #ffffff;
+            text-align: center;
+
+            ._hd{
+                color: #ffffff;
+                font-size: 14px;
+                font-family: 'AcuminPro-Bold';
+            }
+
+            ._bd{
+                // display: flex;
+                ._font{
+                    color: #ffffff;
+                    font-size: 12px;
+                    font-family: 'AcuminPro-Bold';
+                }
+
+                .countdown{
+                    margin-top: 5px;
+                }
+            }
+
+            &::after{
+                content: ' ';
+                position: absolute;
+                width: 10px;
+                height: 10px;
+                right:30px;
+                top: -4px;
+                background-color: #222222;
+                transform:rotate(315deg);
+                -moz-transform:rotate(315deg); 	/* Firefox */
+                -webkit-transform:rotate(315deg); /* Safari 和 Chrome */
+                box-shadow: 0px 0px 0px 0 transparent, 0 0px 0px 0px transparent, 0 0 0 0 transparent, 1px -1px 2px -1px rgba(0,0,0,0.25);
             }
         }
     }
