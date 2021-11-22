@@ -5,7 +5,7 @@
             <div class="headerContent">
                 <div class="headerLogo">
                     <div class="logo" @click="backHome()">
-                        <img src="https://dgzfssf1la12s.cloudfront.net/site/pc/logo03_.png" alt="Chic Me">
+                        <img :src="logo" alt="siteName">
                     </div>
                     <div class="support" @click="backSupport()">{{$t("support.s_support")}}</div>
                 </div>
@@ -76,6 +76,18 @@ export default {
         '$route': 'tabChange'
     },
     computed:{
+        logo(){
+            if(window.blackLogo){
+                return window.blackLogo
+            }
+            return 'https://dgzfssf1la12s.cloudfront.net/site/pc/logo03_.png'
+        },
+        siteName(){
+            if(window.floderName){
+                return window.floderName
+            }
+            return'ChicMe'
+        }
     },
     methods:{
         tabChange(item){

@@ -282,3 +282,8 @@ export const getNoCommentOrder = () => {
 export const getPointsHistory = (start,end) => {
     return axios.get("/v9/luck-draw/"+start+"/"+end+"/history")
 }
+
+// survey 获取问题配置
+export const getSurveyQuestions = (config) => {
+    return axios.get('/message/anon/get-list/'+config,{},{}).then(data => data)
+}

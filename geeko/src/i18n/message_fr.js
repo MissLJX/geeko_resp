@@ -168,6 +168,8 @@ export default {
         survey_thanks: "Vous avez déjà soumis cette enquête ！Vous avez ",
         survey_thanks_points: '{point} points',
         survey_thanks_more: ' sur votre compte, jetez un œil et bon shopping sur {website}!',
+        survey_go_shopping : "Faire du shopping",
+        survey_view_points : "Points de vue",
         survey_question_1: {
             title: "*En ce qui concerne les achats d'articles de mode, prenez-vous généralement une décision à l'avance ou au moment de l'achat ?",
             answer1: 'Avant',

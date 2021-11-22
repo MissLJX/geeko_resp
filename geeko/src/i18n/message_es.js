@@ -168,6 +168,8 @@ export default {
         survey_thanks: "Ya enviaste esta encuesta！ ¡Tienes ",
         survey_thanks_points: '{point} puntos ',
         survey_thanks_more: 'en tu cuenta, échale un vistazo y disfruta comprando en {website}!',
+        survey_go_shopping: "Ir de compras",
+        survey_view_points: 'Puntos de vista',
         survey_question_1: {
             title: '*Con respecto a la compra de artículos de moda, ¿suele tomar una decisión de antemano o en el momento de la compra?',
             answer1: 'De antemano',

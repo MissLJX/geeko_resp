@@ -395,6 +395,7 @@
                 questionSubmitLoading: false, // 正在上传
                 successShow: false, // 上传成功提示
                 descriptionRequired: false, // description是否必填
+                _orderId: '',
             }
         },
         components: {
@@ -404,10 +405,14 @@
         mounted(){
             this.$store.dispatch("getQuestionType")
             if(localStorage._orderId){
+                this._orderId = localStorage._orderId
                 setTimeout(()=>{
                     this.selectChange({label:'Return the order',value:'04'})
                 }, 200)
-            }
+                setTimeout(()=>{
+                    localStorage.removeItem('_orderId')
+                }, 400)
+            } 
             if(localStorage._code){
                 localStorage.removeItem('_code')
             }
@@ -450,7 +455,7 @@
                         if(this.ticket_con?.operaId){
                             fData.append("operaId",this.ticket_con.operaId)
                         }else{
-                            fData.append("operaId",localStorage._orderId ? localStorage._orderId :this.ticketid)
+                            fData.append("operaId",this._orderId ? this._orderId :this.ticketid)
                         }
                         // console.log(fData.operaId)
                         fData.append("questionType",this.list.find(q => q.value == this.selected).label)
@@ -464,7 +469,7 @@
                         if(this.ticket_con?.operaId){
                             fData.append("operaId",this.ticket_con.operaId)
                         }else{
-                            fData.append("operaId",localStorage._orderId ? localStorage._orderId :this.ticketid)
+                            fData.append("operaId",this._orderId ? this._orderId :this.ticketid)
                         }
                         // console.log(fData.operaId)
                         fData.append("questionType",this.question && this.question.length > 0 ?(this.questions.find(q=>q.value == otherSubject) ? (this.questions.find(q=>q.value == otherSubject).label) : '' ) : (list.find(l => l.value == otherSubject) ? list.find(l => l.value == otherSubject).label : ''))
@@ -539,7 +544,7 @@
         methods: {
             selectChange(e){
                 // console.log(this.usedQuestionType,this.ticket_con.operaId, this.ticketid)
-                if((!this.ticket_con.operaId && !this.ticketid) && !localStorage._orderId){
+                if((!this.ticket_con.operaId && !this.ticketid) && !this._orderId){
                     this.questionMaskShow = false
                     return
                 }
@@ -571,7 +576,7 @@
                 if(this.ticket_con?.operaId){
                     fData.append("operaId",this.ticket_con.operaId)
                 }else{
-                    fData.append("operaId",localStorage._orderId ? localStorage._orderId :this.ticketid)
+                    fData.append("operaId",this._orderId ? this._orderId :this.ticketid)
                 }
                 // console.log(fData.operaId)
                 fData.append("questionType",e.label)

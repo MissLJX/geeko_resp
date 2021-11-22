@@ -262,6 +262,8 @@ export default {
         survey_thanks: "You have already submitted this survey ！You've got ",
         survey_thanks_points: '{point} points',
         survey_thanks_more: ' in your account, have a look and enjoy shopping at {website}!',
+        survey_go_shopping: 'Go Shopping',
+        survey_view_points: 'View Points',
         survey_question_1: {
             title: '*Regarding shopping fashion items, do you typically make a decision beforehand or at the time of shopping?',
             answer1: 'Beforehand',

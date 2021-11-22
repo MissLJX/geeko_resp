@@ -9,16 +9,15 @@
         </div>
 
         <div class="survey-container" v-if="!maskShow">
-            <div class="survey-info">
+            <!-- <div class="survey-info">
                 <div class="info-box">
                     <div class="info-title">{{$t("survey.survey_title")}}</div>
-                    <!-- 加 points参数： -->
                     <div class="info-content">{{$t("survey.survey_title_content", {website: GLOBAL.sitename, point: points})}}</div> 
                 </div>
-            </div>
+            </div> -->
 
-            <question-item v-for='(item,index) in questionList' 
-                           :noBorder="index == questionList.length-1"
+            <question-item v-for='(item,index) in questionListAll' 
+                           :noBorder="index == questionListAll.length-1 || item.noBorder"
                            :defaultV="item.defaultValue?item.defaultValue:''"
                            :index="index"
                            :key="item.title.split(' ')[-1]" 
@@ -30,9 +29,10 @@
                            @change="(e)=> questionChange(e)"
                            :question="item"
                            :ref="'question'+(index+1)"
+                           :content="item.content"
                            ></question-item>
 
-            <div class="survey-info">
+            <!-- <div class="survey-info">
                 <div class="info-box">
                     <div class="info-content">{{$t("survey.survey_to_help_us")}}</div> 
                 </div>
@@ -51,7 +51,7 @@
                             @change="(e)=> questionChange(e)"
                             :question="item"
                             :ref="'question'+(index+questionList.length+1)"
-                            ></question-item>
+                            ></question-item> -->
         
             <div class="btnBox">
                 <div class="submitBtn" @click="()=>submit()">
@@ -64,15 +64,14 @@
             <div class="maskInfo">
                 <i class="iconfont maskClose" @click="()=>this.maskShow=false">&#xe7c9;</i>
                 <img src="https://image.geeko.ltd/chicme/2021-9-7/2021-9-7-me-survey-points.png" alt="">
-                <div class="maskContent">
-                     {{clickSubmit ? $t("survey.survey_thanks_done"):$t("survey.survey_thanks")}}
-                     <!-- ,{points: ...} -->
+                <div class="maskContent" v-html="clickSubmit ? maskContent.contentDone : maskContent.content">
+                     <!-- {{clickSubmit ? $t("survey.survey_thanks_done"):$t("survey.survey_thanks")}}
                     <strong>{{$t("survey.survey_thanks_points", {point: points})}}</strong>
-                    {{$t("survey.survey_thanks_more",{website: GLOBAL.sitename})}}                    
+                    {{$t("survey.survey_thanks_more",{website: GLOBAL.sitename})}}                     -->
                 </div>
                 <div class="maskButton">
-                    <div class="maskBtn" @click="()=>goShopping()">Go Shopping</div>
-                    <div class="maskBtn view" @click="()=>viewPoints()">View Points</div>
+                    <div class="maskBtn" @click="()=>goShopping()">{{$t("survey.survey_go_shopping")}}</div>
+                    <div class="maskBtn view" @click="()=>viewPoints()">{{$t("survey.survey_view_points")}}</div>
                 </div>
             </div>
         </div>
@@ -82,94 +81,264 @@
 <script>
     import Question from '../components/question/question.vue'
     import {mapGetters, mapActions} from 'vuex';
+    import {getSurveyQuestions} from '../api/index';
 
-    let questionObject = [
+    let questionAll = [
         {
-            id:0,
-            title:'*Regarding shopping fashion items, do you typically make a decision beforehand or at the time of shopping?',
-            answer:'',
-            input: ''
-        },{
-            id:1,
-            title:'*Which factors are important to you when you make the decision to purchase a product?（You can choose one or more）',
-            answer:'',
-            input: ''
-        },{
-            id:2,
-            title:'*How often do you shop for fashion items?',
-            answer:'',
-            input: ''
-        },{
-            id:3,
-            title:'*What promotion would you prefer?',
-            answer:''
-        },{
-            id:4,
-            title:'*Which kind of style would you prefer?',
-            answer:'',
-            input: ''                  
-        },{
-            id:5,
-            title:'*How did you know ChicMe?（You can choose one or more）',
-            answer:'',
-            input: ''
-        },{
-            id:6,
-            title:'*How familiar are you with ChicMe?',
-            answer:'',
-            input: ''
-        },{
-            id:7,
-            title:'*How well does our website & APP meet your needs?',
-            answer:'',
-            input: ''
-        },{
-            id:8,
-            title:'*How easy was it to find what you were looking for on our website & APP？',
-            answer:'',
-            input: ''
-        },{
-            id:9,
-            title:'*Would you recommend ChicMe website and APP to friends or colleagues?',
-            answer:'',
-            input: ''
-        },{
-            id:10,
-            title:'*What are the brands that you typically buy ? Please list three of your favorite.',
-            answer:'',
-            input: ''
-        },{
-            id:11,
-            title:'*Do you have any comments about how we can improve our website & APP?',
-            answer:'',
-            input: ''
-        },{
-            id:12,
-            title:'*What is your age?',
-            answer:'',
-            input: ''
-        },{
-            id:13,
-            title:'*What is your gender?',
-            answer:'',
-            input: ''
-        },{
-            id:14,
-            title:'*Which country do you live in?',
-            answer:'',
-            input: ''
-        },{
-            id:15,
-            title:'*What kind of occupation are you in?',
-            answer:'',
-            input: ''
-        },{
-            id:16,
-            title:'*On average, how much do you spend on fashion items each month?',
-            answer:'',
-            input: ''
+            "title": "Dear Customer",
+            "content": "At Bellewholesale , we are always looking to bring more good products and services for you.So that we can better understand your demand and preferences, we kindly invite you to take part in this short survey.To thank you for your support, we will offer you 200 points to your account.",
+            "type": "title",
+            "defaultValue": "",
+            "noBorder": true,
+            "inputValue": "",
+            "answerList": []
         },
-        
+        {
+            "title": "*What kind of your clothing boutique?",
+            "id": 0,
+            "type": "radio",
+            "defaultValue": "",
+            "inputValue": "",
+            "answerList": [{
+                    "label": "Physical Store",
+                    "value": "Physical Store"
+                },
+                {
+                    "label": "Online Shop",
+                    "value": "Online Shop"
+                }
+            ]
+        },
+        {
+            "title": "*What is your boutique website ?",
+            "type": "textarea",
+            "defaultValue": "",
+            "inputValue": "",
+            "id": 1,
+            "answerList": [
+
+            ]
+        },
+        {
+            "title": "*What are the top three best-selling product types in your clothing boutique?",
+            "type": "textarea",
+            "defaultValue": "",
+            "inputValue": "",
+            "id": 2,
+            "answerList": [
+
+            ]
+        },
+        {
+            "title": "*Which factors are important to you when you make the decision to buying in bulk?",
+            "type": "checkbox",
+            "id": 3,
+            "defaultValue": "",
+            "inputValue": "",
+            "answerList": [{
+                "label": "Shipping Speed",
+                "value": "Shipping Speed"
+            }, {
+                "label": "Product Price",
+                "value": "Product Price"
+            }, {
+                "label": "Product Quality",
+                "value": "Product Quality"
+            }, {
+                "label": "Return and Exchange",
+                "value": "Return and Exchange"
+            }, {
+                "label": "Customer services",
+                "value": "Customer services"
+            }, {
+                "label": "Promotions",
+                "value": "Promotions"
+            }]
+        },
+        {
+            "title": "*How often do you shop for fashion items?",
+            "id": 4,
+            "type": "radio",
+            "defaultValue": "",
+            "inputValue": "",
+            "answerList": [{
+                    "label": "Several times a week",
+                    "value": "Several times a week"
+                },
+                {
+                    "label": "About once a week",
+                    "value": "About once a week"
+                },
+                {
+                    "label": "Several times a month",
+                    "value": "Several times a month"
+                },
+                {
+                    "label": "About once a month",
+                    "value": "About once a month"
+                },
+                {
+                    "label": "Less than once a month",
+                    "value": "Less than once a month"
+                },
+            ]
+        },
+        {
+            "title": "*What communication platform would you prefer with the customer service?",
+            "type": "checkbox",
+            "id": 5,
+            "defaultValue": "",
+            "inputValue": "",
+            "answerList": [{
+                "label": "WhatsApp",
+                "value": "WhatsApp"
+            }, {
+                "label": "Email",
+                "value": "Email"
+            }, {
+                "label": "Chat",
+                "value": "Chat"
+            }, {
+                "label": "Facebook",
+                "value": "Facebook"
+            }, {
+                "label": "Ins",
+                "value": "Ins"
+            }]
+        },
+        {
+            "title": "*Which discount method do you prefer ?",
+            "type": "checkbox",
+            "id": 6,
+            "defaultValue": "",
+            "inputValue": "",
+            "answerList": [{
+                "label": "Discount coupon",
+                "value": "Discount coupon"
+            }, {
+                "label": "Bonus point",
+                "value": "Bonus point"
+            }, {
+                "label": "Purchase with free gift",
+                "value": "Purchase with free gift"
+            }, {
+                "label": "Exclusive code",
+                "value": "Exclusive code"
+            }, {
+                "label": "Cash coupon",
+                "value": "Cash coupon"
+            }]
+        },
+        {
+            "title": "*Which kind of product style you prefer for your clothing boutique?",
+            "type": "checkbox",
+            "id": 7,
+            "defaultValue": "",
+            "inputValue": "",
+            "answerList": [{
+                "label": "OL style",
+                "value": "OL style"
+            }, {
+                "label": "Street style",
+                "value": "Street style"
+            }, {
+                "label": "Retro style",
+                "value": "Retro style"
+            }, {
+                "label": "Sporty style",
+                "value": "Sporty style"
+            }, {
+                "label": "Casual style",
+                "value": "Casual style"
+            }, {
+                "label": "Baroque style",
+                "value": "Baroque style"
+            }]
+        },
+        {
+            "title": "*How familiar are you with wholesale policy of the site Bellewholesale ?",
+            "id": 8,
+            "type": "radio",
+            "defaultValue": "",
+            "inputValue": "",
+            "answerList": [{
+                    "label": "Extremely familiar",
+                    "value": "Extremely familiar"
+                },
+                {
+                    "label": "Very familiar",
+                    "value": "Very familiar"
+                },
+                {
+                    "label": "Somewhat familiar",
+                    "value": "Somewhat familiar"
+                },
+                {
+                    "label": "Not so familiar",
+                    "value": "Not so familiar"
+                },
+                {
+                    "label": "Not at all familiar",
+                    "value": "Not at all familiar"
+                },
+            ]
+        },
+        {
+            "title": "*Would you recommend Bellewholesale website and APP to friends or colleagues?",
+            "id": 9,
+            "type": "radio",
+            "defaultValue": "",
+            "inputValue": "",
+            "answerList": [{
+                    "label": "Yes",
+                    "value": "Yes"
+                },
+                {
+                    "label": "No",
+                    "value": "No"
+                }
+            ]
+        },
+        {
+            "title": "*What are the brands that you typically buy ? Please list three of your favorite.",
+            "type": "textarea",
+            "defaultValue": "",
+            "inputValue": "",
+            "id": 10,
+            "answerList": [
+
+            ]
+        },
+        {
+            "title": "*Do you have any comments about how we can improve our website & APP?",
+            "type": "textarea",
+            "defaultValue": "",
+            "inputValue": "",
+            "noBorder":true,
+            "id": 11,
+            "answerList": [
+
+            ]
+        },
+        {
+            "title": "",
+            "content": "Thank you very much for your participation! Your thoughts are very important to us. 200 points will be sent to your  account once you complete the survey and submit. We guarantee the confidentiality and security in the treatment of your personal data. All your answers are guaranteed to remain anonymous.With our warm regards and thanks.Bellewholesale ",
+            "type": "content",
+            "defaultValue": "",
+            "inputValue": "",
+            "noBorder":true,
+            "answerList": [
+
+            ]
+        },
+        {
+            "content": "Thank you very much for your participation! Your thoughts are very important to us. 200 points will be sent to your account once you complete the survey and submit. ",
+            "contentDone": "Thank you very much for your participation! Your thoughts are very important to us. 200 points will be sent to your account once you complete the survey and submit. ",
+            "type": "mask",
+            "import": "200 points",
+            "title": "",
+            "answerList":[]
+        }
     ]
 
     export default {
@@ -177,476 +346,19 @@
             return {
                 emptyShow:false,
                 inputSelect:'title1',
-                questionList:[
-                    {
-                        title:this.$t('survey.survey_question_1.title'),
-                        id: 0,
-                        type: 'radio', // checkbox & textarea
-                        defaultValue:'',
-                        inputValue:'',
-                        answerList:[
-                            {
-                                label:this.$t('survey.survey_question_1.answer1'),
-                                value: "Beforehand",
-                            },
-                            {
-                                label: this.$t('survey.survey_question_1.answer2'),
-                                value: 'At the time of purchase',
-                            }
-                        ]
-                    },{
-                        title:this.$t('survey.survey_question_2.title'),
-                        type: 'checkbox', // checkbox & textarea
-                        id: 1,
-                        defaultValue:'',
-                        inputValue:'',
-                        answerList:[
-                            {
-                                label: this.$t('survey.survey_question_2.answer1'),
-                                value: "Brand",
-                            },
-                            {
-                                label: this.$t('survey.survey_question_2.answer2'),
-                                value: 'Price',
-                            },
-                            {
-                                label: this.$t('survey.survey_question_2.answer3'),
-                                value: 'Quality',
-                            },
-                            {
-                                label: this.$t('survey.survey_question_2.answer4'),
-                                value: 'Style',
-                            },
-                            {
-                                label: this.$t('survey.survey_question_2.answer5'),
-                                value: 'Color choices',
-                            },
-                            {
-                                label: this.$t('survey.survey_question_2.answer6'),
-                                value: 'Return and change',
-                            },
-                            {
-                                label: this.$t('survey.survey_question_2.answer7'),
-                                value: 'Customer services',
-                            },
-                            {
-                                label: this.$t('survey.survey_question_2.answer8'),
-                                value: 'Free shipping',
-                            },
-                        ]
-                    },{
-                        title:this.$t('survey.survey_question_3.title'),
-                        type: 'radio', // checkbox & textarea
-                        id: 2,
-                        defaultValue:'',
-                        inputValue:'',
-                        answerList:[
-                            {
-                                label: this.$t('survey.survey_question_3.answer1'),
-                                value: "Several times a week",
-                            },
-                            {
-                                label: this.$t('survey.survey_question_3.answer2'),
-                                value: 'About once a week',
-                            },
-                            {
-                                label: this.$t('survey.survey_question_3.answer3'),
-                                value: 'Several times a month',
-                            },
-                            {
-                                label: this.$t('survey.survey_question_3.answer4'),
-                                value: 'About once a month',
-                            },
-                            {
-                                label: this.$t('survey.survey_question_3.answer5'),
-                                value: 'Less than once a month',
-                            },
-                        ]
-                    },{
-                        title:this.$t('survey.survey_question_4.title'),
-                        type: 'checkbox', // checkbox & textarea
-                        defaultValue:'',
-                        inputValue:'',
-                        id: 3,
-                        answerList:[
-                            {
-                                label:this.$t('survey.survey_question_4.answer1'),
-                                value: "Discount",
-                            },
-                            {
-                                label: this.$t('survey.survey_question_4.answer2'),
-                                value: 'Coupon',
-                            },
-                            {
-                                label: this.$t('survey.survey_question_4.answer3'),
-                                value: 'Purchase with gift',
-                            },
-                            {
-                                label: this.$t('survey.survey_question_4.answer4'),
-                                value: 'Bonus point',
-                            },
-                            {
-                                label: this.$t('survey.survey_question_4.answer5'),
-                                value: 'Exclusive code',
-                            },
-                        ]
-                    },{
-                        title:this.$t('survey.survey_question_5.title'),
-                        type: 'radio', // checkbox & textarea
-                        defaultValue:'',
-                        inputValue:'',
-                        id: 4,
-                        answerList:[
-                            {
-                                label:this.$t('survey.survey_question_5.answer1'),
-                                value: "Regular fit",
-                            },
-                            {
-                                label:this.$t('survey.survey_question_5.answer2'),
-                                value: "Oversize",
-                            },
-                            {
-                                label:this.$t('survey.survey_question_5.answer3'),
-                                value: "Slim",
-                            },
-                            {
-                                label: this.$t('survey.survey_question_5.answer4'),
-                                value: "I'm willing to try differnet styles",
-                            },
-                        ]
-                    },{
-                        title:this.$t('survey.survey_question_6.title', {website: this.GLOBAL.sitename}),
-                        type: 'checkbox', // checkbox & textarea
-                        defaultValue:'',
-                        inputValue:'',
-                        id: 5,
-                        answerList:[
-                            {
-                                label:this.$t('survey.survey_question_6.answer1'),
-                                value: "Google",
-                            },
-                            {
-                                label:this.$t('survey.survey_question_6.answer2'),
-                                value: "Facebook",
-                            },
-                            {
-                                label:this.$t('survey.survey_question_6.answer3'),
-                                value: "Instagram",
-                            },
-                            {
-                                label:this.$t('survey.survey_question_6.answer4'),
-                                value: "YouTube",
-                            },
-                            {
-                                label:this.$t('survey.survey_question_6.answer5'),
-                                value: "Tik Tok",
-                            },
-                            {
-                                label:this.$t('survey.survey_question_6.answer6'),
-                                value: "Pinterest",
-                            },
-                            {
-                                label:this.$t('survey.survey_question_6.answer7'),
-                                value: "Recommend by friends",
-                            },
-                            {
-                                label:this.$t('survey.survey_question_6.answer8'),
-                                value: "Others",
-                            },
-                        ]
-                    },{
-                        title:this.$t('survey.survey_question_7.title', {website: this.GLOBAL.sitename}),
-                        type: 'radio', // checkbox & textarea
-                        defaultValue:'',
-                        inputValue:'',
-                        id: 6,
-                        answerList:[
-                            {
-                                label:this.$t('survey.survey_question_7.answer1'),
-                                value: "Extremely familiar",                                
-                            },
-                            {
-                                label:this.$t('survey.survey_question_7.answer2'),
-                                value: "Very familiar",                                
-                            },
-                            {
-                                label:this.$t('survey.survey_question_7.answer3'),
-                                value: "Somewhat familiar",                                
-                            },
-                            {
-                                label:this.$t('survey.survey_question_7.answer4'),
-                                value: "Not so familiar",                                
-                            },
-                            {
-                                label:this.$t('survey.survey_question_7.answer5'),
-                                value: "Not at all familiar",
-                            },
-                        ]
-                    },{
-                        title:this.$t('survey.survey_question_8.title'),
-                        type: 'radio', // checkbox & textarea
-                        defaultValue:'',
-                        inputValue:'',
-                        id: 7,
-                        answerList:[
-                            {
-                                label:this.$t('survey.survey_question_8.answer1'),
-                                value: "Extremely well",
-                            },
-                            {
-                                label:this.$t('survey.survey_question_8.answer2'),
-                                value: "Very well",
-                            },
-                            {
-                                label:this.$t('survey.survey_question_8.answer3'),
-                                value: "Somewhat well",
-                            },
-                            {
-                                label:this.$t('survey.survey_question_8.answer4'),
-                                value: "Not so well",
-                            },
-                            {
-                                label:this.$t('survey.survey_question_8.answer5'),
-                                value: "Not at all well",
-                            },
-                        ]
-                    },{
-                        title:this.$t('survey.survey_question_9.title'),
-                        type: 'radio', // checkbox & textarea
-                        defaultValue:'',
-                        inputValue:'',
-                        id: 8,
-                        answerList:[
-                            {
-                                label:this.$t('survey.survey_question_9.answer1'),
-                                value: "Extremely easy",
-                            },
-                            {
-                                label:this.$t('survey.survey_question_9.answer2'),
-                                value: "Very easy",
-                            },
-                            {
-                                label:this.$t('survey.survey_question_9.answer3'),
-                                value: "Somewhat easy",
-                            },
-                            {
-                                label:this.$t('survey.survey_question_9.answer4'),
-                                value: "Not so easy",
-                            },
-                            {
-                                label:this.$t('survey.survey_question_9.answer5'),
-                                value: "Not at all easy",
-                            },
-                        ]
-                    },{
-                        title:this.$t('survey.survey_question_10.title', {website: this.GLOBAL.sitename}),
-                        type: 'radio', // checkbox & textarea
-                        defaultValue:'',
-                        inputValue:'',
-                        id: 9,
-                        answerList:[
-                            {
-                                label:this.$t('survey.survey_question_10.answer1'),
-                                value: "Yes",
-                            },
-                            {
-                                label:this.$t('survey.survey_question_10.answer2'),
-                                value: "No",
-                            },
-                        ]
-                    },{
-                        title:this.$t('survey.survey_question_11.title'),
-                        type: 'textarea', // checkbox & textarea
-                        defaultValue:'',
-                        inputValue:'',
-                        id: 10,
-                        answerList:[]
-                    },{
-                        title:this.$t('survey.survey_question_12.title'),
-                        type: 'textarea', // checkbox & textarea
-                        defaultValue:'',
-                        inputValue:'',
-                        id: 11,
-                        answerList:[]
-                    },
-                ],
-                questionList1:[
-                    {
-                        title:this.$t('survey.survey_question_13.title'),
-                        type: 'radio', // checkbox & textarea
-                        defaultValue:'',
-                        inputValue:'',
-                        id: 12,
-                        answerList:[
-                            {
-                                label:this.$t('survey.survey_question_13.answer1'),
-                                value: "Under 18",
-                            },
-                            {
-                                label:this.$t('survey.survey_question_13.answer2'),
-                                value: "18-24",
-                            },
-                            {
-                                label:this.$t('survey.survey_question_13.answer3'),
-                                value: "25-34",
-                            },
-                            {
-                                label:this.$t('survey.survey_question_13.answer4'),
-                                value: "35-44",
-                            },
-                            {
-                                label:this.$t('survey.survey_question_13.answer5'),
-                                value: "45-54",
-                            },
-                            {
-                                label:this.$t('survey.survey_question_13.answer6'),
-                                value: "55-64",
-                            },
-                            {
-                                label:this.$t('survey.survey_question_13.answer7'),
-                                value: "65 plus",
-                            },
-                        ]
-                    },{
-                        title:this.$t('survey.survey_question_14.title'),
-                        type: 'radio', // checkbox & textarea
-                        defaultValue:'',
-                        inputValue:'',
-                        id: 13,
-                        answerList:[
-                            {
-                                label:this.$t('survey.survey_question_14.answer1'),
-                                value: "Female",
-                            },
-                            {
-                                label:this.$t('survey.survey_question_14.answer2'),
-                                value: "Male",
-                            },
-                            {
-                                label:this.$t('survey.survey_question_14.answer3'),
-                                value: "Others",
-                            },
-                        ]
-                    },{
-                        title:this.$t('survey.survey_question_15.title'),
-                        type: 'select', // checkbox & textarea
-                        defaultValue:'',
-                        inputValue:'',
-                        id: 14,
-                        answerList:[]
-                    },{
-                        title:this.$t('survey.survey_question_16.title'),
-                        type: 'checkbox', // checkbox & textarea
-                        defaultValue:'',
-                        inputValue:'',
-                        id: 15,
-                        answerList:[
-                            {
-                                label:this.$t('survey.survey_question_16.answer1'),
-                                value: "Agriculture, forestry, and fishing",
-                            },
-                            {
-                                label:this.$t('survey.survey_question_16.answer2'),
-                                value: "Energy",
-                            },
-                            {
-                                label:this.$t('survey.survey_question_16.answer3'),
-                                value: "Information technology/software",
-                            },
-                            {
-                                label:this.$t('survey.survey_question_16.answer4'),
-                                value: "Transportation",
-                            },
-                            {
-                                label:this.$t('survey.survey_question_16.answer5'),
-                                value: "Entertainment publishing/journalism",
-                            },
-                            {
-                                label:this.$t('survey.survey_question_16.answer6'),
-                                value: "Real Estate",
-                            },
-                            {
-                                label:this.$t('survey.survey_question_16.answer7'),
-                                value: "Education",
-                            },
-                            {
-                                label:this.$t('survey.survey_question_16.answer8'),
-                                value: "Sports",
-                            },
-                            {
-                                label:this.$t('survey.survey_question_16.answer9'),
-                                value: "Government",
-                                
-                            },
-                            {
-                                label:this.$t('survey.survey_question_16.answer10'),
-                                value: "Students",
-                                
-                            },
-                            {
-                                label:this.$t('survey.survey_question_16.answer11'),
-                                value: "Housewives",
-                                
-                            },
-                            {
-                                label:this.$t('survey.survey_question_16.answer12'),
-                                value: "Unemployment",
-                                
-                            },
-                            {
-                                label:this.$t('survey.survey_question_16.answer13'),
-                                value: "Others",
-                                text: ''
-                            },
-                        ]
-                    },{
-                        title:this.$t('survey.survey_question_17.title'),
-                        type: 'radio', // checkbox & textarea
-                        defaultValue:'',
-                        inputValue:'',
-                        id: 16,
-                        answerList:[
-                            {
-                                label:this.$t('survey.survey_question_17.answer1'),
-                                value: "Under $30",
-                                
-                            },
-                            {
-                                label:this.$t('survey.survey_question_17.answer2'),
-                                value: "$30-$50",
-                                
-                            },
-                            {
-                                label:this.$t('survey.survey_question_17.answer3'),
-                                value: "$50-$100",
-                                
-                            },
-                            {
-                                label:this.$t('survey.survey_question_17.answer4'),
-                                value: "$100-$200",
-                                
-                            },
-                            {
-                                label:this.$t('survey.survey_question_17.answer5'),
-                                value: "$300-$500",
-                                
-                            },
-                            {
-                                label:this.$t('survey.survey_question_17.answer6'),
-                                value: "$500 or more",
-                                
-                            },
-                        ]
-                    },
-                ],
-                questionObject:questionObject,
+                questionListAll:[],
+                // questionObject: questionObject,
                 maskShow: false,
                 result_id: 0,
                 isUpdate:false,
                 hadDoneBefore: false,
                 clickSubmit: false,
                 selectOpen: false,
-                selectItem: {label:'Country',value: ''}
+                selectItem: {label:'Country',value: ''},
+                maskContent:{
+                    content:'',
+                    contentDone:''
+                }
             }
         },
         computed:{
@@ -668,16 +380,48 @@
         },
         mounted(){
             this.$nextTick(() => {
-                this.getData()
-            })
+                this.getQuestionList()
+            })            
         },
         watch:{
         },
         methods:{
+            getQuestionList(){
+                let config = (window.name||'chicme').toLocaleLowerCase == 'bellewholesell'?'M1576':'M1575'
+                getSurveyQuestions(config).then((data)=>{
+                    // console.log(data)
+                    if(data && data.result && data.result.length > 0){
+                        let questionAll = data.result
+                        this.questionListAll = questionAll;
+                        let maskContent = questionAll.find(q => q.type == 'mask');
+                        if(maskContent && maskContent.import){
+                            if(maskContent.content){
+                                maskContent.content = maskContent.content.replace(maskContent.import,'<strong>'+maskContent.import+'</strong>')
+                            }
+                            if(maskContent.contentDone){
+                                maskContent.contentDone = maskContent.contentDone.replace(maskContent.import,'<strong>'+maskContent.import+'</strong>')
+                            }
+                            // console.log(maskContent.content)
+                            this.maskContent = {
+                                content:maskContent.content,
+                                contentDone:maskContent.contentDone
+                            }
+                        }
+                    }
+                    this.getData()
+                },(err)=>{
+                    console.log(err)
+                    this.getData()
+                })
+                
+                
+            },
             questionChange(data){
-                const question1Select = this.questionList.find(q => q.id === data.question.id)
-                const question2Select = this.questionList1.find(q => q.id === data.question.id)
-                const selectedQuestion = question1Select ? question1Select : question2Select
+                // console.log(data)
+                // const question1Select = this.questionList.find(q => q.id === data.question.id)
+                // const question2Select = this.questionList1.find(q => q.id === data.question.id)
+                // const selectedQuestion = question1Select ? question1Select : question2Select
+                const selectedQuestion = this.questionListAll.find(q => q.id === data.question.id)
 
                 if(selectedQuestion.type == 'radio' || selectedQuestion.type == 'textarea' || selectedQuestion.type == 'select'){
                     selectedQuestion.defaultValue = data.selectedValue
@@ -695,10 +439,11 @@
                 }
             },
             questionInputChange(data){
-                const question1Select = this.questionList.find(q => q.id === data.question.id)
-                const question2Select = this.questionList1.find(q => q.id === data.question.id)
-                const selectedQuestion = question1Select ? question1Select : question2Select
-                console.log(selectedQuestion)
+                // const question1Select = this.questionList.find(q => q.id === data.question.id)
+                // const question2Select = this.questionList1.find(q => q.id === data.question.id)
+                // const selectedQuestion = question1Select ? question1Select : question2Select
+                const selectedQuestion = this.questionListAll.find(q => q.id === data.question.id)
+                // console.log(selectedQuestion)
 
                 selectedQuestion.inputValue = data.inputValue
             },
@@ -709,32 +454,24 @@
                 if(this.result_id){
                     params.id = this.result_id
                 }
-
-                for(let i in this.questionObject){
-                    let v = ''
-                    let inp;
-                    this.questionList.forEach(q => {
-                        if(q.id == this.questionObject[i].id){
-                            v = q.defaultValue
-                            inp = q.inputValue
-                        }
-                    })
-                    this.questionList1.forEach(q => {
-                        if(q.id == this.questionObject[i].id){
-                            v = q.defaultValue
-                            inp = q.inputValue
-                        }
-                    })
-                    this.questionObject[i].answer = v
-                    if(inp){
-                        this.questionObject[i].input = inp
+                let list = []
+                for(let i in this.questionListAll){
+                    // console.log(i)
+                    let obj = {id:'',title:'',answer:'',input:''}
+                    if(this.questionListAll[i].id || this.questionListAll[i].id == 0){
+                        obj.id = this.questionListAll[i].id;
+                        this.questionListAll[i].title && (obj.title = this.questionListAll[i].title)
+                        this.questionListAll[i].defaultValue && (obj.answer = this.questionListAll[i].defaultValue)
+                        this.questionListAll[i].inputValue && (obj.input = this.questionListAll[i].inputValue)
+                        list.push(obj)
                     }
                 }
-                params.answers = JSON.stringify(this.questionObject)
-                console.log(params);
-                if(this.checkData()){
+                params.answers = JSON.stringify(list)
+                // console.log(list);
+                // return
+                if(this.checkData(list)){
                     this.$store.dispatch('updateSurvey', params).then(res => {
-                        console.log(res)
+                        // console.log(res)
                         if(res.code == 200){
                             this.maskShow = true;
                             this.clickSubmit = true;
@@ -743,13 +480,13 @@
                     })
                 }
             },
-            checkData(){
-                console.log(this.questionObject)
-                for(let i in this.questionObject){
-                    if(!this.questionObject[i]['answer'] || 
-                       JSON.stringify(this.questionObject[i]['answer'])=="[]" || 
-                       JSON.stringify(this.questionObject[i]['answer'])=="{}"){ 
-                           console.log(i)
+            checkData(list){
+                // console.log(list)
+                for(let i in list){
+                    if(!list[i]['answer'] || 
+                       JSON.stringify(list[i]['answer'])=="[]" || 
+                       JSON.stringify(list[i]['answer'])=="{}"){ 
+                        //    console.log(i)
                         //    window.location.hash = ""
                         //    window.location.hash = "#question"+(Number(i)+1)
                         //    document.getElementById('question'+(Number(i)+1)).scrollIntoView(true)
@@ -781,19 +518,29 @@
                         let answers;
                         if(answersJSON){
                             answers = JSON.parse(answersJSON)
-                            this.questionList.forEach(question => {
-                                const selectedQuestion = this.getThatQuestion(question.id, answers)
-                                if(selectedQuestion)
-                                    question.defaultValue = selectedQuestion.answer
-                                    question.inputValue = selectedQuestion.input
+                            // this.questionList.forEach(question => {
+                            //     const selectedQuestion = this.getThatQuestion(question.id, answers)
+                            //     if(selectedQuestion)
+                            //         question.defaultValue = selectedQuestion.answer
+                            //         question.inputValue = selectedQuestion.input
+                            // })
+                            // this.questionList1.forEach(question1 => {
+                            //     const selectedQuestion = this.getThatQuestion(question1.id, answers)
+                            //     if(selectedQuestion)
+                            //         question1.defaultValue = selectedQuestion.answer
+                            //         question1.inputValue = selectedQuestion.input
+                            // })
+                            this.questionListAll.forEach(question1 => {
+                                if(question1.id){
+                                    const selectedQuestion = this.getThatQuestion(question1.id, answers)
+                                    // console.log(selectedQuestion)
+                                    if(selectedQuestion)
+                                        question1.defaultValue = selectedQuestion.answer
+                                        question1.inputValue = selectedQuestion.input
+                                }
+                                
                             })
-                            this.questionList1.forEach(question1 => {
-                                const selectedQuestion = this.getThatQuestion(question1.id, answers)
-                                if(selectedQuestion)
-                                    question1.defaultValue = selectedQuestion.answer
-                                    question1.inputValue = selectedQuestion.input
-                            })
-                            console.log(this.questionList,this.questionList1)
+                            // console.log(this.questionList,this.questionList1)
                         } else {
                             console.error(new Date()+"  问卷信息丢失 cid："+ result.customerId+" id："+result.id+"")
                             let errorlog = {
@@ -936,7 +683,7 @@
                 background-color: #000;
                 color: #fff;
                 border-radius: 2px;
-                margin-top: 26px;
+                // margin-top: 26px;
                 text-transform: uppercase;
                 text-align: center;
                 line-height: 42px;

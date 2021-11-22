@@ -1,6 +1,6 @@
 <template>
     <div :class="!noBorder?'question':'question lastChild'" :id="'question'+(index+1)">
-        <div class="question-title">{{title}}</div>
+        <div class="question-title" v-if="title && type !== 'title'">{{replacedSiteName(title)}}</div>
         <div v-if="type == 'radio'" class="question-answer-list">
             <div v-for="(item, index) in answerList" 
                  :key="index"
@@ -42,29 +42,29 @@
         </div>
 
         <div v-if="type == 'select'" class="question-answer-list">
-            <!-- <div class="selectBox">
-                <div class="selectInputBox" @click="openSelect()">
-                    <span>{{selectedValue}}</span>
-                    <div v-if="selectOpen == true" class="selectOptionBox">
-                        <div class='selectOption gray'>Country</div>
-                        <div :class="{'selectOption':true, 'selectOption-select': defaultV == item.value}"
-                            v-for="(item, index) in countries" 
-                            :key="index"  
-                            :value="item.value"
-                            @click="optionClick(item)"
-                            >
-                            {{item.label}}
-                        </div>
-                    </div>
-                </div>
-                
-                <span :class="{'iconfont selectIcon': true, 'option-open': selectOpen}">&#xe692;</span>
-            </div> -->
             <m-select :defaultV="selectItem" 
                       :countries="countries"
                       @optionClick="optionClick"
                     ></m-select>
         </div>
+
+        <div v-if="type=='content'">
+            <div class="survey-info">
+                <div class="info-box">
+                    <div class="info-content">{{replacedSiteName(content)}}</div> 
+                </div>
+            </div>
+        </div>
+
+        <div v-if="type=='title'">
+            <div class="survey-info">
+                <div class="info-box">
+                    <div class="info-title">{{replacedSiteName(title)}}</div>
+                    <!-- 加 points参数： -->
+                    <div class="info-content">{{replacedSiteName(content)}}</div> 
+                </div>
+            </div>
+        </div>  
     </div>
 </template>
 
@@ -115,6 +115,9 @@
                 type: Boolean,
                 required: true,
                 default:false,
+            },
+            content:{
+                type: String,
             }
         },
         computed:{
@@ -127,7 +130,7 @@
         },
         watch:{
             hadDoneBefore:function(newV,oldV){
-                console.log(newV, oldV)
+                // console.log(newV, oldV)
             }
         },
         created(){
@@ -147,6 +150,13 @@
         watch:{
         },
         methods: {
+            replacedSiteName(content){
+                if(content){
+                    let text = content.replace(/(chicme|Chicme|Chic me|chic me|Chic Me|chic Me|ChicMe|chicMe)/g, ()=>{return window.name || 'ChicMe'});
+                    return text
+                }
+                return ''
+            },
             openSelect(){
                 // console.log('sss')
                 if(!this.hadDoneBefore){
@@ -154,7 +164,7 @@
                 }
             },
             optionClick(item){
-                console.log(item)
+                // console.log(item)
                 if(!this.hadDoneBefore){
                     this.selectItem = item.label;
                     this.selectOpen = !this.selectOpen;
@@ -163,7 +173,7 @@
             },
             
             changeHandle(e, type){
-                console.log(e)
+                // console.log(e)
                 if(!this.hadDoneBefore){
                     if(type=='textarea'){
                         this.$emit("otherChange",{
@@ -178,8 +188,8 @@
                 }
             },
             othersChange(e){
-                console.log(e.target.value)
-                console.log(this.question)
+                // console.log(e.target.value)
+                // console.log(this.question)
                 if(!this.hadDoneBefore){
                     this.$emit("otherChange",{
                         question: this.question,
@@ -358,5 +368,26 @@
     }
     .lastChild{
         border-bottom: none;
+    }
+    .survey-info{
+        width: 100%;
+        min-height: 106px;
+        background-color: #fff4d9;
+        padding: 16px 12px 13px;
+        color: #222;
+        font-size: 13px;
+
+        .info-title{
+            font-size: 14px;
+            // text-shadow: 0 0 #222;
+            font-weight: bold;
+            line-height: 16px;
+            margin-bottom: 11px;
+        }
+
+        .info-content{
+            font-family: Roboto-Regular;
+            line-height: 22px;
+        }
     }
 </style>

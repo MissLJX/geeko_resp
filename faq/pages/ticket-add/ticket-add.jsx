@@ -778,14 +778,21 @@ class TicketAdd extends React.Component {
       this.chatDiv.scrollTop = this.chatDiv.scrollHeight
     }, 500)
   }
+
+  
   
   componentWillMount () {
+    // console.log(window.zE)
+    if(window.zE){
+      zE('webWidget', 'hide');
+    }
     this.getQuestionType()
     // 接受传值的参数
-    const params = this.props.history.location.state
+    let params = this.props.history.location.state
     let id;
+    // console.log(params,this.props.history.location.pathname)
     // 接受url传值的参数
-    let urlParams = this.props.history.location.pathname ? this.props.history.location.pathname.split("/")[1] != 'wanna' ? this.props.history.location.pathname.split("/")[5] : '' : '';
+    let urlParams = this.props.history.location.pathname ? this.props.history.location.pathname.split("/")[1] != 'wanna' ? this.props.history.location.pathname.split("/")[5] :  this.props.history.location.pathname.split("/")[6] : '';
     if(!urlParams){
       urlParams = this.props.history.location.search ? 
                   this.props.history.location.search.indexOf('id') != -1 ?
@@ -808,6 +815,11 @@ class TicketAdd extends React.Component {
     // 如果链接中没有传值 而且本地没有数据 则会跳转到ticket列表
     if(!id && !localStorage.__order && !urlParams && !customerCode){
       this.props.history.push({pathname: `${window.ctx || ''}/support/ticket`})
+    }
+    // app消息通知带ticketid跳转
+    if(urlParams.match(/[a-z]/ig)){
+      id = urlParams
+      urlParams = null
     }
     // console.log(id)
     if(urlParams){
@@ -923,7 +935,7 @@ class TicketAdd extends React.Component {
                         list.find(l => l.value == subject).label :'': ''
         }).then(res => {})
       }
-      if(!subject && ticket.subject == '7'){
+      if(!subject && ticket && ticket.subject && ticket.subject == '7'){
         let otherSubject = list[list.length-1].value;
         subject = otherSubject
         questionTypeChange({
@@ -1056,8 +1068,7 @@ class TicketAdd extends React.Component {
                         list.find(l => l.value == subject).label :'': ''
         }).then(res => {})
       }
-      console.log(subject,ticket.subject)
-      if(!subject && ticket.subject == '7'){
+      if(!subject && ticket && ticket.subject && ticket.subject == '7'){
         let otherSubject = list[list.length-1].value;
         subject = otherSubject
         questionTypeChange({

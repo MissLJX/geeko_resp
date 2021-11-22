@@ -161,8 +161,7 @@
             showTicket:function(data){
                 this.isShowSelect = false
                 this.$store.dispatch('clearTicket')
-                let reg = /^[0-9]*$/;
-                if(reg.test(data)){
+                if(this.testString(data)){
                     this.$store.dispatch('getTicket',data).then(()=>{
                         this.isShowTicket = true;
                     })
@@ -171,8 +170,15 @@
                         this.isShowTicket = true;
                     })
                 }
-                
-                // this.$router.replace({name: '/me/m/faq/support-ticket'})
+            },
+            testString(str){
+                let arr = str.split("")
+                for(let i = 0; i < arr.length; i++){
+                    if(typeof(arr[i]-0) == 'number'){
+                        return true
+                    }
+                }
+                return false
             },
             showTicketByCode(code){
                 this.isShowSelect = false
@@ -220,6 +226,7 @@
             this.$store.dispatch('getTickets', {skip:0,state:0})
         },
         mounted(){
+            console.log(this.$router.currentRoute.query?.id && !urlIdShowed)
             if(this.$router.currentRoute.query?.id && !urlIdShowed){
                 localStorage.removeItem("_code")
                 localStorage._orderId = this.$router.currentRoute.query?.id

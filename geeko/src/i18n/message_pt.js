@@ -168,6 +168,8 @@ export default {
         survey_thanks: "Você já enviou esta pesquisa！ Você tem ",
         survey_thanks_points: '{point} pontos ',
         survey_thanks_more: 'em sua conta, dê uma olhada e faça compras no {website}!',
+        survey_go_shopping: 'Vá às compras',
+        survey_view_points: 'Pontos de vista',
         survey_question_1: {
             title: '*Em relação a compras de itens de moda, você costuma tomar uma decisão com antecedência ou na hora de fazer as compras?',
             answer1: 'Antecipadamente',

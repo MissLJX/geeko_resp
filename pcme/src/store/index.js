@@ -505,7 +505,7 @@ const mutations = {
         state.ticket =  _.cloneDeep(ticket)
     },
     [types.GLOBAL_GET_TICKET_CON](state,ticket){
-        console.log(ticket)
+        // console.log(ticket)
         state.ticket_con =  _.cloneDeep(ticket)
     },
     [types.GLOBAL_GET_TICKET_ID](state,ticketid){
@@ -1102,7 +1102,7 @@ const actions = {
     getTicket({commit},id){
         api.getTicket(id).then((ticket) => {
             if(ticket){
-                console.log(ticket)
+                // console.log(ticket)
                 commit(types.GLOBAL_GET_TICKET, ticket.order)
                 commit(types.GLOBAL_GET_TICKET_CON, ticket.ticket?ticket.ticket:{})
                 commit(types.GLOBAL_GET_TICKET_ID, ticket.order.id)
@@ -1113,7 +1113,7 @@ const actions = {
     getTicketByTicketId({commit},id){
         api.getTicketByTicketId(id).then((ticket) => {
             if(ticket){
-                console.log(ticket)
+                // console.log(ticket)
                 commit(types.GLOBAL_GET_TICKET, ticket.order)
                 commit(types.GLOBAL_GET_TICKET_CON, ticket.ticket?ticket.ticket:{})
                 commit(types.GLOBAL_GET_TICKET_ID, ticket.order.id)
@@ -1124,7 +1124,7 @@ const actions = {
     getTicketByCode({commit},code){
         api.getTicketByCode(code).then((ticket) => {
             if(ticket){
-                console.log(ticket)
+                // console.log(ticket)
                 commit(types.GLOBAL_GET_TICKET, ticket.order)
                 commit(types.GLOBAL_GET_TICKET_CON, ticket.ticket?ticket.ticket:{})
                 commit(types.GLOBAL_GET_TICKET_ID, ticket.order.id)

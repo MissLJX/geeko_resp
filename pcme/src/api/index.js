@@ -324,3 +324,8 @@ export const surveyGet = () => {
 export const getQuestionType = () => {
     return axios.get('/message/anon/get-list/M1551',{},{}).then(data => data)
 }
+
+// survey 获取问题配置
+export const getSurveyQuestions = (config) => {
+    return axios.get('/message/anon/get-list/'+config,{},{}).then(data => data)
+}
