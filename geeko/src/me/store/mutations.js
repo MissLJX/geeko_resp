@@ -206,6 +206,9 @@ const mutations = {
     },
     [types.GET_HAS_NO_COMMENT_ORDER](state, status){
         state.hasNoCommentOrder = status
+    },
+    [types.GET_DOBULE_POINTS_DATA](state,points){
+        state.dobulePoints = points;
     }
 }
 

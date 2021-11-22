@@ -53,7 +53,9 @@ const getters = {
 
     wishlistEvent:state => state.wishlistEvent,
 
-    hasNoCommentOrder: state => state.hasNoCommentOrder
+    hasNoCommentOrder: state => state.hasNoCommentOrder,
+
+    dobulePoints:state => state.dobulePoints
 }
 
 export default getters;
