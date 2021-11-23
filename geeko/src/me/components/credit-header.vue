@@ -26,7 +26,7 @@
                 <span>{{me.points}}</span>
                 <p>
                     <span>={{me.exchangeAmount}}</span>
-                    <span class="dobule-icon"></span>
+                    <span class="dobule-icon" v-if="dobulePoints && dobulePoints.points"></span>
                 </p>
 
                 <div class="points-message-modal" v-if="dobulePoints && dobulePoints.points">
@@ -38,6 +38,7 @@
                             v-if="getTimeLeft >= 1000" 
                             :timeStyle="{width:'16px',height:'16px',backgroundColor:'#222222',color:'#ffffff',padding:'2px',borderRadius:'2px',fontSize:'12px'}"
                             :show-hour="true"
+                            :show-day="true"
                             class="countdown"
                         />
                     </div>
@@ -83,7 +84,8 @@
             ...mapGetters("me",["dobulePoints"]),
             getTimeLeft(){
                 if(this.dobulePoints && this.dobulePoints.points){
-                    return this.dobulePoints.points.endTime - this.dobulePoints.points.startTime;
+                    let nowTimeStrap = new Date().getTime();
+                    return this.dobulePoints.points.endTime - nowTimeStrap;
                 }
                 return 0;
             }
@@ -127,7 +129,7 @@
         //     #f0d192 0%, 
         //     #f9e5be 100%);
         border-radius: 4px;
-        background: url("https://s3.us-west-2.amazonaws.com/image.chic-fusion.com/chicme/20210804/background.jpg") no-repeat;
+        background: url("https://image.geeko.ltd/chicme/20210804/background.jpg") no-repeat;
         background-position: center;
         background-size:cover;
         padding: 10px 20px;
@@ -167,7 +169,7 @@
                         width: 16px;
                         height: 16px;
                         display: inline-block;
-                        background-image: url(https://s3.us-west-2.amazonaws.com/image.chic-fusion.com/chicme/2021111101/dobule_points_me.png);
+                        background-image: url(https://image.geeko.ltd/chicme/2021111101/dobule_points_me.png);
                         background-size: cover;
                         line-height: 20px;
                     }
@@ -196,6 +198,9 @@
                             color: #222222;
                             font-size: 12px;
                             // transform: scale(.8);
+                            font-family: 'SlatePro-Medium';
+                            display: inline-block;
+                            transform: scale(0.9);
                         }
 
                         .countdown{
@@ -208,13 +213,31 @@
                         position: absolute;
                         width: 10px;
                         height: 10px;
-                        right:30px;
+                        right:34px;
                         top: -4px;
                         background-color: #ffffff;
                         transform:rotate(315deg);
                         -moz-transform:rotate(315deg); 	/* Firefox */
                         -webkit-transform:rotate(315deg); /* Safari 和 Chrome */
                         box-shadow: 0px 0px 0px 0 transparent, 0 0px 0px 0px transparent, 0 0 0 0 transparent, 1px -1px 2px -1px rgba(0,0,0,0.25);
+                    }
+                }
+
+                @media screen and (min-width: 300px) and (max-width: 321px){
+                    .points-message-modal::after{
+                        right: 17px;
+                    }
+                }
+
+                @media screen and (min-width: 325px) and (max-width: 376px){
+                    .points-message-modal::after{
+                        right: 31px;
+                    }
+                }
+
+                @media screen and (min-width: 380px) and (max-width: 415px){
+                    .points-message-modal::after{
+                        right: 41px;
                     }
                 }
             }

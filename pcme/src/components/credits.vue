@@ -13,7 +13,7 @@
                 <p><span class="p-red">{{pointsCustomer.points}}</span></p>
                 <p style="font-size: 12px;color: #222222;">
                     <span>= {{pointsCustomer.exchangeAmount}}</span>
-                    <span class="dobule-icon"></span>
+                    <span class="dobule-icon" v-if="dobulePoints && dobulePoints.points"></span>
                 </p>
             </div>
             <div class="line fl-l"></div>
@@ -35,6 +35,7 @@
                         v-if="getTimeLeft >= 1000" 
                         :timeStyle="{width:'16px',height:'16px',backgroundColor:'#ffffff',color:'#222222',padding:'2px',borderRadius:'2px',fontSize:'16px',fontFamily: 'AcuminPro-Bold'}"
                         :show-hour="true"
+                        :show-day="true"
                         class="countdown"
                     />
                 </div>
@@ -137,7 +138,8 @@
             },
             getTimeLeft(){
                 if(this.dobulePoints && this.dobulePoints.points){
-                    return this.dobulePoints.points.endTime - this.dobulePoints.points.startTime;
+                    let nowTimeStrap = new Date().getTime();
+                    return this.dobulePoints.points.endTime - nowTimeStrap;
                 }
                 return 0;
             }
@@ -254,6 +256,7 @@
             color: #222;
             p{
                 margin-bottom: 5px;
+                line-height: normal;
 
                 & span{
                     vertical-align: middle;
@@ -263,7 +266,7 @@
                     width: 16px;
                     height: 16px;
                     display: inline-block;
-                    background-image: url(https://s3.us-west-2.amazonaws.com/image.chic-fusion.com/chicme/2021111101/pengzhang.svg);
+                    background-image: url(https://image.geeko.ltd/chicme/2021111101/pengzhang.svg);
                     background-size: cover;
                     line-height: 20px;
                 }
@@ -310,8 +313,8 @@
             padding: 8px 10px;
             position: absolute;
             width: 190px;
-            left:106px;
-            top: 115px;
+            left:103px;
+            top: 112px;
             -os-box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.3);
             -ms-box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.3);
             box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.3);

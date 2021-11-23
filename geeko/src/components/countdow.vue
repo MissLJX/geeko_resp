@@ -8,8 +8,12 @@
           <span :style="timeStyle">{{countdowning.hour}}</span><span>:</span>
         </template>
         
-        <span :style="timeStyle">{{countdowning.minute}}</span><span>:</span>
-        <span :style="timeStyle">{{countdowning.second}}</span>
+        <span :style="timeStyle">{{countdowning.minute}}</span>
+
+        <template v-if="showSecond">
+          <span>:</span>
+          <span :style="timeStyle">{{countdowning.second}}</span>
+        </template>
     </div>
 </template>
 
@@ -32,6 +36,10 @@
         default:false
       },
       showHour:{
+        type:Boolean,
+        default:false
+      },
+      showSecond:{
         type:Boolean,
         default:false
       }
