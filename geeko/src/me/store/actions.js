@@ -500,6 +500,11 @@ const actions = {
                 commit(types.GET_HAS_NO_COMMENT_ORDER, result.result?result.result:false)
             })
         })
+    },
+    getDobulePointsData({commit},code){
+        return api.getMessageToObject(code).then(result => {
+            result && commit(types.GET_DOBULE_POINTS_DATA,result);
+        });
     }
 }
 

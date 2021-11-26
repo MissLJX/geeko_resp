@@ -75,6 +75,9 @@
                 <p class="iconfont">&#xe6da;</p>
                 <p>{{$t("index.get_discount")}}</p>
             </a>
+
+            <!-- 积分膨胀提示组件 -->
+            <index-points-modal :index-message="dobulePoints.me.message" v-if="dobulePoints && dobulePoints.me"></index-points-modal>
         </div>
 
         <div class="order">
@@ -179,6 +182,8 @@
     import store from '../../../store/index.js';
     import * as utils from '../../../utils/geekoutils.js';
 
+    import IndexPointsModal from "./IndexPointsModal.vue"
+
     import Swiper from "../../../components/swiper/swiper.vue"
     import _ from "lodash"
 
@@ -191,11 +196,12 @@
             }
         },
         components:{
-            "swiper":Swiper
+            "swiper":Swiper,
+            "index-points-modal":IndexPointsModal
         },
         computed:{
             ...mapGetters('me', [
-                'pointsAllSkip','me', "isLogin", 'feed', 'notificationCount', 'orderCountUnpaid',"shoppingCartCount","messageM1518","hasNoCommentOrder"
+                'pointsAllSkip','me', "isLogin", 'feed', 'notificationCount', 'orderCountUnpaid',"shoppingCartCount","messageM1518","hasNoCommentOrder","dobulePoints"
             ]),
             baseHeaderUrl() {
                 if (window.name === 'chicme') {
@@ -352,6 +358,8 @@
                 };
                 this.swiperData.push(obj2);
             }
+
+            !(this.dobulePoints && this.dobulePoints.me) && store.dispatch("me/getDobulePointsData","M1578");
         },
         mounted(){
             // let cookie = utils.getLocalCookie('_has_no_comment_order')
@@ -511,6 +519,7 @@
             display: flex;
             margin-top: 20px;
             padding: 0px 5px;
+            position: relative;
 
             & > a{
                 flex: 1;

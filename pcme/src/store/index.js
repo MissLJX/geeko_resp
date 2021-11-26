@@ -125,6 +125,8 @@ const state = {
     survey: {},
 
     questionType: [],
+
+    dobulePoints:null
 };
 const getters = {
     me: state => state.me,
@@ -233,6 +235,7 @@ const getters = {
     
     survey: state => state.survey,
     questionType: state => state.questionType,
+    dobulePoints:state => state.dobulePoints
 };
 const mutations = {
     [types.INIT_ME](state, me){
@@ -601,6 +604,9 @@ const mutations = {
     },
     [types.GET_QUESTION_TYPE](state, list){
         state.questionType = list
+    },
+    [types.GET_DOBULE_POINTS_DATA](state,points){
+        state.dobulePoints = points;
     }
 }
 const actions = {
@@ -1295,6 +1301,11 @@ const actions = {
                   commit(types.GET_QUESTION_TYPE, res.result? res.result : [])
               })
           })
+      },
+      getDobulePointsData({commit},code){
+        return api.getMessageToObject(code).then(result => {
+            result && commit(types.GET_DOBULE_POINTS_DATA,result);
+        });
       }
 }
 export default new Vuex.Store({

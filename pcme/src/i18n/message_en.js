@@ -224,7 +224,9 @@ export default {
         you_may_also_ilke:"You may also like",
         whitch_are_your_favorite:"Which are your favorite categories?",
         who_do_you_ususlly:"Who do you usually buy clothes for?",
-        whitch_are_your_styles:"Which are your favorite styles?"
+        whitch_are_your_styles:"Which are your favorite styles?",
+        the_countdown_begins:"The countdown begins. {0} Grab it or regret it!",
+        the_countdown_begins_discount:"100 points = US$2."
     },
     measurements:{
         mea_info1: '"My Measurements" helps simplify the process of finding your perfect fit .Filling out "My Measurements" allows you to.',
