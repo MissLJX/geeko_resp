@@ -102,6 +102,7 @@ class FAQ extends React.PureComponent{
     }
 
     componentWillMount(){
+        document.title = this.props.intl.formatMessage({id: 'faq'});
         // console.log(this.props.location.params)
         let list = JSON.parse(JSON.stringify(this.state.dropDownList))
         if(this.props.location.params){

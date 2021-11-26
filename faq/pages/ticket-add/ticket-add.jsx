@@ -23,7 +23,6 @@ import {
   ImageLoader
 } from '../../components/styled-ticket.jsx'
 import {SelectType} from '../../components/newComponents/new-components'
-import { questions } from '../../data'
 
 const ChatInputBox = styled.div`
       width: 100%;
@@ -627,6 +626,7 @@ class TicketAdd extends React.Component {
 
       isApp: "false",
       questionMaskShow:false,
+      test:0,
       questionObject: { // 信息收集弹窗的数据obj
         questionTypeInput: '',
         showSelectItem: false,
@@ -779,13 +779,12 @@ class TicketAdd extends React.Component {
     }, 500)
   }
 
-  
-  
   componentWillMount () {
     // console.log(window.zE)
     if(window.zE){
       zE('webWidget', 'hide');
     }
+    document.title = this.props.intl.formatMessage({id: 'Ticket'});
     this.getQuestionType()
     // 接受传值的参数
     let params = this.props.history.location.state
@@ -798,10 +797,13 @@ class TicketAdd extends React.Component {
                   this.props.history.location.search.indexOf('id') != -1 ?
                   this.props.history.location.search.split('=')[1]:'':''
     }
-    // 客服邮件跳转过来携带code
+    // 客服邮件跳转过来携带code 可能会存在code=*******&isApp=1....的情况
     const customerCode = this.props.history.location.search ? 
                          this.props.history.location.search.indexOf('code') != -1 ?
-                         this.props.history.location.search.split('=')[1]:'':''
+                         this.props.history.location.search.split('=')[1].indexOf('&') != -1 ?
+                         this.props.history.location.search.split('=')[1].split("&")[0]:
+                         this.props.history.location.search.split('=')[1]:
+                         '':''
     // console.log(this.props.location, urlParams, customerCode)
     // console.log(this.props.history.location.pathname.split("/"))
     // 链接中有传值-ticket列表点击过来的

@@ -234,17 +234,17 @@ const New_order_list_img_box = styled.div`
 //   margin-top: 6px;
     padding-bottom: 10px;
     border-bottom: 1px solid #e6e6e6;
+    display:flex;
+    align-items:center;
+    justify-content:flex-start;
 `
 const New_order_list_select = styled.div`
     display: inline-block;
-    /* height: 80px; */
-    top: -30px;
-    position: relative;
 `
 const New_order_list_item = styled.div`
     /* flex: 1; */
     display: inline-block;
-    width: calc(100% - 28px);
+    width: 100%;
     ul{
         white-space: nowrap;
         overflow: hidden;

@@ -12,7 +12,7 @@ const ContactPage = styled.div`
 const EntryItem = styled.div`
     display: flex;
     background: #fff;
-    height: 67px;
+    min-height: 67px;
     align-items: center;
     margin-bottom: 10px;
     cursor: pointer;
@@ -83,6 +83,10 @@ class ContactUs extends React.PureComponent{
         super(props);
         this.state = {
         }
+    }
+
+    componentWillMount(){
+        document.title = this.props.intl.formatMessage({id: 'contact'});
     }
 
     render(){

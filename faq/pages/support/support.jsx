@@ -167,6 +167,7 @@ class Support extends React.PureComponent{
     }
 
     componentWillMount(){
+        document.title = this.props.intl.formatMessage({id: 'support'});
         if (window.zE) {
             zE('webWidget:on', 'open', function () {
               zE('webWidget', 'show')

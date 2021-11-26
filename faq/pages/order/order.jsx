@@ -90,7 +90,6 @@ const Order = class extends React.Component {
   }
 
   componentWillMount(){
-    // console.log('order from:',this.props.history.location.state)
     this.setState({
       from: this.props.history.location.state ? this.props.history.location.state.from : 'ticket'
     })
@@ -106,7 +105,6 @@ const Order = class extends React.Component {
 
     const linkTo = () => {
       if(!localStorage.__order || localStorage.__order=='null' || localStorage.__order=='{}'){
-        // this.props.history.push({pathname: `${(window.ctx || '')}/support/ticket`})
       } else {
         this.props.history.push({pathname: `${(window.ctx || '')}/me/m/faq/support-ticket`})
       }

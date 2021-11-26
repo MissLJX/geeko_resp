@@ -267,6 +267,8 @@ class Ticket1 extends React.PureComponent{
         // document.body.scrollIntoView({
         //     top: 0,
         // })
+        document.title = this.props.intl.formatMessage({id: 'Ticket'});
+        
         document.documentElement.scrollTop = document.body.scrollTop = 0
     }
     componentWillUpdate(){

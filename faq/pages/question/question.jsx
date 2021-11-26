@@ -321,6 +321,7 @@ class Question1 extends React.PureComponent{
     }
 
     componentWillMount(){
+        document.title = this.props.intl.formatMessage({id: 'faq'});
         this.initPage()
     }
 
