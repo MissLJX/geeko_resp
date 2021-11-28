@@ -17,7 +17,7 @@ export default {
     stateand:'State / Province / Region',
     state:'State',
     selectstate:'Please select your state',
-    zipCode:'zipCode',
+    zipCode:'Zip Code / Postcode',
     phoneNumber:'Phone Number',
     cancel:'CANCEL',
     save:'Save',

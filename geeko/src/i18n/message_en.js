@@ -19,7 +19,7 @@ export default {
         unit: 'Apt / Suit / Unit(Optional)',
         country: 'Country',
         state: 'State',
-        zipCode: 'Zip code',
+        zipCode: 'Zip Code / Postcode',
         phoneNumber: 'Phone Number',
         city: 'City',
         submit: 'Submit',
