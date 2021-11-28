@@ -194,6 +194,7 @@ export default {
         maxinum_three_photos:"Maximum of 3 photos, only JPEG, GIF or PNG.",
     },
     index:{
+        my_wishlist:'Ma liste de souhaits',
         my_account:"Mon compte",
         my_profile:"Mon profil",
         my_address:"Mon adresse",
@@ -207,7 +208,7 @@ export default {
         shipping_info:"Informations sur la livraison",
         return_policy:"Politique de retour",
         terms_notices:"Avis sur les conditions générales",
-        privacy_poilicy:"Conditions d'utilisation de la politique de confidentialité et de sécurité",
+        privacy_poilicy:"Termes de la politique de confidentialité et de sécurité",
         coupons:"Bons de réduction",
         wallet:"Portefeuille",
         get_discount_10:"Obtenez 10 $",

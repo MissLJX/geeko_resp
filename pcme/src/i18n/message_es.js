@@ -195,6 +195,8 @@ export default {
         personal_center:"Centro personal"
     },
     index:{
+        my_wishlist: 'Mi lista de deseos',
+        my_wishlist:'My Wishlist',
         my_account:"Mi cuenta",
         my_profile:"Mi perfil",
         my_address:"Mi dirección",

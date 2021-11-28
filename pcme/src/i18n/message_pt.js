@@ -196,6 +196,7 @@ export default {
         maxinum_three_photos:"Máximo de 3 fotos, apenas JPEG, GIF ou PNG.",
     },
     index:{
+        my_wishlist: 'Minha lista de desejos',
         my_account:"Minha conta",
         my_profile:"Meu perfil",
         my_address:"Meu endereço",

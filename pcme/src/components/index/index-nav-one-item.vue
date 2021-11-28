@@ -1,6 +1,6 @@
 <template>
     <div class="index-nav-one-item" @click="toRoute">
-        My Whishlist
+        {{$t("index.my_wishlist")}}
     </div>
 </template>
 

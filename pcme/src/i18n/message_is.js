@@ -198,12 +198,13 @@ export default {
         personal_center:"Personal Center"
     },
     index:{
+        my_wishlist:'My Wishlist',
         my_account:"My Account",
         my_profile:"My Profile",
         my_address:"My Address",
         my_payment_card:"My Payment Card",
         my_measurements:"My Measurements",
-        my_preference:"My Prefernce",
+        my_preference:"My Preference",
         my_assets:"My Assets",
         returns:"Returns",
         customer_service:"Customer Service",
@@ -211,7 +212,7 @@ export default {
         shipping_info:"Shipping Info",
         return_policy:"Return Policy",
         terms_notices:"Terms & Conditions Notice",
-        privacy_poilicy:"Privacy & Security Policy Termsr",
+        privacy_poilicy:"Privacy & Security Policy Terms",
         coupons:"Coupons",
         wallet:"Wallet",
         get_discount_10:"Get $10",
