@@ -795,7 +795,10 @@ class TicketAdd extends React.Component {
     if(!urlParams){
       urlParams = this.props.history.location.search ? 
                   this.props.history.location.search.indexOf('id') != -1 ?
-                  this.props.history.location.search.split('=')[1]:'':''
+                  this.props.history.location.search.split('=')[1].indexOf('&') != -1 ?
+                  this.props.history.location.search.split('=')[1].split("&")[0]:
+                  this.props.history.location.search.split('=')[1]:
+                  '':''
     }
     // 客服邮件跳转过来携带code 可能会存在code=*******&isApp=1....的情况
     const customerCode = this.props.history.location.search ? 

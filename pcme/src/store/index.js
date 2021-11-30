@@ -20,6 +20,7 @@ const state = {
     orderCountCanceled: 0,
     orderCountUnpaid: 0,
     orderCountPaid: 0,
+    orderCountHistory: 0,
 
     all: [],
     orderdetail:{},
@@ -29,6 +30,7 @@ const state = {
     canceled: [],
     unpaid: [],
     paid:[],
+    history:[],
 
     allLoading: false,
     processingLoading: false,
@@ -37,6 +39,7 @@ const state = {
     canceledLoading: false,
     unpaidLoading: false,
     paidLoading: false,
+    historyLoading: false,
 
     tab: 'all',
     allSkip: 0,
@@ -46,6 +49,7 @@ const state = {
     shippedSkip: 0,
     unpaidSkip: 0,
     paidSkip:0,
+    historySkip:0,
 
     allDone: false,
     processingDone: false,
@@ -54,6 +58,7 @@ const state = {
     shippedDone: false,
     unpaidDone: false,
     paidDone: false,
+    historyDone: false,
 
     bbmessage: null,
     orderid:'',
@@ -172,6 +177,7 @@ const getters = {
     shippedDone: state => state.shippedDone,
     unpaidDone: state => state.unpaidDone,
     paidDone: state => state.paidDone,
+    historyDone: state => state.historyDone,
 
     bbmessage: state => state.bbmessage,
     orderid: state => state.orderid,
@@ -286,6 +292,20 @@ const mutations = {
     [types.HOME_ALL_DONE](state) {
         state.allDone = true;
     },
+
+    [types.HOME_ORDERS_HISTORY](state, orders) {
+        state.history.push(...orders);
+    },
+    [types.HOME_LOADING_HISTORY](state, loading) {
+        state.historyLoading = loading;
+    },
+    [types.HOME_ORDERS_HISTORY_SKIP](state, limit) {
+        state.historySkip += limit;
+    },
+    [types.HOME_HISTORY_DONE](state) {
+        state.historyDone = true;
+    },
+
     [types.HOME_ORDERS_PROCESSING](state, orders) {
         state.processing.push(...orders);
     },
@@ -683,6 +703,24 @@ const actions = {
     getOrderCountPaid({commit}){
         return api.getOrderCountPaid().then((count) => {
             commit(types.ME_ORDER_COUNT_PAID, count)
+        })
+    },
+    loadHistory({commit,state}, limit){
+        if(state.historyDone){
+            return
+        }
+        commit(types.HOME_LOADING_HISTORY,true);
+        return api.getHistoryOrder(state.historySkip).then(orders => {
+            let list = orders.result?order.result:[];
+            if(list && list.length > 0){
+                commit(types.HOME_ORDERS_HISTORY,list);
+                commit(types.HOME_ORDERS_HISTORY_SKIP,limit);
+            } else {
+                commit(types.HOME_ORDERS_HISTORY,[]);
+                commit(types.HOME_HISTORY_DONE);
+            }
+            commit(types.HOME_LOADING_HISTORY, false);
+            return list
         })
     },
     //order

@@ -329,3 +329,8 @@ export const getQuestionType = () => {
 export const getSurveyQuestions = (config) => {
     return axios.get('/message/anon/get-list/'+config,{},{}).then(data => data)
 }
+
+// 获取历史订单记录
+export const getHistoryOrder = (skip) => {
+    return axios.get('/v9/order/'+skip+'/'+20+'/get-order-history',{},{}).then(data => data)
+}

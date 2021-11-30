@@ -1,7 +1,14 @@
 <template>
     <div>
+        <div class="toHistoryOrderList" v-if="!showHistory">
+            <a @click="showHistoryMethod()">Click here to check your previous orders ></a> 
+        </div>
+        <div class="backToOrder" v-if="showHistory">
+            <span class="backIcon" @click="hideHistoryMethod()">{{'< Back'}}</span>
+            <span>HISTORY ORDERS</span>
+        </div>
         <!-- {{orderStatus}} -->
-        <div class="hd">
+        <div class="hd" v-if="!showHistory">
             <div class="el-tbl">
                 <div class="el-tbl-cell" @click="getData(0,'all','click')" :class="{active:0===orderStatus}">
                     {{$t('all')}}<span>{{orderCountAll}}</span>
@@ -27,10 +34,10 @@
             </div>
         </div>
         <div class="bd">
-            <div class="item-order orders-hd">
+            <div :class="{'item-order orders-hd':true,'noMarginTop':showHistory}">
                 <div class="i-bd">
                     <div class="tbl">
-                        <div class="tbl-cell" style="width:523px">{{$t('item')}}</div>
+                        <div class="tbl-cell" style="width:523px">{{$t('item')}}(s)</div>
                         <div class="tbl-cell v-m w-180 tx-c">{{$t('orderstatus')}}</div>
                         <div class="tbl-cell v-m w-190 tx-c">{{$t('action')}}</div>
                     </div>
@@ -129,7 +136,8 @@
                 finished:false,
                 isAddProducts:false,
                 isAddProductstTip:'',
-                constant:constant
+                constant:constant,
+                showHistory:false,
             }
         },
         components: {
@@ -156,6 +164,7 @@
                 'shipped',
                 'confirmed',
                 'canceled',
+                'history',
                 'allLoading',
                 'processingLoading',
                 'confirmedLoading',
@@ -163,6 +172,7 @@
                 'shippedLoading',
                 'unpaidLoading',
                 'paidLoading',
+                'historyLoding',
                 'allDone',
                 'unpaidDone',
                 'paidDone',
@@ -170,6 +180,7 @@
                 'confirmedDone',
                 'canceledDone',
                 'shippedDone',
+                'historyDone',
                 "orderStatus"
             ]),
             ifDone(){
@@ -193,6 +204,9 @@
                 }
                 if(this.method==='Shipped'){
                     return this.shippedDone
+                }
+                if(this.method==='History'){
+                    return this.historyDone
                 }
             },
 
@@ -232,13 +246,12 @@
             ]),
             getData(index,method,flag){
                 // this.index = index
-                this.changeOrderStatus(index);
-                this.method = method
-                if(flag ==='click'){
-                    this.orderMethod = ''
-                }
-
                 if(this.isloded){
+                    this.changeOrderStatus(index);
+                    this.method = method
+                    if(flag ==='click'){
+                        this.orderMethod = ''
+                    }
                     this.isloded = false
                     if(method==='all'){
                         this.$store.dispatch('loadAll',20).then(()=> {
@@ -279,6 +292,12 @@
                     if(method==='Canceled'){
                         this.$store.dispatch('loadCanceled',20).then(()=> {
                             this.orderMethod = this.canceled
+                            this.isloded = true
+                        })
+                    }
+                    if(method==='History'){
+                        this.$store.dispatch('loadHistory',20).then(()=>{
+                            this.orderMethod = this.history
                             this.isloded = true
                         })
                     }
@@ -417,6 +436,14 @@
                 }else{
                     return "Canceled";
                 }
+            },
+            showHistoryMethod(){
+                this.showHistory = true;
+                this.getData(0,'History','click');
+            },
+            hideHistoryMethod(){
+                this.showHistory = false;
+                this.getData(0,'all','click');
             }
         }
     }
@@ -437,6 +464,46 @@
         -webkit-font-smoothing: antialiased;
         -webkit-text-stroke-width: 0.2px;
         -moz-osx-font-smoothing: grayscale;
+    }
+    .toHistoryOrderList{
+        width: 100%;
+        height: 30px;
+        line-height: 30px;
+        background: #f6f6f6;
+        font-family: 'SLATEPRO-MEDIUM';
+        text-decoration: underline;
+        font-size: 14px;
+        font-weight: normal;
+        font-stretch: normal;
+        letter-spacing: 0px;
+        color: #222222;
+
+        & > a{
+            cursor: pointer;
+        }
+    }
+    .backToOrder{
+        height: 44px;
+        line-height: 44px;
+        border-bottom: 1px solid #f6f6f6;
+        font-family: 'ACUMINPRO-BOLD';
+        font-size: 14px;
+        font-weight: normal;
+        font-stretch: normal;
+        letter-spacing: 0px;
+        color: #222222;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        & > .backIcon{
+            cursor:pointer;
+        }
+
+        &::after{
+            content:'< Back';
+            color:transparent;
+        }
     }
     .addProductsMask{
         position: fixed;
@@ -704,6 +771,9 @@
                 border-color: transparent transparent  #f46e6d transparent ;
             }
         }
+    }
+    .noMarginTop{
+        margin-top: 0 !important;
     }
 
 </style>
