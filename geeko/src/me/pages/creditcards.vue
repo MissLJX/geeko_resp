@@ -8,7 +8,7 @@
 
 <style scoped lang="scss">
     .el-wallet-body{
-        position:fixed;
+        // position:fixed;
         width: 100%;
         right:0;
         background: #fff;

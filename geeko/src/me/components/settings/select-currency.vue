@@ -52,6 +52,8 @@
                     this.isLoadingShow = false;
                     this.$emit('update:selectCurrencyShow',false);
                     changeLocalCurrency(value);
+                }).then(() =>{
+                    window.location.reload();
                 });
             }
         },

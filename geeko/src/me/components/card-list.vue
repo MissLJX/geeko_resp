@@ -2,7 +2,7 @@
     <div class="el-cards">
         <list :items="creditcards" :scrollable="false">
             <template slot="li" slot-scope="props">
-                <li :key="props">
+                <li :key="props.index">
                     <card :quickpayRecord="props.item.quickpayRecord" :cardStyle="props.item.style" @delete="deleteHandle"/>
                 </li>
             </template>
