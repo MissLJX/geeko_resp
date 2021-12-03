@@ -202,7 +202,7 @@ const NoDataTxt = styled.span`
 const SubmitBtn = styled.div`
     font-family: Roboto-Bold;
     position: fixed;
-    bottom: 0;
+    bottom: ${props => props.isShowApp=='true'?'0px':'51px'};
     left: 0;
     width: 100%;
     height: 61px;
@@ -303,7 +303,7 @@ class Ticket1 extends React.PureComponent{
                         }
 
                         {/* 提交按钮 */}
-                        <SubmitBtn>
+                        <SubmitBtn isShowApp={window.isShowApp}>
                             <span onClick={()=>this.props.history.push({pathname:`${(window.ctx || '')}/support/order`,state:{from:'ticket'}})}>{intl.formatMessage({id: 'submit'})}</span>    
                         </SubmitBtn>
                     </Page>

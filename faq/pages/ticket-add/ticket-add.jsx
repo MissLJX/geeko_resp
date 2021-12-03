@@ -32,7 +32,7 @@ const ChatInputBox = styled.div`
       align-items: center;
       background: #fff;
       position: fixed;
-      bottom: 0;
+      bottom: ${props => props.isShowApp=='true'?'0px':'51px'};
       box-shadow: 0px 2px 20px 0px 
       rgba(204, 204, 204, 0.5);
   
@@ -658,62 +658,68 @@ class TicketAdd extends React.Component {
     if (!this.validate(true)) {
       return false
     }
+    let operaId = this.state.order?this.state.order.id:this.state.ticket?this.state.ticket.operaId:''
+    if(operaId){
+      const files = evt.currentTarget.files
 
-    const files = evt.currentTarget.files
+      const htmlImageCompress = new HtmlImageCompress(files[0], {quality: 0.7, imageType: files[0].type})
 
-    const htmlImageCompress = new HtmlImageCompress(files[0], {quality: 0.7, imageType: files[0].type})
-    htmlImageCompress.then((result) => {
-      const {file, fileSize} = result
+      htmlImageCompress.then((result) => {
+        const {file, fileSize} = result
 
-      const formData = new FormData()
-      formData.append('operaId', this.state.order.id)
-      // formData.append('questionTypeCode', this.state.subject)
-      // formData.append('message', this.state.message || '-')
-      formData.append('message', '-')
-      formData.append('imageFiles', file)
-      sendImage(formData).then(({result}) => {
-        const file = files[0]
-        const src = window.navigator.userAgent.indexOf('Chrome') >= 1 || window.navigator.userAgent.indexOf('Safari') >= 1 ? window.webkitURL.createObjectURL(file) : window.URL.createObjectURL(file)
-        let ticket = this.state.ticket || {}
-        let replies = []
-        replies = (ticket.ticketReplies || []).concat([])
+        const formData = new FormData()
+        formData.append('operaId', operaId)
+        // formData.append('questionTypeCode', this.state.subject)
+        // formData.append('message', this.state.message || '-')
+        formData.append('message', '-')
+        formData.append('imageFiles', file)
+        sendImage(formData).then(({result}) => {
+          const file = files[0]
+          const src = window.navigator.userAgent.indexOf('Chrome') >= 1 || window.navigator.userAgent.indexOf('Safari') >= 1 ? window.webkitURL.createObjectURL(file) : window.URL.createObjectURL(file)
+          let ticket = this.state.ticket || {}
+          let replies = []
+          replies = (ticket.ticketReplies || []).concat([])
 
-        replies.push({
-          sender: 'buyers',
-          message: '',
-          imageUrls: [src],
-          date: new Date().getTime()
-        })
-        ticket.ticketReplies = replies
+          replies.push({
+            sender: 'buyers',
+            message: '',
+            imageUrls: [src],
+            date: new Date().getTime()
+          })
+          ticket.ticketReplies = replies
 
-        if(ticket){
-          if(ticket.ticketReplies.slice(0)[ticket.ticketReplies.slice(0).length - 1]['sender'] == "buyers"){
-            this.setState({
-              showTip:true
-            })
-          } else {
-            this.setState({
-              showTip: false
-            })
+          if(ticket){
+            if(ticket.ticketReplies.slice(0)[ticket.ticketReplies.slice(0).length - 1]['sender'] == "buyers"){
+              this.setState({
+                showTip:true
+              })
+            } else {
+              this.setState({
+                showTip: false
+              })
+            }
           }
-        }
-        
-        this.setState({
-          ticket,
-          // message: '',
-        })
+          
+          this.setState({
+            ticket,
+            // message: '',
+          })
 
-        this.initScroll()
+          this.initScroll()
+        })
       })
-    })
+    } else {
+      alert('This ticket is not exist!')
+    }
+    
   }
 
   validate (ignoreMessage) {
     this.setState({
-      orderInvalid: !this.state.order,
+      orderInvalid: !this.state.order || !this.state.ticket,
       messageInvalid: !this.state.message && !ignoreMessage
     })
-    return this.state.order && (this.state.message || ignoreMessage)
+    return (this.state.order || this.state.ticket) && (this.state.message || ignoreMessage)
   }
 
   handleTicket (evt) {
@@ -726,52 +732,65 @@ class TicketAdd extends React.Component {
       return false
     }
 
-    sendTicket({
-      operaId: this.state.order.id,
-      // questionTypeCode: this.state.subject,
-      message: this.state.message
-    }).then((data) => {
-      // console.log('data,',data) 
-      // console.log('ticket,',this.state.ticket)
-      // console.log(this.state)
-      let ticket = this.state.ticket || {}
-      let replies = (ticket.ticketReplies || []).concat([])
-      replies.push({
-        sender: 'buyers',
-        message: this.state.message,
-        date: new Date().getTime()
-      })
-      
-      ticket.ticketReplies = replies
-
-      if(ticket){
-        if(ticket.ticketReplies.slice(0)[ticket.ticketReplies.slice(0).length - 1]['sender'] == "buyers"){
-          this.setState({
-            showTip:true
-          })
-        } else {
-          this.setState({
-            showTip: false
-          })
+    let operaId = this.state.order?this.state.order.id:this.state.ticket?this.state.ticket.operaId:''
+    if(operaId){
+      sendTicket({
+        operaId: operaId,
+        // questionTypeCode: this.state.subject,
+        message: this.state.message
+      }).then((data) => {
+        // console.log('data,',data) 
+        // console.log('ticket,',this.state.ticket)
+        // console.log(this.state)
+        let ticket = this.state.ticket || {}
+        let replies = (ticket.ticketReplies || []).concat([])
+        replies.push({
+          sender: 'buyers',
+          message: this.state.message,
+          date: new Date().getTime()
+        })
+        
+        ticket.ticketReplies = replies
+  
+        if(ticket){
+          if(ticket.ticketReplies.slice(0)[ticket.ticketReplies.slice(0).length - 1]['sender'] == "buyers"){
+            this.setState({
+              showTip:true
+            })
+          } else {
+            this.setState({
+              showTip: false
+            })
+          }
         }
-      }
-
-      this.setState({
-        ticket,
-        message: '',
-        // showMsg: true,
-        // showMsgTxt: 'Submitted successfully!'
+  
+        this.setState({
+          ticket,
+          message: '',
+          // showMsg: true,
+          // showMsgTxt: 'Submitted successfully!'
+        })
+  
+        // setTimeout(()=>{
+        //   this.setState({
+        //     showMsg: false,
+        //     showMsgTxt: ''
+        //   })
+        // },2000)
+        this.initScroll()
       })
-
-      // setTimeout(()=>{
-      //   this.setState({
-      //     showMsg: false,
-      //     showMsgTxt: ''
-      //   })
-      // },2000)
-      this.initScroll()
-    })
+    } else {
+      alert('This ticket is not exist!')
+    }
+    
   }
+
+/**
+ * 1. 用户发的文字和图片都没有questionTypeCode和questionType
+ * 2. 有questionTypeCode和reasonCode或message（reasonCode和message可能同时存在也可能只存在其中之一）一定是弹窗
+ * 3. 只有questionTypeCode且没有message或者reasonCode是切换主题的记录，不需要同步到erp
+ * 
+ */
 
   initScroll () {
     setTimeout(() => {
@@ -785,7 +804,8 @@ class TicketAdd extends React.Component {
       zE('webWidget', 'hide');
     }
     document.title = this.props.intl.formatMessage({id: 'Ticket'});
-    this.getQuestionType()
+    
+    
     // 接受传值的参数
     let params = this.props.history.location.state
     let id;
@@ -826,25 +846,30 @@ class TicketAdd extends React.Component {
       id = urlParams
       urlParams = null
     }
-    // console.log(id)
-    if(urlParams){
-      this.getMsgByLinkId(urlParams)
-    } else if (id) {
-      localStorage.__order = ""
-      this.getMsgByUrlId(id)
-    } else if(customerCode){
-      this.getMsgByCode(customerCode)
-    } else {
-      if (localStorage.__order) {
-        this.getMsgByLocalData()
+
+    this.getQuestionType(urlParams,id,customerCode,(urlParams,id,customerCode)=>{
+      console.log(urlParams)
+      if(urlParams){
+        this.getMsgByLinkId(urlParams)
+      } else if (id) {
+        localStorage.__order = ""
+        this.getMsgByUrlId(id)
+      } else if(customerCode){
+        this.getMsgByCode(customerCode)
       } else {
-        this.setState({
-          isNew: true,
-          loading: false,
-          order: {}
-        })
+        if (localStorage.__order) {
+          this.getMsgByLocalData()
+        } else {
+          this.setState({
+            isNew: true,
+            loading: false,
+            order: {}
+          })
+        }
       }
-    }
+    })
+
+    
   }
 
   pageScroll(){
@@ -929,15 +954,14 @@ class TicketAdd extends React.Component {
       const {ticket, order, cusomerName, headSculptureUrl} = result
 
       let subject = ticket ? ticket.questionTypeCode : 0
+      console.log(list)
       if(subject && (!ticket.subject || ticket.subject == 'undefined' || !ticket.subject.match(/[a-z]/ig))){
         questionTypeChange({
           operaId: order.id,
           questionTypeCode: subject,
-          questionType: this.questions.find(q=>q.value == subject) ? 
-                        this.questions.find(q=>q.value == subject).label ?
-                        this.questions.find(q=>q.value == subject).label :
-                        list.find(l => l.value == subject) ?
-                        list.find(l => l.value == subject).label :'': ''
+          questionType: this.question && this.question.length > 0 ?
+                        (this.questions.find(q=>q.value == subject) ? (this.questions.find(q=>q.value == subject).label) : '' ) 
+                        : (list.find(l => l.value == subject) ? list.find(l => l.value == subject).label : '')
         }).then(res => {})
       }
       if(!subject && ticket && ticket.subject && ticket.subject == '7'){
@@ -1062,15 +1086,14 @@ class TicketAdd extends React.Component {
       const {ticket, order, cusomerName, headSculptureUrl} = result
 
       let subject = ticket ? ticket.questionTypeCode : 0
+      
       if(subject && (!ticket.subject || ticket.subject == 'undefined' || !ticket.subject.match(/[a-z]/ig))){
         questionTypeChange({
           operaId: order.id,
           questionTypeCode: subject,
-          questionType: this.questions.find(q=>q.value == subject) ? 
-                        this.questions.find(q=>q.value == subject).label ?
-                        this.questions.find(q=>q.value == subject).label :
-                        list.find(l => l.value == subject) ?
-                        list.find(l => l.value == subject).label :'': ''
+          questionType: this.question && this.question.length > 0 ?
+                        (this.questions.find(q=>q.value == subject) ? (this.questions.find(q=>q.value == subject).label) : '' ) 
+                        : (list.find(l => l.value == subject) ? list.find(l => l.value == subject).label : '')
         }).then(res => {})
       }
       if(!subject && ticket && ticket.subject && ticket.subject == '7'){
@@ -1124,7 +1147,7 @@ class TicketAdd extends React.Component {
   }
 
   // 获取question type以及它的子项
-   getQuestionType(){
+   getQuestionType(urlParams,id,customerCode,callback){
      getQuestionType().then((res) => {
       // console.log(res)
       
@@ -1143,6 +1166,15 @@ class TicketAdd extends React.Component {
         questionTypeList: list,
         questions: qTList,
         questionsReason: qTReasonList,
+      },()=>{
+        console.log(this.state.questions)
+        if(this.state.questions.length > 0){
+          callback(urlParams,id,customerCode)
+        } else {
+          setTimeout(()=>{
+            callback(urlParams,id,customerCode)
+          },100)
+        }
       })
     })
   }
@@ -1585,71 +1617,76 @@ class TicketAdd extends React.Component {
       let imgFileList = questionObject.uploadImgFileList.map(img => {
         return new HtmlImageCompress(img, {quality: 0.7, imageType: img.type})
       })
-      
-      Promise.all(imgFileList).then(results => {
-        // console.log(results)
-        const formData = new FormData()
-        formData.append('operaId', this.state.order.id)
-        formData.append('questionTypeCode', this.state.subject)
-        formData.append('questionType', questions.find(q=>q.value == this.state.subject).label)
-        formData.append('reasonCode', params.selectReason ? params.selectReason.value : '')
-        // 如果原因选择了others 那么reason传others输入的值
-        formData.append('reason', params.selectReason ? params.selectReasonInput ? params.selectReasonInput:params.selectReason.label:'')
-        formData.append('message', questionObject.descriptionInput)
-        results.forEach(item => {
-          const {file} = item
-          formData.append('imageFiles', file)
-        })
-        
-        sendImage(formData).then(({result}) => {
-          let ticket = this.state.ticket || {}
-          let replies = (ticket.ticketReplies || []).concat([])
-          replies.push({
-            sender: 'buyers',
-            message: questionObject.descriptionInput,
-            date: new Date().getTime(),
-            imageUrls: questionObject.uploadImgList,
-            questionTypeCode: this.state.subject,
-            questionType: questions.find(q=>q.value == this.state.subject).label,
-            reasonCode: params.selectReason ? params.selectReason.value : '',
-            reason: params.selectReason ? params.selectReasonInput ? params.selectReasonInput:params.selectReason.label:''
+      let operaId = this.state.order?this.state.order.id:this.state.ticket?this.state.ticket.operaId:''
+      if(operaId){
+        Promise.all(imgFileList).then(results => {
+          // console.log(results)
+          const formData = new FormData()
+          formData.append('operaId', operaId)
+          formData.append('questionTypeCode', this.state.subject)
+          formData.append('questionType', questions.find(q=>q.value == this.state.subject).label)
+          formData.append('reasonCode', params.selectReason ? params.selectReason.value : '')
+          // 如果原因选择了others 那么reason传others输入的值
+          formData.append('reason', params.selectReason ? params.selectReasonInput ? params.selectReasonInput:params.selectReason.label:'')
+          formData.append('message', questionObject.descriptionInput)
+          results.forEach(item => {
+            const {file} = item
+            formData.append('imageFiles', file)
           })
-
-          ticket.ticketReplies = replies
-
-          if(ticket){
-            if(ticket.ticketReplies.slice(0)[ticket.ticketReplies.slice(0).length - 1]['sender'] == "buyers"){
-              this.setState({
-                showTip:true
-              })
-            } else {
-              this.setState({
-                showTip: false
-              })
-            }
-          }
           
-          this.setState({
-            ticket,
-            showMsg: true,
-            message: '',
-            showMsgTxt: intl.formatMessage({id:'submitSuccess'}),
-            questionSubmitLoading: false,
-          })
-    
-          clearTicketData();
-    
-          setTimeout(()=>{
-            this.setState({
-              showMsg: false,
-              showMsgTxt: ''
+          sendImage(formData).then(({result}) => {
+            let ticket = this.state.ticket || {}
+            let replies = (ticket.ticketReplies || []).concat([])
+            replies.push({
+              sender: 'buyers',
+              message: questionObject.descriptionInput,
+              date: new Date().getTime(),
+              imageUrls: questionObject.uploadImgList,
+              questionTypeCode: this.state.subject,
+              questionType: questions.find(q=>q.value == this.state.subject).label,
+              reasonCode: params.selectReason ? params.selectReason.value : '',
+              reason: params.selectReason ? params.selectReasonInput ? params.selectReasonInput:params.selectReason.label:''
             })
-          },2000)
   
-          this.initScroll()
-        })
-
-      })             
+            ticket.ticketReplies = replies
+  
+            if(ticket){
+              if(ticket.ticketReplies.slice(0)[ticket.ticketReplies.slice(0).length - 1]['sender'] == "buyers"){
+                this.setState({
+                  showTip:true
+                })
+              } else {
+                this.setState({
+                  showTip: false
+                })
+              }
+            }
+            
+            this.setState({
+              ticket,
+              showMsg: true,
+              message: '',
+              showMsgTxt: intl.formatMessage({id:'submitSuccess'}),
+              questionSubmitLoading: false,
+            })
+      
+            clearTicketData();
+      
+            setTimeout(()=>{
+              this.setState({
+                showMsg: false,
+                showMsgTxt: ''
+              })
+            },2000)
+    
+            this.initScroll()
+          })
+  
+        }) 
+      } else {
+        alert('This ticket is not exist!')
+      }
+                  
     }
 
     // 清除收集信息弹窗的数据
@@ -1806,16 +1843,31 @@ class TicketAdd extends React.Component {
             <SelectedOrderBox onClick={()=>this.props.history.push({pathname: `${(window.ctx || '')}/support/order`,state:{from:'ticketadd'}})}>
                 <OrderNo>
                     {intl.formatMessage({id:"orderno"})}
-                    <span>{this.state.order ? this.state.order.id ? this.state.order.id : '-' : '-'}</span>
+                    {
+                      console.log(this.state.ticket)
+                    }
+                    <span>
+                      {this.state.order ? 
+                       this.state.order.id ? 
+                       this.state.order.id : '-'
+                       : 
+                       this.state.ticket?
+                       this.state.ticket.operaId?
+                       this.state.ticket.operaId:
+                       '-':'-'}
+                    </span>
                 </OrderNo>
                 <OrderCreateTime>
                     {intl.formatMessage({id:"paymenttime"})}
                     <span>{
                       this.state.order ?
-                      this.state.order.orderTime ? 
+                      (this.state.order.orderTime ? 
                         (new Date(this.state.order.orderTime).toLocaleDateString() + " " + new Date(this.state.order.orderTime).toTimeString().substr(0, 5)) : 
-                        "-":
-                      "-"
+                        "-"):
+                      (this.state.ticket?
+                        this.state.ticket.openDate?
+                        (new Date(this.state.ticket.openDate).toLocaleDateString() + " " + new Date(this.state.ticket.openDate).toTimeString().substr(0, 5)):"-":"-")
+                      // openDate
                       }</span>
                 </OrderCreateTime>
                 <ChangeOrder>&#xe66b;</ChangeOrder>
@@ -1859,7 +1911,7 @@ class TicketAdd extends React.Component {
             
 
             {/* 输入提交 */}
-            <ChatInputBox>
+            <ChatInputBox isShowApp={window.isShowApp}>
                 <ChatInput>
                     <TextInput innerRef={(ta)=>{this.textAreaRef=ta}}
                                style={{boxShadow: this.state.messageInvalid&&'inset 0 0 1px red !important',borderColor: this.state.messageInvalid&&'red !important'}}

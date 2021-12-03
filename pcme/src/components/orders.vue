@@ -1,12 +1,12 @@
 <template>
     <div>
-        <div class="toHistoryOrderList" v-if="!showHistory">
+        <!-- <div class="toHistoryOrderList" v-if="!showHistory">
             <a @click="showHistoryMethod()">Click here to check your previous orders ></a> 
         </div>
         <div class="backToOrder" v-if="showHistory">
             <span class="backIcon" @click="hideHistoryMethod()">{{'< Back'}}</span>
             <span>HISTORY ORDERS</span>
-        </div>
+        </div> -->
         <!-- {{orderStatus}} -->
         <div class="hd" v-if="!showHistory">
             <div class="el-tbl">

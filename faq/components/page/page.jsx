@@ -108,7 +108,7 @@ const PageContanier = (props) => {
     if(window.isShowApp == 'true' || p.noHeader){
         style = {...style, height:'100vh', marginTop:'0px'}
     } else {
-        style = {...style, height:'calc(100vh - 44px)', marginTop:'44px'}
+        style = {...style, height:'calc(100vh - 95px)', marginTop:'44px'}
     }
 
     return (

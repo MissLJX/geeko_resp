@@ -32,7 +32,7 @@ const OrderList = styled.div`
 
 const SubmitBtn = styled.div`
   position: fixed;
-  bottom: 0;
+  bottom: ${props => props.isShowApp=='true'?'0px':'51px'};
   left: 0;
   width: 100%;
   height: 61px;
@@ -123,7 +123,7 @@ const Order = class extends React.Component {
             </OrderList> 
 
           {/* 提交按钮 */}
-          <SubmitBtn>
+          <SubmitBtn isShowApp={window.isShowApp}>
               <span onClick={()=>linkTo()}>
                 {intl.formatMessage({id: 'submit'})}
               </span>    
