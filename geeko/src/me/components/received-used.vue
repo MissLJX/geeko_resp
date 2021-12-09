@@ -5,6 +5,17 @@
         </div>
 
         <div class="_bd">
+            <a :href="GLOBAL.getUrl('/i/points-mall')">
+                <div class="review">
+                    <div>
+                        <span class="iconfont">&#xe6d1;</span>
+                    </div>
+                    <div class="_font">
+                        <p>Points Mall</p>
+                        <p>More points</p>
+                    </div>
+                </div>
+            </a>
             <a :href="GLOBAL.getUrl('/me/m/order/confirmed')">
                 <div class="review">
                     <div>
@@ -52,11 +63,17 @@
                     </div>
                 </div>
             </a>
+            <router-link :to="GLOBAL.getUrl('/me/m/point-guide')" class="fd global-overflow">
+                <div style="padding:0px;">
+                    <div class="_font" style="white-space: normal;line-height: 20px;">
+                        {{$t("point.more_ways_to_earn_more_points")}} >
+                    </div>
+                </div>
+                
+            </router-link>
         </div>
 
-        <router-link :to="GLOBAL.getUrl('/me/m/point-guide')" class="fd global-overflow">
-            {{$t("point.more_ways_to_earn_more_points")}} >
-        </router-link>
+        
     </div>
 </template>
 

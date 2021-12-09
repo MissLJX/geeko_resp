@@ -95,4 +95,5 @@ export default {
   satisfied: 'Zufrieden',
   unsatisfied: 'Unzufrieden',
   rateTextPlaceHolder: 'Hier können Sie den Kundenservice kommentieren.',
+  statusWatingApply:'Warte auf Bewerben',
 }

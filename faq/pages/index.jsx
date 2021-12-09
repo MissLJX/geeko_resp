@@ -57,7 +57,6 @@ messages['pt'] = pt_L
 console.log = () =>{
 
 }
-// window.isApp = 'true'
 if(window.isApp == 'true'){
   window.isShowApp = 'true'
 } else {

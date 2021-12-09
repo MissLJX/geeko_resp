@@ -8,8 +8,8 @@
             <div class="orderInfo">
                 
                 <div>
-                    <p><span>{{$t('orderno')}} </span>{{ticket.id}}</p>
-                    <p><span>{{$t('timeofpayment')}} </span>{{getDate(ticket.orderTime)}}</p>
+                    <p><span>{{$t('orderno')}} </span>{{ticketid}}</p>
+                    <p><span>{{$t('timeofpayment')}} </span>{{getDate(JSON.stringify(ticket)!=='{}'?ticket.orderTime:(ticket_con?ticket_con.openDate:''))}}</p>
                 </div>
                 <i @click="selectorder" class="iconfont">&#xe66b;</i>
             </div>
@@ -45,11 +45,11 @@
                             <div class="el-me-headerImage" :style="{'background-image': 'url('+headerImage+'),url('+baseHeaderUrl+')' }"></div>
                             <div class="cet" >
                                 <div class="sanjiao-right"></div>
-                                <div v-if="!(item.questionType && item.questionTypeCode) && item.message!=='-'" class="txtcontent">{{item.message}}</div>
-                                <div v-if="!(item.questionType && item.questionTypeCode) && item.imageUrls" class="imgarea">
+                                <div v-if="!(item.reasonCode && item.reason) && item.message!=='-'" class="txtcontent">{{item.message}}</div>
+                                <div v-if="!(item.reasonCode && item.reason) && item.imageUrls" class="imgarea">
                                     <img v-for="(img, index) in item.imageUrls" :key="index" :src="imgUrl(img)">
                                 </div>
-                                <div v-if="item.questionType && item.questionTypeCode && (item.reasonCode || item.message)">
+                                <div v-if="item.reasonCode && item.reason">
                                     <div v-if="item.reason" style="color:#222;font-size: 14px;border-bottom:2px solid #999;padding-bottom:5px;text-align:left;">
                                         {{item.reason}}
                                     </div>
@@ -396,6 +396,7 @@
                 successShow: false, // 上传成功提示
                 descriptionRequired: false, // description是否必填
                 _orderId: '',
+                isLoading: false,
             }
         },
         components: {
@@ -404,6 +405,7 @@
         },
         mounted(){
             this.$store.dispatch("getQuestionType")
+            console.log(localStorage._orderId)
             if(localStorage._orderId){
                 this._orderId = localStorage._orderId
                 setTimeout(()=>{
@@ -431,7 +433,7 @@
                     this.isRequired = true
                     alert(this.$t("support.s_select_ph"))
                 }
-            }
+            },
         },
         computed: {
             ...mapGetters(['ticket','ticket_con','ticketid','ticket_sub','questionType']),
@@ -448,8 +450,10 @@
             },
             canBeRated(){
                 if(this.ticket_con && this.ticket_con.questionTypeCode){
-                    // console.log(this.ticket_con)
-                    this.selected = this.ticket_con.questionTypeCode
+                    if(this.selected == '666'){
+                        this.selected = this.ticket_con.questionTypeCode
+                    }
+                    
                     if(this.selected && (!this.ticket_con.subject || this.ticket_con.subject == 'undefined' || !this.ticket_con.subject.match(/[a-z]/ig))){
                         var fData = new FormData();
                         if(this.ticket_con?.operaId){
@@ -543,14 +547,15 @@
         },
         methods: {
             selectChange(e){
-                // console.log(this.usedQuestionType,this.ticket_con.operaId, this.ticketid)
+                if(this.isLoading){
+                    return
+                }
                 if((!this.ticket_con.operaId && !this.ticketid) && !this._orderId){
                     this.questionMaskShow = false
                     return
                 }
-                // console.log(e.value)
-                // console.log(this.selected)
                 if(this.selected == e.value){
+                    // this.selected = e.value;
                     this.isRequired = false
                     let qTReasonList = this.usedQuestionType.find(q => q.value == e.value).reasons ? 
                                     this.usedQuestionType.find(q => q.value == e.value).reasons :
@@ -558,8 +563,14 @@
                     let showed = this.ticket_con ? 
                                 this.ticket_con?.ticketReplies ? 
                                 this.ticket_con?.ticketReplies.find(t => 
-                                        t.questionTypeCode == e.value && (t.reasonCode || t.message || t.imageUrls)
+                                        t.questionTypeCode == e.value && t.reasonCode && t.reason
                                 ) : false : false
+                    this.questionsReason.forEach(q=>{
+                        q.isSelected = false
+                        if(q.value == e.value){
+                            q.isSelected = true
+                        }
+                    })
                     if((qTReasonList.length > 0 || e.value == this.usedQuestionType[this.usedQuestionType.length - 1].value) && !showed){
                         if(e.value == this.usedQuestionType[this.usedQuestionType.length - 1].value){
                             this.descriptionRequired = true
@@ -581,8 +592,11 @@
                 // console.log(fData.operaId)
                 fData.append("questionType",e.label)
                 fData.append("questionTypeCode",e.value)
+                this.isLoading = true
                 this.$store.dispatch("addTicket",fData).then(res=>{
-                    this.selected = e.value
+                    this.isLoading = false
+                    this.selected = e.value;
+                    
                     this.isRequired = false
                     let qTReasonList = this.usedQuestionType.find(q => q.value == e.value).reasons ? 
                                     this.usedQuestionType.find(q => q.value == e.value).reasons :
@@ -590,8 +604,15 @@
                     let showed = this.ticket_con ? 
                                 this.ticket_con?.ticketReplies ? 
                                 this.ticket_con?.ticketReplies.find(t => 
-                                        t.questionTypeCode == e.value && (t.reasonCode || t.message || t.imageUrls)
+                                        t.questionTypeCode == e.value && t.reasonCode && t.reason
                                 ) : false : false
+                    this.questionsReason.forEach(q=>{
+                        q.isSelected=false
+                        if(q.value == e.value){
+                            q.isSelected = true
+                        }
+                    })
+
                     if((qTReasonList.length > 0 || e.value == this.usedQuestionType[this.usedQuestionType.length - 1].value) && !showed){
                         if(e.value == this.usedQuestionType[this.usedQuestionType.length - 1].value){
                             this.descriptionRequired = true
@@ -600,19 +621,20 @@
                         }
                         this.questionsReason = qTReasonList
                         this.questionMaskShow = true
-                        // console.log(this.questionsReason) 
                     }
                 })
                 
             },
             getDate(paymentTime){
-                // console.log(paymentTime)
                 if(paymentTime == null){
                     return '-'
                 }
                 return utils.slashTime(new Date(paymentTime))
             },
             imghandle(evt){
+                if(this.isLoading){
+                    return
+                }
                 evt.preventDefault()
                 if(this.selected == '666' || !this.selected){
                     alert(this.$t("support.s_select_ph"))
@@ -638,11 +660,13 @@
                         this.isRequired = true
                         return ''
                     }
-
+                    this.isLoading = true
                     this.$store.dispatch('addTicket', formData).then(() => {
+                        this.isLoading = false
                         this.$store.dispatch('getTicket',this.ticketid)
                         // this.msg = ''
                     }).catch(e => {
+                        this.isLoading = false
                         alert(e.result)
                     })
                 }else{
@@ -656,6 +680,9 @@
                 this.$emit('selectOrder');
             },
             sendticket(){
+                if(this.isLoading){
+                    return
+                }
                 let formData = new FormData();
                 // console.log(this.msg)
                 if(!this.msg) {
@@ -676,10 +703,13 @@
                     this.isRequired = true
                     return ''
                 }
+                this.isLoading = true
                 this.$store.dispatch('addTicket', formData).then(() => {
+                    this.isLoading = false
                     this.$store.dispatch('getTicket',this.ticketid)
                     this.msg = ''
                 }).catch(e => {
+                    this.isLoading = false
                     alert(e.result)
                 })
             },
@@ -691,6 +721,9 @@
                 // console.log(this.rateData.rate)
             },
             sendRateData(flag){
+                if(this.isLoading){
+                    return
+                }
                 let formData = new FormData();
                 this.showAddRate = false;
                 this.showRater = false;
@@ -701,10 +734,13 @@
                 formData.append("message",this.rateData.message)
                 formData.append("id",this.rateData.id)
                 formData.append("reviewMsg",this.rateData.reviewMsg)
+                this.isLoading = true
                 this.$store.dispatch('rate', formData).then(() => {
+                    this.isLoading = false
                     this.ticket_con.ticketRateService = this.rateData
                     this.showAddRate = false
                 }).catch(err => {
+                    this.isLoading = false
                     this.showAddRate = false
                 })
             },
@@ -726,7 +762,11 @@
                 // if(!checkParams(params)) return
                 // 上传的图片
                 let imgFileList = this.questionObject.uploadImgFileList.map(img => {
-                    return new HtmlImageCompress(img, {quality: 0.7, imageType: img.type})
+                    if(img.type.indexOf('gif') != -1){
+                        return img
+                    } else {
+                        return new HtmlImageCompress(img, {quality: 0.7, imageType: img.type})
+                    }
                 })
                 if(!this.checkUploadData(params)) return
                 // message 传 description数据
@@ -736,21 +776,30 @@
                     if(this.ticket_con?.operaId){
                         formData.append("operaId",this.ticket_con.operaId)
                     }else{
-                        formData.append("operaId",this.ticketid)
+                        formData.append("operaId",this.ticket.id)
                     }
                     formData.append('questionTypeCode', params.question)
                     formData.append('questionType', this.usedQuestionType.find(q=>q.value == params.question)?.label ? this.usedQuestionType.find(q=>q.value == params.question).label : '')
-                    formData.append('reasonCode', params.selectReason ? params.selectReason.value : '')
+                    formData.append('reasonCode', params.selectReason ? params.selectReason.value : '100')
                     // 如果原因选择了others 那么reason传others输入的值
-                    formData.append('reason', params.selectReason ? params.selectReasonInput ? params.selectReasonInput:params.selectReason.label:'')
+                    formData.append('reason', params.selectReason ? params.selectReasonInput ? params.selectReasonInput:params.selectReason.label:'Others')
                     formData.append('message', this.questionObject.descriptionInput)
                     results.forEach(item => {
                         const {file} = item
-                        formData.append('imageFiles', file)
+                        if(file){
+                            formData.append('imageFiles', file)
+                        } else {
+                            formData.append('imageFiles', item)
+                        }
                     })
                     // console.log(formData)
                     this.$store.dispatch('addTicket', formData).then(() => {
-                        this.$store.dispatch('getTicket',this.ticketid)
+                        if(JSON.stringify(this.ticket_con) !== '{}'){
+                            this.$store.dispatch('getTicketByTicketId',this.ticket_con.id)
+                        } else {
+                            this.$store.dispatch('getTicket',this.ticket.id)
+                        }
+                        
                         this.msg = ''
                         this.questionMaskShow = false;
                         this.questionObject = { // 信息收集弹窗的数据obj
@@ -768,10 +817,14 @@
                         this.successShow = true
                     }).catch(e => {
                         alert(e.result)
+                        this.questionSubmitLoading = false
                     })
                 })     
             },
             questionImgUpload(e){
+                if(!e.target.files || e.target.files.length == 0){
+                    return
+                }
                 let file = [...e.target.files]
                 // 判断是否有重复项
                 file.forEach((files, index) => {

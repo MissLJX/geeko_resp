@@ -452,5 +452,6 @@ export default {
         s_rate_info: "Gostaríamos muito de saber o que você acha do nosso atendimento ao cliente para nos ajudar a atendê-lo melhor.",
         s_rate_satisfied: 'Satisfeito',
         s_rate_unsatisfied: 'Insatisfeito',
+        s_wating_for_apply: 'Esperando por se inscrever',
     }
 }

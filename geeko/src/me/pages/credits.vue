@@ -11,8 +11,10 @@
         <div class="_container">
             <credit-header :me="pointsCustomerNum"></credit-header>
             <received-used></received-used>
-            <points-list></points-list>
+            <!-- <points-list></points-list> -->
         </div>
+
+        <points-mall></points-mall>
 
         <Loading v-if="isGetCustomerLoadingShow"></Loading>
     </div>
@@ -43,6 +45,7 @@
     import PointsList from '../components/points-list.vue'
 
     import Loading from '../../components/loading.vue'
+    import PointsMall from '../components/points-mall.vue'
 
     export default{
         data(){
@@ -74,6 +77,7 @@
             'nav-bar':NavBar,
             'points-list':PointsList,
             "Loading":Loading,
+            'points-mall':PointsMall,
         }
     }
 </script>

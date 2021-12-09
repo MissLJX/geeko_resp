@@ -103,7 +103,7 @@ export default {
             return utils.PROJECT + suffix;
         },
         backHome(){
-            this.$router.push({ path: '/'})
+            window.location.href = (window.ctx||'')+'/i/index'
         },
         backSupport(){
             this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/tickets'})
@@ -135,7 +135,7 @@ export default {
                     cursor: pointer;
 
                     img{
-                        width: 131px;
+                        // width: 131px;
 	                    height: 38px;
                     }
                 }

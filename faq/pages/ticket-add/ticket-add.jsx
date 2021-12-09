@@ -661,18 +661,14 @@ class TicketAdd extends React.Component {
     let operaId = this.state.order?this.state.order.id:this.state.ticket?this.state.ticket.operaId:''
     if(operaId){
       const files = evt.currentTarget.files
-
-      const htmlImageCompress = new HtmlImageCompress(files[0], {quality: 0.7, imageType: files[0].type})
-
-      htmlImageCompress.then((result) => {
-        const {file, fileSize} = result
-
+      let type = files[0].type
+      if(type.indexOf('gif') != -1){
         const formData = new FormData()
         formData.append('operaId', operaId)
         // formData.append('questionTypeCode', this.state.subject)
         // formData.append('message', this.state.message || '-')
         formData.append('message', '-')
-        formData.append('imageFiles', file)
+        formData.append('imageFiles', files[0])
         sendImage(formData).then(({result}) => {
           const file = files[0]
           const src = window.navigator.userAgent.indexOf('Chrome') >= 1 || window.navigator.userAgent.indexOf('Safari') >= 1 ? window.webkitURL.createObjectURL(file) : window.URL.createObjectURL(file)
@@ -707,7 +703,54 @@ class TicketAdd extends React.Component {
 
           this.initScroll()
         })
-      })
+      } else {
+        const htmlImageCompress = new HtmlImageCompress(files[0], {quality: 0.7, imageType: type})
+
+        htmlImageCompress.then((result) => {
+          const {file, fileSize} = result
+          const formData = new FormData()
+          formData.append('operaId', operaId)
+          // formData.append('questionTypeCode', this.state.subject)
+          // formData.append('message', this.state.message || '-')
+          formData.append('message', '-')
+          formData.append('imageFiles', file)
+          sendImage(formData).then(({result}) => {
+            const file = files[0]
+            const src = window.navigator.userAgent.indexOf('Chrome') >= 1 || window.navigator.userAgent.indexOf('Safari') >= 1 ? window.webkitURL.createObjectURL(file) : window.URL.createObjectURL(file)
+            let ticket = this.state.ticket || {}
+            let replies = []
+            replies = (ticket.ticketReplies || []).concat([])
+
+            replies.push({
+              sender: 'buyers',
+              message: '',
+              imageUrls: [src],
+              date: new Date().getTime()
+            })
+            ticket.ticketReplies = replies
+
+            if(ticket){
+              if(ticket.ticketReplies.slice(0)[ticket.ticketReplies.slice(0).length - 1]['sender'] == "buyers"){
+                this.setState({
+                  showTip:true
+                })
+              } else {
+                this.setState({
+                  showTip: false
+                })
+              }
+            }
+            
+            this.setState({
+              ticket,
+              // message: '',
+            })
+
+            this.initScroll()
+          })
+        })
+      }
+      
     } else {
       alert('This ticket is not exist!')
     }
@@ -848,7 +891,7 @@ class TicketAdd extends React.Component {
     }
 
     this.getQuestionType(urlParams,id,customerCode,(urlParams,id,customerCode)=>{
-      console.log(urlParams)
+      // console.log(urlParams)
       if(urlParams){
         this.getMsgByLinkId(urlParams)
       } else if (id) {
@@ -883,7 +926,7 @@ class TicketAdd extends React.Component {
       const {ticket, order, cusomerName, headSculptureUrl} = result
       // console.log(result)
       // console.log(ticket.ticketReplies.slice(-1)[ticket.ticketReplies.slice(-1).length - 1]['sender'])
-      if(ticket){
+      if(ticket && ticket.ticketReplies && ticket.ticketReplies.length>0){
         if(ticket.ticketReplies.slice(0)[ticket.ticketReplies.slice(0).length - 1]['sender'] == "buyers"){
           this.setState({
             showTip:true
@@ -900,9 +943,9 @@ class TicketAdd extends React.Component {
         questionTypeChange({
           operaId: order.id,
           questionTypeCode: subject,
-          questionType: this.questions.find(q=>q.value == subject) ? 
-                        this.questions.find(q=>q.value == subject).label ?
-                        this.questions.find(q=>q.value == subject).label :
+          questionType: this.state.questions.find(q=>q.value == subject) ? 
+                        this.state.questions.find(q=>q.value == subject).label ?
+                        this.state.questions.find(q=>q.value == subject).label :
                         list.find(l => l.value == subject) ?
                         list.find(l => l.value == subject).label :'': ''
         }).then(res => {})
@@ -915,8 +958,8 @@ class TicketAdd extends React.Component {
         questionTypeChange({
           operaId: order.id,
           questionTypeCode: otherSubject,
-          questionType: this.question && this.question.length > 0 ?
-                        (this.questions.find(q=>q.value == otherSubject) ? (this.questions.find(q=>q.value == otherSubject).label) : '' ) 
+          questionType: this.state.questions && this.state.questions.length > 0 ?
+                        (this.state.questions.find(q=>q.value == otherSubject) ? (this.state.questions.find(q=>q.value == otherSubject).label) : '' ) 
                         : (list.find(l => l.value == otherSubject) ? list.find(l => l.value == otherSubject).label : '')
         }).then(res => {
           
@@ -949,6 +992,7 @@ class TicketAdd extends React.Component {
 
   // history传参里的id
   getMsgByUrlId(id){
+    console.log("getMsgByUrlId")
     get(id).then(({result}) => {
       // console.log(result)
       const {ticket, order, cusomerName, headSculptureUrl} = result
@@ -959,8 +1003,8 @@ class TicketAdd extends React.Component {
         questionTypeChange({
           operaId: order.id,
           questionTypeCode: subject,
-          questionType: this.question && this.question.length > 0 ?
-                        (this.questions.find(q=>q.value == subject) ? (this.questions.find(q=>q.value == subject).label) : '' ) 
+          questionType: this.state.questions && this.state.questions.length > 0 ?
+                        (this.state.questions.find(q=>q.value == subject) ? (this.state.questions.find(q=>q.value == subject).label) : '' ) 
                         : (list.find(l => l.value == subject) ? list.find(l => l.value == subject).label : '')
         }).then(res => {})
       }
@@ -970,14 +1014,14 @@ class TicketAdd extends React.Component {
         questionTypeChange({
           operaId: order.id,
           questionTypeCode: otherSubject,
-          questionType: this.question && this.question.length > 0 ?
-                        (this.questions.find(q=>q.value == otherSubject) ? (this.questions.find(q=>q.value == otherSubject).label) : '' ) 
+          questionType: this.state.questions && this.state.questions.length > 0 ?
+                        (this.state.questions.find(q=>q.value == otherSubject) ? (this.state.questions.find(q=>q.value == otherSubject).label) : '' ) 
                         : (list.find(l => l.value == otherSubject) ? list.find(l => l.value == otherSubject).label : '')
         }).then(res => {
           
         })
       }
-      if(ticket){
+      if(ticket && ticket.ticketReplies && ticket.ticketReplies.length>0){
         if(ticket.ticketReplies.slice(0)[ticket.ticketReplies.slice(0).length - 1]['sender'] == "buyers"){
           this.setState({
             showTip:true
@@ -1016,11 +1060,12 @@ class TicketAdd extends React.Component {
 
   // 获取链接里的id
   getMsgByLinkId(id){
+    console.log("getMsgByLinkId")
     getByOrderId(id).then(({result}) => {
       const {ticket, order, cusomerName, headSculptureUrl} = result
       console.log(result)
       // console.log(ticket.ticketReplies.slice(-1)[ticket.ticketReplies.slice(-1).length - 1]['sender'])
-      if(ticket){
+      if(ticket && ticket.ticketReplies && ticket.ticketReplies.length>0){
         if(ticket.ticketReplies.slice(0)[ticket.ticketReplies.slice(0).length - 1]['sender'] == "buyers"){
           this.setState({
             showTip:true
@@ -1081,6 +1126,7 @@ class TicketAdd extends React.Component {
 
   // 客服code
   getMsgByCode(code){
+    console.log("getMsgByCode")
     getByCode(code).then(({result}) => {
       // console.log(result)
       const {ticket, order, cusomerName, headSculptureUrl} = result
@@ -1091,8 +1137,8 @@ class TicketAdd extends React.Component {
         questionTypeChange({
           operaId: order.id,
           questionTypeCode: subject,
-          questionType: this.question && this.question.length > 0 ?
-                        (this.questions.find(q=>q.value == subject) ? (this.questions.find(q=>q.value == subject).label) : '' ) 
+          questionType: this.state.questions && this.state.questions.length > 0 ?
+                        (this.state.questions.find(q=>q.value == subject) ? (this.state.questions.find(q=>q.value == subject).label) : '' ) 
                         : (list.find(l => l.value == subject) ? list.find(l => l.value == subject).label : '')
         }).then(res => {})
       }
@@ -1102,14 +1148,14 @@ class TicketAdd extends React.Component {
         questionTypeChange({
           operaId: order.id,
           questionTypeCode: otherSubject,
-          questionType: this.question && this.question.length > 0 ?
-                        (this.questions.find(q=>q.value == otherSubject) ? (this.questions.find(q=>q.value == otherSubject).label) : '' ) 
+          questionType: this.state.questions && this.state.questions.length > 0 ?
+                        (this.state.questions.find(q=>q.value == otherSubject) ? (this.state.questions.find(q=>q.value == otherSubject).label) : '' ) 
                         : (list.find(l => l.value == otherSubject) ? list.find(l => l.value == otherSubject).label : '')
         }).then(res => {
           
         })
       }
-      if(ticket){
+      if(ticket && ticket.ticketReplies && ticket.ticketReplies.length>0){
         if(ticket.ticketReplies.slice(0)[ticket.ticketReplies.slice(0).length - 1]['sender'] == "buyers"){
           this.setState({
             showTip:true
@@ -1167,7 +1213,7 @@ class TicketAdd extends React.Component {
         questions: qTList,
         questionsReason: qTReasonList,
       },()=>{
-        console.log(this.state.questions)
+        // console.log(this.state.questions)
         if(this.state.questions.length > 0){
           callback(urlParams,id,customerCode)
         } else {
@@ -1250,6 +1296,7 @@ class TicketAdd extends React.Component {
     }
 
     const QuestionTip = (props) => {
+      console.log(props)
       const imageUrls = props.reply.imageUrls
       let message = props.reply.message === '-' ? '' : props.reply.message
       let messages = (message || '').split(/[\s|\n]/)
@@ -1275,7 +1322,7 @@ class TicketAdd extends React.Component {
         let reason = reasonList.find(q => q.value == props.reply.reasonCode)
         richTxt = `
           <div style="color:#222;font-size: 14px;border-bottom:2px solid #999;padding-bottom:5px;">
-            ${reason ? reason.value == reasonList[reasonList.length - 1].value ? props.reply.reason : reason.label : '-'}
+            ${reason ? reason.value == reasonList[reasonList.length - 1].value ? props.reply.reason : reason.label : props.reply.reasonCode=='100'?props.reply.reason:'-'}
           </div>
           <div style="color:#222;font-size: 14px;border-bottom:2px solid #999;padding:5px 0;">
             ${message}
@@ -1364,7 +1411,7 @@ class TicketAdd extends React.Component {
     const GroupReplyHtmls = (props) => {
       const replies = [];
       props.replies.forEach(r => {
-        if(r.message || r.imageUrls || r.reasonCode || r.reason){
+        if(r.message || r.imageUrls || (r.reasonCode || r.reason)){
           replies.push(r)
         }
       })
@@ -1384,8 +1431,8 @@ class TicketAdd extends React.Component {
                   {
                     reply.isRate ?
                     <RateTip reply={reply}></RateTip>
-                    :reply.questionType && reply.questionTypeCode ?
-                    <QuestionTip reply={reply}></QuestionTip>:
+                    :reply.reason && reply.reasonCode ?
+                    <QuestionTip questionTypeCode={props.questionTypeCode} reply={reply}></QuestionTip>:
                     <ReplyTip reply={reply} />
                   }
                   
@@ -1399,13 +1446,13 @@ class TicketAdd extends React.Component {
     }
 
     const selectChange= (e) => {
-        // console.log(e)
+        console.log(e)
         // return
         if(this.state.subject === e){
           let qTReasonList = questions.find(q => q.value == e) && questions.find(q => q.value == e).reasons ? 
                                questions.find(q => q.value == e).reasons : []
             // 保证每个问题只展示一次
-            let isShowed = this.state.ticket ? this.state.ticket.ticketReplies.find(t => t.questionTypeCode == e && (t.reasonCode || t.message || t.imageUrls)) : false
+            let isShowed = this.state.ticket ? this.state.ticket.ticketReplies ? this.state.ticket.ticketReplies.find(t => t.questionTypeCode == e && t.reasonCode && t.reason) : false:false
             if((qTReasonList.length > 0 || e == questions[questions.length - 1].value) && !isShowed){
               // 判断description是否是必填
               if(e == questions[questions.length - 1].value){
@@ -1431,8 +1478,9 @@ class TicketAdd extends React.Component {
             })
           return
         }
+        let operaId = this.state.order?this.state.order.id:this.state.ticket?this.state.ticket.operaId:''
         questionTypeChange({
-          operaId: this.state.order.id,
+          operaId: operaId,
           questionTypeCode: e,
           questionType: questionTypeList.find(q => q.value == e).label
         }).then(res => {
@@ -1444,7 +1492,7 @@ class TicketAdd extends React.Component {
             let qTReasonList = questions.find(q => q.value == e) && questions.find(q => q.value == e).reasons ? 
                                questions.find(q => q.value == e).reasons : []
             // 保证每个问题只展示一次
-            let isShowed = this.state.ticket ? this.state.ticket.ticketReplies.find(t => t.questionTypeCode == e && (t.reasonCode || t.message || t.imageUrls)) : false
+            let isShowed = this.state.ticket ? this.state.ticket.ticketReplies ? this.state.ticket.ticketReplies.find(t => t.questionTypeCode == e && t.reasonCode && t.reason) : false:false
             if((qTReasonList.length > 0 || e == questions[questions.length - 1].value) && !isShowed){
               // 判断description是否是必填
               if(e == questions[questions.length - 1].value){
@@ -1486,10 +1534,14 @@ class TicketAdd extends React.Component {
     }    
 
     const questionImgUpload = (e) => {
+      if(!e.target.files || e.target.files.length == 0){
+        return
+      }
       let file = [...e.target.files]
       // 判断是否有重复项
       file.forEach((files, index) => {
         let sameFile = questionObject.uploadImgFileList.find(f => f.name === files.name);
+        console.log(sameFile)
         if(sameFile){
           file.splice(index, 1)
         }
@@ -1518,6 +1570,7 @@ class TicketAdd extends React.Component {
           uploadImgList:imgSrcList
         }
       })
+      clearFile()
     }
 
     const deleteImg = (index) => {
@@ -1532,6 +1585,11 @@ class TicketAdd extends React.Component {
           uploadImgList: imgList
         }
       })
+      clearFile()
+    }
+
+    const clearFile = () =>{
+      this.maskUpload.value=null
     }
 
     const checkParams = (params) => {
@@ -1615,7 +1673,11 @@ class TicketAdd extends React.Component {
       if(!checkParams(params)) return
       // 上传的图片
       let imgFileList = questionObject.uploadImgFileList.map(img => {
-        return new HtmlImageCompress(img, {quality: 0.7, imageType: img.type})
+        if(img.type.indexOf('gif') != -1){
+          return img
+        } else {
+          return new HtmlImageCompress(img, {quality: 0.7, imageType: img.type})
+        }
       })
       let operaId = this.state.order?this.state.order.id:this.state.ticket?this.state.ticket.operaId:''
       if(operaId){
@@ -1625,13 +1687,18 @@ class TicketAdd extends React.Component {
           formData.append('operaId', operaId)
           formData.append('questionTypeCode', this.state.subject)
           formData.append('questionType', questions.find(q=>q.value == this.state.subject).label)
-          formData.append('reasonCode', params.selectReason ? params.selectReason.value : '')
+          formData.append('reasonCode', params.selectReason ? params.selectReason.value : '100')
           // 如果原因选择了others 那么reason传others输入的值
-          formData.append('reason', params.selectReason ? params.selectReasonInput ? params.selectReasonInput:params.selectReason.label:'')
+          formData.append('reason', params.selectReason ? params.selectReasonInput ? params.selectReasonInput:params.selectReason.label:'Others')
           formData.append('message', questionObject.descriptionInput)
           results.forEach(item => {
             const {file} = item
-            formData.append('imageFiles', file)
+            if(file){
+              formData.append('imageFiles', file)
+            } else {
+              formData.append('imageFiles', item)
+            }
+            
           })
           
           sendImage(formData).then(({result}) => {
@@ -1644,8 +1711,19 @@ class TicketAdd extends React.Component {
               imageUrls: questionObject.uploadImgList,
               questionTypeCode: this.state.subject,
               questionType: questions.find(q=>q.value == this.state.subject).label,
-              reasonCode: params.selectReason ? params.selectReason.value : '',
-              reason: params.selectReason ? params.selectReasonInput ? params.selectReasonInput:params.selectReason.label:''
+              reasonCode: params.selectReason ? params.selectReason.value : '100',
+              reason: params.selectReason ? params.selectReasonInput ? params.selectReasonInput:params.selectReason.label:'Others'
+            })
+
+            console.log({
+              sender: 'buyers',
+              message: questionObject.descriptionInput,
+              date: new Date().getTime(),
+              imageUrls: questionObject.uploadImgList,
+              questionTypeCode: this.state.subject,
+              questionType: questions.find(q=>q.value == this.state.subject).label,
+              reasonCode: params.selectReason ? params.selectReason.value : '100',
+              reason: params.selectReason ? params.selectReasonInput ? params.selectReasonInput:params.selectReason.label:'Others'
             })
   
             ticket.ticketReplies = replies
@@ -1691,6 +1769,7 @@ class TicketAdd extends React.Component {
 
     // 清除收集信息弹窗的数据
     const clearTicketData = () => {
+      console.log('...')
       hideNoInputTips()
       let copyList = questionsReason.slice(0);
       copyList.forEach(c => c.isSelected = false);
@@ -1843,9 +1922,6 @@ class TicketAdd extends React.Component {
             <SelectedOrderBox onClick={()=>this.props.history.push({pathname: `${(window.ctx || '')}/support/order`,state:{from:'ticketadd'}})}>
                 <OrderNo>
                     {intl.formatMessage({id:"orderno"})}
-                    {
-                      console.log(this.state.ticket)
-                    }
                     <span>
                       {this.state.order ? 
                        this.state.order.id ? 
@@ -1883,7 +1959,7 @@ class TicketAdd extends React.Component {
             <Chat innerRef={(div) => { this.chatDiv = div }} style={{ height:'calc(100% - 230px)',overflow: 'hidden', overflowY: 'scroll', padding:'20px',WebkitOverflowScrolling:'touch'}}>
               {this.state.ticket && this.state.ticket.ticketReplies && _.map(groupReplies(this.state.ticket.ticketReplies), (group, index) => (
                 <div key={index}>                  
-                  <GroupReplyHtmls headSculptureUrl={this.state.headSculptureUrl} replies={group} index={index}/>
+                  <GroupReplyHtmls headSculptureUrl={this.state.headSculptureUrl} questionTypeCode={this.state.ticket.questionTypeCode} replies={group} index={index}/>
                 </div>
               ))}
               {/* 提示 */}
@@ -2065,6 +2141,7 @@ class TicketAdd extends React.Component {
                           <input style={{opacity:0,position:'absolute',width:'80px',height:'80px'}} 
                             type="file" 
                             id="imageFiles" 
+                            ref={e => this.maskUpload=e}
                             multiple="multiple" 
                             onChange={(e)=>questionImgUpload(e)}
                             accept="image/jpg,image/jpeg,image/png,image/gif"></input>

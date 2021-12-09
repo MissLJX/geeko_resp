@@ -450,5 +450,6 @@ export default {
         s_rate_info: "Nos encantaría saber lo que piensa de nuestro servicio de atención al cliente para ayudarnos a brindarle un mejor servicio",
         s_rate_satisfied: 'Satisfecho',
         s_rate_unsatisfied: 'Insatisfecho',
+        s_wating_for_apply: 'Esperando aplicar',
     }
 }

@@ -19,7 +19,6 @@ class App extends React.Component {
   }
 }
 
-window.accessToken = '7ae739c7-572b-4d62-9f09-b8329954222a'
 
 let root = document.getElementById('root')
 

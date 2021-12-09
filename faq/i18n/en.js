@@ -97,4 +97,5 @@ export default {
   satisfied: 'Satisfied',
   unsatisfied: 'Unsatisfied',
   rateTextPlaceHolder: 'You can comment customer service here.',
+  statusWatingApply:'Wating for Apply',
 }

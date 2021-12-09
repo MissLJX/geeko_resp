@@ -95,4 +95,5 @@ export default {
   satisfied: 'Satisfeito',
   unsatisfied: 'Insatisfeito',
   rateTextPlaceHolder: 'Você pode comentar o atendimento ao cliente aqui.',
+  statusWatingApply:'Esperando por se inscrever',
 }

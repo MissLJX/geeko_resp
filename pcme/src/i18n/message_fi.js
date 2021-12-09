@@ -453,5 +453,6 @@ export default {
         s_rate_info: "We'd love to hear what you think of our customer service to help us to serve you better.",
         s_rate_satisfied: 'Satisfied',
         s_rate_unsatisfied: 'Unsatisfied',
+        s_wating_for_apply: 'Wating for Apply',
     }
 }

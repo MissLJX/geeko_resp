@@ -118,11 +118,16 @@ class TicketList extends React.PureComponent{
                                 <StatusCircle style={{backgroundColor:'#f9a646'}}></StatusCircle>
                                 <StatusTxt style={{color:'#f9a646'}}>{intl.formatMessage({id:'statuswating'})}</StatusTxt>
                             </Waiting>)
-                default:
-                    // case 0:
+                
+                case 3:
                     return (<Resolved>
                                 <StatusCircle style={{backgroundColor:'#999'}}></StatusCircle>
                                 <StatusTxt style={{color:'#999'}}>{intl.formatMessage({id:'statusresolved'})}</StatusTxt>
+                            </Resolved>)
+                default:
+                    return (<Resolved>
+                                <StatusCircle style={{backgroundColor:'#E64646'}}></StatusCircle>
+                                <StatusTxt style={{color:'#E64646'}}>{intl.formatMessage({id:'statusWatingApply'})}</StatusTxt>
                             </Resolved>)
             }
         }
@@ -147,6 +152,7 @@ class TicketList extends React.PureComponent{
                         </TicketLineOne>
                         <TicketContent>
                             {
+                                item.ticketReplies && item.ticketReplies.length > 0 &&
                                 item.ticketReplies.slice(-1)[item.ticketReplies.slice(-1).length - 1].message ? 
                                 item.ticketReplies.slice(-1)[item.ticketReplies.slice(-1).length - 1].message : '-'
                             }

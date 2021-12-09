@@ -76,7 +76,7 @@
                         </div>
 
                         <!-- <div v-if="confirmedOrder" class="returns-btn" @click="showTicket(orderdetail.id)">Return</div> -->
-                        <div v-if="orderpro.status === constant.PACKAGE_STATUS_DELIVERED && isNormalOrder" class="returns-btn" @click="showTicket(orderdetail.id)">Return</div>
+                        <div v-if="orderpro.status === constant.PACKAGE_STATUS_DELIVERED && isNormalOrder" class="returns-btn" @click="showTicketReturn(orderdetail.id)">Return</div>
                     </td>
                 </tr>
             </table>
@@ -440,14 +440,14 @@
                 this.isShowSelect = false
                 this.isShowTicket = false
             },
-            showTicket:function(data){
+            showTicketReturn(data){
                 this.isShowSelect = false
                 localStorage._orderId = JSON.stringify(data);
                 this.$store.dispatch('getTicket',data).then(()=>{
                     this.isShowTicket = true;
                 })
             },
-            selectorder:function(){
+            selectorder(){
                 this.isShowSelect = true;
                 this.isShowTicket = false;
             },

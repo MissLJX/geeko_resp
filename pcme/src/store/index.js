@@ -1147,9 +1147,9 @@ const actions = {
         api.getTicket(id).then((ticket) => {
             if(ticket){
                 // console.log(ticket)
-                commit(types.GLOBAL_GET_TICKET, ticket.order)
+                commit(types.GLOBAL_GET_TICKET, ticket.order?ticket.order:{})
                 commit(types.GLOBAL_GET_TICKET_CON, ticket.ticket?ticket.ticket:{})
-                commit(types.GLOBAL_GET_TICKET_ID, ticket.order.id)
+                commit(types.GLOBAL_GET_TICKET_ID, ticket.order?ticket.order.id:(ticket.ticket?ticket.ticket.operaId:''))
                 commit(types.GLOBAL_GET_TICKET_SUB, ticket.subjectSelections)
             }
         })
@@ -1157,10 +1157,10 @@ const actions = {
     getTicketByTicketId({commit},id){
         api.getTicketByTicketId(id).then((ticket) => {
             if(ticket){
-                // console.log(ticket)
-                commit(types.GLOBAL_GET_TICKET, ticket.order)
+                //  console.log(ticket.order?ticket.order.id:(ticket.ticket?ticket.ticket.operaId:''))
+                commit(types.GLOBAL_GET_TICKET, ticket.order?ticket.order:{})
                 commit(types.GLOBAL_GET_TICKET_CON, ticket.ticket?ticket.ticket:{})
-                commit(types.GLOBAL_GET_TICKET_ID, ticket.order.id)
+                commit(types.GLOBAL_GET_TICKET_ID, ticket.order?ticket.order.id:(ticket.ticket?ticket.ticket.operaId:''))
                 commit(types.GLOBAL_GET_TICKET_SUB, ticket.subjectSelections)
             }
         })
@@ -1169,9 +1169,9 @@ const actions = {
         api.getTicketByCode(code).then((ticket) => {
             if(ticket){
                 // console.log(ticket)
-                commit(types.GLOBAL_GET_TICKET, ticket.order)
+                commit(types.GLOBAL_GET_TICKET, ticket.order?ticket.order:{})
                 commit(types.GLOBAL_GET_TICKET_CON, ticket.ticket?ticket.ticket:{})
-                commit(types.GLOBAL_GET_TICKET_ID, ticket.order.id)
+                commit(types.GLOBAL_GET_TICKET_ID, ticket.order?ticket.order.id:(ticket.ticket?ticket.ticket.operaId:''))
                 commit(types.GLOBAL_GET_TICKET_SUB, ticket.subjectSelections)
             }
         })

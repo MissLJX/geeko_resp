@@ -450,5 +450,6 @@ export default {
         s_rate_info: "Wir würden gerne hören, was Sie von unserem Kundenservice halten, damit wir Sie besser bedienen können.",
         s_rate_satisfied: 'Zufrieden',
         s_rate_unsatisfied: 'Unzufrieden',
+        s_wating_for_apply: 'Warte auf Bewerben',
     }
 }

@@ -54,6 +54,11 @@ export default {
         // 页面销毁前移除监听
         document.removeEventListener("click",this.closeItem,false);   
     },
+    watch:{
+    //    selectValue:function(oldValue,newValue){
+    //        console.log("newValue",newValue,"oldValue",oldValue);
+    //    }
+    },
     computed:{
         value(){
             // console.log(this.selectValue)

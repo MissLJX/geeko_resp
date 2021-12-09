@@ -28,11 +28,23 @@
                     <tr v-if="!tickets">{{$t('nomoredata')}}</tr>
                     <template  >
                         <tr v-for="(ticket, index) in ticketList" :key="index">
-                            <td @click="showTicket(ticket.operaId)"><span>{{ticket.id}}</span></td>
+                            <td @click="showTicket(ticket.id)"><span>{{ticket.id}}</span></td>
                             <td>{{getlastmsg(ticket.ticketReplies)}}</td>
                             <td>{{getDate(ticket.openDate)}}</td>
-                            <td :class="{'statusTr':true,'resolved':ticket.state==3,'waiting':ticket.state===1,'replied':ticket.state===2}">
-                                <span :class="{'statusCircle': true, 'resolvedC':ticket.state==3,'waitingC':ticket.state===1,'repliedC':ticket.state===2}"></span>
+                            <td :class="{
+                                'statusTr':true,
+                                'resolved':ticket.state==3,
+                                'waiting':ticket.state===1,
+                                'replied':ticket.state===2,
+                                'apply':ticket.state===0
+                                }">
+                                <span :class="{
+                                    'statusCircle': true, 
+                                    'resolvedC':ticket.state==3,
+                                    'waitingC':ticket.state===1,
+                                    'repliedC':ticket.state===2,
+                                    'applyC':ticket.state===0,
+                                    }"></span>
                                 {{getStatus(ticket.state)}}
                             </td>
                         </tr>
@@ -79,6 +91,10 @@
               tabList: [
                     {
                         label: this.$t("support.s_all_c"),
+                        value: '9',
+                    },
+                    {
+                        label: this.$t("support.s_wating_for_apply"),
                         value: '0',
                     },
                     {
@@ -94,7 +110,7 @@
                         value: '3',
                     },
               ],
-              selectType: '0',
+              selectType: '9',
               page: 1,
               listDefault: [],
               fromOrder: false, // 从order跳转过来
@@ -173,12 +189,11 @@
             },
             testString(str){
                 let arr = str.split("")
-                for(let i = 0; i < arr.length; i++){
-                    if(typeof(arr[i]-0) == 'number'){
-                        return true
-                    }
+                if(arr.length < 26){
+                    return true
+                } else {
+                    return false
                 }
-                return false
             },
             showTicketByCode(code){
                 this.isShowSelect = false
@@ -196,7 +211,7 @@
                     case 3:
                         return this.$t("support.s_resolved")
                     default:
-                        return this.$t("support.s_wating_for_replied")
+                        return this.$t("support.s_wating_for_apply")
                 }
             },
             getlastmsg(replies){
@@ -207,6 +222,8 @@
                     }else{
                         return replies?.[replies?.length-1]?.message || '-'
                     }
+                } else {
+                    return '-'
                 }
             },
             selectorder:function(){
@@ -223,10 +240,10 @@
             }
         },
         created(){
-            this.$store.dispatch('getTickets', {skip:0,state:0})
+            this.$store.dispatch('getTickets', {skip:0,state:9})
         },
         mounted(){
-            console.log(this.$router.currentRoute.query?.id && !urlIdShowed)
+            // console.log(this.$router.currentRoute.query?.id && !urlIdShowed)
             if(this.$router.currentRoute.query?.id && !urlIdShowed){
                 localStorage.removeItem("_code")
                 localStorage._orderId = this.$router.currentRoute.query?.id
@@ -262,6 +279,9 @@
     .repliedC{
         background-color: #57b936 !important;
     }
+    .applyC{
+        background-color: #E64646 !important;
+    }
     .waitingC{
         background-color: #f9a646 !important;
     }
@@ -273,6 +293,9 @@
     }
     .waiting{
         color: #f9a646 !important;
+    }
+    .apply{
+        color: #E64646 !important;
     }
     .tickets{
         width: 1200px;
