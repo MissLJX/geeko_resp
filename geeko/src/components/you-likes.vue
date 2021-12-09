@@ -51,7 +51,8 @@
         computed: {
             ...mapGetters('me',["isLogin"]),
             products(){
-                return store.getters['me/youlikeProducts']
+                let products = store.getters['me/youlikeProducts']
+                return products.length > 0 ? products.filter(item =>!item.isSmartCard && !item.isCollection) : [];
             },
             skip(){
                 return store.getters['me/youlikeskip']
