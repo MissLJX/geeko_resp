@@ -72,9 +72,9 @@ input:-webkit-autofill{
 /** ================icon font==================**/
 @font-face {
   font-family: 'iconfont';  /* Project id 384296 */
-  src: url('//at.alicdn.com/t/font_384296_s1b8r4qdmr.woff2?t=1627622893908') format('woff2'),
-       url('//at.alicdn.com/t/font_384296_s1b8r4qdmr.woff?t=1627622893908') format('woff'),
-       url('//at.alicdn.com/t/font_384296_s1b8r4qdmr.ttf?t=1627622893908') format('truetype');
+  src: url('//at.alicdn.com/t/font_384296_zvrzfrdfpyp.woff2?t=1633924148619') format('woff2'),
+       url('//at.alicdn.com/t/font_384296_zvrzfrdfpyp.woff?t=1633924148619') format('woff'),
+       url('//at.alicdn.com/t/font_384296_zvrzfrdfpyp.ttf?t=1633924148619') format('truetype');
 }
 
 .iconfont{
@@ -91,16 +91,25 @@ input:-webkit-autofill{
 @font-face {
   font-family: 'SlatePro';
   src: url('https://s3.geeko.ltd/fonts/SlatePro.ttf');
+  font-display: swap;
 }
 
 @font-face {
   font-family: 'SlatePro-Medium';
   src: url('https://s3.geeko.ltd/fonts/SlatePro-Medium.ttf');
+  font-display: swap;
 }
 
 @font-face {
   font-family: 'AcuminPro-Bold';
-  src: url('https://s3.geeko.ltd/fonts/acumin/Acumin-BdPro.otf');
+  src: url('https://s3.geeko.ltd/fonts/Roboto-Bold.ttf.gz');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Roboto-Medium";
+  src: url("https://s3.geeko.ltd/fonts/Roboto-Medium.ttf");
+  font-display: swap
 }
 
 
@@ -109,6 +118,8 @@ body{
   font-family: SlatePro, "Open Sans", Arial,"Helvetica Neue", Helvetica, sans-serif;
   -webkit-text-size-adjust: 100%;
   color: #222928;
+  // background-color: #f7f7f7;
+  background-color: #ffffff;
 }
 
 

@@ -50,9 +50,7 @@ export const getCredits = (skip) => {
 export const creditcards = getCredits
 
 export const getYouLikeProducts = (skip) => {
-    return axios.get('/product/1/'+skip+'/20/show', {}, {}).then((data) => {
-        return data.result
-    })
+    return axios.get('/product/1/'+skip+'/20/show', {}, {});
 }
 
 export const getWishlist = () => {
@@ -78,9 +76,7 @@ export const countUnreadNotification = () => {
 }
 
 export const getWishProducts = (customerId, skip) => {
-    return axios.get(VPATH + '/wanna-list/anon/' + customerId + '/' + skip + '/20/all-products', {}, {}).then((data) => {
-        return data.result
-    })
+    return axios.get(VPATH + '/wanna-list/anon/' + customerId + '/' + skip + '/20/all-products', {}, {});
 }
 
 export const postProfile = (data) => {
@@ -96,7 +92,7 @@ export const changePassword = (data) => {
 }
 
 export const changeAccountEmail = (data) => {
-    return axios.post(VPATH + '/customer/send-change-account-email', qs.stringify(data), {'Content-Type': http_infos.default_post_content_type}).then(data => data.result)
+    return axios.post(VPATH + '/customer/send-change-account-email', qs.stringify(data), {'Content-Type': http_infos.default_post_content_type});
 }
 
 export const changeEmail = (data) => {
@@ -144,6 +140,22 @@ export const getMessage = (code) => {
     return axios.get('/message/get/'+code).then((data) => {
         return data.result
     })
+}
+
+export const getMessage2 = (code) => {
+    return axios.get("/message/anon/country-message/"+code).then(data => data.result);
+}
+
+// 如果message的结构为Object
+// /v9/message/anon/get-object/{code}
+export const getMessageToObject = (code) => {
+    return axios.get(VPATH + "/message/anon/get-object/"+code).then(data => data.result);
+}
+
+// 如果message的结构为数组
+// /v9/message/anon/get-list/{code}
+export const getMessageToArray = (code) => {
+    return axios.get(VPATH + "/message/anon/get-list/"+code).then(data => data.result);
 }
 
 export const getCreditCards = () => {
@@ -224,9 +236,7 @@ export const getCustomerPointsNum = () => {
 // menuId   APP0010
 // product/anon/{skip}/{limit}/{groupNo}/{menuId}/list-by-menu
 export const getPointsProductList = (skip) => {
-    return axios.get(VPATH+"/product/anon/"+ skip+"/20/0/APP0010/list-by-menu",{},{}).then((data) => {
-        return data.result;
-    });
+    return axios.get(VPATH+"/product/anon/"+ skip+"/20/0/APP0010/list-by-menu",{},{});
 }
 
 //make-suggestion
@@ -234,5 +244,46 @@ export const makeSuggestion = (files) => {
     return axios.post('/ticket/add', files, {'Content-Type': http_infos.upload_image_content_type}).then(data => data.result)
 }
 
+// get cart product num
+export const getShoppingCartNum = () => {
+    return axios.get(VPATH + "/shopping-cart/count-products",{},{}).then(data => data.result);
+}
 
+export const updateCustomerSave = (customer) => {
+    console.log("customer",customer);
+    return axios.post(VPATH + "/customer/save",customer,{}).then(data => data.result);
+}
 
+export const surveySave = (params) => {
+    return axios.cpost('/questionnaire-answer/anon/save',params,{}).then(data => data);
+}
+
+export const surveyGet = () => {
+    return axios.get('/questionnaire-answer/anon/get',{},{}).then(data => data)
+}
+
+// /context/anon/get-currency-list
+export const getCurrencyList =() => {
+    return axios.get("/context/anon/get-currency-list",{},{}).then(data => data.result);
+}
+
+// https://www.chicme.xyz/L/1F4Q3Z7A81P7G8G3w3D5m9a4w/product/0/20/29b78253-be62-483a-9852-cbd23d5e7bf1/scp-show2
+// 通过productId获取相似产品
+export const getRelationProducts = ({productId,skip}) => {
+    return axios.get(`/product/${skip}/20/${productId}/scp-show2`);
+}
+// 获取是否存在未评论的订单
+export const getNoCommentOrder = () => {
+    // console.log('api 请求')
+    return axios.get("/v9/order/exists-order-without-comment",{},{}).then(data => data)
+}
+
+// 获取用户历史积分获得情况
+export const getPointsHistory = (start,end) => {
+    return axios.get("/v9/luck-draw/"+start+"/"+end+"/history")
+}
+
+// survey 获取问题配置
+export const getSurveyQuestions = (config) => {
+    return axios.get('/message/anon/get-list/'+config,{},{}).then(data => data)
+}

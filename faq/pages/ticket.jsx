@@ -136,7 +136,7 @@ const Ticket = class extends React.Component {
 
   componentWillMount () {
     const {id} = this.props.match.params
-
+    // console.log(this.props.match)
     if (id) {
       get(id).then(({result}) => {
         const {ticket, order, cusomerName, headSculptureUrl} = result
@@ -227,12 +227,12 @@ const Ticket = class extends React.Component {
       <LabelValueContainer>
         <LabelValue label={intl.formatMessage({id: 'orderno'})} value={this.state.order.id}/>
         <LabelValue label={intl.formatMessage({id: 'paymenttime'})} value={paymentTime(this.state.order.paymentTime)}/>
-        {this.state.isNew && <Link to={`${window.ctx||''}/support/orders`} className="iconfont">&#xe66b;</Link>}
+        {this.state.isNew && <Link to={`${window.ctx||''}/me/m/faq/orders`} className="iconfont">&#xe66b;</Link>}
 
       </LabelValueContainer>
     ) : (
       <OrderSelector className={this.state.orderInvalid ? 'invalid' : ''}>
-        <Link to={`${window.ctx||''}/support/orders`}>
+        <Link to={`${window.ctx||''}/me/m/faq/orders`}>
           <FormattedMessage id="selectorder"/>
           <i className="iconfont">&#xe694;</i>
         </Link>
@@ -322,7 +322,7 @@ const Ticket = class extends React.Component {
               <div style={{borderTop: '1px solid #cacaca', paddingTop: '20px', paddingLeft: '20px', paddingRight: '20px', paddingBottom: '15px'}}>
                 <h1 style={{fontSize: '18px', fontWeight: '400', textAlign: 'center'}}><FormattedMessage id="helpyou"/></h1>
                 <div>
-                  <GeekoSelect value={this.state.subject} onChange={(evt) => { this.setState({subject: evt.currentTarget.value}) }} style={{width: '100%', height: '40px', marginTop: '10px'}}>
+                  <GeekoSelect value={this.state.subject} onChange={(evt) => {this.setState({subject: evt.currentTarget.value}) }} style={{width: '100%', height: '40px', marginTop: '10px'}}>
                     {questions.map(q => (
                       <option key={q.value} value={q.value}>{q.label}</option>
                     ))}

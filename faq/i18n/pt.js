@@ -48,5 +48,52 @@ export default {
   satisfied: 'Satisfeito',
   unsatisfied: 'Insatisfeito',
   you_can_rate: 'Você pode comentar o atendimento ao cliente aqui',
-  please_rate: 'Por favor classifique meu serviço'
+  please_rate: 'Por favor classifique meu serviço',
+  // support:
+  click:'Para todas as perguntas e respostas, clique em nosso',
+  faq:"FAQ",
+  page:"página",
+  findNothing:"Não consegue encontrar a resposta que procura?",
+  contact:"Fale conosco",
+  orderProcessing: "Order Processing",
+  tracking:"Rastreamento Logístico",
+  return:"Devolução e reembolso",
+  product:"Produto e estoque",
+  payment:"Pagamento e promoções",
+  account:"Problemas de conta",
+  // contact:
+  Ticket:'Ingresso',
+  TicketTime: 'SOMENTE para problema pós-venda （Cancelar / Editar pedido / Status de envio / Devolução / Troca etc.)',
+  OnlineTime: 'SOMENTE para problemas de pré-venda. As vendas online não têm acesso às informações do pedido. ',
+  online:'Ajuda online',
+  // faq
+  search: "Resultados da pesquisa",
+  resultFor: "resultados para \"<strong>{result}</strong>\"",
+  question:"Tem mais perguntas?",
+  articleHelpful:"Este artigo foi útil?",
+  related:"Artigos Relacionados",
+  // ticket
+  noTicket:"no Ticket",
+  // order
+  // ticket add
+  textareaPlaceHolder:"Digite uma mensagem aqui ...",
+  orderNo:"pedido NÃO",
+  responseTime:"Tempo de resposta esperado：Dentro de 24h",
+  selectTip: 'Selecione seu tipo de pergunta',
+  statuswating: 'Esperando por respostas',
+  // question ticket
+  defaultSelect: 'Selecione o seu tipo de pergunta',
+  submitSuccess: 'Submetido com sucesso!',
+  submitTips: "Os motivos abaixo são opcionais. Você pode clicar no “X” se não quiser escolher nenhum deles.",
+  selectReason: 'Selecione um motivo',
+  description: 'Descrição',
+  description_ph: 'Descreva o seu problema o máximo possível para que o atendimento ao cliente possa responder mais rápido…',
+  uploadImage: 'Enviar Imagem',
+  uploadTips: 'Máximo de 3 fotos, apenas JPEG, GIF ou PNG.',  
+  rate:'Avalie meu serviço',
+  rateInfo: "Gostaríamos muito de saber o que você acha do nosso atendimento ao cliente para nos ajudar a atendê-lo melhor.",
+  satisfied: 'Satisfeito',
+  unsatisfied: 'Insatisfeito',
+  rateTextPlaceHolder: 'Você pode comentar o atendimento ao cliente aqui.',
+  statusWatingApply:'Esperando por se inscrever',
 }

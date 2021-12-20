@@ -1,4 +1,4 @@
-import React, {createRef, useLayoutEffect, useState} from 'react'
+import React, {createRef, useEffect, useLayoutEffect, useState} from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import Loading from '../components/msite/loading.jsx'
@@ -133,6 +133,17 @@ const GuestConfirm = props => {
 
 	const ref = createRef()
 
+	useEffect(() => {
+		if(window.GeekoSensors){
+			window.GeekoSensors.Track('PitPositionExposure', {
+				resource_type: 'Guest Login'
+			})
+			window.GeekoSensors.Track('PitPositionExposure', {
+				resource_type: 'Guest Checkout'
+			})
+		}
+	}, [])
+
 	useLayoutEffect(() => {
 		ref.current.classList.add('anim')
 	}, [])
@@ -144,6 +155,35 @@ const GuestConfirm = props => {
 		} , 200)
 	}
 
+	const loginHandle = () => {
+		try {
+			if(window.GeekoSensors){
+				window.GeekoSensors.Track('PitPositionClick', {
+					resource_type: 'Guest Login'
+				})
+			}
+
+		}catch(e){
+			console.error(e)
+		}
+
+		props.onLogin()
+
+	}
+
+	const continueHandle = () => {
+		props.onCheckout()
+		try {
+			if(window.GeekoSensors){
+				window.GeekoSensors.Track('PitPositionClick', {
+					resource_type: 'Guest Checkout'
+				})
+			}
+		}catch(e){
+			console.error(e)
+		}
+	}
+
 
 	return <GUESTCONFIRM innerRef={ref}>
 		<div className="__hd">
@@ -153,11 +193,11 @@ const GuestConfirm = props => {
 		<div style={{marginTop: 10}}>
 			<div className="__txt"><FormattedMessage id="get_more_discount"/></div>
 			<div style={{marginTop:6}}>
-				<BigButton onClick={props.onLogin}><FormattedMessage id="register"/>/<FormattedMessage id="sign_in"/></BigButton>
+				<BigButton onClick={loginHandle}><FormattedMessage id="register"/>/<FormattedMessage id="sign_in"/></BigButton>
 			</div>
 			<div style={{marginTop: 14}} className="__txt"><FormattedMessage id="check_as_email"/></div>
 			<div style={{marginTop: 6}}>
-				<BigButton className="outlined" onClick={props.onCheckout}><FormattedMessage id="guest_checkout"/></BigButton>
+				<BigButton className="outlined" onClick={continueHandle}><FormattedMessage id="guest_checkout"/></BigButton>
 			</div>
 		</div>
 	</GUESTCONFIRM>
@@ -615,6 +655,7 @@ const ShoppingCart = class extends React.Component {
 			tipFixed: false,
 			showAsk: false,
 			askMessage: '',
+			askTitle: '',
 			paypaling: false,
 			checking: false,
 			refreshing: false,
@@ -788,15 +829,15 @@ const ShoppingCart = class extends React.Component {
 			}
 		}
 
-		// if (scrollTop > this.scrollTop) {
-		// 	if (this.couponAlert) {
-		// 		this.couponAlert.classList.add('closed')
-		// 	}
-		// } else {
-		// 	if (this.couponAlert && documentHeight - scrollTop > windowHeight) {
-		// 		this.couponAlert.classList.remove('closed')
-		// 	}
-		// }
+		if (scrollTop > this.scrollTop) {
+			if (this.couponAlert) {
+				this.couponAlert.classList.add('closed')
+			}
+		} else {
+			if (this.couponAlert && documentHeight - scrollTop > windowHeight) {
+				this.couponAlert.classList.remove('closed')
+			}
+		}
 
 
 		this.scrollTop = scrollTop
@@ -867,7 +908,7 @@ const ShoppingCart = class extends React.Component {
 			return
 		}
 
-		if (payMethod === '18') {
+		if (payType === '30' || payMethod === '18') {
 
 			this.setState({
 				checking: true
@@ -875,7 +916,7 @@ const ShoppingCart = class extends React.Component {
 
 			placeOrderAll(payMethod).then(data => data.result).then(result => {
 				const { orderId } = result
-				this.props.history.push(`${window.ctx || ''}${__route_root__}/credit/${orderId}`)
+				this.props.history.push(`${window.ctx || ''}${__route_root__}/credit/${orderId}?payMethod=${payMethod}`)
 				this.setState({
 					checking: false
 				})
@@ -884,9 +925,6 @@ const ShoppingCart = class extends React.Component {
 				this.setState({
 					checking: false
 				})
-				if (window.__is_login__) {
-					this.props.history.push(`${window.ctx || ''}/checkout/${orderId}`)
-				}
 			})
 		
 		}else if (payType === '2' || payMethod === '17' || payType === '8') {
@@ -1855,7 +1893,8 @@ const ShoppingCart = class extends React.Component {
 		const { shippingInsuranceMsg2 } = this.props.cart
 		this.setState({
 			showAsk: true,
-			askMessage: shippingInsuranceMsg2
+			askMessage: shippingInsuranceMsg2,
+			askTitle: <FormattedMessage id={'shipping_insurance'}/>
 		})
 	}
 
@@ -2474,6 +2513,13 @@ const ShoppingCart = class extends React.Component {
 		}
 	}
 
+	couponClick(){
+		if (window.GeekoSensors) {
+			window.GeekoSensors.Track('CouponButtonClick', {
+			})
+		}
+	}
+
 
 	render() {
 		const { cart, loading, empty, editing, isCreditShow, mercadocards, creditcards, intl } = this.props
@@ -2513,6 +2559,9 @@ const ShoppingCart = class extends React.Component {
 			// 	{id: '5fd3c997-4d17-43d5-bf2e-0f26fabff1db',pcMainImage: '5fd3c997-4d17-43d5-bf2e-0f26fabff1db-54534-pc-sec', name: 'Give me a reason to prove me wrong', price: {amount: '0', unit: '$'}, msrp: {amount: '20', unit: '$'}},
 			// 	{id: '191f7188-5578-4427-a700-326ddbc3f08f',pcMainImage: '191f7188-5578-4427-a700-326ddbc3f08f-53915-pc', name: 'Give me a reason to prove me wrong', price: {amount: '0', unit: '$'}, msrp: {amount: '30', unit: '$'}}
 			// ]
+
+			// cart.expectedPointDiscount = null
+			// cart.expectedPoints = 0
 		}
 
 		const TipModal = Tip
@@ -3024,19 +3073,13 @@ const ShoppingCart = class extends React.Component {
 
 
 												<LineBox style={{ paddingLeft: 10, paddingRight: 10 }}>
-
-
-
-
-
 													{
-														cart.expectedPoints > 0 && (
-															<TurnTool open={this.openPoints.bind(this)} turnAcitve={cart.openPointUse}>
-
-																<FormattedMessage style={{ fontSize: 15 }} id="credit_msg" values={{ credits: cart.expectedPoints, discount: <Red><Money money={cart.expectedPointDiscount} /></Red> }} />
-																<Ask style={{ marginLeft: 4 }} onClick={this.creditClickHandle.bind(this)} />
-															</TurnTool>
-														)
+														<TurnTool ignoreButton={cart.expectedPoints <= 0} open={this.openPoints.bind(this)} turnAcitve={cart.openPointUse}>
+															<span style={{ fontSize: 14, fontFamily:'SlatePro-Medium' }}>
+																<FormattedMessage  id="credit_msg" values={{ credits: cart.expectedPoints, discount: <Red><Money money={cart.expectedPointDiscount || {amount:'0', unit: ''}} /></Red> }} />
+															</span>
+															<Ask style={{ marginLeft: 4 }} onClick={this.creditClickHandle.bind(this)} />
+														</TurnTool>
 													}
 												</LineBox>
 											</Box>
@@ -3384,7 +3427,7 @@ const ShoppingCart = class extends React.Component {
 											this.state.showAsk && this.state.askMessage && (
 												<React.Fragment>
 													<Mask />
-													<FixedMessage onClose={() => { this.setState({ showAsk: false, askMessage: null }) }}>
+													<FixedMessage title={this.state.askTitle} onClose={() => { this.setState({ showAsk: false, askMessage: null, askTitle: '' }) }}>
 														<p dangerouslySetInnerHTML={{ __html: this.state.askMessage }} />
 													</FixedMessage>
 												</React.Fragment>
@@ -3425,9 +3468,13 @@ const ShoppingCart = class extends React.Component {
 											</SUCCESSTIP>
 										}
 
-										{/* {
-											(!this.state.couponBanner || !this.state.couponBanner.enable) && cart.messages && cart.messages.couponMsg && <CouponAlert onClick={() => { this.props.history.push(`${window.ctx || ''}${__route_root__}/coupons`) }} innerRef={c => this.couponAlert = c} coupon={cart.coupon} couponMsg={cart.messages ? cart.messages.couponMsg : null} />
-										} */}
+										{
+											// (!this.state.couponBanner || !this.state.couponBanner.enable) &&
+											cart.messages && cart.messages.couponMsg && <CouponAlert onClick={() => {
+												this.props.history.push(`${window.ctx || ''}${__route_root__}/coupons`)
+												this.couponClick()
+											}} innerRef={c => this.couponAlert = c} coupon={cart.coupon} couponMsg={cart.messages ? cart.messages.couponMsg : null} />
+										}
 
 
 										{

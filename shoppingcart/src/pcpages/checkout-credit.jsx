@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import {injectIntl, FormattedMessage} from 'react-intl'
 import { connect } from 'react-redux'
 import {Link} from 'react-router-dom'
-import {__route_root__} from '../utils/utils.js'
+import {__route_root__, storage} from '../utils/utils.js'
 import Empty from '../components/pc/empty.jsx'
 
 import OrderSummary from '../components/pc/order-summary.jsx'
@@ -21,6 +21,7 @@ import CardList from '../components/pc/card-list.jsx'
 import { BigButton } from '../components/msite/buttons.jsx'
 
 import MercadoBinding from '../components/pc/mercado-binding.jsx'
+import AdyenBinding from '../components/pc/adyen-binding.jsx'
 
 import {submit} from '../utils/common-pay.js'
 
@@ -38,7 +39,7 @@ import {
 	getLookup,
 	oceanpay3d,
 	openSafeChargeOrder,
-	setSafeChargeStatus
+	setSafeChargeStatus, adyen_3d_call_back
 } from '../api'
 
 import {
@@ -194,7 +195,10 @@ const Credit = class extends React.Component {
 			showDeleteConfirm: false,
 			cardDelete: null,
 			dlocalerror: null,
-			frameSuffix: new Date().getTime()
+			frameSuffix: new Date().getTime(),
+			cvvState: {},
+			show3DFrame: false,
+			adyenCheckout: null
 		}
 
 		this.handleInputChange = this.handleInputChange.bind(this)
@@ -206,6 +210,39 @@ const Credit = class extends React.Component {
 
 	cvvRef(c) {
 		this.cvvField = c
+	}
+
+	adyenCvvHandle(cvvState, adyenCheckout){
+		this.setState({
+			cvvState,
+			adyenCheckout
+		})
+	}
+
+	handleOnAdditionalDetails(state){
+		const {checkout} = this.props
+		this.setState({
+			checking: true,
+			show3DFrame:false
+		})
+		adyen_3d_call_back({transactionId: checkout.transactionId, details: state.data.details}).then(data => {
+			const { result } = data
+			const {transactionId, orderId, success, warnMsg, response} = result
+			if(success){
+				window.location.href = `${window.ctx || ''}/order-confirm/${transactionId}?transactionId=${transactionId}`
+			}else{
+				alert(warnMsg || 'Error')
+			}
+
+			this.setState({
+				checking: false
+			})
+		}).catch(data => {
+			alert(data.result || data)
+			this.setState({
+				checking: false
+			})
+		})
 	}
 
 	componentWillMount () {
@@ -382,6 +419,12 @@ const Credit = class extends React.Component {
 		})
 	}
 
+	showAdyenHandle(){
+		this.setState({
+			showAdyen: !this.state.showAdyen
+		})
+	}
+
 	checkout (evt) {
 		const {checkout, installments, document} = this.props
 		if (checkout.payMethod === '19') {
@@ -424,7 +467,52 @@ const Credit = class extends React.Component {
 					checking: false
 				})
 			})
-		} else {
+		} else if(checkout.payMethod === '89'){
+			if(this.state.cvvState && this.state.cvvState.isValid){
+				this.setState({
+					checking: true
+				})
+				checkout_credit({orderId: checkout.orderId, cvv: this.state.cvvState.data.paymentMethod.encryptedSecurityCode}).then(data => {
+					const result = data.result
+					const {orderId} = checkout.orderId
+					const {response, details} = result
+					if(result.success){
+						window.location.href = `${window.ctx || ''}/order-confirm/${result.transactionId}?transactionId=${result.transactionId}`
+					}else if(response){
+						if(response.action){
+							const { action } = response
+							const threeDSConfiguration = {
+								challengeWindowSize: '05'
+							}
+
+							try {
+								this.state.adyenCheckout.createFromAction(action,threeDSConfiguration).mount('#frame-container')
+							}catch (e){
+								console.error(e)
+							}
+
+							if(action.type !== 'redirect'){
+								this.setState({
+									show3DFrame: true
+								})
+							}
+
+
+						}else{
+							alert(details || 'Error')
+							this.setState({
+								checking: false,
+							})
+						}
+					}else{
+						alert(result.details || 'Error')
+						this.setState({
+							checking: false,
+						})
+					}
+				}).catch(this.processErrorBack)
+			}
+		}else {
 			this.payCredit({orderId: checkout.orderId, payInstallments: installments})
 		}
 	}
@@ -433,33 +521,33 @@ const Credit = class extends React.Component {
 		const response = result.openOrderResponse
 		const self = this
 
-        // Instantiate Safecharge API
-        const sfc = SafeCharge({
-            env: window.safechargeEnv || 'prod', // the environment you’re running on, prod for production
-            merchantId: response.merchantId, //as asigned by SafeCharge
-            merchantSiteId: response.merchantSiteId // your merchantsite id provided by Safecharge
-        })
+		// Instantiate Safecharge API
+		const sfc = SafeCharge({
+			env: window.safechargeEnv || 'prod', // the environment you’re running on, prod for production
+			merchantId: response.merchantId, //as asigned by SafeCharge
+			merchantSiteId: response.merchantSiteId // your merchantsite id provided by Safecharge
+		})
 
 
-        sfc.createPayment({
-            "sessionToken": response.sessionToken, //recieved form opeOrder API
-            "merchantId": response.merchantId, //as asigned by SafeCharge
-            "merchantSiteId": response.merchantSiteId, //as asigned by SafeCharge
-            "userTokenId": response.userTokenId,
-            "clientUniqueId": response.clientUniqueId, // optional
-            "paymentOption": {
-                "userPaymentOptionId": result.userPaymentOptionId,
+		sfc.createPayment({
+			'sessionToken': response.sessionToken, //recieved form opeOrder API
+			'merchantId': response.merchantId, //as asigned by SafeCharge
+			'merchantSiteId': response.merchantSiteId, //as asigned by SafeCharge
+			'userTokenId': response.userTokenId,
+			'clientUniqueId': response.clientUniqueId, // optional
+			'paymentOption': {
+				'userPaymentOptionId': result.userPaymentOptionId,
 			},
-			"billingAddress": {
-				"country": result.country,
-				"email": result.email
+			'billingAddress': {
+				'country': result.country,
+				'email': result.email
 			},
-			"deviceDetails": {
-				"ipAddress": result.ip
+			'deviceDetails': {
+				'ipAddress': result.ip
 			}
-        }, function (res) {
+		}, function (res) {
 			setSafeChargeStatus(response.sessionToken).then(data => data.result).then(result => {
-				if(res.result === "APPROVED"){
+				if(res.result === 'APPROVED'){
 					window.location.href = `${window.ctx || ''}/order-confirm/${response.clientUniqueId}`
 				}else{
 					alert(res.errorDescription || res.reason || 'Error')
@@ -473,7 +561,7 @@ const Credit = class extends React.Component {
 					checking: false
 				})
 			})
-        })
+		})
 	}
 
 	triggerOcean(){
@@ -684,6 +772,7 @@ const Credit = class extends React.Component {
 	}
 
 	payMercado (params) {
+
 		const { orderId } = this.props.checkout
 		return mercadopay_order({
 			orderId,
@@ -697,6 +786,10 @@ const Credit = class extends React.Component {
 			}
 			return result
 		})
+	}
+
+	payAdyen(params){
+		console.log(params)
 	}
 
 	getFrame () {
@@ -732,10 +825,23 @@ const Credit = class extends React.Component {
 		}
 	}
 
+	addNewCard(){
+		const { checkout } = this.props
+		const { payMethod } = checkout
+
+		if(payMethod === '89'){
+			this.showAdyenHandle()
+		}else if(payMethod === '19'){
+			this.showMercadoHandle()
+		} else{
+			this.showFrameHandle()
+		}
+	}
+
 	render () {
 		// alert('fuck')
 		const { intl, checkout, creditcards, mercadocards} = this.props
-		var _frame = this.getFrame()
+		var _frame = this.getFrame() || {}
 
 		let cards, payMethod, country
 		if (checkout) {
@@ -770,11 +876,22 @@ const Credit = class extends React.Component {
 									{
 										this.state.noCard ? <div>
 
+
 											{
-												payMethod === '19' ? <div style={{width: 500, paddingTop: 10}}>
+												payMethod === '89' && <div style={{width: 500, paddingTop: 10}}>
+													<AdyenBinding orderTotal={checkout.orderTotal} checkout={checkout} pay={this.payAdyen.bind(this)} email={this.props.me ? this.props.me.email : ''}/>
+												</div>
+											}
+
+											{
+												payMethod === '19' && <div style={{width: 500, paddingTop: 10}}>
 													<img style={{display: 'block', marginBottom: 10}} src="https://image.geeko.ltd/shoppingcart/maxicocard.png"/>
 													<MercadoBinding orderId={checkout.orderId} orderTotal={checkout.orderTotal} pay={this.payMercado.bind(this)} email={this.props.me ? this.props.me.email : ''}/>
-												</div> : <div style={{position: 'relative'}}>
+												</div>
+											}
+
+											{
+												payMethod !== '89' && payMethod !== '19' && <div style={{position: 'relative'}}>
 													{
 														this.state.frameLoading && <div style={{textAlign: 'center', paddingTop: 40}} className="__loading">
 															<img alt="loading" src="https://image.geeko.ltd/site/upgrade/20180316/loading.gif"/>
@@ -782,7 +899,6 @@ const Credit = class extends React.Component {
 													}
 													<iframe onLoad={ this.frameLoadHandle.bind(this) } style={{height: _frame.height, width: '100%'}} src={`${_frame.url}&_=${this.state.frameSuffix}`}/>
 												</div>
-
 											}
 
 										</div> : <div>
@@ -800,9 +916,11 @@ const Credit = class extends React.Component {
 												documentBtn={c => this.documentBtn = c}
 												cvvRef = { this.cvvRef.bind(this) }
 												dlocalerror = {this.state.dlocalerror}
+												adyenCvvHandle={ this.adyenCvvHandle.bind(this) }
+												handleOnAdditionalDetails = {this.handleOnAdditionalDetails.bind(this)}
 											/>
 
-											{ this.state.checking ? <CREDITBTN style={{marginTop: 15}}>{intl.formatMessage({id: 'please_wait'})}...</CREDITBTN> : <CREDITBTN style={{marginTop: 15}} onClick={ payMethod === '19' ? this.showMercadoHandle.bind(this) : this.showFrameHandle.bind(this) }>+ <FormattedMessage id="use_new_card" /></CREDITBTN>}
+											{ this.state.checking ? <CREDITBTN style={{marginTop: 15}}>{intl.formatMessage({id: 'please_wait'})}...</CREDITBTN> : <CREDITBTN style={{marginTop: 15}} onClick={ this.addNewCard.bind(this) }>+ <FormattedMessage id="use_new_card" /></CREDITBTN>}
 
 											<div style={{borderTop: 'solid 1px #e6e6e6', marginTop: 20, paddingTop: 40}}>
 
@@ -866,6 +984,31 @@ const Credit = class extends React.Component {
 								</div>
 							</MERCADOMODAL>
 						</Modal>
+					}
+
+					{
+						this.state.showAdyen && <Modal onClose={ this.showAdyenHandle.bind(this) }>
+							<MERCADOMODAL>
+								<div className="__title"><FormattedMessage id="credit_card"/></div>
+
+								<div style={{marginTop: 20, minHeight: 200}}>
+									<AdyenBinding orderTotal={checkout.orderTotal} checkout={checkout} pay={this.payAdyen.bind(this)} email={this.props.me ? this.props.me.email : ''}/>
+								</div>
+							</MERCADOMODAL>
+						</Modal>
+					}
+
+					{
+						<div style={{display:`${this.state.show3DFrame?'block':'none' }`}}>
+							<Modal onClose={ this.showAdyenHandle.bind(this) }>
+								<MERCADOMODAL>
+									<div className="__title"><FormattedMessage id="credit_card"/></div>
+									<div style={{marginTop: 20, minHeight: 200}} id="frame-container">
+									</div>
+								</MERCADOMODAL>
+							</Modal>
+						</div>
+
 					}
 
 					{

@@ -1,4 +1,4 @@
-import './css/style.css'
+import './css/base.css'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {BrowserRouter} from 'react-router-dom'
@@ -13,12 +13,18 @@ class App extends React.Component {
     return (
 		 	<BrowserRouter>
 		 		<Index/>
+         <div className="x-fw" style={{display:'none'}}></div>
 		 	</BrowserRouter>
     )
   }
 }
 
-const root = document.createElement('div')
-document.body.appendChild(root)
+
+let root = document.getElementById('root')
+
+if(!root){
+  root = document.createElement('div')
+  document.body.appendChild(root)
+}
 
 ReactDOM.render(<App/>, root)

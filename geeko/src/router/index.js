@@ -27,6 +27,10 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
+    if(to.fullPath == `${window.ctx || ''}/me/m/support`){
+        let baseurl = window.location.href.split(to.fullPath)[0];
+        window.location.href = baseurl + `${window.ctx || ''}/support`
+    }
 
     store.dispatch('paging', {paging: true})
 
@@ -34,7 +38,9 @@ router.beforeEach((to, from, next) => {
     if (to.path.startsWith(ROUTER_PATH_ME)) {
         store.dispatch('me/init').then(() => {
             next()
-        })
+        }).catch(e => {
+            next();
+        });
     } else {
         next()
     }

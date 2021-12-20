@@ -16,7 +16,7 @@
                 'me'
             ]),
             sitename(){
-                return site
+                return this.GLOBAL.sitename
             }
         }
     }

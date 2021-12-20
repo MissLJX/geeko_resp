@@ -6,9 +6,10 @@ import App from './app.vue'
 import {sync} from 'vuex-router-sync'
 import i18n from './i18n'
 import './css/style.scss'
-import global_ from './components/Global.vue'
+// import global_ from './components/Global.vue'
+import common from "./common.js"
 import './utils/validate.js'
-Vue.prototype.GLOBAL = global_
+Vue.prototype.GLOBAL = common
 
 sync(store, router)
 

@@ -6,25 +6,38 @@ export function withScroll (WrappedComponent) {
       super(props)
       this.handleScroll = this.handleScroll.bind(this)
     }
-
+    
     handleScroll (evt) {
       let [scrollTop, documentHeight, windowHeight] = [
         document.documentElement.scrollTop || document.body.scrollTop,
         document.body.clientHeight,
         window.screen.height
       ]
-
-      if (scrollTop + windowHeight >= documentHeight - 200) {
-      	this.props.scrollHandler(evt)
+       // 滚动的高度
+      const scrollTop1 = (evt.srcElement ? evt.srcElement.scrollTop : false) || window.pageYOffset || (evt.srcElement ? evt.srcElement.body.scrollTop : 0)
+      // 视窗高度
+      const clientHeight = (evt.srcElement && evt.srcElement.clientHeight) || document.body.clientHeight
+      // 页面高度
+      const scrollHeight = (evt.srcElement && evt.srcElement.scrollHeight) || document.body.scrollHeight
+      // 距离页面底部的高度
+      const height = scrollHeight - scrollTop1 - clientHeight
+      // console.log(scrollTop1, clientHeight, scrollHeight, height)
+      if(height < 200){
+        this.props.scrollHandler(evt)
       }
+      // if (scrollTop + windowHeight >= documentHeight - 200) {
+      //   this.props.scrollHandler(evt)
+      	
+      // }
     }
 
     componentDidMount () {
-    	document.addEventListener('scroll', this.handleScroll)
+      // console.log('34',document.getElementById("pageScroll"))
+    	document.getElementById("pageScroll").addEventListener('scroll', this.handleScroll)
     }
 
     componentWillUnmount () {
-    	document.removeEventListener('scroll', this.handleScroll)
+    	document.getElementById("pageScroll").removeEventListener('scroll', this.handleScroll)
     }
 
     render () {

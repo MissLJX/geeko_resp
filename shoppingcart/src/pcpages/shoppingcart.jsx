@@ -111,7 +111,7 @@ import {
 	klarna_create_session,
 	klarna_place_order,
 	pay,
-	get_pay_params
+	get_pay_params, placeOrderAll
 } from '../api'
 import deeplink from '../utils/deeplink.js'
 
@@ -851,8 +851,23 @@ const ShoppingCart = class extends React.Component {
 		}
 
 
-
-		if (payType === '2' || payType === '7') {
+		if(payType === '30'){
+			this.setState({
+				checking: true
+			})
+			placeOrderAll(payMethod).then(data => data.result).then(result => {
+				const { orderId } = result
+				this.props.history.push(`${window.ctx || ''}/checkout/${orderId}/credit?payMethod=${payMethod}`)
+				this.setState({
+					checking: false
+				})
+			}).catch(data => {
+				alert(data.result)
+				this.setState({
+					checking: false
+				})
+			})
+		}else if (payType === '2' || payType === '7') {
 			if (payMethod === '17') {
 				const { cpf } = this.props
 				this.brazilOceanForm.validateAll()

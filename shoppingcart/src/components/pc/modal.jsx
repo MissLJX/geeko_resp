@@ -33,7 +33,7 @@ const CLOSE = styled.span`
 `
 
 export const Modal = (props) => <Fragment>
-	<MASK>
+	<MASK style={props.style}>
 	  <MODAL>
 	    <CLOSE onClick={props.onClose}>&#xe69a;</CLOSE>
 	    {

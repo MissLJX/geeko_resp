@@ -99,9 +99,10 @@ export const atmPay = (paymentMethodId) => axios.post(`${VPATH}/money-transfer/p
 export const ticketPay = (paymentMethodId) => axios.post(`${VPATH}/cash/pay`, { paymentMethodId })
 
 export const getSafeCharge = (payMethod) => axios.get(`${VPATH}/safe-charge/get-pay-params`, { payMethod, _: new Date().getTime() })
-export const openSafeChargeOrder = orderId => axios.get(`${VPATH}/safe-charge/open-order`, { orderId, _: new Date().getTime() })
+export const openSafeChargeOrder = (orderId, merchantSiteId) => axios.get(`${VPATH}/safe-charge/open-order`, { orderId, merchantSiteId, _: new Date().getTime() })
 export const setSafeChargeStatus = sessionToken => axios.get(`${VPATH}/safe-charge/set-payment-status`, { sessionToken, _: new Date().getTime() })
 export const setSafeCharge = params => axios.post(`${VPATH}/safe-charge/set-payment-status`, { ...params, _: new Date().getTime() })
+export const initSafeChargeOrder = orderId => axios.get(`${VPATH}/safe-charge/init-order`, { orderId, _: new Date().getTime() })
 
 export const getMultiMethodCards = (payMethods) => {
 	if (window.__is_login__) {
@@ -153,6 +154,7 @@ export const getOrderDetails = id => axios.get(`${VPATH}/order/get-order-details
 export const gettransaction = (id) => axios.get(`${VPATH}/order/anon/order-confim`, { transactionId: id })
 export const updateorderaddress = (address) => axios.post(`${VPATH}/order/anon/shipping-detail-update`, address)
 export const updatebillingaddress = (address) => axios.post(`${VPATH}/order/anon/update-billing-address`, address)
+
 
 
 export const getRecProducts = () => axios.get(`${VPATH}/shopping-cart/get-shopping-cart-recommendeds`,{})
@@ -254,4 +256,11 @@ export const openStripeOrder = orderId => axios.post(`${VPATH}/stripe/open-order
 export const stripePay = data => axios.body(`${VPATH}/stripe/bind-card2`, data)
 export const stripeCallBack = data => axios.body(`${VPATH}/stripe/pay-result`, data)
 
-export const register = data => axios.post(`${VPATH}/customer/anon/register`, data)
+export const register = data => axios.post(`${VPATH}/customer/anon/register2`, data)
+
+
+
+//alyen
+export const alyen_check_out = data => axios.body(`${VPATH}/adyen/checkout`, data)
+export const openAdyenOrder = orderId => axios.post(`${VPATH}/adyen/open-order`, {orderId})
+export const adyen_3d_call_back = data => axios.body(`${VPATH}/adyen/threeDSCallBack`, data)

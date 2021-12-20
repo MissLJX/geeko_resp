@@ -58,6 +58,9 @@
                 return fecha.format(new Date(this.notification.sendTime), 'YYYY-MM-DD hh:mm:ss')
             }
         },
+        created(){
+            console.log(this.notification)
+        },
         components: {
             'model-1': Model1,
             'model-2': Model2,

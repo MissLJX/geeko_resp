@@ -88,6 +88,7 @@
                                 width: 54px;
                                 background-color: #f5f5f5;
                                 font-family: 'SlatePro-Medium';
+                                vertical-align: middle;
                             }
                         }
                     }

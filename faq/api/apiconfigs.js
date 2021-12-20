@@ -40,7 +40,7 @@ const instance = axios.create({
     appVersion: '3.5.7',
     xtoken: window.secret || '',
     // countryCode: getCountry(),
-    deviceType: 'msite',
+    deviceType: window.deviceType || 'msite',
     wid: getWid(),
     accessToken: window.accessToken || ''
   }

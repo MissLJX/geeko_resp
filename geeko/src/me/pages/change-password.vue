@@ -27,7 +27,7 @@
 
 
                 <div class="el-change-block">
-                    <label class="el-change-label">Confirm</label>
+                    <label class="el-change-label">Confirm Password</label>
                     <p class="st-control el-change-control">
                         <input name="confirmPassword"  v-validate="'required'" v-model="info.confirmPassword"
                                :class="{'st-input':true, 'st-input-danger':!confirmed || errors.has('confirmPassword')}" type="text"/>
@@ -41,6 +41,8 @@
         <div class="sett-name-footer">
             <div class="change-password-save"  @click="changePasswordHandle">Save</div>
         </div>
+
+        <loading v-if="isLoadingShow"></loading>
     </div>
 </template>
 
@@ -91,6 +93,7 @@
                 font-family: SlatePro-Medium;
                 font-size: 17px;
                 color: #ffffff;
+                text-transform: uppercase;
             }
         }
     }
@@ -120,10 +123,14 @@
                             alert("The old and new passwords cannot be the same.");
                             return;
                         }
+
+                        this.isLoadingShow = true;
                         this.$store.dispatch('me/changePassword', this.info).then(() => {
                             alert("Success");
+                            this.isLoadingShow = false;
                             this.$router.go(-1)
                         }).catch(e => {
+                            this.isLoadingShow = false;
                             alert(e.result)
                         })
                         return;

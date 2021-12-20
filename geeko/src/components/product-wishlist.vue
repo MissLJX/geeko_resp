@@ -19,7 +19,7 @@
             </template>
         </list>
         <div class="el-btn">
-            <span class="c-clearAll" @click="clearAllHandle()">Remove all Invalid Items</span>
+            <!-- <span class="c-clearAll" @click="clearAllHandle()">Remove all Invalid Items</span> -->
             <span class="c-delete" @click="cancelSaveHandle()">Delete</span>
         </div>
     </div>
@@ -35,11 +35,11 @@
     }
     .el-products{
         li{
-            width: 25%;
+            width: 50%;
             padding: 5px;
             float:left;
         }
-        margin-bottom: 56px;
+        margin-bottom: 66px;
         padding: 0 5px;
     }
     .b-relative{
@@ -47,13 +47,13 @@
     }
     .el-btn{
         width: 100%;
-        height: 56px;
         border-top: 1px solid #e6e6e6;
         background-color: #fff;
         position: fixed;
         bottom: 51px;
-        z-index: 500;
-        line-height: 56px;
+        z-index: 100;
+        padding: 16px 0px;
+
         .c-clearAll{
             width: 210px;
             height: 33px;
@@ -67,14 +67,17 @@
             cursor: pointer;
         }
         .c-delete{
-            font-family: HelveticaNeue-Medium;
-            font-size: 16px;
-            font-weight: normal;
-            font-stretch: normal;
+            font-family: 'AcuminPro-Bold';
+            font-size: 14px;
             color: #000000;
             float: right;
-            margin-right: 10px;
+            margin-right: 20px;
+            border-radius: 2px;
+	        border: solid 1px #222222;
             cursor: pointer;
+            height: 36px;
+            line-height: 36px;
+            padding: 0px 20px;
         }
     }
     .mask{
@@ -137,6 +140,10 @@
             finished:{
                 type: Boolean,
                 default: false
+            },
+            scrollable:{
+                type:Boolean,
+                default:true
             }
         },
         components: {
@@ -145,7 +152,34 @@
         },
         methods:{
             cancelSaveHandle(){
-                this.isAlert = true;
+                let _this = this;
+                _this.$store.dispatch('confirmShow', {
+                    show: true,
+                    cfg: {
+                        btnFont:{
+                            yes:"Confirm",
+                            no:"Cancel"
+                        },
+                        message: "Are you sure you want to delete the item(s)?",
+                        yes: function () {
+                            _this.deleteHandle('1');
+                            _this.$store.dispatch('closeConfirm');
+                        },
+                        no: function () {
+                            _this.$store.dispatch('closeConfirm');
+                        }
+                    }
+                });
+
+                // 多选确认点击
+                if(window.GeekoSensors){
+                    window.GeekoSensors.Track('WishlistButtonClick', {
+                        page_sort:"wish list",
+                        page_type: "收藏夹页",
+                        button_pv:"delete_multi",
+                        is_success:true
+                    })
+                }
             },
             clearAllHandle(){
                 this.tipMsg = 'Are you sure you want to remove all expired products?'
@@ -153,7 +187,7 @@
                 this.clearAll = true;
             },
             deleteHandle(isDel){
-                this.isAlert = false;
+                console.log("isDel",isDel);
                 if(isDel === '1' && !this.clearAll){
                     let idArr = store.getters['me/save'];
                     let productIds = idArr.join(",");

@@ -229,6 +229,7 @@ class ShippingTable extends React.Component {
         const infos = this.props.infos
 
         const desc = infos[0].standard ? infos[0].standard.desc : '';
+        const expre = infos[0].express ? infos[0].express.desc : "";
         const hasStandard = _.find(this.props.infos, info => !!info.standard)
         const hasExpedited = _.find(this.props.infos, info => !!info.expedited)
         const hasExpress = _.find(this.props.infos, info => !!info.express)
@@ -238,9 +239,11 @@ class ShippingTable extends React.Component {
                 <div className="x-table-title">
                     Delivery
                 </div>
-                <div className={ desc ? 'x-shipping-desc' : '' } dangerouslySetInnerHTML={{__html:desc}}>
-                    {/* <span>{ desc }</span> */}
-                </div>
+                <div className={ desc ? 'x-shipping-desc' : '' } dangerouslySetInnerHTML={{__html:desc}}></div>
+
+                {
+                    expre && <div className={ expre ? 'x-shipping-desc' : '' } style={{marginTop:"5px"}} dangerouslySetInnerHTML={{__html:expre}}></div>
+                }
 
                 <div>
                     <table className="x-shipping-table" style={{width:'100%'}}>

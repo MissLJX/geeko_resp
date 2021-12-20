@@ -1,7 +1,8 @@
 <template>
     <div class="orderTicket" v-if="ticket">
         <div class="s-hd">
-            <h3 @click="close"><i class="iconfont">&#xe693;</i>{{$t('ticket')}}</h3>
+            <h3 >{{$t('ticket')}}</h3>
+            <i @click="close" class="iconfont">&#xe7c9;</i>
         </div>
         <div class="s-bd">
             <div class="orderInfo">
@@ -133,7 +134,8 @@
             },
             headerImage(){
                 if(this.ticket_con.customerId){
-                    return utils.imageutil.getHeaderImg(this.ticket_con.customerId)
+                    // return utils.imageutil.getHeaderImg(this.ticket_con.customerId)
+                    return this.$store.getters.headerImage;
                 }
             },
             sellerheaderImage(){
@@ -306,6 +308,9 @@
             padding-left: 25px;
             position: absolute;
             top: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             h3{
                 line-height: 50px;
                 font-size: 18px;

@@ -1,9 +1,9 @@
 <template>
     <div>
-        <list :items="products" :loading="loading" :finished="finished" class="el-products" @listing="$emit('listing')">
+        <list :items="products" :loading="loading" :scrollable="scrollable" :finished="finished" class="el-products" @listing="$emit('listing')">
             <template slot="li" slot-scope="props">
                 <li :key="props.item.id">
-                    <product :product="props.item"/>
+                    <product :product="props.item" :index="props.index" v-bind="$attrs"/>
                 </li>
             </template>
         </list>
@@ -26,6 +26,7 @@
     import Product from './product.vue'
 
     export default{
+        inheritAttrs:false,
         props: {
             products: {
                 type: Array,
@@ -38,6 +39,13 @@
             finished:{
                 type: Boolean,
                 default: false
+            },
+            scrollable:{
+                type:Boolean,
+                default:true
+            },
+            calssifyName:{
+                type:String
             }
         },
         components: {

@@ -48,5 +48,52 @@ export default {
   satisfied: 'Satisfait',
   unsatisfied: 'Insatisfait',
   you_can_rate: 'Vous pouvez commenter le service client ici',
-  please_rate: 'S\'il vous plaît noter mon service'
+  please_rate: 'S\'il vous plaît noter mon service',
+  // support:
+  click:'Pour toutes les questions/réponses, veuillez cliquer sur notre',
+  faq:"FAQ",
+  page:"page",
+  findNothing:"Vous ne trouvez pas la réponse que vous recherchez?",
+  contact:"Nous contacter",
+  orderProcessing: "Traitement des commandes",
+  tracking:"Suivi logistique",
+  return:"Retour & Remboursement",
+  product:"Produit & Stock",
+  payment:"Paiement et promotions",
+  account:"Problèmes de compte",
+  // contact:
+  Ticket:'Billet',
+  TicketTime : "UNIQUEMENT pour les problèmes après-vente (Annuler/Modifier la commande/État d'expédition/Retour/Échange, etc.) ",
+  OnlineTime :"UNIQUEMENT pour le numéro de pré-vente. Les ventes en ligne n'ont pas accès aux informations de commande.",
+  online:'Aide en ligne',
+  // faq
+  search: "Résultats de la recherche",
+  resultFor: "résultats pour \"<strong>{result}</strong>\"",
+  question:"Vous avez d'autres questions?",
+  articleHelpful:"Cet article vous a-t-il été utile?",
+  related:"Articles liés",
+  // ticket
+  noTicket:"pas de billet",
+  // order
+  // ticket add
+  textareaPlaceHolder:"Tapez un message ici...",
+  orderNo:"N° de commande",
+  responseTime:"Temps de réponse attendu：Dans les 24 h",
+  selectTip: 'Veuillez sélectionner votre type de question',
+  statuswating: 'Esperando respuestas',
+  // question ticket
+  defaultSelect: 'Veuillez sélectionner votre type de question',
+  submitSuccess: 'Soumis avec succès!',
+  submitTips: "Les raisons ci-dessous sont facultatives. Vous pouvez cliquer sur « X » si vous ne souhaitez en choisir aucun.",
+  selectReason: 'Sélectionnez une raison',
+  description: 'La description',
+  description_ph : "Veuillez décrire votre problème autant que possible afin que le service client puisse répondre plus rapidement… ",
+  uploadImage: 'Télécharger une image',
+  uploadTips: 'Maximum de 3 photos, uniquement JPEG, GIF ou PNG.',
+  rate:'Évaluez mon service',
+  rateInfo: "Nous aimerions savoir ce que vous pensez de notre service client pour nous aider à mieux vous servir.",
+  satisfied: 'Satisfait',
+  unsatisfied: 'Insatisfait',
+  rateTextPlaceHolder: 'Vous pouvez commenter le service client ici.',
+  statusWatingApply:'En attente de candidature',
 }

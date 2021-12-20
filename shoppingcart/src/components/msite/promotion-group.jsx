@@ -85,7 +85,7 @@ const BirdHead = ({promotion, selected, selectHandle, askClick}) => <PROMOTIONHE
 			<CheckBox onClick={ () => { selectHandle(!selected) } } className={selected ? 'selected' : ''}/>
 		</div> */}
 		<div className="x-cell">
-			<div style={{fontFamily: 'SlatePro-Medium'}}>{promotion.title} <Ask style={{ marginLeft: 4 }} onClick={ evt => { askClick(promotion.description) } }/></div>
+			<div style={{fontFamily: 'SlatePro-Medium'}}>{promotion.title} <Ask style={{ marginLeft: 4 }} onClick={ evt => { askClick(promotion.description, promotion.title) } }/></div>
 		</div>
 	</div>
 </PROMOTIONHEAD>
@@ -102,14 +102,16 @@ const Promotion = class extends React.Component {
 		this.groupClick = this.groupClick.bind(this)
 		this.state = {
 			showAsk: false,
-			askMessage: ''
+			askMessage: '',
+			askTitle: ''
 		}
 	}
 
-	askClick(description){
+	askClick(description, title){
 		this.setState({
 			showAsk: true,
-			askMessage: description
+			askMessage: description,
+			askTitle: title
 		})
 	}
 
@@ -183,14 +185,13 @@ const Promotion = class extends React.Component {
 				items={delivery.shoppingCartProducts}
 				isEditingItem={this.props.isEditingItem}
 				selectedItems={this.props.selectedItems}
-				/>
-
+			/>
 
 			{
 				this.state.showAsk && this.state.askMessage && (
 					<React.Fragment>
 						<Mask />
-						<FixedMessage onClose={() => { this.setState({ showAsk: false, askMessage: null }) }}>
+						<FixedMessage title={this.state.askTitle} onClose={() => { this.setState({ showAsk: false, askMessage: null, askTitle: '' }) }}>
 							<p dangerouslySetInnerHTML={{ __html: this.state.askMessage }} />
 						</FixedMessage>
 					</React.Fragment>

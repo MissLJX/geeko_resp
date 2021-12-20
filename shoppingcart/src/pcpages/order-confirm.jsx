@@ -190,7 +190,7 @@ const OrderConfirm = class extends React.Component {
 			histories: [],
 			successTip: null,
 			tabIndex: 0,
-			faceurl: "",
+			faceurl: '',
 			confirmBanner: null
 		}
 	}
@@ -232,12 +232,12 @@ const OrderConfirm = class extends React.Component {
 		if (window.__is_login__) {
 			// faceUrl
 			getFaceBookUrl().then(data => {
-				console.log("getFaceBookUrl", data, window.siteUrl);
+				console.log('getFaceBookUrl', data, window.siteUrl)
 				this.setState({
-					faceurl: window.siteUrl + "/i/share/register?key=" + data.result
-				});
+					faceurl: window.siteUrl + '/i/share/register?key=' + data.result
+				})
 
-			});
+			})
 		}
 
 		getCountryMessage('M1396').then(({ result }) => {
@@ -334,25 +334,25 @@ const OrderConfirm = class extends React.Component {
 	getPayUrl() {
 		const { transaction } = this.props
 		switch (transaction.payMethod) {
-			case '20':
-			case '21':
-				return transaction.mercadopagoPayURL
-			case '16':
-			case '23':
-			case '25':
-			case '29':
-			case '27':
-			case '28':
-			case '30':
-			case '31':
-			case '34':
-			case '35':
-			case '37':
-			case '40':
-			case '41':
-			case '43':
-			case '44':
-				return transaction.boletoPayCodeURL
+		case '20':
+		case '21':
+			return transaction.mercadopagoPayURL
+		case '16':
+		case '23':
+		case '25':
+		case '29':
+		case '27':
+		case '28':
+		case '30':
+		case '31':
+		case '34':
+		case '35':
+		case '37':
+		case '40':
+		case '41':
+		case '43':
+		case '44':
+			return transaction.boletoPayCodeURL
 		}
 	}
 
@@ -360,55 +360,55 @@ const OrderConfirm = class extends React.Component {
 		const { m1186, transaction } = this.props
 		const bb = JSON.parse(m1186.message)
 		switch (transaction.payMethod) {
-			case '20':
-			case '21':
-			case '27':
-			case '28':
-			case '30':
-			case '31':
-			case '34':
-			case '35':
-			case '37':
-			case '40':
-			case '41':
-			case '43':
-			case '44':
-				return bb.spain
-			case '16':
-			case '23':
-			case '25':
-			case '29':
-				return bb.portugal
-			default:
-				return null
+		case '20':
+		case '21':
+		case '27':
+		case '28':
+		case '30':
+		case '31':
+		case '34':
+		case '35':
+		case '37':
+		case '40':
+		case '41':
+		case '43':
+		case '44':
+			return bb.spain
+		case '16':
+		case '23':
+		case '25':
+		case '29':
+			return bb.portugal
+		default:
+			return null
 		}
 	}
 
 	getBtnText() {
 		const { transaction } = this.props
 		switch (transaction.payMethod) {
-			case '20':
-			case '21':
-			case '27':
-			case '28':
-			case '30':
-			case '31':
-			case '34':
-			case '35':
-			case '37':
-			case '40':
-			case '41':
-			case '43':
-			case '44':
-				return 'Generar Ticket'
-			case '29':
-				return 'Gerar Ticket'
-			case '16':
-			case '23':
-			case '25':
-				return 'Imprimir boleto'
-			default:
-				return null
+		case '20':
+		case '21':
+		case '27':
+		case '28':
+		case '30':
+		case '31':
+		case '34':
+		case '35':
+		case '37':
+		case '40':
+		case '41':
+		case '43':
+		case '44':
+			return 'Generar Ticket'
+		case '29':
+			return 'Gerar Ticket'
+		case '16':
+		case '23':
+		case '25':
+			return 'Imprimir boleto'
+		default:
+			return null
 		}
 	}
 
@@ -418,7 +418,7 @@ const OrderConfirm = class extends React.Component {
 
 	// Messenger分享
 	messengerShare = () => {
-		window.open('https://www.facebook.com/dialog/share_referral/?app_id=' + window.__FB_Messenger_App_ID + '&redirect_uri=' + window.siteUrl + "/i/fbshare-back" + '&state=1', '_blank', 'width=500,height=725,top=110,left=710,menubar=no,toolbar=no,status=no,scrollbars=no');
+		window.open('https://www.facebook.com/dialog/share_referral/?app_id=' + window.__FB_Messenger_App_ID + '&redirect_uri=' + window.siteUrl + '/i/fbshare-back' + '&state=1', '_blank', 'width=500,height=725,top=110,left=710,menubar=no,toolbar=no,status=no,scrollbars=no')
 	}
 
 	faceShare() {
@@ -431,19 +431,19 @@ const OrderConfirm = class extends React.Component {
 						'type': '1',
 						'info1': window.utm_source,
 						'info2': window.utm_campaign
-					});
+					})
 				}
-			});
+			})
 		}
 	}
 
 
 	toTermsConditions() {
-		this.props.history.push(`${this.props.match.url}/terms-conditions-pc`);
+		this.props.history.push(`${this.props.match.url}/terms-conditions-pc`)
 	}
 
 	toCopy() {
-		this.props.history.push(`${this.props.match.url}/to-share-copy-pc`);
+		this.props.history.push(`${this.props.match.url}/to-share-copy-pc`)
 	}
 
 

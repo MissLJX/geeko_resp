@@ -1,35 +1,43 @@
 <template>
     <div>
-        <div class="hd">
+        <!-- <div class="toHistoryOrderList" v-if="!showHistory">
+            <a @click="showHistoryMethod()">Click here to check your previous orders ></a> 
+        </div>
+        <div class="backToOrder" v-if="showHistory">
+            <span class="backIcon" @click="hideHistoryMethod()">{{'< Back'}}</span>
+            <span>HISTORY ORDERS</span>
+        </div> -->
+        <!-- {{orderStatus}} -->
+        <div class="hd" v-if="!showHistory">
             <div class="el-tbl">
-                <div class="el-tbl-cell" @click="getData(0,'all','click')" :class="{active:0===index}">
+                <div class="el-tbl-cell" @click="getData(0,'all','click')" :class="{active:0===orderStatus}">
                     {{$t('all')}}<span>{{orderCountAll}}</span>
                 </div>
-                <div class="el-tbl-cell" @click="getData(1,'Unpaid','click')" :class="{active:1===index}">
+                <div class="el-tbl-cell" @click="getData(1,'Unpaid','click')" :class="{active:1===orderStatus}">
                     {{$t('unpaid')}}<span>{{orderCountUnpaid}}</span>
                 </div>
-                <div class="el-tbl-cell" @click="getData(2,'Paid','click')" :class="{active:2===index}">
+                <!-- <div class="el-tbl-cell" @click="getData(2,'Paid','click')" :class="{active:2===orderStatus}">
                     {{$t('paid')}}<span>{{orderCountPaid}}</span>
-                </div>
-                <div class="el-tbl-cell" @click="getData(3,'Processing','click')" :class="{active:3===index}">
+                </div> -->
+                <div class="el-tbl-cell" @click="getData(3,'Processing','click')" :class="{active:3===orderStatus}">
                     {{$t('processing')}}<span>{{orderCountProcessing}}</span>
                 </div>
-                <div class="el-tbl-cell" @click="getData(4,'Shipped','click')" :class="{active:4===index}">
+                <div class="el-tbl-cell" @click="getData(4,'Shipped','click')" :class="{active:4===orderStatus}">
                     {{$t('ordershipped')}}<span>{{orderCountShipped}}</span>
                 </div>
-                <div class="el-tbl-cell" @click="getData(5,'Comfirmed','click')" :class="{active:5===index}">
+                <div class="el-tbl-cell" @click="getData(5,'Comfirmed','click')" :class="{active:5===orderStatus}">
                     {{$t('orderconfirm')}}<span>{{orderCountReceipt}}</span>
                 </div>
-                <div class="el-tbl-cell" @click="getData(6,'Canceled','click')" :class="{active:6===index}">
+                <div class="el-tbl-cell" @click="getData(6,'Canceled','click')" :class="{active:6===orderStatus}">
                     {{$t('cancelorder1')}}<span>{{orderCountCanceled}}</span>
                 </div>
             </div>
         </div>
         <div class="bd">
-            <div class="item-order orders-hd">
+            <div :class="{'item-order orders-hd':true,'noMarginTop':showHistory}">
                 <div class="i-bd">
                     <div class="tbl">
-                        <div class="tbl-cell" style="width:523px">{{$t('item')}}</div>
+                        <div class="tbl-cell" style="width:523px">{{$t('item')}}(s)</div>
                         <div class="tbl-cell v-m w-180 tx-c">{{$t('orderstatus')}}</div>
                         <div class="tbl-cell v-m w-190 tx-c">{{$t('action')}}</div>
                     </div>
@@ -48,7 +56,7 @@
                     <div class="tbl">
                         <div class="tbl-cell w-523">
                             <div class="proimg" v-if="item.orderItems && index < 4" v-for="(img,index) in item.orderItems">
-                                <link-image   :href="productUrl(img.productName,img.sku,img.productId)" :src="img.productImageUrl" :title="img.productName"/>
+                                <link-image :href="productUrl(img.productName,img.sku,img.productId)" :src="img.productImageUrl" :title="img.productName"/>
                             </div>
                             <div v-if="item.orderItems && item.orderItems.length > 4" class="viewmore" @click="checkDetail(item.id)">
                                 <div class="bg"></div>
@@ -56,19 +64,19 @@
                             </div>
                         </div>
                         <div class="tbl-cell v-m w-180 tx-c">
-                            <p>{{item.statusView}}</p>
+                            <p>{{item.fulfillmentStatusView}}</p>
                             <p class="detail cur-p" @click="checkDetail(item.id)">{{$t('detail')}}</p>
-                            <p class="detail cur-p" v-if="item.id && item.status === 2 || item.status === 3"  @click="checkLogistics(item.id)">{{$t('track')}}</p>
+                            <p class="detail cur-p" v-if="item.fulfillmentStatus !== constant.TOTAL_STATUS_UNPAID"  @click="checkLogistics(item.id)">{{$t('track')}}</p>
                         </div>
                         <div class="tbl-cell v-m w-190 tx-c">
                             <div class="pos-rel">
-                                <a class="r-btn" :href="getPayUrl(item)" target="_blank" v-if="getPayUrl(item) && item.status === 0">{{getBtnText(item)}}</a>
-                                <div class="offTip" v-if="orderoffset(item) >= 0 && getBtnText(item)==='Imprimir boleto' && item.status === 0 && getPayUrl(item)">
+                                <a class="r-btn" :href="getPayUrl(item)" target="_blank" v-if="getPayUrl(item) && item.fulfillmentStatus === constant.TOTAL_STATUS_UNPAID">{{getBtnText(item)}}</a>
+                                <div class="offTip" v-if="orderoffset(item) >= 0 && getBtnText(item)==='Imprimir boleto' && item.fulfillmentStatus === constant.TOTAL_STATUS_UNPAID && getPayUrl(item)">
                                     <div class="triangle"></div>
                                     <span class="label">Presente de cupão expirs</span>
                                     <count-down :timeStyle="{color:'#fff'}" :timeLeft="orderoffset(item)"></count-down>
                                 </div>
-                                <div class="offTip" v-if="orderoffset(item) >= 0 && (getBtnText(item)==='Generar Ticket' || getBtnText(item)==='Gerar Ticket') && item.status === 0 && getPayUrl(item)">
+                                <div class="offTip" v-if="orderoffset(item) >= 0 && (getBtnText(item)==='Generar Ticket' || getBtnText(item)==='Gerar Ticket') && item.fulfillmentStatus === constant.TOTAL_STATUS_UNPAID && getPayUrl(item)">
                                     <div class="triangle"></div>
                                     <span class="label" >Tiempo restante para realizar el pago</span>
                                     <count-down :timeStyle="{color:'#fff'}" :timeLeft="orderoffset(item)"></count-down>
@@ -76,15 +84,15 @@
                             </div>
                             <!--线上其他支付按钮+倒计时-->
                             <div class="pos-rel">
-                                <a class="b-btn" :href="checkoutUrl(item.id)"  v-if="item.id && item.status===0 && !item.mercadopagoPayURL && !item.boletoPayCodeURL && orderoffset(item) >= 0">{{$t("paynow")}}</a>
-                                <div class="offTip" v-if="item.id && item.status===0 && !item.mercadopagoPayURL && !item.boletoPayCodeURL && orderoffset(item) >= 0">
+                                <a class="b-btn" :href="checkoutUrl(item.id)"  v-if="item.id && item.fulfillmentStatus===constant.TOTAL_STATUS_UNPAID && !item.mercadopagoPayURL && !item.boletoPayCodeURL && orderoffset(item) >= 0">{{$t("paynow")}}</a>
+                                <div class="offTip" v-if="item.id && item.fulfillmentStatus===constant.TOTAL_STATUS_UNPAID && !item.mercadopagoPayURL && !item.boletoPayCodeURL && orderoffset(item) >= 0">
                                     <div class="triangle"></div>
                                     <span class="label">{{$t("remaining")}}:</span>
                                     <count-down :timeStyle="{color:'#fff'}" :timeLeft="orderoffset(item)"></count-down>
                                 </div>
                             </div>
-                            <!--重新加入购物车-->
-                            <div class="b-btn" @click="addProducts(item.orderItems)" v-if="item.id && item.status===4">{{$t("repurchase")}}</div>
+                            <!-- 重新加入购物车  -->
+                            <div class="b-btn" @click="addProducts(item.orderItems)" v-if="item.id && item.fulfillmentStatus===constant.TOTAL_STATUS_CANCELED">{{$t("repurchase")}}</div>
                         </div>
                     </div>
                 </div>
@@ -93,8 +101,11 @@
             <div class="el-no-more" v-show="ifDone">{{$t('nomoredata')}}</div>
         </div>
 
-        <select-order v-if="isShowSelect" v-on:closeSelect="closeSelect1" v-on:showTicket="showTicket"></select-order>
-        <order-ticket  v-if="isShowTicket" v-on:closeSelect="closeSelect1" v-on:selectOrder="selectorder"></order-ticket>
+        <!-- <select-order v-if="isShowSelect" v-on:closeSelect="closeSelect1" v-on:showTicket="showTicket"></select-order>
+        <order-ticket  v-if="isShowTicket" v-on:closeSelect="closeSelect1" v-on:selectOrder="selectorder"></order-ticket> -->
+
+        <faq-select-order v-if="isShowSelect" v-on:closeSelect="closeSelect1" v-on:showTicket="showTicket"></faq-select-order>
+        <faq-order-ticket  v-if="isShowTicket" v-on:closeSelect="closeSelect1" v-on:selectOrder="selectorder"></faq-order-ticket>
 
         <transition name="fade">
             <div v-if="isAddProducts" class="addProductsMask">{{isAddProductstTip}}</div>
@@ -105,10 +116,14 @@
 <script>
     import {mapGetters, mapActions} from 'vuex';
     import * as utils from '../utils/geekoutil';
+    import * as constant from "../utils/constant.js"
     import LinkImage from './link-image.vue';
     import orderTicket from './order-ticket.vue';
     import selectOrder from './select-order.vue';
     import CountDown from './countdow.vue';
+    import FaqSelectOrder from './faq/faq-select-order.vue';
+    import FaqOrderTicket from './faq/faq-order-ticket.vue';
+    
     export default {
         data (){
             return{
@@ -120,19 +135,23 @@
                 isloded:false,
                 finished:false,
                 isAddProducts:false,
-                isAddProductstTip:''
+                isAddProductstTip:'',
+                constant:constant,
+                showHistory:false,
             }
         },
         components: {
             'link-image': LinkImage,
             'order-ticket':orderTicket,
             'select-order':selectOrder,
-            'count-down': CountDown
+            'count-down': CountDown,
+            'faq-select-order':FaqSelectOrder,
+            'faq-order-ticket':FaqOrderTicket
         },
         computed: {
             ...mapGetters([
                 'orderCountUnpaid',
-                'orderCountPaid',
+                // 'orderCountPaid',
                 'orderCountProcessing',
                 'orderCountShipped',
                 'orderCountReceipt',
@@ -145,6 +164,7 @@
                 'shipped',
                 'confirmed',
                 'canceled',
+                'history',
                 'allLoading',
                 'processingLoading',
                 'confirmedLoading',
@@ -152,13 +172,16 @@
                 'shippedLoading',
                 'unpaidLoading',
                 'paidLoading',
+                'historyLoding',
                 'allDone',
                 'unpaidDone',
                 'paidDone',
                 'processingDone',
                 'confirmedDone',
                 'canceledDone',
-                'shippedDone'
+                'shippedDone',
+                'historyDone',
+                "orderStatus"
             ]),
             ifDone(){
                 if(this.method==='all'){
@@ -182,8 +205,17 @@
                 if(this.method==='Shipped'){
                     return this.shippedDone
                 }
+                if(this.method==='History'){
+                    return this.historyDone
+                }
             },
 
+        },
+        watch:{
+            orderStatus(newStatus){
+                let orderName =  this.getOrderStatusName(this.orderStatus);
+                this.getData(newStatus,orderName,"click");
+            }
         },
         created(){
             this.$store.dispatch('getOrderCountAll');
@@ -192,11 +224,15 @@
             this.$store.dispatch('getOrderCountReceipt');
             this.$store.dispatch('getOrderCountCanceled');
             this.$store.dispatch('getOrderCountUnpaid');
-            this.$store.dispatch('getOrderCountPaid');
-            this.loadAll(20).then(()=> {
-                this.orderMethod = this.all
-                this.isloded = true
-            })
+            // this.$store.dispatch('getOrderCountPaid');
+
+            let orderName =  this.getOrderStatusName(this.orderStatus);
+            // this.loadAll(20).then(()=> {
+            //     this.orderMethod = this.all
+            //     this.isloded = true
+            // })
+            this.isloded = true
+            this.getData(this.orderStatus,orderName,"click");
         },
         mounted(){
             window.addEventListener('scroll',this.scrollHandle)
@@ -206,16 +242,16 @@
         },
         methods:{
             ...mapActions([
-                'loadAll'
+                'loadAll',"changeOrderStatus"
             ]),
             getData(index,method,flag){
-                this.index = index
-                this.method = method
-                if(flag ==='click'){
-                    this.orderMethod = ''
-                }
-
+                // this.index = index
                 if(this.isloded){
+                    this.changeOrderStatus(index);
+                    this.method = method
+                    if(flag ==='click'){
+                        this.orderMethod = ''
+                    }
                     this.isloded = false
                     if(method==='all'){
                         this.$store.dispatch('loadAll',20).then(()=> {
@@ -259,6 +295,12 @@
                             this.isloded = true
                         })
                     }
+                    if(method==='History'){
+                        this.$store.dispatch('loadHistory',20).then(()=>{
+                            this.orderMethod = this.history
+                            this.isloded = true
+                        })
+                    }
                 }
             },
             getDate(paymentTime){
@@ -294,7 +336,7 @@
             scrollHandle(evt){
                 evt.preventDefault();
                 if(document.documentElement.scrollTop + window.innerHeight >= document.body.offsetHeight-300) {
-                    this.getData(this.index,this.method,'scroll')
+                    this.getData(this.orderStatus,this.method,'scroll')
                 }
             },
             productUrl(name,sku,id){
@@ -377,6 +419,31 @@
                     default:
                         return null
                 }
+            },
+            getOrderStatusName(status){
+                if(status === 0){
+                    return "all";
+                }else if(status == 1){
+                    return "Unpaid";
+                }else if(status === 2){
+                    return "Paid";
+                }else if(status === 3){
+                    return "Processing";
+                }else if(status === 4){
+                    return "Shipped";
+                }else if(status === 5){
+                    return "Comfirmed";
+                }else{
+                    return "Canceled";
+                }
+            },
+            showHistoryMethod(){
+                this.showHistory = true;
+                this.getData(0,'History','click');
+            },
+            hideHistoryMethod(){
+                this.showHistory = false;
+                this.getData(0,'all','click');
             }
         }
     }
@@ -397,6 +464,46 @@
         -webkit-font-smoothing: antialiased;
         -webkit-text-stroke-width: 0.2px;
         -moz-osx-font-smoothing: grayscale;
+    }
+    .toHistoryOrderList{
+        width: 100%;
+        height: 30px;
+        line-height: 30px;
+        background: #f6f6f6;
+        font-family: 'SLATEPRO-MEDIUM';
+        text-decoration: underline;
+        font-size: 14px;
+        font-weight: normal;
+        font-stretch: normal;
+        letter-spacing: 0px;
+        color: #222222;
+
+        & > a{
+            cursor: pointer;
+        }
+    }
+    .backToOrder{
+        height: 44px;
+        line-height: 44px;
+        border-bottom: 1px solid #f6f6f6;
+        font-family: 'ACUMINPRO-BOLD';
+        font-size: 14px;
+        font-weight: normal;
+        font-stretch: normal;
+        letter-spacing: 0px;
+        color: #222222;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        & > .backIcon{
+            cursor:pointer;
+        }
+
+        &::after{
+            content:'< Back';
+            color:transparent;
+        }
     }
     .addProductsMask{
         position: fixed;
@@ -664,6 +771,9 @@
                 border-color: transparent transparent  #f46e6d transparent ;
             }
         }
+    }
+    .noMarginTop{
+        margin-top: 0 !important;
     }
 
 </style>

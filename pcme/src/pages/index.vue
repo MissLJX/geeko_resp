@@ -1,26 +1,19 @@
 <template>
     <div class="el-me-body">
         <div class="el-me-hd">
-            <p style="text-transform:capitalize"><span @click="window.location.href = '/'">{{$t('home')}}</span><router-link :to="getUrl('/me/m')"> > {{$t('me')}}</router-link><span v-if="isActive!=='Me'"> > {{isActive}}</span></p>
+            <p style="text-transform:capitalize"><span @click="window.location.href = '/'">{{$t('home')}}</span><router-link :to="getUrl('/me/m')"> > {{$t('me')}}</router-link><span v-if="isActive !== 'Me'"> > {{isActive}}</span></p>
         </div>
         <div class="el-me-bd">
             <div class="el-me-nav">
-                <h3  @click="changeClass('me')"><router-link :to="getUrl('/me/m')">{{$t('me')}}</router-link></h3>
-                <ul>
-                    <li :class="{'active':isActive==='orders'}" @click="changeClass('orders')"><router-link :to="getUrl('/me/m/order')">{{$t('myorders')}}</router-link></li>
-                    <li :class="{'active':isActive==='tickets'}" @click="changeClass('tickets')"><router-link :to="getUrl('/me/m/tickets')">{{$t('mytickets')}}</router-link></li>
-                    <li :class="{'active':isActive==='notification'}" @click="changeClass('notification')"><router-link :to="getUrl('/me/m/notification')">{{$t('mymessages')}}</router-link></li>
-                    <li :class="{'active':isActive==='coupons'}" @click="changeClass('coupons')"><router-link :to="getUrl('/me/m/coupons')">{{$t('mycoupons')}}</router-link></li>
-                    <li :class="{'active':isActive==='credits'}" @click="changeClass('credits')"><router-link :to="getUrl('/me/m/credits')">{{$t('mycredits')}}</router-link></li>
-                    <li :class="{'active':isActive==='cards'}" @click="changeClass('cards')"><router-link :to="getUrl('/me/m/cards')">{{$t('mycreditscards')}}</router-link></li>
-                    <li :class="{'active':isActive==='wishlist'}" @click="changeClass('wishlist')"><router-link :to="getUrl('/me/m/wishlist')">{{$t('mywishlist')}}</router-link></li>
-                    <li :class="{'active':isActive==='addressBook'}" @click="changeClass('addressBook')"><router-link :to="getUrl('/me/m/addressBook')">{{$t('addressBook')}}</router-link></li>
-                    <li :class="{'active':isActive==='changeEmail'}" @click="changeClass('changeEmail')"><router-link :to="getUrl('/me/m/change-email')">{{$t('changeEmail')}}</router-link></li>
-                    <li :class="{'active':isActive==='changePwd'}" @click="changeClass('changePwd')"><router-link :to="getUrl('/me/m/changePwd')">{{$t('changepwd')}}</router-link></li>
-                    <li :class="{'active':isActive==='updateProfile'}" @click="changeClass('updateProfile')"><router-link :to="getUrl('/me/m/updateProfile')">{{$t('updatepro')}}</router-link></li>
-                    <li :class="{'active':isActive==='makeSug'}" @click="changeClass('makeSug')"><router-link :to="getUrl('/me/m/makeSug')">{{$t('makesug')}}</router-link></li>
-                    <li @click="logoutHandle">{{$t('logout')}}</li>
-                </ul>
+                <div class="el-me-left-container">
+                    <p class="h-title">
+                        <router-link :to="getUrl('/me/m')">{{$t("point.personal_center")}}</router-link>
+                    </p>
+
+                    <!-- 导航中的路由 -->
+                    <index-nav-container :isActive="isActive" @changeRouter="changeClass"></index-nav-container>
+
+                </div>
             </div>
             <div class="el-me-con">
                 <keep-alive>
@@ -31,12 +24,13 @@
     </div>
 </template>
 <script>
-
     import {PROJECT} from '../utils/geekoutil'
+    import IndexNavContainer from "../components/index/index-nav-container.vue"
+
     export default {
         data(){
           return{
-              isActive:'Me'
+              isActive:'Me',
           }
         },
         methods:{
@@ -52,10 +46,17 @@
                 return PROJECT + suffix;
             }
         },
+        components:{
+            "index-nav-container":IndexNavContainer
+        },
         beforeRouteEnter(to,from,next){
             if(to.path && !!to.path && to.path.includes("notification")){
                 next(vm => {
                     vm.isActive = "notification";
+                });
+            }else if(to.path && !!to.path && to.path.includes("credits")){
+                next(vm => {
+                    vm.isActive = "credits";
                 });
             }else if(to.name && !!to.name){
                 next(vm => {
@@ -69,23 +70,25 @@
             '$route':function(to,form){
                 if(!to.name && to.path == "/me/m"){
                     this.isActive = "Me";
+                }else if(to.path && !!to.path && to.path.includes("notification")){
+                    this.isActive = "notification";
+                }else if(to.path && !!to.path && to.path.includes("credits")){
+                    this.isActive = "credits";
+                }else{
+                    this.isActive = to.name;
                 }
             }
         }
     }
 </script>
 <style scoped lang="scss">
-    .active a{
-        color: #222 !important;
-        font-weight: bold;
-    }
     .el-me-body{
-        width: 1141px;
+        width: 1230px;
         margin: 0 auto;
         .el-me-hd{
             font-size: 14px;
             color: #666;
-            padding:30px 0 60px 0;
+            padding:30px 0 30px 0;
             p{
                 a{
                     color:#666;
@@ -94,29 +97,26 @@
         }
         .el-me-bd{
             .el-me-nav{
-                width: 225px;
+                width: 280px;
                 float: left;
+                margin-right: 31px;
+                background-color: #ffffff;
+                padding: 25px 20px 40px 20px;
+
+                .el-me-left-container{
+                    .h-title{
+                        font-family: 'SlatePro-Medium';
+                        font-size: 20px;
+                        color: #222222;
+                    }
+                }
+
                 h3{
                     padding-bottom: 30px;
                     font-size: 18px;
                     a{
                         text-decoration: none;
                         color: #000000;
-                    }
-                }
-                ul li {
-                    padding: 10px 0;
-                    cursor: pointer;
-                    color: #666666;
-                    a{
-                        font-size: 14px;
-                        color: #666666;
-                        text-decoration: none;
-                        padding: 12px 0;
-                        &:hover{
-                            color: #222;
-                            /*font-weight: bold;*/
-                        }
                     }
                 }
             }

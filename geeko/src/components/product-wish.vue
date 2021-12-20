@@ -48,12 +48,12 @@
     }
     .myCheck + label{
         position: absolute;
-        right: 2px;
-        top: 2px;
-        z-index: 300;
-        background-color: white;
+        right: 6px;
+        top: 6px;
+        z-index: 100;
+        // background-color: white;
         border-radius: 50%;
-        border:1px solid #d3d3d3;
+        border:2px solid #222222;
         width:18px;
         height:18px;
         display: inline-block;
@@ -62,12 +62,18 @@
         line-height: 18px;
     }
     .myCheck:checked + label{
-        background-color: #e5004f;
+        // background-color: #e5004f;
         border: none;
-        color: white;
+        // color: white;
+        background-color: #ffffff;
     }
     .myCheck:checked + label:after{
-        content:"\2714";
+        content:'\e65b';
+        font-family: 'iconfont';
+        color: #222222;
+        font-size: 18px;
+        position: relative;
+        // background-color: #222222;
     }
     .gray{
         -webkit-filter: grayscale(100%);

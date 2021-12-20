@@ -84,6 +84,7 @@
                                 width: 20%;
                                 background-color: #f5f5f5;
                                 font-family: 'SlatePro-Medium';
+                                vertical-align: middle;
                             }
 
                             &:nth-child(2){

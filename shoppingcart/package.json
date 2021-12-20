@@ -38,11 +38,13 @@
     "webpack-dev-server": "^3.1.4"
   },
   "dependencies": {
+    "@adyen/adyen-web": "^4.7.3",
     "@stripe/react-stripe-js": "^1.4.1",
     "@stripe/stripe-js": "^1.16.0",
     "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
     "ejs-html-loader": "^3.1.0",
+    "js-base64": "^3.6.1",
     "js-cookie": "^2.2.0",
     "jsbarcode": "^3.11.0",
     "qs": "^6.5.2",

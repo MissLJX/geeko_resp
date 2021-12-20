@@ -1,25 +1,41 @@
 <template>
     <div class="el-list-product">
-        <a :href="productUrl">
+        <a 
+            :href="productUrl" 
+            :data-title="eventTitle" 
+            :data-column="calssifyName" 
+            :data-product-position="index+1"
+            data-product-list-source 
+            :product-id="product.id"
+			:data-product-source="product.dataSource" 
+            :data-geeko-id="geekoId"
+            :data-geeko-experiment="experimentId"
+			:data-request-id="product.aliRequestId"
+            :data-experiment-id="product.aliExperimentId"
+			:type="eventTitle"
+			:data-type="eventTitle"
+            :data-content="eventTitle"
+            ref="oftenProduct"
+        >
             <figure>
                 <div class="img">
                     <img :src="imageUrl" :class="{'gray':isSoldOutProduct}"/>
                 </div>
-
-                <figcaption>
-                    <p class="st-ellipsis el-product-name">{{product.name}}</p>
-                    <div class="st-table st-fullwidth">
-                        <div class="st-cell st-v-m">
-                            <span class="el-product-price">{{price}}</span>
-                            <del class="el-product-del">{{delPrice}}</del>
-                        </div>
-                        <div class="st-cell st-v-m st-t-r">
-                            <i @click.prevent="likeHandle" class="iconfont el-product-like" :class="{red:liked}">{{liked ? '&#xe677;' : '&#xe631;'}}</i>
-                        </div>
-                    </div>
-                </figcaption>
             </figure>
         </a>
+
+        <figcaption>
+            <p class="st-ellipsis el-product-name">{{product.name}}</p>
+            <div class="st-table st-fullwidth">
+                <div class="st-cell st-v-m">
+                    <span class="el-product-price">{{price}}</span>
+                    <del class="el-product-del">{{delPrice}}</del>
+                </div>
+                <div class="st-cell st-v-m st-t-r" :data-productId="product.id">
+                    <i @click.prevent="addToCart(product.id)" class="iconfont el-product-like">&#xe6a8;</i>
+                </div>
+            </div>
+        </figcaption>
     </div>
 </template>
 
@@ -78,7 +94,7 @@
         }
 
         .el-product-like {
-            font-size: 20px;
+            font-size: 18px;
             &.red {
                 color: #f00;
             }
@@ -103,14 +119,28 @@
 </style>
 
 <script type="text/ecmascript-6">
-    import {imageutil, unitprice , producturl} from '../utils/geekoutils'
+    import {imageutil, unitprice , producturl , PROJECT} from '../utils/geekoutils'
     import _ from 'lodash'
 
     export default{
         props: {
             product: Object,
             required: true,
-            isSoldOut:true
+            isSoldOut:true,
+            index:Number,
+            calssifyName:String,
+            requestId:{
+                type:String,
+                default:""
+            },
+            experimentId:{
+                type:String,
+                default:""
+            },
+            eventTitle:{
+                type:String,
+                default:""
+            }
         },
         computed: {
             imageUrl(){
@@ -129,16 +159,8 @@
                     return unitprice(this.product.price)
                 return ''
             },
-            liked(){
-                var wishlist = this.$store.getters['me/wishlist']
-                if (wishlist && wishlist.length && wishlist[0].productIds && wishlist[0].productIds.length) {
-                        return _.indexOf(wishlist[0].productIds, this.product.id) >= 0
-                }
-
-                return false
-            },
             productUrl(){
-                return window.ctx + '/' + producturl(this.product)
+                return PROJECT + '/' + producturl(this.product)
             },
             isSoldOutProduct(){
                 if(this.product.status == 2){
@@ -146,17 +168,31 @@
                 }else{
                     return false
                 }
+            },
+            isLogin(){
+                return this.$store.getters["me/isLogin"];
+            },
+            geekoId(){
+                if(this.product && this.product.geekoRequsestId){
+                    return this.product.geekoRequsestId;
+                }else{
+                    return this.requestId;
+                }
             }
         },
         methods: {
-            likeHandle(){
-                var wishlist = this.$store.getters['me/wishlist']
-                var index = _.indexOf(wishlist[0].productIds, this.product.id)
-                if (index < 0) {
-                    this.$store.dispatch('like', this.product.id)
-                } else {
-                    this.$store.dispatch('unlike',  this.product.id)
-                }
+            addToCart(productId){
+                this.$store.dispatch("globalLoadingShow",true);
+                this.$store.dispatch("getProductDetailMessage",productId).then((product) => {
+                    this.$store.dispatch("addToCartIsShow",true);
+                    this.$store.dispatch("globalLoadingShow",false);
+                });
+            }
+        },
+        mounted(){
+            let value = this.$refs.oftenProduct;
+            if (window.productListObserver) {
+                window.productListObserver.observe(value)
             }
         }
     }

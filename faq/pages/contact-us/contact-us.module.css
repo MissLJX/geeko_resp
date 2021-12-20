@@ -1,0 +1,60 @@
+@font-face {
+    font-family: 'iconfont';  /* Project id 384296 */
+    src: url('//at.alicdn.com/t/font_384296_ea5pedcgl35.woff2?t=1629961872918') format('woff2'),
+        url('//at.alicdn.com/t/font_384296_ea5pedcgl35.woff?t=1629961872918') format('woff'),
+        url('//at.alicdn.com/t/font_384296_ea5pedcgl35.ttf?t=1629961872918') format('truetype');
+}
+.iconfont {
+    font-family:"iconfont" !important;
+    font-size:16px;
+    font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.contactPage{
+    width: 100%;
+    height: 100vh;
+    background-color: #f6f6f6;
+}
+.entryItem{
+    display: flex;
+    background: #fff;
+    height: 67px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.icon{
+    margin-left: 23px;
+    margin-right: 13px;
+    margin-top: -20px;
+    font-size: 19px;
+}
+.entryInfoBox{
+    display: flex;
+    flex-direction: column;
+    font-family: Roboto-Bold;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #222222;
+    text-shadow: 0 0 #222;
+    flex: 1;
+}
+.supportTime{
+    font-family: Roboto-Regular;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #999999;
+    text-shadow: none;
+    margin-top: 7px;
+}
+.linkTo{
+    transform: rotate(180deg);
+    margin-right: 13px;
+    margin-left: 10px;
+}

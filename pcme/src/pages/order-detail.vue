@@ -18,12 +18,12 @@
                 <p v-if="orderdetail.paymentTime"><span>{{$t('paymentTime')}}: </span>{{getDate}}</p>
                 <p v-if="orderdetail.payMethodName"><span>{{$t('paymentMethod')}}: </span>{{orderdetail.payMethodName}}</p>
             </div>
-            <div class="payNow" v-if="orderdetail.status === 0 && orderoffset >= 0">
+            <div class="payNow" v-if="orderdetail.fulfillmentStatus === constant.TOTAL_STATUS_UNPAID && orderoffset >= 0">
                 <div class="otherPay">
                     <div class="remain">{{$t("remaining")}}:<count-down :timeStyle="{color:'#fff'}" :timeLeft="orderoffset"></count-down></div>
-                    <a class="paybtn" :href="getPayUrl" v-if="getBtnText && getPayUrl && orderdetail.status === 0 && orderoffset >= 0">{{getBtnText}}</a>
-                    <a class="paybtn" :href="checkoutUrl(orderdetail.id)" v-if="getBtnText2 && getPayUrl && orderdetail.status === 0 && orderoffset >= 0">{{getBtnText2}}</a>
-                    <a class="paybtn" :href="checkoutUrl(orderdetail.id)" v-if="!orderdetail.mercadopagoPayURL && !orderdetail.boletoPayCodeURL && orderdetail.status === 0 && orderoffset >= 0">{{$t("paynow")}}</a>
+                    <a class="paybtn" :href="getPayUrl" v-if="getBtnText && getPayUrl && orderdetail.fulfillmentStatus === constant.TOTAL_STATUS_UNPAID && orderoffset >= 0">{{getBtnText}}</a>
+                    <a class="paybtn" :href="checkoutUrl(orderdetail.id)" v-if="getBtnText2 && getPayUrl && orderdetail.fulfillmentStatus === constant.TOTAL_STATUS_UNPAID && orderoffset >= 0">{{getBtnText2}}</a>
+                    <a class="paybtn" :href="checkoutUrl(orderdetail.id)" v-if="!orderdetail.mercadopagoPayURL && !orderdetail.boletoPayCodeURL && orderdetail.fulfillmentStatus === constant.TOTAL_STATUS_UNPAID && orderoffset >= 0">{{$t("paynow")}}</a>
                 </div>
             </div>
             <div class="payTip" v-if="orderdetail.unPayMessage && orderoffset >= 0">
@@ -71,13 +71,16 @@
                         <div v-if="confirmedOrder" class="review-btn" :class="{'b-btn':confirmedOrder,'black':shippedOrder || processingOrder}">
                             <span  @click="review(item.productId,item.variantId)">{{$t('review')}}</span>
                         </div>
-                        <div @click="addProduct(item.variantId)" v-if="item.variantId && orderdetail.status===4" class="review-btn">
+                        <div @click="addProduct(item.variantId)" v-if="item.variantId && orderdetail.fulfillmentStatus===constant.TOTAL_STATUS_CANCELED" class="review-btn">
                             <span>{{$t("repurchase")}}</span>
                         </div>
+
+                        <!-- <div v-if="confirmedOrder" class="returns-btn" @click="showTicket(orderdetail.id)">Return</div> -->
+                        <div v-if="orderpro.status === constant.PACKAGE_STATUS_DELIVERED && isNormalOrder" class="returns-btn" @click="showTicketReturn(orderdetail.id)">Return</div>
                     </td>
                 </tr>
             </table>
-            <div class="pricecon">
+            <div class="pricecon" v-if="isNormalOrder">
                 <div class="pricecon1" v-if="orderdetail">
                     <p class="p-price">ItemTotal:<span class="price">{{paymentItemTotal}}</span></p>
                     <p class="p-price" v-if="orderdetail.shippingPrice && orderdetail.shippingPrice.amount!=='0'">{{$t('shipping')}}:<span class="price">{{shippingprice}}</span></p>
@@ -86,15 +89,15 @@
                 </div>
             </div>
             <div class="actionbtn">
-                <div class="r-btn" :class="{'b-btn':confirmedOrder,'black':shippedOrder || processingOrder}" v-if="shippedOrder || orderdetail.isCanCanceled || (orderdetail.id && orderdetail.status===4)">
+                <div class="r-btn" :class="{'b-btn':confirmedOrder,'black':shippedOrder || processingOrder}" v-if="shippedOrder || orderdetail.isCanCanceled || (orderdetail.id && orderdetail.fulfillmentStatus===constant.TOTAL_STATUS_CANCELED)">
                     <span v-if="shippedOrder" @click="() => {this.isConfirmAlert = true}">{{$t('confirmorder')}}</span>
                     <span v-if="orderdetail.isCanCanceled" @click="() => {this.isAlert = true}">{{$t('cancelorder2')}}</span>
-                    <span @click="addProducts(orderdetail.orderItems)" v-if="orderdetail.id && orderdetail.status===4">{{$t("repurchase")}}</span>
+                    <span @click="addProducts(orderdetail.orderItems)" v-if="orderdetail.id && orderdetail.fulfillmentStatus===constant.TOTAL_STATUS_CANCELED">{{$t("repurchase")}}</span>
                 </div>
                 <div class="r-btn black" v-if="orderdetail.hasReturnLabel">
                     <a :href="getReturnLabel()">{{$t('returnlabel')}}</a>
                 </div>
-                <div class="r-btn w-btn" v-if="orderdetail.id && (orderdetail.status===2 || orderdetail.status===3) ">
+                <div class="r-btn w-btn" v-if="orderdetail.fulfillmentStatus !== constant.TOTAL_STATUS_UNPAID">
                     <span  @click="checkLogistics(orderdetail.id)">{{$t('track')}}</span>
                 </div>
 
@@ -116,10 +119,12 @@
             >
             </return-logistics> -->
 
-            <select-order v-if="isShowSelect" v-on:closeSelect="closeSelect1" v-on:showTicket="showTicket"></select-order>
-            <order-ticket  v-if="isShowTicket" v-on:closeSelect="closeSelect1" v-on:selectOrder="selectorder"></order-ticket>
+            <!-- <select-order v-if="isShowSelect" v-on:closeSelect="closeSelect1" v-on:showTicket="showTicket"></select-order>
+            <order-ticket  v-if="isShowTicket" v-on:closeSelect="closeSelect1" v-on:selectOrder="selectorder"></order-ticket> -->
+            <faq-select-order v-if="isShowSelect" v-on:closeSelect="closeSelect1" v-on:showTicket="showTicket"></faq-select-order>
+            <faq-order-ticket  v-if="isShowTicket" v-on:closeSelect="closeSelect1" v-on:selectOrder="selectorder"></faq-order-ticket>
 
-            <div v-if="getBtnText==='Imprimir boleto' && orderdetail.status == 0 && orderoffset >= 0 && couponshow && getPayUrl">
+            <div v-if="getBtnText==='Imprimir boleto' && orderdetail.fulfillmentStatus == constant.TOTAL_STATUS_UNPAID && orderoffset >= 0 && couponshow && getPayUrl">
                 <div class="mask"></div>
                 <div class="coupon-window">
                     <span class="coupon-close" @click="() => {this.couponshow = false}"><i class="iconfont">&#xe69a;</i></span>
@@ -139,7 +144,7 @@
                 </div>
             </div>
 
-            <div v-if="(getBtnText==='Generar Ticket' || getBtnText==='Gerar Ticket') && orderdetail.status === 0 && orderoffset >= 0 && couponshow && getPayUrl">
+            <div v-if="(getBtnText==='Generar Ticket' || getBtnText==='Gerar Ticket') && orderdetail.fulfillmentStatus === constant.TOTAL_STATUS_UNPAID && orderoffset >= 0 && couponshow && getPayUrl">
                 <div class="mask"></div>
                 <div class="coupon-window">
                     <span class="coupon-close" @click="() => {this.couponshow = false}"><i class="iconfont">&#xe69a;</i></span>
@@ -197,9 +202,12 @@
 <script>
     import {mapGetters} from 'vuex';
     import * as utils from '../utils/geekoutil';
+    import * as constant from "../utils/constant.js"
     import LinkImage from '../components/link-image.vue';
     import selectOrder from '../components/select-order.vue';
     import orderTicket from '../components/order-ticket.vue';
+    import faqSelectOrder from '../components/faq/faq-select-order.vue';
+    import faqOrderTicket from '../components/faq/faq-order-ticket.vue';
     import CountDown from '../components/countdow.vue';
     import loding from '../components/loding.vue';
     // import ReturnLogistics from '../components/return-logistics.vue'
@@ -223,7 +231,9 @@
                 isAddProductstTip:'',
                 selected:0,
                 isRequired:false,
-                isReturnLogistics:false
+                isReturnLogistics:false,
+                constant:constant,
+                isNormalOrder: true,
             }
         },
         components: {
@@ -231,6 +241,8 @@
             'order-ticket':orderTicket,
             'select-order':selectOrder,
             'count-down': CountDown,
+            'faq-select-order': faqSelectOrder,
+            'faq-order-ticket': faqOrderTicket,
             'loding':loding,
             // 'return-logistics':ReturnLogistics
         },
@@ -321,41 +333,41 @@
                     return '-'
                 }
             },
-            getStatus(){
-                return utils.STATUS_LABEL(this.orderdetail.status)
-            },
+            // getStatus(){
+            //     return utils.STATUS_LABEL(this.orderdetail.fulfillmentStatus)
+            // },
             paymentItemTotal(){
                 if(this.order && this.orderdetail.paymentItemTotal){
-                    return this.orderdetail.paymentItemTotal.unit+this.orderdetail.paymentItemTotal.amount
+                    return utils.unitprice(this.orderdetail.paymentItemTotal);
                 }
             },
             shippingprice(){
                 if(this.orderdetail && this.orderdetail.shippingPrice){
-                    return this.orderdetail.shippingPrice.unit+this.orderdetail.shippingPrice.amount
+                    return utils.unitprice(this.orderdetail.shippingPrice);
                 }
             },
             shippingInsurancePrice(){
                 if(this.orderdetail && this.orderdetail.shippingInsurancePrice){
-                    return this.orderdetail.shippingInsurancePrice.unit+this.orderdetail.shippingInsurancePrice.amount
+                    return utils.unitprice(this.orderdetail.shippingInsurancePrice);
                 }
             },
             total(){
                 if(this.orderdetail && this.orderdetail.orderTotal){
-                    return this.orderdetail.orderTotal.unit+this.orderdetail.orderTotal.amount
+                    return utils.unitprice(this.orderdetail.orderTotal);
                 }
             },
             confirmedOrder(){
-                if(this.orderdetail && this.orderdetail.status===5){
+                if(this.orderdetail && this.orderdetail.fulfillmentStatus===constant.TOTAL_STATUS_REVIEW){
                     return true
                 }
             },
             shippedOrder(){
-                if(this.order && this.orderdetail.status===3){
+                if(this.order && this.orderdetail.isConfirmBtnShow && this.orderdetail.fulfillmentStatus === constant.TOTAL_STATUS_SHIPPED){
                     return true
                 }
             },
             processingOrder(){
-                if(this.order && this.orderdetail.status===2){
+                if(this.order && this.orderdetail.fulfillmentStatus===constant.TOTAL_STATUS_PROCCESSING){
                     return true
                 }
             },
@@ -392,7 +404,7 @@
                     this.isloding = true;
                     this.$store.dispatch('confirmOrder',this.orderdetail.id).then(()=>{
                         this.isloding = false
-                        _this.orderdetail.status = 10
+                        _this.orderdetail.fulfillmentStatus = constant.TOTAL_STATUS_REVIEW;
                         alert("success")
                     }).catch((e) => {
                         alert(e);
@@ -428,18 +440,19 @@
                 this.isShowSelect = false
                 this.isShowTicket = false
             },
-            showTicket:function(data){
+            showTicketReturn(data){
                 this.isShowSelect = false
+                localStorage._orderId = JSON.stringify(data);
                 this.$store.dispatch('getTicket',data).then(()=>{
                     this.isShowTicket = true;
                 })
             },
-            selectorder:function(){
+            selectorder(){
                 this.isShowSelect = true;
                 this.isShowTicket = false;
             },
             realprice(item){
-                return item.unit+item.amount
+                return utils.unitprice(item);
             },
             changeTab(index){
                 this.isActive = index;
@@ -522,6 +535,7 @@
                 this.shipping = this.orderdetail.shippingDetail
                 this.shippingstate = this.orderdetail.shippingDetail.state
                 this.shippingcountry =this.orderdetail.shippingDetail.country
+                this.isNormalOrder = this.orderdetail.type !== 1
                 this.isloding = false
             }).catch((e) => {
                 console.error(e);
@@ -557,6 +571,19 @@
         text-align: center;
         line-height: 32px;
         cursor: pointer;
+    }
+    .returns-btn{
+        width: 140px;
+        height: 32px;
+        background-color: #ffffff;
+        border-radius: 2px;
+	    border: solid 1px #cacaca;
+        text-align: center;
+        line-height: 32px;
+        cursor: pointer;
+        font-size: 14px;
+        color: #222222;
+        margin-top: 10px;
     }
     .grey{
         color: #999;

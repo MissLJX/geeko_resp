@@ -179,11 +179,17 @@ export const updateComment = (comment) => {
     return axios.post('/product-comment/update', comment, {'Content-Type': http_infos.upload_image_content_type}).then(data => data.result)
 }
 //tickets
-export const getTickets = (skip) => {
-    return axios.get('/ticket/'+ skip + '/20/show').then(data => data.result)
+export const getTickets = (skip,state) => {
+    return axios.get('/ticket/'+ skip + '/20/show?state='+state).then(data => data.result)
 }
 export const getTicket = (id) => {
     return axios.get('/ticket/'+id+'/order/get').then(data => data.result)
+}
+export const getTicketByTicketId = (id) => {
+    return axios.get('/ticket/'+id+'/get').then(data => data.result)
+}
+export const getTicketByCode = (code) => {
+    return axios.get('/ticket/' + code + '/get-by-order').then(data => data.result)
 }
 export const addTicket = (ticket) => {
     return axios.post('/ticket/order/add', ticket, {'Content-Type': http_infos.upload_image_content_type}).then(data => data.result)
@@ -286,4 +292,45 @@ export const getCustomerPointsNum = () => {
     })
 }
 
+// 获取you may also likes产品
+export const getYouLikeProducts = (skip) => {
+    return axios.get('/product/1/'+skip+'/20/show', {}, {}).then((data) => {
+        return data.result
+    })
+}
 
+// 传body体修改用户的信息
+export const updateCustomerSave = (customer) => {
+    console.log("customer",customer);
+    return axios.post(VPATH + "/customer/save",customer,{}).then(data => data.result);
+}
+
+// 如果message的结构为Object
+// /v9/message/anon/get-object/{code}
+export const getMessageToObject = (code) => {
+    return axios.get(VPATH + "/message/anon/get-object/"+code).then(data => data.result);
+}
+
+// survey
+export const surveySave = (params) => {
+    return axios.cpost('/questionnaire-answer/anon/save',params,{}).then(data => data);
+}
+
+export const surveyGet = () => {
+    return axios.get('/questionnaire-answer/anon/get',{},{}).then(data => data)
+}
+
+// ticket 获取问题类型
+export const getQuestionType = () => {
+    return axios.get('/message/anon/get-list/M1551',{},{}).then(data => data)
+}
+
+// survey 获取问题配置
+export const getSurveyQuestions = (config) => {
+    return axios.get('/message/anon/get-list/'+config,{},{}).then(data => data)
+}
+
+// 获取历史订单记录
+export const getHistoryOrder = (skip) => {
+    return axios.get('/v9/order/'+skip+'/'+20+'/get-order-history',{},{}).then(data => data)
+}

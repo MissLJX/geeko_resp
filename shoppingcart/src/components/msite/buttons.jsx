@@ -12,6 +12,7 @@ export const BigButton = styled.div`
 	cursor: pointer;
 	text-align: center;
 	font-family: AcuminPro-Bold;
+    text-transform: uppercase;
 	&:active{
 		opacity: .8;
 	}

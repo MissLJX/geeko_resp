@@ -1,13 +1,20 @@
 import * as types from './mutation_types'
 import * as api from '../api'
 import _ from 'lodash'
+import { stringify } from 'qs'
 
 export const state = {
     paging: false,
+    modalconfirmshow: false,
+    confirmCfg:null,
     screenLoading: false,
     countries: null,
     states: null,
-    currencies: null
+    currencies: null,
+    productDetail:null,
+    productId:"",
+    addToCartModalShow:false,
+    globalLoadingShow:false
 }
 
 
@@ -15,8 +22,14 @@ export const getters = {
     countries: state => state.countries,
     states: state => state.states,
     paging: state => state.paging,
+    modalconfirmshow: state => state.modalconfirmshow,
+    confirmCfg: state => state.confirmCfg,
     screenLoading: state => state.screenLoading,
-    currencies: state => state.currencies
+    currencies: state => state.currencies,
+    productDetail:state => state.productDetail.products,
+    productId:state => state.productId,
+    addToCartModalShow:state => state.addToCartModalShow,
+    globalLoadingShow:state => state.globalLoadingShow
 }
 
 
@@ -52,12 +65,31 @@ export const mutations = {
     },
     [types.GLOBAL_UN_LIKE](state, productId){
         var wishlist = state.me.wishlist, index = _.indexOf(wishlist[0].productIds, productId)
+        // console.log(wishlist)
+        // console.log("state.me.wishProducts",state.me.wishProducts)
+        state.me.wishProducts.splice(index,1);
         api.unlike(productId).then(() => {
             wishlist[0].productIds.splice(index, 1)
         })
     },
     [types.GLOBAL_GET_CURRENCIES](state, currencies){
         state.currencies = currencies
+    },
+    [types.APP_CONFIRM_SHOW](state, {show , cfg}){
+        state.confirmCfg = cfg
+        state.modalconfirmshow = show
+    },
+    [types.GET_PRODUCT_DETAIL_MESSAGE](state,product){
+        state.productDetail = _.cloneDeep(product);
+    },
+    [types.GET_PRODUCT_DETAIL_MESSAGE_PRODUCT_ID](state,productId){
+        state.productId = productId;
+    },
+    [types.ADD_TO_CART_IS_SHOW](state,flag){
+        state.addToCartModalShow = flag;
+    },
+    [types.GLOBAL_LOADING_SHOW](state,flag){
+        state.globalLoadingShow = flag;
     }
 }
 
@@ -81,6 +113,12 @@ export const actions = {
     paging({commit}, {paging}){
         commit(types.GLOBAL_PAGING, paging)
     },
+    confirmShow: function ({commit}, shower) {
+        commit(types.APP_CONFIRM_SHOW, shower)
+    },
+    closeConfirm: function ({commit}) {
+        commit(types.APP_CONFIRM_SHOW, {show: false, cfg: null})
+    },
     screenLoading({commit}, {loading}){
         commit(types.GLOBAL_SCREEN_LOADING, loading)
     },
@@ -90,9 +128,9 @@ export const actions = {
     clearId({commit}){
         commit(types.GLOBAL_CLEAR_ID)
     },
-    clearskip({commit}){
-        commit(types.GLOBAL_CLEAR_SKIP)
-    },
+    // clearskip({commit}){
+    //     commit(types.GLOBAL_CLEAR_SKIP)
+    // },
     like({commit}, productId){
         commit(types.GLOBAL_LIKE, productId)
     },
@@ -107,5 +145,23 @@ export const actions = {
     },
     logoff(closedReason){
         return api.logoff(closedReason)
+    },
+    getProductDetailMessage({commit},productId){
+        return api.getProductDetailMessage(productId).then((result) => {
+            commit(types.GET_PRODUCT_DETAIL_MESSAGE,result.result);
+            commit(types.GET_PRODUCT_DETAIL_MESSAGE_PRODUCT_ID,productId);
+            return result.result;
+        }).catch((e) => {
+            console.log(e)
+        });
+    },
+    addToCartIsShow({commit},flag){
+        commit(types.ADD_TO_CART_IS_SHOW,flag);
+    },
+    globalLoadingShow({commit},flag){
+        commit(types.GLOBAL_LOADING_SHOW,flag);
+    },
+    addToCart({commit},product){
+        return api.addProducts(product);
     }
 }

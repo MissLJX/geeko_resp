@@ -75,7 +75,7 @@
                 this.$store.dispatch("getFeedSummary")
                 if(!this.finished && !this.ifloding ){
                     this.ifloding=true;
-                    this.$store.dispatch("getWishproducts",0).then(({finished})=>{
+                    this.$store.dispatch("getWishproducts",this.wishskip).then(({finished})=>{
                         this.ifloding=false;
                         this.finished= finished;
                         this.$store.dispatch("getWishskip")

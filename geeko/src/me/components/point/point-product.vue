@@ -1,6 +1,13 @@
 <template>
     <div class="el-list-product">
-        <a :href="productUrl">
+        <a 
+            :href="productUrl"
+            data-title="me" 
+            :data-column="calssifyName" 
+            :data-product-position="index+1"
+            data-product-list-source
+            :product-id="product.id"
+        >
             <figure>
                 <div class="img">
                     <img :src="imageUrl" :class="{'gray':isSoldOutProduct}"/>
@@ -103,14 +110,16 @@
 </style>
 
 <script type="text/ecmascript-6">
-    import {imageutil, unitprice , producturl} from '../../../utils/geekoutils'
+    import {imageutil, unitprice , producturl , PROJECT} from '../../../utils/geekoutils'
     import _ from 'lodash'
 
     export default{
         props: {
             product: Object,
             required: true,
-            isSoldOut:true
+            isSoldOut:true,
+            index:Number,
+            calssifyName:String
         },
         computed: {
             imageUrl(){
@@ -138,7 +147,7 @@
                 return false
             },
             productUrl(){
-                return window.ctx + '/' + producturl(this.product)
+                return PROJECT + '/' + producturl(this.product)
             },
             isSoldOutProduct(){
                 if(this.product.status == 2){

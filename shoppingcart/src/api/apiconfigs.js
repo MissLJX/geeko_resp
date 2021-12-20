@@ -44,7 +44,12 @@ const instance = axios.create({
 		// countryCode: getCountry(),
 		wid: getWid(),
 		StemFrom: typeof (utm_source) === 'undefined' ? '' : utm_source,
-		accessToken: window.accessToken || ''
+		accessToken: window.accessToken || '',
+		'x-width': window.screen.width,
+		'x-height': window.screen.height,
+		'javaenabled': window.navigator.javaEnabled(),
+		'x-colordepth':  window.screen.colorDepth,
+		'x-time-zone-offset': new Date().getTimezoneOffset()
 	}
 })
 

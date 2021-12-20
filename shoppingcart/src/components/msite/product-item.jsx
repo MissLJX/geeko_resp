@@ -95,14 +95,19 @@ export const NormalProduct = class extends React.Component {
 			onSelect(product.variants[0], product)
 		}}>
 			<a ref={this.productRef.bind(this)} className="__image product-click" product-id={product.id}
-				data-product-source={product.dataSource} data-geeko-id={product.geekoRequsestId || requestId}
+				data-product-source={product.dataSource} data-geeko-id={product.geekoRequsestId || requestId} data-geeko-experiment={product.experimentId}
 				data-request-id={product.aliRequestId} data-experiment-id={product.aliExperimentId}
 				type="shopping_cart_match_with" data-column={column} data-product-list-source data-title="shoppingcart"
 				data-type={type} data-content={content} data-product-position={position}>
 				<img src={`${IMAGE_PREFIX}/medium/${product.pcMainImage}`}/>
 			</a>
 
-			{off > 0 && <OFF>-{off}%</OFF>}
+
+			{
+				product.isNew && <OFF style={{backgroundColor: '#5ad133'}}>NEW</OFF>
+			}
+
+			{off > 0 && !product.isNew && <OFF>-{off}%</OFF>}
 
 			<div className="__price">
 

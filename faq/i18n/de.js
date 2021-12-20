@@ -48,5 +48,52 @@ export default {
   satisfied: 'Zufrieden',
   unsatisfied: 'Unzufrieden',
   you_can_rate: 'Sie können den Kundenservice hier kommentieren',
-  please_rate: 'Bitte bewerten Sie meinen Service'
+  please_rate: 'Bitte bewerten Sie meinen Service',
+  // support:
+  click:'Für alle Fragen und Antworten klicken Sie bitte auf unsere',
+  faq:"FAQ",
+  page:"Seite",
+  findNothing:"Kann die gesuchte Antwort nicht finden?",
+  contact:"Kontaktieren Sie uns",
+  orderProcessing: "Auftragsabwicklung",
+  tracking:"Logistik-Tracking",
+  return:"Rückgabe & Rückerstattung",
+  product:"Produkt & Lager",
+  payment:"Zahlung & Promos",
+  account:"Kontoprobleme",
+  // contact:
+  Ticket:'Fahrkarte',
+  TicketTime:'NUR für After-Sale-Ausgabe（Stornieren/Bearbeiten Sie Ihre Bestellung/Versandstatus/Rückgabe/Umtausch usw.)',
+  OnlineTime: 'NUR für Vorverkaufsausgaben. Online-Verkäufe haben keinen Zugriff auf Bestellinformationen.',
+  online:'Online-Hilfe',
+  // faq
+  search: "Suchergebnisse",
+  resultFor: "Ergebnisse für \"<strong>{result}</strong>\"",
+  question:"Haben Sie weitere Fragen?",
+  articleHelpful:"War dieser Artikel hilfreich?",
+  related:"Ähnliche Artikel",
+  // ticket
+  noTicket:"kein Ticket",
+  // order
+  // ticket add
+  textareaPlaceHolder:"Geben Sie hier eine Nachricht ein...",
+  orderNo:"Bestell-Nr",
+  responseTime:"Erwartete Reaktionszeit: Innerhalb von 24 Stunden",
+  selectTip: 'Bitte wählen Sie Ihren Fragetyp',
+  statuswating: 'Warte auf Antwort',
+  // question ticket
+  defaultSelect: 'Bitte wählen Sie Ihren Fragetyp',
+  submitSuccess: 'Erfolgreich eingereicht!',
+  submitTips: "Die folgenden Gründe sind optional. Sie können auf „X“ klicken, wenn Sie keines davon auswählen möchten.",
+  selectReason: 'Einen Grund wählen',
+  description: 'Beschreibung',
+  description_ph: 'Bitte beschreiben Sie Ihr Problem so genau wie möglich, damit der Kundenservice schneller reagieren kann...',
+  uploadImage: 'Bild hochladen',
+  uploadTips: 'Maximal 3 Fotos, nur JPEG, GIF oder PNG. ',
+  rate:'Bewerten Sie meinen Service',
+  rateInfo: "Wir würden gerne hören, was Sie von unserem Kundenservice halten, damit wir Sie besser bedienen können.",
+  satisfied: 'Zufrieden',
+  unsatisfied: 'Unzufrieden',
+  rateTextPlaceHolder: 'Hier können Sie den Kundenservice kommentieren.',
+  statusWatingApply:'Warte auf Bewerben',
 }

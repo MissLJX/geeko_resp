@@ -60,6 +60,9 @@ export default {
             return obj;
         }
     },
+    created:function(){
+        this.initOption();
+    },
     watch:{
        yearSon:function(newVal,oldVal){
             this.yearSon = newVal;
@@ -76,6 +79,8 @@ export default {
     },
     methods:{
         initOption:function(){
+            // 之前因为未有初始化容易导致watch监听的时候导致没有数据
+            this.flag = false;
             var myDate = new Date;
             var year = myDate.getFullYear();//获取当前年
             var month = myDate.getMonth()+1;//获取当前月

@@ -7,7 +7,7 @@ const setPath = function (folderName) {
     return path.join(__dirname, folderName);
 };
 
-
+const {CleanWebpackPlugin} = require('clean-webpack-plugin')
 
 const extractHTML = new HtmlWebpackPlugin({
     title: 'Me',
@@ -25,8 +25,9 @@ const config = {
     },
     output: {
         path: setPath('dist'),
-        publicPath: '/resources/vue/pcme/',
-        filename:'[name].js'
+        // publicPath: '/resources/vue/pcme/', // 正式
+        publicPath: '/resources/vue/pcme/', // 本地
+        filename:'[name].[contenthash].js'
     },
 
     optimization: {
@@ -42,8 +43,10 @@ const config = {
     devtool: '#eval-source-map',
     plugins: [
         extractHTML,
-        new VueLoaderPlugin()
+        new VueLoaderPlugin(),
+        new CleanWebpackPlugin()
     ],
+    devtool: 'source-map',
     module: {
         rules: [
             {
@@ -66,6 +69,6 @@ const config = {
                 use: ['vue-style-loader','css-loader', 'sass-loader']
             }
         ]
-    }
+    },
 };
 module.exports = config;

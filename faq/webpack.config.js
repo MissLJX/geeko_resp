@@ -7,16 +7,17 @@ const BUILD_PATH = path.resolve(ROOT_PATH, 'dist')
 
 module.exports = {
   entry: {
-  	app: path.resolve(ROOT_PATH, 'app.jsx')
+    app: path.resolve(ROOT_PATH, 'app.jsx')
   },
   output: {
-  	path: BUILD_PATH,
+    path: BUILD_PATH,
     publicPath: '/',
-  	filename: '[name].bundle.js'
+    filename: '[name].bundle.js'
   },
   mode: 'development',
   // enable dev source map
-  devtool: 'eval-source-map',
+  // devtool: 'eval-source-map',
+  devtool: 'cheap-module-source-map',
   // enable dev server
   devServer: {
     historyApiFallback: true,
@@ -25,7 +26,9 @@ module.exports = {
     progress: true,
     proxy: {
       '/api': {
-        target: 'https://www.chicme.com',
+        // target: 'https://www.chicme.com',
+        // target: 'https://www.chicme.xyz',
+        target: 'http://localhost:8080/wanna',
         pathRewrite: { '^/api': '' },
         secure: false,
         changeOrigin: true
@@ -45,7 +48,7 @@ module.exports = {
       },
       {
         test: /.css$/,
-        use: ['style-loader', 'css-loader']
+        use: ['style-loader', {loader:'css-loader',options:{modules:true}}]
       }
     ]
   },

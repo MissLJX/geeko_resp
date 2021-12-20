@@ -78,8 +78,12 @@ export const imageutil = {
 }
 
 
-export const unitprice = function (money) {
-    return money && (money.unit + money.amount) || '';
+export const unitprice = (money) => {
+	if(money){
+		return money.currency === 'EUR'? (money.amount + money.unit) : (money.unit + money.amount)
+	}else{
+		return ''
+	}
 }
 
 export const producturl = function (product) {
@@ -114,5 +118,26 @@ export const dateFormat = function(times) {
     // 拼接
     return day + "/" + month + "/" + year + " " + hours + ":" + minutes + ":" + seconds + " " + str;
 }
+
+export const changeLocalLanguage = function(language){
+    Cookie.set('lang', language , {expires: 30});
+}
+
+export const changeLocalCurrency = function(currency){
+    Cookie.set('currency', currency , {expires: 30});
+}
+
+export const getLocalCookie = function(name){
+    return Cookie.get(name);
+}
+
+export const saveUserHasNoCommentOrderState = function(state){
+    return Cookie.set('_has_no_comment_order', state, {expires: 1})
+}
+
+export const removeLocalCookie = function(name){
+    return Cookie.remove(name);
+}
+
 
 

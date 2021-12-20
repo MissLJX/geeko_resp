@@ -1,8 +1,9 @@
 import React, {useEffect} from 'react'
 import {connect} from 'react-redux'
 import CreditCard from '../components/msite/credit.jsx'
-// import CreditCardC from '../components/msite/creditC.jsx'
-// import CreditCardS from '../components/msite/credit-stripe.jsx'
+import CreditCardC from '../components/msite/creditC.jsx'
+import CreditCardS from '../components/msite/credit-stripe.jsx'
+import CreditCardA from '../components/msite/credit-adyen.jsx'
 import styled from 'styled-components'
 import {FormattedMessage, FormattedHTMLMessage} from 'react-intl'
 import {AnimatedRoute} from 'react-router-transition'
@@ -216,26 +217,24 @@ export default connect(state => {
 
 			<div className="__bd" style={{paddingTop: window.isApp ? 0 : 44}}>
 
-				{/* {
-					search.payMethod === '87' && <CreditCardC onPurchase={() => {setLeaved(true)}} onGo={p => { setP(p); }} orderId={props.match.params.orderId} />
-				} */}
+				{
+					search.payMethod === '87' && <CreditCardC onPurchase={() => {setLeaved(true)}} onGo={p => { setP(p) }} orderId={props.match.params.orderId} />
+				}
+
+				{
+					search.payMethod === '88' && <CreditCardS onPurchase={() => {setLeaved(true)}} onGo={p => { setP(p) }} orderId={props.match.params.orderId} />
+				}
+
+				{
+					search.payMethod === '89' && <CreditCardA onPurchase={() => {setLeaved(true)}} onGo={p => { setP(p) }} orderId={props.match.params.orderId} />
+				}
+
+				{
+					(!search.payMethod || search.payMethod === '18') && <CreditCard onPurchase={() => {setLeaved(true)}} onGo={p => { setP(p) }} orderId={props.match.params.orderId} />
+				}
 
 
-				{/* {
-					 search.payMethod === '18' && <CreditCard onPurchase={() => {setLeaved(true)}} onGo={p => { setP(p); }} orderId={props.match.params.orderId} />
-				} */}
 
-				<CreditCard onPurchase={() => {
-					setLeaved(true)
-				}} onGo={p => {
-					setP(p)
-				}} orderId={props.match.params.orderId}/>
-
-				{/*<CreditCardS onPurchase={() => {*/}
-				{/*	setLeaved(true)*/}
-				{/*}} onGo={p => {*/}
-				{/*	setP(p)*/}
-				{/*}} orderId={props.match.params.orderId}/>*/}
 			</div>
 		</ShoppingBody>
 

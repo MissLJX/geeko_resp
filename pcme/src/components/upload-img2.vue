@@ -6,7 +6,7 @@
                 <span class="removeImg" @click="removeImg(index)">&times;</span>
             </li>
         </ul>
-        <div class="upload-img" id="uploadimg" v-show="uploadedImages.length<5">
+        <div class="upload-img" id="uploadimg" v-show="uploadedImages.length<3">
             <i class="iconfont">&#xe6d3;</i>
             <!-- <p>{{$t('uploadphoto')}}</p> -->
             <form ref="imageLoader">
@@ -37,9 +37,9 @@
                     var src = window.navigator.userAgent.indexOf("Chrome") >= 1 || window.navigator.userAgent.indexOf("Safari") >= 1 ? window.webkitURL.createObjectURL(file) : window.URL.createObjectURL(file);
                     this.uploadedImages.push(src)
                 })
-                if (this.uploadedImages.length > 5) {
-                    this.uploadedImages.splice(3, this.uploadedImages.length - 5);
-                    this.files.splice(5, this.files.length - 5)
+                if (this.uploadedImages.length > 3) {
+                    this.uploadedImages.splice(3, this.uploadedImages.length - 3);
+                    this.files.splice(5, this.files.length - 3)
                 }
 
                 this.$emit('getImgFiles',this.files)

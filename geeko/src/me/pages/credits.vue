@@ -1,6 +1,5 @@
 <template>
     <div class="el-credit-body">
-
         <nav-bar>
             <i class="iconfont el-back-font" slot="left" @click="$router.go(-1)">&#xe693;</i>
             <span slot="center">{{$t("point.my_points")}}</span>
@@ -12,8 +11,10 @@
         <div class="_container">
             <credit-header :me="pointsCustomerNum"></credit-header>
             <received-used></received-used>
-            <points-list></points-list>
+            <!-- <points-list></points-list> -->
         </div>
+
+        <points-mall></points-mall>
 
         <Loading v-if="isGetCustomerLoadingShow"></Loading>
     </div>
@@ -32,7 +33,6 @@
             margin-top: 10px;
         }
     }
-
 </style>
 
 <script type="text/ecmascript-6">
@@ -45,6 +45,7 @@
     import PointsList from '../components/points-list.vue'
 
     import Loading from '../../components/loading.vue'
+    import PointsMall from '../components/points-mall.vue'
 
     export default{
         data(){
@@ -75,7 +76,8 @@
             'received-used': ReceivedUsed,
             'nav-bar':NavBar,
             'points-list':PointsList,
-            "Loading":Loading
+            "Loading":Loading,
+            'points-mall':PointsMall,
         }
     }
 </script>

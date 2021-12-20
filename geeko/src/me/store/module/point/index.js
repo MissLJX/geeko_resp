@@ -136,16 +136,17 @@ const actions = {
         });
     },
     getPointsProducts({commit}, {skip}){
-        return api.getPointsProductList(skip).then((products) => {
+        return api.getPointsProductList(skip).then((data) => {
+            let products = data.result;
             if (products && products.length) {
                 commit(types.ME_GET_POINTS_PRODUCTS, products)
             } else {
                 if (skip === 0) {
-                    return {empty: true, finished: true}
+                    return {empty: true, finished: true,"requestId":data.requestId,"experimentId":data.experimentId}
                 }
-                return {finished: true}
+                return {finished: true,"requestId":data.requestId,"experimentId":data.experimentId}
             }
-            return {}
+            return {"requestId":data.requestId,"experimentId":data.experimentId}
         })
     },
     getPointsSkip({commit}){

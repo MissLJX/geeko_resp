@@ -48,5 +48,52 @@ export default {
   satisfied: 'Satisfecho',
   unsatisfied: 'Insatisfecho',
   you_can_rate: 'Puedes comentar servicio al cliente aquí',
-  please_rate: 'Por favor califica mi servicio'
+  please_rate: 'Por favor califica mi servicio',
+  // support:
+  click:'Para todas las preguntas y respuestas, haga clic en nuestro',
+  faq:"Preguntas frecuentes",
+  page:"página",
+  findNothing:"¿No encuentra la respuesta que busca?",
+  contact:"Contáctenos",
+  orderProcessing: "Procesamiento de pedidos",
+  tracking:"Seguimiento logístico",
+  return:"Devolución y reembolso",
+  product:"Producto y stock",
+  payment:"Pago y promociones",
+  account:"Problemas con la cuenta",
+  // contact:
+  Ticket:'Ticket',
+  TicketTime: 'SÓLO para problemas de posventa （Cancelar / Editar pedido / Estado de envío / Devolución / Cambio, etc.)',
+   OnlineTime: 'SOLO para la edición de preventa. Las ventas en línea no tienen acceso a la información del pedido. ',
+  online:'Ayuda en línea',
+  // faq
+  search: "Resultados de la búsqueda",
+  resultFor: "resultados para \"<strong>{result}</strong>\"",
+  question:"¿Tienes más preguntas?",
+  articleHelpful:"¿Te resultó útil este artículo?",
+  related:"Artículos relacionados",
+  // ticket
+  noTicket:"no Ticket",
+  // order
+  // ticket add
+  textareaPlaceHolder:"Escriba un mensaje aquí ...",
+  orderNo:"order NO",
+  responseTime:"Tiempo de respuesta esperado: en 24 horas",
+  selectTip: 'Seleccione su tipo de pregunta',
+  statuswating: 'Esperando respuestas',
+  // question ticket
+  defaultSelect: 'Seleccione su tipo de pregunta',
+  submitSuccess: '¡Enviado satisfactoriamente!',
+  submitTips: "Las siguientes razones son opcionales. Puede hacer clic en “X” si no desea elegir ninguno de ellos.  ",
+  selectReason: 'Seleccione una razón',
+  description: 'Descripción',
+  description_ph: 'Describe tu problema tanto como sea posible para que el servicio al cliente pueda responder más rápido ...',
+  uploadImage: 'Cargar imagen',
+  uploadTips: 'Máximo de 3 fotos, solo JPEG, GIF o PNG',
+  rate:'Califica mi servicio',
+  rateInfo: "Nos encantaría saber qué piensa de nuestro servicio de atención al cliente para ayudarnos a brindarle un mejor servicio",
+  satisfied: 'Satisfecho',
+  unsatisfied: 'Insatisfecho',
+  rateTextPlaceHolder: 'Puede comentar el servicio al cliente aquí.',
+  statusWatingApply:'Esperando aplicar',
 }

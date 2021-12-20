@@ -1,5 +1,12 @@
 import React, { useEffect } from 'react'
-import { openStripeOrder, usecreditcard, stripePay, stripeCallBack, checkout_credit } from '../../api'
+import {
+	openStripeOrder,
+	usecreditcard,
+	stripePay,
+	stripeCallBack,
+	checkout_credit,
+	openSafeChargeOrder, setSafeCharge
+} from '../../api'
 import {
 	getCreditCards
 } from '../../store/actions.js'
@@ -272,19 +279,21 @@ const Credit = class extends React.Component {
 		}
 	}
 
-	static getDerivedStateFromProps(props, state) {
-		if (props.safechargeresponse != state.safechargeresponse) {
-			return { ...state, safechargeresponse: props.safechargeresponse }
+
+	static getDerivedStateFromProps(props, state){
+		if(props.safechargeresponse != state.safechargeresponse){
+			return {...state, safechargeresponse: props.safechargeresponse}
 		}
 		return null
 	}
 
-	componentDidUpdate(prevProps, prevState) {
-		if (prevState.safechargeresponse != this.state.safechargeresponse) {
+	componentDidUpdate(prevProps, prevState){
+		if(prevState.safechargeresponse != this.state.safechargeresponse){
 			console.log(this.state.safechargeresponse)
 			this.initPage()
 		}
 	}
+
 
 	componentDidMount() {
 		this.initPage()
@@ -323,23 +332,140 @@ const Credit = class extends React.Component {
 		const self = this
 		const { orderId, onPurchase } = this.props
 
-		if (!this.state.openResult) {
-			return
+
+		if (self.state.showNew) {
+			if (!this.state.openResult) {
+				return
+			}
+
+			if(!window.__is_login__){
+				if(!this.state.openResult.openOrderResponse || !this.state.openResult.openOrderResponse.clientSecret)
+					return
+				this.confirmPayment()
+			}else{
+				this.createPaymentMethod()
+			}
+		}else{
+
+			const selectedCard = self.props.creditcards.find(card => card.isSelected)
+
+			if(selectedCard && selectedCard.quickpayRecord.payMethod === '18'){
+				this.paySafeCharge(selectedCard)
+			}else{
+				self.setState({
+					checking: true
+				})
+				checkout_credit({orderId}).then(data => {
+					const result = data.result
+					if(result.success){
+						window.location.href = `${window.ctx || ''}/order-confirm/${result.transactionId}?transactionId=${result.transactionId}`
+					}else{
+						if (window.isApp) {
+							window.location.href = `${window.ctx || ''}/geekopay/app-fail?errMsg=${result.details || 'Error'}`
+						} else {
+							alert(result.details || 'Error')
+							if (orderId && window.__is_login__) {
+								this.props.onGo(`${window.ctx || ''}/checkout/${orderId}`)
+								storage.add('temp-order', orderId, 1 * 60 * 60)
+							}
+						}
+					}
+					self.setState({
+						checking: false
+					})
+				}).catch(data => {
+					if (window.isApp) {
+						window.location.href = `${window.ctx || ''}/geekopay/app-fail?errMsg=${data.result || data || 'Error'}`
+					} else {
+						alert(data.result || data)
+						if (orderId && window.__is_login__) {
+							this.props.onGo(`${window.ctx || ''}/checkout/${orderId}`)
+							storage.add('temp-order', orderId, 1 * 60 * 60)
+						}
+					}
+
+				})
+			}
 		}
 
-		if(!window.__is_login__){
-			if(!this.state.openResult.openOrderResponse || !this.state.openResult.openOrderResponse.clientSecret)
-				return
-			this.confirmPayment()
-		}else{
-			this.createPaymentMethod()
-		}
+
 		onPurchase()
+	}
+
+
+
+	paySafeCharge(selectedCard){
+		const { orderId } = this.props
+		const { billingAddress } = this.state
+		const self = this
+		self.setState({
+			checking: true
+		})
+		openSafeChargeOrder(orderId).then(data => data.result).then(result => {
+			const response = result.openOrderResponse
+
+			self.sfc = SafeCharge({
+				env: window.safechargeEnv || 'prod',
+				merchantId: response.merchantId,
+				merchantSiteId: response.merchantSiteId
+			})
+
+			self.sfc.createPayment({
+				'sessionToken': response.sessionToken,
+				'merchantId': response.merchantId,
+				'merchantSiteId': response.merchantSiteId,
+				'clientUniqueId': response.clientUniqueId, // optional
+				'userTokenId': response.userTokenId,
+				'paymentOption': {
+					'userPaymentOptionId': selectedCard.quickpayRecord.quickpayId,
+				},
+				'billingAddress': {
+					'email': result.email,
+					'country': result.country
+				},
+				'deviceDetails': {
+					'ipAddress': result.ip
+				}
+			}, function (res) {
+				self.callBackSafeCharge({ ...res, sessionToken: response.sessionToken })
+			})
+		})
+	}
+
+
+	callBackSafeCharge(res) {
+		const self = this
+		const { orderId } = this.props
+
+		if (res.result === 'APPROVED') {
+			setSafeCharge({ ...res }).then(data => data.result).then(result => {
+				window.location.href = `${window.ctx || ''}/order-confirm/${result.clientUniqueId}?transactionId=${result.clientUniqueId}`
+			}).catch(data => {
+				alert(data.result || data)
+				self.setState({
+					checking: false
+				})
+			})
+		} else {
+			if (window.isApp) {
+				window.location.href = `${window.ctx || ''}/geekopay/app-fail?errMsg=${res.errorDescription || res.reason || 'Error'}`
+			} else {
+				alert(res.errorDescription || res.reason || 'Error')
+				if (orderId && window.__is_login__) {
+					this.props.onGo(`${window.ctx || ''}/checkout/${orderId}`)
+					storage.add('temp-order', orderId, 1 * 60 * 60)
+				}
+			}
+			self.setState({
+				checking: false
+			})
+		}
 	}
 
 
 	createPaymentMethod(){
 		const { stripe, elements } = this.props
+		const self = this
 		if (!stripe || !elements) {
 			// Stripe.js has not loaded yet. Make sure to disable
 			// form submission until Stripe.js has loaded.
@@ -376,6 +502,9 @@ const Credit = class extends React.Component {
 			if (payload.error) {
 				console.log('[error]', payload.error)
 				alert(payload.error.message)
+				self.setState({
+					checking: false,
+				})
 			} else {
 				console.log('[PaymentMethod]', payload.paymentMethod)
 
@@ -395,6 +524,8 @@ const Credit = class extends React.Component {
 					}else{
 						if (window.isApp) {
 							window.location.href = `${window.ctx || ''}/geekopay/app-fail?errMsg=${warnMsg}`
+						}else{
+							alert(warnMsg || 'Error')
 						}
 					}
 
@@ -415,6 +546,7 @@ const Credit = class extends React.Component {
 
 	confirmPayment() {
 		const { stripe, elements } = this.props
+		var self = this
 		this.setState({
 			checking: true,
 		})
@@ -464,6 +596,10 @@ const Credit = class extends React.Component {
 					alert(data.result || data)
 				}
 			})
+		}).catch(e => {
+			self.setState({
+				checking: false,
+			})
 		})
 	}
 
@@ -511,7 +647,7 @@ const Credit = class extends React.Component {
 						{
 							cards && cards.length > 0 && <div style={{ backgroundColor: '#fff', paddingTop: 16, borderTop: 'solid 1px #e6e6e6' }}>
 								<div style={{ paddingLeft: 12 }}>
-									<span style={{ fontFamily: 'AcuminPro-Bold' }}>Select a Card</span>
+									<span style={{ fontFamily: 'AcuminPro-Bold' }}><FormattedMessage id="select_a_card"/></span>
 								</div>
 								<div>
 									{
@@ -707,7 +843,7 @@ const Credit = class extends React.Component {
 
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
-const promise = loadStripe('pk_test_51JI2NUEf4gK6pnckAuiiFk2whunhssbSU7PbQ7vRergnUh1pMlbjjg0JM4W55Bacj5wZbutwQKiTXfNwzNTXbMNv00NVqfh1TZ')
+const promise = loadStripe(window.__stripe_pk_)
 
 
 const InjectedCheckoutForm = props => (
@@ -735,7 +871,7 @@ export default connect(state => {
 }, dispatch => {
 	return {
 		GETCREDITCARDS: payMethod => {
-			return dispatch(getCreditCards(payMethod))
+			return dispatch(getCreditCards(['18', '88'], true))
 		}
 	}
 })(withRouter(InjectCredit))

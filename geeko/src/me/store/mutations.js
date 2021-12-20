@@ -7,6 +7,9 @@ const mutations = {
         state.me = _me
         state.headerImage = utils.IMAGE_PREFIX + '/icon/' + _me.id
     },
+    [types.ME_GET_NO_LOGIN](state,flag){
+        state.isLogin = flag;
+    },
     [types.ME_GET_FEED](state, _feed){
         state.feed = _feed
     },
@@ -114,6 +117,11 @@ const mutations = {
         state.addresses.splice(_index, 1)
     },
     [types.ME_ADD_ADDRESS](state, address){
+        state.addresses.forEach(item => {
+            if(item && item.isDefaultAddress){
+                item.isDefaultAddress = false;
+            }
+        });
         state.addresses.unshift(address)
     },
     [types.ME_GET_NOTIFICATION_COUNT](state, count){
@@ -164,8 +172,43 @@ const mutations = {
     [types.ME_GET_EXPIRED_COUPONS](state,expiredCoupons){
         state.expiredCoupons = _.concat(state.expiredCoupons,expiredCoupons);
     },
-    [types.ME_GET_EXPIRED_COUPONS_SKIP](){
+    [types.ME_GET_EXPIRED_COUPONS_SKIP](state){
         state.expiredCouponsSkip += 20;
+    },
+    [types.CHANGE_GET_ME_DATA](state,customer){
+        let name = customer.name;
+        let changeValue = customer.customer[name];
+        state.me[name] = _.cloneDeep(changeValue);
+    },
+    [types.GET_ME_CURRENCY_LIST](state,currency){
+        state.currencyList = _.concat(state.currencyList,currency);
+    },
+    [types.GET_SHOPPING_CART_NUM](state,num){
+        state.shoppingCartCount = num;
+    },
+    [types.GET_INDEX_MESSAGE_CODE_LOGIN](state,message){
+        state.messageM1518 = message;
+    },
+    [types.GET_MY_PREFERENCES_MESSAGE_CODE](state,message){
+        state.messageM1521 = message;
+    },
+    [types.GET_RELATION_PRODUCTS](state,products){
+        state.relationProducts = _.concat(state.relationProducts,products);
+    },
+    [types.GET_RELATION_PRODUCTS_SKIP](state){
+        state.relationProductsSkip += 20;
+    },
+    [types.GET_SURVEY_ANSWER](state, obj){
+        state.survey = obj
+    },
+    [types.GET_RECORD_WISHLIST_EVENT](state,wishlist){
+        state.wishlistEvent = wishlist;
+    },
+    [types.GET_HAS_NO_COMMENT_ORDER](state, status){
+        state.hasNoCommentOrder = status
+    },
+    [types.GET_DOBULE_POINTS_DATA](state,points){
+        state.dobulePoints = points;
     }
 }
 

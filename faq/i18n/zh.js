@@ -48,5 +48,47 @@ export default {
   satisfied: '满意',
   unsatisfied: '不满意',
   you_can_rate: '这里写评价',
-  please_rate: '请给我评价'
+  please_rate: '请给我评价',
+  // support:
+  click:'所有问答请点击我们的',
+  faq:"常见问题",
+  page:"页面",
+  findNothing:"找不到您要找的答案？",
+  contact:"联系我们",
+  orderProcessing: "订单处理",
+  tracking:"物流追踪",
+  return:"退货和退款",
+  product:"产品和库存",
+  payment:"付款和促销",
+  account:"帐户问题",
+  // contact:
+  Ticket:'处理记录',
+  TicketTime:'仅限售后问题（取消/编辑订单/发货状态/退货/换货等）',
+  OnlineTime:'仅适用于预售问题。 在线销售无权访问订单信息。',
+  online:'在线帮助',
+  // faq
+  search: "搜索结果",
+  resultFor: "个有关\"<strong>{result}</strong>\"的结果",
+  question:"还有更多问题？",
+  articleHelpful:"这篇文章有帮助吗？",
+  related:"相关文章",
+  // ticket
+  noTicket:"没有处理记录",
+  // order
+  // ticket add
+  textareaPlaceHolder:"在此处输入消息...",
+  orderNo:"订单号",
+  responseTime:"预期响应时间：24小时内",
+  selectTip: '请选择您的问题类型',
+  statuswating: '等待回复',
+  // question ticket
+  defaultSelect: '请选择您的问题类型',
+  submitSuccess: '提交成功！',
+  submitTips: "以下原因是可选的。 如果您不想选择其中任何一个，可以单击“X”。",
+  selectReason: '选择原因',
+  description: '问题描述',
+  description_ph: '请尽量详细描述您的问题，以便客服更快响应……',
+  uploadImage: '上传图片',
+  uploadTips: '最多3张图片，仅限JPEG、GIF或PNG格式',
+  statusWatingApply:'等待描述',
 }

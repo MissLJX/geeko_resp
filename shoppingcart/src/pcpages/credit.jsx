@@ -41,7 +41,7 @@ import { payDLocal,
 	placeOrderAll,
 	openSafeChargeOrder,
 	setSafeChargeStatus
- } from '../api'
+} from '../api'
 
 import {submit} from '../utils/common-pay.js'
 
@@ -387,33 +387,32 @@ const Credit = class extends React.Component {
 		const response = result.openOrderResponse
 		const self = this
 
-        // Instantiate Safecharge API
-        const sfc = SafeCharge({
-            env: window.safechargeEnv || 'prod', // the environment you’re running on, prod for production
-            merchantId: response.merchantId, //as asigned by SafeCharge
-            merchantSiteId: response.merchantSiteId // your merchantsite id provided by Safecharge
-        })
+		// Instantiate Safecharge API
+		const sfc = SafeCharge({
+			env: window.safechargeEnv || 'prod', // the environment you’re running on, prod for production
+			merchantId: response.merchantId, //as asigned by SafeCharge
+			merchantSiteId: response.merchantSiteId // your merchantsite id provided by Safecharge
+		})
 
-
-        sfc.createPayment({
-            "sessionToken": response.sessionToken, //recieved form opeOrder API
-            "merchantId": response.merchantId, //as asigned by SafeCharge
-            "merchantSiteId": response.merchantSiteId, //as asigned by SafeCharge
-            "userTokenId": response.userTokenId,
-            "clientUniqueId": response.clientUniqueId, // optional
-            "paymentOption": {
-                "userPaymentOptionId": result.userPaymentOptionId,
+		sfc.createPayment({
+			'sessionToken': response.sessionToken, //recieved form opeOrder API
+			'merchantId': response.merchantId, //as asigned by SafeCharge
+			'merchantSiteId': response.merchantSiteId, //as asigned by SafeCharge
+			'userTokenId': response.userTokenId,
+			'clientUniqueId': response.clientUniqueId, // optional
+			'paymentOption': {
+				'userPaymentOptionId': result.userPaymentOptionId,
 			},
-			"billingAddress": {
-				"country": result.country,
-				"email": result.email
+			'billingAddress': {
+				'country': result.country,
+				'email': result.email
 			},
-			"deviceDetails": {
-				"ipAddress": result.ip
+			'deviceDetails': {
+				'ipAddress': result.ip
 			}
-        }, function (res) {
+		}, function (res) {
 			setSafeChargeStatus(response.sessionToken).then(data => data.result).then(result => {
-				if(res.result === "APPROVED"){
+				if(res.result === 'APPROVED'){
 					window.location.href = `${window.ctx || ''}/order-confirm/${response.clientUniqueId}`
 				}else{
 					alert(res.errorDescription || res.reason || 'Error')
@@ -430,7 +429,7 @@ const Credit = class extends React.Component {
 					checking: false
 				})
 			})
-        })
+		})
 	}
 
 	triggerOcean(){

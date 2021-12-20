@@ -2,6 +2,8 @@ import Cookie from 'js-cookie'
 
 export const PROJECT = window.ctx || ''
 export const ROUTER_PATH_ME = PROJECT + '/me'
+export const ROUTER_PATH_ME_M = PROJECT + "/me/m"
+
 export const getUUID = () => {
     function S4() {
         return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
@@ -38,15 +40,23 @@ export const enDate = (date) => {
     return month_names[date.getMonth()] + ' ' + date.getDate() + ',' + date.getFullYear()
 }
 export const enTime = (date) => {
-    return enDate(date) + ' '+ date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()
+    return enDate(date) + ' '+ addZero(date.getHours()) + ':' + addZero(date.getMinutes()) + ':' + addZero(date.getSeconds())
 }
 export const enYear = (date) => {
     return date.getFullYear()
+}
+export const addZero = (num) => {
+    return num > 9 ? num : '0'+num 
 }
 
 export const enMonth = (date) => {
     return month_names[date.getMonth()]
 }
+
+export const slashTime = (date) => {
+    return (new Date(date).toLocaleDateString() + " " + new Date(date).toTimeString().substr(0, 5)) 
+}
+
 
 //order status
 export const STATUS_PENDING = 1
@@ -118,12 +128,16 @@ export const imageutil = {
         return IMAGE_PREFIX + '/' + IMAGE_ORIGINAL + '/' + id
     },
     getHeaderImg(id){
-        return IMAGE_PREFIX + '/icon/' + id
+        return IMAGE_PREFIX + '/icon/' + id + "?icon=" + Date.now();
     }
 }
 
-export const unitprice = function (money) {
-    return money && (money.unit + money.amount) || '';
+export const unitprice = (money) => {
+	if(money){
+		return money.currency === 'EUR'? (money.amount + money.unit) : (money.unit + money.amount)
+	}else{
+		return ''
+	}
 }
 
 const _url_analyst = function (name) {
@@ -183,4 +197,8 @@ export const getDYD = function(birthday){
         day:newArr[2]
     };
     return obj;
+}
+
+export const checkArray = function(arr){
+    return arr && arr.length > 0
 }

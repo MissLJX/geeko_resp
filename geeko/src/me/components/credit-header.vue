@@ -24,7 +24,25 @@
         <div class="credits-header-container">
             <div class="item1">
                 <span>{{me.points}}</span>
-                <p>={{me.exchangeAmount}}</p>
+                <p>
+                    <span>={{me.exchangeAmount}}</span>
+                    <span class="dobule-icon" v-if="dobulePoints && dobulePoints.points"></span>
+                </p>
+
+                <div class="points-message-modal" v-if="dobulePoints && dobulePoints.points">
+                    <p class="_hd">{{dobulePoints.points.discount}}</p>
+                    <div class="_bd">
+                        <span class="_font">{{dobulePoints.points.message}}</span>
+                        <count-down 
+                            :timeLeft="getTimeLeft" 
+                            v-if="getTimeLeft >= 1000" 
+                            :timeStyle="{width:'16px',height:'16px',backgroundColor:'#222222',color:'#ffffff',padding:'2px',borderRadius:'2px',fontSize:'12px'}"
+                            :show-hour="true"
+                            :show-day="true"
+                            class="countdown"
+                        />
+                    </div>
+                </div>
             </div>
             <div class="item2">
                 <p class="over-points">{{me.overduePoints}}</p>
@@ -37,7 +55,7 @@
                     <p class="points-history">{{$t("point.points_history")}} ></p>
                 </router-link>
 
-                <div class="msg-tips" v-if="seen">{{message.message}}.</div>
+                <div class="msg-tips" v-if="seen">{{message}}.</div>
             </div>
         </div>
     </div>
@@ -46,24 +64,45 @@
 
 
 <script type="text/ecmascript-6">
-    import {mapGetters} from 'vuex'
+    import CountDown from "../../components/countdow.vue"
+    import {mapGetters} from "vuex"
+
     export default {
         props: {
             me: {
                 type: Object,
-                required: true
+                required: true,
+                message: ''
             }
-        },
-        computed: {
-            ...mapGetters('me', ['message']),
         },
         data(){
             return{
                 seen:false
             }
         },
+        computed:{
+            ...mapGetters("me",["dobulePoints"]),
+            getTimeLeft(){
+                if(this.dobulePoints && this.dobulePoints.points){
+                    let nowTimeStrap = new Date().getTime();
+                    return this.dobulePoints.points.endTime - nowTimeStrap;
+                }
+                return 0;
+            }
+
+        },
         created(){
-            this.$store.dispatch('me/getMessage', 'M1138')
+            this.$store.dispatch('me/getMessage', 'M1138').then((res)=>{
+                // console.log(res)
+                if(res && res.message){
+                    this.message = res.message;
+                }
+            });
+
+            !(this.dobulePoints && this.dobulePoints.points) && this.$store.dispatch("me/getDobulePointsData","M1578");
+        },
+        components:{
+            "count-down":CountDown
         }
     }
 </script>
@@ -90,7 +129,7 @@
         //     #f0d192 0%, 
         //     #f9e5be 100%);
         border-radius: 4px;
-        background: url("https://s3.us-west-2.amazonaws.com/image.chic-fusion.com/chicme/20210804/background.jpg") no-repeat;
+        background: url("https://image.geeko.ltd/chicme/20210804/background.jpg") no-repeat;
         background-position: center;
         background-size:cover;
         padding: 10px 20px;
@@ -110,16 +149,96 @@
 
             .item1{
                 border-right: 1px dashed #eac89c;
+                position: relative;
 
-                & span{
+                & > span{
                     font-size: 36px;
                     font-family: 'AcuminPro-Bold';
                     color: #9d6929;
                 }
 
-                & p{
+                & > p{
                     font-size: 12px;
                     color: #be8f55;
+
+                    & span{
+                        vertical-align: middle;
+                    }
+
+                    .dobule-icon{
+                        width: 16px;
+                        height: 16px;
+                        display: inline-block;
+                        background-image: url(https://image.geeko.ltd/chicme/2021111101/dobule_points_me.png);
+                        background-size: cover;
+                        line-height: 20px;
+                    }
+                }
+
+                .points-message-modal{
+                    background-color: #ffffff;
+                    padding: 8px 5px;
+                    position: absolute;
+                    width: 100%;
+                    right: 10px;
+                    top: 75px;
+                    -os-box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.3);
+                    -ms-box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.3);
+                    box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.3);
+
+                    ._hd{
+                        color: #222222;
+                        font-size: 12px;
+                        font-family: 'AcuminPro-Bold';
+                    }
+
+                    ._bd{
+                        // display: flex;
+                        ._font{
+                            color: #222222;
+                            font-size: 12px;
+                            // transform: scale(.8);
+                            font-family: 'SlatePro-Medium';
+                            display: inline-block;
+                            transform: scale(0.9);
+                        }
+
+                        .countdown{
+                            margin-top: 5px;
+                        }
+                    }
+
+                    &::after{
+                        content: ' ';
+                        position: absolute;
+                        width: 10px;
+                        height: 10px;
+                        right:34px;
+                        top: -4px;
+                        background-color: #ffffff;
+                        transform:rotate(315deg);
+                        -moz-transform:rotate(315deg); 	/* Firefox */
+                        -webkit-transform:rotate(315deg); /* Safari 和 Chrome */
+                        box-shadow: 0px 0px 0px 0 transparent, 0 0px 0px 0px transparent, 0 0 0 0 transparent, 1px -1px 2px -1px rgba(0,0,0,0.25);
+                    }
+                }
+
+                @media screen and (min-width: 300px) and (max-width: 321px){
+                    .points-message-modal::after{
+                        right: 17px;
+                    }
+                }
+
+                @media screen and (min-width: 325px) and (max-width: 376px){
+                    .points-message-modal::after{
+                        right: 31px;
+                    }
+                }
+
+                @media screen and (min-width: 380px) and (max-width: 415px){
+                    .points-message-modal::after{
+                        right: 41px;
+                    }
                 }
             }
 

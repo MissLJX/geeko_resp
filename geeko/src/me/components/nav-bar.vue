@@ -24,6 +24,7 @@
         line-height: 44px;
         text-align: center;
         display: flex;
+        background-color: #ffffff;
         .left,.right{
             width: 60px;
         }
@@ -33,6 +34,7 @@
             font-family: SlatePro-Medium;
 	        font-size: 17px;
             color: #222222;
+            text-transform: capitalize;
         }
 
         .left{
