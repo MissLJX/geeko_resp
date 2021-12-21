@@ -466,7 +466,7 @@
                         fData.append("questionTypeCode",this.selected)
                         this.$store.dispatch("addTicket",fData).then(res=>{})
                     }
-                    if(!this.selected && this.ticket_con && this.ticket_con.subject && this.ticket_con.subject == '7'){
+                    if(!this.selected && this.ticket_con && this.ticket_con.subject && (this.ticket_con.subject == '7' || this.ticket_con.subject == '000')){
                         let otherSubject = this.list[this.list.length-1].value;
                         this.selected = otherSubject
                         var fData = new FormData();
@@ -552,35 +552,6 @@
                 }
                 if((!this.ticket_con.operaId && !this.ticketid) && !this._orderId){
                     this.questionMaskShow = false
-                    return
-                }
-                if(this.selected == e.value){
-                    // this.selected = e.value;
-                    this.isRequired = false
-                    let qTReasonList = this.usedQuestionType.find(q => q.value == e.value).reasons ? 
-                                    this.usedQuestionType.find(q => q.value == e.value).reasons :
-                                    []
-                    let showed = this.ticket_con ? 
-                                this.ticket_con?.ticketReplies ? 
-                                this.ticket_con?.ticketReplies.find(t => 
-                                        t.questionTypeCode == e.value && t.reasonCode && t.reason
-                                ) : false : false
-                    this.questionsReason.forEach(q=>{
-                        q.isSelected = false
-                        if(q.value == e.value){
-                            q.isSelected = true
-                        }
-                    })
-                    if((qTReasonList.length > 0 || e.value == this.usedQuestionType[this.usedQuestionType.length - 1].value) && !showed){
-                        if(e.value == this.usedQuestionType[this.usedQuestionType.length - 1].value){
-                            this.descriptionRequired = true
-                        } else {
-                            this.descriptionRequired = false
-                        }
-                        this.questionsReason = qTReasonList
-                        this.questionMaskShow = true
-                        // console.log(this.questionsReason) 
-                    }
                     return
                 }
                 var fData = new FormData();
