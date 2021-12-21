@@ -952,7 +952,7 @@ class TicketAdd extends React.Component {
       }
       
       // console.log(subject,ticket.subject)
-      if(!subject && ticket && ticket.subject && ticket.subject == '7'){
+      if(!subject && ticket && ticket.subject && (ticket.subject == '7' || ticket.subject == '000')){
         let otherSubject = list[list.length-1].value;
         subject = otherSubject
         questionTypeChange({
@@ -1008,7 +1008,7 @@ class TicketAdd extends React.Component {
                         : (list.find(l => l.value == subject) ? list.find(l => l.value == subject).label : '')
         }).then(res => {})
       }
-      if(!subject && ticket && ticket.subject && ticket.subject == '7'){
+      if(!subject && ticket && ticket.subject && (ticket.subject == '7' || ticket.subject == '000')){
         let otherSubject = list[list.length-1].value;
         subject = otherSubject
         questionTypeChange({
@@ -1142,7 +1142,7 @@ class TicketAdd extends React.Component {
                         : (list.find(l => l.value == subject) ? list.find(l => l.value == subject).label : '')
         }).then(res => {})
       }
-      if(!subject && ticket && ticket.subject && ticket.subject == '7'){
+      if(!subject && ticket && ticket.subject && (ticket.subject == '7' || ticket.subject == '000')){
         let otherSubject = list[list.length-1].value;
         subject = otherSubject
         questionTypeChange({
