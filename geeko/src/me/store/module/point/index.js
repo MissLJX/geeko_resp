@@ -14,6 +14,8 @@ const state = {
     pointsCustomerNum:{},
     pointsProducts:[],
     pointsProductsSkip:0,
+    pointsMallProducts:[],
+    pointsMallProductsSkip:0,
 };
 
 const getters = {
@@ -27,7 +29,9 @@ const getters = {
     pointsExpiredSkip:state => state.pointsExpiredSkip,
     pointsCustomerNum:state => state.pointsCustomerNum,
     pointsProducts:state => state.pointsProducts,
-    pointsProductsSkip:state => state.pointsProductsSkip
+    pointsProductsSkip:state => state.pointsProductsSkip,
+    pointsMallProducts:state => state.pointsMallProducts,
+    pointsMallProductsSkip:state => state.pointsMallProductsSkip
 };
 
 const mutations = {
@@ -63,6 +67,18 @@ const mutations = {
     },
     [types.ME_GET_POINTS_PRODUCT_SKIP](state){
         state.pointsProductsSkip += 20
+    },
+    [types.ME_GET_POINTS_MALL_PRODUCTS](state,pointsMallProducts){
+        state.pointsMallProducts = _.concat(state.pointsMallProducts,pointsMallProducts);
+    },
+    [types.ME_GET_POINTS_MALL_PRODUCTS_SKIP](state){
+        state.pointsMallProductsSkip += 20;
+    },
+    [types.ME_GET_POINTS_MALL_PRODUCTS_SKIP_CLEAR](state){
+        state.pointsMallProductsSkip = 0;
+    },
+    [types.ME_GET_POINTS_MALL_PRODUCTS_CLEAR](state,){
+        state.pointsMallProducts = [];
     },
 };
 
@@ -154,6 +170,41 @@ const actions = {
     },
     makeSuggestion({commit},formData){
         return api.makeSuggestion(formData);
+    },
+    getPointsMallProducts({commit},{skip,collectionId}){
+        return api.getPointsMallProduct({skip,collectionId}).then(data => {
+            let products = data.result;
+            if(products && products.length){
+                commit(types.ME_GET_POINTS_MALL_PRODUCTS, products)
+            } else {
+                if(skip === 0){
+                    return {
+                        empty: true,
+                        finished: true,
+                        "requestId": data.requestId,
+                        "experimentId": data.experimentId
+                    }
+                }
+                return {
+                    finished: true,
+                    "requestId": data.requestId,
+                    "experimentId": data.experimentId
+                }
+            }
+            return {
+                "requestId": data.requestId,
+                "experimentId": data.experimentId
+            }
+        })
+    },
+    getPointsMallSkip({commit}){
+        commit(types.ME_GET_POINTS_MALL_PRODUCTS_SKIP)
+    },
+    clearPointsMallProducts({commit}){
+        commit(types.ME_GET_POINTS_MALL_PRODUCTS_CLEAR)
+    },
+    clearPointsMallSkip({commit}){
+        commit(types.ME_GET_POINTS_MALL_PRODUCTS_SKIP_CLEAR)
     }
 };
 

@@ -3,7 +3,8 @@
         <list :items="products" :loading="loading" :scrollable="scrollable" :finished="finished" class="el-products" @listing="$emit('listing')">
             <template slot="li" slot-scope="props">
                 <li :key="props.item.id">
-                    <product :product="props.item" :index="props.index" v-bind="$attrs"/>
+                    <product v-if="!isPointsMall" :product="props.item" :index="props.index" v-bind="$attrs"/>
+                    <product-pointsmall v-if="isPointsMall" :product="props.item" :index="props.index" :productType='productType' v-bind="$attrs"/>
                 </li>
             </template>
         </list>
@@ -24,6 +25,7 @@
 
     import List from './list.vue'
     import Product from './product.vue'
+    import ProductPointsMall from './product-pointsMall.vue'
 
     export default{
         inheritAttrs:false,
@@ -46,11 +48,20 @@
             },
             calssifyName:{
                 type:String
+            },
+            isPointsMall:{
+                type: Boolean,
+                default: false
+            },
+            productType:{
+                type: Number,
+                default: 1
             }
         },
         components: {
             'list': List,
-            'product': Product
+            'product': Product,
+            'product-pointsmall':ProductPointsMall
         }
     }
 </script>
