@@ -51,3 +51,5 @@ export const addProducts = (products) => {
 export const getProductDetailMessage = (productId) => {
     return axios.get(`/v9/product/anon/${productId}/show2`);
 }
+
+

@@ -309,5 +309,23 @@ export default {
         rules3: ' after you receive them.',
         rules4: 'Use the points to deduct up to 50% of the total amount of products when you check out. To learn more about points and their usage, please ',
         click_here: 'click here'
+    },
+    points_mall: {
+        points_mall: 'Points Mall',
+        points_credit: 'Points Credit',
+        points_redemption: 'Resgate de pontos',
+        points_coupon: 'Cupom',
+        points_points: 'points',
+        points_redeem: 'Resgatar',
+        points_date: 'Data de expiração',
+        points_redeem_success: 'Resgate bem-sucedido!',
+        points_confirm: 'Confirmar',
+        points_cancel: 'Cancelar',
+        points_go_shopping: 'Vá às compras',
+        points_sign: 'Sign in / Register',
+        points_sign_text: 'Faça login / registre-se para adicionar o item Points Mall.',
+        points_check_redeem_text: 'Deseja usar {points} pontos para resgatar este cupom?',
+        points_not_enough_text: 'Você não tem pontos suficientes para resgatar este cupom.',
+        points_have_same_text: 'Você já tem um cupom para o mesmo, então vá e pegue seu item favorito!'
     }
 }

@@ -80,10 +80,38 @@ export const imageutil = {
 
 export const unitprice = (money) => {
 	if(money){
+        if(!money.amount){
+            return ''
+        }
 		return money.currency === 'EUR'? (money.amount + money.unit) : (money.unit + money.amount)
 	}else{
 		return ''
 	}
+}
+
+export const pricePoints = (points,type)=>{
+    if(points){
+        if(type==1){
+            return '<span style="font-size:12px;"> + '+points+'</span><img style="width:10px;margin:0 3px;" src="https://image.geeko.ltd/2021-11-01-lottery/2021-11-01-lottery-points.png">'
+        } else {
+            return points + '<img style="width:10px;margin:0 3px;" src="https://image.geeko.ltd/2021-11-01-lottery/2021-11-01-lottery-points.png">'
+        }
+    } else {
+        return ''
+    }
+}
+
+export const getPointsMoney = (money) => {
+    if(!!!money)return '';
+    var moneyTxt = '';
+    if(money.price && money.points){
+        moneyTxt = unitprice(money.price) + pricePoints(money.points,1);
+    } else if(money.price && !!!money.points){
+        moneyTxt = unitprice(money.price)
+    } else if(!!!money.price && money.points){
+        moneyTxt = pricePoints(money.points,2)
+    }
+    return moneyTxt
 }
 
 export const producturl = function (product) {

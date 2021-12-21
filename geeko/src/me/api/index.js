@@ -287,3 +287,28 @@ export const getPointsHistory = (start,end) => {
 export const getSurveyQuestions = (config) => {
     return axios.get('/message/anon/get-list/'+config,{},{}).then(data => data)
 }
+
+// 获取积分产品列表
+export const getPointsMallProduct = ({skip, collectionId}) => {
+    return axios.get(VPATH+"/product/"+ skip+"/20/"+collectionId+"/c/show",{},{}).then(data => data)
+}
+
+// 获取积分商城collection列表
+export const getPointsMallCollectionId = () => {
+    return axios.get(VPATH+'/collection/anon/get-points-mall-collections',{},{}).then(data => data)
+}
+
+// 获取积分商城优惠券列表
+export const getPointsCouponList = () => {
+    return axios.get('/points-exchange-coupon/anon/get-list',{},{}).then(data => data)
+}
+
+// 积分商城优惠券兑换
+export const pointsCouponExchange = (id) => {
+    return axios.get('/points-exchange-coupon/exchange',{id:id},{}).then(data => data)
+}
+
+// 获取积分商城go shopping的collection id
+export const getPointsGoShoppingId = () => {
+    return axios.get('/message/get/M1586',{},{}).then(data=>data);
+}

@@ -209,7 +209,7 @@ const mutations = {
     },
     [types.GET_DOBULE_POINTS_DATA](state,points){
         state.dobulePoints = points;
-    }
+    },
 }
 
 export default mutations;
