@@ -1,6 +1,6 @@
 <template>
     <div class="el-credit-body">
-        <nav-bar>
+        <nav-bar style="position:sticky;top:0;background:#fff;z-index: 11;">
             <i class="iconfont el-back-font" slot="left" @click="$router.go(-1)">&#xe693;</i>
             <span slot="center">{{$t("point.my_points")}}</span>
             <a href="/fs/points-policy" slot="right">
@@ -15,6 +15,8 @@
         </div>
 
         <points-mall></points-mall>
+
+        
 
         <Loading v-if="isGetCustomerLoadingShow"></Loading>
     </div>
@@ -52,7 +54,8 @@
             return {
                 received: 0,
                 used: 0,
-                isGetCustomerLoadingShow:false
+                isGetCustomerLoadingShow:false,
+                
             }
         },
         computed: {
@@ -78,6 +81,11 @@
             'points-list':PointsList,
             "Loading":Loading,
             'points-mall':PointsMall,
+        },
+        methods:{
+            btnClick(e){
+                console.log(e)
+            }   
         }
     }
 </script>

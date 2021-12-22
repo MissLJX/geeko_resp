@@ -62,6 +62,7 @@
             if(this.products && this.products.length > 0){
                 return;
             }
+            
 
             store.dispatch("me/getPointsProducts", {skip: 0}).then(({requestId,experimentId}) => {
                 this.loading = false

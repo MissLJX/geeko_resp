@@ -832,7 +832,6 @@ class TicketAdd extends React.Component {
  * 1. 用户发的文字和图片都没有questionTypeCode和questionType
  * 2. 有questionTypeCode和reasonCode或message（reasonCode和message可能同时存在也可能只存在其中之一）一定是弹窗
  * 3. 只有questionTypeCode且没有message或者reasonCode是切换主题的记录，不需要同步到erp
- * 
  */
 
   initScroll () {
@@ -952,7 +951,7 @@ class TicketAdd extends React.Component {
       }
       
       // console.log(subject,ticket.subject)
-      if(!subject && ticket && ticket.subject && ticket.subject == '7'){
+      if(!subject && ticket && ticket.subject && (ticket.subject == '7' || ticket.subject == '000')){
         let otherSubject = list[list.length-1].value;
         subject = otherSubject
         questionTypeChange({
@@ -1008,7 +1007,7 @@ class TicketAdd extends React.Component {
                         : (list.find(l => l.value == subject) ? list.find(l => l.value == subject).label : '')
         }).then(res => {})
       }
-      if(!subject && ticket && ticket.subject && ticket.subject == '7'){
+      if(!subject && ticket && ticket.subject && (ticket.subject == '7' || ticket.subject == '000')){
         let otherSubject = list[list.length-1].value;
         subject = otherSubject
         questionTypeChange({
@@ -1142,7 +1141,7 @@ class TicketAdd extends React.Component {
                         : (list.find(l => l.value == subject) ? list.find(l => l.value == subject).label : '')
         }).then(res => {})
       }
-      if(!subject && ticket && ticket.subject && ticket.subject == '7'){
+      if(!subject && ticket && ticket.subject && (ticket.subject == '7' || ticket.subject == '000')){
         let otherSubject = list[list.length-1].value;
         subject = otherSubject
         questionTypeChange({
@@ -1447,37 +1446,6 @@ class TicketAdd extends React.Component {
 
     const selectChange= (e) => {
         console.log(e)
-        // return
-        if(this.state.subject === e){
-          let qTReasonList = questions.find(q => q.value == e) && questions.find(q => q.value == e).reasons ? 
-                               questions.find(q => q.value == e).reasons : []
-            // 保证每个问题只展示一次
-            let isShowed = this.state.ticket ? this.state.ticket.ticketReplies ? this.state.ticket.ticketReplies.find(t => t.questionTypeCode == e && t.reasonCode && t.reason) : false:false
-            if((qTReasonList.length > 0 || e == questions[questions.length - 1].value) && !isShowed){
-              // 判断description是否是必填
-              if(e == questions[questions.length - 1].value){
-                this.setState({
-                  descriptionRequired: true
-                })
-              } else {
-                this.setState({
-                  descriptionRequired: false
-                })
-              }
-              this.setState({
-                questionMaskShow: true,
-                questionsReason: qTReasonList,
-              })
-            }
-            
-            
-            setTimeout(()=>{
-              var top = document.getElementById("top")
-              top.scrollIntoView()
-              top = null
-            })
-          return
-        }
         let operaId = this.state.order?this.state.order.id:this.state.ticket?this.state.ticket.operaId:''
         questionTypeChange({
           operaId: operaId,
@@ -1509,7 +1477,6 @@ class TicketAdd extends React.Component {
                 questionsReason: qTReasonList,
               })
             }
-            
             
             setTimeout(()=>{
               var top = document.getElementById("top")

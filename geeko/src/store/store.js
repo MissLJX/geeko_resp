@@ -14,7 +14,8 @@ export const state = {
     productDetail:null,
     productId:"",
     addToCartModalShow:false,
-    globalLoadingShow:false
+    globalLoadingShow:false,
+    isPointsProduct: false,
 }
 
 
@@ -29,7 +30,8 @@ export const getters = {
     productDetail:state => state.productDetail.products,
     productId:state => state.productId,
     addToCartModalShow:state => state.addToCartModalShow,
-    globalLoadingShow:state => state.globalLoadingShow
+    globalLoadingShow:state => state.globalLoadingShow,
+    isPointsProduct: state => state.isPointsProduct,
 }
 
 
@@ -90,7 +92,10 @@ export const mutations = {
     },
     [types.GLOBAL_LOADING_SHOW](state,flag){
         state.globalLoadingShow = flag;
-    }
+    },
+    [types.GLOBAL_IS_POINTS_PRODUCT](state,flag){
+        state.isPointsProduct = flag;
+    },
 }
 
 
@@ -163,5 +168,8 @@ export const actions = {
     },
     addToCart({commit},product){
         return api.addProducts(product);
-    }
+    },
+    setIsPointsProduct({commit},flag){
+        commit(types.GLOBAL_IS_POINTS_PRODUCT, flag);
+    },
 }

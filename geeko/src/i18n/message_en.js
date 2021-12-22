@@ -311,5 +311,23 @@ export default {
         rules3: ' after you receive them.',
         rules4: 'Use the points to deduct up to 50% of the total amount of products when you check out. To learn more about points and their usage, please ',
         click_here: 'click here'
+    },
+    points_mall:{
+        points_mall:'Points Mall',
+        points_credit:'Points Credit',
+        points_redemption:'Points Redemption',
+        points_coupon:'Coupon',
+        points_points:'points',
+        points_redeem:'Redeem',
+        points_date:'Expiry date',
+        points_redeem_success:'Redemption successful!',
+        points_confirm:'Confirm',
+        points_cancel:'Cancel',
+        points_go_shopping:'Go Shopping',
+        points_sign:'Sign in/Register',
+        points_sign_text:'Please sign in/register to add the Points Mall item.',
+        points_check_redeem_text:'Do you want to use {points} points to redeem this coupon?',
+        points_not_enough_text:'You do not have enough points to redeem this coupon.',
+        points_have_same_text:'You already have a coupon for the same, so go and pick up your favourite item!'
     }
 }

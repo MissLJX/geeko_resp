@@ -309,5 +309,25 @@ export default {
         rules3: ' lang gültig.',
         rules4: 'Verwenden Sie Punkte an der Kasse, um bis zu 50% des Gesamtbetrags der Ware abzuziehen. Um mehr über Punkte und ihre Verwendung zu erfahren, ',
         click_here: 'klicken Sie hier.'
+    },
+    points_mall:{
+        points_mall:'Punkte-Mall',
+        points_credit:'Punkteguthaben',
+        points_redemption:'Punkte einlösen',
+        points_coupon:'Gutschein',
+        points_points:'Punkte',
+        points_redeem:'Einlösen',
+        points_date:'Verfallsdatum',
+        points_redeem_success:'Einlösung erfolgreich!',
+        points_confirm:'Bestätigen',
+        points_cancel:'Abbrechen',
+        points_go_shopping:'Einkaufen gehen',
+        points_sign:'Anmelden/Registrieren',
+        points_sign_text:'Bitte melden Sie sich an/registrieren Sie sich, um den Points Mall-Artikel hinzuzufügen.',
+        points_check_redeem_text:'Möchten Sie diesen Coupon mit {points} Punkten einlösen?',
+        points_not_enough_text:'Sie haben nicht genügend Punkte, um diesen Coupon einzulösen.',
+        points_have_same_text:'Du hast bereits einen Gutschein dafür, also hol dir deinen Lieblingsartikel!'
+
+        
     }
 }

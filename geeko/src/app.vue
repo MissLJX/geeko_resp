@@ -160,6 +160,7 @@
         methods:{
             modalHide(){
                 this.$store.dispatch("addToCartIsShow",false);
+                this.$store.dispatch("setIsPointsProduct", false);
             }
         }
     }
