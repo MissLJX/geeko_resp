@@ -188,6 +188,13 @@ const Me = [
         meta:{title:"Survey"}
     },
     {
+<<<<<<< HEAD
+        path:ROUTER_PATH_ME + "/my-measurements",
+        component:() => import("../pages/my-measurements/my-measurements.vue"),
+        name:"my-measurements",
+        meta:{title:"My Measurements"}
+    }
+=======
         path:ROUTER_PATH_ME + "/about-policy",
         component:() => import(/* webpackChunkName: "about-policy" */ "../pages/about-policy.vue"),
         name:"about-policy",
@@ -253,6 +260,7 @@ const Me = [
     //     name:"Test",
     //     meta:{title:"Test"}
     // }
+>>>>>>> eb3cbf28d0258dec1b5d767a930419f2eb052d24
 ]
 
 export default Me
