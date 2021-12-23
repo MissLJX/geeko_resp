@@ -310,7 +310,7 @@ export default {
         rules4: "Utilisez les points pour déduire jusqu'à 50 % du montant total des produits lorsque vous passez à la caisse. Pour en savoir plus sur les points et leur utilisation, veuillez ",
         click_here: 'cliquer ici.'
     },
-    points_mall :{
+    points_mall:{
         points_mall:'Points Mall',
         points_credit:'Crédit de points',
         points_redemption:'Échange de points',
@@ -326,6 +326,7 @@ export default {
         points_sign_text:"Veuillez vous connecter/enregistrer pour ajouter l'article Points Mall.",
         points_check_redeem_text:'Voulez-vous utiliser {points} points pour échanger ce coupon ?',
         points_not_enough_text:"Vous n'avez pas assez de points pour utiliser ce coupon.",
-        points_have_same_text:'Vous avez déjà un coupon pour le même, alors allez chercher votre article préféré !'
+        points_have_same_text:'Vous avez déjà un coupon pour le même, alors allez chercher votre article préféré !',
+        points_more:'Plus de points',
     }
 }

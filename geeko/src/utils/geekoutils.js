@@ -102,11 +102,14 @@ export const pricePoints = (points,type)=>{
 }
 
 export const getPointsMoney = (money) => {
+    // console.log(money)
     if(!!!money)return '';
     var moneyTxt = '';
-    if(money.price && money.points){
+    if(money.price && money.points && money.price.amount && money.price.amount != 0){
         moneyTxt = unitprice(money.price) + pricePoints(money.points,1);
-    } else if(money.price && !!!money.points){
+    } else if(money.price && money.points && (!money.price.amount || money.price.amount == 0)){
+        moneyTxt = pricePoints(money.points,2);
+    } else if(money.price && !!!money.points && money.price.amount > 0){
         moneyTxt = unitprice(money.price)
     } else if(!!!money.price && money.points){
         moneyTxt = pricePoints(money.points,2)

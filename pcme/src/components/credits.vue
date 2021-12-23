@@ -100,6 +100,18 @@
                         </div>
                     </div>
                 </a>
+
+                <a :href="pointsMallUrl">
+                    <div class="pointsMall">
+                        <div>
+                            <span class="iconfont">&#xe703;</span>
+                        </div>
+                        <div class="_font">
+                            <p>{{$t("points_mall.points_mall")}}</p>
+                            <p>{{$t("points_mall.points_more")}}</p>
+                        </div>
+                    </div>
+                </a>
             </div>
         </div>
         <loding v-if="isLoadingShow"></loding>
@@ -142,6 +154,9 @@
                     return this.dobulePoints.points.endTime - nowTimeStrap;
                 }
                 return 0;
+            },
+            pointsMallUrl(){
+                return (window.ctx||'')+'/i/points-mall';
             }
         },
         data(){
@@ -183,19 +198,18 @@
 <style scoped lang="scss">
 
     @font-face {
-        font-family: 'iconfont';  /* project id 384296 */
-        src: url('//at.alicdn.com/t/font_384296_m72f720tkb.eot');
-        src: url('//at.alicdn.com/t/font_384296_m72f720tkb.eot?#iefix') format('embedded-opentype'),
-        url('//at.alicdn.com/t/font_384296_m72f720tkb.woff') format('woff'),
-        url('//at.alicdn.com/t/font_384296_m72f720tkb.ttf') format('truetype'),
-        url('//at.alicdn.com/t/font_384296_m72f720tkb.svg#iconfont') format('svg');
+        font-family: 'iconfont';  /* Project id 384296 */
+        src: url('//at.alicdn.com/t/font_384296_wjqn1ci550k.woff2?t=1640236331770') format('woff2'),
+            url('//at.alicdn.com/t/font_384296_wjqn1ci550k.woff?t=1640236331770') format('woff'),
+            url('//at.alicdn.com/t/font_384296_wjqn1ci550k.ttf?t=1640236331770') format('truetype');
     }
     .iconfont{
         font-family:"iconfont" !important;
         font-size:16px;font-style:normal;
         -webkit-font-smoothing: antialiased;
         -webkit-text-stroke-width: 0.2px;
-        -moz-osx-font-smoothing: grayscale;}
+        -moz-osx-font-smoothing: grayscale;
+    }
     .credits-points{
         margin-top: -50px;
 
@@ -432,6 +446,10 @@
                 background-image: linear-gradient(124deg, 
                 #77efbf 0%, 
                 #7dede2 100%);
+                border-radius: 4px;
+            }
+            .pointsMall{
+                background-image: linear-gradient(124deg, #73a9f9 0%, #b2dbf9 100%);
                 border-radius: 4px;
             }
 

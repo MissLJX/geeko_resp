@@ -326,6 +326,7 @@ export default {
         points_sign_text: 'Faça login / registre-se para adicionar o item Points Mall.',
         points_check_redeem_text: 'Deseja usar {points} pontos para resgatar este cupom?',
         points_not_enough_text: 'Você não tem pontos suficientes para resgatar este cupom.',
-        points_have_same_text: 'Você já tem um cupom para o mesmo, então vá e pegue seu item favorito!'
+        points_have_same_text: 'Você já tem um cupom para o mesmo, então vá e pegue seu item favorito!',
+        points_more: 'Mais pontos',
     }
 }

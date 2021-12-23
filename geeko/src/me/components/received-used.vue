@@ -6,13 +6,13 @@
 
         <div class="_bd">
             <a :href="GLOBAL.getUrl('/i/points-mall')">
-                <div class="review">
+                <div class="pointsMall">
                     <div>
-                        <span class="iconfont">&#xe6d1;</span>
+                        <span class="iconfont">&#xe703;</span>
                     </div>
                     <div class="_font">
-                        <p>Points Mall</p>
-                        <p>More points</p>
+                        <p>{{$t("points_mall.points_mall")}}</p>
+                        <p>{{$t("points_mall.points_more")}}</p>
                     </div>
                 </div>
             </a>
@@ -88,6 +88,12 @@
 </script>
 
 <style scoped lang="scss">
+    @font-face {
+        font-family: 'iconfont';  /* Project id 384296 */
+        src: url('//at.alicdn.com/t/font_384296_wjqn1ci550k.woff2?t=1640236331770') format('woff2'),
+            url('//at.alicdn.com/t/font_384296_wjqn1ci550k.woff?t=1640236331770') format('woff'),
+            url('//at.alicdn.com/t/font_384296_wjqn1ci550k.ttf?t=1640236331770') format('truetype');
+    }
     .received-used{
         margin-bottom: 15px;
         ._hd{
@@ -165,6 +171,11 @@
                 background-image: linear-gradient(124deg, 
                 #77efbf 0%, 
                 #7dede2 100%);
+                border-radius: 4px;
+            }
+
+            .pointsMall{
+                background-image: linear-gradient(124deg, #73a9f9 0%, #b2dbf9 100%);
                 border-radius: 4px;
             }
 

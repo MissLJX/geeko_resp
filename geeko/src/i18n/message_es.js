@@ -326,6 +326,7 @@ export default {
         points_sign_text: 'Por favor inicie sesión / regístrese para agregar el artículo de Points Mall.',
         points_check_redeem_text: '¿Quieres usar {points} puntos para canjear este cupón?',
         points_not_enough_text: 'No tienes suficientes puntos para canjear este cupón.',
-        points_have_same_text: '¡Ya tienes un cupón para el mismo, así que ve y recoge tu artículo favorito!'
+        points_have_same_text: '¡Ya tienes un cupón para el mismo, así que ve y recoge tu artículo favorito!',
+        points_more: 'Más puntos',
     }
 }

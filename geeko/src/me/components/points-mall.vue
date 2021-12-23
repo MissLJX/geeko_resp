@@ -176,16 +176,16 @@
                 getPointsMallCollectionId().then(res => {
                     console.log(res)
                     if(res && res.code==200){
-                        for(let i = 0; i < res.result.length; i++){
-                            if(res.result[i]['name'].indexOf('全') != -1){
-                                this.allPointsCollection = res.result[i]['id']
-                                console.log('全部',this.allPointsCollection)
-                            }
-                            if(res.result[i]['name'].indexOf('部分') != -1){
-                                this.partPointsCollection = res.result[i]['id']
-                                console.log('部分',this.partPointsCollection)
-                            }
-                        }
+                        // for(let i = 0; i < res.result.length; i++){
+                            // if(res.result[i]['name'].indexOf('全') != -1){
+                                this.allPointsCollection = res.result[0]['id']
+                                // console.log('全部',this.allPointsCollection)
+                            // }
+                            // if(res.result[i]['name'].indexOf('部分') != -1){
+                                this.partPointsCollection = res.result[1]['id']
+                                // console.log('部分',this.partPointsCollection)
+                            // }
+                        // }
                     }
                     this.changeTag(1)
                 })
@@ -660,3 +660,4 @@
     }
 
 </style>
+

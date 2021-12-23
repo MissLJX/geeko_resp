@@ -327,6 +327,7 @@ export default {
         points_sign_text:'Please sign in/register to add the Points Mall item.',
         points_check_redeem_text:'Do you want to use {points} points to redeem this coupon?',
         points_not_enough_text:'You do not have enough points to redeem this coupon.',
-        points_have_same_text:'You already have a coupon for the same, so go and pick up your favourite item!'
+        points_have_same_text:'You already have a coupon for the same, so go and pick up your favourite item!',
+        points_more:'More points',
     }
 }

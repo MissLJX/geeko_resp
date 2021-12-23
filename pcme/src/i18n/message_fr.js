@@ -451,5 +451,9 @@ export default {
         s_rate_satisfied: 'Satisfait',
         s_rate_unsatisfied: 'Insatisfait',
         s_wating_for_apply: 'En attente de candidature',
+    },
+    points_mall:{
+        points_mall:'Points Mall',
+        points_more:'Plus de points',
     }
 }

@@ -20,7 +20,7 @@
             ></product-size>
 
         </div>
-        <div class="_fd" @click="addToCart" v-if="!isPointsProduct">
+        <div class="_fd" @click="addToCart(false)" v-if="!isPointsProduct">
             <div>Add to Cart</div>
         </div>
 
@@ -77,7 +77,7 @@
             },
             saveProduct(){
                 if(window.WannaList){
-                    let isActive = window.WannaList.exists(product.id) ? 'active':''
+                    let isActive = window.WannaList.exists(this.product.id) ? 'active':''
                     return 'mp-l-save alike __like ' + isActive
                 } else {
                     return 'mp-l-save alike __like'
@@ -113,8 +113,15 @@
                 this.productId = productId;
                 this.variantId = this.product.variants[0].id;
             },
-            addToCart(){
-                this.$store.dispatch("addToCart",{"variantId":this.variantId,"quantity":'1'}).then(() => {
+            addToCart(pointsSale){
+                let params = {
+                    "variantId":this.variantId,
+                    "quantity":'1'
+                }
+                if(pointsSale){
+                    params.pointsMallSales = true
+                }
+                this.$store.dispatch("addToCart",JSON.stringify(params)).then(() => {
                     console.log("success");
                     this.$store.dispatch("addToCartIsShow",false);
                     this.$store.dispatch("setIsPointsProduct", false);
@@ -126,50 +133,40 @@
                 });
             },
             addToCartOrigin(){
-                if(window.GeekoSensors){
-                    window.GeekoSensors.Track('AddToCartButtonClick', {
-                        referrer: document.referrer,
-                        addtocart_type: "正常加购",
-                    })
+                if(window.isLoged == 'true'){
+                    if(window.GeekoSensors){
+                        window.GeekoSensors.Track('AddToCartButtonClick', {
+                            referrer: document.referrer,
+                            addtocart_type: "正常加购",
+                        })
+                    }
+                    this.addToCart(false)
+                } else {
+
                 }
-                this.$store.dispatch("addToCart",{"variantId":this.variantId,"quantity":'1'}).then(() => {
-                    console.log("success");
-                    this.$store.dispatch("addToCartIsShow",false);
-                    this.$store.dispatch("setIsPointsProduct", false);
-                    window.countShoppingCart ? window.countShoppingCart() : "";
-                }).catch((e) => {
-                    console.log("e",e);
-                    this.$store.dispatch("addToCartIsShow",false);
-                    this.$store.dispatch("setIsPointsProduct", false);
-                });
             },
             addToCartPoints(){
-                if(this.variantProduct.pointsMallVariantSales.price){
-                    if(window.GeekoSensors){
-                        window.GeekoSensors.Track('AddToCartButtonClick', {
-                            referrer: document.referrer,
-                            addtocart_type: "混合加购",
-                        })
+                if(window.isLoged == 'true'){
+                    if(this.variantProduct.pointsMallVariantSales.price){
+                        if(window.GeekoSensors){
+                            window.GeekoSensors.Track('AddToCartButtonClick', {
+                                referrer: document.referrer,
+                                addtocart_type: "混合加购",
+                            })
+                        }
+                    } else {
+                        if(window.GeekoSensors){
+                            window.GeekoSensors.Track('AddToCartButtonClick', {
+                                referrer: document.referrer,
+                                addtocart_type: "积分加购",
+                            })
+                        }
                     }
+                    this.addToCart(true)
                 } else {
-                    if(window.GeekoSensors){
-                        window.GeekoSensors.Track('AddToCartButtonClick', {
-                            referrer: document.referrer,
-                            addtocart_type: "积分加购",
-                        })
-                    }
+
                 }
                 
-                this.$store.dispatch("addToCart",{"variantId":this.variantId,"quantity":'1'}).then(() => {
-                    console.log("success");
-                    this.$store.dispatch("addToCartIsShow",false);
-                    this.$store.dispatch("setIsPointsProduct", false);
-                    window.countShoppingCart ? window.countShoppingCart() : "";
-                }).catch((e) => {
-                    console.log("e",e);
-                    this.$store.dispatch("addToCartIsShow",false);
-                    this.$store.dispatch("setIsPointsProduct", false);
-                });
             }
         }
     }

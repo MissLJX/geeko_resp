@@ -3,7 +3,8 @@
         <list :items="products" :loading="loading" :scrollable="scrollable" :finished="finished" class="el-products" @listing="$emit('listing')">
             <template slot="li" slot-scope="props">
                 <li :key="props.item.id">
-                    <product :product="props.item" :index="props.index" :calssify-name="calssifyName" v-bind="$attrs"/>
+                    <product v-if="!props.item.pointsMallSales" :product="props.item" :index="props.index" :calssify-name="calssifyName" v-bind="$attrs"/>
+                    <product-pointsmall v-if="props.item.pointsMallSales" :product="props.item" :index="props.index" :calssify-name="calssifyName" v-bind="$attrs"/>
                 </li>
             </template>
         </list>
@@ -13,6 +14,7 @@
 <script>
     import List from '../../../components/list.vue'
     import Product from './product-wishlist.vue'
+    import ProductPointsMall from './product-wishlist-points.vue'
 
     export default {
         name:"ProductWishListList",
@@ -40,7 +42,8 @@
         },
         components: {
             'list': List,
-            'product': Product
+            'product': Product,
+            'product-pointsmall':ProductPointsMall
         }
     }
 </script>
