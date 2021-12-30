@@ -96,4 +96,5 @@ export default {
   unsatisfied: 'Unzufrieden',
   rateTextPlaceHolder: 'Hier können Sie den Kundenservice kommentieren.',
   statusWatingApply:'Warte auf Bewerben',
+  facebook_check: 'Wenn Sie dies überprüfen, senden wir Ihnen den Status der Sendungsverfolgung und Bestellinformationen in Messenger',
 }

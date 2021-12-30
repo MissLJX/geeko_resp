@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="padding-bottom: 150px;">
         <div class="_hd">
             <!-- {{$t("index.my_measurements")}} -->
             {{$t("support.s_support")}}
@@ -23,12 +23,29 @@
                 <span >{{$t("support.s_onlineHelp")}}</span> 
             </div>
         </div>
+
+        <div v-if="showFBMessage" style="text-align: center; position: relative; top: 30px">
+            <div id="fmsg" style="display: none; font-size: 16px; color: #e64545;">{{$t("support.facebook_check")}}</div>
+            <div ref="faceBookRef" 
+                class="fb-messenger-checkbox"
+                target="_top"
+                :origin="origin"
+                :page_id="pageId"
+                :messenger_app_id="messageAppId"
+                :user_ref="userRef"
+                skin="light"
+                center_align="true">
+            </div>
+
+        </div>
   </div>
 </template>
 
 
 <script>
 import * as utils from '../../utils/geekoutil'
+import {mapGetters} from 'vuex'
+
 export default {
   data(){
     return {
@@ -76,8 +93,46 @@ export default {
                 type:""
             },
         ],
+        hassubed: false,
     }
   },
+  computed:{
+    ...mapGetters([
+        'me',
+    ]),
+    origin:function(){
+        return window.__FB_Origin
+    },
+    pageId:function(){
+        return window.__FB_Page_ID
+    },
+    messageAppId:function(){
+        return window.__FB_Messenger_App_ID
+    },
+    userRef:function(){
+        return window.__FB_User_Ref
+    },
+    showFBMessage:function(){
+        return this.me && !this.me.subscribeToFacebookMessage
+    }
+  },
+  created(){
+    
+
+  },
+  mounted(){
+    //   console.log('111: ',window.addFaceBookJs)
+      if(window.addFaceBookJs){
+          window.addFaceBookJs(this.me.id)
+      } else {
+          setTimeout(()=>{
+            //   console.log('222: ', window.addFaceBookJs)
+            window.addFaceBookJs(this.me.id)
+          }, 500)
+      }
+        
+  },
+
   methods:{
       toFaq(e){
           this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/faq/faq', query: {type: e} })

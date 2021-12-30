@@ -184,6 +184,12 @@
                 return unitprice(this.product.price)
             },
             delPrice(){
+                // if (this.product.pointsMallSales && ((this.product.promotion && this.product.promotion.enabled) || this.product.price)){
+                //     if (this.product.promotion && this.product.promotion.enabled) {
+                //         return unitprice(this.product.promotion.promotionPrice)
+                //     }
+                //     return unitprice(this.product.price)
+                // }
                 if (this.product.msrp && this.product.msrp.amount > 0)
                     return unitprice(this.product.msrp)
                 if (this.product.promotion && this.product.promotion.enabled)

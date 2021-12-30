@@ -94,7 +94,12 @@ export const mutations = {
         state.globalLoadingShow = flag;
     },
     [types.GLOBAL_IS_POINTS_PRODUCT](state,flag){
-        state.isPointsProduct = flag;
+        if(window.showPointsMall){
+            state.isPointsProduct = flag;
+        } else {
+            state.isPointsProduct = false;
+        }
+        
     },
 }
 
@@ -167,6 +172,7 @@ export const actions = {
         commit(types.GLOBAL_LOADING_SHOW,flag);
     },
     addToCart({commit},product){
+        console.log(product)
         return api.addProducts(product);
     },
     setIsPointsProduct({commit},flag){

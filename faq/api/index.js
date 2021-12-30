@@ -1,5 +1,6 @@
 import axios from './apiconfigs'
 const VPATH = '/v9'
+export const getMe = () => axios.get(`${VPATH}/customer/get`)
 export const list = (skip, limit) => axios.get(`/ticket/${skip}/${limit}/show?state=9`)
 export const get = (id) => axios.get(`/ticket/${id}/get`)
 export const getByOrderId = (orderId) => axios.get(`/ticket/${orderId}/order/get`)

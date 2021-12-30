@@ -101,7 +101,7 @@
                     </div>
                 </a>
 
-                <a :href="pointsMallUrl">
+                <a :href="pointsMallUrl" v-if="showPointsMall">
                     <div class="pointsMall">
                         <div>
                             <span class="iconfont">&#xe703;</span>
@@ -157,6 +157,9 @@
             },
             pointsMallUrl(){
                 return (window.ctx||'')+'/i/points-mall';
+            },
+            showPointsMall(){
+                return window.showPointsMall;
             }
         },
         data(){

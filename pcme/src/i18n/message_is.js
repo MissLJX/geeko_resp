@@ -454,7 +454,7 @@ export default {
         s_rate_satisfied: 'Satisfied',
         s_rate_unsatisfied: 'Unsatisfied',
         s_wating_for_apply: 'Wating for Apply',
-        
+        facebook_check: 'If you check this, we will send you logistics tracking status and order information in Messenger',
     },
     points_mall:{
         points_mall:'Points Mall',

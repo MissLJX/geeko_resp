@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <script>
-            window.accessToken = '1380a91d-250e-4b50-a858-18194dea3048';
+            window.accessToken = 'af15ca77-8e0d-4b88-91ef-c60d54edba04';
             window.locale = "en";
 
             window.showShare = true;
@@ -12,13 +12,106 @@
             window.downloadIcon = "https://image.geeko.ltd/chicme/20210415/code.png";
 
             window.__is_login__ = true;
+            window.showPointsMall = false;
             
     </script>
     <title><%= htmlWebpackPlugin.options.title%></title>
     <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+
+  
+
+    
 </head>
 <body>
 <div id="app">
 </div>
+
+<script>
+    window.messageId = '527869367412301';
+    window.__FB_Messenger_App_ID = '628197333983380'
+    window.facebook_appId = '628197333983380'
+    window.__FB_Page_ID = '527869367412301'
+    window.__FB_Ref = 'support'
+    window.__FB_User_Ref = '1d674s0B7t6M778v318r6K4B4a_1640769387121'
+    window.__FB_Origin = 'http://localhost'
+</script>
+    
+    <script>
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: '628197333983380',
+                autoLogAppEvents: true,
+                xfbml: true,
+                version: 'v6.0'
+            });
+
+			/*global FB b:true*/
+			/*eslint no-undef: "error"*/
+			FB.Event.subscribe('messenger_checkbox', function (e) {
+                
+				if (e.event == 'rendered') {
+					console.log('Plugin was rendered')
+					document.getElementById('fmsg').style.display = 'block'
+				} else if (e.event == 'checkbox') {
+					var checkboxState = e.state
+					console.log('Checkbox state: ' + checkboxState)
+
+					FB.AppEvents.logEvent('MessengerCheckboxUserConfirmation', null, {
+						'app_id': window.__FB_Messenger_App_ID,
+						'page_id': window.__FB_Page_ID,
+						'ref': 'support',
+						'user_ref': window.meId
+					})
+
+				} else if (e.event == 'not_you') {
+					console.log('User clicked \'not you\'')
+				} else if (e.event == 'hidden') {
+					console.log('Plugin was hidden')
+					document.getElementById('fmsg').style.display = 'none'
+				}
+			}, function(err){
+                console.log(err)
+            })
+    
+    
+        };
+    
+        // (function (d, s, id) {
+        //     var js, fjs = d.getElementsByTagName(s)[0];
+        //     if (d.getElementById(id)) { return; }
+        //     js = d.createElement(s); js.id = id;
+        //     js.src = "https://connect.facebook.net/en_US/sdk.js";
+        //     fjs.parentNode.insertBefore(js, fjs);
+        // }(document, 'script', 'facebook-jssdk'));
+    
+    </script>
+
+<script>
+     window.addFaceBookJs = function(id) {
+
+            window.meId = id;
+
+            var head = document.getElementsByTagName('head')[0]
+
+            if(document.getElementById('facebook-jssdk')){
+                head.removeChild(document.getElementById('facebook-jssdk'))
+            }
+
+            var script = document.createElement('script')
+            script.type = 'text/javascript'
+            script.defer = true
+            script.async = true
+            script.id = 'facebook-jssdk'
+            script.src =  'https://connect.facebook.net/en_US/sdk.js'
+            head.appendChild(script)
+        
+    }
+</script>
+
 </body>
 </html>
+
+
+
+
+

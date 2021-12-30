@@ -453,6 +453,7 @@ export default {
         s_rate_satisfied: 'Satisfeito',
         s_rate_unsatisfied: 'Insatisfeito',
         s_wating_for_apply: 'Esperando por se inscrever',
+        facebook_check: 'Se você verificar isso, enviaremos a você o status de rastreamento de logística e as informações do pedido no Messenger.',
     },
     points_mall:{
         points_mall: 'Points Mall',

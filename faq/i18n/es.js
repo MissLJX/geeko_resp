@@ -96,4 +96,5 @@ export default {
   unsatisfied: 'Insatisfecho',
   rateTextPlaceHolder: 'Puede comentar el servicio al cliente aquí.',
   statusWatingApply:'Esperando aplicar',
+  facebook_check: 'Si marca esta opción, le enviaremos el estado de seguimiento de la logística y la información del pedido en Messenger.',
 }

@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="manifest" href="/manifest.json">
+    <title>Support</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <script type="text/javascript">
+		window.deviceType="msite"
+        window.siteName = 'Boutiquefeel'
+        window.accessToken = '98a05d22-8fb8-413a-bfe2-93e4545dd226'
+        window.wid = '7adda544-3dee-4a1a-94c0-3e49a7b5fc50'
+        window.secret = 'A2RHUmDn9Y1jLtaGrqDGhVtM1D1mX6V7xkPySRII2Ve9nM0+7EhSXK/gn6uS6mEVWDX7F6xCPNk='
+        window.lang = 'en'
+        window.locale = 'en_US'
+        window.__is_login__ = true
+        window.__isnew = true
+        // window.paypalEnv= 'sandbox'
+        window.paypalEnv = 'sandbox'
+        window.__currency__ = 'USD'
+        // window.token = 1
+        window.safechargeEnv = 'test'
+        // window.isApp = true
+
+        window.__payimage__ = 'https://s3-us-west-2.amazonaws.com/wanna/pc_default.png'
+
+        window.__country = 'en_US'.split('_')[1];
+
+        window.__FB_Origin = 'http://localhost'
+        window.__FB_Page_ID = '843011132517448'
+        window.__FB_Messenger_App_ID = '628197333983380'
+
+        window.__Order_ID = '123'
+        window.__User_ID = '123'
+
+        window.siteUrl = "http://localhost:8080/wanna";
+
+        window.showShare = "123";
+
+        // https://s3-us-west-2.amazonaws.com/wanna/pt_BR.png
+
+        window.__session_customer__ = {
+            id: '123',
+            communicationEmail: 'shaolei@163.com'
+        }
+
+        if (window.localStorage) {
+            var dataStr = localStorage.getItem('temp-order')
+            localStorage.removeItem('temp-order');
+            if (dataStr != null) {
+                var data = JSON.parse(dataStr)
+                window.location.href = 'https://www.chicme.xyz/me/m/order/detail/' + data.data
+            }
+        }
+
+
+        window.__checkout_pk__ = 'pk_test_3e2416d3-4466-4602-ae3f-4743a72e52d6'
+        window.__checkout_pk_eu__ = 'pk_test_3e2416d3-4466-4602-ae3f-4743a72e52d6'
+
+        window.__stripe_pk_ = 'pk_test_51JVUymFQmDHNWcI5IpNBegYdx4VFGvg9aGA1cdc9bo1DSj1BtyM3aKVpLax4siqhONa6VYJF7yyuO4yYdozhhDjO00seojsB45'
+        window.__stripe_eu_pk_ = 'pk_test_51JI2NUEf4gK6pnckAuiiFk2whunhssbSU7PbQ7vRergnUh1pMlbjjg0JM4W55Bacj5wZbutwQKiTXfNwzNTXbMNv00NVqfh1TZ'
+        window.__adyen_pk__ = 'test_EJPHGOWAYJD6TCWNGTEOZTKQJMW63YNR'
+       
+
+        window.adyenEnv = 'test'
+
+        window.messageId = '527869367412301';
+window.__FB_Messenger_App_ID = '628197333983380'
+window.facebook_appId = '628197333983380'
+window.__FB_Page_ID = '527869367412301'
+window.__FB_Ref = 'support'
+window.__FB_User_Ref = '1d674s0B7t6M778v318r6K4B4a_1640769387121'
+window.__FB_Origin = 'http://localhost'
+
+
+    </script>
+
+
+<script>
+    // ensure this function is defined before loading afterpay.js
+    function initAfterpay() {
+        AfterPay.initializeForPopup({
+            countryCode: 'US',
+            onCommenceCheckout: function (actions) {
+                /* retrieve afterpay token from your server */
+                /* then call `actions.resolve(token)` */
+            },
+            onComplete: function (data) {
+                /* handle success/failure of checkout */
+            },
+            target: '#afterpay-express-button',
+            shippingOptionRequired: false,
+        })
+    }
+</script>
+<script
+    src="https://portal.sandbox.afterpay.com/afterpay.js?
+merchant_key=789a8ae797d61ce571e665a480f064cd56721c1b044630d2b3f74943ffd34d13c18db1a787cb1e176d395349afb23927edccaf72c2efc8627dfe0a8e8bd1d599"
+    async onload="initAfterpay()">
+    </script>
+
+
+</head>
+
+<body>
+
+
+    <div id="root">
+
+    </div>
+
+
+    <!-- add frames script -->
+    <script src="https://cdn.checkout.com/js/framesv2.min.js"></script>
+
+
+    <!-- <button style="display: none;" id="addtohome">Add to home page</button> -->
+
+    <script type="text/javascript">
+
+     // window.addEventListener('mouseleave', function(){console.log('xxx')}, false)
+    </script>
+
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB6QIoObSvW7tGaWVIKekDkQrVke5Tpjak&libraries=places&v=weekly"
+      async
+    ></script>
+
+  
+
+    <script>
+        window.renderKlarna = function () {
+            if (!window.klarnaRendered) {
+
+                window.klarnaExpressButtonAsyncCallback = function () {
+                    Klarna.ExpressButton.on('user-authenticated', function (callbackData) {
+                        window.saveKlarnaAddress(callbackData)
+                    })
+                }
+
+
+                window.klarnaRendered = true
+                var klarna_script = document.createElement('script')
+                klarna_script.setAttribute('src', 'https://x.klarnacdn.net/express-button/v1/lib.js')
+                klarna_script.setAttribute('data-id', 'PN04100')
+                klarna_script.setAttribute('data-environment', 'playground')
+                klarna_script.setAttribute('async', 'true')
+                document.body.appendChild(klarna_script)
+            }
+        }
+
+        window.renderAfterpay = function () {
+            if (!window.afterpayRendered) {
+
+                window.initAfterpay = function () {
+                    alert(window.AfterPay)
+                    window.notifyAfterpay()
+                }
+
+                window.afterpayRendered = true
+                var afterpay_script = document.createElement('script')
+                afterpay_script.setAttribute('src', 'https://portal.sandbox.afterpay.com/afterpay.js?merchant_key=chicmekeyglobal')
+                afterpay_script.setAttribute('async', true)
+                afterpay_script.onload = window.initAfterpay;
+                document.body.appendChild(afterpay_script)
+            }
+        }
+
+
+
+
+    </script>
+
+    
+    <script src="https://s3.geeko.ltd/js/songbird.js"></script>
+
+
+    <script src="https://cdn.safecharge.com/safecharge_resources/v1/websdk/safecharge.js"></script>
+
+    <script
+        src="https://www.paypal.com/sdk/js?client-id=Aclcpbaca2DWJk_Mib43P1-n8jel44b5nCSSfWUon4OCliG0ypwhry1EFohlWs6siEfRVLq4m-I6EDSN&components=buttons,funding-eligibility&buyer-country=US&commit=false"></script>
+
+
+    <!-- <script src="https://secure.mlstatic.com/sdk/javascript/v1/mercadopago.js"></script>
+
+    <script type="text/javascript">
+        Mercadopago.setPublishableKey('APP_USR-a33040db-a987-4742-a2ce-499fd071c7cc')
+    </script> -->
+
+
+
+    <script type="text/javascript">
+
+        window.sendEvent = function (data) {
+            console.log(data)
+        }
+    </script>
+
+    <!-- <script src="https://js-sandbox.dlocal.com"></script> -->
+
+    <!-- <script type="text/javascript">
+    window.__dlocal = dlocal('8bba6985-ddc9-4882-a5b1-28c522a85d71');
+
+
+</script> -->
+
+
+
+    <script type="text/javascript">
+            /**
+             * Created by shao_ on 2017/9/30.
+             */
+
+            (function () {
+
+                function registerServiceWorker() {
+                    return navigator.serviceWorker.register('/sw2.js', {
+                        scope: '.'
+                    }).then(function (registration) {
+                        console.log('Service worker successfully registered.')
+                        return registration
+                    }).catch(function (err) {
+                        console.error('Unable to register service worker.', err)
+                    })
+                }
+
+
+                if ('serviceWorker' in navigator) {
+                    window.addEventListener('load', function () {
+                        registerServiceWorker().then(function (registration) {
+                            // alert('sw2')
+                            console.log(registration);
+                        });
+                    })
+                }
+            })();
+
+
+        var deferredPrompt, btnAdd = document.getElementById("addtohome");
+        if(benAdd){
+            window.addEventListener('beforeinstallprompt', (e) => {
+            // alert('fuck2');
+            // Prevent Chrome 67 and earlier from automatically showing the prompt
+            e.preventDefault();
+            // Stash the event so it can be triggered later.
+            deferredPrompt = e;
+            // Update UI notify the user they can add to home screen
+            btnAdd.style.display = 'block';
+
+        });
+
+
+        btnAdd.addEventListener('click', (e) => {
+            // hide our user interface that shows our A2HS button
+            btnAdd.style.display = 'none';
+            // Show the prompt
+            deferredPrompt.prompt();
+            // Wait for the user to respond to the prompt
+            deferredPrompt.userChoice
+                .then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the A2HS prompt');
+                    } else {
+                        console.log('User dismissed the A2HS prompt');
+                    }
+                    deferredPrompt = null;
+                });
+        });
+
+        window.addEventListener('appinstalled', (evt) => {
+            alert('Installed');
+            app.logEvent('a2hs', 'installed');
+        });
+        }
+            
+        
+
+
+    </script>
+
+<script>
+    window.fbAsyncInit = function () {
+        FB.init({
+            appId: '628197333983380',
+            autoLogAppEvents: true,
+            xfbml: true,
+            version: 'v6.0'
+        });
+
+        /*global FB b:true*/
+        /*eslint no-undef: "error"*/
+        FB.Event.subscribe('messenger_checkbox', function (e) {
+            
+            if (e.event == 'rendered') {
+                console.log('Plugin was rendered')
+                document.getElementById('fmsg').style.display = 'block'
+            } else if (e.event == 'checkbox') {
+                var checkboxState = e.state
+                console.log('Checkbox state: ' + checkboxState)
+
+                FB.AppEvents.logEvent('MessengerCheckboxUserConfirmation', null, {
+                    'app_id': window.__FB_Messenger_App_ID,
+                    'page_id': window.__FB_Page_ID,
+                    'ref': 'support',
+                    'user_ref': window.meId
+                })
+
+            } else if (e.event == 'not_you') {
+                console.log('User clicked \'not you\'')
+            } else if (e.event == 'hidden') {
+                console.log('Plugin was hidden')
+                document.getElementById('fmsg').style.display = 'none'
+            }
+        }, function(err){
+            console.log(err)
+        })
+
+
+    };
+
+    // (function (d, s, id) {
+    //     var js, fjs = d.getElementsByTagName(s)[0];
+    //     if (d.getElementById(id)) { return; }
+    //     js = d.createElement(s); js.id = id;
+    //     js.src = "https://connect.facebook.net/en_US/sdk.js";
+    //     fjs.parentNode.insertBefore(js, fjs);
+    // }(document, 'script', 'facebook-jssdk'));
+
+</script>
+
+<script>
+ window.addFaceBookJs = function(id) {
+
+        window.meId = id;
+
+        var head = document.getElementsByTagName('head')[0]
+
+        if(document.getElementById('facebook-jssdk')){
+            head.removeChild(document.getElementById('facebook-jssdk'))
+        }
+
+        var script = document.createElement('script')
+        script.type = 'text/javascript'
+        script.defer = true
+        script.async = true
+        script.id = 'facebook-jssdk'
+        script.src =  'https://connect.facebook.net/en_US/sdk.js'
+        head.appendChild(script)
+    
+}
+</script>
+
+
+
+
+
+
+
+
+
+    <script src="https://x.klarnacdn.net/kp/lib/v1/api.js"></script>
+
+
+
+    <script type="text/javascript">
+    //<![CDATA[ 
+    (function() {
+      function riskifiedBeaconLoad() {
+        var store_domain = 'www.chicme.com_us';
+        var session_id = window.wid;
+        var url = ('https:' == document.location.protocol ? 'https://' : 'http://')
+          + "beacon.riskified.com?shop=" + store_domain + "&sid=" + session_id;
+        var s = document.createElement('script');
+        s.type = 'text/javascript';
+        s.async = true;
+        s.src = url;
+        var x = document.getElementsByTagName('script')[0];
+        x.parentNode.insertBefore(s, x);
+      }
+      if (window.attachEvent)
+        window.attachEvent('onload', riskifiedBeaconLoad)
+      else
+        window.addEventListener('load', riskifiedBeaconLoad, false);
+    })();
+    //]]>
+    </script>
+
+
+</body>
+
+</html>

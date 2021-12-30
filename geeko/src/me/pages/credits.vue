@@ -11,10 +11,10 @@
         <div class="_container">
             <credit-header :me="pointsCustomerNum"></credit-header>
             <received-used></received-used>
-            <!-- <points-list></points-list> -->
+            <points-list v-if="!showPointsMall"></points-list>
         </div>
 
-        <points-mall></points-mall>
+        <points-mall v-if="showPointsMall"></points-mall>
 
         
 
@@ -60,6 +60,9 @@
         },
         computed: {
             ...mapGetters('me', ['feed','me','pointsCustomerNum']),
+            showPointsMall(){
+                return window.showPointsMall
+            },
 /*
             receivedPoints(){
                 this.allPoints.forEach(points=>{

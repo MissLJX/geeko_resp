@@ -5,7 +5,7 @@ import {FormattedMessage, injectIntl} from 'react-intl';
 import { Page } from '../../components/page/page';
 import {EntryButton} from '../../components/newComponents/new-components'
 import styled from 'styled-components';
-import {list} from '../../api'
+import {list, getMe} from '../../api'
 
 const EntryButtonBox = styled.div`
     display: flex;
@@ -118,6 +118,7 @@ class Support extends React.PureComponent{
     constructor(props){
         super(props)
         this.state = {
+            me: '',
             // intl: this.props.intl.formatMessage({id:"version1"}).support,
             buttonList:[
                 {
@@ -179,6 +180,23 @@ class Support extends React.PureComponent{
       
             zE('webWidget', 'helpCenter:setSuggestions', { search: 'FAQ' })
         }
+        getMe().then(res => {
+            console.log(res)
+            if(res && res.code == 200){
+                this.setState({
+                    me: res.result || ''
+                })
+            }
+        }).catch(err=>{
+            console.error(err)
+        })
+    }
+
+    componentDidMount(){
+        const { me } = this.state
+        if(window.addFaceBookJs){
+            window.addFaceBookJs(me.id)
+        }
     }
 
     // contact us 
@@ -189,9 +207,10 @@ class Support extends React.PureComponent{
 		}
     }
 
+
     render(){
         const {intl} = this.props;
-        const {buttonList} = this.state;
+        const {buttonList, me} = this.state;
         
 
         const toContact = () => {
@@ -227,7 +246,7 @@ class Support extends React.PureComponent{
 
         const linkTo = (url,title) => {
             this.props.history.push({pathname:url, params:{title: title}})
-        }
+        }    
 
         return(
             <div>
@@ -249,14 +268,17 @@ class Support extends React.PureComponent{
                             })
                         }
                     </EntryButtonBox>
+                    
                     <ClickToFAQ>
                         {intl.formatMessage({id:"click"})}
                         <span onClick={()=>this.props.history.push({pathname: `${(window.ctx || '')}/support/faq`})}>{intl.formatMessage({id:"faq"})}</span> 
                         {intl.formatMessage({id:"page"})} 
                     </ClickToFAQ>
+                    
                     <FindMore>
                         {intl.formatMessage({id:"findNothing"})}
                     </FindMore>
+                    
                     <ContactUs
                         innerRef={this.contactRef.bind(this)}
                         onClick={()=>toContact()}
@@ -269,6 +291,25 @@ class Support extends React.PureComponent{
                         <ContactIcon>&#xe6e9;</ContactIcon>
                         {intl.formatMessage({id:"contact"})}
                     </ContactUs>
+
+                    {
+                        !me.subscribeToFacebookMessage && 
+                        <div style={{ textAlign: 'center', position: 'relative', top: 30 }}>
+                            <div id="fmsg" style={{ display: 'none', fontSize: 12, color: '#e64545', width: '80%',margin: '0 auto',}}>{intl.formatMessage({ id: 'facebook_check' })}</div>
+                            <div className="fb-messenger-checkbox"
+                                target="_top"
+                                origin={window.__FB_Origin}
+                                page_id={window.__FB_Page_ID}
+                                messenger_app_id={window.__FB_Messenger_App_ID}
+                                user_ref={window.__FB_User_Ref}
+                                size="small"
+                                skin="light"
+                                center_align="true"
+                                >
+                            </div>
+                        </div>
+                    }
+                    
                 </Page>
 
             </div>

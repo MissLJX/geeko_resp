@@ -3,8 +3,8 @@
         <div class="_bd">
             <product-swiper :images="productImages"></product-swiper>
 
-            <product-price v-if="!isPointsProduct" :product="product" :variant-product="variantProduct"></product-price>
-            <product-price-points v-if="isPointsProduct" :product="product" :variant-product="variantProduct"></product-price-points>
+            <product-price :product="product" :variant-product="variantProduct"></product-price>
+            <!-- <product-price-points v-if="isPointsProduct" :product="product" :variant-product="variantProduct"></product-price-points> -->
 
             <product-color
                 :variant-product="variantProduct"
@@ -121,7 +121,7 @@
                 if(pointsSale){
                     params.pointsMallSales = true
                 }
-                this.$store.dispatch("addToCart",JSON.stringify(params)).then(() => {
+                this.$store.dispatch("addToCart",params).then(() => {
                     console.log("success");
                     this.$store.dispatch("addToCartIsShow",false);
                     this.$store.dispatch("setIsPointsProduct", false);
@@ -173,6 +173,9 @@
 </script>
 
 <style scoped lang="scss">
+    .active{
+        color: #e64545;
+    }    
     .add-to-cart-modal{
         position: fixed;
         background-color: #fff;

@@ -26,9 +26,10 @@ module.exports = {
     progress: true,
     proxy: {
       '/api': {
-        // target: 'https://www.chicme.com',
         target: 'https://www.chicme.xyz',
-        // target: 'http://localhost:8080/wanna',
+				cookiePathRewrite: {
+					'/wanna': '/',
+				},
         pathRewrite: { '^/api': '' },
         secure: false,
         changeOrigin: true
@@ -55,6 +56,7 @@ module.exports = {
   plugins: [
     new HTMLWebpackPlugin({
       title: 'FAQ',
+      template: 'index.html',
       meta: {
       	'charset': 'utf-8',
         'viewport': 'width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no'

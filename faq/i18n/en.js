@@ -98,4 +98,5 @@ export default {
   unsatisfied: 'Unsatisfied',
   rateTextPlaceHolder: 'You can comment customer service here.',
   statusWatingApply:'Wating for Apply',
+  facebook_check: 'If you check this, we will send you logistics tracking status and order information in Messenger',
 }

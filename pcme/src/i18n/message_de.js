@@ -451,6 +451,7 @@ export default {
         s_rate_satisfied: 'Zufrieden',
         s_rate_unsatisfied: 'Unzufrieden',
         s_wating_for_apply: 'Warte auf Bewerben',
+        facebook_check: 'Wenn Sie dies überprüfen, senden wir Ihnen den Status der Sendungsverfolgung und Bestellinformationen in Messenger',
     },
     points_mall:{
         points_mall:'Punkte-Mall',

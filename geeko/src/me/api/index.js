@@ -300,7 +300,7 @@ export const getPointsMallCollectionId = () => {
 
 // 获取积分商城优惠券列表
 export const getPointsCouponList = () => {
-    return axios.get('/points-exchange-coupon/anon/get-list',{},{}).then(data => data)
+    return axios.get('/points-exchange-coupon/get-list',{},{}).then(data => data)
 }
 
 // 积分商城优惠券兑换

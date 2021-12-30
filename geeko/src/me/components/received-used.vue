@@ -5,8 +5,8 @@
         </div>
 
         <div class="_bd">
-            <a :href="GLOBAL.getUrl('/i/points-mall')">
-                <div class="pointsMall">
+            <a :href="GLOBAL.getUrl('/i/points-mall')" v-if="showPointsMall">
+                <div class="pointsMall" >
                     <div>
                         <span class="iconfont">&#xe703;</span>
                     </div>
@@ -63,7 +63,7 @@
                     </div>
                 </div>
             </a>
-            <router-link :to="GLOBAL.getUrl('/me/m/point-guide')" class="fd global-overflow">
+            <router-link :to="GLOBAL.getUrl('/me/m/point-guide')" :class="{'fd global-overflow':true,'show100':!showPointsMall}">
                 <div style="padding:0px;">
                     <div class="_font" style="white-space: normal;line-height: 20px;">
                         {{$t("point.more_ways_to_earn_more_points")}} >
@@ -82,6 +82,11 @@
         data(){
             return{
                 selectValue:0
+            }
+        },
+        computed:{
+            showPointsMall(){
+                return window.showPointsMall
             }
         }
     }
@@ -203,6 +208,11 @@
             padding: 0px 20px;
             cursor: pointer;
             display: inline-block;
+        }
+
+        .show100{
+            width: 100% !important;
+            height: 30px !important;
         }
     }
 
