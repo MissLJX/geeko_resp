@@ -3,7 +3,8 @@ import i18n from "../i18n/index.js";
 export const getRightSize = arr => {
     return arr.filter(product =>{
         return product.size2 === "S" || product.size2 === "M" || product.size2 === "L" 
-                || product.size2 === "XL" || product.size2 === "2XL" || product.size2 === "3XL";
+                || product.size2 === "XL" || product.size2 === "2XL" || product.size2 === "3XL" 
+                || product.size2 === "0XL" || product.size2 === "1XL" || product.size2 === "4XL" || product.size2 === '5XL';
     });
 }
 

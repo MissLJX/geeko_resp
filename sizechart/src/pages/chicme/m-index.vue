@@ -102,8 +102,13 @@
                 <span @click="bwhSize = 'S'" :class="{'active' : bwhSize === 'S'}">S</span>
                 <span @click="bwhSize = 'M'" :class="{'active' : bwhSize === 'M'}">M</span>
                 <span @click="bwhSize = 'L'" :class="{'active' : bwhSize === 'L'}">L</span>
+                <!-- <span @click="bwhSize = '0XL'" :class="{'active' : bwhSize === '0XL'}">0XL</span> -->
                 <span @click="bwhSize = 'XL'" :class="{'active' : bwhSize === 'XL'}">XL</span>
+                <!-- <span @click="bwhSize = '1XL'" :class="{'active' : bwhSize === '1XL'}">1XL</span> -->
                 <span @click="bwhSize = '2XL'" :class="{'active' : bwhSize === '2XL'}">2XL</span>
+                <span @click="bwhSize = '3XL'" :class="{'active' : bwhSize === '3XL'}">3XL</span>
+                <span @click="bwhSize = '4XL'" :class="{'active' : bwhSize === '4XL'}">4XL</span>
+                <!-- <span @click="bwhSize = '5XL'" :class="{'active' : bwhSize === '5XL'}">5XL</span> -->
             </div>
 
             <div class="_content">

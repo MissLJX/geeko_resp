@@ -719,7 +719,7 @@
         },
         computed: {
             getLang(){
-                console.log(window.locale)
+                // console.log(window.locale)
                 if(window.locale && (window.locale ==='de_DE' || window.locale === 'es_ES')){
                     return 'EU'
                 }else if(window.locale && window.locale ==='en_GB'){

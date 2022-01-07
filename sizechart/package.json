@@ -4,7 +4,7 @@
   "description": "chic me profile page",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack-dev-server --config ./build/webpack.dev.config.js --port 3004 --inline --hot",
+    "dev": "webpack-dev-server --config ./build/webpack.dev.config.js --port 3007 --inline --hot",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --config ./build/webpack.config.build.js"
   },

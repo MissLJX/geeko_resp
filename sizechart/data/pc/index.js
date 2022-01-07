@@ -43,27 +43,32 @@ export const getData = async productId => {
 
     let product = _.uniqBy(productVO.product.variants,'size');
 
-    if(pmethod === "size"){
-        product = getRightSize(product);
-    }else{
-        product = getShoesSize(product);
-    }
+    // if(pmethod === "size"){
+    //     product = getRightSize(product);
+    // }else{
+    //     product = getShoesSize(product);
+    // }
     
     for(let i= 0 ; i <product.length;i++ ){
         const valArr = [];
-        valArr.push(product[i].size);
-        labelArr.push(sizeData['sizedata'][pmethod].find((n)=>n["value"]===product[i].size2)["label"]);
-        sizeArr.push(sizeData['sizedata'][pmethod].find((n)=>n["value"]===product[i].size2)["sizeMap"]);
-        if(product[i].descriptionMaps){
-            const thisArr = [];
-            for(let j=0;j<2;j++){
-                thisArr.push(product[i].descriptionMaps[j])
+        const targetItem = sizeData['sizedata'][pmethod].find((n)=>n["value"]===product[i].size2);
+        if(targetItem){
+            valArr.push(product[i].size);
+
+            labelArr.push(targetItem["label"]);
+            sizeArr.push(targetItem["sizeMap"]);
+            if(product[i].descriptionMaps){
+                const thisArr = [];
+                for(let j=0;j<2;j++){
+                    thisArr.push(product[i].descriptionMaps[j])
+                }
+                changeArr.push(...[thisArr])
+                result.push([targetItem["label"],targetItem["sizeMap"],...[thisArr]]);
+            }else {
+                changeArr.push('');
+                result.push([targetItem["label"],targetItem["sizeMap"],'']);
             }
-            changeArr.push(...[thisArr])
-        }else {
-            changeArr.push('');
         }
-        result.push([labelArr[i],sizeArr[i],changeArr[i]]);
     }
 
     let productModelStature = productVO.product.modelStature;

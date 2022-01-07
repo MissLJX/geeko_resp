@@ -54,9 +54,9 @@ messages['es'] = es_L
 messages['pt'] = pt_L
 
 // 清空打印
-console.log = () =>{
+// console.log = () =>{
 
-}
+// }
 if(window.isApp == 'true'){
   window.isShowApp = 'true'
 } else {

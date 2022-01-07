@@ -91,8 +91,8 @@ export default {
     },
     methods:{
         tabChange(item){
-            // console.log(item.path.split('faq/')[1].split('/')[0])
-            if(item?.path?.split('faq/')[1].split('/')[0] && item?.path?.split('faq/')[1].split('/')[0] != 'online-help' && item?.path?.split('faq/')[1].split('/')[0] != 'support-ticket'){
+            // console.log(item.path.split('faq/'))
+            if(item?.path?.split('faq/')[1].split('/')[0] != 'online-help' && item?.path?.split('faq/')[1].split('/')[0] != 'support-ticket'){
                 this.tabChoose = 'faq'
             } else {
                 this.tabChoose = item.path.split('faq/')[1].split('/')[0]

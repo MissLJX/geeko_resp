@@ -28,14 +28,42 @@ const sizedata = {
                 RU: '38-40'
             }
         },
+        // {
+        //     label: 'L',
+        //     value: 'L',
+        //     sizeMap: {
+        //         US: '10-12',
+        //         CA: '10-12',
+        //         UK: '16-18',
+        //         AU: '16-18',
+        //         EU: '40-42',
+        //         BR: 'M',
+        //         FR: '42-44',
+        //         RU: '42-44'
+        //     }
+        // },
         {
-            label: 'L',
-            value: 'L',
+            label: 'XL',
+            value: 'XL',
+            sizeMap: {
+                US: '12-14',
+                CA: '12-14',
+                UK: '20-22',
+                AU: '20-22',
+                EU: '42-44',
+                BR: 'G',
+                FR: '46-48',
+                RU: '46-48'
+            }
+        },
+        {
+            label: '0XL',
+            value: '0XL',
             sizeMap: {
                 US: '10-12',
                 CA: '10-12',
                 UK: '16-18',
-                AU: '16-18',
+                AU: '20-22',
                 EU: '40-42',
                 BR: 'M',
                 FR: '42-44',
@@ -43,8 +71,8 @@ const sizedata = {
             }
         },
         {
-            label: 'XL',
-            value: 'XL',
+            label: '1XL',
+            value: '1XL',
             sizeMap: {
                 US: '12-14',
                 CA: '12-14',
@@ -82,6 +110,20 @@ const sizedata = {
                 BR: 'G3',
                 FR: '50-52',
                 RU: '50-52'
+            }
+        },
+        {
+            label: '4XL',
+            value: '4XL',
+            sizeMap: {
+                US: '18-20',
+                CA: '18-20',
+                UK: '32-34',
+                AU: '28-30',
+                EU: '48-50',
+                BR: 'G4',
+                FR: '52-54',
+                RU: '52-54'
             }
         }
     ],

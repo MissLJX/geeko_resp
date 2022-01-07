@@ -193,11 +193,20 @@ class Support extends React.PureComponent{
     }
 
     componentDidMount(){
+        console.log('mounted')
         const { me } = this.state
         if(window.addFaceBookJs){
+            console.log('...')
+            window.FB = null
+            window.fbAsyncInit.hasRun = false;
             window.addFaceBookJs(me.id)
         }
     }
+
+    componentWillUpdate(){
+        console.log('update')
+    }
+ 
 
     // contact us 
     contactRef(dom){
@@ -209,6 +218,7 @@ class Support extends React.PureComponent{
 
 
     render(){
+        console.log('render')
         const {intl} = this.props;
         const {buttonList, me} = this.state;
         

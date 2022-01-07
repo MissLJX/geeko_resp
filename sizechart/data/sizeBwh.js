@@ -72,6 +72,30 @@ const sizeBwh = {
             'waist':"80-86 cm",
             'hip':"114-120 cm"
         }
+    ],
+    "3XL":[
+        {
+            'bust':"42.5-48.0 inch",
+            'waist':"36.4-41.3 inch",
+            'hip':"48-50.4 inch"
+        },
+        {
+            'bust':"108-122 cm",
+            'waist':"88-105 cm",
+            'hip':"122-128 cm"
+        }
+    ],
+    "4XL":[
+        {
+            'bust':"48.8-51.2 inch",
+            'waist':"37.4-43.3 inch",
+            'hip':"49.2-53.1 inch"
+        },
+        {
+            'bust':"124-130 cm",
+            'waist':"95-110 cm",
+            'hip':"125-135 cm"
+        }
     ]
 }
 

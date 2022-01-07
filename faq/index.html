@@ -66,17 +66,22 @@
         window.adyenEnv = 'test'
 
         window.messageId = '527869367412301';
-window.__FB_Messenger_App_ID = '628197333983380'
-window.facebook_appId = '628197333983380'
-window.__FB_Page_ID = '527869367412301'
-window.__FB_Ref = 'support'
-window.__FB_User_Ref = '1d674s0B7t6M778v318r6K4B4a_1640769387121'
-window.__FB_Origin = 'http://localhost'
+        window.__FB_Messenger_App_ID = '628197333983380'
+        window.facebook_appId = '628197333983380'
+        window.__FB_Page_ID = '527869367412301'
+        window.__FB_Ref = 'support'
+        window.__FB_User_Ref = '1d674s0B7t6M778v318r6K4B4a_1640769387121'
+        window.__FB_Origin = 'http://localhost'
 
+        // window.__FB_Origin = "https://www.boutiquefeel.com"
+        // window.__FB_User_Ref = "1q6r4N0z9o1m7c2j022t8C3j4E_1640921772698" 
+        // window.__FB_Page_ID = '1197317563662685'
+        // window.facebook_appId = '2087214101500691'
+        // window.__FB_Messenger_App_ID = '2087214101500691'
+        // window.messageId = '1197317563662685'
 
     </script>
-
-
+   
 <script>
     // ensure this function is defined before loading afterpay.js
     function initAfterpay() {
@@ -281,6 +286,7 @@ merchant_key=789a8ae797d61ce571e665a480f064cd56721c1b044630d2b3f74943ffd34d13c18
 
 <script>
     window.fbAsyncInit = function () {
+        console.log('init')
         FB.init({
             appId: '628197333983380',
             autoLogAppEvents: true,
@@ -331,15 +337,12 @@ merchant_key=789a8ae797d61ce571e665a480f064cd56721c1b044630d2b3f74943ffd34d13c18
 
 <script>
  window.addFaceBookJs = function(id) {
-
+     console.log(id)
         window.meId = id;
-
         var head = document.getElementsByTagName('head')[0]
-
         if(document.getElementById('facebook-jssdk')){
             head.removeChild(document.getElementById('facebook-jssdk'))
         }
-
         var script = document.createElement('script')
         script.type = 'text/javascript'
         script.defer = true

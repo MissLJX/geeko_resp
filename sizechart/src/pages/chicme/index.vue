@@ -111,8 +111,13 @@
                 <span @click="bwhSize = 'S'" :class="{'active' : bwhSize === 'S'}">S</span>
                 <span @click="bwhSize = 'M'" :class="{'active' : bwhSize === 'M'}">M</span>
                 <span @click="bwhSize = 'L'" :class="{'active' : bwhSize === 'L'}">L</span>
+                <!-- <span @click="bwhSize = '0XL'" :class="{'active' : bwhSize === '0XL'}">0XL</span> -->
                 <span @click="bwhSize = 'XL'" :class="{'active' : bwhSize === 'XL'}">XL</span>
+                <!-- <span @click="bwhSize = '1XL'" :class="{'active' : bwhSize === '1XL'}">1XL</span> -->
                 <span @click="bwhSize = '2XL'" :class="{'active' : bwhSize === '2XL'}">2XL</span>
+                <span @click="bwhSize = '3XL'" :class="{'active' : bwhSize === '3XL'}">3XL</span>
+                <span @click="bwhSize = '4XL'" :class="{'active' : bwhSize === '4XL'}">4XL</span>
+                <!-- <span @click="bwhSize = '5XL'" :class="{'active' : bwhSize === '5XL'}">5XL</span> -->
             </div>
 
             <div class="_content">
@@ -222,7 +227,7 @@
         },
         computed: {
             getLang(){
-                console.log(window.locale)
+                // console.log(window.locale)
                 if(window.locale && (window.locale ==='de_DE' || window.locale === 'es_ES')){
                     return 'EU'
                 }else if(window.locale && window.locale ==='en_GB'){
@@ -245,7 +250,7 @@
                 let arr = [];
                 let num = 0;
                 let index = 0;
-                console.log("this.result",this.result);
+                // console.log("this.result",this.result);
                 for (let i=0;i<this.result.length;i++){
                     if(typeof this.result[i][2] === 'object'){
                         let count = 0;
@@ -259,7 +264,7 @@
                         }
                     }
                 }
-                console.log("index",index);
+                // console.log("index",index);
                 // 最少有一个尺码
                 if(this.result[index]){
                     var i = 0;
@@ -328,6 +333,7 @@
                 }
             },
             getBwhMessage:function(){
+                // console.log(sizeBwh)
                 return sizeBwh['sizeBwh'][this.bwhSize][this.picked];
             }
         },
@@ -495,7 +501,8 @@
                 margin-top: 15px;
             }
             ._size{
-                margin: 10px 0px;
+                // margin: 10px 0px;
+                margin-top: 10px;
                 & > span{
                     height: 30px;
                     line-height: 30px;
@@ -509,6 +516,7 @@
                     margin-left: 10px;
                     text-align: center;
                     cursor: pointer;
+                    margin-bottom: 10px;
                 }
 
                 & > span:first-child{
