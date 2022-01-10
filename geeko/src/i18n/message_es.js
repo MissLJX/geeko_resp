@@ -328,5 +328,9 @@ export default {
         points_not_enough_text: 'No tienes suficientes puntos para canjear este cupón.',
         points_have_same_text: '¡Ya tienes un cupón para el mismo, así que ve y recoge tu artículo favorito!',
         points_more: 'Más puntos',
+    },
+    add:{
+        sign_in: 'Iniciar sesión',
+        addFavorites:'¡Agregue sus favoritos a su lista de deseos ahora!',
     }
 }

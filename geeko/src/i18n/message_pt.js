@@ -328,5 +328,9 @@ export default {
         points_not_enough_text: 'Você não tem pontos suficientes para resgatar este cupom.',
         points_have_same_text: 'Você já tem um cupom para o mesmo, então vá e pegue seu item favorito!',
         points_more: 'Mais pontos',
+    },
+    add:{
+        sign_in: 'Entrar',
+        addFavorites:'Adicione seus favoritos à sua lista de desejos agora!',
     }
 }

@@ -18,11 +18,12 @@
                 <span class="iconfont">&#xe6e7;</span>
             </div>
 
-            <p class="_font">Add your favorites to your Wishlist now!</p>
+            <p class="_font">{{$t("add.addFavorites")}}</p>
+
 
             <div class="_btn">
-                <span v-if="goShoppingShow" @click="selectGo('/')">Go Shopping</span>
-                <span v-if="!isLogin" @click="selectGo('/i/login?redirectUrl=/me/m')">Sign In</span>
+                <span v-if="goShoppingShow" @click="selectGo('/')">{{$t("points_mall.points_go_shopping")}}</span>
+                <span v-if="!isLogin" @click="selectGo('/i/login?redirectUrl=/me/m')">{{$t("add.sign_in")}}</span>
             </div>
             <!-- <div class="_btn">Go Shopping</div> -->
         </div>

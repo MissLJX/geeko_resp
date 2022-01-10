@@ -328,5 +328,9 @@ export default {
         points_not_enough_text:'Sie haben nicht genügend Punkte, um diesen Coupon einzulösen.',
         points_have_same_text:'Du hast bereits einen Gutschein dafür, also hol dir deinen Lieblingsartikel!',
         points_more:'Mehr Punkte',
+    },
+    add:{
+        sign_in: 'Anmelden',
+        addFavorites:'Fügen Sie jetzt Ihre Favoriten zu Ihrer Wunschliste hinzu!',
     }
 }

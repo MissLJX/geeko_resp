@@ -328,5 +328,9 @@ export default {
         points_not_enough_text:"Vous n'avez pas assez de points pour utiliser ce coupon.",
         points_have_same_text:'Vous avez déjà un coupon pour le même, alors allez chercher votre article préféré !',
         points_more:'Plus de points',
+    },
+    add:{
+        sign_in: "S'identifier",
+        addFavorites:'Ajoutez vos favoris à votre liste de souhaits maintenant !',
     }
 }
