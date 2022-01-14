@@ -132,13 +132,26 @@
         <Loading v-if="uploadImageLoadingShow || confirmLoadingShow"></Loading>
 
         <transition name="uper">
-            <div class="success-container" v-if="successShow">
-                <div class="_hd">
+            <div class="success-container" v-if="!!reminderMessage">
+                <!-- <div class="_hd">
                     <span class="iconfont">&#xe6b7;</span>
                 </div>
                 <p class="_title1">{{$t("point.submit_success")}}</p>
-                <p class="_title2">{{$t("point.wu_have_success")}}</p>
-                
+                <p class="_title2">{{$t("point.wu_have_success")}}</p> -->
+                <div style="padding:0px 45px;">
+                    <div v-html="reminderMessage"></div>
+
+                    <btn 
+                        class="fill normal" 
+                        :style="{fontSize:16,fontFamily:'AcuminPro-Bold',color:'#ffffff',textTransform: 'uppercase',marginTop:'20px'}"
+                        @click.native="GLOBAL.getUrl('/')"
+                    >Shop Now</btn>
+                    <btn 
+                        class="fill normal" 
+                        :style="{fontSize:'16px',fontFamily:'AcuminPro-Bold',color:'#ffffff',textTransform: 'uppercase',marginTop:'10px'}"
+                        @click.native="GLOBAL.getUrl('/fs/points-policy')"
+                    >Get more points</btn>
+                </div>
             </div>
         </transition>
     </div>
@@ -149,12 +162,14 @@
     import fecha from 'fecha'
     import Loading from '../../components/loading.vue'
     import HtmlImageCompress from 'html-image-compress'
+    import Btn from "../../components/btn.vue"
 
     export default {
         name:"MakeSug",
         components:{
             'nav-bar':NavBar,
-            "Loading":Loading
+            "Loading":Loading,
+            "btn":Btn
         },
         data(){
             return {
@@ -176,7 +191,7 @@
                     questionTypeBorderShow:false,
                     timeBorderShow:false
                 },
-                successShow:false
+                reminderMessage:null
             }
         },
         computed:{
@@ -274,7 +289,23 @@
                             //     console.log("formData",a, b);
                             // }
                             _this.$store.dispatch("me/makeSuggestion",formData).then(() => {
-                                this.successShow = true;
+                                if(result?.prompt?.html){
+                                    this.reminderMessage =result.prompt.html;
+                                }else{
+                                    this.$toast({
+                                        content:"Update success!",
+                                        type:"success",
+                                        timer:2000,
+                                        style1:{
+                                            backgroundColor:"#ffffff",
+                                            color:"#222222",
+                                            padding:"15px 10px",
+                                            borderRadius:"5px",
+                                            boxShadow: "0px 0px 4px 1px rgba(0, 0, 0, 0.2)",
+                                            bottom:"300px"
+                                        }
+                                    }).show();
+                                }
                             });
                         }
                     });

@@ -36,6 +36,8 @@
             </div>
         </div>
 
+        <points-reminder-modal :reminderMessage="reminderMessage" @onClose="() =>this.reminderMessage=null" v-if="!!reminderMessage" />
+
         <loading v-if="isLoadingShow"></loading>
     </div>
 </template>
@@ -162,6 +164,7 @@
     import MMInput from "../../components/editmessage/m-m-input.vue";
     import store from "../../../store/index";
     import {mapGetters, mapActions} from 'vuex';
+    import PointsReminderModal from "../../../components/modal/points-reminder-modal.vue"
 
     export default {
         name:"MyMeasurements",
@@ -322,7 +325,8 @@
                 testShow: true,
                 isLoadingShow:false,
                 inputData:{},
-                sizingList: ["True to size","Large","Small"]
+                sizingList: ["True to size","Large","Small"],
+                reminderMessage:null
             }
         },
         computed:{
@@ -418,8 +422,25 @@
                             }
 
                 store.dispatch("me/updateCustomerSave", obj).then(res => {
-                    this.$router.go(-1);
+                    // this.$router.go(-1);
                     this.isLoadingShow = false;
+                    if(result?.prompt?.html){
+                        this.reminderMessage =result.prompt.html;
+                    }else{
+                        this.$toast({
+                            content:"Update success!",
+                            type:"success",
+                            timer:2000,
+                            style1:{
+                                backgroundColor:"#ffffff",
+                                color:"#222222",
+                                padding:"15px 10px",
+                                borderRadius:"5px",
+                                boxShadow: "0px 0px 4px 1px rgba(0, 0, 0, 0.2)",
+                                bottom:"300px"
+                            }
+                        }).show();
+                    }
                 })
             },
             initInputData(){
@@ -454,6 +475,7 @@
             "nav-bar": NavBar,
             "m-select": MMSelect,
             "m-input": MMInput,
+            "points-reminder-modal":PointsReminderModal
         }
     }
 </script>

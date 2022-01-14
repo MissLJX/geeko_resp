@@ -11,9 +11,12 @@ import {sync} from 'vuex-router-sync'
 import VeeValidate from 'vee-validate'
 
 import Loading from "./components/loading.vue"
+import Toast from "./components/toast/index"
 
 // import _global from "./components/Global.vue"
 import common from "./common.js"
+
+Vue.prototype.$toast = Toast;
 
 Vue.prototype.GLOBAL = common
 

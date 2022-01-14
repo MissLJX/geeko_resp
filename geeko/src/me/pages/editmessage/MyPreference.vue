@@ -28,6 +28,8 @@
 
         <submit-btn @toSubmit="addPreference" :title="$t('label.save')"></submit-btn>
 
+        <points-reminder-modal :reminderMessage="reminderMessage" @onClose="() =>this.reminderMessage=null" v-if="!!reminderMessage" />
+
         <loading v-if="isLoadingShow"></loading>
     </div>
 </template>
@@ -36,17 +38,17 @@
     import NavBar from "../../components/nav-bar.vue"
     import MyPreferenceItem from "../../components/editmessage/MyPreferenceItem.vue"
     import SubmitBtn from "../../../components/submit-btn.vue"
-
     import store from "../../../store/index.js"
-
     import { mapGetters } from "vuex"
+    import PointsReminderModal from "../../../components/modal/points-reminder-modal.vue"
 
     export default {
         name:"MyPreference",
         components:{
             "nav-bar":NavBar,
             "my-preference-item":MyPreferenceItem,
-            "submit-btn":SubmitBtn
+            "submit-btn":SubmitBtn,
+            "points-reminder-modal":PointsReminderModal
         },
         computed:{
             ...mapGetters("me",["me","messageM1521"])
@@ -85,7 +87,8 @@
                     usuallyBuyClothesFor:[],
                     favoriteStyles:[]
                 },
-                isLoadingShow:false
+                isLoadingShow:false,
+                reminderMessage:null
             }  
         },
         created(){
@@ -129,7 +132,24 @@
                 };
                 _this.$store.dispatch("me/updateCustomerSave",obj).then(result => {
                     _this.isLoadingShow = false;
-                    _this.$router.go(-1);
+                    // _this.$router.go(-1);
+                    if(result?.prompt?.html){
+                        this.reminderMessage =result.prompt.html;
+                    }else{
+                        this.$toast({
+                            content:"Update success!",
+                            type:"success",
+                            timer:2000,
+                            style1:{
+                                backgroundColor:"#ffffff",
+                                color:"#222222",
+                                padding:"15px 10px",
+                                borderRadius:"5px",
+                                boxShadow: "0px 0px 4px 1px rgba(0, 0, 0, 0.2)",
+                                bottom:"300px"
+                            }
+                        }).show();
+                    }
                 });
             },
             disposeCustomer(arr){
@@ -156,5 +176,18 @@
 <style scoped lang="scss">
     .my-preference{
         padding-bottom: 20px;
+    }
+
+    .points-modal{
+        .container{
+            position: fixed;
+            z-index: 11;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%,-50%);
+            width: 80%;
+            background-color: #ffffff;
+            padding: 20px 0px;
+        }
     }
 </style>

@@ -26,6 +26,15 @@
             border-color: #dcdcdc;
         }
 
+        &.normal{
+            padding: 8.5px 5px;
+            border: none;
+            width: 90%;
+            display: block;
+            margin: 0 auto;
+            margin-top: 15px;
+            border-radius: 2px;
+        }
     }
 </style>
 

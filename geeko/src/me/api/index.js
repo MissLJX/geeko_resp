@@ -250,7 +250,6 @@ export const getShoppingCartNum = () => {
 }
 
 export const updateCustomerSave = (customer) => {
-    console.log("customer",customer);
     return axios.post(VPATH + "/customer/save",customer,{}).then(data => data.result);
 }
 
