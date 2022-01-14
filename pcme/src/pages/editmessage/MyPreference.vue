@@ -57,15 +57,21 @@
                     usuallyBuyClothesFor:[],
                     favoriteStyles:[]
                 },
-                isLoadingShow:false
+                isLoadingShow:false,
+                haveDoneBefore: false,
+                tipContent: ''
             }  
         },
         created(){
+            this.tipContent = "<div style='text-align: center;'><img src='https://image.geeko.ltd/chicme/2021111101/modal_points.png' alt='ModalPoints' style='width:50%;'><p style='font-weight:bold;font-size:24px;margin: 0;'>100 Points</p><p style='margin: 0;font-size: 12px;'><span>100 points = $1 USD.</span><a href='/fs/points-policy' style='vertical-align: middle;'><img src='https://image.geeko.ltd/chicme/2021111101/question.png' alt='Question' style='width: 14px;height: 14px;'></a></p><p style='margin: 0;font-size: 12px;line-height: 12px;margin-top: 10px;font-family: Roboto-Regular'>Saved Successfully!</p><p style='margin: 0;font-size: 12px;font-family: Roboto-Regular;'>You’ve got <span style='color: #e64545;font-weight: bold;font-family: Roboto-Regular;'>100 points</span> in your account</p></div>"
             if(!this.me.myPreference){
+                this.haveDoneBefore = false
                 this.myPreference.favoriteCategories = [];
                 this.myPreference.usuallyBuyClothesFor = [];
                 this.myPreference.favoriteStyles = [];
                 return;
+            } else {
+                this.haveDoneBefore = true
             }
 
             let {favoriteCategories,usuallyBuyClothesFor,favoriteStyles} = JSON.parse(JSON.stringify(this.me.myPreference));
@@ -73,6 +79,7 @@
             this.myPreference.favoriteCategories = this.getDisposeArr(favoriteCategories);
             this.myPreference.usuallyBuyClothesFor = this.getDisposeArr(usuallyBuyClothesFor);
             this.myPreference.favoriteStyles = this.getDisposeArr(favoriteStyles);
+            
         },
         methods:{
             getCategoryValue(value){
@@ -100,9 +107,28 @@
 
                 };
                 _this.$store.dispatch("updateCustomerSave",obj).then(result => {
-                    alert("Success!");
+                    // alert("Success!");
                     _this.isLoadingShow = false;
-                });
+                    if(_this.haveDoneBefore){
+                        _this.showNormalTip()
+                    } else {
+                        if(res.prompt && res.prompt.html){
+                            _this.tipContent = res.prompt.html
+                        }
+                        _this.showPointsTip()
+                        _this.haveDoneBefore = false
+                    }
+                })
+            },
+            showNormalTip(){
+                this.$store.dispatch("setTipContent", 'Update Success');
+                this.$store.dispatch("setShowTip", true);
+                this.$store.dispatch("setTipType", '');
+            },
+            showPointsTip(){
+                this.$store.dispatch("setTipContent", this.tipContent);
+                this.$store.dispatch("setShowTip", true);
+                this.$store.dispatch("setTipType", 'points');
             },
             disposeCustomer(arr){
                 if(arr && arr.length > 0){

@@ -456,7 +456,11 @@ export default {
         facebook_check: 'Se você verificar isso, enviaremos a você o status de rastreamento de logística e as informações do pedido no Messenger.',
     },
     points_mall:{
-        points_mall: 'Points Mall',
-        points_more: 'Mais pontos',
-    }
+        points_mall:'Points Mall',
+        points_more:'Mais Pontos',
+        shop_now:'compre agora',
+        get_more_points:'obtenha mais pontos',
+        to_review:"para revisar",
+        view_more:'ver mais',
+    },
 }

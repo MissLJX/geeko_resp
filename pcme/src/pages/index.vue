@@ -21,11 +21,16 @@
                 </keep-alive>
             </div>
         </div>
+        <success-tip v-if="showTip" :content="tipContent" :type="tipType"></success-tip>
+        <!-- <button @click="setShowTip">showTip</button>
+        <button @click="setTipContent">changeTip</button> -->
     </div>
 </template>
 <script>
     import {PROJECT} from '../utils/geekoutil'
     import IndexNavContainer from "../components/index/index-nav-container.vue"
+    import SuccessTip from '../components/success-tip.vue'
+    import {mapGetters} from 'vuex';
 
     export default {
         data(){
@@ -44,10 +49,23 @@
             },
             getUrl(suffix){
                 return PROJECT + suffix;
+            },
+            setShowTip(){
+                this.$store.dispatch("setShowTip", true);
+            },
+            setTipContent(){
+                this.$store.dispatch("setTipContent", 'success');
+            },
+            setTipType(){
+                this.$store.dispatch("setTipType", "points");
             }
         },
+        computed:{
+            ...mapGetters(['showTip','tipContent','tipType']),
+        },
         components:{
-            "index-nav-container":IndexNavContainer
+            "index-nav-container":IndexNavContainer,
+            "success-tip":SuccessTip,
         },
         beforeRouteEnter(to,from,next){
             if(to.path && !!to.path && to.path.includes("notification")){

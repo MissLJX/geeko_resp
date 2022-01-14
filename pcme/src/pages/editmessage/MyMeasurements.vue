@@ -176,6 +176,7 @@
         margin-top: 100px;
         transition: all 0.1s;
         padding-bottom: 20px;
+        cursor: pointer;
     }
     .saveBtn:active{
         background-color: rgba(35,35,35,0.6);
@@ -200,6 +201,7 @@
     import MMInput from "../../components/editmessage/m-m-input.vue";
     import store from "../../store/index.js"
     import {mapGetters, mapActions} from 'vuex';
+    import loding from "../../components/loding.vue"
 
     export default {
         name:"MyMeasurements",
@@ -360,7 +362,9 @@
                 testShow: true,
                 isLoadingShow:false,
                 inputData:{},
-                sizingList: ["True to size","Large","Small"]
+                sizingList: ["True to size","Large","Small"],
+                haveDoneBefore: false,
+                tipContent:''
             }
         },
         computed:{
@@ -374,7 +378,8 @@
         },
         created:function(){
            this.getData()
-           console.log(this.$t("measurements.mea_height"))
+           this.tipContent = "<div style='text-align: center;'><img src='https://image.geeko.ltd/chicme/2021111101/modal_points.png' alt='ModalPoints' style='width:50%;'><p style='font-weight:bold;font-size:24px;margin: 0;'>100 Points</p><p style='margin: 0;font-size: 12px;'><span>100 points = $1 USD.</span><a href='/fs/points-policy' style='vertical-align: middle;'><img src='https://image.geeko.ltd/chicme/2021111101/question.png' alt='Question' style='width: 14px;height: 14px;'></a></p><p style='margin: 0;font-size: 12px;line-height: 12px;margin-top: 10px;font-family: Roboto-Regular'>Saved Successfully!</p><p style='margin: 0;font-size: 12px;font-family: Roboto-Regular;'>You’ve got <span style='color: #e64545;font-weight: bold;font-family: Roboto-Regular;'>100 points</span> in your account</p></div>"
+        //    console.log(this.$t("measurements.mea_height"))
         },
         mounted(){
              
@@ -382,7 +387,7 @@
         methods:{
             inputChange(value){
                 // console.log(this.inputData)
-                console.log(value)
+                // console.log(value)
                 // console.log(this.slotList);
                 this.inputData = value;
                 this.submitData = value;
@@ -409,6 +414,12 @@
             },
             getData(){
                 let result = this.me.mySizeInformation;
+                // console.log(this.me)
+                if(result){
+                    this.haveDoneBefore = true;
+                } else {
+                    this.haveDoneBefore = false;
+                }
                 for(let i = 0; i < this.slotList.length; i++){
                     for(let item in result){
                         if(item == this.slotList[i].slotTitle.split(" ")[0].toLocaleLowerCase()){
@@ -456,7 +467,27 @@
 
                 store.dispatch("updateCustomerSave", obj).then(res => {
                     this.isLoadingShow = false;
+                    
+                    if(this.haveDoneBefore){
+                        this.showNormalTip()
+                    } else {
+                        if(res.prompt && res.prompt.html){
+                            this.tipContent = res.prompt.html
+                        }
+                        this.showPointsTip()
+                        this.haveDoneBefore = false
+                    }
                 })
+            },
+            showNormalTip(){
+                this.$store.dispatch("setTipContent", 'Update Success');
+                this.$store.dispatch("setShowTip", true);
+                this.$store.dispatch("setTipType", '');
+            },
+            showPointsTip(){
+                this.$store.dispatch("setTipContent", this.tipContent);
+                this.$store.dispatch("setShowTip", true);
+                this.$store.dispatch("setTipType", 'points');
             },
             initInputData(){
                 // console.log("触发");
@@ -482,7 +513,7 @@
                         }
                     }
                 }
-                console.log(data)
+                // console.log(data)
                 this.inputData = data;
             }
         },
@@ -490,6 +521,7 @@
             // "nav-bar": NavBar,
             "m-select": MMSelect,
             "m-input": MMInput,
+            "loading":loding,
         }
     }
 </script>

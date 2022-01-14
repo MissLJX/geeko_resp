@@ -453,8 +453,12 @@ export default {
         s_wating_for_apply: 'En attente de candidature',
         facebook_check: 'Si vous cochez cette case, nous vous ferons parvenir le statut de suivi logistique et les informations de commande dans Messenger.',
     },
-    points_mall: {
-        points_mall: 'Points Mall',
-        points_more: 'Plus de points',
-    }
+    points_mall:{
+        points_mall:'Points Mall',
+        points_more:'Plus de points',
+        shop_now:'acheter maintenant',
+        get_more_points :'obtenir plus de points',
+        to_review:"pour réviser",
+        view_more:'voir plus',
+    },
 }

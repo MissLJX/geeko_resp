@@ -62,16 +62,18 @@
         </div>
         <div v-if="maskShow" class="maskBox" id="maskBody">
             <div class="maskInfo">
-                <i class="iconfont maskClose" @click="()=>this.maskShow=false">&#xe7c9;</i>
-                <img src="https://image.geeko.ltd/chicme/2021-9-7/2021-9-7-me-survey-points.png" alt="">
-                <div class="maskContent" v-html="clickSubmit ? maskContent.contentDone : maskContent.content">
-                     <!-- {{clickSubmit ? $t("survey.survey_thanks_done"):$t("survey.survey_thanks")}}
-                    <strong>{{$t("survey.survey_thanks_points", {point: points})}}</strong>
-                    {{$t("survey.survey_thanks_more",{website: GLOBAL.sitename})}}                     -->
+                <!-- <img src="https://image.geeko.ltd/chicme/2021-9-7/2021-9-7-me-survey-points.png" alt="">
+                <div class="points_num">100 points</div>
+                <div class="points_policy">
+                    100points = 1$
+                    <span class="iconfont points_icon" @click="toPointsPolicy">&#xe73f;</span>
+                </div> -->
+                <div class="points_content" v-html="tipContent">
+                    
                 </div>
-                <div class="maskButton">
-                    <div class="maskBtn" @click="()=>goShopping()">{{$t("survey.survey_go_shopping")}}</div>
-                    <div class="maskBtn view" @click="()=>viewPoints()">{{$t("survey.survey_view_points")}}</div>
+                <div class="points_btn_box">
+                    <div class="maskBtn" @click="()=>goShopping()">{{$t("points_mall.shop_now")}}</div>
+                    <div class="maskBtn view" @click="()=>viewPoints()">{{$t("points_mall.get_more_points")}}</div>
                 </div>
             </div>
         </div>
@@ -358,7 +360,8 @@
                 maskContent:{
                     content:'',
                     contentDone:''
-                }
+                },
+                tipContent: ''
             }
         },
         computed:{
@@ -377,6 +380,7 @@
             console.log=()=>{
                 
             }
+            this.tipContent = "<div style='text-align: center;'><img src='https://image.geeko.ltd/chicme/2021111101/modal_points.png' alt='ModalPoints' style='width:50%;'><p style='font-weight:bold;font-size:24px;margin: 0;line-height:28px;'>150 Points</p><p style='margin: 0;font-size: 12px;'><span>100 points = $1 USD.</span><a href='/fs/points-policy' style='vertical-align: middle;'><img src='https://image.geeko.ltd/chicme/2021111101/question.png' alt='Question' style='width: 14px;height: 14px;'></a></p><p style='margin: 0;font-size: 12px;line-height: 12px;margin-top: 10px;font-family: Roboto-Regular'>Thanks for your time!</p><p style='margin: 0;font-size: 12px;font-family: Roboto-Regular;'>You’ve got <span style='color: #e64545;font-weight: bold;font-family: Roboto-Regular;'>150 points</span> in your account, have a look and enjoy shopping at ChicMe!</p></div>"
         },
         mounted(){
             this.$nextTick(() => {
@@ -476,6 +480,9 @@
                             this.maskShow = true;
                             this.clickSubmit = true;
                             this.getData()
+                            if(res.result && res.result.prompt && res.result.prompt.html){
+                                this.tipContent = res.result.prompt.html
+                            }
                         }
                     })
                 }
@@ -515,6 +522,9 @@
                 this.$store.dispatch("getSurvey",{}).then(data => data.result).then(result => {
                     if(result){
                         const {answers:answersJSON,id} = result
+                        if( result.prompt && result.prompt.html){
+                            this.tipContent = result.prompt.html
+                        }
                         let answers;
                         if(answersJSON){
                             answers = JSON.parse(answersJSON)
@@ -711,11 +721,12 @@
             // border: 1px solid;
 
             .maskInfo{
-                width: 568px;
+                width: 400px;
                 min-height: 330px;
                 background-color: #fff;
                 border-radius: 4px;
                 position: relative;
+                text-align: center;
 
                 .maskClose{
                     position: absolute;
@@ -761,7 +772,7 @@
                         display: flex;
                         align-items: center;
                         justify-content: center;
-                        font-family: Roboto-Bold;
+                        font-family: 'ACUMINPRO-BOLD';
                         font-size: 16px;
                         font-weight: normal;
                         font-stretch: normal;
@@ -769,11 +780,12 @@
                         letter-spacing: 0px;
                         color: #ffffff;
                         cursor: pointer;
+                        text-transform: uppercase;
                     }
                     .view{
-                        background-color: #fff;
-                        color: #222;
-                        border: solid 1px #cacaca;
+                        // background-color: #fff;
+                        // color: #222;
+                        // border: solid 1px #cacaca;
                         margin-top: 12px;
                         margin-bottom: 24px;
                     }
@@ -857,4 +869,77 @@
                     transition: all 0.3s linear;
                 }
             }
+    // .tip_content{
+    //     width: 471px;
+    //     min-height: 200px;
+    //     background-color: #ffffff;
+    //     padding: 18px 36px 30px;
+    //     text-align: center;
+    // }
+    .points_num{
+        font-family: 'ACUMINPRO-BOLD';
+        font-size: 24px;
+        font-weight: normal;
+        font-stretch: normal;
+        letter-spacing: 0px;
+        color: #222222;
+    }
+    .points_policy{
+        font-family: 'SLATEPRO';
+        font-size: 14px;
+        font-weight: normal;
+        font-stretch: normal;
+        line-height: 16px;
+        letter-spacing: 0px;
+        color: #222222;
+        margin-bottom: 28px;
+    }
+    .points_icon{
+        font-size: 14px !important;
+        cursor: pointer;    
+    }
+    .points_content{
+        font-family: 'SLATEPRO';
+        font-size: 14px;
+        font-weight: normal;
+        font-stretch: normal;
+        letter-spacing: 0px;
+        color: #222222;
+        margin-bottom: 20px;
+    }
+    .color_red{
+        color:#e64545;
+        font-family: 'ACUMINPRO-BOLD';
+    }
+    .points_btn_box{
+        margin-top: 45px;
+
+        .maskBtn{
+            width: 360px;
+            height: 42px;
+            background-color: #000000;
+            border-radius: 2px;
+            color: #fff;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'ACUMINPRO-BOLD';
+            font-size: 16px;
+            font-weight: normal;
+            font-stretch: normal;
+            line-height: 19px;
+            letter-spacing: 0px;
+            color: #ffffff;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        .view{
+            // background-color: #fff;
+            // color: #222;
+            // border: solid 1px #cacaca;
+            margin-top: 12px;
+            margin-bottom: 24px;
+        }
+    }
 </style>

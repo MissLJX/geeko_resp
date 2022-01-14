@@ -334,3 +334,14 @@ export const getSurveyQuestions = (config) => {
 export const getHistoryOrder = (skip) => {
     return axios.get('/v9/order/'+skip+'/'+20+'/get-order-history',{},{}).then(data => data)
 }
+
+// often bought with
+export const getOftenBoughtWith = (id) => {
+    // return axios.get('/v9/collection/anon/get-products-by-main-product-category-id?productId='+id,{},{}).then(data => data)
+    return axios.specialGet('/v9/order/anon/0/20/get-same-category-products?orderId='+id,{}, {}).then(data => data)
+}
+
+// wait for review
+export const getReviewOrder = () => {
+    return axios.get('/v9/order/10/get-not-comment-orders', {}, {}).then(data => data)
+}

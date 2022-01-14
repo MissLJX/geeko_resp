@@ -459,5 +459,10 @@ export default {
     points_mall:{
         points_mall:'Points Mall',
         points_more:'More Points',
-    }
+        shop_now:'shop now',
+        get_more_points:'get more points',
+        to_review:"to review",
+        view_more:'view more',
+    },
+
 }

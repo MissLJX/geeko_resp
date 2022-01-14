@@ -10,7 +10,7 @@
         </div>
         <div class="v-btn" @click="shopnow">{{$t('shopnow')}}</div>
     </div>
-</template>
+</template> 
 
 <script>
     export default {

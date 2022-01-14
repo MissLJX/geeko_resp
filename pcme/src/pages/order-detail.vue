@@ -402,10 +402,15 @@
                 this.isConfirmAlert = false
                 if(flag === '1'){
                     this.isloding = true;
-                    this.$store.dispatch('confirmOrder',this.orderdetail.id).then(()=>{
+                    this.$store.dispatch('confirmOrder',this.orderdetail.id).then((res)=>{
+                        let tipContent = ''
+                        if(res.prompt && res.prompt.html){
+                            tipContent = res.prompt.html
+                        }
                         this.isloding = false
                         _this.orderdetail.fulfillmentStatus = constant.TOTAL_STATUS_REVIEW;
-                        alert("success")
+                        // alert("success")
+                        this.$router.push({path:"me/m/orderConfirm", params:{tipContent: tipContent}});
                     }).catch((e) => {
                         alert(e);
                         this.isloding = false
@@ -542,6 +547,7 @@
                /* window.location.href='/me/m/order'*/
             })
             this.$store.dispatch('getCancelOrderReason')
+
         }
     }
 </script>

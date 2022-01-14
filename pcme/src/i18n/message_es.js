@@ -454,7 +454,11 @@ export default {
         facebook_check: 'Si marca esta opción, le enviaremos el estado de seguimiento de la logística y la información del pedido en Messenger.',
     },
     points_mall:{
-        points_mall: 'Points Mall',
-        points_more: 'Más puntos',
-    }
+        points_mall:'Centro comercial de puntos',
+        points_more:'Más Puntos',
+        shop_now:'comprar ahora',
+        get_more_points:'obtener más puntos',
+        to_review:"revisar",
+        ver_más:'ver más',
+    },
 }

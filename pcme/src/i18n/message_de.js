@@ -454,7 +454,11 @@ export default {
         facebook_check: 'Wenn Sie dies überprüfen, senden wir Ihnen den Status der Sendungsverfolgung und Bestellinformationen in Messenger',
     },
     points_mall:{
-        points_mall:'Punkte-Mall',
+        points_mall:'Punkte-Einkaufszentrum',
         points_more:'Mehr Punkte',
-    }
+        shop_now:'jetzt einkaufen',
+        get_more_points:'erhalte mehr Punkte',
+        to_review:"überprüfen",
+        view_more:'Mehr anzeigen',
+    },
 }

@@ -47,8 +47,8 @@ const config = {
     contentBase: './dist',
     proxy: {
 			'/api': {
-				target: 'https://www.chicme.xyz',
-				// target: 'http://localhost:8080',
+				// target: 'https://www.chicme.xyz',
+				target: 'http://localhost:8080',
 				pathRewrite: { '^/api': '' },
 				cookieDomainRewrite: 'localhost',
 				cookiePathRewrite: {

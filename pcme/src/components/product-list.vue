@@ -1,6 +1,6 @@
 <template>
-    <div class="points-list" ref="fineRef" @scroll="getMore">
-        <ul class="st-clear" ref="fineRef" @scroll="getMore">
+    <div class="points-list" ref="fineRef">
+        <ul class="st-clear" ref="fineRef">
             <slot v-for="item in items" name="li" :item="item" track-by="$index"></slot>
         </ul>
         <div v-show="loading" class="el-list-loading-1"><i class="iconfont">&#xe69f;</i></div>
@@ -35,9 +35,9 @@
     }
 
     .points-list{
-        max-height: 450px;
-        overflow-y: auto;
-        padding: 10px 0;
+        // max-height: 450px;
+        // overflow-y: auto;
+        // padding: 10px 0;
     }
 </style>
 
@@ -63,6 +63,7 @@
         },
         methods: {
             getMore(){
+                // console.log('scroll')
                 let clientHeight = this.$refs.fineRef.clientHeight;
                 let scrollTop=this.$refs.fineRef.scrollTop;
                 let scrollHeight=this.$refs.fineRef.scrollHeight;
@@ -74,6 +75,13 @@
                     }
                 }
             },
+        },
+        created(){
+            // console.log(this.items)
+            // window.addEventListener("scroll",()=>this.getMore())
+        },
+        beforeDestroy(){
+            // window.removeEventListener("scroll",()=>this.getMore())
         }
     }
 </script>

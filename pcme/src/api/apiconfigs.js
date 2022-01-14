@@ -87,6 +87,27 @@ export default {
     },
     cpost(url, data, headers = {}){
         return this.post(url, qs.stringify(data), {...headers, 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'})
+    },
+    specialGet(url, params, headers){
+        return new Promise((resolve, reject) => {
+            instance.get(url, {
+                params: params,
+                headers: {
+                    ...headers
+                }
+            }).then((res) => {
+                if (res.data.code === 310) {
+                    reRequest().then((res) => {
+                        this.get(url, params, headers)
+                    }).catch((e) => {
+                        console.error(e)
+                        reject(e)
+                    })
+                } else {
+                    resolve(res.data);
+                }
+            }).catch(e => console.error(e))
+        })
     }
 
 }

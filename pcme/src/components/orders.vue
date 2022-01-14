@@ -218,6 +218,8 @@
             }
         },
         created(){
+            console.log(this.$route.query)
+            
             this.$store.dispatch('getOrderCountAll');
             this.$store.dispatch('getOrderCountProcessing');
             this.$store.dispatch('getOrderCountShipped');
@@ -232,9 +234,14 @@
             //     this.isloded = true
             // })
             this.isloded = true
-            this.getData(this.orderStatus,orderName,"click");
+            if(this.$route.query && this.$route.query.type && this.$route.query.type == 'review'){
+                this.getData(5,'Comfirmed','click')
+            } else {
+                this.getData(this.orderStatus,orderName,"click");
+            }
         },
         mounted(){
+            
             window.addEventListener('scroll',this.scrollHandle)
         },
         destroyed(){

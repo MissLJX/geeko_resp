@@ -52,6 +52,27 @@
                 <div class="n-btn" @click="changeEmail">{{$t('submit')}}</div>
             </div>
         </div> -->
+        <div class="tip_mask" @click.self="closeMask" v-if="showTip">
+            <div class="tip_content" >
+                <!-- <span class="iconfont success_icon">&#xe6b7;</span>
+                <div class="points_num">Submitted Successfully</div>
+                <div class="points_policy">
+                    100points = 1$
+                    <span class="iconfont points_icon" @click="toPointsPolicy">&#xe73f;</span>
+                </div> -->
+                <div class="points_content" v-html="tipContent">
+
+                </div>
+                <div class="points_btn_box">
+                    <div class="points_btn" @click="goShopping">
+                        {{$t("points_mall.shop_now")}}
+                    </div>
+                    <div class="points_btn" @click="viewPoints">
+                        {{$t("points_mall.get_more_points")}}
+                    </div>
+                </div>
+            </div>
+        </div>
         <loding v-if="isloding"></loding>
     </div>
 </template>
@@ -75,7 +96,9 @@
                 cemail:null,
                 nemail:'',
                 // isAlert:false,
-                isloding:false
+                isloding:false,
+                showTip: false,
+                tipContent: ''
             }
         },
         components:{
@@ -120,7 +143,8 @@
                         formData.append('message', this.subject);
 
                         this.$store.dispatch('makeSuggestion', formData).then(() => {
-                            alert("success")
+                            // alert("success")
+                            this.showTip = true;
                             this.isloding = false
                         }).catch(e => {
                             this.isloding = false
@@ -139,10 +163,20 @@
             //             this.isAlert = false
             //         }
             //     })
-            // }
+            // },
+            closeMask(){
+                this.showTip = false;
+            }
         },
         created(){
             this.$store.dispatch('getMe')
+            this.tipContent = "<div style='text-align: center;'> <img src='https://image.geeko.ltd/chicme/2021111101/right_icon.png' alt='ModalPoints' style='width:54px;'> <p style='font-weight:bold;font-size:18px;margin: 0;line-height:28px;color: #000000;'>Submitted Successfully</p> <p style='margin: 0;font-size: 12px;font-family: Roboto-Regular;line-height:16px;margin-top:8px;'> We have successfully received your suggestion and it will take few days to process this issue, we will reach out to you if we need any information. Please check our reply at your email address. Accepted suggestions will earn <span style='color: #e64545;font-weight: bold;font-family: Roboto-Regular;'>200 points</span>. Thanks for your cooperation. </p> <p style='margin: 0;font-size: 12px;'> <span>100 points = $1 USD.</span> <a href='/fs/points-policy' style='vertical-align: middle;'><img src='https://image.geeko.ltd/chicme/2021111101/question.png' alt='Question' style='width: 14px;height: 14px;'></a> </p> </div>"
+        },
+        goShopping(){
+            window.location.href = `${window.ctx || ''}/`
+        },
+        viewPoints(){
+            window.location.href = `${window.ctx || ''}/me/m/credits`
         },
     }
 </script>
@@ -335,5 +369,89 @@
                 }
             }
         }
+    }
+    .tip_mask{
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: rgba(0,0,0,0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .success_icon{
+        font-size: 54px;
+        line-height: 54px;
+        color: #20b759;
+    }
+    .tip_content{
+        width: 471px;
+        min-height: 200px;
+        background-color: #ffffff;
+        padding: 18px 36px 30px;
+        text-align: center;
+    }
+    .points_num{
+        font-family: 'ACUMINPRO-BOLD';
+        font-size: 18px;
+        font-weight: normal;
+        font-stretch: normal;
+        letter-spacing: 0px;
+        color: #222222;
+        margin: 25px 0 30px;
+    }
+    .points_policy{
+        font-family: 'SLATEPRO';
+        font-size: 12px;
+        font-weight: normal;
+        font-stretch: normal;
+        line-height: 16px;
+        letter-spacing: 0px;
+        color: #222222;
+        margin-bottom: 8px;
+        display: none;
+    }
+    .points_icon{
+        font-size: 12px !important;
+        cursor: pointer;    
+    }
+    .points_content{
+        font-family: 'SLATEPRO';
+        font-size: 14px;
+        font-weight: normal;
+        font-stretch: normal;
+        letter-spacing: 0px;
+        color: #222222;
+        margin-bottom: 20px;
+
+        span{
+            font-family: 'ACUMINPRO-BOLD';
+        }
+    }
+    .points_btn{
+        height: 44px;
+        background-color: #222222;
+        border-radius: 2px;
+        line-height: 44px;
+        color: #fff;
+        font-family: 'ACUMINPRO-BOLD';
+        font-size: 20px;
+        font-weight: normal;
+        font-stretch: normal;
+        letter-spacing: 0px;
+        color: #ffffff;
+        cursor: pointer;
+        margin-bottom: 16px;
+        text-transform: uppercase;
+
+        &:last-child{
+            margin: 0;
+        }
+    }
+    .color_red{
+        color:#e64545;
+        font-family: 'ACUMINPRO-BOLD';
     }
 </style>

@@ -14,6 +14,9 @@ import Notification from '../components/notification.vue'
 import UpdateProfile from '../components/update-profile.vue'
 import Wishlist from '../components/wishlist.vue'
 import confirmSuccess from '../pages/confirm-success.vue'
+import emailConfirm from '../pages/email-confirm.vue'
+import orderConfirm from '../pages/order-confirm.vue'
+import reviewConfirm from '../pages/review-confirm.vue'
 import OrderDetail from '../pages/order-detail.vue'
 import OrderCode from '../pages/order-code.vue'
 import LogisticsDetail from '../pages/logistics-detail.vue'
@@ -24,6 +27,7 @@ import Survey from '../pages/survey.vue'
 import FaqIndex from '../pages/faq-index/faq-index.vue'
 import Faq from '../pages/faq/faq.vue'
 import Support from "../pages/support/support.vue"
+import Refer from '../components/refer.vue'
 
 const __Base_Path__ = window.ctx || ''
 
@@ -169,6 +173,7 @@ const routes = [
                 component:MakeSug,
                 meta: {title:'Make Suggestion'},
             },
+            
             {
                 path:"my-preference",
                 name:"my-preference",
@@ -192,8 +197,30 @@ const routes = [
         },
     {
         path:__Base_Path__+'/me/m/confirmSuccess*',
-        component: confirmSuccess,
+        // component: confirmSuccess,
+        component: emailConfirm,
         meta: {title:'ConfirmEmail'},
+    },
+    {
+        path:__Base_Path__+'/me/m/emailConfirm',
+        component: emailConfirm,
+        name:'confirmEmail',
+        meta: {title:'ConfirmEmail'},
+        props: true
+    },
+    {
+        path:__Base_Path__+'/me/m/orderConfirm',
+        component: orderConfirm,
+        name:'orderConfirm',
+        meta: {title:'OrderConfirm'},
+        props: true
+    },
+    {
+        path:__Base_Path__+'/me/m/reviewConfirm',
+        component: reviewConfirm,
+        name: 'reviewConfirm',
+        meta: {title:'ReviewConfirm'},
+        props: true
     },
     {
         path:__Base_Path__+'/me/m/order/detail/:orderId',
@@ -229,6 +256,12 @@ const routes = [
         path:__Base_Path__+'/me/m/survey',
         component: Survey,
         meta: {title:'Survey'},
+    },
+    {
+        path:__Base_Path__+'/me/m/refer',
+        name:"refer",
+        component:Refer,
+        meta: {title:'Refer a Friend'},
     },
     {
         path:__Base_Path__+'/me/m/faq',

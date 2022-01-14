@@ -264,8 +264,13 @@
                             _this.comment.productId = this.orderpro.productId
                         _this.$store.dispatch('sendComment', {reply:formData}).then(() => {
                             this.isloding = false
-                            alert("Success!");
-                            this.$router.go(-1);
+                            // alert("Success!");
+                            // this.$router.go(-1);
+                            let tipContent = ''
+                            if(res.prompt && res.prompt.html){
+                                tipContent = res.prompt.html
+                            }
+                            this.$router.push({name:'reviewConfirm', params:{tipContent: tipContent}})
                         }).catch((e) => {
                             alert(e);
                             this.isloding = false
