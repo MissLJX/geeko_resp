@@ -241,7 +241,7 @@ export const getPointsProductList = (skip) => {
 
 //make-suggestion
 export const makeSuggestion = (files) => {
-    return axios.post('/ticket/add', files, {'Content-Type': http_infos.upload_image_content_type}).then(data => data.result)
+    return axios.post('/ticket/add', files, {'Content-Type': http_infos.upload_image_content_type});
 }
 
 // get cart product num
@@ -250,7 +250,7 @@ export const getShoppingCartNum = () => {
 }
 
 export const updateCustomerSave = (customer) => {
-    return axios.post(VPATH + "/customer/save",customer,{}).then(data => data.result);
+    return axios.post(VPATH + "/customer/save",customer,{});
 }
 
 export const surveySave = (params) => {

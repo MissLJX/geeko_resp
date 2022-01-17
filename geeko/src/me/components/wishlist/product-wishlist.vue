@@ -49,7 +49,7 @@
                     <span class="el-product-price">{{price}}</span>
                     <del class="el-product-del">{{delPrice}}</del>
                 </div>
-                <div class="st-cell st-v-m st-t-r">
+                <div class="st-cell st-v-m st-t-r" v-if="product && product.status !=='2'">
                     <i @click.prevent="addToCart(product.id)" class="iconfont el-product-like">&#xe6a8;</i>
                 </div>
             </div>

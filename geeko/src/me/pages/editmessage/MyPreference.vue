@@ -130,11 +130,11 @@
                     definition:{myPreference:this.myPreference}
 
                 };
-                _this.$store.dispatch("me/updateCustomerSave",obj).then(result => {
+                _this.$store.dispatch("me/updateCustomerSave",obj).then(prompt => {
                     _this.isLoadingShow = false;
                     // _this.$router.go(-1);
-                    if(result?.prompt?.html){
-                        this.reminderMessage =result.prompt.html;
+                    if(prompt?.html){
+                        this.reminderMessage = prompt.html;
                     }else{
                         this.$toast({
                             content:"Update success!",

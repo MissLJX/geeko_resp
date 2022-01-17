@@ -421,11 +421,11 @@
                             "name":"mySizeInformation"
                             }
 
-                store.dispatch("me/updateCustomerSave", obj).then(res => {
+                store.dispatch("me/updateCustomerSave", obj).then(prompt => {
                     // this.$router.go(-1);
                     this.isLoadingShow = false;
-                    if(result?.prompt?.html){
-                        this.reminderMessage =result.prompt.html;
+                    if(prompt?.html){
+                        this.reminderMessage =prompt.html;
                     }else{
                         this.$toast({
                             content:"Update success!",

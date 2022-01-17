@@ -57,7 +57,8 @@ export default {
         no:'NO',
         cancel:'Cancelar',
         use:'Usar',
-        manage_your_wishlist:"Haga clic aquí para administrar su lista de deseos"
+        manage_your_wishlist:"Haga clic aquí para administrar su lista de deseos",
+        shop_now:"Compra ahora"
     },
     point:{
         my_points:"Mis puntos",

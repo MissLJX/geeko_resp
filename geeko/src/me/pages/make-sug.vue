@@ -144,13 +144,13 @@
                     <btn 
                         class="fill normal" 
                         :style="{fontSize:16,fontFamily:'AcuminPro-Bold',color:'#ffffff',textTransform: 'uppercase',marginTop:'20px'}"
-                        @click.native="GLOBAL.getUrl('/')"
-                    >Shop Now</btn>
+                        @click.native="toHref(GLOBAL.getUrl('/'))"
+                    >{{$t("label.shop_now")}}</btn>
                     <btn 
                         class="fill normal" 
                         :style="{fontSize:'16px',fontFamily:'AcuminPro-Bold',color:'#ffffff',textTransform: 'uppercase',marginTop:'10px'}"
-                        @click.native="GLOBAL.getUrl('/fs/points-policy')"
-                    >Get more points</btn>
+                        @click.native="toHref(GLOBAL.getUrl('/fs/points-policy'))"
+                    >{{$t("point.get_more_points")}}</btn>
                 </div>
             </div>
         </transition>
@@ -288,9 +288,11 @@
                             // for (var [a, b] of formData.entries()) {
                             //     console.log("formData",a, b);
                             // }
-                            _this.$store.dispatch("me/makeSuggestion",formData).then(() => {
-                                if(result?.prompt?.html){
-                                    this.reminderMessage =result.prompt.html;
+                            _this.confirmLoadingShow = true;
+                            _this.$store.dispatch("me/makeSuggestion",formData).then(({prompt}) => {
+                                // console.log("prompt",prompt);
+                                if(prompt?.html){
+                                    this.reminderMessage = prompt.html;
                                 }else{
                                     this.$toast({
                                         content:"Update success!",
@@ -306,6 +308,8 @@
                                         }
                                     }).show();
                                 }
+
+                                _this.confirmLoadingShow = false;
                             });
                         }
                     });
@@ -318,6 +322,9 @@
                 //     this.$router.go(-1)
                 // }
                 this.$router.go(-1);
+            },
+            toHref(href){
+                window.location.href = href;
             }
         }
     }

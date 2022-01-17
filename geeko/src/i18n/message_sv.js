@@ -58,7 +58,8 @@ export default {
         no:'Nej',
         cancel:'Avbryt',
         use:'Anv\u00e4nd',
-        manage_your_wishlist:"Click here to manage your wishlist"
+        manage_your_wishlist:"Click here to manage your wishlist",
+        shop_now:"Shop Now"
     },
     point:{
         my_points:"My Points",

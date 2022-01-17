@@ -14,7 +14,7 @@
       :style="style1"
     >
       <div class="tip-box-content">
-          <span class="iconfont" style="font-size:21px;color:#20b759;margin-right:5px;">&#xe6b7;</span>
+          <span class="iconfont" style="font-size:21px;color:#20b759;margin-right:5px;" v-if="!!style1">&#xe6b7;</span>
           <span>{{ content }}</span>
       </div>
     </div>

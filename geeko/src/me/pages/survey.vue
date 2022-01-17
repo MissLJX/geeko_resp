@@ -15,7 +15,7 @@
             <p class="_title">{{$t("point.sorry_empty_here_not")}}</p>
         </div>
 
-        <div :class="{'survey-container':true, 'noHeader':isApp}" v-if="!reminderMessage">
+        <div :class="{'survey-container':true, 'noHeader':isApp}" v-if="!maskShow">
             <!-- <div class="survey-info">
                 <div class="info-title">{{$t("survey.survey_title")}}</div>
                 <div class="info-content">{{$t("survey.survey_title_content", {website: GLOBAL.sitename,point:points})}}</div> 
@@ -62,15 +62,13 @@
 
             
         </div>
-        <div v-if="!!reminderMessage" class="maskBox">
+        <div v-if="maskShow" class="maskBox">
             <div class="maskInfo">
-                <div v-html="reminderMessage" style="padding:0 45px;"></div>
-                <!-- <i class="iconfont maskClose" @click="()=>this.maskShow=false">&#xe7c9;</i>
-                <img src="https://image.geeko.ltd/chicme/2021-9-7/2021-9-7-me-survey-points.png" alt="">
-                <div class="maskContent" v-html="clickSubmit ? maskContent.contentDone : maskContent.content"></div> -->
+                <div v-html="reminderMessage" style="padding:0 45px;" v-if="!!reminderMessage"></div>
+
                 <div class="maskButton">
-                    <div class="maskBtn" @click="()=>goShopping()">Shop Now</div>
-                    <div class="maskBtn view" @click="()=>viewPoints()">Get more points</div>
+                    <div class="maskBtn" @click="()=>goShopping()">{{$t("label.shop_now")}}</div>
+                    <div class="maskBtn view" @click="()=>viewPoints()">{{$t("point.get_more_points")}}</div>
                 </div>
             </div>
         </div>
@@ -181,6 +179,7 @@
                 emptyShow:false,
                 inputSelect:'title1',
                 questionListAll:[],
+                maskShow: false,
                 result_id: 0,
                 hadDoneBefore: false,
                 clickSubmit: false,
@@ -214,6 +213,13 @@
                 if(res.message && res.id == 'M1545'){
                     let m = JSON.parse(res.message).point;
                     this.points = m;
+                }
+            }))
+
+            this.$store.dispatch('me/getMessage', 'M1617').then((res=>{
+                // console.log(res)
+                if(res?.message){
+                    this.reminderMessage = res.message;
                 }
             }))
             console.log=()=>{
@@ -305,26 +311,9 @@
                     store.dispatch('me/updateSurvey', params).then(res => {
                         if(res.code == 200){
                             this.getData();
+                            this.maskShow = true;
                             this.clickSubmit = true;
                             document.body.style.position = 'fixed'
-
-                            if(result?.prompt?.html){
-                                this.reminderMessage =result.prompt.html;
-                            }else{
-                                this.$toast({
-                                    content:"Update success!",
-                                    type:"success",
-                                    timer:2000,
-                                    style1:{
-                                        backgroundColor:"#ffffff",
-                                        color:"#222222",
-                                        padding:"15px 10px",
-                                        borderRadius:"5px",
-                                        boxShadow: "0px 0px 4px 1px rgba(0, 0, 0, 0.2)",
-                                        bottom:"300px"
-                                    }
-                                }).show();
-                            }
                         }
                     })
                 }
@@ -401,25 +390,8 @@
                         }
                         if(answers){
                             this.hadDoneBefore = true;
+                            this.maskShow = true;
                             document.body.style.position = 'fixed';
-
-                            if(result?.prompt?.html){
-                                this.reminderMessage =result.prompt.html;
-                            }else{
-                                this.$toast({
-                                    content:"Update success!",
-                                    type:"success",
-                                    timer:2000,
-                                    style1:{
-                                        backgroundColor:"#ffffff",
-                                        color:"#222222",
-                                        padding:"15px 10px",
-                                        borderRadius:"5px",
-                                        boxShadow: "0px 0px 4px 1px rgba(0, 0, 0, 0.2)",
-                                        bottom:"300px"
-                                    }
-                                }).show();
-                            }
                         }
                         if(id){
                             this.result_id = id;
@@ -529,12 +501,12 @@
                     display: none;
                 }
 
-                // img{
-                //     display: block;
-                //     width: 88px;
-                //     height: 56px;
-                //     margin: 18px auto 26px;
-                // }
+                img{
+                    display: block;
+                    width: 88px;
+                    height: 56px;
+                    margin: 18px auto 26px;
+                }
 
                 .maskContent{
                     width: 300px;
@@ -557,11 +529,10 @@
                 .maskButton{
                     margin-top: 34px;
                     font-family: AcuminPro-Bold;
-                    padding: 0px 45px;
 
                     .maskBtn{
-                        width: 100%;
-                        height: 38px;
+                        width: 240px;
+                        height: 32px;
                         background-color: #000000;
                         border-radius: 2px;
                         color: #fff;
@@ -569,9 +540,11 @@
                         display: flex;
                         align-items: center;
                         justify-content: center;
-                        text-transform: uppercase;
                     }
                     .view{
+                        background-color: #fff;
+                        color: #222;
+                        border: solid 1px #cacaca;
                         margin-top: 14px;
                         margin-bottom: 24px;
                     }
