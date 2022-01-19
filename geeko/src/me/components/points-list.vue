@@ -81,6 +81,7 @@
             font-size: 14px;
             color: #222222;
             font-family: 'AcuminPro-Bold';
+            text-align: center;
         }
         .bd{
             margin-top: 10px;

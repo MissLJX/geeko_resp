@@ -118,7 +118,7 @@ export const getPointsMoney = (money) => {
 }
 
 export const producturl = function (product) {
-    return _.concat('product', _url_analyst(product.name), product.parentSku, product.id + '.html').join('/')
+    return _.concat('product', _url_analyst(product.name), product.id + '.html').join('/')
 }
 
 export const dateFormat = function(times) {

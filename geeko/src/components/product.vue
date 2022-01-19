@@ -66,6 +66,7 @@
         }
         .img{
             position: relative;
+            background-color: #efefef;
             &::after{
                 content: '';
                 display: block;

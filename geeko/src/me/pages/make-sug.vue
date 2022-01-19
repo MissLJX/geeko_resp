@@ -143,7 +143,7 @@
 
                     <btn 
                         class="fill normal" 
-                        :style="{fontSize:16,fontFamily:'AcuminPro-Bold',color:'#ffffff',textTransform: 'uppercase',marginTop:'20px'}"
+                        :style="{fontSize:'16px',fontFamily:'AcuminPro-Bold',color:'#ffffff',textTransform: 'uppercase',marginTop:'20px'}"
                         @click.native="toHref(GLOBAL.getUrl('/'))"
                     >{{$t("label.shop_now")}}</btn>
                     <btn 
