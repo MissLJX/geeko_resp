@@ -62,7 +62,7 @@
                     let reg = /<span\s*id='email'>[\s\S]*<\/span>/g;
                     let reg2 = /#email#/;
                     if(query && query.pointsForCash){
-                        str = str.replace(reg,`<span id='email'>${query.pointsForCash}</span>`)
+                        str = str.replace(reg,`<span id='email'>100 points = $${query.pointsForCash} USD.</span>`)
                     }
                     
                     if(query && query.email){

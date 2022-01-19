@@ -24,7 +24,7 @@
                     </div>
                     <div class="_font">
                         <p>Buy and Earn</p>
-                        <p>us$1 = 1 points</p>
+                        <p>US$1 = 1 POINTS</p>
                     </div>
                 </div>
             </a>
@@ -53,7 +53,7 @@
                 </div>
             </router-link>
 
-            <a href="/i/download">
+            <a href="/share">
                 <div class="refer">
                     <div>
                         <span class="iconContainer">&#xe6d2;</span>
@@ -121,9 +121,7 @@
         methods:{
             buyEarnEvent:async function(event){
                 event.preventDefault();
-                console.log("1111")
                 let response = await getMessage("M1624");
-                console.log("response",response);
                 if(!!response?.message){
                     let _this = this;
                     this.$store.dispatch('confirmShow', {
@@ -136,7 +134,9 @@
                             message: "Buy and Earn",
                             message2:response?.message,
                             yes: function () {
-                                _this.$store.dispatch('closeConfirm');
+                                _this.$store.dispatch('closeConfirm').then(() =>{
+                                    window.location.href = _this.GLOBAL.getUrl("/");
+                                });
                             },
                             no:function(){
                                 _this.$store.dispatch('closeConfirm');
@@ -153,6 +153,13 @@
                                 },
                                 message:{
                                     fontSize:"16px",
+                                    fontFamily: 'AcuminPro-Bold'
+                                },
+                                message2:{
+                                    color:"#222222"
+                                },
+                                btnYes:{
+                                    fontSize:"14px",
                                     fontFamily: 'AcuminPro-Bold'
                                 }
                             },
@@ -199,7 +206,7 @@
                 & > div{
                     height: 100%;
                     width: 100%;
-                    padding: 20px 12px;
+                    padding: 12px 12px;
                     text-align: center;
                 }
 
