@@ -30,7 +30,7 @@
                 <btn 
                     class="fill normal" 
                     :style="{fontSize:'16px',fontFamily:'AcuminPro-Bold',color:'#ffffff',textTransform: 'uppercase',marginTop:'10px'}"
-                    @click.native="toHref(GLOBAL.getUrl('/fs/points-policy'))"
+                    @click.native="toPointsPage"
                 >{{$t("point.get_more_points")}}</btn>
             </div>
         </template>
@@ -92,6 +92,9 @@
             },
             toHref(href){
                 window.location.href = href;
+            },
+            toPointsPage(){
+                this.$router.push({name:"credits"});
             }
         }
     }

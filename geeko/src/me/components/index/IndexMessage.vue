@@ -73,7 +73,7 @@
             </a>
             <a href="/share" click-name="Get$10">
                 <p class="iconfont">&#xe6da;</p>
-                <p>{{$t("index.get_discount")}}</p>
+                <p>{{$t("label.refer")}}</p>
             </a>
 
             <!-- 积分膨胀提示组件 -->

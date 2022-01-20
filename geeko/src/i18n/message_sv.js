@@ -59,7 +59,8 @@ export default {
         cancel:'Avbryt',
         use:'Anv\u00e4nd',
         manage_your_wishlist:"Click here to manage your wishlist",
-        shop_now:"Shop Now"
+        shop_now:"Shop Now",
+        refer:'H\u00e4nvisa en v\u00e4n',
     },
     point:{
         my_points:"My Points",

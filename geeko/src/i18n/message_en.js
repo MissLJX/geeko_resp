@@ -58,7 +58,8 @@ export default {
         cancel:'Cancel',
         use:'Use',
         manage_your_wishlist:"Click here to manage your wishlist",
-        shop_now:"Shop Now"
+        shop_now:"Shop Now",
+        refer:'Refer a Friend',
     },
     point:{
         my_points:"My Points",

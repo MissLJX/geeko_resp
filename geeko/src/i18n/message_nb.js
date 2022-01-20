@@ -59,7 +59,8 @@ export default {
         cancel:'Avbryt',
         use:'Bruk',
         manage_your_wishlist:"Click here to manage your wishlist",
-        shop_now:"Shop Now"
+        shop_now:"Shop Now",
+        refer:'Henvis en venn',
     },
     point:{
         my_points:"My Points",

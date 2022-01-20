@@ -106,7 +106,8 @@
                         this.$store.dispatch("globalLoadingShow",false);
                         _this.modalShow("A verification link has been sent to your email address, please check your mailbox.");
                     }).catch((e) => {
-                        console.log("This mailbox adress is already existed,please re-enter.");
+                        this.$store.dispatch("globalLoadingShow",false);
+                        _this.modalShow(e?.result ?? "Sorry, your operations are too busy, please try again later");
                     });
                 }else{
                     _this.modalShow("Your email has been verified, please use other ways to get points.");

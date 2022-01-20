@@ -59,7 +59,8 @@ export default {
         cancel:'Peruuta',
         use:'K\u00e4yt\u00e4',
         manage_your_wishlist:"Click here to manage your wishlist",
-        shop_now:"Shop Now"
+        shop_now:"Shop Now",
+        refer:'Lähetä kaverille',
     },
     point:{
         my_points:"My Points",

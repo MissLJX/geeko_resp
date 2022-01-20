@@ -223,7 +223,6 @@
         },
         mounted(){
             this.$nextTick(()=>this.getQuestionList())
-            console.log('submit111111');
         },
         beforeDestroy(){
             document.body.style.position = 'static'
@@ -317,7 +316,11 @@
                             document.body.style.position = 'fixed'
 
                             if(prompt?.html){
-                                _this.reminderMessage = prompt.html;
+                                let str = prompt.html;
+                                if(window.isApp == "true"){
+                                    str = str.replace(/fs\/points-policy/,"fs/points-policy?isApp=1");
+                                }
+                                _this.reminderMessage = str;
                             }else{
                                 _this.$store.dispatch('me/getMessage', 'M1628').then((res=>{
                                     // console.log(res)
