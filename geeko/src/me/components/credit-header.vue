@@ -1,28 +1,7 @@
 <template>
     <div class="credits-header">
-        <!-- <div class="st-table credits-hd">
-            <div class="st-cell st-v-m">
-                <div class="circle">
-                    <span class="iconfont __icon">&#xe76e;</span>
-                </div>
-            </div>
-            <div class="st-cell el-credits-discount st-v-m">
-                <span></span>
-                <span>=${{pointsMoney}}</span>
-            </div>
-
-            <div class="st-cell el-credits-right st-v-m">
-                <span>=${{pointsMoney}}</span>
-            </div>
-        </div> -->
-
-        <!-- <div class="expiring-points">
-            <span class="overduepoints"></span>
-            
-        </div> -->
-
         <div class="credits-header-container">
-            <div class="item1">
+            <!-- <div class="item1">
                 <span>{{me.points}}</span>
                 <p>
                     <span>={{me.exchangeAmount}}</span>
@@ -43,17 +22,25 @@
                         />
                     </div>
                 </div>
+            </div> -->
+
+            <p class="points-history">
+                <router-link :to="{name:'points-all'}">
+                    {{$t("point.points_history")}} >
+                </router-link>
+            </p>
+
+            <div class="points-num">
+                <span class="_num">{{me.points}}</span>
+                <p><span>={{me.exchangeAmount}}</span></p>
             </div>
-            <div class="item2">
-                <p class="over-points">{{me.overduePoints}}</p>
-                <span class="exping-soon">{{$t("point.points_expired_soon")}} </span>
+
+            <div class="expiring-points">
+                <span class="_font">{{me.overduePoints}} POINTS</span>
+                <span>Expriring Soon</span>
                 <span class="__question" @click="seen = !seen;">
                     <span>?</span>
                 </span>
-
-                <router-link :to="{name:'points-all'}">
-                    <p class="points-history">{{$t("point.points_history")}} ></p>
-                </router-link>
 
                 <div class="msg-tips" v-if="seen">{{message}}.</div>
             </div>
@@ -71,25 +58,24 @@
         props: {
             me: {
                 type: Object,
-                required: true,
-                message: ''
+                required: true
             }
         },
         data(){
             return{
-                seen:false
+                seen:false,
+                message: ''
             }
         },
         computed:{
-            ...mapGetters("me",["dobulePoints"]),
-            getTimeLeft(){
-                if(this.dobulePoints && this.dobulePoints.points){
-                    let nowTimeStrap = new Date().getTime();
-                    return this.dobulePoints.points.endTime - nowTimeStrap;
-                }
-                return 0;
-            }
-
+            // ...mapGetters("me",["dobulePoints"]),
+            // getTimeLeft(){
+            //     if(this.dobulePoints && this.dobulePoints.points){
+            //         let nowTimeStrap = new Date().getTime();
+            //         return this.dobulePoints.points.endTime - nowTimeStrap;
+            //     }
+            //     return 0;
+            // }
         },
         created(){
             this.$store.dispatch('me/getMessage', 'M1138').then((res)=>{
@@ -99,7 +85,7 @@
                 }
             });
 
-            !(this.dobulePoints && this.dobulePoints.points) && this.$store.dispatch("me/getDobulePointsData","M1578");
+            // !(this.dobulePoints && this.dobulePoints.points) && this.$store.dispatch("me/getDobulePointsData","M1578");
         },
         components:{
             "count-down":CountDown
@@ -125,153 +111,73 @@
     }
 
     .credits-header{
-        // background-image: linear-gradient(44deg, 
-        //     #f0d192 0%, 
-        //     #f9e5be 100%);
         border-radius: 4px;
-        background: url("https://image.geeko.ltd/chicme/20210804/background.jpg") no-repeat;
+        background: url("https://image.geeko.ltd/20220113/points_bg.png") no-repeat;
         background-position: center;
         background-size:cover;
         padding: 10px 20px;
         height: 100%;
 
         .credits-header-container{
-            display: flex;
-            justify-content: space-between;
-            // align-items: center;
-
-            & > div{
-                width: 50%;
-                text-align: center;
-                padding: 10px 0px;
-                position: relative;
+            .points-history{
+                text-align: right;
+                font-size: 12px;
+                color: #222222;
             }
 
-            .item1{
-                border-right: 1px dashed #eac89c;
+            .points-num{
+                text-align: center;
+                ._num{
+                    font-size: 48px;
+                    color: #222222;
+                    font-family: 'AcuminPro-Bold';
+                }
+
+                p{
+                    font-family: 'SlatePro-Medium';
+                    font-size: 14px;
+                }
+            }
+
+            .expiring-points{
                 position: relative;
+                background-color: #1a1a1a;
+                border-radius: 11px;
+                width: fit-content;
+                align-items: center;
+                margin: 0 auto;
+                text-align: center;
+                color: #ffffff;
+                padding: 3px 20px;
+                margin-top: 20px;
+                font-size: 12px;
 
                 & > span{
-                    font-size: 36px;
-                    font-family: 'AcuminPro-Bold';
-                    color: #9d6929;
+                    text-transform: uppercase;
                 }
 
-                & > p{
-                    font-size: 12px;
-                    color: #be8f55;
-
-                    & span{
-                        vertical-align: middle;
-                    }
-
-                    .dobule-icon{
-                        width: 16px;
-                        height: 16px;
-                        display: inline-block;
-                        background-image: url(https://image.geeko.ltd/chicme/2021111101/dobule_points_me.png);
-                        background-size: cover;
-                        line-height: 20px;
-                    }
-                }
-
-                .points-message-modal{
-                    background-color: #ffffff;
-                    padding: 8px 5px;
-                    position: absolute;
-                    width: 100%;
-                    right: 10px;
-                    top: 75px;
-                    -os-box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.3);
-                    -ms-box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.3);
-                    box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.3);
-
-                    ._hd{
-                        color: #222222;
-                        font-size: 12px;
-                        font-family: 'AcuminPro-Bold';
-                    }
-
-                    ._bd{
-                        // display: flex;
-                        ._font{
-                            color: #222222;
-                            font-size: 12px;
-                            // transform: scale(.8);
-                            font-family: 'SlatePro-Medium';
-                            display: inline-block;
-                            transform: scale(0.9);
-                        }
-
-                        .countdown{
-                            margin-top: 5px;
-                        }
-                    }
-
-                    &::after{
-                        content: ' ';
-                        position: absolute;
-                        width: 10px;
-                        height: 10px;
-                        right:34px;
-                        top: -4px;
-                        background-color: #ffffff;
-                        transform:rotate(315deg);
-                        -moz-transform:rotate(315deg); 	/* Firefox */
-                        -webkit-transform:rotate(315deg); /* Safari 和 Chrome */
-                        box-shadow: 0px 0px 0px 0 transparent, 0 0px 0px 0px transparent, 0 0 0 0 transparent, 1px -1px 2px -1px rgba(0,0,0,0.25);
-                    }
-                }
-
-                @media screen and (min-width: 300px) and (max-width: 321px){
-                    .points-message-modal::after{
-                        right: 17px;
-                    }
-                }
-
-                @media screen and (min-width: 325px) and (max-width: 376px){
-                    .points-message-modal::after{
-                        right: 31px;
-                    }
-                }
-
-                @media screen and (min-width: 380px) and (max-width: 415px){
-                    .points-message-modal::after{
-                        right: 41px;
-                    }
-                }
-            }
-
-            .item2{
-                text-align: right;
-                .over-points{
-                    font-size: 36px;
-                    font-family: 'AcuminPro-Bold';
-                    color: #9d6929;
-                    text-align: center;
+                ._font{
+                    font-family: 'SlatePro-Medium';
                 }
 
                 .exping-soon{
-                    font-size: 12px;
-	                color: #be8f55;
+                    font-size: 16px;
+                    color: #222222;
                     vertical-align: middle;
-                    margin-right: 3px;
-                    text-transform: capitalize;
-                    width: 80%;
-                    display: inline-block;
                 }
 
                 .__question{
                     display: inline-block;
-                    width: 14px;
-                    height: 14px;
-                    line-height: 11px;
+                    width: 13px;
+                    height: 13px;
+                    line-height: 13px;
                     text-align: center;
-                    color: #be8f55;
+                    color: #ffffff;
                     border-radius: 50%;
-                    border: 1px solid #be8f55;
+                    border: 1px solid #ffffff;
                     vertical-align: middle;
                     cursor: pointer;
+                    margin-left: 3px;
 
                     & > span{
                         font-size: 12px;
@@ -288,16 +194,8 @@
                     border: 1px solid #efefef;
                     font-size: 12px;
                     right: 0px;
-                    top: 70px;
+                    top: 25px;
                     text-align: left;
-                }
-
-                .points-history{
-                    font-family: 'SlatePro-Medium';
-                    font-size: 12px;
-                    color: #9d6929;
-                    text-align: right;
-                    margin-top: 10px;
                 }
             }
         }
@@ -337,53 +235,6 @@
                     font-size: 16px;
                     color: #222222;
                 }
-            }
-        }
-
-        .expiring-points{
-            padding: 10px 0px;
-            position: relative;
-            .overduepoints{
-                font-size: 16px;
-                color: #f0526a;
-                vertical-align: middle;
-            }
-
-            .exping-soon{
-                font-size: 16px;
-                color: #222222;
-                vertical-align: middle;
-            }
-
-            .__question{
-                display: inline-block;
-                width: 18px;
-                height: 18px;
-                line-height: 18px;
-                text-align: center;
-                color: #cacaca;
-                border-radius: 50%;
-                border: 1px solid #cacaca;
-                vertical-align: middle;
-                cursor: pointer;
-
-                & > span{
-                    font-size: 15px;
-                }
-            }
-
-            .msg-tips{
-                width: 200px;
-                height: 60px;
-                padding: 10px;
-                position: absolute;
-                background-color: white;
-                color: #666;
-                border: 1px solid #efefef;
-                font-size: 12px;
-                right: 0px;
-                top: 35px;
-                text-align: left;
             }
         }
     }

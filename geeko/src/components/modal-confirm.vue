@@ -5,16 +5,23 @@
               v-if="cfg.btnClose" 
               @click="cfg.no">&#xe69a;</span>
 
-        <div class="bd"
-             :style="messageStyle">
-            <p>{{cfg.message}}</p>
+        <div class="bd">
+            <p :style="messageStyle">{{cfg.message}}</p>
         </div>
 
-        <div class="message2" 
-             v-if="cfg.message2"
-             :style="message2Style">
-            <p>{{cfg.message2}}</p>
-        </div>
+        <template>
+            <div class="message2" 
+                v-if="cfg.message2 && cfg.htmlMessage2"
+                :style="message2Style">
+                <p v-html="cfg.message2"></p>
+            </div>
+
+            <div class="message2" 
+                v-else
+                :style="message2Style">
+                <p>{{cfg.message2}}</p>
+            </div>
+        </template>
 
         <div class="fd">
             <button class="btn" 

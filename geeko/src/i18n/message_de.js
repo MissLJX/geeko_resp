@@ -57,7 +57,9 @@ export default {
         no:'Nein',
         cancel:'Abbrechen',
         use:'Benutzen',
-        manage_your_wishlist:"Klicken hier, um Ihre Wunschliste zu verwalten"
+        manage_your_wishlist:"Klicken hier, um Ihre Wunschliste zu verwalten",
+        shop_now:"Jetzt einkaufen",
+        refer:'Empfehlen Sie einen Freund',
     },
     point:{
         my_points:"Meine Punkte",

@@ -64,14 +64,11 @@
         </div>
         <div v-if="maskShow" class="maskBox">
             <div class="maskInfo">
-                <i class="iconfont maskClose" @click="()=>this.maskShow=false">&#xe7c9;</i>
-                <img src="https://image.geeko.ltd/chicme/2021-9-7/2021-9-7-me-survey-points.png" alt="">
-                <div class="maskContent" v-html="clickSubmit ? maskContent.contentDone : maskContent.content">
+                <div v-html="reminderMessage" style="padding:0 45px;" v-if="!!reminderMessage"></div>
 
-                </div>
                 <div class="maskButton">
-                    <div class="maskBtn" @click="()=>goShopping()">{{$t("survey.survey_go_shopping")}}</div>
-                    <div class="maskBtn view" @click="()=>viewPoints()">{{$t("survey.survey_view_points")}}</div>
+                    <div class="maskBtn" @click="()=>goShopping()">{{$t("label.shop_now")}}</div>
+                    <div class="maskBtn view" @click="()=>viewPoints()">{{$t("point.get_more_points")}}</div>
                 </div>
             </div>
         </div>
@@ -190,7 +187,9 @@
                 maskContent:{
                     content:'',
                     contentDone:''
-                }
+                },
+                reminderMessage:null,
+                submitFlag:true
             }
         },
         components:{
@@ -217,9 +216,10 @@
                     this.points = m;
                 }
             }))
-            console.log=()=>{
+
+            // console.log=()=>{
                 
-            }
+            // }
         },
         mounted(){
             this.$nextTick(()=>this.getQuestionList())
@@ -285,6 +285,7 @@
                 // console.log('submit')
                 let list = []
                 let params = {}
+                let _this = this;
                 for(let i in this.questionListAll){
                     // console.log(i)
                     let obj = {id:'',title:'',answer:'',input:''}
@@ -302,13 +303,32 @@
                 }
                 // console.log(JSON.stringify(list))
                 // params = {answers: '[{"id":0,"title":"*Regarding shopping fashion items, do you typically make a decision beforehand or at the time of shopping?","answer":"Beforehand","input":""},{"id":1,"title":"*Which factors are important to you when you make the decision to purchase a product?（You can choose one or more）","answer":["Customer services"],"input":""},{"id":2,"title":"*How often do you shop for fashion items?","answer":"Several times a month","input":""},{"id":3,"title":"*What promotion would you prefer?","answer":["Exclusive code"]},{"id":4,"title":"*Which kind of style would you prefer?","answer":"Oversize","input":""},{"id":5,"title":"*How did you know ChicMe?（You can choose one or more）","answer":["Recommend by friends"],"input":""},{"id":6,"title":"*How familiar are you with ChicMe?","answer":"Not at all familiar","input":""},{"id":7,"title":"*How well does our website & APP meet your needs?","answer":"Not at all well","input":""},{"id":8,"title":"*How easy was it to find what you were looking for on our website & APP？","answer":"Not at all easy","input":""},{"id":9,"title":"*Would you recommend ChicMe website and APP to friends or colleagues?","answer":"No","input":""},{"id":10,"title":"*What are the brands that you typically buy ? Please list three of your favorite.","answer":"da","input":""},{"id":11,"title":"*Do you have any comments about how we can improve our website & APP?","answer":"sa","input":""},{"id":12,"title":"*What is your age?","answer":"35-44","input":""},{"id":13,"title":"*What is your gender?","answer":"Others","input":""},{"id":14,"title":"*Which country do you live in?","answer":"FR","input":""},{"id":15,"title":"*What kind of occupation are you in?","answer":["Others"],"input":""},{"id":16,"title":"*On average, how much do you spend on fashion items each month?","answer":"$100-$200","input":""}]'}
-                if(this.checkData(list)){
+                
+                if(this.checkData(list) && this.submitFlag){
+                    this.submitFlag = false;
                     store.dispatch('me/updateSurvey', params).then(res => {
+                        this.submitFlag = true;
+                        const {prompt} = res;
                         if(res.code == 200){
-                            this.getData();
+                            // this.getData();
                             this.maskShow = true;
                             this.clickSubmit = true;
                             document.body.style.position = 'fixed'
+
+                            if(prompt?.html){
+                                let str = prompt.html;
+                                if(window.isApp == "true"){
+                                    str = str.replace(/fs\/points-policy/,"fs/points-policy?isApp=1");
+                                }
+                                _this.reminderMessage = str;
+                            }else{
+                                _this.$store.dispatch('me/getMessage', 'M1628').then((res=>{
+                                    // console.log(res)
+                                    if(res?.message){
+                                        _this.reminderMessage = res.message;
+                                    }
+                                }))
+                            }
                         }
                     })
                 }
@@ -349,6 +369,7 @@
                 return q
             },
             getData(){
+                let _this = this;
                 store.dispatch("me/getSurvey",{}).then(data => data.result).then(result => {
                     if(result){
                         const {answers:answersJSON,id} = result
@@ -387,6 +408,13 @@
                             this.hadDoneBefore = true;
                             this.maskShow = true;
                             document.body.style.position = 'fixed';
+
+                            _this.$store.dispatch('me/getMessage', 'M1628').then((res=>{
+                                // console.log(res)
+                                if(res?.message){
+                                    _this.reminderMessage = res.message;
+                                }
+                            }))
                         }
                         if(id){
                             this.result_id = id;
@@ -535,6 +563,8 @@
                         display: flex;
                         align-items: center;
                         justify-content: center;
+                        font-size: 16px;
+                        text-transform: uppercase;
                     }
                     .view{
                         background-color: #fff;

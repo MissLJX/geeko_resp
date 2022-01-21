@@ -92,6 +92,12 @@ input:-webkit-autofill{
 }
 
 @font-face {
+	font-family: 'Roboto-Regular';
+	src: url('https://s3.geeko.ltd/fonts/Roboto-Regular.ttf.gz');
+	font-display: swap;
+}
+
+@font-face {
 	font-family: 'SlatePro-Medium';
 	src: url('https://s3.geeko.ltd/fonts/Roboto-Medium.ttf.gz');
 	font-display: swap;

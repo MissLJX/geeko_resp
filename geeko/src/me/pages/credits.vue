@@ -8,15 +8,14 @@
             </a>
         </nav-bar>
 
+        <credit-header :me="pointsCustomerNum"></credit-header>
+
         <div class="_container">
-            <credit-header :me="pointsCustomerNum"></credit-header>
             <received-used></received-used>
             <points-list v-if="!showPointsMall"></points-list>
         </div>
 
         <points-mall v-if="showPointsMall"></points-mall>
-
-        
 
         <Loading v-if="isGetCustomerLoadingShow"></Loading>
     </div>

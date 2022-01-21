@@ -132,13 +132,26 @@
         <Loading v-if="uploadImageLoadingShow || confirmLoadingShow"></Loading>
 
         <transition name="uper">
-            <div class="success-container" v-if="successShow">
-                <div class="_hd">
+            <div class="success-container" v-if="!!reminderMessage">
+                <!-- <div class="_hd">
                     <span class="iconfont">&#xe6b7;</span>
                 </div>
                 <p class="_title1">{{$t("point.submit_success")}}</p>
-                <p class="_title2">{{$t("point.wu_have_success")}}</p>
-                
+                <p class="_title2">{{$t("point.wu_have_success")}}</p> -->
+                <div style="padding:0px 45px;">
+                    <div v-html="reminderMessage"></div>
+
+                    <btn 
+                        class="fill normal" 
+                        :style="{fontSize:'16px',fontFamily:'AcuminPro-Bold',color:'#ffffff',textTransform: 'uppercase',marginTop:'20px'}"
+                        @click.native="toHref(GLOBAL.getUrl('/'))"
+                    >{{$t("label.shop_now")}}</btn>
+                    <btn 
+                        class="fill normal" 
+                        :style="{fontSize:'16px',fontFamily:'AcuminPro-Bold',color:'#ffffff',textTransform: 'uppercase',marginTop:'10px'}"
+                        @click.native="toPointsPage"
+                    >{{$t("point.get_more_points")}}</btn>
+                </div>
             </div>
         </transition>
     </div>
@@ -149,12 +162,14 @@
     import fecha from 'fecha'
     import Loading from '../../components/loading.vue'
     import HtmlImageCompress from 'html-image-compress'
+    import Btn from "../../components/btn.vue"
 
     export default {
         name:"MakeSug",
         components:{
             'nav-bar':NavBar,
-            "Loading":Loading
+            "Loading":Loading,
+            "btn":Btn
         },
         data(){
             return {
@@ -176,7 +191,7 @@
                     questionTypeBorderShow:false,
                     timeBorderShow:false
                 },
-                successShow:false
+                reminderMessage:null
             }
         },
         computed:{
@@ -273,8 +288,28 @@
                             // for (var [a, b] of formData.entries()) {
                             //     console.log("formData",a, b);
                             // }
-                            _this.$store.dispatch("me/makeSuggestion",formData).then(() => {
-                                this.successShow = true;
+                            _this.confirmLoadingShow = true;
+                            _this.$store.dispatch("me/makeSuggestion",formData).then(({prompt}) => {
+                                // console.log("prompt",prompt);
+                                if(prompt?.html){
+                                    this.reminderMessage = prompt.html;
+                                }else{
+                                    this.$toast({
+                                        content:"Update success!",
+                                        type:"success",
+                                        timer:2000,
+                                        style1:{
+                                            backgroundColor:"#ffffff",
+                                            color:"#222222",
+                                            padding:"15px 10px",
+                                            borderRadius:"5px",
+                                            boxShadow: "0px 0px 4px 1px rgba(0, 0, 0, 0.2)",
+                                            bottom:"300px"
+                                        }
+                                    }).show();
+                                }
+
+                                _this.confirmLoadingShow = false;
                             });
                         }
                     });
@@ -287,6 +322,12 @@
                 //     this.$router.go(-1)
                 // }
                 this.$router.go(-1);
+            },
+            toHref(href){
+                window.location.href = href;
+            },
+            toPointsPage(){
+                this.$router.push({name:"credits"});
             }
         }
     }

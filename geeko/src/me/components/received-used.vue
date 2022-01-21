@@ -16,10 +16,23 @@
                     </div>
                 </div>
             </a>
-            <a :href="GLOBAL.getUrl('/me/m/order/confirmed')">
+
+            <a @click="buyEarnEvent($event)">
+                <div class="buy-earn">
+                    <div>
+                        <span class="iconContainer"></span>
+                    </div>
+                    <div class="_font">
+                        <p>Buy and Earn</p>
+                        <p>US$1 = 1 POINTS</p>
+                    </div>
+                </div>
+            </a>
+
+            <a @click="recordEventSkip(false,'/me/m/order/confirmed','Review',$event)">
                 <div class="review">
                     <div>
-                        <span class="iconfont">&#xe6d1;</span>
+                        <span class="iconContainer"></span>
                     </div>
                     <div class="_font">
                         <p>{{$t("point.review")}}</p>
@@ -27,23 +40,11 @@
                     </div>
                 </div>
             </a>
-            
-            <router-link :to="{name:'survey'}">
-                <div class="survey">
-                    <div>
-                        <span class="iconfont">&#xe6cf;</span>
-                    </div>
-                    <div class="_font">
-                        <p>{{$t("point.survey")}}</p>
-                        <p>0~300 points</p>
-                    </div>
-                </div>
-            </router-link>
-            
-            <router-link :to="{name:'make-sug'}">
+
+            <router-link to="/" @click.native="recordEventSkip(true,'/me/m/makeSug','Suggestion',$event)">
                 <div class="suggestion">
                     <div>
-                        <span class="iconfont">&#xe6d0;</span>
+                        <span class="iconContainer"></span>
                     </div>
                     <div class="_font">
                         <p>{{$t("point.suggestion")}}</p>
@@ -51,26 +52,52 @@
                     </div>
                 </div>
             </router-link>
-            
-            <a href="/i/download">
-                <div class="download">
+
+            <a @click="recordEventSkip(false,'/share','ReferFriend',$event)">
+                <div class="refer">
                     <div>
-                        <span class="iconfont">&#xe6d2;</span>
+                        <span class="iconContainer">&#xe6d2;</span>
                     </div>
                     <div class="_font">
-                        <p>{{$t("point.download_app")}}</p>
-                        <p>{{$t("point.get_more_points")}}</p>
+                        <p>{{$t("label.refer")}}</p>
+                        <p>Up to 500 points</p>
                     </div>
                 </div>
             </a>
-            <router-link :to="GLOBAL.getUrl('/me/m/point-guide')" :class="{'fd global-overflow':true,'show100':!showPointsMall}">
+            
+            <router-link to="/" @click.native="recordEventSkip(true,'/me/m/survey','Survey',$event)">
+                <div class="survey">
+                    <div>
+                        <span class="iconContainer"></span>
+                    </div>
+                    <div class="_font">
+                        <p>{{$t("point.survey")}}</p>
+                        <p>150 points</p>
+                    </div>
+                </div>
+            </router-link>
+
+            <router-link to="/" @click.native="recordEventSkip(true,'/me/m/point-guide','MoreWays',$event)">
+                <div class="more">
+                    <div>
+                        <span class="iconContainer"></span>
+                    </div>
+                    <div class="_font">
+                        <p>More Ways ></p>
+                        <p></p>
+                    </div>
+                </div>
+            </router-link>
+            
+            
+            <!-- <router-link :to="GLOBAL.getUrl('/me/m/point-guide')" :class="{'fd global-overflow':true,'show100':!showPointsMall}">
                 <div style="padding:0px;">
                     <div class="_font" style="white-space: normal;line-height: 20px;">
                         {{$t("point.more_ways_to_earn_more_points")}} >
                     </div>
                 </div>
                 
-            </router-link>
+            </router-link> -->
         </div>
 
         
@@ -78,15 +105,142 @@
 </template>
 
 <script>
+    import {getMessage} from "../api/index"
+
     export default {
         data(){
             return{
                 selectValue:0
             }
         },
+        mounted:function(){
+            if(window.GeekoSensors){
+                window.GeekoSensors.Track('PitPositionExposure', {
+                    page_sort:"Me",
+                    page_content: "Points",
+                    resourcepage_title:"Points_BuyEarn",
+                    resource_content:"BuyEarn"
+                })
+
+                window.GeekoSensors.Track('PitPositionExposure', {
+                    page_sort:"Me",
+                    page_content: "Points",
+                    resourcepage_title:"Points_Review",
+                    resource_content:"Review"
+                })
+
+                window.GeekoSensors.Track('PitPositionExposure', {
+                    page_sort:"Me",
+                    page_content: "Points",
+                    resourcepage_title:"Points_Suggestion",
+                    resource_content:"Suggestion"
+                })
+
+                window.GeekoSensors.Track('PitPositionExposure', {
+                    page_sort:"Me",
+                    page_content: "Points",
+                    resourcepage_title:"Points_ReferFriend",
+                    resource_content:"ReferFriend"
+                })
+
+                window.GeekoSensors.Track('PitPositionExposure', {
+                    page_sort:"Me",
+                    page_content: "Points",
+                    resourcepage_title:"Points_Survey",
+                    resource_content:"Survey"
+                })
+
+                window.GeekoSensors.Track('PitPositionExposure', {
+                    page_sort:"Me",
+                    page_content: "Points",
+                    resourcepage_title:"Points_MoreWays",
+                    resource_content:"MoreWays"
+                })
+            }
+        },
         computed:{
             showPointsMall(){
                 return window.showPointsMall
+            }
+        },
+        methods:{
+            buyEarnEvent:async function(event){
+                event.preventDefault();
+                let response = await getMessage("M1624");
+                if(!!response?.message){
+                    let _this = this;
+                    this.$store.dispatch('confirmShow', {
+                        show: true,
+                        cfg: {
+                            btnFont:{
+                                yes:"SHOP NOW",
+                            },
+                            btnClose: true,
+                            message: "Buy and Earn",
+                            message2:response?.message,
+                            yes: function () {
+                                _this.$store.dispatch('closeConfirm').then(() =>{
+                                    window.location.href = _this.GLOBAL.getUrl("/");
+                                });
+                            },
+                            no:function(){
+                                _this.$store.dispatch('closeConfirm');
+                            },
+                            style:{
+                                box:{
+                                    padding:"15px 12px"
+                                },
+                                btnClose:{
+                                    fontSize: "20px",
+                                    fontWeight: "bold",
+                                    top:"5px",
+                                    right:"4px"
+                                },
+                                message:{
+                                    fontSize:"16px",
+                                    fontFamily: 'AcuminPro-Bold'
+                                },
+                                message2:{
+                                    color:"#222222"
+                                },
+                                btnYes:{
+                                    fontSize:"14px",
+                                    fontFamily: 'AcuminPro-Bold'
+                                }
+                            },
+                            htmlMessage2:true
+                        }
+                    })
+                }
+
+                if(window.GeekoSensors){
+                    window.GeekoSensors.Track('PitPositionClick', {
+                        page_sort:"Me",
+                        page_content: "Points",
+                        resourcepage_title:"Points_BuyEarn",
+                        resource_content:"BuyEarn"
+                    })
+                }
+            },
+            recordEventSkip(type,path,eventName,event){
+                // type true表示路由跳转  false表示window.location跳转
+                // path 路径或者跳转的名字
+                // eventName  事件的名字
+                event.preventDefault();
+                if(!!type){
+                    this.$router.push(this.GLOBAL.getUrl(path));
+                }else{
+                    window.location.href = this.GLOBAL.getUrl(path);
+                }
+
+                if(window.GeekoSensors){
+                    window.GeekoSensors.Track('PitPositionClick', {
+                        page_sort:"Me",
+                        page_content: "Points",
+                        resourcepage_title:`Points_${eventName}`,
+                        resource_content:eventName
+                    })
+                }
             }
         }
     }
@@ -114,32 +268,29 @@
             justify-content: space-between;
 
             & > a{
-                width: calc(50% - 5px);
-                height: 72px;
+                width: calc(33.33333% - 10px);
                 margin-bottom: 10px;
                 display: inline-block;
                 cursor: pointer;
+                box-shadow: 1px 2px 4px 0px 
+                    rgba(0, 0, 0, 0.08);
+                border-radius: 16px;
+                border: solid 1px #e6e6e6;
 
                 & > div{
                     height: 100%;
                     width: 100%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    padding: 0px 20px;
-                }
-
-                & .iconfont{
-                    font-size: 30px;
-                    color: #ffffff;
-                    margin-right: 10px;
+                    padding: 12px 12px;
+                    text-align: center;
                 }
 
                 & ._font{
                     overflow: hidden;
+                    margin-top: 10px;
+
                     & > p:first-child{
-                        font-size: 14px;
-                        color: #ffffff;
+                        font-size: 12px;
+                        color: #222222;
                         font-family: 'AcuminPro-Bold';
                         white-space: nowrap;
                         overflow: hidden;
@@ -149,34 +300,47 @@
 
                     & > p:last-child{
                         font-size: 12px;
-	                    color: #ffffff;
+	                    color: #222222;
                         white-space: nowrap;
                         overflow: hidden;
                         text-overflow: ellipsis;
                         width: 100%;
                     }
                 }
+
+                & .iconContainer{
+                    width: 28px;
+                    height: 28px;
+                    display: inline-block;
+                    background-size: cover;
+                    background-repeat: no-repeat;
+                }
+            }
+
+            .buy-earn{
+                & .iconContainer{
+                    background-image: url("https://image.geeko.ltd/20220113/My-Points-Buy-Earn.png");
+                }
             }
 
             .review{
-                background-image: linear-gradient(124deg, 
-                    #ff8976 0%, 
-                    #ffcca8 100%);
-                border-radius: 4px;
+                & .iconContainer{
+                    background-image: url("https://image.geeko.ltd/20220113/My-Points-review.png");
+                    width: 37px;
+                    height: 30px;
+                }
             }
 
             .survey{
-                background-image: linear-gradient(124deg, 
-                    #b886b4 0%, 
-                    #dab1db 100%);
-                border-radius: 4px;
+                & .iconContainer{
+                    background-image: url("https://image.geeko.ltd/20220113/My-Points-survey.png");
+                }
             }
 
             .suggestion{
-                background-image: linear-gradient(124deg, 
-                #77efbf 0%, 
-                #7dede2 100%);
-                border-radius: 4px;
+                & .iconContainer{
+                    background-image: url("https://image.geeko.ltd/20220113/My-Points-suggestion.png");
+                }
             }
 
             .pointsMall{
@@ -184,14 +348,15 @@
                 border-radius: 4px;
             }
 
-            .download{
-                background-image: linear-gradient(124deg, 
-                #73a9f9 0%, 
-                #b2dbf9 100%);
-                border-radius: 4px;
+            .refer{
+                & .iconContainer{
+                    background-image: url("https://image.geeko.ltd/20220113/My-Points-refer.png");
+                }
+            }
 
-                & .iconfont{
-                    font-size: 27px;
+            .more{
+                & .iconContainer{
+                    background-image: url("https://image.geeko.ltd/20220113/My-Points-moreways.png");
                 }
             }
         }

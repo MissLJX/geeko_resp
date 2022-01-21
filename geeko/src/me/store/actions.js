@@ -414,11 +414,9 @@ const actions = {
     },
     updateCustomerSave({commit},customer){
         return new Promise((reslove,reject) => {
-            api.updateCustomerSave({"customer":customer.customer}).then((result) => {
-                reslove(result);
-                console.log("customer",customer);
+            api.updateCustomerSave({"customer":customer.customer}).then((data) => {
+                reslove(data.prompt);
                 if(customer.name === 'myPreference'){
-                    console.log("customer",customer.name);
                     customer["customer"] = customer["definition"];
                 }
                 commit(types.CHANGE_GET_ME_DATA,customer);

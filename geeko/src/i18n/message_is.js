@@ -58,7 +58,9 @@ export default {
 	    no: 'Nei',
         cancel:'Hætta við',
         use:'Nota',
-        manage_your_wishlist:"Click here to manage your wishlist"
+        manage_your_wishlist:"Click here to manage your wishlist",
+        shop_now:"Shop Now",
+        refer:'Tilv\u00edsa vini',
     },
     point:{
         my_points:"My Points",
