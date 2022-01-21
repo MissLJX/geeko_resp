@@ -29,7 +29,7 @@
                 </div>
             </a>
 
-            <a :href="GLOBAL.getUrl('/me/m/order/confirmed')">
+            <a @click="recordEventSkip(false,'/me/m/order/confirmed','Review',$event)">
                 <div class="review">
                     <div>
                         <span class="iconContainer"></span>
@@ -41,7 +41,7 @@
                 </div>
             </a>
 
-            <router-link :to="{name:'make-sug'}">
+            <router-link to="/" @click.native="recordEventSkip(true,'/me/m/makeSug','Suggestion',$event)">
                 <div class="suggestion">
                     <div>
                         <span class="iconContainer"></span>
@@ -53,19 +53,19 @@
                 </div>
             </router-link>
 
-            <a href="/share">
+            <a @click="recordEventSkip(false,'/share','ReferFriend',$event)">
                 <div class="refer">
                     <div>
                         <span class="iconContainer">&#xe6d2;</span>
                     </div>
                     <div class="_font">
-                        <p>Refer a Friend</p>
+                        <p>{{$t("label.refer")}}</p>
                         <p>Up to 500 points</p>
                     </div>
                 </div>
             </a>
             
-            <router-link :to="{name:'survey'}">
+            <router-link to="/" @click.native="recordEventSkip(true,'/me/m/survey','Survey',$event)">
                 <div class="survey">
                     <div>
                         <span class="iconContainer"></span>
@@ -77,7 +77,7 @@
                 </div>
             </router-link>
 
-            <router-link :to="GLOBAL.getUrl('/me/m/point-guide')">
+            <router-link to="/" @click.native="recordEventSkip(true,'/me/m/point-guide','MoreWays',$event)">
                 <div class="more">
                     <div>
                         <span class="iconContainer"></span>
@@ -111,6 +111,51 @@
         data(){
             return{
                 selectValue:0
+            }
+        },
+        mounted:function(){
+            if(window.GeekoSensors){
+                window.GeekoSensors.Track('PitPositionExposure', {
+                    page_sort:"Me",
+                    page_content: "Points",
+                    resourcepage_title:"Points_BuyEarn",
+                    resource_content:"BuyEarn"
+                })
+
+                window.GeekoSensors.Track('PitPositionExposure', {
+                    page_sort:"Me",
+                    page_content: "Points",
+                    resourcepage_title:"Points_Review",
+                    resource_content:"Review"
+                })
+
+                window.GeekoSensors.Track('PitPositionExposure', {
+                    page_sort:"Me",
+                    page_content: "Points",
+                    resourcepage_title:"Points_Suggestion",
+                    resource_content:"Suggestion"
+                })
+
+                window.GeekoSensors.Track('PitPositionExposure', {
+                    page_sort:"Me",
+                    page_content: "Points",
+                    resourcepage_title:"Points_ReferFriend",
+                    resource_content:"ReferFriend"
+                })
+
+                window.GeekoSensors.Track('PitPositionExposure', {
+                    page_sort:"Me",
+                    page_content: "Points",
+                    resourcepage_title:"Points_Survey",
+                    resource_content:"Survey"
+                })
+
+                window.GeekoSensors.Track('PitPositionExposure', {
+                    page_sort:"Me",
+                    page_content: "Points",
+                    resourcepage_title:"Points_MoreWays",
+                    resource_content:"MoreWays"
+                })
             }
         },
         computed:{
@@ -165,6 +210,35 @@
                             },
                             htmlMessage2:true
                         }
+                    })
+                }
+
+                if(window.GeekoSensors){
+                    window.GeekoSensors.Track('PitPositionClick', {
+                        page_sort:"Me",
+                        page_content: "Points",
+                        resourcepage_title:"Points_BuyEarn",
+                        resource_content:"BuyEarn"
+                    })
+                }
+            },
+            recordEventSkip(type,path,eventName,event){
+                // type true表示路由跳转  false表示window.location跳转
+                // path 路径或者跳转的名字
+                // eventName  事件的名字
+                event.preventDefault();
+                if(!!type){
+                    this.$router.push(this.GLOBAL.getUrl(path));
+                }else{
+                    window.location.href = this.GLOBAL.getUrl(path);
+                }
+
+                if(window.GeekoSensors){
+                    window.GeekoSensors.Track('PitPositionClick', {
+                        page_sort:"Me",
+                        page_content: "Points",
+                        resourcepage_title:`Points_${eventName}`,
+                        resource_content:eventName
                     })
                 }
             }
