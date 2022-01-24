@@ -98,7 +98,11 @@ export default {
         complete_your_size_information:"Complete your personal size information and you",
         will_earn_size_information:"will earn 100 points.",
         we_will_keep_the_size_information:"We will keep the information you fill in strictly",
-        confidential:"confidential."
+        confidential:"confidential.",
+        buy_and_earn:"Buy and Earn",
+        more_ways:"More Ways",
+        expriring_soon:"Expriring Soon",
+        update_to:"Up to"
     },
     index:{
         points:"Points",

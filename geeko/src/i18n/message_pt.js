@@ -6,7 +6,7 @@ export default {
     message: {
         shoppingCart: 'Carrinho de compras',
         loading: 'a carregar',
-        addressTip: '* Indica que um campo é obrigatório',
+        addressTip: '* Indica que um campo \u00e9 obrigatório',
     },
     label: {
         save: 'Guardar',
@@ -42,7 +42,7 @@ export default {
         changeCurrency: 'Alterar Moeda',
         wishlist: 'Lista de desejos',
         settings: 'Definições',
-        mayLike:'TAMBÉM PODE GOSTAR',
+        mayLike:'TAMB\u00e9M PODE GOSTAR',
         logout:'Desconectar',
         logoff:'Sair',
         delete:'Apagar',
@@ -51,8 +51,8 @@ export default {
         notification:'Notificações',
         total:'Total',
         others:'Outros',
-        creditcard:'Cartões de crédito',
-        remove_credit_card:'Tem certeza de que deseja remover este cartão de crédito?',
+        creditcard:'Cartões de cr\u00e9dito',
+        remove_credit_card:'Tem certeza de que deseja remover este cartão de cr\u00e9dito?',
         yes:'sim',
         no:'não',
         cancel:'Cancelar',
@@ -97,7 +97,11 @@ export default {
         complete_your_size_information:"Preencha suas informações pessoais de tamanho e você",
         will_earn_size_information:"ganhará 100 pontos.",
         we_will_keep_the_size_information:"Manteremos as informações que você preencher estritamente",
-        confidential:"confidencial."
+        confidential:"confidencial.",
+        buy_and_earn:"Compre e ganhe",
+        more_ways:"Mais maneiras",
+        expriring_soon:"Que expirarão em breve",
+        update_to:"At\u00e9"
     },
     index:{
         points:"Pontos",
@@ -153,7 +157,7 @@ export default {
         mea_bra_size: 'Tamanho do sutiã',
         mea_waist: 'cintura',
         mea_hips: 'Quadris',
-        mea_perference: 'Qual é a sua preferência?',
+        mea_perference: 'Qual \u00e9 a sua preferência?',
         mea_true_to_size: 'Fiel ao tamanho',
         mea_large: 'Grande',
         mea_small: 'Pequeno',
@@ -223,11 +227,11 @@ export default {
             answer8: 'Outros',
         },
         survey_question_7: {
-            title: '*Qual é o seu grau de familiaridade com o {website}?',
+            title: '*Qual \u00e9 o seu grau de familiaridade com o {website}?',
             answer1: 'Extremamente familiar',
             answer2: 'Muito familiar',
             answer3: 'Um pouco familiar',
-            answer4: 'Não é tão familiar',
+            answer4: 'Não \u00e9 tão familiar',
             answer5: 'Nada familiarizado',
         },
         survey_question_8: {
@@ -243,7 +247,7 @@ export default {
             answer1: 'Extremamente fácil',
             answer2: 'Muito fácil',
             answer3: 'Um pouco fácil',
-            answer4: 'Não é tão fácil',
+            answer4: 'Não \u00e9 tão fácil',
             answer5: 'Nem um pouco fácil',
         },
         survey_question_10: {
@@ -258,7 +262,7 @@ export default {
             title: '*Você tem algum comentário sobre como podemos melhorar nosso website e APP?',
         },
         survey_question_13: {
-            title: '*Qual é a sua idade?',
+            title: '*Qual \u00e9 a sua idade?',
             answer1: 'Menor de 18',
             answer2: '18-24',
             answer3: '25-34',
@@ -268,7 +272,7 @@ export default {
             answer7: '65 plus',
         },
         survey_question_14: {
-            title: '*Qual é o seu gênero?',
+            title: '*Qual \u00e9 o seu gênero?',
             answer1: 'Feminino',
             answer2: 'Masculino',
             answer3: 'Outros'
@@ -293,7 +297,7 @@ export default {
             answer13: 'Outros',
         },
         survey_question_17: {
-            title: '*Em média, quanto você gasta em itens de moda por mês?',
+            title: '*Em m\u00e9dia, quanto você gasta em itens de moda por mês?',
             answer1: 'Menos de $30',
             answer2: '$30-$50',
             answer3: '$50-$100',

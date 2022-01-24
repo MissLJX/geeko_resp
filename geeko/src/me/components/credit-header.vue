@@ -36,8 +36,8 @@
             </div>
 
             <div class="expiring-points">
-                <span class="_font">{{me.overduePoints}} POINTS</span>
-                <span>Expriring Soon</span>
+                <span class="_font">{{me.overduePoints}} {{$t("index.points")}}</span>
+                <span>{{$t("point.expriring_soon")}}</span>
                 <span class="__question" @click="seen = !seen;">
                     <span>?</span>
                 </span>

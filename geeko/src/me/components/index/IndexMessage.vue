@@ -71,10 +71,13 @@
                 <p class="iconfont">&#xe6dd;</p>
                 <p>{{$t("index.wallet")}}</p>
             </a>
-            <a href="/share" click-name="Get$10">
-                <p class="iconfont">&#xe6da;</p>
-                <p>{{$t("label.refer")}}</p>
-            </a>
+
+            <template v-if="getDownLoadImage">
+                <a href="/share" click-name="Get$10">
+                    <p class="iconfont">&#xe6da;</p>
+                    <p>{{$t("label.refer")}}</p>
+                </a>
+            </template>
 
             <!-- 积分膨胀提示组件 -->
             <index-points-modal :index-message="dobulePoints.me.message" v-if="dobulePoints && dobulePoints.me"></index-points-modal>
@@ -233,6 +236,9 @@
                     return "";
                 }
             },
+            getDownLoadImage(){
+                return !!window.downloadIcon;
+            }
         },
         watch:{
             hasNoCommentOrder(newV, oldV){

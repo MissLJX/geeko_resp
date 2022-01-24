@@ -23,8 +23,8 @@
                         <span class="iconContainer"></span>
                     </div>
                     <div class="_font">
-                        <p>Buy and Earn</p>
-                        <p>US$1 = 1 POINTS</p>
+                        <p>{{$t("point.buy_and_earn")}}</p>
+                        <p v-if="discountMsg">{{discountMsg}}</p>
                     </div>
                 </div>
             </a>
@@ -36,58 +36,60 @@
                     </div>
                     <div class="_font">
                         <p>{{$t("point.review")}}</p>
-                        <p>0~2000 points</p>
+                        <p>0~2000 {{$t("index.points")}}</p>
                     </div>
                 </div>
             </a>
 
-            <router-link to="/" @click.native="recordEventSkip(true,'/me/m/makeSug','Suggestion',$event)">
+            <a @click="recordEventSkip(true,'/me/m/makeSug','Suggestion',$event)">
                 <div class="suggestion">
                     <div>
                         <span class="iconContainer"></span>
                     </div>
                     <div class="_font">
                         <p>{{$t("point.suggestion")}}</p>
-                        <p>0~200 points</p>
-                    </div>
-                </div>
-            </router-link>
-
-            <a @click="recordEventSkip(false,'/share','ReferFriend',$event)">
-                <div class="refer">
-                    <div>
-                        <span class="iconContainer">&#xe6d2;</span>
-                    </div>
-                    <div class="_font">
-                        <p>{{$t("label.refer")}}</p>
-                        <p>Up to 500 points</p>
+                        <p>0~200 {{$t("index.points")}}</p>
                     </div>
                 </div>
             </a>
-            
-            <router-link to="/" @click.native="recordEventSkip(true,'/me/m/survey','Survey',$event)">
+
+            <template v-if="getDownLoadImage">
+                <a @click="recordEventSkip(false,'/share','ReferFriend',$event)">
+                    <div class="refer">
+                        <div>
+                            <span class="iconContainer">&#xe6d2;</span>
+                        </div>
+                        <div class="_font">
+                            <p>{{$t("label.refer")}}</p>
+                            <p>Up to 500 {{$t("index.points")}}</p>
+                        </div>
+                    </div>
+                </a>
+            </template>
+
+            <a @click="recordEventSkip(true,'/me/m/survey','Survey',$event)">
                 <div class="survey">
                     <div>
                         <span class="iconContainer"></span>
                     </div>
                     <div class="_font">
                         <p>{{$t("point.survey")}}</p>
-                        <p>150 points</p>
+                        <p>150 {{$t("index.points")}}</p>
                     </div>
                 </div>
-            </router-link>
+            </a>
 
-            <router-link to="/" @click.native="recordEventSkip(true,'/me/m/point-guide','MoreWays',$event)">
+            <a @click="recordEventSkip(true,'/me/m/point-guide','MoreWays',$event)">
                 <div class="more">
                     <div>
                         <span class="iconContainer"></span>
                     </div>
                     <div class="_font">
-                        <p>More Ways ></p>
+                        <p>{{$t("point.more_ways")}} ></p>
                         <p></p>
                     </div>
                 </div>
-            </router-link>
+            </a>
             
             
             <!-- <router-link :to="GLOBAL.getUrl('/me/m/point-guide')" :class="{'fd global-overflow':true,'show100':!showPointsMall}">
@@ -110,8 +112,16 @@
     export default {
         data(){
             return{
-                selectValue:0
+                selectValue:0,
+                discountMsg:null
             }
+        },
+        created:function(){
+            this.$store.dispatch('me/getMessage', 'M1630').then((res=>{
+                if(res?.message){
+                    this.discountMsg = res.message;
+                }
+            }))
         },
         mounted:function(){
             if(window.GeekoSensors){
@@ -161,6 +171,9 @@
         computed:{
             showPointsMall(){
                 return window.showPointsMall
+            },
+            getDownLoadImage(){
+                return !!window.downloadIcon;
             }
         },
         methods:{
@@ -358,6 +371,11 @@
                 & .iconContainer{
                     background-image: url("https://image.geeko.ltd/20220113/My-Points-moreways.png");
                 }
+            }
+
+            &::after{
+                content:"";
+                width: calc(33.33333% - 10px);
             }
         }
 
