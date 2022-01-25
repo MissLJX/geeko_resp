@@ -64,10 +64,10 @@
 
                 </div>
                 <div class="points_btn_box">
-                    <div class="points_btn" @click="goShopping">
+                    <div class="points_btn" @click="()=>goShopping()">
                         {{$t("points_mall.shop_now")}}
                     </div>
-                    <div class="points_btn" @click="viewPoints">
+                    <div class="points_btn" @click="()=>viewPoints()">
                         {{$t("points_mall.get_more_points")}}
                     </div>
                 </div>
@@ -98,7 +98,8 @@
                 // isAlert:false,
                 isloding:false,
                 showTip: false,
-                tipContent: ''
+                tipContent: '',
+                points: 100,
             }
         },
         components:{
@@ -142,8 +143,13 @@
                         // }
                         formData.append('message', this.subject);
 
-                        this.$store.dispatch('makeSuggestion', formData).then(() => {
+                        this.$store.dispatch('makeSuggestion', formData).then((res) => {
                             // alert("success")
+                            if(res.prompt && res.prompt.html){
+                                let policyUrl = /(\/fs\/points-policy)/
+                                let text = res.prompt.html.indexOf('/fs/points-policy') != -1 ? res.prompt.html.replace(policyUrl, '/fs/points-policy-pc'): res.prompt.html
+                                this.tipContent = text
+                            }
                             this.showTip = true;
                             this.isloding = false
                         }).catch(e => {
@@ -166,18 +172,19 @@
             // },
             closeMask(){
                 this.showTip = false;
-            }
+            },
+            goShopping(){
+                window.location.href = `${window.ctx || ''}/`
+            },
+            viewPoints(){
+                window.location.href = `${window.ctx || ''}/me/m/credits`
+            },
         },
         created(){
             this.$store.dispatch('getMe')
-            this.tipContent = "<div style='text-align: center;'> <img src='https://image.geeko.ltd/chicme/2021111101/right_icon.png' alt='ModalPoints' style='width:54px;'> <p style='font-weight:bold;font-size:18px;margin: 0;line-height:28px;color: #000000;'>Submitted Successfully</p> <p style='margin: 0;font-size: 12px;font-family: Roboto-Regular;line-height:16px;margin-top:8px;'> We have successfully received your suggestion and it will take few days to process this issue, we will reach out to you if we need any information. Please check our reply at your email address. Accepted suggestions will earn <span style='color: #e64545;font-weight: bold;font-family: Roboto-Regular;'>200 points</span>. Thanks for your cooperation. </p> <p style='margin: 0;font-size: 12px;'> <span>100 points = $1 USD.</span> <a href='/fs/points-policy' style='vertical-align: middle;'><img src='https://image.geeko.ltd/chicme/2021111101/question.png' alt='Question' style='width: 14px;height: 14px;'></a> </p> </div>"
+            this.tipContent = "<div style='text-align: center;'> <img src='https://image.geeko.ltd/chicme/2021111101/right_icon.png' alt='ModalPoints' style='width:54px;'> <p style='font-weight:bold;font-size:18px;margin: 0;line-height:28px;color: #000000;'>Submitted Successfully</p> <p style='margin: 0;font-size: 12px;font-family: Roboto-Regular;line-height:16px;margin-top:8px;'> We have successfully received your suggestion and it will take few days to process this issue, we will reach out to you if we need any information. Please check our reply at your email address. Accepted suggestions will earn <span style='color: #e64545;font-weight: bold;font-family: Roboto-Regular;'>200 points</span>. Thanks for your cooperation. </p> <p style='margin: 0;font-size: 12px;'> <span>100 points = $1 USD.</span> <a href='/fs/points-policy-pc' style='vertical-align: middle;'><img src='https://image.geeko.ltd/chicme/2021111101/question.png' alt='Question' style='width: 14px;height: 14px;'></a> </p> </div>"
         },
-        goShopping(){
-            window.location.href = `${window.ctx || ''}/`
-        },
-        viewPoints(){
-            window.location.href = `${window.ctx || ''}/me/m/credits`
-        },
+        
     }
 </script>
 

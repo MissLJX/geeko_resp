@@ -1,6 +1,6 @@
 <template>
     <div class="order_list_box">
-        <div class="order_list_item" v-for="item in reviewOrderList">
+        <div class="order_list_item" v-for="item in orderList">
             <div class="order_title">
                 <span>Order No. <span class="order_id">{{item.id}}</span></span>
             </div>

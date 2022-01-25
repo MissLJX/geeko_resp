@@ -366,21 +366,28 @@
         },
         computed:{
             ...mapGetters(['message']),
-            points(){
-                if(this.message.message){
-                    let m = JSON.parse(this.message.message).point;
-                    return m
-                }
-            }
+            // tipContent(){
+            //     if(this.message){
+            //         console.log(this.message)
+            //         return this.message.message
+            //     } else {
+            //         return ''
+            //     }
+            // }
+            // points(){
+                // if(this.message.message){
+                //     let m = JSON.parse(this.message.message).point;
+                //     return m
+                // }
+            // }
         },
         created(){
-            this.$store.dispatch('getMessage', 'M1545')
+            this.$store.dispatch('getMessage', 'M1627')
             // 点击其他区域关闭弹窗
             document.addEventListener("click",this.closeItem,false) 
             console.log=()=>{
                 
             }
-            this.tipContent = "<div style='text-align: center;'><img src='https://image.geeko.ltd/chicme/2021111101/modal_points.png' alt='ModalPoints' style='width:50%;'><p style='font-weight:bold;font-size:24px;margin: 0;line-height:28px;'>150 Points</p><p style='margin: 0;font-size: 12px;'><span>100 points = $1 USD.</span><a href='/fs/points-policy' style='vertical-align: middle;'><img src='https://image.geeko.ltd/chicme/2021111101/question.png' alt='Question' style='width: 14px;height: 14px;'></a></p><p style='margin: 0;font-size: 12px;line-height: 12px;margin-top: 10px;font-family: Roboto-Regular'>Thanks for your time!</p><p style='margin: 0;font-size: 12px;font-family: Roboto-Regular;'>You’ve got <span style='color: #e64545;font-weight: bold;font-family: Roboto-Regular;'>150 points</span> in your account, have a look and enjoy shopping at ChicMe!</p></div>"
         },
         mounted(){
             this.$nextTick(() => {
@@ -479,9 +486,11 @@
                         if(res.code == 200){
                             this.maskShow = true;
                             this.clickSubmit = true;
-                            this.getData()
-                            if(res.result && res.result.prompt && res.result.prompt.html){
-                                this.tipContent = res.result.prompt.html
+                            // this.getData()
+                            if(res.prompt && res.prompt.html){
+                                let policyUrl = /(\/fs\/points-policy)/
+                                let text = res.prompt.html.indexOf('/fs/points-policy') != -1 ? res.prompt.html.replace(policyUrl, '/fs/points-policy-pc'): res.prompt.html
+                                this.tipContent = text;
                             }
                         }
                     })
@@ -522,9 +531,9 @@
                 this.$store.dispatch("getSurvey",{}).then(data => data.result).then(result => {
                     if(result){
                         const {answers:answersJSON,id} = result
-                        if( result.prompt && result.prompt.html){
-                            this.tipContent = result.prompt.html
-                        }
+                        let policyUrl = /(\/fs\/points-policy)/
+                        let text = this.message.message.indexOf('/fs/points-policy') != -1 ? this.message.message.replace(policyUrl, '/fs/points-policy-pc'): this.message.message
+                        this.tipContent = text;
                         let answers;
                         if(answersJSON){
                             answers = JSON.parse(answersJSON)

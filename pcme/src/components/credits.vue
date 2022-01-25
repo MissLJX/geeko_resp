@@ -53,17 +53,29 @@
         <div class="get-method">
             <div class="c-hd">{{$t("point.how_to_get_points")}}</div>
             <div class="_bd">
-                <a href="/me/m/order">
-                    <div class="review">
+                <a @click="()=>openEarnMask()">
+                    <div class="methodBox">
                         <div>
-                            <span class="iconfont">&#xe6d1;</span>
+                            <img src="https://image.geeko.ltd/20220113/My-Points-Buy-Earn.png" alt="">
                         </div>
                         <div class="_font">
-                            <p>{{$t("point.review")}}</p>
-                            <p>0~2000 points</p>
+                            <p>{{$t("points_mall.buyAndEarn")}}</p>
+                            <p>{{pointsExchange}}</p>
                         </div>
                     </div>
                 </a>
+                <a @click="()=>routTo('/me/m/order?type=review')" >
+                    <div class="review">
+                        <div>
+                            <img src="https://image.geeko.ltd/20220113/My-Points-review.png" alt="">
+                        </div>
+                        <div class="_font">
+                            <p>{{$t("point.review")}}</p>
+                            <p>0~2000 {{$t("point.points")}}</p>
+                        </div>
+                    </div>
+                </a>
+                
                 
                 <!-- <router-link :to="{name:'survey'}">
                     <div class="survey">
@@ -77,19 +89,53 @@
                     </div>
                 </router-link> -->
                 
-                <a :href="makeSuggestionUrl">
+                <a @click="()=>routTo(makeSuggestionUrl)">
                     <div class="suggestion">
                         <div>
-                            <span class="iconfont">&#xe6d0;</span>
+                            <img src="https://image.geeko.ltd/20220113/My-Points-suggestion.png" alt="">
                         </div>
                         <div class="_font">
                             <p>{{$t("point.suggestion")}}</p>
-                            <p>0~200 points</p>
+                            <p>200 {{$t("point.points")}}</p>
+                        </div>
+                    </div>
+                </a>
+
+                <a @click="()=>toShare()" v-if="getDownLoadImage">
+                    <div class="review">
+                        <div>
+                            <img src="https://image.geeko.ltd/20220113/My-Points-refer.png" alt="">
+                        </div>
+                        <div class="_font">
+                            <p>{{$t("points_mall.referAFriend")}}</p>
+                            <p>{{$t("points_mall.upToXPoints", {x:500})}}</p>
                         </div>
                     </div>
                 </a>
                 
-                <a href="/i/download" v-if="getDownLoadImage">
+                <a @click="()=>routTo('/me/m/survey')">
+                    <div class="review">
+                        <div>
+                            <img src="https://image.geeko.ltd/20220113/My-Points-survey.png" alt="">
+                        </div>
+                        <div class="_font">
+                            <p>{{$t("points_mall.survey")}}</p>
+                            <p>150 {{$t("point.points")}}</p>
+                        </div>
+                    </div>
+                </a>
+                <a @click="()=>openMoreMask()">
+                    <div class="review">
+                        <div>
+                            <img src="https://image.geeko.ltd/20220113/My-Points-moreways.png" alt="">
+                        </div>
+                        <div class="_font">
+                            <p>{{$t("points_mall.moreWays")}} ></p>
+                        </div>
+                    </div>
+                </a>
+                
+                <!-- <a href="/i/download" v-if="getDownLoadImage">
                     <div class="download">
                         <div class="_image">
                             <img :src="getDownLoadImage" alt="code">
@@ -99,9 +145,9 @@
                             <p>{{$t("point.get_more_points")}}</p>
                         </div>
                     </div>
-                </a>
+                </a> -->
 
-                <a :href="pointsMallUrl" v-if="showPointsMall">
+                <!-- <a :href="pointsMallUrl" v-if="showPointsMall">
                     <div class="pointsMall">
                         <div>
                             <span class="iconfont">&#xe703;</span>
@@ -111,10 +157,42 @@
                             <p>{{$t("points_mall.points_more")}}</p>
                         </div>
                     </div>
-                </a>
+                </a> -->
             </div>
         </div>
         <loding v-if="isLoadingShow"></loding>
+
+        <div v-if="showEarnMask || (showMoreMask && moreWayList.length > 0)" class="maskBox" @click.self="closeMask()">
+            <div class="earnBox" v-if="showEarnMask">
+                <span class="iconfont closeImg" @click.self="closeMask()">&#xe7c9;</span>
+                <div class="maskTitle">{{$t("points_mall.buyAndEarn")}}</div>
+                <div class="maskContent" v-html="earnMaskContent">
+                    <!-- <div>1. You’ll earn 1 point for every dollar spent on your purchase.</div>
+
+                    <div>2. Points will be credited to your account once you Confirm delivery of your order.<br>
+                    ↓↓<br>
+                    Log into your ChicMe account<br>
+                    ↓↓<br>
+                    Click on "My Orders"<br>
+                    ↓↓<br>
+                    Select orders you have received and click on "Confirm order "</div> -->
+                </div>
+                <div class="maskBtn" @click="goShopping">{{$t("points_mall.shop_now")}}</div>
+            </div>
+
+            <div class="moreBox" v-if="showMoreMask">
+                <span class="iconfont closeImg" @click.self="closeMask()">&#xe7c9;</span>
+                <div class="maskTitle">{{$t("points_mall.moreWays")}}</div>
+                <div class="maskContent">
+                    <div class="moreItem" v-for="item in moreWayList" @click="()=>linkTo(item.type)">
+                        <div class="moreItemTitle">{{item.title}}</div>
+                        <div class="moreItemDescription">
+                            {{item.content}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -125,7 +203,8 @@
     import PointsContainer from './point/PointsContainer.vue'
     import loding from './loding.vue'
 
-    import CountDowns from "../components/countdowns.vue"
+    import CountDowns from "./countdowns.vue"
+    import {getMessage, getSurveyQuestions} from '../api/index.js';
 
     export default {
         computed: {
@@ -160,7 +239,7 @@
             },
             showPointsMall(){
                 return window.showPointsMall;
-            }
+            },
         },
         data(){
             return{
@@ -169,13 +248,76 @@
                 isHaveRec:false,
                 isHaveUse:false,
                 isReceived:'0',
-                isLoadingShow:false
+                isLoadingShow:false,
+                showMoreMask: false,
+                showEarnMask: false,
+                moreWayList: [],
+                earnMaskContent:'',
+                pointsExchange: '',
             }
         },
         methods: {
             isShow: function(){
                 this.seen = !this.seen;
-
+            },
+            routTo(url){
+                this.$router.push(url)
+            },
+            openEarnMask(){
+                this.showEarnMask = true;
+            },
+            openMoreMask(){
+                this.showMoreMask = true;
+            },
+            closeMask(){
+                this.showMoreMask = false;
+                this.showEarnMask = false;
+            },
+            goShopping(){
+                window.location.href = '/';
+            },
+            createMoreWays(){
+                getSurveyQuestions('M1538').then((res)=> {
+                    if(res && res.code == 200){
+                        let list = []
+                        for(let i in res.result){
+                            !res.result[i]['isApp'] && list.push(res.result[i])
+                        }
+                        this.moreWayList = list
+                    }
+                })
+            },
+            createBuyAndEarn(){
+                getMessage('M1624').then(res => {
+                    if(res && res.message){
+                        this.earnMaskContent = res.message
+                    }
+                })
+            },
+            getPointsExchange(){
+                getMessage("M1630").then(res => {
+                    if(res && res.message){
+                        this.pointsExchange = res.message
+                    }
+                })
+            },
+            linkTo(type){
+                switch(type){
+                    case 1:
+                        this.routTo("/me/m/my-measurements");
+                        return;
+                    case 2:
+                        this.routTo("/me/m/my-preference");
+                        return;
+                    case 3:
+                        this.routTo("/me/m/change-email");
+                        return;
+                    default:
+                        return;
+                }
+            },
+            toShare(){
+                window.location.href = "/share";
             }
         },
         components:{
@@ -185,6 +327,9 @@
         },
         created(){
             this.$store.dispatch('getMessage', 'M1138');
+            this.createMoreWays()
+            this.createBuyAndEarn()
+            this.getPointsExchange()
             // this.$store.dispatch('getCredits',{skip:0});
             this.$store.dispatch('getMe');
             this.isLoadingShow = true;
@@ -395,13 +540,17 @@
             display: flex;
 
             & > a{
-                width: 210px;
-                height: 100px;
                 margin-bottom: 10px;
                 display: inline-block;
                 cursor: pointer;
-                border-radius: 4px;
-                margin-right: 10px;
+                margin-right: 14px;
+                width: 145px;
+                height: 161px;
+                background-color: #ffffff;
+                box-shadow: 1px 2px 4px 0px 
+                    rgba(0, 0, 0, 0.08);
+                border-radius: 16px;
+                border: solid 1px #e6e6e6;
 
                 & > div{
                     height: 100%;
@@ -409,52 +558,70 @@
                     display: flex;
                     align-items: center;
                     justify-content: center;
+                    flex-direction: column;
+                    text-align: center;
+
+                    & > div{
+                        height: 30%;
+
+                        img{
+                            height: 100%;
+                        }
+                    }
+
                 }
 
                 & .iconfont{
                     font-size: 42px;
-                    color: #ffffff;
-                    margin-right: 10px;
+                    // color: #ffffff;
+                    // margin-right: 10px;
                 }
 
                 & ._font{
+                    height: 30%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-direction: column;
+                    
                     & > p:first-child{
                         font-size: 14px;
-                        color: #ffffff;
+                        color: #222;
                         font-family: 'AcuminPro-Bold';
+                        margin: 20px 0 3px;
                     }
 
                     & > p:last-child{
                         font-size: 12px;
-	                    color: #ffffff;
+	                    color: #222;
                     }
                 }
             }
+            
+            // .review{
+            //     background-image: linear-gradient(124deg, 
+            //         #ff8976 0%, 
+            //         #ffcca8 100%);
+            //     // border-radius: 4px;
+            // }
 
-            .review{
-                background-image: linear-gradient(124deg, 
-                    #ff8976 0%, 
-                    #ffcca8 100%);
-                border-radius: 4px;
-            }
+            // .survey{
+            //     background-image: linear-gradient(124deg, 
+            //         #b886b4 0%, 
+            //         #dab1db 100%);
+            //     // border-radius: 4px;
+            // }
 
-            .survey{
-                background-image: linear-gradient(124deg, 
-                    #b886b4 0%, 
-                    #dab1db 100%);
-                border-radius: 4px;
-            }
-
-            .suggestion{
-                background-image: linear-gradient(124deg, 
-                #77efbf 0%, 
-                #7dede2 100%);
-                border-radius: 4px;
-            }
-            .pointsMall{
-                background-image: linear-gradient(124deg, #73a9f9 0%, #b2dbf9 100%);
-                border-radius: 4px;
-            }
+            // .suggestion{
+            //     background-image: linear-gradient(124deg, 
+            //     #77efbf 0%, 
+            //     #7dede2 100%);
+            //     // border-radius: 4px;
+            // }
+            // .pointsMall{
+            //     background-image: linear-gradient(124deg, #73a9f9 0%, #b2dbf9 100%);
+            //     // border-radius: 4px;
+            // }
 
             .download{
                 padding: 0px 10px;
@@ -470,7 +637,7 @@
                 ._image{
                     width: 42px;
                     height: 42px;
-                    margin-right: 10px;
+                    // margin-right: 10px;
 
                     & > img{
                         width: 100%;
@@ -480,5 +647,107 @@
             }
         }
     }
+    .maskBox{
+        position: fixed;
+        width: 100%;
+        height: 100vh;
+        top: 0;
+        left: 0;
+        background: rgba(0,0,0,0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .earnBox,.moreBox{
+            width: 420px;
+            min-height: 200px;
+            background: #FFF;
+            position: relative;
+            padding: 18px 20px 20px;
+
+            .maskContent{
+                font-family: 'SLATEPRO';
+                font-size: 14px;
+                font-weight: normal;
+                font-stretch: normal;
+                line-height: 18px;
+                letter-spacing: 0px;
+                color: #222222;
+                text-align: center;
+            }
+            .maskBtn{
+                height: 37px;
+                background-color: #222222;
+                border-radius: 2px;
+                font-family: 'ACUMINPRO-BOLD';
+                font-size: 14px;
+                font-weight: normal;
+                font-stretch: normal;
+                letter-spacing: 0px;
+                color: #fff;
+                text-align: center;
+                line-height: 37px;
+                text-transform: uppercase;
+                margin-top: 28px;
+                cursor: pointer;
+            }
+            .moreItem{
+                border-bottom: 1px solid #f2f2f2;
+                padding-bottom: 10px;
+                margin-bottom: 10px;
+                text-align: left;
+                cursor: pointer;
+
+                .moreItemTitle{
+                    font-family: 'ACUMINPRO-BOLD';
+                    font-size: 14px;
+                    font-weight: normal;
+                    font-stretch: normal;
+                    line-height: 18px;
+                    letter-spacing: 0px;
+                    color: #222222;
+                }
+
+                .moreItemDescription{
+                    font-family: 'SLATEPRO';
+                    font-size: 12px;
+                    font-weight: normal;
+                    font-stretch: normal;
+                    line-height: 18px;
+                    letter-spacing: 0px;
+                    color: #999999;
+                    margin-top: 8px;
+                }
+            }
+        }
+        // .moreBox{
+        //     width: 420px;
+        //     min-height: 200px;
+        //     background: #FFF;
+        //     position: relative;
+        //     padding: 18px 20px 20px;
+        // }
+
+        .closeImg{
+            font-size: 12px;
+            position: absolute;
+            right: 8px;
+            top: 8px;
+            color: #999;
+            cursor: pointer;
+        }
+        .maskTitle{
+            font-family: 'ACUMINPRO-BOLD';
+            font-size: 16px;
+            font-weight: normal;
+            font-stretch: normal;
+            line-height: 20px;
+            letter-spacing: 0px;
+            color: #222222;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+    }
+    
 
 </style>

@@ -173,7 +173,7 @@ export default {
     required: 'Required',
     point:{
         my_points:"My Points",
-        points_expired_soon:"Points Expriring Soon",
+        points_expired_soon:"Points Expiring Soon",
         how_to_get_points:"How to get points?",
         review:"Review",
         suggestion:"Suggestion",
@@ -188,7 +188,7 @@ export default {
         we_are_committed_to_prod:"We are committed to providing quality products with convenient and professional service.Your comments help us to continue to improve our website and service",
         please_leave_your:"Please leave your thoughts in the comment box below. We welcome them.In return, we will give you 200 credits if your comment is adopted. We will notify you by email:",
         all:"All",
-        recived:"Recived",
+        recived:"Received",
         used:"Used",
         expired:"Expired",
         sorry_inconvenience:"Sorry for the inconvenience, we wii fix the problem as soon as possible…",
@@ -463,6 +463,15 @@ export default {
         get_more_points:'get more points',
         to_review:"to review",
         view_more:'view more',
+        often_bought_with:'Often Bought With',
+        buyAndEarn:'Buy and Earn',
+        referAFriend:'Refer a Friend',
+        survey: 'Survey',
+        moreWays: 'More Ways',
+        upToXPoints: 'up to {x} points',
+        awaitingReview: 'These orders are also awaiting review',
+        highlyReview: 'Shop the highly reviewed items',
+        viewOrder: 'view order',
     },
 
 }

@@ -364,7 +364,8 @@
                 inputData:{},
                 sizingList: ["True to size","Large","Small"],
                 haveDoneBefore: false,
-                tipContent:''
+                tipContent:'',
+                tipPoints:'',
             }
         },
         computed:{
@@ -472,10 +473,12 @@
                         this.showNormalTip()
                     } else {
                         if(res.prompt && res.prompt.html){
-                            this.tipContent = res.prompt.html
+                            let policyUrl = /(\/fs\/points-policy)/
+                            let text = res.prompt.html.indexOf('/fs/points-policy') != -1 ? res.prompt.html.replace(policyUrl, '/fs/points-policy-pc'): res.prompt.html
+                            this.tipContent = text
                         }
                         this.showPointsTip()
-                        this.haveDoneBefore = false
+                        this.haveDoneBefore = true
                     }
                 })
             },

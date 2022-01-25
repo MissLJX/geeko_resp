@@ -85,7 +85,16 @@
                     <p class="p-price">ItemTotal:<span class="price">{{paymentItemTotal}}</span></p>
                     <p class="p-price" v-if="orderdetail.shippingPrice && orderdetail.shippingPrice.amount!=='0'">{{$t('shipping')}}:<span class="price">{{shippingprice}}</span></p>
                     <p class="p-price" v-if="orderdetail.shippingInsurancePrice && orderdetail.shippingInsurancePrice.amount!=='0'">Insurance:<span class="price">{{shippingInsurancePrice}}</span></p>
-                    <p class="p-price t-p">{{$t('ordertotal')}}:<span class="price r-p">{{total}}</span></p>
+                    <p class="p-price t-p">
+                        {{$t('ordertotal')}}:
+                        <span class="price r-p">
+                            {{total}} 
+                            <span style="position:relative;" v-if="orderdetail.doublePointsMultiple">
+                                <img style="width: 22px;vertical-align: middle;" src="https://image.geeko.ltd/2021-11-01-lottery/2021-11-01-lottery-points.png" alt="">
+                                <span style="position: absolute;font-size: 14px;bottom: -6px;left: 15px;font-family: 'ACUMINPRO-BOLD';text-shadow: 1px 0 0 #e64545;">X{{orderdetail.doublePointsMultiple}}</span>
+                            </span>
+                        </span>
+                    </p>
                 </div>
             </div>
             <div class="actionbtn">
@@ -406,11 +415,13 @@
                         let tipContent = ''
                         if(res.prompt && res.prompt.html){
                             tipContent = res.prompt.html
+                            this.$router.push({name:"orderConfirm", params:{tipContent: tipContent, id: this.orderdetail.id}});
+                        } else {
+                            alert("Success!")
                         }
                         this.isloding = false
                         _this.orderdetail.fulfillmentStatus = constant.TOTAL_STATUS_REVIEW;
-                        // alert("success")
-                        this.$router.push({path:"me/m/orderConfirm", params:{tipContent: tipContent}});
+                        
                     }).catch((e) => {
                         alert(e);
                         this.isloding = false
@@ -531,6 +542,7 @@
             // }
         },
         created(){
+            
             this.$store.dispatch('getOrder',this.$route.params.orderId).then((order)=>{
                 if(!order){
                     window.location.href='/me/m/order';

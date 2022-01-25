@@ -30,7 +30,7 @@
                 <index-wishlist :isloding.sync="isloding"></index-wishlist>
             </div>
 
-            <div class="share m-top">
+            <!-- <div class="share m-top">
                 <index-share 
                     :isloding="isloding" 
                     @changeLoadin="changeLoadin"
@@ -38,7 +38,7 @@
                     :isshowTerm.sync="isshowTerm"
                 ></index-share>
 
-            </div>
+            </div> -->
         </div>
 
         <div class="_right-container">

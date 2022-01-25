@@ -155,7 +155,7 @@ export const postProfile = (data) => {
 }
 //make-suggestion
 export const makeSuggestion = (files) => {
-    return axios.post('/ticket/add', files, {'Content-Type': http_infos.upload_image_content_type}).then(data => data.result)
+    return axios.post('/ticket/add', files, {'Content-Type': http_infos.upload_image_content_type}).then(data => data)
 }
 
 //share-to-friend
@@ -173,10 +173,10 @@ export const getComment = (productId) => {
     return axios.get('/comment/' + productId + '/get').then(data => data.result)
 }
 export const sendComment = (comment) => {
-    return axios.post('/product-comment/add', comment, {'Content-Type': http_infos.upload_image_content_type}).then(data => data.result)
+    return axios.post('/product-comment/add', comment, {'Content-Type': http_infos.upload_image_content_type}).then(data => data)
 }
 export const updateComment = (comment) => {
-    return axios.post('/product-comment/update', comment, {'Content-Type': http_infos.upload_image_content_type}).then(data => data.result)
+    return axios.post('/product-comment/update', comment, {'Content-Type': http_infos.upload_image_content_type}).then(data => data)
 }
 //tickets
 export const getTickets = (skip,state) => {
@@ -302,7 +302,7 @@ export const getYouLikeProducts = (skip) => {
 // 传body体修改用户的信息
 export const updateCustomerSave = (customer) => {
     console.log("customer",customer);
-    return axios.post(VPATH + "/customer/save",customer,{}).then(data => data.result);
+    return axios.post(VPATH + "/customer/save",customer,{}).then(data => data);
 }
 
 // 如果message的结构为Object

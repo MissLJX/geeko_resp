@@ -63,7 +63,7 @@
             }  
         },
         created(){
-            this.tipContent = "<div style='text-align: center;'><img src='https://image.geeko.ltd/chicme/2021111101/modal_points.png' alt='ModalPoints' style='width:50%;'><p style='font-weight:bold;font-size:24px;margin: 0;'>100 Points</p><p style='margin: 0;font-size: 12px;'><span>100 points = $1 USD.</span><a href='/fs/points-policy' style='vertical-align: middle;'><img src='https://image.geeko.ltd/chicme/2021111101/question.png' alt='Question' style='width: 14px;height: 14px;'></a></p><p style='margin: 0;font-size: 12px;line-height: 12px;margin-top: 10px;font-family: Roboto-Regular'>Saved Successfully!</p><p style='margin: 0;font-size: 12px;font-family: Roboto-Regular;'>You’ve got <span style='color: #e64545;font-weight: bold;font-family: Roboto-Regular;'>100 points</span> in your account</p></div>"
+            this.tipContent = "<div style='text-align: center;'><img src='https://image.geeko.ltd/chicme/2021111101/modal_points.png' alt='ModalPoints' style='width:50%;'><p style='font-weight:bold;font-size:24px;margin: 0;'>100 Points</p><p style='margin: 0;font-size: 12px;'><span>100 points = $1 USD.</span><a href='/fs/points-policy-pc' style='vertical-align: middle;'><img src='https://image.geeko.ltd/chicme/2021111101/question.png' alt='Question' style='width: 14px;height: 14px;'></a></p><p style='margin: 0;font-size: 12px;line-height: 12px;margin-top: 10px;font-family: Roboto-Regular'>Saved Successfully!</p><p style='margin: 0;font-size: 12px;font-family: Roboto-Regular;'>You’ve got <span style='color: #e64545;font-weight: bold;font-family: Roboto-Regular;'>100 points</span> in your account</p></div>"
             if(!this.me.myPreference){
                 this.haveDoneBefore = false
                 this.myPreference.favoriteCategories = [];
@@ -92,8 +92,7 @@
                 this.myPreference.favoriteStyles = value;
             },
             addPreference(){
-                let _this = this;
-                _this.isLoadingShow = true;
+                this.isLoadingShow = true;
                 let obj = {
                     customer:{
                         myPreference:{
@@ -106,17 +105,19 @@
                     definition:{myPreference:this.myPreference}
 
                 };
-                _this.$store.dispatch("updateCustomerSave",obj).then(result => {
+                this.$store.dispatch("updateCustomerSave",obj).then(result => {
                     // alert("Success!");
-                    _this.isLoadingShow = false;
-                    if(_this.haveDoneBefore){
-                        _this.showNormalTip()
+                    this.isLoadingShow = false;
+                    if(this.haveDoneBefore){
+                        this.showNormalTip()
                     } else {
-                        if(res.prompt && res.prompt.html){
-                            _this.tipContent = res.prompt.html
+                        if(result.prompt && result.prompt.html){
+                            let policyUrl = /(\/fs\/points-policy)/
+                            let text = result.prompt.html.indexOf('/fs/points-policy') != -1 ? result.prompt.html.replace(policyUrl, '/fs/points-policy-pc'): result.prompt.html
+                            this.tipContent = text
                         }
-                        _this.showPointsTip()
-                        _this.haveDoneBefore = false
+                        this.showPointsTip()
+                        this.haveDoneBefore = true
                     }
                 })
             },

@@ -34,9 +34,9 @@
                 <p>{{$t("index.wallet")}}</p>
             </router-link>
             
-            <a href="/share">
+            <a href="/share" v-if="hasOwnApp">
                 <p class="iconfont">&#xe6da;</p>
-                <p>{{$t("index.get_discount_10")}}</p>
+                <p>{{$t("points_mall.referAFriend")}}</p>
             </a>
         </div>
     </div>
@@ -82,6 +82,9 @@
                     return this.me.email;
                 }
             },
+            hasOwnApp(){
+                return window.downloadIcon ? true : false
+            }
         },
         methods:{
             confirmEmail(){

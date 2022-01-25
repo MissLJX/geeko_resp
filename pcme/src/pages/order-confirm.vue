@@ -1,22 +1,22 @@
 <template>
   <div class="confirm_page">
-      <div >
-          <span class="iconfont success_icon">&#xe6b7;</span>
+      <div v-html="tipContent">
+          <!-- <span class="iconfont success_icon">&#xe6b7;</span>
             <div class="page_title">Order Confirmed Successfully</div>
             <div class="credit-con">
                 <p>You’ve got <strong class="color_red">xxx points</strong> in your account.</p>
                 <p>100 points = $1 USD.</p>
-            </div>
+            </div> -->
       </div>
         
 
         <div class="btn_box">
-            <div class="v-btn" @click="shopnow">{{$t('shopnow')}}</div>
-            <div class="v-btn" @click="getPoints">get more points</div>
+            <div class="v-btn" @click="viewOrder">{{$t('points_mall.viewOrder')}}</div>
+            <div class="v-btn" @click="toReview">{{$t("points_mall.to_review")}}</div>
         </div>
 
         <div class="productBox">
-            <div class="listTitle">Often Bought With</div>
+            <div class="listTitle">{{$t("points_mall.often_bought_with")}}</div>
 
             <div class="_bd">
                 <you-likes-list :products="oftenBoughtWithList" :loading="loading" :finished="finished" @listing="listingHandle"></you-likes-list>
@@ -30,17 +30,12 @@
 import { mapGetters } from "vuex"
 import YouLikesList from "../components/often-bougth-with.vue"
 export default {
-    props:{
-        tipContent:{
-            type:String,
-            default:''
-        }
-    },
     data(){
             return {
                 loading: false,
                 finished: false,
-                tipContent: ''
+                tipContent: '',
+                orderId: '',
             }
         },
         computed:{
@@ -65,12 +60,25 @@ export default {
             getPoints(){
                 this.$router.push("/me/m/credits")
             },
+            viewOrder(){
+                if(this.orderId){
+                    this.$router.push("/me/m/order/"+this.orderId)
+                } else {
+                    this.$router.go(-1);
+                }
+            },
+            toReview(){
+                this.$router.push("/me/m/order?type=review'")
+            }
         },
         created(){
             this.listingHandle();
-            var t = `<img src='https://image.geeko.ltd/chicme/2021111101/right_icon.png' alt='ModalPoints' style='width:54px;'><div style="font-family: 'ACUMINPRO-BOLD';font-size: 18px;font-weight: normal;font-stretch: normal;letter-spacing: 0px;color: #222222;margin-top: 18px;margin-bottom: 14px;">Order Confirmed Successfully</div><div style="font-family: 'SLATEPRO';font-size: 14px;font-weight: normal;font-stretch: normal;line-height: 16px;letter-spacing: 0px;color: #222222;margin-bottom: 40px;"><p>You’ve got <strong style="color:#e64545;">xxx points</strong> in your account.</p><p>100 points = $1 USD.</p></div>`
+            this.$route.params.id && (this.orderId = this.$route.params.id)
+            var t = `<img src='https://image.geeko.ltd/chicme/2021111101/right_icon.png' alt='ModalPoints' style='width:54px;'><div style="font-family: 'ACUMINPRO-BOLD';font-size: 18px;font-weight: normal;font-stretch: normal;letter-spacing: 0px;color: #222222;margin-top: 18px;margin-bottom: 14px;">Order Confirmed Successfully</div><div style="font-family: 'SLATEPRO';font-size: 14px;font-weight: normal;font-stretch: normal;line-height: 16px;letter-spacing: 0px;color: #222222;margin-bottom: 40px;"><p>You’ve got <strong style="color:#e64545;">100 points</strong> in your account.</p><p>100 points = $1 USD.</p></div>`
             if(this.$route.params.tipContent){
-                this.tipContent = this.$route.params.tipContent
+                let policyUrl = /(\/fs\/points-policy)/
+                let text = this.$route.params.tipContent.indexOf('/fs/points-policy') != -1 ? this.$route.params.tipContent.replace(policyUrl, '/fs/points-policy-pc'): this.$route.params.tipContent
+                this.tipContent = text
             } else {
                 this.tipContent = t
             }

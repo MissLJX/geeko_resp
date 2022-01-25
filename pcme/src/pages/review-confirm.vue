@@ -1,30 +1,30 @@
 <template>
   <div class="confirm_page">
       <div v-html="tipContent">
-          <span class="iconfont success_icon">&#xe6b7;</span>
+          <!-- <span class="iconfont success_icon">&#xe6b7;</span>
             <div class="page_title">Reviewed Successfully</div>
             <div class="credit-con">
                 <p>Thanks for your time!</p>
                 <p>Accepted review will earn <strong class="color_red">xxx points</strong>, have a look and enjoy shopping at ChicMe!</p>
-            </div>
+            </div> -->
       </div>
         
 
         <div class="btn_box">
-            <div class="v-btn" @click="shopnow">{{$t('shopnow')}}</div>
-            <div class="v-btn" @click="getPoints">get more points</div>
+            <div class="v-btn" @click="shopnow">{{$t('points_mall.shop_now')}}</div>
+            <div class="v-btn" @click="getPoints">{{$t("points_mall.get_more_points")}}</div>
         </div>
 
         <div class="productBox">
             <div class="listTitle">
-                <span :class="{'selected':listShow==1}" v-if="reviewOrderList && reviewOrderList.length > 0" @click="()=>chanegData(1)">These orders are also awaiting review</span>
-                <span :class="{'selected':listShow==2}" @click="()=>chanegData(2)">Shop the highly reviewed items</span>
+                <span :class="{'selected':listShow==1}" v-if="reviewOrderList && reviewOrderList.length > 0" @click="()=>chanegData(1)">{{$t("points_mall.awaitingReview")}}</span>
+                <span :class="{'selected':listShow==2}" @click="()=>chanegData(2)">{{$t("points_mall.highlyReview")}}</span>
             </div>
 
             <div class="_bd">
                 <!-- 等待评价的订单列表 -->
                 <div v-if="listShow==1 && reviewOrderList && reviewOrderList.length > 0">
-                    <review-order-list></review-order-list>
+                    <review-order-list :orderList="reviewOrderList"></review-order-list>
                 </div>
 
                 <you-likes-list v-if="listShow==2" :products="list" :loading="loading" :finished="finished" @listing="listingHandle"></you-likes-list>
@@ -88,9 +88,11 @@ export default {
     created(){
         //  this.listingHandle();
         this.getReviewOrder()
-        let t = `<img src='https://image.geeko.ltd/chicme/2021111101/right_icon.png' alt='ModalPoints' style='width:54px;vertical-align: middle;'><div style="font-family: 'ACUMINPRO-BOLD';font-size: 18px;font-weight: normal;font-stretch: normal;letter-spacing: 0px;color: #222222;margin-top: 18px;margin-bottom: 14px;">Reviewed Successfully</div><div style="font-family: 'SLATEPRO';font-size: 14px;font-weight: normal;font-stretch: normal;line-height: 16px;letter-spacing: 0px;color: #222222;margin-bottom: 40px;"><p>Thanks for your time!</p><p>Accepted review will earn <strong style="color:#e64545;">xxx points</strong>, have a look and enjoy shopping at ChicMe!</p></div>`
+        let t = "<img src='https://image.geeko.ltd/chicme/2021111101/right_icon.png' alt='ModalPoints' style='width:54px;vertical-align: middle;'><div style='font-family: ACUMINPRO-BOLD;font-size: 18px;font-weight: normal;font-stretch: normal;letter-spacing: 0px;color: #222222;margin-top: 18px;margin-bottom: 14px;'>Reviewed Successfully</div><div style='font-family: SLATEPRO;font-size: 14px;font-weight: normal;font-stretch: normal;line-height: 16px;letter-spacing: 0px;color: #222222;margin-bottom: 40px;'><p>Thanks for your time!</p><p>Accepted review will earn <strong style='color:#e64545;'>100 points</strong>, have a look and enjoy shopping at ChicMe!</p><p>100 points = $1 <a href='/fs/points-policy' style='vertical-align: middle;'><img src='https://image.geeko.ltd/chicme/2021111101/question.png' alt='Question' style='width: 14px;height: 14px;'></a></p></div>"
         if(this.$route.params.tipContent){
-            this.tipContent = this.$route.params.tipContent
+            let policyUrl = /(\/fs\/points-policy)/
+            let text = this.$route.params.tipContent.indexOf('/fs/points-policy') != -1 ? this.$route.params.tipContent.replace(policyUrl, '/fs/points-policy-pc'): this.$route.params.tipContent
+            this.tipContent = text
         } else {
             this.tipContent = t
         }
