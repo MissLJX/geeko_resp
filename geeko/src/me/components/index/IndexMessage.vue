@@ -62,9 +62,13 @@
                 <p>{{$t("label.coupons")}}</p>
             </a>
             <a @click.prevent="specificationLogin('/me/m/credits',1)" click-name="Points">
-                <p class="iconfont">
+                <p class="iconfont" v-if="!isLogin">
                     <span :class="{'_font' : isLogin}">{{getFeedNum(feed && feed.points,"&#xe6db;")}}</span>
                 </p>
+                <div style="position:relative;height:23px;" v-if="isLogin">
+                    <img class="animation_points_icon" style="width:23px;" src="https://image.geeko.ltd/2021-11-01-lottery/2021-11-01-lottery-points.png" alt="">
+                    <span class="animation_points_text _font">{{getFeedNum(feed && feed.points,"&#xe6db;")}}</span>
+                </div>
                 <p>{{$t("index.points")}}</p>
             </a>
             <a @click.prevent="specificationLogin('/me/m/creditcards',1)" click-name="Wallet">
@@ -380,6 +384,48 @@
 </script>
 
 <style scoped lang="scss">
+.animation_points_icon{
+    animation: icon_exchange 5s linear infinite;
+    position: absolute;
+    left: calc(50% - 12px);
+}
+.animation_points_text{
+    display: block;
+    position: absolute;
+    width: 100%;
+    line-height: 23px;
+    opacity: 0;
+    animation: icon_exchange 5s linear 2.5s infinite;
+}
+@keyframes icon_exchange{
+    0%{
+        opacity: 0;
+        transform: rotateY(180deg);
+    }
+    2%{
+        opacity: 0.6;
+        transform: rotateY(180deg);
+    }
+    10%{
+        opacity: 1;
+        transform: rotateY(0deg);
+    }
+    42%{
+        opacity: 1;
+        // transform: rotateY(0deg);
+        // transform: rotateY(90deg);
+    }
+    50%{
+        opacity: 0;
+        // transform: rotateY(180deg);
+        // display: none;
+    }
+    100%{
+        opacity: 0;
+        // display: none;
+        // transform: rotateY(0);
+    }
+}
     .index-message{
         // padding-top: 20px;
         ._hd{
