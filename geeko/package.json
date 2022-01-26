@@ -13,7 +13,7 @@
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
     "@babel/runtime": "^7.16.7",
-    "axios": "^0.16.2",
+    "axios": "^0.21.2",
     "dateutil": "^0.1.0",
     "fecha": "^2.3.1",
     "html-image-compress": "^1.1.0",
