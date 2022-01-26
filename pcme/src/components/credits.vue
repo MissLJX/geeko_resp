@@ -64,7 +64,7 @@
                         </div>
                     </div>
                 </a>
-                <a @click="()=>routTo('/me/m/order?type=review')" >
+                <a @click="()=>routTo({path:'/me/m/order?type=review',type:'Review'})" >
                     <div class="review">
                         <div>
                             <img src="https://image.geeko.ltd/20220113/My-Points-review.png" alt="">
@@ -89,7 +89,7 @@
                     </div>
                 </router-link> -->
                 
-                <a @click="()=>routTo(makeSuggestionUrl)">
+                <a @click="()=>routTo({path:makeSuggestionUrl, type:'Suggestion'})">
                     <div class="suggestion">
                         <div>
                             <img src="https://image.geeko.ltd/20220113/My-Points-suggestion.png" alt="">
@@ -113,7 +113,7 @@
                     </div>
                 </a>
                 
-                <a @click="()=>routTo('/me/m/survey')">
+                <a @click="()=>routTo({path:'/me/m/survey',type:'Survey'})">
                     <div class="review">
                         <div>
                             <img src="https://image.geeko.ltd/20220113/My-Points-survey.png" alt="">
@@ -260,13 +260,38 @@
             isShow: function(){
                 this.seen = !this.seen;
             },
-            routTo(url){
-                this.$router.push(url)
+            routTo({path,type}){
+                // console.log(path,type)
+                if(window.GeekoSensors && type){
+                    window.GeekoSensors.Track('PitPositionClick', {
+                        page_sort:"Me",
+                        page_content: "Points",
+                        resourcepage_title:"Points_"+type,
+                        resource_content:type
+                    })
+                }
+                this.$router.push(path)
             },
             openEarnMask(){
+                if(window.GeekoSensors){
+                    window.GeekoSensors.Track('PitPositionClick', {
+                        page_sort:"Me",
+                        page_content: "Points",
+                        resourcepage_title:"Points_BuyEarn",
+                        resource_content:"BuyEarn"
+                    })
+                }
                 this.showEarnMask = true;
             },
             openMoreMask(){
+                if(window.GeekoSensors){
+                    window.GeekoSensors.Track('PitPositionClick', {
+                        page_sort:"Me",
+                        page_content: "Points",
+                        resourcepage_title:"Points_MoreWays",
+                        resource_content:"MoreWays"
+                    })
+                }
                 this.showMoreMask = true;
             },
             closeMask(){
@@ -304,13 +329,13 @@
             linkTo(type){
                 switch(type){
                     case 1:
-                        this.routTo("/me/m/my-measurements");
+                        this.routTo({path:"/me/m/my-measurements",type:''});
                         return;
                     case 2:
-                        this.routTo("/me/m/my-preference");
+                        this.routTo({path:"/me/m/my-preference",type:''});
                         return;
                     case 3:
-                        this.routTo("/me/m/change-email");
+                        this.routTo({path:"/me/m/change-email",type:''});
                         return;
                     default:
                         return;
@@ -326,6 +351,7 @@
             "count-down":CountDowns
         },
         created(){
+            // console.log(this.$route)
             this.$store.dispatch('getMessage', 'M1138');
             this.createMoreWays()
             this.createBuyAndEarn()
@@ -339,6 +365,51 @@
             });
 
             !(this.dobulePoints && this.dobulePoints.points) && this.$store.dispatch("getDobulePointsData","M1578");
+        },
+        mounted(){
+            if(window.GeekoSensors){
+                window.GeekoSensors.Track('PitPositionExposure', {
+                    page_sort:"Me",
+                    page_content: "Points",
+                    resourcepage_title:"Points_BuyEarn",
+                    resource_content:"BuyEarn"
+                })
+
+                window.GeekoSensors.Track('PitPositionExposure', {
+                    page_sort:"Me",
+                    page_content: "Points",
+                    resourcepage_title:"Points_Review",
+                    resource_content:"Review"
+                })
+
+                window.GeekoSensors.Track('PitPositionExposure', {
+                    page_sort:"Me",
+                    page_content: "Points",
+                    resourcepage_title:"Points_Suggestion",
+                    resource_content:"Suggestion"
+                })
+
+                window.GeekoSensors.Track('PitPositionExposure', {
+                    page_sort:"Me",
+                    page_content: "Points",
+                    resourcepage_title:"Points_ReferFriend",
+                    resource_content:"ReferFriend"
+                })
+
+                window.GeekoSensors.Track('PitPositionExposure', {
+                    page_sort:"Me",
+                    page_content: "Points",
+                    resourcepage_title:"Points_Survey",
+                    resource_content:"Survey"
+                })
+
+                window.GeekoSensors.Track('PitPositionExposure', {
+                    page_sort:"Me",
+                    page_content: "Points",
+                    resourcepage_title:"Points_MoreWays",
+                    resource_content:"MoreWays"
+                })
+            }
         }
     }
 </script>
