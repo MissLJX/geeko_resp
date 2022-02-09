@@ -1,6 +1,6 @@
 <template>
     <div class="el-coupon st-table">
-        <div class="el-coupon-info st-cell st-v-m">
+        <!-- <div class="el-coupon-info st-cell st-v-m">
             <span class="el-coupon-amount">{{coupontAmount}}</span>
             <span class="el-coupon-name" v-if="coupon.coupon.name">{{coupon.coupon.name}}</span>
             <p class="el-coupon-clearance" v-if="coupon.coupon.description">{{coupon.coupon.description}}</p>
@@ -8,85 +8,106 @@
         </div>
 
         <div class="st-cell st-v-m st-t-r">
-            <!-- <i class="iconfont expired-icon" v-if="isExpried">&#xe748;</i> -->
-        </div>
+            <i class="iconfont expired-icon" v-if="isExpried">&#xe748;</i>
+        </div> -->
+
+        <div class="x-table __vm x-fw __fixed"
+            :style="{background: isAvailable ?
+                    `url('https://s3.us-west-2.amazonaws.com/image.chic-fusion.com/chicme/2021-12-17/coupon_available.png') no-repeat` :
+                    `url('https://s3.us-west-2.amazonaws.com/image.chic-fusion.com/chicme/2021-12-17/coupon_disavailable.png') no-repeat`,
+                backgroundSize: '100% 100%'}"
+            >
+		<div class='couponMainInfo'>
+			<div class="x-cell" style="height: 100%">
+				<div style="display: flex; align-items: center; justify-content: flex-start">
+					<span class="couponAmount" :style="{'color':isAvailable?'#ff782a' : '#999'}">{{coupontAmount}}</span>
+
+				</div>
+				
+                <div v-if="coupon.coupon.name" :style="{ 'margin-top': 4, 'color': isAvailable ? '#ff782a' : '#999' }">
+                    <span class='description'>{{coupon.coupon.name}}</span>
+                </div>
+            
+                <div v-if="coupon.coupon.description" :style="{ 'margin-top': 4, 'color': isAvailable ? '#ff782a' : '#999' }">
+                    <span class='description'>{{coupon.coupon.description}}</span>
+                </div>
+				
+			</div>
+			<div class="x-cell">
+			</div>
+		</div>
+		<div class='dateInfo'>
+			 <li v-if="expireDate">
+                <span class='dot'>.</span>
+                <span class="el-coupon-date">{{expireDate}}</span>
+            </li>
+				
+            <li v-if="expireDate">
+                <span class='dot'>.</span>
+                <span class="el-coupon-date">{{expireDate}}</span>
+            </li>
+		</div>
+
+	</div>
     </div>
 </template>
 
 <style scoped lang="scss">
     .el-coupon{
-        .el-coupon-info{
-            .el-coupon-amount{
-                font-family: SlatePro-Medium;
-                font-size: 22px;
-                color: #ecb85e;
-                vertical-align: middle;
-            }
 
-            .el-coupon-name{
-                font-family: SlatePro;
-                font-size: 12px;
-                color: #ecb85e;
-                border: solid 1px #ecb85e;
-                padding: 0px 3px;
-                margin-left: 5px;
-                display: inline-block;
-                height: 17px;
-                line-height: 17px;
-                vertical-align: middle;
-                margin-top: 2px;
-            }
+        max-height: 121px;
 
-            .el-coupon-clearance{
-                font-family: SlatePro-Medium;
-                font-size: 12px;
-                color: #222222;
-                // line-height: 25px;
-                margin-top: 5px;
-            }
-
-            .el-coupon-date{
-                font-family: SlatePro;
-                font-size: 12px;
-                color: #999999;
-                margin-top: 5px;
-            }      
+        .couponAmount{
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0px;
+            margin-right: 10px;
+            white-space: nowrap;
+            font-family: 'ACUMINPRO-BOLD';
+            font-size: 20px;
+            line-height: 24px;
+            text-transform: uppercase;
         }
 
-        .el-coupon-use{
-            background-color: #faefd2 !important;
+        .couponMainInfo{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-height: 93px;
+            border-bottom: 1px solid #fff;
+            padding: 13px 0px 5px 15px;
+
+            & > div:last-child{
+                width: 70px;
+                text-align: right;
+                position:relative;
+                right: 27px;
+            }
+        }
+        .dateInfo{
+            padding: 4px 15px;
+            font-family: 'SLATEPRO';
+            font-size: 12px;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0px;
+            color: #999999;
+
+            & > li{
+                position: relative;
+                top: -4px;
+            }
         }
 
-        .expired-icon{
-            font-size: 50px;
-            color: #cacaca;
+        .description{
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
         }
-    }
-
-    .el-coupon-li{
-        .el-coupon{
-            .el-coupon-info{
-                .el-coupon-amount{
-                    color: #cacaca;
-                }
-
-                .el-coupon-name{
-                    color: #cacaca;
-                    border: solid 1px #cacaca;
-                }
-
-                .el-coupon-clearance{
-                    color: #cacaca;
-                }
-
-                .el-coupon-date{
-                    color: #cacaca;
-                }      
-            }
-
-            .el-coupon-use{
-                background-color: #cacaca !important;
-            }
+        
+        .dot{
+            vertical-align: super;
         }
     }
 </style>
@@ -130,6 +151,10 @@
 
                 return ''
 
+            },
+            isAvailable(){
+                console.log(this.coupon)
+                return this.coupon.isAvailable
             }
         },
         methods: {
