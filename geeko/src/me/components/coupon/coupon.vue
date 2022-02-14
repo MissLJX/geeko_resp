@@ -1,57 +1,78 @@
 <template>
-    <div class="el-coupon st-table">
-        <div class="el-coupon-info st-cell st-v-m">
-            <span class="el-coupon-amount">{{coupontAmount}}</span>
-            <span class="el-coupon-name" v-if="coupon.coupon.name">{{coupon.coupon.name}}</span>
-            <p class="el-coupon-clearance" v-if="coupon.coupon.description">{{coupon.coupon.description}}</p>
-            <p class="el-coupon-date">{{expireDate}}</p>
+    <div>
+        <div class="el-coupon">
+            <div class="el-coupon-info">
+                <span class="el-coupon-amount">{{coupontAmount}}</span>
+                <p class="el-coupon-name" v-if="coupon.coupon.name">{{coupon.coupon.name}}</p>
+                <p class="el-coupon-clearance" v-if="coupon.coupon.description">{{coupon.coupon.description}}</p>
+            </div>
         </div>
-
-        <div class="st-cell st-v-m st-t-r">
-            <!-- <i class="iconfont expired-icon" v-if="isExpried">&#xe748;</i> -->
-        </div>
+        
+        <ul class="el-coupon el-coupon-ul">
+            <li class="el-coupon-date">{{expireDate}}</li>
+            <li class="el-coupon-date">Not vaild on clearance sale</li>
+        </ul>
     </div>
 </template>
 
 <style scoped lang="scss">
     .el-coupon{
-        .el-coupon-info{
-            .el-coupon-amount{
-                font-family: SlatePro-Medium;
-                font-size: 22px;
-                color: #ecb85e;
-                vertical-align: middle;
-            }
+        position: relative;
+        background-color: #ffeadb;
+        padding: 10px 5px;
 
-            .el-coupon-name{
-                font-family: SlatePro;
-                font-size: 12px;
-                color: #ecb85e;
-                border: solid 1px #ecb85e;
-                padding: 0px 3px;
-                margin-left: 5px;
-                display: inline-block;
-                height: 17px;
-                line-height: 17px;
-                vertical-align: middle;
-                margin-top: 2px;
-            }
-
-            .el-coupon-clearance{
-                font-family: SlatePro-Medium;
-                font-size: 12px;
-                color: #222222;
-                // line-height: 25px;
-                margin-top: 5px;
-            }
-
-            .el-coupon-date{
-                font-family: SlatePro;
-                font-size: 12px;
-                color: #999999;
-                margin-top: 5px;
-            }      
+        &::after{
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 100%;
+            top: 0;
+            bottom: 0;
+            right: -10px;
+            background: radial-gradient(10px 9px ellipse at right, transparent 5px, #ffeadb 0px);
+            background-size: 10px 16px
+            
         }
+
+        &::before{
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 100%;
+            top: 0;
+            bottom: 0;
+            left: -10px;
+            background: radial-gradient(10px 9px ellipse at left, transparent 5px, #ffeadb 0px);
+            background-size: 10px 16px;
+            
+        }
+
+        .el-coupon-amount{
+            font-family: 'AcuminPro-Bold';
+            font-size: 20px;
+            color: #ff782a;
+            text-transform: uppercase;
+        }
+
+        .el-coupon-name{
+            font-size: 12px;
+            margin-top: 5px;
+            color: #ff782a;
+        }
+
+        .el-coupon-clearance{
+            font-size: 12px;
+            color: #222222;
+            margin-top: 5px;
+            color: #ff782a;
+        }
+
+        .el-coupon-date{
+            font-family: SlatePro;
+            font-size: 12px;
+            color: #999999;
+            margin-top: 5px;
+        }     
 
         .el-coupon-use{
             background-color: #faefd2 !important;
@@ -63,32 +84,50 @@
         }
     }
 
-    .el-coupon-li{
-        .el-coupon{
-            .el-coupon-info{
-                .el-coupon-amount{
-                    color: #cacaca;
-                }
+    .el-coupon-ul{
+        margin-top: 2px;
+        padding: 7px 5px;
 
-                .el-coupon-name{
-                    color: #cacaca;
-                    border: solid 1px #cacaca;
-                }
+        & > li{
+            position: relative;
+            padding-left: 5px;
 
-                .el-coupon-clearance{
-                    color: #cacaca;
-                }
-
-                .el-coupon-date{
-                    color: #cacaca;
-                }      
-            }
-
-            .el-coupon-use{
-                background-color: #cacaca !important;
+            &::before{
+                content: "";
+                position: absolute;
+                left: 0px;
+                top: 50%;
+                -webkit-transform: translateY(-50%);
+                    -ms-transform: translateY(-50%);
+                        transform: translateY(-50%);
+                width: 2px;
+                height: 2px;
+                background-color: #999999;
+                border-radius: 50%;
             }
         }
     }
+
+    // .el-coupon-li{
+    //     .el-coupon{
+    //         .el-coupon-info{
+    //             .el-coupon-amount{
+    //                 color: #cacaca;
+    //             }
+    //             .el-coupon-clearance{
+    //                 color: #cacaca;
+    //             }
+
+    //             .el-coupon-date{
+    //                 color: #cacaca;
+    //             }      
+    //         }
+
+    //         .el-coupon-use{
+    //             background-color: #cacaca !important;
+    //         }
+    //     }
+    // }
 </style>
 
 <script type="text/ecmascript-6">
@@ -125,7 +164,7 @@
 
 
                 if (beginDate && endDate) {
-                    return utils.dateFormat(beginDate) + "-" + utils.dateFormat(endDate);
+                    return fecha.format(beginDate,"DD/MM/YYYY HH:mm") + "~" + fecha.format(endDate,"DD/MM/YYYY HH:mm");
                 }
 
                 return ''

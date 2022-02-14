@@ -134,7 +134,7 @@
         padding: 10px 0;
         background-color: #fff8e1;
         display: flex;
-        margin-bottom: 20px;
+        // margin-bottom: 20px;
         cursor: pointer;
 
         .iconfont{

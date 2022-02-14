@@ -69,6 +69,8 @@
 
 <style lang="scss" scoped>
     .coupon-container{
+        background-color: #f6f6f6;
+
         .el-coupon-header{
             display: flex;
             justify-content: space-between;

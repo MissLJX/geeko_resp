@@ -15,7 +15,7 @@
             text-align: center;
             height: 50px;
             line-height: 50px;
-            font-weight: bold;
+            font-family: 'AcuminPro-Bold';
             text-transform: capitalize;
         }
 

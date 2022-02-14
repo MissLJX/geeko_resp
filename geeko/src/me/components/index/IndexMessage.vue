@@ -31,6 +31,11 @@
         
         <swiper v-if="swiperData && swiperData.length > 0" :notification-data.sync="swiperData" :email="email"></swiper>
 
+        <div class="guest-user" v-if="false">
+            <span>Guest User</span>
+            <span class="iconfont" @click="gustUserModalEvent()">&#xe718;</span>
+        </div>
+
         <div class="header-icon">
             <div class="st-table">
                 <div class="st-cell st-v-m icon-container">
@@ -335,6 +340,51 @@
                     }
                 })
             },
+            gustUserModalEvent(){
+                let _this = this;
+                this.$store.dispatch('confirmShow', {
+                    show: true,
+                    cfg: {
+                        btnFont:{
+                            yes:"Set password",
+                            no:"Cancel"
+                        },
+                        message: "Guest User",
+                        message2:"This is your temporay account. Set up password to register to get more discount!",
+                        yes: function () {
+                            _this.$store.dispatch('closeConfirm').then(() =>{
+                                window.location.href = _this.GLOBAL.getUrl("/");
+                            });
+                        },
+                        no:function(){
+                            _this.$store.dispatch('closeConfirm');
+                        },
+                        style:{
+                            box:{
+                                padding:"15px 12px",
+                                width:"70%"
+                            },
+                            message:{
+                                fontSize:"14px",
+                            },
+                            message2:{
+                                color:"#222222",
+                                fontSize:"12px"
+                            },
+                            btnYes:{
+                                fontSize:"14px",
+                                fontFamily: 'SlatePro-Medium',
+                                textTransform: 'uppercase'
+                            },
+                            btnNo:{
+                                fontSize:"14px",
+                                fontFamily: 'SlatePro-Medium',
+                                textTransform: 'uppercase'
+                            }
+                        }
+                    }
+                })
+            }
         },
         created:async function(){
             store.dispatch('me/countNotifications');
@@ -493,8 +543,28 @@
             }
         }
 
+        .guest-user{
+            margin-top: 15px;
+            padding-left: 14px;
+
+            & > span{
+                &:first-child{
+                    font-family: 'SlatePro-Medium';
+                    font-size: 20px;
+                    color: #000000;
+                }
+
+                &:last-child{
+                    font-size: 12px;
+                    cursor: pointer;
+                    color: #000000;
+                }
+            }
+        }
+
         .header-icon{
             padding: 0px 14px;
+            margin-top: 20px;
             .icon{
                 width: 78px;
                 height: 78px;
