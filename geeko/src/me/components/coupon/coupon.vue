@@ -15,7 +15,7 @@
             :style="{background: isAvailable ?
                     `url('https://s3.us-west-2.amazonaws.com/image.chic-fusion.com/chicme/2021-12-17/coupon_available.png') no-repeat` :
                     `url('https://s3.us-west-2.amazonaws.com/image.chic-fusion.com/chicme/2021-12-17/coupon_disavailable.png') no-repeat`,
-                backgroundSize: '100% 100%'}"
+                'background-size': '100% 100%'}"
             >
 		<div class='couponMainInfo'>
 			<div class="x-cell" style="height: 100%">

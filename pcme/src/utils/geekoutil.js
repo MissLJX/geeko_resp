@@ -202,3 +202,32 @@ export const getDYD = function(birthday){
 export const checkArray = function(arr){
     return arr && arr.length > 0
 }
+
+export const dateFormat = function(times) {
+    var date = new Date(times);
+
+    var str;
+
+    var year=date.getFullYear();
+    var hour = date.getHours();
+
+    if(hour > 12){
+        hour -= 12;
+        str = "PM";
+    }else{
+        str = "AM";
+    }
+
+    /* 在日期格式中，月份是从0开始的，因此要加0
+    * 使用三元表达式在小于10的前面加0，以达到格式统一  如 09:11:05
+    * */
+    var month = date.getMonth()+1 < 10 ? "0"+(date.getMonth()+1) : date.getMonth()+1;
+    var day = date.getDate() < 10 ? "0"+date.getDate() : date.getDate();
+    var hours = hour < 10 ? "0"+hour : hour;
+    var minutes = date.getMinutes() < 10 ? "0"+date.getMinutes() : date.getMinutes();
+    var seconds = date.getSeconds() < 10 ? "0"+date.getSeconds() : date.getSeconds();
+    
+
+    // 拼接
+    return day + "/" + month + "/" + year + " " + hours + ":" + minutes + ":" + seconds + " " + str;
+}
