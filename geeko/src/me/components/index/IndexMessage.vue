@@ -31,7 +31,7 @@
         
         <swiper v-if="swiperData && swiperData.length > 0" :notification-data.sync="swiperData" :email="email"></swiper>
 
-        <div class="guest-user" v-if="false">
+        <div class="guest-user" v-if="true">
             <span>Guest User</span>
             <span class="iconfont" @click="gustUserModalEvent()">&#xe718;</span>
         </div>
@@ -353,7 +353,7 @@
                         message2:"This is your temporay account. Set up password to register to get more discount!",
                         yes: function () {
                             _this.$store.dispatch('closeConfirm').then(() =>{
-                                window.location.href = _this.GLOBAL.getUrl("/");
+                                _this.$router.push({name:"set-password"});
                             });
                         },
                         no:function(){

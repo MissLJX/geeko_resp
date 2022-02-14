@@ -1,110 +1,110 @@
 <template>
-    <div>
-        <div class="el-coupon">
-            <div class="el-coupon-info">
-                <span class="el-coupon-amount">{{coupontAmount}}</span>
-                <p class="el-coupon-name" v-if="coupon.coupon.name">{{coupon.coupon.name}}</p>
-                <p class="el-coupon-clearance" v-if="coupon.coupon.description">{{coupon.coupon.description}}</p>
-            </div>
+    <div class="el-coupon st-table">
+        <!-- <div class="el-coupon-info st-cell st-v-m">
+            <span class="el-coupon-amount">{{coupontAmount}}</span>
+            <span class="el-coupon-name" v-if="coupon.coupon.name">{{coupon.coupon.name}}</span>
+            <p class="el-coupon-clearance" v-if="coupon.coupon.description">{{coupon.coupon.description}}</p>
+            <p class="el-coupon-date">{{expireDate}}</p>
         </div>
-        
-        <ul class="el-coupon el-coupon-ul">
-            <li class="el-coupon-date">{{expireDate}}</li>
-            <li class="el-coupon-date">Not vaild on clearance sale</li>
-        </ul>
+
+        <div class="st-cell st-v-m st-t-r">
+            <i class="iconfont expired-icon" v-if="isExpried">&#xe748;</i>
+        </div> -->
+
+        <div class="x-table __vm x-fw __fixed"
+            :style="{background:`url('https://s3.us-west-2.amazonaws.com/image.chic-fusion.com/chicme/2021-12-17/coupon_available.png') no-repeat`,
+                'background-size': '100% 100%'}"
+            >
+		<div class='couponMainInfo'>
+			<div class="x-cell" style="height: 100%">
+				<div style="display: flex; align-items: center; justify-content: flex-start">
+					<span class="couponAmount" :style="{'color':'#ff782a'}">{{coupontAmount}}</span>
+				</div>
+				
+                <div v-if="coupon.coupon.name" :style="{ 'margin-top': 4, 'color':'#ff782a' }">
+                    <span class='description'>{{coupon.coupon.name}}</span>
+                </div>
+            
+                <div v-if="coupon.coupon.description" :style="{ 'margin-top': 4, 'color': '#ff782a' }">
+                    <span class='description'>{{coupon.coupon.description}}</span>
+                </div>
+				
+			</div>
+			<div class="x-cell">
+			</div>
+		</div>
+		<div class='dateInfo'>
+			 <li v-if="expireDate">
+                <span class='dot'>.</span>
+                <span class="el-coupon-date">{{expireDate}}</span>
+            </li>
+				
+            <li v-if="expireDate">
+                <span class='dot'>.</span>
+                <span class="el-coupon-date">{{expireDate}}</span>
+            </li>
+		</div>
+
+	</div>
     </div>
 </template>
 
 <style scoped lang="scss">
     .el-coupon{
-        position: relative;
-        background-color: #ffeadb;
-        padding: 10px 5px;
 
-        &::after{
-            content: '';
-            position: absolute;
-            width: 10px;
-            height: 100%;
-            top: 0;
-            bottom: 0;
-            right: -10px;
-            background: radial-gradient(10px 9px ellipse at right, transparent 5px, #ffeadb 0px);
-            background-size: 10px 16px
-            
-        }
+        max-height: 121px;
 
-        &::before{
-            content: '';
-            position: absolute;
-            width: 10px;
-            height: 100%;
-            top: 0;
-            bottom: 0;
-            left: -10px;
-            background: radial-gradient(10px 9px ellipse at left, transparent 5px, #ffeadb 0px);
-            background-size: 10px 16px;
-            
-        }
-
-        .el-coupon-amount{
-            font-family: 'AcuminPro-Bold';
+        .couponAmount{
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0px;
+            margin-right: 10px;
+            white-space: nowrap;
+            font-family: 'ACUMINPRO-BOLD';
             font-size: 20px;
-            color: #ff782a;
+            line-height: 24px;
             text-transform: uppercase;
         }
 
-        .el-coupon-name{
-            font-size: 12px;
-            margin-top: 5px;
-            color: #ff782a;
-        }
+        .couponMainInfo{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-height: 93px;
+            border-bottom: 1px solid #fff;
+            padding: 13px 0px 5px 15px;
 
-        .el-coupon-clearance{
-            font-size: 12px;
-            color: #222222;
-            margin-top: 5px;
-            color: #ff782a;
-        }
-
-        .el-coupon-date{
-            font-family: SlatePro;
-            font-size: 12px;
-            color: #999999;
-            margin-top: 5px;
-        }     
-
-        .el-coupon-use{
-            background-color: #faefd2 !important;
-        }
-
-        .expired-icon{
-            font-size: 50px;
-            color: #cacaca;
-        }
-    }
-
-    .el-coupon-ul{
-        margin-top: 2px;
-        padding: 7px 5px;
-
-        & > li{
-            position: relative;
-            padding-left: 5px;
-
-            &::before{
-                content: "";
-                position: absolute;
-                left: 0px;
-                top: 50%;
-                -webkit-transform: translateY(-50%);
-                    -ms-transform: translateY(-50%);
-                        transform: translateY(-50%);
-                width: 2px;
-                height: 2px;
-                background-color: #999999;
-                border-radius: 50%;
+            & > div:last-child{
+                width: 70px;
+                text-align: right;
+                position:relative;
+                right: 27px;
             }
+        }
+        .dateInfo{
+            padding: 4px 15px;
+            font-family: 'SLATEPRO';
+            font-size: 12px;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0px;
+            color: #999999;
+
+            & > li{
+                position: relative;
+                top: -4px;
+            }
+        }
+
+        .description{
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+        }
+        
+        .dot{
+            vertical-align: super;
         }
     }
 

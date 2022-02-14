@@ -155,7 +155,7 @@
              */
         ],
         mounted(){
-            console.log(this.cfg)
+            // console.log(this.cfg)
         },
         computed:{
             boxStyle(){
@@ -201,7 +201,7 @@
                 Object.keys(style).forEach((key1)=>{
                     keyStyle += this.toLine(key1) + ":" + style[key1+''] + ";"
                 })
-                console.log(keyStyle)
+                // console.log(keyStyle)
                 return keyStyle;
             }
         }

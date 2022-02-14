@@ -1,8 +1,9 @@
 <template>
     <div class="coupons">
+        <div class="couponsTitle">{{$t("mycoupons")}}</div>
         <div v-show="!coupons" class="el-list-loading"><i class="iconfont">&#xe69f;</i></div>
         <div class="coupon" v-for="item in coupons">
-            <div class="fl-l" :class="{'unabled':!item.isAvailable}">
+            <!-- <div class="fl-l" :class="{'unabled':!item.isAvailable}">
                 <p class="amount">{{item.coupon.couponName2}}</p>
                 <p class="name">{{item.coupon.name}}</p>
                 <p class="time">{{getDate(item.coupon.beginDate)}} <span v-if="item.coupon.beginDate">-</span> {{getDate(item.coupon.endDate)}}</p>
@@ -12,6 +13,41 @@
                 <div class="bg">
                     <div class="usenow"  v-if="!item.isAvailable">{{$t('usenow')}}</div>
                     <div @click="useHandle(item.coupon.id)" class="usenow" v-if="item.isAvailable">{{$t('usenow')}}</div>
+                </div>
+            </div> -->
+            <div class="x-table __vm x-fw __fixed"
+                :style="{background: `url('https://s3.us-west-2.amazonaws.com/image.chic-fusion.com/chicme/2021-12-17/coupon_available.png') no-repeat` ,
+                    'background-size': '100% 100%', 'height':'100%'}"
+                >
+                <div class='couponMainInfo'>
+                    <div class="x-cell" style="height: 100%">
+                        <div style="display: flex; align-items: center; justify-content: flex-start">
+                            <span class="couponAmount" :style="{'color':'#ff782a'}">{{item.coupon.couponName2}}</span>
+
+                        </div>
+                        
+                        <div v-if="item.coupon.name" :style="{ 'margin-top': 6, 'color': '#ff782a' }">
+                            <span class='description'>{{item.coupon.name}}</span>
+                        </div>
+                    
+                        <div v-if="item.coupon.description" :style="{ 'margin-top': 6, 'color': '#ff782a' }">
+                            <span class='description'>{{item.coupon.description}}</span>
+                        </div>
+                        
+                    </div>
+                    <div class="x-cell">
+                    </div>
+                </div>
+                <div class='dateInfo'>
+                    <li v-if="expireDate(item.coupon)">
+                        <span class='dot'>.</span>
+                        <span class="el-coupon-date">{{expireDate(item.coupon)}}</span>
+                    </li>
+                        
+                    <li v-if="expireDate(item.coupon)">
+                        <span class='dot'>.</span>
+                        <span class="el-coupon-date">{{expireDate(item.coupon)}}</span>
+                    </li>
                 </div>
             </div>
         </div>
@@ -26,10 +62,13 @@
         computed: {
             ...mapGetters([
                 'coupons'
-            ])
+            ]),
+            
+            
         },
         created(){
             this.$store.dispatch('getCoupons')
+            // console.log(this.coupons)
         },
         methods:{
             getDate(time){
@@ -42,7 +81,18 @@
                 this.$store.dispatch('useCoupon',id).then(() => {
                     window.location.href = '/cart'
                 })
-            }
+            },
+            expireDate(item){
+                var [beginDate, endDate] = [item.beginDate, item.endDate]
+
+
+                if (beginDate && endDate) {
+                    return utils.dateFormat(beginDate) + "-" + utils.dateFormat(endDate);
+                }
+
+                return ''
+
+            },
         }
     }
 </script>
@@ -78,11 +128,81 @@
             background-color: #e6e6e6 !important;
         }
     }
+    li{
+        list-style-type: none;
+    }
+    .couponsTitle{
+        text-align: center;
+        font-family: 'ACUMINPRO-BOLD';
+        font-size: 24px;
+        font-weight: normal;
+        font-stretch: normal;
+        letter-spacing: 0px;
+        color: #222222;
+        margin-bottom: 20px;
+    }
+    .couponAmount{
+        font-weight: normal;
+        font-stretch: normal;
+        letter-spacing: 0px;
+        margin-right: 10px;
+        white-space: nowrap;
+        font-family: 'ACUMINPRO-BOLD';
+        font-size: 26px;
+        line-height: 31px;
+        text-transform: uppercase;
+    }
+
+    .couponMainInfo{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 100px;
+        border-bottom: 1px solid #fff;
+        padding: 16px 0px 8px 20px;
+
+        & > div:last-child{
+            width: 70px;
+            text-align: right;
+            position:relative;
+            right: 27px;
+        }
+    }
+    .dateInfo{
+        padding: 4px 20px;
+        font-family: 'SLATEPRO';
+        font-size: 14px;
+        font-weight: normal;
+        font-stretch: normal;
+        letter-spacing: 0px;
+        color: #999999;
+
+        & > li{
+            position: relative;
+            top: -2px;
+        }
+    }
+
+    .description{
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        line-height: 20px;
+        font-size: 16px;
+    }
+    
+    .dot{
+        vertical-align: super;
+        position: relative;
+        top: 2px;
+    }
+
     .coupons{
         .coupon{
-            width: 438px;
-            height: 125px;
-            border: solid 1px #e6e6e6;
+            width: 435px;
+            height: 157px;
+            // border: solid 1px #e6e6e6;
             float: left;
             margin-bottom: 20px;
             position: relative;

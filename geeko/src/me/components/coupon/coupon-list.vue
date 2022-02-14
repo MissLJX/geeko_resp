@@ -2,7 +2,7 @@
     <div class="el-coupons">
         <list :items="coupons" :scrollable="scrollable" :loading="loading" :finished="finished" @listing="$emit('listing')">
             <template slot="li" slot-scope="props">
-                <li :key="props.item.coupon.id" :class="{'el-coupon-li' : !props.item.isAvailable}">
+                <li :key="props.item.coupon.id">
                     <coupon :coupon="props.item"/>
                 </li>
             </template>
@@ -43,12 +43,16 @@
 
 <style scoped lang="scss">
     .el-coupons  li{
-        padding: 10px 10px 0px 10px;
-        border-bottom: 2px solid #ff782a;
+        .__container{
+            position: relative;
+        }
 
         &:first-child{
             border-top: none;
         }
+        .el-coupon{
+            width: 100%;
+        }
+        padding: 10px;
     }
-
 </style>

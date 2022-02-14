@@ -44,7 +44,13 @@ const Me = [
         path: ROUTER_PATH_ME + '/change-password',
         component: () => import(/* webpackChunkName: "change-password" */ '../pages/change-password.vue'),
         name: 'change-password',
-        meta: {title: 'Change password'}
+        meta: {title: 'Change Password'}
+    },
+    {
+        path: ROUTER_PATH_ME + '/set-password',
+        component: () => import(/* webpackChunkName: "set-password" */ '../pages/set-password.vue'),
+        name: 'set-password',
+        meta: {title: 'Set Password'}
     },
     {
         path: ROUTER_PATH_ME + '/coupons',

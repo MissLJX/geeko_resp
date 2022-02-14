@@ -35,7 +35,8 @@
                         v-if="getTimeLeft >= 1000" 
                         :timeStyle="{width:'16px',height:'16px',backgroundColor:'#ffffff',color:'#222222',padding:'2px',borderRadius:'2px',fontSize:'16px',fontFamily: 'AcuminPro-Bold'}"
                         :show-hour="true"
-                        :show-day="true"
+                        :show-day="false"
+                        :show-second="true"
                         class="countdown"
                     />
                 </div>

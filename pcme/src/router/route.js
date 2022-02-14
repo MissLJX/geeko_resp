@@ -27,7 +27,6 @@ import Survey from '../pages/survey.vue'
 import FaqIndex from '../pages/faq-index/faq-index.vue'
 import Faq from '../pages/faq/faq.vue'
 import Support from "../pages/support/support.vue"
-import Refer from '../components/refer.vue'
 
 const __Base_Path__ = window.ctx || ''
 
@@ -257,12 +256,7 @@ const routes = [
         component: Survey,
         meta: {title:'Survey'},
     },
-    {
-        path:__Base_Path__+'/me/m/refer',
-        name:"refer",
-        component:Refer,
-        meta: {title:'Refer a Friend'},
-    },
+    
     {
         path:__Base_Path__+'/me/m/faq',
         component: FaqIndex,
