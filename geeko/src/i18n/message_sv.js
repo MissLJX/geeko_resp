@@ -61,6 +61,18 @@ export default {
         manage_your_wishlist:"Click here to manage your wishlist",
         shop_now:"Shop Now",
         refer:'H\u00e4nvisa en v\u00e4n',
+        guest_user:"Guest User",
+        temporay_account_set_password:"This is your temporay account. Set up password to register to get more discount!",
+        set_password:"Set password",
+        set_successful:"Set Successful",
+        welcome_to:"Welcome to",    //CM1107
+        mininum_length_six:"6 characters minimum",  //CM1100
+        maximun_length_twenty:"20 characters maximum",  //CM1101
+        no_emojis:"No emojis",    //CM1102
+        exclusive_new_email:"I’ d like to receive exclusive offers and news by Email.", //google
+        agree_to_policy:"I agree to the {0} and", //CM0490
+        terms_of_services:"Terms of Service", //CM0103
+        set_password_more_discount:"Set your password to get more discount!",   //google
     },
     point:{
         my_points:"My Points",

@@ -15,8 +15,8 @@
                 </li>
 
                 <li>
-                    <router-link class="el-me-tool-list-item" :to="{name: 'change-password'}">
-                        <touch-go class="el-me-tool-list-touch" :label1="$t('label.changePassword')">
+                    <router-link class="el-me-tool-list-item" :to="{name: me.temporary ? 'set-password' : 'change-password'}">
+                        <touch-go class="el-me-tool-list-touch" :label1="me.temporary ? $t('label.set_password') : $t('label.changePassword')">
                         </touch-go>
                     </router-link>
                 </li>

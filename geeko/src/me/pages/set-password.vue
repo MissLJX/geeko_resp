@@ -2,7 +2,7 @@
     <div class="set-password">
         <nav-bar>
             <i class="iconfont el-back-font" slot="left" @click="$router.go(-1)">&#xe693;</i>
-            <span slot="center">Set Password</span>
+            <span slot="center">{{$t("label.set_password")}}</span>
         </nav-bar>
 
         <div class="_content">
@@ -14,23 +14,26 @@
             </div>
 
             <div class="_rule" v-if="ruleShow">
-                <p :class="rulePass.minLength?'pass':'nopass'">6 characters minimum</p>
-                <p :class="rulePass.maxLength?'pass':'nopass'">20 characters maximum</p>
-                <p :class="rulePass.noEmojis?'pass':'nopass'">No emojis</p>
+                <p :class="rulePass.minLength?'pass':'nopass'">{{$t("label.mininum_length_six")}}</p>
+                <p :class="rulePass.maxLength?'pass':'nopass'">{{$t("label.maximun_length_twenty")}}</p>
+                <p :class="rulePass.noEmojis?'pass':'nopass'">{{$t("label.no_emojis")}}</p>
             </div>
             
             <div class="agreement">
                 <div class="item1">
                     <span class="iconfont" :class="{'_selected':policyActive.first}" @click="policyActive.first=!policyActive.first">&#xe65a;</span>
                     <span :class="{'active':fontActive}">
-                        I agree to the <a href="${ctx}/fs/terms-conditions-notice">Terms of Service</a> and <a href="${ctx}/fs/privacy-security-policy">Privacy Policy  </a>
+                        <i18n path="label.agree_to_policy" tag="span" for="label.terms_of_services">
+                            <a href="${ctx}/fs/terms-conditions-notice">{{$t("label.terms_of_services")}}</a>
+                        </i18n>
+                        <a href="${ctx}/fs/privacy-security-policy">{{$t("index.privacy_policy")}}  </a>
                     </span>
                 </div>
 
                 <div class="item1">
                     <span class="iconfont" :class="{'_selected':policyActive.second}" @click="policyActive.second=!policyActive.second">&#xe65a;</span>
                     <span>
-                        I’ d like to receive exclusive offers and news by Email.
+                        {{$t("label.exclusive_new_email")}}
                     </span>
                 </div>
             </div>
@@ -41,9 +44,9 @@
         <div class="success-modal" v-if="modalShow">
             <div class="modal-content">
                 <img src="https://image.geeko.ltd/chicme/2021111101/right_icon.png" alt="right">
-                <p class="font1">Welcome To {{name}}</p>
-                <p class="font2">Set Successful</p>
-                <btn class="fill btn normal" style="font-family: 'AcuminPro-Bold';width:100%;padding:10px 5px;margin-top:10px;" @click.native="modalSuccessEvent()">GO SHOPPING</btn>
+                <p class="font1">{{$t("label.welcome_to")}} {{name}}</p>
+                <p class="font2">{{$t("label.set_successful")}}</p>
+                <btn class="fill btn normal" style="font-family: 'AcuminPro-Bold';width:100%;padding:10px 5px;margin-top:10px;" @click.native="modalSuccessEvent()">{{$t("survey.survey_go_shopping")}}</btn>
             </div>
             <div class="mask"></div>
         </div>
@@ -109,6 +112,7 @@
         },
         methods:{
             confimedEvent:function(){
+                let _this = this;
                 if(this.password.length <=0){
                     alert("The password cannot be empty!");
                     return;
@@ -126,7 +130,14 @@
                     return;
                 }
 
-                modalShow = true;
+                 this.$store.dispatch('me/changePassword', {newPassword:this.password}).then(() => {
+                    _this.modalShow = true;
+                }).catch(e => {
+                    alert(e.result);
+                    _this.password = "";
+                    _this.policyActive.first = false;
+                })
+
             },
             modalSuccessEvent(){
                 window.location.href = this.GLOBAL.getUrl("/");

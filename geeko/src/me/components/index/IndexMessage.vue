@@ -31,8 +31,8 @@
         
         <swiper v-if="swiperData && swiperData.length > 0" :notification-data.sync="swiperData" :email="email"></swiper>
 
-        <div class="guest-user" v-if="true">
-            <span>Guest User</span>
+        <div class="guest-user" v-if="me.temporary">
+            <span>{{$t("label.guest_user")}}</span>
             <span class="iconfont" @click="gustUserModalEvent()">&#xe718;</span>
         </div>
 
@@ -346,11 +346,11 @@
                     show: true,
                     cfg: {
                         btnFont:{
-                            yes:"Set password",
-                            no:"Cancel"
+                            yes:this.$t("label.set_password"),
+                            no:this.$t("label.cancel")
                         },
-                        message: "Guest User",
-                        message2:"This is your temporay account. Set up password to register to get more discount!",
+                        message: this.$t("label.guest_user"),
+                        message2:this.$t("label.temporay_account_set_password"),
                         yes: function () {
                             _this.$store.dispatch('closeConfirm').then(() =>{
                                 _this.$router.push({name:"set-password"});
@@ -407,6 +407,15 @@
                     isClick:true
                 };
                 message1518 && this.swiperData.push(obj1);
+            }else if(this.isLogin && this.me.temporary){
+                let obj2 = {
+                    id:'100',
+                    icon:"&#xe6ca;",
+                    icon2:"&#xe694;",
+                    message:this.$t("label.set_password_more_discount"),
+                    isClick:false
+                };
+                this.swiperData.push(obj2);
             }else if(this.isLogin && !this.me.isConfirmEmail){
                 let message1543 = await store.dispatch("me/getIndexLoginMessageCode","M1543");
                 let obj2 = {

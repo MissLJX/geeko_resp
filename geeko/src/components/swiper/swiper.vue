@@ -56,7 +56,12 @@
             },
             email:{
                 type:String
-            }
+            },
+            // temporary:{
+            //     type:Boolean,
+            //     required:true,
+            //     default:false
+            // }
         },
         computed:{
             ifOwnEmail(){
@@ -89,7 +94,7 @@
                     window.location.href = this.GLOBAL.getUrl(`/i/login?redirectUrl=/me/m`);
                     return false;
                 }
-
+                
                 if(this.ifOwnEmail){
                     this.$router.push({name:"change-email"});
                 }else{

@@ -60,6 +60,18 @@ export default {
         manage_your_wishlist:"Clique aqui para gerenciar sua lista de desejos",
         shop_now:"Compre agora",
         refer:'Recomendar a um amigo',
+        guest_user:"Usuário convidado",
+        temporay_account_set_password:"Esta é sua conta provisória. Configure uma senha para se registrar e obter mais desconto!",
+        set_password:"Configurar Senha",
+        set_successful:"Definido com sucesso",
+        welcome_to:"Bem-vindo ao",    //CM1107
+        mininum_length_six:"6 caracteres no m\u00EDnimo",  //CM1100
+        maximun_length_twenty:"20 caracteres no m\u00E1ximo",  //CM1101
+        no_emojis:"Sem emojis",    //CM1102
+        exclusive_new_email:"Desejo receber ofertas e novidades exclusivas por e-mail.", //google
+        agree_to_policy:"Eu concordo com {0} and", //CM0490
+        terms_of_services:"Termos de servi\u00E7o", //CM0103
+        set_password_more_discount:"Defina sua senha para obter mais desconto!",   //google
     },
     point:{
         my_points:"Meus pontos",
