@@ -1,26 +1,10 @@
 <template>
-    <div class="coupon-container">
-        <!-- <div class="el-coupon-header">
-            <div :class="{'active' : isActive}">
-                <span @click="isActive = true;">
-                    Unused Coupons
-                </span>
-            </div>
-            <div :class="{'active' : !isActive}">
-                <span @click="isActive = false;">
-                    Expired Coupons
-                </span>
-            </div>
-        </div> -->
-
+    <div class="coupon-container" v-if="coupons && coupons.length > 0">
         <div class="el-coupon-body">
             <coupon-list :coupons="coupons"></coupon-list>
         </div>
-
-        <!-- <div class="no-more">
-            You have no valid coupons yet!
-        </div> -->
     </div>
+    <div v-else class="el-list-loading"><i class="iconfont">&#xe69f;</i></div>
 </template>
 
 <script>
@@ -109,6 +93,25 @@
             color: #999999;
             padding-top: 30px;
             text-align: center;
+        }
+    }
+
+    .el-list-loading {
+        text-align: center;
+        padding: 10px 0;
+        i {
+            font-size: 24px;
+            display: inline-block;
+            animation: list-loading 1.5s infinite linear;
+        }
+    }
+
+    @keyframes list-loading {
+        from {
+            transform: rotate(0);
+        }
+        to {
+            transform: rotate(360deg);
         }
     }
 </style>

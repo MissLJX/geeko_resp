@@ -2,41 +2,31 @@
     <div class="coupons">
         <div class="couponsTitle">{{$t("mycoupons")}}</div>
         <div v-show="!coupons" class="el-list-loading"><i class="iconfont">&#xe69f;</i></div>
-        <div class="coupon" v-for="item in coupons">
-            <!-- <div class="fl-l" :class="{'unabled':!item.isAvailable}">
-                <p class="amount">{{item.coupon.couponName2}}</p>
-                <p class="name">{{item.coupon.name}}</p>
-                <p class="time">{{getDate(item.coupon.beginDate)}} <span v-if="item.coupon.beginDate">-</span> {{getDate(item.coupon.endDate)}}</p>
-                <i class="iconfont" v-if="!item.isAvailable">&#xe748;</i>
-            </div>
-            <div class="fl-r" :class="{'r-unabled':!item.isAvailable}">
-                <div class="bg">
-                    <div class="usenow"  v-if="!item.isAvailable">{{$t('usenow')}}</div>
-                    <div @click="useHandle(item.coupon.id)" class="usenow" v-if="item.isAvailable">{{$t('usenow')}}</div>
-                </div>
-            </div> -->
-            <div class="x-table __vm x-fw __fixed"
-                :style="{background: `url('https://s3.us-west-2.amazonaws.com/image.chic-fusion.com/chicme/2021-12-17/coupon_available.png') no-repeat` ,
+        <div class="coupon" v-for="item in coupons" :key="item.coupon.id">
+            <div class="__vm x-fw __fixed"
+                :style="{background: `url('https://image.geeko.ltd/chicme/2021-12-17/coupon_available.png') no-repeat` ,
                     'background-size': '100% 100%', 'height':'100%'}"
                 >
                 <div class='couponMainInfo'>
                     <div class="x-cell" style="height: 100%">
                         <div style="display: flex; align-items: center; justify-content: flex-start">
-                            <span class="couponAmount" :style="{'color':'#ff782a'}">{{item.coupon.couponName2}}</span>
-
+                            <span class="couponAmount" :style="{'color':'#ff782a'}">{{item.coupon.name}}</span>
                         </div>
                         
-                        <div v-if="item.coupon.name" :style="{ 'margin-top': 6, 'color': '#ff782a' }">
-                            <span class='description'>{{item.coupon.name}}</span>
+                        <div v-if="item.coupon.condition" :style="{ 'margin-top': 6, 'color': '#ff782a' }">
+                            <span class='description'>{{item.coupon.condition}}</span>
                         </div>
                     
                         <div v-if="item.coupon.description" :style="{ 'margin-top': 6, 'color': '#ff782a' }">
                             <span class='description'>{{item.coupon.description}}</span>
                         </div>
-                        
+
+                        <div v-if="item.coupon.infoMsg" :style="{ 'margin-top': 6, 'color': '#ff782a' }">
+                            <span class='description'>{{item.coupon.infoMsg}}</span>
+                        </div>
                     </div>
-                    <div class="x-cell">
-                    </div>
+                    <!-- <div class="x-cell">
+                    </div> -->
                 </div>
                 <div class='dateInfo'>
                     <li v-if="expireDate(item.coupon)">
@@ -44,9 +34,9 @@
                         <span class="el-coupon-date">{{expireDate(item.coupon)}}</span>
                     </li>
                         
-                    <li v-if="expireDate(item.coupon)">
+                    <li v-if="item.coupon.usageReminder">
                         <span class='dot'>.</span>
-                        <span class="el-coupon-date">{{expireDate(item.coupon)}}</span>
+                        <span class="el-coupon-date">{{item.coupon.usageReminder}}</span>
                     </li>
                 </div>
             </div>
@@ -56,7 +46,8 @@
 
 <script>
     import {mapGetters} from 'vuex';
-    import * as utils from '../utils/geekoutil';
+    // import * as utils from '../utils/geekoutil';
+    import fecha from 'fecha'
 
     export default {
         computed: {
@@ -87,7 +78,7 @@
 
 
                 if (beginDate && endDate) {
-                    return utils.dateFormat(beginDate) + "-" + utils.dateFormat(endDate);
+                    return fecha.format(beginDate,"DD/MM/YYYY HH:mm") + "~" + fecha.format(endDate,"DD/MM/YYYY HH:mm");
                 }
 
                 return ''
@@ -161,12 +152,12 @@
         border-bottom: 1px solid #fff;
         padding: 16px 0px 8px 20px;
 
-        & > div:last-child{
-            width: 70px;
-            text-align: right;
-            position:relative;
-            right: 27px;
-        }
+        // & > div:last-child{
+        //     width: 70px;
+        //     text-align: right;
+        //     position:relative;
+        //     right: 27px;
+        // }
     }
     .dateInfo{
         padding: 4px 20px;

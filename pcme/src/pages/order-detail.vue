@@ -9,7 +9,7 @@
             <div class="shippinginfo">
                 <p>{{shipping.name}}</p>
                 <p>{{shipping.streetAddress1}}</p>
-                <p>{{shipping.zipCode}},{{shipping.city}},{{shippingstate.label ? shippingstate.label : shippingstate.value}},{{shippingcountry.label}}</p>
+                <p>{{shipping.zipCode}},{{shipping.city}},{{shippingstate && shippingstate.label ? shippingstate && shippingstate.label : shippingstate && shippingstate.value}},{{shippingcountry && shippingcountry.label}}</p>
             </div>
             <div class="bgline"></div>
             <h4>{{$t('orderinfo')}}</h4>

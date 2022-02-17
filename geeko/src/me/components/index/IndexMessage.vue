@@ -31,7 +31,7 @@
         
         <swiper v-if="swiperData && swiperData.length > 0" :notification-data.sync="swiperData" :email="email"></swiper>
 
-        <div class="guest-user" v-if="me.temporary">
+        <div class="guest-user" v-if="me && me.temporary">
             <span>{{$t("label.guest_user")}}</span>
             <span class="iconfont" @click="gustUserModalEvent()">&#xe718;</span>
         </div>

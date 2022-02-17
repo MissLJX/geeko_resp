@@ -1,9 +1,12 @@
 <template>
     <div class="el-coupons-body">
-        <page-header>
-            <span>{{$t('label.coupons')}}</span>
-        </page-header>
-        <div>
+        <div class="fixed-header">
+            <page-header>
+                <span>{{$t('label.coupons')}}</span>
+            </page-header>
+        </div>
+        
+        <div style="padding-top:50px;">
             <coupon-container></coupon-container>
         </div>
     </div>
@@ -27,3 +30,15 @@
         }
     }
 </script>
+
+<style lang="scss" scoped>
+    .fixed-header{
+        height: 50px;
+        width: 100%;
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        background-color: rgb(255, 255, 255);
+        z-index: 5;
+    }
+</style>

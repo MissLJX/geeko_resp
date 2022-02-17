@@ -24,9 +24,9 @@
                     <span class="iconfont" :class="{'_selected':policyActive.first}" @click="policyActive.first=!policyActive.first">&#xe65a;</span>
                     <span :class="{'active':fontActive}">
                         <i18n path="label.agree_to_policy" tag="span" for="label.terms_of_services">
-                            <a href="${ctx}/fs/terms-conditions-notice">{{$t("label.terms_of_services")}}</a>
+                            <a :href="GLOBAL.getUrl('/fs/terms-conditions-notice')">{{$t("label.terms_of_services")}}</a>
                         </i18n>
-                        <a href="${ctx}/fs/privacy-security-policy">{{$t("index.privacy_policy")}}  </a>
+                        <a :href="GLOBAL.getUrl('/fs/privacy-security-policy')">{{$t("index.privacy_policy")}}  </a>
                     </span>
                 </div>
 
