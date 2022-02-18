@@ -19,10 +19,10 @@
                 <p :class="rulePass.noEmojis?'pass':'nopass'">{{$t("label.no_emojis")}}</p>
             </div>
             
-            <div class="agreement">
+            <div class="agreement-vue">
                 <div class="item1">
                     <span class="iconfont" :class="{'_selected':policyActive.first}" @click="policyActive.first=!policyActive.first">&#xe65a;</span>
-                    <span :class="{'active':fontActive}">
+                    <span :class="{'active-animation':fontActive}">
                         <i18n path="label.agree_to_policy" tag="span" for="label.terms_of_services">
                             <a :href="GLOBAL.getUrl('/fs/terms-conditions-notice')">{{$t("label.terms_of_services")}}</a>
                         </i18n>
@@ -38,7 +38,7 @@
                 </div>
             </div>
 
-            <btn class="fill btn normal" style="font-family: 'AcuminPro-Bold';width:100%;padding:16px 5px;margin-top:30px;" @click.native="confimedEvent()">Confirm</btn>
+            <btn class="fill btn normal" style="font-family: 'AcuminPro-Bold';width:100%;padding:16px 5px;margin-top:30px;" @click.native="confimedEvent()">{{$t("points_mall.points_confirm")}}</btn>
         </div>
 
         <div class="success-modal" v-if="modalShow">
@@ -219,7 +219,7 @@
                 }
             }
 
-            .agreement{
+            .agreement-vue{
                 a{
                     text-decoration: underline;
                 }
@@ -259,7 +259,7 @@
                         }
                     }
 
-                    span.active{
+                    span.active-animation{
                         animation: finger infinite 0.5s;
 	                    -webkit-animation: finger infinite 0.5s;
                     }

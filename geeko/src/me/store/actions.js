@@ -21,7 +21,6 @@ const actions = {
                 commit(types.ME_INITIALIZED)
             }).catch((e) => {
                 console.log("initcatch",e);
-                alert(e);
                 commit(types.ME_GET_NO_LOGIN,false);
             });
         }
