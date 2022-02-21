@@ -58,6 +58,7 @@
     import {mapGetters} from "vuex"
     import { isEmojiCharacter } from "../../utils/geekoutils"
     import Btn from "../../components/btn.vue"
+    import Cache from "../../utils/cache.js"
 
     export default {
         name:"SetPassword",
@@ -132,6 +133,7 @@
 
                  this.$store.dispatch('me/changePassword', {newPassword:this.password}).then(() => {
                     _this.modalShow = true;
+                    Cache.set("customerEmail",_this.me.email,(365*24*60*60)*1000);
                 }).catch(e => {
                     alert(e.result);
                     _this.password = "";
