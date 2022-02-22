@@ -5,9 +5,9 @@
                 <span>{{$t('label.coupons')}}</span>
             </page-header>
         </div>
-        
-        <div style="padding-top:50px;">
-            <coupon-container></coupon-container>
+
+        <div style="padding-top:50px;background-color: #f6f6f6;">
+            <coupon-list :loading="loading" :finished="finished" :coupons="coupons" :isRedeem="false"></coupon-list>
         </div>
     </div>
 </template>
@@ -20,14 +20,39 @@
 
 <script type="text/ecmascript-6">
     import PageHeader from '../components/page-header.vue'
+    // import CouponContainer from './coupon/CouponContainer.vue'
+    import CouponList from "../components/coupon/coupon-list.vue"
+    import { mapGetters } from "vuex";
+    import store from "../../store/index.js"
 
-    import CouponContainer from './coupon/CouponContainer.vue'
 
     export default{
+        name:"Coupons",
+        data(){
+            return {
+                loading:false,
+                finished:false
+            }
+        },
         components: {
             'page-header': PageHeader,
-            'coupon-container':CouponContainer
-        }
+            "coupon-list":CouponList
+        },
+        computed:{
+            ...mapGetters('me', ['coupons']),
+        },
+        created(){
+            if(!(this.coupons && this.coupons.length > 0)){
+                this.loading = true;
+                store.dispatch('me/getCoupons').then((data) => {
+                    this.loading = false;
+
+                    if(data && data.length <=0){
+                        this.finished = true;
+                    }
+                })
+            }
+        },
     }
 </script>
 

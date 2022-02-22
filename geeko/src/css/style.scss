@@ -260,4 +260,18 @@ a{
   width: 100%;
 }
 
+.li-fixed-header{
+  height: 50px;
+  width: 100%;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  background-color: rgb(255, 255, 255);
+  z-index: 5;
+}
+
+.li-fixed-body{
+  padding-top: 50px;
+}
+
 /**==================================**/

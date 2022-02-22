@@ -78,6 +78,12 @@ const Me = [
         // ]
     },
     {
+        path:ROUTER_PATH_ME+"/redeem-coupon",
+        component:() =>import(/* webpackChunkName: "redeem-coupon" */ "../pages/redeem-coupons.vue"),
+        name:"redeem-coupon",
+        meta:{title:"Redeem Coupon"}
+    },
+    {
         path: ROUTER_PATH_ME + '/credits',
         component: () => import(/* webpackChunkName: "credits" */ '../pages/credits.vue'),
         name: 'credits',

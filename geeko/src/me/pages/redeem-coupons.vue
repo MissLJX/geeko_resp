@@ -1,0 +1,95 @@
+<template id="redeem-coupon">
+    <div class="redeem-coupon">
+        <div class="li-fixed-header">
+            <page-header>
+                <span>Redeem Coupon</span>
+            </page-header>
+        </div>
+
+        <div class="redeem-coupon-container">
+            <div class="redeem-coupon-bg">
+                <span>My points: 164321</span>
+                <span class="__icon"></span>
+            </div>
+        </div>
+
+        <div class="li-fixed-body redeem-coupon-list" style="padding-top:90px;">
+            <coupon-list :loading="loading" :finished="finished" :coupons="coupons" :is-redeem="true"></coupon-list>
+        </div>
+    </div>
+</template>
+<script>
+    import PageHeader from "../components/page-header.vue"
+    import { mapGetters } from 'vuex'
+    import store from '../../store/index'
+    import CouponList from "../components/coupon/coupon-list.vue"
+
+    export default {
+        name:"RedeemCoupon",
+        data(){
+            return {
+                loading:false,
+                finished:false
+            }
+        },
+        components:{
+            "page-header":PageHeader,
+            "coupon-list":CouponList
+        },
+        created(){
+            if(!(this.coupons && this.coupons.length > 0)){
+                this.loading = true;
+                store.dispatch('me/getCoupons').then((data) => {
+                    this.loading = false;
+
+                    if(data && data.length < 0){
+                        this.finished = true;
+                    }
+                })
+            }
+        },
+        computed:{
+            ...mapGetters('me', ['coupons'])
+        }
+    }
+</script>
+<style lang="scss" scoped>
+    .redeem-coupon{
+        .redeem-coupon-container{
+            position: fixed;
+            top: 50px;
+            left: 0;
+            width: 100%;
+
+            .redeem-coupon-bg{
+                background-image: url("https://image.geeko.ltd/chicme/2022022201/redeem_coupon_bg.png");
+                background-size: cover;
+                background-repeat: no-repeat;
+                height: 40px;
+                line-height: 40px;
+                text-align: center;
+
+                .__icon{
+                    width: 12px;
+                    height: 12px;
+                    display: inline-block;
+                    background-image: url(https://image.geeko.ltd/chicme/2021111101/point_mall.svg);
+                    background-size: cover;
+                    background-repeat: no-repeat;
+                    position: relative;
+                    top: 1px;
+                }
+
+                & span{
+                    font-size: 14px;
+                    color: #fcc202;
+                    font-family: 'SlatePro-Medium';
+                }
+            }
+        }
+
+        .redeem-coupon-list{
+            padding: 90px 10px 0px;
+        }
+    }
+</style>

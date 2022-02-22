@@ -102,7 +102,23 @@
             </router-link> -->
         </div>
 
-        
+        <div class="_hd" style="padding-top:15px;">
+            How to Use Points?
+        </div>
+
+        <div class="_bd">
+            <a @click="recordEventSkip(true,'/me/m/redeem-coupon','Redeem Coupon',$event)">
+                <div class="survey">
+                    <div>
+                        <span class="iconContainer"></span>
+                    </div>
+                    <div class="_font">
+                        <p>Redeem Coupon</p>
+                        <p style="opacity: 0;">Redeem Coupon</p>
+                    </div>
+                </div>
+            </a>
+        </div>
     </div>
 </template>
 
