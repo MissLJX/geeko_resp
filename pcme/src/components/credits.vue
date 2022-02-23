@@ -161,6 +161,25 @@
                 </a> -->
             </div>
         </div>
+
+        <div class="get-method">
+            <div class="c-hd">How to USE points?</div>
+            <div class="_bd">
+                <a @click="()=>routTo({path:`${GLOBAL.getUrl('/me/m/redeem-coupon')}`, type:'RedeemCoupon'})">
+                    <div class="methodBox">
+                        <div>
+                            <img src="https://image.geeko.ltd/chicme/2022022201/My-Points-Redeem-Coupon.png" alt="My-Points-Redeem-Coupon">
+                        </div>
+                        <div class="_font">
+                            <p>Redeem Coupon</p>
+                            <p></p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+
         <loding v-if="isLoadingShow"></loding>
 
         <div v-if="showEarnMask || (showMoreMask && moreWayList.length > 0)" class="maskBox" @click.self="closeMask()">

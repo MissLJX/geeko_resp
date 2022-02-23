@@ -27,7 +27,6 @@ import Survey from '../pages/survey.vue'
 import FaqIndex from '../pages/faq-index/faq-index.vue'
 import Faq from '../pages/faq/faq.vue'
 import Support from "../pages/support/support.vue"
-
 const __Base_Path__ = window.ctx || ''
 
 const routes = [
@@ -91,6 +90,12 @@ const routes = [
                 component:Coupons,
                 name:"coupons",
                 meta: {title:'My Coupons'},
+            },
+            {
+                path:"redeem-coupon",
+                component:() =>import("../pages/redeem-coupons.vue"),
+                name:"redeem-coupon",
+                meta:{title:"Redeem Coupon"}
             },
             {
                 path:'credits',

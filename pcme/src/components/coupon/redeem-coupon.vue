@@ -1,4 +1,4 @@
-<template id="redeem-coupon">
+<template>
     <div class="redeem-coupon">
         <div class="_top">
             <div class="_left">
@@ -71,13 +71,12 @@
                     show: true,
                     cfg: {
                         btnFont:{
-                            yes:this.$t("points_mall.points_confirm"),
-                            no:this.$t("label.cancel")
+                            yes:this.$t("confirm"),
+                            no:this.$t("cancel")
                         },
                         message2:`Do you want to use xxx points to redeem this coupon?`,
                         yes: function () {
                             _this.$store.dispatch('closeConfirm').then(() =>{
-                                _this.$router.push({name:"set-password"});
                             });
                         },
                         no:function(){
@@ -86,23 +85,18 @@
                         style:{
                             box:{
                                 padding:"15px 8px 12px",
-                                width:"80%"
-                            },
-                            message:{
-                                fontSize:"14px",
+                                width:"454px"
                             },
                             message2:{
                                 color:"#222222",
-                                fontSize:"14px",
+                                fontSize:"22px",
                                 fontFamily: 'SlatePro-Medium',
                             },
                             btnYes:{
-                                fontSize:"14px",
                                 fontFamily: 'SlatePro-Medium',
                                 textTransform: 'uppercase'
                             },
                             btnNo:{
-                                fontSize:"14px",
                                 fontFamily: 'SlatePro-Medium',
                                 textTransform: 'uppercase'
                             }
@@ -117,7 +111,7 @@
                     show: true,
                     cfg: {
                         btnFont:{
-                            yes:this.$t("points_mall.points_confirm"),
+                            yes:this.$t("confirm"),
                         },
                         message2:`You do not have enough points to redeem this coupon.`,
                         yes: function () {
@@ -128,19 +122,17 @@
                         style:{
                             box:{
                                 padding:"15px 8px 12px",
-                                width:"80%"
+                                width:"454px"
                             },
                             message2:{
                                 color:"#222222",
-                                fontSize:"14px",
+                                fontSize:"22px",
                                 fontFamily: 'SlatePro-Medium',
                             },
                             btnYes:{
-                                fontSize:"14px",
                                 fontFamily: 'SlatePro-Medium',
                                 textTransform: 'uppercase',
-                                height: "42px",
-                                lineHeight: "42px"
+                                marginTop:"20px"
                             }
                         }
                     }
@@ -153,9 +145,9 @@
                     show: true,
                     cfg: {
                         btnFont:{
-                            yes:this.$t("survey.survey_go_shopping"),
+                           yes:this.$t("survey.survey_go_shopping"),
                         },
-                        message2:`<span class="iconfont" style="color:#ff8031;font-size:60px;">&#xe6b7;</span><br/><br/><p style="font-size:16px;font-family: 'AcuminPro-Bold';">Redemption successful!</p><br/>`,
+                        message2:`<span class="iconfont" style="color:#ff8031;font-size:90px;">&#xe6b7;</span><br/><br/><p style="font-size:22px;font-family: 'AcuminPro-Bold';">Redemption successful!</p>`,
                         htmlMessage2:true,
                         yes: function () {
                             _this.$store.dispatch('closeConfirm').then(() =>{
@@ -165,19 +157,17 @@
                         style:{
                             box:{
                                 padding:"15px 8px 12px",
-                                width:"80%"
+                                width:"454px"
                             },
                             message2:{
                                 color:"#222222",
-                                fontSize:"14px",
+                                fontSize:"22px",
                                 fontFamily: 'SlatePro-Medium',
                             },
                             btnYes:{
-                                fontSize:"14px",
                                 fontFamily: 'SlatePro-Medium',
                                 textTransform: 'uppercase',
-                                height: "42px",
-                                lineHeight: "42px"
+                                marginTop:"20px"
                             }
                         }
                     }
@@ -191,6 +181,8 @@
 </script>
 <style lang="scss" scoped>
     .redeem-coupon{
+        width: 447px;
+        margin-bottom: 20px;
         position: relative;
 
         ._top{
@@ -203,19 +195,19 @@
             ._left{
                 text-transform: capitalize;
                 .name{
-                    font-size: 20px;
+                    font-size: 26px;
                     color: #ff782a;
                     font-family: 'AcuminPro-Bold';
                 }
 
                 .description{
-                    font-size: 12px;
+                    font-size: 16px;
                     color: #ff782a;
                 }
             }
 
             ._right{
-                font-size: 14px;
+                font-size: 18px;
                 color: #ffffff;
                 font-family: 'AcuminPro-Bold';
             }
@@ -228,14 +220,16 @@
             height: 100%;
             border-top: 1px solid #ffffff;
             padding: 5px 5px 5px 15px;
+            min-height: 48px;
 
             ._left{
                 li{
-                    font-size: 12px;
+                    font-size: 16px;
                     color: #999999;
 
                     .dot{
-                        vertical-align: super;
+                        position: relative;
+                        top: -3px;
                     }
                 }
             }
@@ -252,7 +246,7 @@
                     cursor: pointer;
                     border: none;
                     background-color: transparent;
-                    font-size: 12px;
+                    font-size: 16px;
                     color: #ff7d2e;
                     display: inline-block;
                     font-family: 'AcuminPro-Bold';
@@ -286,9 +280,9 @@
             background: url(https://image.geeko.ltd/chicme/2022022201/redeemed_coupon_bg.png) 0% 0% / 100% 100% no-repeat;
             justify-content: center;
             z-index: 1;
-            color: #ffffff;
-            font-size: 12px;
             font-family: 'AcuminPro-Bold';
+            font-size: 16px;
+            color: #ffffff;
         }
 
         ._redeemed-bg{

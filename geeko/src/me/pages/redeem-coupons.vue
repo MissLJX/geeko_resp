@@ -60,6 +60,7 @@
             top: 50px;
             left: 0;
             width: 100%;
+            z-index: 2;
 
             .redeem-coupon-bg{
                 background-image: url("https://image.geeko.ltd/chicme/2022022201/redeem_coupon_bg.png");

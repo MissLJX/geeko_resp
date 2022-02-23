@@ -413,7 +413,9 @@
                     icon:"&#xe6ca;",
                     icon2:"&#xe694;",
                     message:this.$t("label.set_password_more_discount"),
-                    isClick:false
+                    isClick:false,
+                    clickFunction:() =>{
+                    }
                 };
                 this.swiperData.push(obj2);
             }else if(this.isLogin && !this.me.isConfirmEmail){

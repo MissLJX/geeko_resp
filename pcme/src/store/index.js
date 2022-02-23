@@ -63,7 +63,7 @@ const state = {
     bbmessage: null,
     orderid:'',
 
-    coupons:'',
+    coupons:[],
     message:'',
     credits:[],
     wishProducts: [],
@@ -139,6 +139,8 @@ const state = {
 
     oftenBoughtWithList: [],
     reviewOrderList: [],
+    modalconfirmshow: false,
+    confirmCfg:null,
 };
 const getters = {
     me: state => state.me,
@@ -256,6 +258,8 @@ const getters = {
 
     oftenBoughtWithList: state => state.oftenBoughtWithList,
     reviewOrderList: state => state.reviewOrderList,
+    modalconfirmshow: state => state.modalconfirmshow,
+    confirmCfg: state => state.confirmCfg,
 };
 const mutations = {
     [types.INIT_ME](state, me){
@@ -656,7 +660,11 @@ const mutations = {
     },
     [types.GET_REVIEW_ORDER](state, list){
         state.reviewOrderList = list
-    }
+    },
+    [types.APP_CONFIRM_SHOW](state, {show , cfg}){
+        state.confirmCfg = cfg
+        state.modalconfirmshow = show
+    },
 }
 const actions = {
     // init({commit}){
@@ -915,7 +923,8 @@ const actions = {
     //coupons
     getCoupons({commit}){
         return api.getCoupons().then((coupons) => {
-            commit(types.ME_COUPONS,coupons)
+            commit(types.ME_COUPONS,coupons);
+            return coupons;
         })
     },
     useCoupon(context, couponId){
@@ -1390,10 +1399,15 @@ const actions = {
       },
       getReviewOrder({commit}){
           return api.getReviewOrder().then(res => {
-                console.log(res)
                 res && commit(types.GET_REVIEW_ORDER, res.result)
           })
-      }
+      },
+      confirmShow: function ({commit}, shower) {
+        commit(types.APP_CONFIRM_SHOW, shower)
+      },
+      closeConfirm: function ({commit}) {
+        commit(types.APP_CONFIRM_SHOW, {show: false, cfg: null})
+      },
 }
 export default new Vuex.Store({
     state,
