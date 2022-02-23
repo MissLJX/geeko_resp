@@ -148,7 +148,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        height: 100px;
+        height: 120px;
         border-bottom: 1px solid #fff;
         padding: 16px 0px 8px 20px;
 
@@ -192,7 +192,7 @@
     .coupons{
         .coupon{
             width: 435px;
-            height: 157px;
+            height: 177px;
             // border: solid 1px #e6e6e6;
             float: left;
             margin-bottom: 20px;
