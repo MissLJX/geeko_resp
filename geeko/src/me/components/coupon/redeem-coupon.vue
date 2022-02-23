@@ -29,6 +29,10 @@
                 <button>Redeem</button>
             </div>
         </div>
+
+        <div class="_" v-if="index === 0">
+            111
+        </div>
     </div>
 </template>
 <script>
@@ -40,6 +44,9 @@
             coupon: {
                 type: Object,
                 required:true
+            },
+            index:{
+                type:Number
             }
         },
         computed:{
@@ -58,6 +65,8 @@
 </script>
 <style lang="scss" scoped>
     .redeem-coupon{
+        position: relative;
+
         ._top{
             background-image: url(https://image.geeko.ltd/chicme/2022022201/conversion_coupon_top.png);
             background-size: 100% 100%;
