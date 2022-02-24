@@ -103,7 +103,7 @@
         </div>
 
         <div class="_hd" style="padding-top:15px;">
-            How to Use Points?
+            {{ $t("label.hot_use_points") }}
         </div>
 
         <div class="_bd">
@@ -113,8 +113,8 @@
                         <span class="iconContainer"></span>
                     </div>
                     <div class="_font">
-                        <p>Redeem Coupon</p>
-                        <p style="opacity: 0;">Redeem Coupon</p>
+                        <p>{{ $t("label.redeem_coupon") }}</p>
+                        <p style="opacity: 0;"></p>
                     </div>
                 </div>
             </a>

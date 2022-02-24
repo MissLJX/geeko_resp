@@ -2,13 +2,13 @@
     <div class="redeem-coupon">
         <div class="li-fixed-header">
             <page-header>
-                <span>Redeem Coupon</span>
+                <span>{{$t("label.redeem_coupon")}}</span>
             </page-header>
         </div>
 
         <div class="redeem-coupon-container">
             <div class="redeem-coupon-bg">
-                <span>My points: 164321</span>
+                <span>{{$t("point.My points")}}: {{feed.points}}</span>
                 <span class="__icon"></span>
             </div>
         </div>
@@ -33,6 +33,9 @@
                 finished:false,
                 coupons:[]
             }
+        },
+        computed:{
+            ...mapGetters("me",["feed"])
         },
         components:{
             "page-header":PageHeader,

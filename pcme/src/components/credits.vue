@@ -163,7 +163,7 @@
         </div>
 
         <div class="get-method">
-            <div class="c-hd">How to USE points?</div>
+            <div class="c-hd">{{ $t("label.hot_use_points") }}</div>
             <div class="_bd">
                 <a @click="()=>routTo({path:`${GLOBAL.getUrl('/me/m/redeem-coupon')}`, type:'RedeemCoupon'})">
                     <div class="methodBox">
@@ -171,7 +171,7 @@
                             <img src="https://image.geeko.ltd/chicme/2022022201/My-Points-Redeem-Coupon.png" alt="My-Points-Redeem-Coupon">
                         </div>
                         <div class="_font">
-                            <p>Redeem Coupon</p>
+                            <p>{{ $t("label.redeem_coupon") }}</p>
                             <p></p>
                         </div>
                     </div>

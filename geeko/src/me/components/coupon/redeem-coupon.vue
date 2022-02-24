@@ -9,7 +9,7 @@
             </div>
             
             <div class="_right">
-                xxx points
+                xxx {{$t("index.points")}}
             </div>
         </div>
 
@@ -26,12 +26,12 @@
             </ul>
 
             <div class="_right">
-                <button>Redeem</button>
+                <button>{{$t("points_mall.points_redeem")}}</button>
             </div>
         </div>
 
         <template v-if="index === 0">
-            <div class="_redeemed">Redeemed</div>
+            <div class="_redeemed">{{$t("label.redeemed")}}</div>
 
             <div class="_redeemed-bg"></div>
         </template>
@@ -74,7 +74,7 @@
                             yes:this.$t("points_mall.points_confirm"),
                             no:this.$t("label.cancel")
                         },
-                        message2:`Do you want to use xxx points to redeem this coupon?`,
+                        message2:this.$t("points_mall.points_check_redeem_text",{points:'200'}),
                         yes: function () {
                             _this.$store.dispatch('closeConfirm').then(() =>{
                                 _this.$router.push({name:"set-password"});
@@ -119,7 +119,7 @@
                         btnFont:{
                             yes:this.$t("points_mall.points_confirm"),
                         },
-                        message2:`You do not have enough points to redeem this coupon.`,
+                        message2:this.$t("points_mall.points_not_enough_text"),
                         yes: function () {
                             _this.$store.dispatch('closeConfirm').then(() =>{
                                
@@ -155,7 +155,7 @@
                         btnFont:{
                             yes:this.$t("survey.survey_go_shopping"),
                         },
-                        message2:`<span class="iconfont" style="color:#ff8031;font-size:60px;">&#xe6b7;</span><br/><br/><p style="font-size:16px;font-family: 'AcuminPro-Bold';">Redemption successful!</p><br/>`,
+                        message2:`<span class="iconfont" style="color:#ff8031;font-size:60px;">&#xe6b7;</span><br/><br/><p style="font-size:16px;font-family: 'AcuminPro-Bold';">${$t("points_mall.points_redeem_success")}</p><br/>`,
                         htmlMessage2:true,
                         yes: function () {
                             _this.$store.dispatch('closeConfirm').then(() =>{

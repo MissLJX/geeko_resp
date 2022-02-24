@@ -61,7 +61,7 @@
                 id:'100',
                 icon:"&#xe6ca;",
                 icon2:"&#xe694;",
-                message:"Use points to redeem more coupons!",
+                message:this.$t("label.use_points_redeem_coupon"),
                 isClick:false,
                 clickFunction:() =>{
                     this.$router.push(this.GLOBAL.getUrl("/me/m/redeem-coupon"));

@@ -171,6 +171,16 @@ export default {
     share_get:"SHARE UP TO 50% OFF, GET $10",
     share_lucky:"Share lucky draw with your friends, and get up to 50% off together.  And you'll get $10 when they make a purchase.",
     required: 'Required',
+    label:{
+        redeem_coupon:"Redeem Coupon",
+        hot_use_points:"How to Use Points?",
+        use_points_redeem_coupon:"Use points to redeem more coupons!",
+        redeem:"Redeem",
+        redeemed:"Redeemed",
+        points_check_redeem_text:'Do you want to use {point} points to redeem this coupon?',
+        points_not_enough_text:'You do not have enough points to redeem this coupon.',
+        points_redeem_success:'Redemption successful!',
+    },
     point:{
         my_points:"My Points",
         points_expired_soon:"Points Expiring Soon",
