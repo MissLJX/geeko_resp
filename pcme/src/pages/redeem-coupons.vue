@@ -16,26 +16,29 @@
     </div>
 </template>
 <script>
-    import { mapGetters } from "vuex"
     import CouponList from "../components/coupon/coupon-list.vue"
+    import { getPointsCouponList } from "../api/index.js"
 
     export default {
         name:"RedeemCoupons",
         data(){
             return {
                 loading:false,
-                finished:false
+                finished:false,
+                coupons:[]
             }
         },
         created(){
             this.loading = true;
-            this.$store.dispatch('getCoupons').then((data) =>{
-                console.log('data', data);
+            getPointsCouponList().then((data) =>{
+                if(data.result && data.result.length > 0){
+                    this.coupons.push(...data.result);
+                }else{
+                    this.finished = true;
+                }
+
                 this.loading = false;
             });
-        },
-        computed:{
-            ...mapGetters(['coupons'])
         },
         components:{
             "coupon-list":CouponList

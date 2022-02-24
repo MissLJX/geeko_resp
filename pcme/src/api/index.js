@@ -343,5 +343,15 @@ export const getOftenBoughtWith = (id) => {
 
 // wait for review
 export const getReviewOrder = () => {
-    return axios.get('/v9/order/10/get-not-comment-orders', {}, {}).then(data => data)
+    return axios.get(`/${NVPATH}/order/10/get-not-comment-orders`, {}, {}).then(data => data)
+}
+
+// 获取积分商城优惠券列表
+export const getPointsCouponList = () => {
+    return axios.get('/points-exchange-coupon/get-list',{},{}).then(data => data)
+}
+
+// 积分商城优惠券兑换
+export const pointsCouponExchange = (id) => {
+    return axios.post('/points-exchange-coupon/exchange',{id:id},{}).then(data => data)
 }
