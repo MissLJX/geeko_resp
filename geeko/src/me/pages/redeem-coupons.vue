@@ -23,13 +23,15 @@
     import { mapGetters } from 'vuex'
     import store from '../../store/index'
     import CouponList from "../components/coupon/coupon-list.vue"
+    import { getPointsCouponList } from "../api/index.js"
 
     export default {
         name:"RedeemCoupon",
         data(){
             return {
                 loading:false,
-                finished:false
+                finished:false,
+                coupons:[]
             }
         },
         components:{
@@ -37,19 +39,16 @@
             "coupon-list":CouponList
         },
         created(){
-            if(!(this.coupons && this.coupons.length > 0)){
-                this.loading = true;
-                store.dispatch('me/getCoupons').then((data) => {
-                    this.loading = false;
+            this.loading = true;
+            getPointsCouponList().then(data =>{
+                if(data.result && data.result.length > 0){
+                    this.coupons.push(...data.result);
+                }else{
+                    this.finished = true;
+                }
 
-                    if(data && data.length < 0){
-                        this.finished = true;
-                    }
-                })
-            }
-        },
-        computed:{
-            ...mapGetters('me', ['coupons'])
+                this.loading = false;
+            });
         }
     }
 </script>

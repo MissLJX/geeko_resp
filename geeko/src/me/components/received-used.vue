@@ -108,7 +108,7 @@
 
         <div class="_bd">
             <a @click="recordEventSkip(true,'/me/m/redeem-coupon','Redeem Coupon',$event)">
-                <div class="survey">
+                <div class="redeem-coupon">
                     <div>
                         <span class="iconContainer"></span>
                     </div>
@@ -276,6 +276,8 @@
 </script>
 
 <style scoped lang="scss">
+    @import "../../css/base";
+
     @font-face {
         font-family: 'iconfont';  /* Project id 384296 */
         src: url('//at.alicdn.com/t/font_384296_wjqn1ci550k.woff2?t=1640236331770') format('woff2'),
@@ -348,13 +350,13 @@
 
             .buy-earn{
                 & .iconContainer{
-                    background-image: url("https://image.geeko.ltd/20220113/My-Points-Buy-Earn.png");
+                    @include image_geeko_url('20220113/My-Points-Buy-Earn.png');
                 }
             }
 
             .review{
                 & .iconContainer{
-                    background-image: url("https://image.geeko.ltd/20220113/My-Points-review.png");
+                    @include image_geeko_url("20220113/My-Points-review.png");
                     width: 37px;
                     height: 30px;
                 }
@@ -362,13 +364,20 @@
 
             .survey{
                 & .iconContainer{
-                    background-image: url("https://image.geeko.ltd/20220113/My-Points-survey.png");
+                    @include image_geeko_url("20220113/My-Points-survey.png");
                 }
             }
 
             .suggestion{
                 & .iconContainer{
-                    background-image: url("https://image.geeko.ltd/20220113/My-Points-suggestion.png");
+                    @include image_geeko_url("20220113/My-Points-suggestion.png");
+                }
+            }
+
+            .redeem-coupon{
+                & .iconContainer{
+                    @include image_geeko_url('chicme/2022022201/My-Points-Redeem-Coupon.png');
+                    width: 34px;
                 }
             }
 
@@ -379,13 +388,13 @@
 
             .refer{
                 & .iconContainer{
-                    background-image: url("https://image.geeko.ltd/20220113/My-Points-refer.png");
+                    @include image_geeko_url("20220113/My-Points-refer.png");
                 }
             }
 
             .more{
                 & .iconContainer{
-                    background-image: url("https://image.geeko.ltd/20220113/My-Points-moreways.png");
+                    @include image_geeko_url("20220113/My-Points-moreways.png");
                 }
             }
 

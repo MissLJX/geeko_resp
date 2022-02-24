@@ -1,6 +1,6 @@
 <template>
     <div class="el-coupons">
-        <list :items="coupons" :scrollable="scrollable" :loading="loading" :finished="finished" @listing="$emit('listing')">
+        <list :items="coupons" :loading="loading" :finished="finished" @listing="$emit('listing')">
             <template slot="li" slot-scope="props">
                 <li :key="props.item.coupon.id">
                     <coupon :coupon="props.item" v-if="!isRedeem"/>
@@ -28,8 +28,7 @@
                 type:Boolean
             },
             scrollable:{
-                type:Boolean,
-                default:false
+                type:Boolean
             },
             isRedeem:{
                 type:Boolean,
