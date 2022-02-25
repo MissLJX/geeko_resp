@@ -75,7 +75,7 @@ export default {
         redeem_coupon:"Redeem Coupon",
         hot_use_points:"How to Use Points?",
         use_points_redeem_coupon:"Use points to redeem more coupons!",
-        redeemed:"Redeemed"
+        redeemed:"Redeemed",
     },
     point:{
         my_points:"My Points",

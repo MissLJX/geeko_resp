@@ -68,10 +68,14 @@ export default {
         mininum_length_six:"Mindestens 6 Zeichen",  //CM1100
         maximun_length_twenty:"Maximal 20 Zeichen",  //CM1101
         no_emojis:"Keine Emojis",    //CM1102
-        exclusive_new_email:"Ich möchte exklusive Angebote und Neuigkeiten per E-Mail erhalten.", //google
+        exclusive_new_email:"Ich m\u00f6chte exklusive Angebote und Neuigkeiten per E-Mail erhalten.", //google
         agree_to_policy:"Ich willige ein in {0} and", //CM0490
         terms_of_services:"Nutzungsbedingungen", //CM0103
         set_password_more_discount:"Legen Sie Ihr Passwort fest, um mehr Rabatt zu erhalten!",   //google
+        redeem_coupon:"Coupon einl\u00f6sen",
+        hot_use_points:"Wie werden Punkte verwendet?",
+        use_points_redeem_coupon:"Verwenden Sie Punkte, um weitere Coupons einzul\u00f6sen!",
+        redeemed:"Eingel\u00f6st",
     },
     point:{
         my_points:"Meine Punkte",

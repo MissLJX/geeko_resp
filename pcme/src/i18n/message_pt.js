@@ -172,6 +172,16 @@ export default {
     mymessages:'Minhas Mensagens',
     notiothers:"Outras",
     prmotion:"promoção",
+    label:{
+        redeem_coupon:"Use um cupom",
+        hot_use_points:"Como usar os pontos?",
+        use_points_redeem_coupon:"Troque seus pontos por mais cupons!",
+        redeem:'Resgatar',
+        redeemed:"Resgatado ",
+        points_check_redeem_text: 'Deseja usar {points} pontos para resgatar este cupom?',
+        points_not_enough_text: 'Você não tem pontos suficientes para resgatar este cupom.',
+        points_redeem_success: 'Resgate bem-sucedido!',
+    },
     point:{
         my_points:"Meus pontos",
         points_expired_soon:"Pontos que expirarão em breve",

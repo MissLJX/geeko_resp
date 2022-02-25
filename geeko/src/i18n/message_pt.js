@@ -72,6 +72,10 @@ export default {
         agree_to_policy:"Eu concordo com {0} and", //CM0490
         terms_of_services:"Termos de servi\u00E7o", //CM0103
         set_password_more_discount:"Defina sua senha para obter mais desconto!",   //google
+        redeem_coupon:"Use um cupom",
+        hot_use_points:"Como usar os pontos?",
+        use_points_redeem_coupon:"Troque seus pontos por mais cupons!",
+        redeemed:"Resgatado ",
     },
     point:{
         my_points:"Meus pontos",
