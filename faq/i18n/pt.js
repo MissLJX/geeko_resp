@@ -97,4 +97,5 @@ export default {
   rateTextPlaceHolder: 'Você pode comentar o atendimento ao cliente aqui.',
   statusWatingApply:'Esperando por se inscrever',
   facebook_check: 'Se você verificar isso, enviaremos a você o status de rastreamento de logística e as informações do pedido no Messenger.',
+  return_the_oder: 'Devolver o pedido',
 }

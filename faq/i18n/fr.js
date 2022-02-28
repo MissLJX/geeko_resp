@@ -97,4 +97,5 @@ export default {
   rateTextPlaceHolder: 'Vous pouvez commenter le service client ici.',
   statusWatingApply:'En attente de candidature',
   facebook_check: 'Si vous cochez cette case, nous vous ferons parvenir le statut de suivi logistique et les informations de commande dans Messenger.',
+  return_the_oder : 'Retourner la commande',
 }

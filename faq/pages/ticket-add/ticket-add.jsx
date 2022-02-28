@@ -782,9 +782,6 @@ class TicketAdd extends React.Component {
         // questionTypeCode: this.state.subject,
         message: this.state.message
       }).then((data) => {
-        // console.log('data,',data) 
-        // console.log('ticket,',this.state.ticket)
-        // console.log(this.state)
         let ticket = this.state.ticket || {}
         let replies = (ticket.ticketReplies || []).concat([])
         replies.push({
@@ -851,17 +848,19 @@ class TicketAdd extends React.Component {
     // 接受传值的参数
     let params = this.props.history.location.state
     let id;
-    // console.log(params,this.props.history.location.pathname)
+    console.log(params,this.props.history.location)
     // 接受url传值的参数
     let urlParams = this.props.history.location.pathname ? this.props.history.location.pathname.split("/")[1] != 'wanna' ? this.props.history.location.pathname.split("/")[5] :  this.props.history.location.pathname.split("/")[6] : '';
-    if(!urlParams){
-      urlParams = this.props.history.location.search ? 
+    console.log(urlParams)
+    // if(!urlParams){
+    // 不弹窗的传参
+    let urlParamsNoMask = this.props.history.location.search ? 
                   this.props.history.location.search.indexOf('id') != -1 ?
                   this.props.history.location.search.split('=')[1].indexOf('&') != -1 ?
                   this.props.history.location.search.split('=')[1].split("&")[0]:
                   this.props.history.location.search.split('=')[1]:
                   '':''
-    }
+    // }
     // 客服邮件跳转过来携带code 可能会存在code=*******&isApp=1....的情况
     const customerCode = this.props.history.location.search ? 
                          this.props.history.location.search.indexOf('code') != -1 ?
@@ -880,18 +879,20 @@ class TicketAdd extends React.Component {
       window.isShowApp = params.isShowApp ? params.isShowApp : 'false'
     }
     // 如果链接中没有传值 而且本地没有数据 则会跳转到ticket列表
-    if(!id && !localStorage.__order && !urlParams && !customerCode){
+    if(!id && !localStorage.__order && !urlParams && !urlParamsNoMask && !customerCode){
       this.props.history.push({pathname: `${window.ctx || ''}/support/ticket`})
     }
     // app消息通知带ticketid跳转
-    if(urlParams.match(/[a-z]/ig)){
+    if(urlParams && urlParams.match(/[a-z]/ig)){
       id = urlParams
       urlParams = null
     }
 
     this.getQuestionType(urlParams,id,customerCode,(urlParams,id,customerCode)=>{
       // console.log(urlParams)
-      if(urlParams){
+      if(urlParamsNoMask){
+        this.getMsgById(urlParamsNoMask)
+      } else if(urlParams){
         this.getMsgByLinkId(urlParams)
       } else if (id) {
         localStorage.__order = ""
@@ -1050,14 +1051,91 @@ class TicketAdd extends React.Component {
 
       this.initScroll()
     }).catch((data) => {
-      alert(data.result)
+      alert('111'+data.result)
       if (data.code === 401) {
         window.location.href = `${window.ctx || ''}/me/m`
       }
     })
   }
 
-  // 获取链接里的id
+  // 获取链接里的?id=
+  getMsgById(id){
+    console.log("getMsgByLinkId")
+    getByOrderId(id).then(({result}) => {
+      const {ticket, order, cusomerName, headSculptureUrl} = result
+      console.log(result)
+      // console.log(ticket.ticketReplies.slice(-1)[ticket.ticketReplies.slice(-1).length - 1]['sender'])
+      if(ticket && ticket.ticketReplies && ticket.ticketReplies.length>0){
+        if(ticket.ticketReplies.slice(0)[ticket.ticketReplies.slice(0).length - 1]['sender'] == "buyers"){
+          this.setState({
+            showTip:true
+          })
+        } else {
+          this.setState({
+            showTip: false
+          })
+        }
+      }
+      let subject = ticket ? ticket.questionTypeCode : 0
+      if(subject && (!ticket.subject || ticket.subject == 'undefined' || !ticket.subject.match(/[a-z]/ig))){
+        questionTypeChange({
+          operaId: order.id,
+          questionTypeCode: subject,
+          questionType: this.state.questions.find(q=>q.value == subject) ? 
+                        this.state.questions.find(q=>q.value == subject).label ?
+                        this.state.questions.find(q=>q.value == subject).label :
+                        list.find(l => l.value == subject) ?
+                        list.find(l => l.value == subject).label :'': ''
+        }).then(res => {})
+      }
+      
+      // console.log(subject,ticket.subject)
+      if(!subject && ticket && ticket.subject && (ticket.subject == '7' || ticket.subject == '000')){
+        let otherSubject = list[list.length-1].value;
+        subject = otherSubject
+        questionTypeChange({
+          operaId: order.id,
+          questionTypeCode: otherSubject,
+          questionType: this.state.questions && this.state.questions.length > 0 ?
+                        (this.state.questions.find(q=>q.value == otherSubject) ? (this.state.questions.find(q=>q.value == otherSubject).label) : '' ) 
+                        : (list.find(l => l.value == otherSubject) ? list.find(l => l.value == otherSubject).label : '')
+        }).then(res => {
+          
+        })
+      }
+      this.setState({
+        isNew: true,
+        ticket,
+        order,
+        cusomerName,
+        headSculptureUrl,
+        loading: false,
+        subject: subject,
+      })
+      // console.log({
+      //   operaId: order.id,
+      //   questionTypeCode: '04',
+      //   questionType: 'Return the order'
+      // })
+      
+      setTimeout(()=>{
+        var top = document.getElementById("top")
+        top.scrollIntoView()
+        top = null
+      })
+      this.initScroll()
+    }).catch((data) => {
+      alert('Order does not exist')
+      console.log(data)
+      if (data.code === 401) {
+        window.location.href = `${window.ctx || ''}/me/m`
+      } else {
+        this.props.history.goBack()
+      }
+    })
+  }
+
+  // 获取链接里的/id
   getMsgByLinkId(id){
     console.log("getMsgByLinkId")
     getByOrderId(id).then(({result}) => {
@@ -1092,14 +1170,14 @@ class TicketAdd extends React.Component {
       questionTypeChange({
         operaId: order.id,
         questionTypeCode: '04',
-        questionType: 'Return the order'
+        questionType: this.props.intl.formatMessage({id: 'return_the_oder'})
       }).then(res => {})
 
       let e = '04'
       let qTReasonList = this.state.questions.find(q => q.value == e) && this.state.questions.find(q => q.value == e).reasons ? 
                          this.state.questions.find(q => q.value == e).reasons : []
       // 保证每个问题只展示一次
-      let isShowed = ticket ? ticket.ticketReplies.find(t => t.questionTypeCode == e) : false
+      let isShowed = ticket ? (ticket.ticketReplies && ticket.ticketReplies.find(t => t.questionTypeCode == e)) : false
       if((qTReasonList.length > 0) && !isShowed){
         this.setState({
           questionMaskShow: true,
@@ -1115,6 +1193,7 @@ class TicketAdd extends React.Component {
       this.initScroll()
     }).catch((data) => {
       alert('Order does not exist')
+      console.log(data)
       if (data.code === 401) {
         window.location.href = `${window.ctx || ''}/me/m`
       } else {
@@ -1184,7 +1263,7 @@ class TicketAdd extends React.Component {
 
       this.initScroll()
     }).catch((data) => {
-      alert(data.result)
+      alert('222'+data.result)
       if (data.code === 401) {
         window.location.href = `${window.ctx || ''}/me/m`
       }
@@ -1786,6 +1865,10 @@ class TicketAdd extends React.Component {
 
     // 添加评论
     const addRate = () => {
+      if(!this.state.subject){
+        alert(this.props.intl.formatMessage({id:"selectTip"}));
+        return false
+      }
       if(!this.state.rateShow){
         this.state.rateShow = true
       } else {
@@ -1937,9 +2020,8 @@ class TicketAdd extends React.Component {
                   </ResponseTip>
                 )
               }
-              
               {
-                (true || this.state.ticket && this.state.ticket.canBeRated) && <div style={{marginTop: 20, textAlign: 'center'}}>
+                (this.state.ticket && this.state.ticket.ticketReplies.length > 0) && <div style={{marginTop: 20, textAlign: 'center'}}>
                   <div onClick={()=>addRate()} style={{color: '#3aa978', textDecoration: 'none', cursor:'pointer',}}>
                     <RATE style={{verticalAlign: 'middle'}}>&#xe60d;</RATE>
                     <span style={{textDecoration: 'underline', verticalAlign: 'middle'}}>{intl.formatMessage({id:"rate"})}</span>

@@ -1181,6 +1181,8 @@ const actions = {
                 commit(types.GLOBAL_GET_TICKET_ID, ticket.order?ticket.order.id:(ticket.ticket?ticket.ticket.operaId:''))
                 commit(types.GLOBAL_GET_TICKET_SUB, ticket.subjectSelections)
             }
+        }).catch(err => {
+            alert(err.result)
         })
     },
     getTicketByTicketId({commit},id){
@@ -1192,6 +1194,8 @@ const actions = {
                 commit(types.GLOBAL_GET_TICKET_ID, ticket.order?ticket.order.id:(ticket.ticket?ticket.ticket.operaId:''))
                 commit(types.GLOBAL_GET_TICKET_SUB, ticket.subjectSelections)
             }
+        }).catch(err => {
+            alert(err.result)
         })
     },
     getTicketByCode({commit},code){
@@ -1203,6 +1207,8 @@ const actions = {
                 commit(types.GLOBAL_GET_TICKET_ID, ticket.order?ticket.order.id:(ticket.ticket?ticket.ticket.operaId:''))
                 commit(types.GLOBAL_GET_TICKET_SUB, ticket.subjectSelections)
             }
+        }).catch(err => {
+            alert(err.result)
         })
     },
     clearTicket({commit},id){

@@ -70,7 +70,7 @@
                         break
                     case 9:
                         if(id){
-                            _url = '/me/m/faq/support-ticket?id='+id
+                            _url = '/me/m/faq/support-ticket/'+id
                         } else {
                             _url = '/me/m/faq/support-ticket'
                         }

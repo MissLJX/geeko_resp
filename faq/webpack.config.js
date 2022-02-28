@@ -26,10 +26,11 @@ module.exports = {
     progress: true,
     proxy: {
       '/api': {
-        target: 'https://www.chicme.xyz',
-				cookiePathRewrite: {
-					'/wanna': '/',
-				},
+        // target: 'https://www.chicme.com',
+        target: 'http://192.168.2.66:8080',
+				// cookiePathRewrite: {
+				// 	'/wanna': '/',
+				// },
         pathRewrite: { '^/api': '' },
         secure: false,
         changeOrigin: true

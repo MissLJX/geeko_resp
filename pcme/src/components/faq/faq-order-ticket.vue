@@ -97,7 +97,7 @@
                 </div>
 
                 <!-- 展开客服评价 -->
-                <div class="rateTips" @click="addRate">
+                <div v-if="canBeRated" class="rateTips" @click="addRate">
                     <span class="iconfont " style="font-size: 30px;">&#xe60d;</span>
                     <span style='text-decoration: underline; vertical-align: middle;'>{{$t("support.s_rate_my_service")}}</span> 
                 </div>
@@ -128,7 +128,7 @@
                     <span class="iconfont send">&#xe789;</span>
                 </div>
 
-                <div class="submitSuccessTip" v-if="successShow || (canBeRated && true)">
+                <div class="submitSuccessTip" v-if="successShow">
                     {{$t("support.s_submit_success")}}
                 </div>
 
@@ -405,7 +405,7 @@
         },
         mounted(){
             this.$store.dispatch("getQuestionType")
-            console.log(localStorage._orderId)
+            // console.log(localStorage._orderId)
             if(localStorage._orderId){
                 this._orderId = localStorage._orderId
                 setTimeout(()=>{
@@ -453,7 +453,6 @@
                     if(this.selected == '666'){
                         this.selected = this.ticket_con.questionTypeCode
                     }
-                    
                     if(this.selected && (!this.ticket_con.subject || this.ticket_con.subject == 'undefined' || !this.ticket_con.subject.match(/[a-z]/ig))){
                         var fData = new FormData();
                         if(this.ticket_con?.operaId){
@@ -489,7 +488,7 @@
                     this.initReviewMsg = this.ticket_con && this.ticket_con.ticketRateService ? this.ticket_con.ticketRateService.message : ''
                     this.rateData.id = this.ticket_con ? this.ticket_con.id: null
                 }
-                return false
+                return this.selected && this.selected != '666' && this.ticket_con && this.ticket_con.ticketReplies.length > 0
             },
             addRated(){
                 if(this.ticket_con && this.ticket_con.reviewFlag === 1){

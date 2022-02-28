@@ -97,4 +97,5 @@ export default {
   rateTextPlaceHolder: 'Hier können Sie den Kundenservice kommentieren.',
   statusWatingApply:'Warte auf Bewerben',
   facebook_check: 'Wenn Sie dies überprüfen, senden wir Ihnen den Status der Sendungsverfolgung und Bestellinformationen in Messenger',
+  return_the_oder: 'Bestellung zurücksenden',
 }

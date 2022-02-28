@@ -293,7 +293,7 @@ const routes = [
                 meta:{title:"Search Results",depth:1,keepAlive:true}
             },
             {
-                path:"support-ticket",
+                path:"support-ticket/:id?",
                 name: "support-ticket",
                 component: () => import("../pages/support-ticket/support-ticket.vue"),
                 // component: () => import("../components/tickets.vue"),

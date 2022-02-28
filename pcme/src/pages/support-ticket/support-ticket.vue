@@ -243,8 +243,14 @@
             this.$store.dispatch('getTickets', {skip:0,state:9})
         },
         mounted(){
+            // console.log(this.$route)
             // console.log(this.$router.currentRoute.query?.id && !urlIdShowed)
-            if(this.$router.currentRoute.query?.id && !urlIdShowed){
+            if(this.$route.params?.id && !urlIdShowed){
+                localStorage.removeItem("_code")
+                localStorage._orderId = this.$route.params?.id
+                this.showTicket(localStorage._orderId)
+            }
+            if((this.$router.currentRoute.query?.id) && !urlIdShowed){
                 localStorage.removeItem("_code")
                 localStorage._orderId = this.$router.currentRoute.query?.id
                 this.showTicket(localStorage._orderId)
