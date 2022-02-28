@@ -2,8 +2,8 @@
     <div class="swiper">
         <div class="swiper-container" v-swiper:mySwiper="swiperOption" :class="{'swiper-no-swiping' : notificationData && notificationData.length <= 1}">
             <div class="swiper-wrapper">
-                <div class="swiper-slide" :key="id+index" v-for="({id,icon,icon2,message,isClick},index) in notificationData">
-                    <div class="notification-container" @click="isClick && disposeNotification(id)">
+                <div class="swiper-slide" :key="id+index" v-for="({id,icon,icon2,message,isClick,clickFunction},index) in notificationData">
+                    <div class="notification-container" @click="isClick?disposeNotification(id):clickFunction()">
                         <div class="iconfont" v-html="icon"></div>
                         <div class="_font">{{message}}</div>
                         <div class="iconfont" v-html="icon2"></div>

@@ -1,1 +1,5 @@
 $red:#e5004f;
+
+@mixin image_geeko_url($icon){
+	background-image: url('https://image.geeko.ltd/#{$icon}');
+}

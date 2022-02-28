@@ -4,10 +4,12 @@
             <page-header>
                 <span>{{$t('label.coupons')}}</span>
             </page-header>
+
+            <swiper :notificationData="swiperData"></swiper>
         </div>
-        
-        <div style="padding-top:50px;">
-            <coupon-container></coupon-container>
+
+        <div style="padding-top:84px;background-color: #f6f6f6;">
+            <coupon-list :loading="loading" :finished="finished" :coupons="coupons" :isRedeem="false"></coupon-list>
         </div>
     </div>
 </template>
@@ -20,14 +22,53 @@
 
 <script type="text/ecmascript-6">
     import PageHeader from '../components/page-header.vue'
+    import CouponList from "../components/coupon/coupon-list.vue"
+    import { mapGetters } from "vuex";
+    import store from "../../store/index.js";
+    import Swiper from "../../components/swiper/swiper.vue"
 
-    import CouponContainer from './coupon/CouponContainer.vue'
 
     export default{
+        name:"Coupons",
+        data(){
+            return {
+                loading:false,
+                finished:false,
+                swiperData:[]
+            }
+        },
         components: {
             'page-header': PageHeader,
-            'coupon-container':CouponContainer
-        }
+            "coupon-list":CouponList,
+            "swiper":Swiper
+        },
+        computed:{
+            ...mapGetters('me', ['coupons']),
+        },
+        created(){
+            if(!(this.coupons && this.coupons.length > 0)){
+                this.loading = true;
+                store.dispatch('me/getCoupons').then((data) => {
+                    this.loading = false;
+
+                    if(data && data.length <=0){
+                        this.finished = true;
+                    }
+                })
+            }
+
+            let obj = {
+                id:'100',
+                icon:"&#xe6ca;",
+                icon2:"&#xe694;",
+                message:this.$t("label.use_points_redeem_coupon"),
+                isClick:false,
+                clickFunction:() =>{
+                    this.$router.push(this.GLOBAL.getUrl("/me/m/redeem-coupon"));
+                }
+            };
+            this.swiperData.push(obj);
+        },
     }
 </script>
 

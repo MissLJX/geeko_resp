@@ -170,6 +170,16 @@ export default {
     ordertotal: 'Total de la commande',
     notiothers: "Autres",
     prmotion: "Promotion",
+    label:{
+        redeem_coupon:"Utilisez le coupon",
+        hot_use_points:"Comment utiliser les points?",
+        use_points_redeem_coupon:"Utilisez des points pour \u00e9changer plus de coupons",
+        redeem:'\u00e9changer',
+        redeemed:"Rachet\u00e9",
+        points_check_redeem_text:'Voulez-vous utiliser {points} points pour \u00e9changer ce coupon ?',
+        points_not_enough_text:"Vous n'avez pas assez de points pour utiliser ce coupon.",
+        points_redeem_success:'\u00e9change r\u00e9ussi !',
+    },
     point: {
         my_points: "Mes points",
         points_expired_soon: "Points expirant bientôt",

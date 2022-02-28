@@ -41,7 +41,7 @@
                 favoriteValue:[],
             }
         },
-        mounted(){
+        mounted:function(){
             this.favoriteValue = this.favorite;
         },
         methods:{
@@ -52,7 +52,7 @@
                 }else{
                     this.favoriteValue.push(item);
                 }
-                this.$emit("getValue",this.favoriteValue);
+                this.$emit("update:favorite",this.favoriteValue);
             },
             verifyActive(value){
                 return this.favoriteValue.findIndex((item) => item.value == value);

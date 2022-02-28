@@ -173,6 +173,16 @@ export default {
     share_get:"DEL OP TIL 50% RABAT, FÅ $ 10",  //google
     share_lucky:"Del heldig lodtrækning med dine venner, og få op til 50% rabat sammen. Og du får $ 10, når de foretager et køb.",  //google,
     required: 'Required',
+    label:{
+        redeem_coupon:"Redeem Coupon",
+        hot_use_points:"How to Use Points?",
+        use_points_redeem_coupon:"Use points to redeem more coupons",
+        redeem:"Redeem",
+        redeemed:"Redeemed",
+        points_check_redeem_text:'Do you want to use {points} points to redeem this coupon?',
+        points_not_enough_text:'You do not have enough points to redeem this coupon.',
+        points_redeem_success:'Redemption successful!',
+    },
     point:{
         my_points:"My Points",
         points_expired_soon:"Points Expriring Soon",

@@ -1,9 +1,10 @@
 <template>
     <div class="el-coupons">
-        <list :items="coupons" :scrollable="scrollable" :loading="loading" :finished="finished" @listing="$emit('listing')">
+        <list :items="coupons" :loading="loading" :finished="finished" @listing="$emit('listing')">
             <template slot="li" slot-scope="props">
                 <li :key="props.item.coupon.id">
-                    <coupon :coupon="props.item"/>
+                    <coupon :coupon="props.item" v-if="!isRedeem"/>
+                    <redeem-coupon :coupon="props.item" v-else :index="props.index" />
                 </li>
             </template>
         </list>
@@ -13,6 +14,7 @@
 <script type="text/ecmascript-6">
     import List from '../../../components/list.vue'
     import Coupon from './coupon.vue'
+    import RedeemCoupon from "./redeem-coupon.vue"
 
     export default{
         props:{
@@ -26,17 +28,17 @@
                 type:Boolean
             },
             scrollable:{
-                type:Boolean,
-                default:false
+                type:Boolean
             },
-            isExpried:{
+            isRedeem:{
                 type:Boolean,
                 default:false
             }
         },
         components: {
             'list': List,
-            'coupon': Coupon
+            'coupon': Coupon,
+            "redeem-coupon":RedeemCoupon
         }
     }
 </script>

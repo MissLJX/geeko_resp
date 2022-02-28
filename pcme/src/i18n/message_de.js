@@ -170,6 +170,16 @@ export default {
     ordertotal:'Bestellung Gesamt',
     notiothers:"Andere",
     prmotion:"Förderung",
+    label:{
+        redeem_coupon:"Coupon einl\u00f6sen",
+        hot_use_points:"Wie werden Punkte verwendet?",
+        use_points_redeem_coupon:"Verwenden Sie Punkte, um weitere Coupons einzul\u00f6sen",
+        redeem:'Einl\u00f6sen',
+        redeemed:"Eingel\u00f6st",
+        points_check_redeem_text:'M\u00f6chten Sie diesen Coupon mit {points} Punkten einl\u00f6sen?',
+        points_not_enough_text:'Sie haben nicht genügend Punkte, um diesen Coupon einzul\u00f6sen.',
+        points_redeem_success:'Einl\u00f6sung erfolgreich!',
+    },
     point:{
         my_points:"Meine Punkte",
         points_expired_soon:"Punkte verfallen bald",

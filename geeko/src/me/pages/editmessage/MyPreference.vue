@@ -8,22 +8,22 @@
         <my-preference-item 
             :category="messageM1521.favoriteCategories" 
             :title="$t('index.whitch_are_your_favorite')"
-            @getValue="getCategoryValue"
-            :favorite="myPreference.favoriteCategories"
+            :favorite.sync="myPreference.favoriteCategories"
+            v-if="myPreference.favoriteCategories && myPreference.favoriteCategories.length > 0"
         ></my-preference-item>
 
         <my-preference-item 
             :category="messageM1521.usuallyBuyClothesFor" 
             :title="$t('index.who_do_you_ususlly')"
-            @getValue="getUsuallyValue"
-            :favorite="myPreference.usuallyBuyClothesFor"
+            :favorite.sync="myPreference.usuallyBuyClothesFor"
+            v-if="myPreference.usuallyBuyClothesFor && myPreference.usuallyBuyClothesFor.length > 0"
         ></my-preference-item>
 
         <my-preference-item 
             :category="messageM1521.favoriteStyles" 
             :title="$t('index.whitch_are_your_styles')"
-            @getValue="getCategoryStylesValue"
-            :favorite="myPreference.favoriteStyles"
+            :favorite.sync="myPreference.favoriteStyles"
+            v-if="myPreference.favoriteStyles && myPreference.favoriteStyles.length > 0"            
         ></my-preference-item>
 
         <submit-btn @toSubmit="addPreference" :title="$t('label.save')"></submit-btn>
@@ -106,15 +106,6 @@
             this.myPreference.favoriteStyles = this.getDisposeArr(favoriteStyles);
         },
         methods:{
-            getCategoryValue(value){
-                this.myPreference.favoriteCategories = value;
-            },
-            getUsuallyValue(value){
-                this.myPreference.usuallyBuyClothesFor = value;
-            },
-            getCategoryStylesValue(value){
-                this.myPreference.favoriteStyles = value;
-            },
             addPreference(){
                 let _this = this;
                 _this.isLoadingShow = true;

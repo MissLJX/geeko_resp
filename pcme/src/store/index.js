@@ -63,7 +63,7 @@ const state = {
     bbmessage: null,
     orderid:'',
 
-    coupons:'',
+    coupons:[],
     message:'',
     credits:[],
     wishProducts: [],
@@ -139,6 +139,8 @@ const state = {
 
     oftenBoughtWithList: [],
     reviewOrderList: [],
+    modalconfirmshow: false,
+    confirmCfg:null,
 };
 const getters = {
     me: state => state.me,
@@ -256,6 +258,8 @@ const getters = {
 
     oftenBoughtWithList: state => state.oftenBoughtWithList,
     reviewOrderList: state => state.reviewOrderList,
+    modalconfirmshow: state => state.modalconfirmshow,
+    confirmCfg: state => state.confirmCfg,
 };
 const mutations = {
     [types.INIT_ME](state, me){
@@ -656,6 +660,13 @@ const mutations = {
     },
     [types.GET_REVIEW_ORDER](state, list){
         state.reviewOrderList = list
+    },
+    [types.APP_CONFIRM_SHOW](state, {show , cfg}){
+        state.confirmCfg = cfg
+        state.modalconfirmshow = show
+    },
+    [types.CHANGE_ME_FEED_POINT_COUNT](state,point){
+        state.feed && (state.feed.points -= point);
     }
 }
 const actions = {
@@ -915,7 +926,8 @@ const actions = {
     //coupons
     getCoupons({commit}){
         return api.getCoupons().then((coupons) => {
-            commit(types.ME_COUPONS,coupons)
+            commit(types.ME_COUPONS,coupons);
+            return coupons;
         })
     },
     useCoupon(context, couponId){
@@ -1357,49 +1369,57 @@ const actions = {
             });
         });
       },
-      getSurvey({commit},params){
-          // console.log(params)
-          return new Promise((reslove,reject) => {
-              api.surveyGet(params).then((result) => {
-                  console.log(result)
-                  reslove(result);
-                  commit(types.GET_SURVEY_ANSWER, params);
-              });
-          });
-      },
-      getQuestionType({commit}, params){
-          return new Promise((reslove, reject) => {
-              api.getQuestionType(params).then(res => {
-                  reslove(res);
-                  commit(types.GET_QUESTION_TYPE, res.result? res.result : [])
-              })
-          })
-      },
-      getDobulePointsData({commit},code){
-        return api.getMessageToObject(code).then(result => {
-            result && commit(types.GET_DOBULE_POINTS_DATA,result);
+    getSurvey({commit},params){
+        // console.log(params)
+        return new Promise((reslove,reject) => {
+            api.surveyGet(params).then((result) => {
+                console.log(result)
+                reslove(result);
+                commit(types.GET_SURVEY_ANSWER, params);
+            });
         });
-      },
-      setShowTip({commit}, flag){
-         commit(types.GET_SHOW_TIP, flag);
-      },
-      setTipContent({commit}, content){
-         commit(types.GET_TIP_CONTENT, content);
-      },
-      setTipType({commit}, type){
-          commit(types.GET_TIP_TYPE, type);
-      },
-      getOftenBoughtWithList({commit}, {id}){
-          return api.getOftenBoughtWith(id).then(res => {
-              res && res.code==200 && commit(types.GET_OFTEN_BOUGHT_WITH_LIST, res.result)
-          })
-      },
-      getReviewOrder({commit}){
-          return api.getReviewOrder().then(res => {
-                console.log(res)
-                res && commit(types.GET_REVIEW_ORDER, res.result)
-          })
-      }
+    },
+    getQuestionType({commit}, params){
+        return new Promise((reslove, reject) => {
+            api.getQuestionType(params).then(res => {
+                reslove(res);
+                commit(types.GET_QUESTION_TYPE, res.result? res.result : [])
+            })
+        })
+    },
+    getDobulePointsData({commit},code){
+    return api.getMessageToObject(code).then(result => {
+        result && commit(types.GET_DOBULE_POINTS_DATA,result);
+    });
+    },
+    setShowTip({commit}, flag){
+        commit(types.GET_SHOW_TIP, flag);
+    },
+    setTipContent({commit}, content){
+        commit(types.GET_TIP_CONTENT, content);
+    },
+    setTipType({commit}, type){
+        commit(types.GET_TIP_TYPE, type);
+    },
+    getOftenBoughtWithList({commit}, {id}){
+        return api.getOftenBoughtWith(id).then(res => {
+            res && res.code==200 && commit(types.GET_OFTEN_BOUGHT_WITH_LIST, res.result)
+        })
+    },
+    getReviewOrder({commit}){
+        return api.getReviewOrder().then(res => {
+            res && commit(types.GET_REVIEW_ORDER, res.result)
+        })
+    },
+    confirmShow: function ({commit}, shower) {
+        commit(types.APP_CONFIRM_SHOW, shower)
+    },
+    closeConfirm: function ({commit}) {
+        commit(types.APP_CONFIRM_SHOW, {show: false, cfg: null})
+    },
+    changeMeFeedPoints({ commit },point){
+        commit(types.CHANGE_ME_FEED_POINT_COUNT,point);
+    }
 }
 export default new Vuex.Store({
     state,

@@ -173,6 +173,16 @@ export default {
     share_get:"DEILDU AÐ 50% AFSLÁTTU, FÁÐU $ 10",  //google
     share_lucky:"Deildu happdrætti með vinum þínum og fáðu allt að 50% afslátt saman. Og þú færð $ 10 þegar þeir kaupa.",  //google
     required: 'Required',
+    label:{
+        redeem_coupon:"Redeem Coupon",
+        hot_use_points:"How to Use Points?",
+        use_points_redeem_coupon:"Use points to redeem more coupons",
+        redeem:"Redeem",
+        redeemed:"Redeemed",
+        points_check_redeem_text:'Do you want to use {points} points to redeem this coupon?',
+        points_not_enough_text:'You do not have enough points to redeem this coupon.',
+        points_redeem_success:'Redemption successful!',
+    },
     point:{
         my_points:"My Points",
         points_expired_soon:"Points Expriring Soon",

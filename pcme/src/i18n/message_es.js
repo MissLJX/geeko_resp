@@ -170,6 +170,16 @@ export default {
     mymessages:'Mis mensajes',
     notiothers:"Otros",
     prmotion:"Promoción",
+    label:{
+        redeem_coupon:"Canjear cupón",
+        hot_use_points:"¿Cómo usar los puntos?",
+        use_points_redeem_coupon:"¡Usa puntos para canjear más cupones",
+        redeem:'Canjear',
+        redeemed:"Redimido",
+        points_check_redeem_text: '¿Quieres usar {points} puntos para canjear este cupón?',
+        points_not_enough_text: 'No tienes suficientes puntos para canjear este cupón.',
+        points_redeem_success: '¡Redención exitosa!',
+    },
     point:{
         my_points:"Mis puntos",
         points_expired_soon:"Puntos que vencen pronto",

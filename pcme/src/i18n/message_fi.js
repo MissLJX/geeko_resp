@@ -173,6 +173,16 @@ export default {
     share_get:"JAA Jopa 50% ALENNUSTA, SAA 10 dollaria",  //google
     share_lucky:"Jaa onnen arvonta ystävillesi ja saat jopa 50% alennuksen yhdessä. Ja saat 10 dollaria, kun he tekevät ostoksen.",  //google
     required: 'Required',
+    label:{
+        redeem_coupon:"Redeem Coupon",
+        hot_use_points:"How to Use Points?",
+        use_points_redeem_coupon:"Use points to redeem more coupons",
+        redeem:"Redeem",
+        redeemed:"Redeemed",
+        points_check_redeem_text:'Do you want to use {points} points to redeem this coupon?',
+        points_not_enough_text:'You do not have enough points to redeem this coupon.',
+        points_redeem_success:'Redemption successful!',
+    },
     point:{
         my_points:"My Points",
         points_expired_soon:"Points Expriring Soon",
