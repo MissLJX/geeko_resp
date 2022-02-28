@@ -173,7 +173,7 @@ export default {
     label:{
         redeem_coupon:"Coupon einl\u00f6sen",
         hot_use_points:"Wie werden Punkte verwendet?",
-        use_points_redeem_coupon:"Verwenden Sie Punkte, um weitere Coupons einzul\u00f6sen!",
+        use_points_redeem_coupon:"Verwenden Sie Punkte, um weitere Coupons einzul\u00f6sen",
         redeem:'Einl\u00f6sen',
         redeemed:"Eingel\u00f6st",
         points_check_redeem_text:'M\u00f6chten Sie diesen Coupon mit {points} Punkten einl\u00f6sen?',

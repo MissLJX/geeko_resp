@@ -173,7 +173,7 @@ export default {
     label:{
         redeem_coupon:"Canjear cupón",
         hot_use_points:"¿Cómo usar los puntos?",
-        use_points_redeem_coupon:"¡Usa puntos para canjear más cupones!",
+        use_points_redeem_coupon:"¡Usa puntos para canjear más cupones",
         redeem:'Canjear',
         redeemed:"Redimido",
         points_check_redeem_text: '¿Quieres usar {points} puntos para canjear este cupón?',

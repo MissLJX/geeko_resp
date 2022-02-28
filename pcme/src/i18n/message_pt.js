@@ -175,7 +175,7 @@ export default {
     label:{
         redeem_coupon:"Use um cupom",
         hot_use_points:"Como usar os pontos?",
-        use_points_redeem_coupon:"Troque seus pontos por mais cupons!",
+        use_points_redeem_coupon:"Troque seus pontos por mais cupons",
         redeem:'Resgatar',
         redeemed:"Resgatado ",
         points_check_redeem_text: 'Deseja usar {points} pontos para resgatar este cupom?',

@@ -9,7 +9,7 @@
             </div>
             
             <div class="_right">
-                xxx {{$t("index.points")}}
+                {{coupon.points}} {{$t("index.points")}}
             </div>
         </div>
 
@@ -26,11 +26,11 @@
             </ul>
 
             <div class="_right">
-                <button>{{$t("points_mall.points_redeem")}}</button>
+                <button @click="() =>redeemCouponEvent()">{{$t("points_mall.points_redeem")}}</button>
             </div>
         </div>
 
-        <template v-if="index === 0">
+        <template v-if="isUse">
             <div class="_redeemed">{{$t("label.redeemed")}}</div>
 
             <div class="_redeemed-bg"></div>
@@ -39,9 +39,16 @@
 </template>
 <script>
     import fecha from 'fecha';
+    import { mapGetters } from "vuex"
+    import { pointsCouponExchange } from "../../api/index.js"
 
     export default {
         name:"RedeemCoupon",
+        data(){
+            return {
+                isUse:false
+            }
+        },
         props: {
             coupon: {
                 type: Object,
@@ -52,6 +59,7 @@
             }
         },
         computed:{
+            ...mapGetters("me",["feed"]),
             expireDate(){
                 var [beginDate, endDate] = [this.coupon.coupon.beginDate, this.coupon.coupon.endDate];
 
@@ -64,8 +72,26 @@
             }
         },
         methods:{
+            redeemCouponEvent(){
+                let _this = this;
+                if(this.coupon.points > this.feed.points){
+                    this.lackOfIntegral();
+                }else{
+                    this.confirmTheChange(this.coupon.points,() =>{
+                        _this.$store.dispatch("globalLoadingShow",true);
+                        pointsCouponExchange(_this.coupon.id).then((data) =>{
+                            if(data && data.code === 200){
+                                _this.forSuccessEvent();
+                                _this.$store.dispatch("me/changeMeFeedPoints",_this.coupon.points);
+                                _this.isUse = true;
+                            }
+                            _this.$store.dispatch("globalLoadingShow",false);
+                        });
+                    });
+                }
+            },
             // 确认兑换弹窗
-            confirmTheChange(){
+            confirmTheChange(points,callback){
                 let _this = this;
                 this.$store.dispatch('confirmShow', {
                     show: true,
@@ -74,10 +100,10 @@
                             yes:this.$t("points_mall.points_confirm"),
                             no:this.$t("label.cancel")
                         },
-                        message2:this.$t("points_mall.points_check_redeem_text",{points:'200'}),
+                        message2:this.$t("points_mall.points_check_redeem_text",{points}),
                         yes: function () {
                             _this.$store.dispatch('closeConfirm').then(() =>{
-                                _this.$router.push({name:"set-password"});
+                                if(callback) callback();
                             });
                         },
                         no:function(){
@@ -155,11 +181,11 @@
                         btnFont:{
                             yes:this.$t("survey.survey_go_shopping"),
                         },
-                        message2:`<span class="iconfont" style="color:#ff8031;font-size:60px;">&#xe6b7;</span><br/><br/><p style="font-size:16px;font-family: 'AcuminPro-Bold';">${$t("points_mall.points_redeem_success")}</p><br/>`,
+                        message2:`<span class="iconfont" style="color:#ff8031;font-size:60px;">&#xe6b7;</span><br/><br/><p style="font-size:16px;font-family: 'AcuminPro-Bold';">${this.$t("points_mall.points_redeem_success")}</p><br/>`,
                         htmlMessage2:true,
                         yes: function () {
                             _this.$store.dispatch('closeConfirm').then(() =>{
-                               
+                               window.location.href = _this.GLOBAL.getUrl(`/`);
                             });
                         },
                         style:{

@@ -8,7 +8,7 @@
 
         <div class="redeem-coupon-container">
             <div class="redeem-coupon-bg">
-                <span>{{$t("point.My points")}}: {{feed.points}}</span>
+                <span>{{$t("point.my_points")}}: {{feed.points}}</span>
                 <span class="__icon"></span>
             </div>
         </div>
@@ -23,7 +23,7 @@
     import { mapGetters } from 'vuex'
     import store from '../../store/index'
     import CouponList from "../components/coupon/coupon-list.vue"
-    import { getPointsCouponList } from "../api/index.js"
+    import { getPointsCouponList,getCoupons } from "../api/index.js"
 
     export default {
         name:"RedeemCoupon",
@@ -51,6 +51,20 @@
                 }
 
                 this.loading = false;
+
+                // if(data && data.length > 0){
+                //     const coupons = data.map((coupon,index) =>{
+                //         console.log('coupon', coupon);
+                //         coupon.coupon.points = 30;
+                //         index === 1 && (coupon.isUse = true);
+                //     });
+
+                //     this.coupons.push(...data);
+                // }else{
+                //     this.finished = true;
+                // }
+
+                // this.loading = false;
             });
         }
     }

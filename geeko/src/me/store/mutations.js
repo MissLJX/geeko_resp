@@ -210,6 +210,9 @@ const mutations = {
     [types.GET_DOBULE_POINTS_DATA](state,points){
         state.dobulePoints = points;
     },
+    [types.CHANGE_ME_FEED_POINT_COUNT](state,point){
+        state.feed && (state.feed.points -= point);
+    }
 }
 
 export default mutations;

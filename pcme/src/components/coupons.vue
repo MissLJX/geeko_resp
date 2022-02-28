@@ -3,9 +3,9 @@
         <div class="couponsTitle">{{$t("mycoupons")}}</div>
         <router-link class="redeem-coupon-message" :to="{name:'redeem-coupon'}">
             <span class="iconfont">&#xe6ca;</span>
-            <span class="_font">Use points to redeem more coupons ></span>
+            <span class="_font">{{ $t("label.use_points_redeem_coupon") }} ></span>
         </router-link>
-        <div v-show="!coupons" class="el-list-loading"><i class="iconfont">&#xe69f;</i></div>
+        <div v-show="coupons && coupons.length <= 0" class="el-list-loading"><i class="iconfont">&#xe69f;</i></div>
         <div class="coupon" v-for="item in coupons" :key="item.coupon.id">
             <div class="__vm x-fw __fixed"
                 :style="{background: `url('https://image.geeko.ltd/chicme/2021-12-17/coupon_available.png') no-repeat` ,

@@ -503,6 +503,9 @@ const actions = {
         return api.getMessageToObject(code).then(result => {
             result && commit(types.GET_DOBULE_POINTS_DATA,result);
         });
+    },
+    changeMeFeedPoints({ commit },point){
+        commit(types.CHANGE_ME_FEED_POINT_COUNT,point);
     }
 }
 

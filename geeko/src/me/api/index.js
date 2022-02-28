@@ -304,7 +304,7 @@ export const getPointsCouponList = () => {
 
 // 积分商城优惠券兑换
 export const pointsCouponExchange = (id) => {
-    return axios.post('/points-exchange-coupon/exchange',{id:id},{}).then(data => data)
+    return axios.post('/points-exchange-coupon/exchange',qs.stringify({id}),{}).then(data => data)
 }
 
 // 获取积分商城go shopping的collection id

@@ -173,7 +173,7 @@ export default {
     label:{
         redeem_coupon:"Utilisez le coupon",
         hot_use_points:"Comment utiliser les points?",
-        use_points_redeem_coupon:"Utilisez des points pour \u00e9changer plus de coupons!",
+        use_points_redeem_coupon:"Utilisez des points pour \u00e9changer plus de coupons",
         redeem:'\u00e9changer',
         redeemed:"Rachet\u00e9",
         points_check_redeem_text:'Voulez-vous utiliser {points} points pour \u00e9changer ce coupon ?',

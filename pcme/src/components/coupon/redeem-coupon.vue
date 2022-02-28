@@ -9,7 +9,7 @@
             </div>
             
             <div class="_right">
-                xxx {{ $t("point.points") }}
+                {{coupon.points}} {{ $t("point.points") }}
             </div>
         </div>
 
@@ -26,11 +26,11 @@
             </ul>
 
             <div class="_right">
-                <button>{{ $t("label.redeem") }}</button>
+                <button @click="redeemCouponEvent">{{ $t("label.redeem") }}</button>
             </div>
         </div>
 
-        <template v-if="index === 0">
+        <template v-if="isUse">
             <div class="_redeemed">{{ $t("label.redeemed") }}</div>
 
             <div class="_redeemed-bg"></div>
@@ -39,9 +39,16 @@
 </template>
 <script>
     import fecha from 'fecha';
+    import { pointsCouponExchange } from "../../api/index.js"
+    import { mapGetters } from "vuex"
 
     export default {
         name:"RedeemCoupon",
+        data(){
+            return {
+                isUse:false
+            }
+        },
         props: {
             coupon: {
                 type: Object,
@@ -52,6 +59,7 @@
             }
         },
         computed:{
+            ...mapGetters(["feed"]),
             expireDate(){
                 var [beginDate, endDate] = [this.coupon.coupon.beginDate, this.coupon.coupon.endDate];
 
@@ -64,8 +72,27 @@
             }
         },
         methods:{
+            redeemCouponEvent(){
+                let _this = this;
+                if(this.coupon.points > this.feed.points){
+                    this.lackOfIntegral();
+                }else{
+                    this.confirmTheChange(this.coupon.points,() =>{
+                        _this.$store.dispatch('paging', {paging: true})
+                        pointsCouponExchange(_this.coupon.id).then((data) =>{
+                            if(data && data.code === 200){
+                                _this.forSuccessEvent();
+                                _this.$store.dispatch('paging', {paging: true})
+                                _this.$store.dispatch("changeMeFeedPoints",_this.coupon.points);
+                                _this.isUse = true;
+                            }
+                            _this.$store.dispatch('paging', {paging: false})
+                        });
+                    });
+                }
+            },
             // 确认兑换弹窗
-            confirmTheChange(){
+            confirmTheChange(points,callback){
                 let _this = this;
                 this.$store.dispatch('confirmShow', {
                     show: true,
@@ -74,9 +101,10 @@
                             yes:this.$t("confirm"),
                             no:this.$t("cancel")
                         },
-                        message2:this.$t("label.points_check_redeem_text",{point:'200'}),
+                        message2:this.$t("label.points_check_redeem_text",{points}),
                         yes: function () {
                             _this.$store.dispatch('closeConfirm').then(() =>{
+                                if(callback) callback();
                             });
                         },
                         no:function(){
@@ -147,11 +175,11 @@
                         btnFont:{
                            yes:this.$t("survey.survey_go_shopping"),
                         },
-                        message2:`<span class="iconfont" style="color:#ff8031;font-size:90px;">&#xe6b7;</span><br/><br/><p style="font-size:22px;font-family: 'AcuminPro-Bold';">${$t("label.points_redeem_success")}</p>`,
+                        message2:`<span class="iconfont" style="color:#ff8031;font-size:90px;">&#xe6b7;</span><br/><br/><p style="font-size:22px;font-family: 'AcuminPro-Bold';">${this.$t("label.points_redeem_success")}</p>`,
                         htmlMessage2:true,
                         yes: function () {
                             _this.$store.dispatch('closeConfirm').then(() =>{
-                               
+                               window.location.href = _this.GLOBAL.getUrl(`/`);
                             });
                         },
                         style:{
