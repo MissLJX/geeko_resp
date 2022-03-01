@@ -41,7 +41,8 @@ module.exports = {
     },
     resolve:{
         alias: {
-            process: "process/browser"
+            process: "process/browser",
+            "@":path.join(__dirname, 'src')
         }
     },
     module: {

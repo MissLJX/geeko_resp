@@ -24,12 +24,12 @@
         </template>
 
         <div class="fd">
-            <button class="btn" 
+            <button class="l-vue-btn" 
                     @click="cfg.yes" 
                     v-if="cfg.btnFont && cfg.btnFont.yes"
                     :style="btnYes"
                     >{{cfg.btnFont.yes}}</button>
-            <button class="btn no" 
+            <button class="l-vue-btn no" 
                     @click="cfg.no" 
                     v-if="cfg.btnFont && cfg.btnFont.no"
                     :style="btnNo"
@@ -81,8 +81,9 @@
         margin-top: 20px;
     }
 
-    .st-confirm > .fd > .btn{
+    .st-confirm > .fd > .l-vue-btn{
         height: 45px;
+        background:#222222;
         background-color: #222222;
         line-height: 45px;
         color: #ffffff;
@@ -92,10 +93,11 @@
         font-size: 20px;
     }
 
-    .st-confirm > .fd > .btn.no{
+    .st-confirm > .fd > .l-vue-btn.no{
         margin-top: 10px;
         border: solid 1px #222222;
         color: #222222;
+        background: #ffffff;
         background-color: #ffffff;
     }
 

@@ -14,7 +14,7 @@
         </div>
 
         <div class="li-fixed-body redeem-coupon-list" style="padding-top:90px;">
-            <coupon-list :loading="loading" :finished="finished" :coupons="coupons" :is-redeem="true"></coupon-list>
+            <coupon-list :loading="loading" :finished="finished" :coupons="coupons" :is-redeem="true" @changeCoupons="changeCoupons"></coupon-list>
         </div>
     </div>
 </template>
@@ -66,6 +66,15 @@
 
                 // this.loading = false;
             });
+        },
+        methods:{
+            changeCoupons(id){
+                if(this.coupons && this.coupons.length > 0){
+                    this.coupons.forEach(item =>{
+                        item.id === id && (item.status = 1);
+                    });
+                }
+            }
         }
     }
 </script>

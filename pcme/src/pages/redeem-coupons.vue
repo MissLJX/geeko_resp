@@ -11,7 +11,7 @@
         </div>
 
         <div class="redeem-coupon-list">
-            <coupon-list :loading="loading" :finished="finished" :coupons="coupons"></coupon-list>
+            <coupon-list :loading="loading" :finished="finished" :coupons="coupons" @changeCoupons="changeCoupons"></coupon-list>
         </div>
     </div>
 </template>
@@ -46,6 +46,15 @@
         },
         components:{
             "coupon-list":CouponList
+        },
+        methods:{
+            changeCoupons(id){
+                if(this.coupons && this.coupons.length > 0){
+                    this.coupons.forEach(item =>{
+                        item.id === id && (item.status = 1);
+                    });
+                }
+            }
         }
     }
 </script>

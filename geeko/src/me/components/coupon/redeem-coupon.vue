@@ -30,7 +30,7 @@
             </div>
         </div>
 
-        <template v-if="isUse">
+        <template v-if="coupon.status === 1">
             <div class="_redeemed">{{$t("label.redeemed")}}</div>
 
             <div class="_redeemed-bg"></div>
@@ -40,15 +40,10 @@
 <script>
     import fecha from 'fecha';
     import { mapGetters } from "vuex"
-    import { pointsCouponExchange } from "../../api/index.js"
+    import { pointsCouponExchange } from "@/me/api/index.js"
 
     export default {
         name:"RedeemCoupon",
-        data(){
-            return {
-                isUse:false
-            }
-        },
         props: {
             coupon: {
                 type: Object,
@@ -83,7 +78,9 @@
                             if(data && data.code === 200){
                                 _this.forSuccessEvent();
                                 _this.$store.dispatch("me/changeMeFeedPoints",_this.coupon.points);
-                                _this.isUse = true;
+                                _this.$emit("changeCoupons",_this.coupon.id);
+
+                                _this.$store.dispatch('me/getCoupons');
                             }
                             _this.$store.dispatch("globalLoadingShow",false);
                         });

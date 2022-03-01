@@ -62,7 +62,7 @@
             
         },
         created(){
-            this.$store.dispatch('getCoupons')
+            this.$store.dispatch('getCoupons');
             // console.log(this.coupons)
         },
         methods:{

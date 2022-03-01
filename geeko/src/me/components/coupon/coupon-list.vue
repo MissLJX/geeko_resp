@@ -4,7 +4,8 @@
             <template slot="li" slot-scope="props">
                 <li :key="props.item.coupon.id">
                     <coupon :coupon="props.item" v-if="!isRedeem"/>
-                    <redeem-coupon :coupon="props.item" v-else :index="props.index" />
+                    <!-- @changeCoupons="(id) =>$emit('changeCoupons',id)" -->
+                    <redeem-coupon :coupon="props.item" v-else :index="props.index" v-on="$listeners" />
                 </li>
             </template>
         </list>

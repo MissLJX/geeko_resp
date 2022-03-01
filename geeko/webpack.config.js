@@ -4,6 +4,9 @@ const webpack = require('webpack')
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
+function resolve(dir) {
+    return path.join(__dirname, dir);
+}
 
 module.exports = {
     entry: './src/main.js',
@@ -45,7 +48,8 @@ module.exports = {
     resolve:{
         alias: {
             process: "process/browser",
-            'vue$': 'vue/dist/vue.esm.js'
+            // 'vue$': 'vue/dist/vue.esm.js',
+            "@":resolve('src')
         }
     },
     plugins: [

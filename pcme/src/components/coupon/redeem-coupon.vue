@@ -30,7 +30,7 @@
             </div>
         </div>
 
-        <template v-if="isUse">
+        <template v-if="coupon.status === 1">
             <div class="_redeemed">{{ $t("label.redeemed") }}</div>
 
             <div class="_redeemed-bg"></div>
@@ -44,11 +44,6 @@
 
     export default {
         name:"RedeemCoupon",
-        data(){
-            return {
-                isUse:false
-            }
-        },
         props: {
             coupon: {
                 type: Object,
@@ -82,9 +77,9 @@
                         pointsCouponExchange(_this.coupon.id).then((data) =>{
                             if(data && data.code === 200){
                                 _this.forSuccessEvent();
-                                _this.$store.dispatch('paging', {paging: true})
                                 _this.$store.dispatch("changeMeFeedPoints",_this.coupon.points);
-                                _this.isUse = true;
+                                _this.$emit("changeCoupons",_this.coupon.id);
+                                _this.$store.dispatch('getCoupons');
                             }
                             _this.$store.dispatch('paging', {paging: false})
                         });
