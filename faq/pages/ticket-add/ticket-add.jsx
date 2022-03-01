@@ -2021,7 +2021,7 @@ class TicketAdd extends React.Component {
                 )
               }
               {
-                (this.state.ticket && this.state.ticket.ticketReplies.length > 0) && <div style={{marginTop: 20, textAlign: 'center'}}>
+                (this.state.ticket && this.state.ticket.ticketReplies && this.state.ticket.ticketReplies.length > 0) && <div style={{marginTop: 20, textAlign: 'center'}}>
                   <div onClick={()=>addRate()} style={{color: '#3aa978', textDecoration: 'none', cursor:'pointer',}}>
                     <RATE style={{verticalAlign: 'middle'}}>&#xe60d;</RATE>
                     <span style={{textDecoration: 'underline', verticalAlign: 'middle'}}>{intl.formatMessage({id:"rate"})}</span>
