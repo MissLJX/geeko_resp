@@ -450,9 +450,7 @@
             },
             canBeRated(){
                 if(this.ticket_con && this.ticket_con.questionTypeCode){
-                    if(this.selected == '666'){
-                        this.selected = this.ticket_con.questionTypeCode
-                    }
+                    this.selected = this.ticket_con.questionTypeCode
                     
                     if(this.selected && (!this.ticket_con.subject || this.ticket_con.subject == 'undefined' || !this.ticket_con.subject.match(/[a-z]/ig))){
                         var fData = new FormData();
@@ -480,9 +478,7 @@
                         fData.append("questionTypeCode",otherSubject)
                         this.$store.dispatch("addTicket",fData).then(res=>{})
                     }
-                } else {
-                    this.selected = '666'
-                }
+                } 
                 if(this.ticket_con){
                     this.rateData.rate = this.ticket_con && this.ticket_con.ticketRateService ? this.ticket_con.ticketRateService.rate : 5;
                     this.rateData.message = this.ticket_con && this.ticket_con.ticketRateService ? this.ticket_con.ticketRateService.message : ''
