@@ -488,7 +488,7 @@
                     this.initReviewMsg = this.ticket_con && this.ticket_con.ticketRateService ? this.ticket_con.ticketRateService.message : ''
                     this.rateData.id = this.ticket_con ? this.ticket_con.id: null
                 }
-                return this.selected && this.selected != '666' && this.ticket_con && this.ticket_con.ticketReplies.length > 0
+                return this.selected && this.selected != '666' && this.ticket_con && this.ticket_con.ticketReplies && this.ticket_con.ticketReplies.length > 0
             },
             addRated(){
                 if(this.ticket_con && this.ticket_con.reviewFlag === 1){
