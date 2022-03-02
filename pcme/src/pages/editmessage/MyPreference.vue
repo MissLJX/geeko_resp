@@ -92,6 +92,14 @@
                 this.myPreference.favoriteStyles = value;
             },
             addPreference(){
+                let _this = this;
+
+                if(this.myPreference.favoriteCategories.length <= 0 && this.myPreference.usuallyBuyClothesFor.length <= 0 && this.myPreference.favoriteStyles.length <= 0){
+                    alert("My preferences can't all be empty");
+                    return;
+                }
+
+
                 this.isLoadingShow = true;
                 let obj = {
                     customer:{

@@ -305,7 +305,7 @@
                 ],
                 submitData: {},
                 infoPart: {
-                    title: this.$t("measurements.mea_mea_how"),
+                    title: this.$t("measurements.mea_how"),
                     imageUrl: "https://s3.us-west-2.amazonaws.com/image.chic-fusion.com/chicme/2021-08-11/2021-08-11-select-body.png",
                     infoList: [
                         {
@@ -392,6 +392,7 @@
             saveData(){
                 // console.log(this.submitData)
                 this.isLoadingShow = true;
+                let _this = this;
                 let final = {};
                 for(let item in this.submitData){
                     // console.log(item)
@@ -414,7 +415,24 @@
                         }
                     }
                 }
-                // console.log(final)
+                
+                if(Object.keys(this.submitData).length <= 0){
+                    _this.$store.dispatch('confirmShow', {
+                        show: true,
+                        cfg: {
+                            btnFont:{
+                                yes:"OK",
+                            },
+                            message: "My MeasureMents can't all be empty",
+                            yes: function () {
+                                _this.$store.dispatch('closeConfirm');
+                            }
+                        }
+                    })
+                    this.isLoadingShow = false;
+                    return;
+                }
+
                 // return;
                 let obj = {
                             "customer":{"mySizeInformation": final},
