@@ -102,7 +102,8 @@
             </router-link> -->
         </div>
 
-        <div class="_hd" style="padding-top:15px;">
+        <!-- redeemCoupon -->
+        <!-- <div class="_hd" style="padding-top:15px;">
             {{ $t("label.hot_use_points") }}
         </div>
 
@@ -118,7 +119,7 @@
                     </div>
                 </div>
             </a>
-        </div>
+        </div> -->
     </div>
 </template>
 
