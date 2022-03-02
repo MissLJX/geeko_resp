@@ -202,6 +202,7 @@ export default {
         expired:"Abgelaufen",
         sorry_inconvenience:"Entschuldigen Sie die Unannehmlichkeiten, wir werden das Problem so schnell wie möglich beheben…",
         maxinum_three_photos:"Maximum of 3 photos, only JPEG, GIF or PNG.",
+        personal_center:"Persönliches Zentrum"
     },
     index:{
         my_wishlist:'Meine Wunschliste',
@@ -234,7 +235,6 @@ export default {
         whitch_are_your_favorite:"Welches sind Ihre Lieblingskategorien?",
         who_do_you_ususlly:"Für wen kaufst du normalerweise Kleidung?",
         whitch_are_your_styles:"Welches sind deine Lieblingsstile",
-        personal_center:"Persönliches Zentrum"
     },
     measurements:{
         mea_info1: '"Meine Maße" hilft Ihnen dabei, Ihre perfekte Passform zu finden. Wenn Sie "Meine Maße" ausfüllen, können Sie dies tun.',

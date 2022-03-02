@@ -107,6 +107,10 @@
         font-size: 12px;
         text-align: center;
     }
+
+    .st-confirm .message2 p{
+        line-height: normal;
+    }
 </style>
 
 
