@@ -205,6 +205,7 @@ export default {
         expired:"Expired",
         sorry_inconvenience:"Sorry for the inconvenience, we wii fix the problem as soon as possible…",
         maxinum_three_photos:"Maximum of 3 photos, only JPEG, GIF or PNG.",
+        personal_center:"Personal Center"
     },
     index:{
         my_wishlist:'My Wishlist',
@@ -237,7 +238,6 @@ export default {
         whitch_are_your_favorite:"Which are your favorite categories?",
         who_do_you_ususlly:"Who do you usually buy clothes for?",
         whitch_are_your_styles:"Which are your favorite styles?",
-        personal_center:"Personal Center"
     },
     measurements:{
         mea_info1: '"My Measurements" helps simplify the process of finding your perfect fit .Filling out "My Measurements" allows you to.',

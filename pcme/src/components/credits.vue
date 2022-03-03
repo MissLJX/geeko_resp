@@ -162,7 +162,8 @@
             </div>
         </div>
 
-        <div class="get-method">
+        <!-- redeemCoupon -->
+        <!-- <div class="get-method">
             <div class="c-hd">{{ $t("label.hot_use_points") }}</div>
             <div class="_bd">
                 <a @click="()=>routTo({path:`${GLOBAL.getUrl('/me/m/redeem-coupon')}`, type:'RedeemCoupon'})">
@@ -177,7 +178,7 @@
                     </div>
                 </a>
             </div>
-        </div>
+        </div> -->
 
 
         <loding v-if="isLoadingShow"></loding>

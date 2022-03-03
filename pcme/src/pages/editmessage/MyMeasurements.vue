@@ -436,6 +436,7 @@
             },
             saveData(){
                 // console.log(this.submitData)
+                let _this = this;
                 this.isLoadingShow = true;
                 let final = {};
                 for(let item in this.submitData){
@@ -461,6 +462,13 @@
                 }
                 // console.log(final)
                 // return;
+
+                if(Object.keys(this.submitData).length <= 0){
+                    alert("My MeasureMents can't all be empty");
+                    this.isLoadingShow = false;
+                    return;
+                }
+
                 let obj = {
                             "customer":{"mySizeInformation": final},
                             "name":"mySizeInformation"

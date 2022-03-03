@@ -5,10 +5,12 @@
                 <span>{{$t('label.coupons')}}</span>
             </page-header>
 
-            <swiper :notificationData="swiperData"></swiper>
+            <!-- redeemCoupon -->
+            <!-- <swiper :notificationData="swiperData"></swiper> -->
         </div>
 
-        <div style="padding-top:84px;background-color: #f6f6f6;">
+        <!-- redeemCoupon 84 -->
+        <div style="padding-top:50px;background-color: #f6f6f6;">
             <coupon-list :loading="loading" :finished="finished" :coupons="coupons" :isRedeem="false"></coupon-list>
         </div>
     </div>
@@ -57,17 +59,18 @@
                 })
             }
 
-            let obj = {
-                id:'100',
-                icon:"&#xe6ca;",
-                icon2:"&#xe694;",
-                message:this.$t("label.use_points_redeem_coupon"),
-                isClick:false,
-                clickFunction:() =>{
-                    this.$router.push(this.GLOBAL.getUrl("/me/m/redeem-coupon"));
-                }
-            };
-            this.swiperData.push(obj);
+            // <!-- redeemCoupon -->
+            // let obj = {
+            //     id:'100',
+            //     icon:"&#xe6ca;",
+            //     icon2:"&#xe694;",
+            //     message:this.$t("label.use_points_redeem_coupon"),
+            //     isClick:false,
+            //     clickFunction:() =>{
+            //         this.$router.push(this.GLOBAL.getUrl("/me/m/redeem-coupon"));
+            //     }
+            // };
+            // this.swiperData.push(obj);
         },
     }
 </script>

@@ -1,10 +1,13 @@
 <template>
     <div class="coupons">
         <div class="couponsTitle">{{$t("mycoupons")}}</div>
-        <router-link class="redeem-coupon-message" :to="{name:'redeem-coupon'}">
+
+        <!-- redeemCoupon -->
+        <!-- <router-link class="redeem-coupon-message" :to="{name:'redeem-coupon'}">
             <span class="iconfont">&#xe6ca;</span>
             <span class="_font">{{ $t("label.use_points_redeem_coupon") }} ></span>
-        </router-link>
+        </router-link> -->
+
         <div v-show="coupons && coupons.length <= 0" class="el-list-loading"><i class="iconfont">&#xe69f;</i></div>
         <div class="coupon" v-for="item in coupons" :key="item.coupon.id">
             <div class="__vm x-fw __fixed"

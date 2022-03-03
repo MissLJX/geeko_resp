@@ -9,28 +9,26 @@
             :category="messageM1521.favoriteCategories" 
             :title="$t('index.whitch_are_your_favorite')"
             :favorite.sync="myPreference.favoriteCategories"
-            v-if="myPreference.favoriteCategories && myPreference.favoriteCategories.length > 0"
+            v-if="messageM1521.favoriteCategories && messageM1521.favoriteCategories.length > 0"
         ></my-preference-item>
 
         <my-preference-item 
             :category="messageM1521.usuallyBuyClothesFor" 
             :title="$t('index.who_do_you_ususlly')"
             :favorite.sync="myPreference.usuallyBuyClothesFor"
-            v-if="myPreference.usuallyBuyClothesFor && myPreference.usuallyBuyClothesFor.length > 0"
+            v-if="messageM1521.usuallyBuyClothesFor && messageM1521.usuallyBuyClothesFor.length > 0"
         ></my-preference-item>
 
         <my-preference-item 
             :category="messageM1521.favoriteStyles" 
             :title="$t('index.whitch_are_your_styles')"
             :favorite.sync="myPreference.favoriteStyles"
-            v-if="myPreference.favoriteStyles && myPreference.favoriteStyles.length > 0"            
+            v-if="messageM1521.favoriteCategories && messageM1521.favoriteCategories.length > 0"            
         ></my-preference-item>
 
         <submit-btn @toSubmit="addPreference" :title="$t('label.save')"></submit-btn>
 
         <points-reminder-modal :reminderMessage="reminderMessage" @onClose="() =>this.reminderMessage=null" v-if="!!reminderMessage" />
-
-        <loading v-if="isLoadingShow"></loading>
     </div>
 </template>
 
@@ -87,7 +85,6 @@
                     usuallyBuyClothesFor:[],
                     favoriteStyles:[]
                 },
-                isLoadingShow:false,
                 reminderMessage:null
             }  
         },
@@ -108,7 +105,25 @@
         methods:{
             addPreference(){
                 let _this = this;
-                _this.isLoadingShow = true;
+
+                if(this.myPreference.favoriteCategories.length <= 0 && this.myPreference.usuallyBuyClothesFor.length <= 0 && this.myPreference.favoriteStyles.length <= 0){
+                    _this.$store.dispatch('confirmShow', {
+                        show: true,
+                        cfg: {
+                            btnFont:{
+                                yes:"OK",
+                            },
+                            message: "My preferences can't all be empty",
+                            yes: function () {
+                                _this.$store.dispatch('closeConfirm');
+                            }
+                        }
+                    })
+
+                    return;
+                }
+
+                _this.$store.dispatch("globalLoadingShow",true);
                 let obj = {
                     customer:{
                         myPreference:{
@@ -122,7 +137,7 @@
 
                 };
                 _this.$store.dispatch("me/updateCustomerSave",obj).then(prompt => {
-                    _this.isLoadingShow = false;
+                    _this.$store.dispatch("globalLoadingShow",false);
                     // _this.$router.go(-1);
                     if(prompt?.html){
                         this.reminderMessage = prompt.html;
@@ -141,6 +156,9 @@
                             }
                         }).show();
                     }
+                }).catch((e) =>{
+                    console.log(e);
+                    _this.$store.dispatch("globalLoadingShow",false);
                 });
             },
             disposeCustomer(arr){

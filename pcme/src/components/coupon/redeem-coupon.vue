@@ -214,6 +214,7 @@
             background-repeat: no-repeat;
             height: 100%;
             padding: 13px 5px 5px 15px;
+            min-height: 90px;
 
             ._left{
                 text-transform: capitalize;
@@ -315,6 +316,10 @@
             background-color: #ffffff;
             height: 100%;
             width: 20px;
+        }
+
+        & p{
+            line-height: normal;
         }
     }
 </style>

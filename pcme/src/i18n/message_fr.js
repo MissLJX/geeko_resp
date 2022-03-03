@@ -202,6 +202,7 @@ export default {
         expired: "Expiré",
         sorry_inconvenience: "Sorry for the inconvenience, we wii fix the problem as soon as possible…",
         maxinum_three_photos: "Maximum of 3 photos, only JPEG, GIF or PNG.",
+        personal_center: "Centre personnel"
     },
     index: {
         my_wishlist: 'Ma liste de souhaits',
@@ -234,7 +235,6 @@ export default {
         whitch_are_your_favorite: "Quelles sont vos catégories préférées ?",
         who_do_you_ususlly: "Pour qui achetez-vous habituellement des vêtements ?",
         whitch_are_your_styles: "Quels sont vos styles préférés",
-        personal_center: "Centre personnel"
     },
     measurements: {
         mea_info1: '« Mes mesures » aide à simplifier le processus de recherche de votre ajustement parfait. Remplir « Mes mesures » vous le permet.',
