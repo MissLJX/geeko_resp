@@ -4,7 +4,7 @@
                            :finished="finished"/>
         <div v-if="empty" class="el-notification-empty">
             <img src="https://image.geeko.ltd/me/msite/empty-notification-dark-1.png">
-            <p>You have no notification</p>
+            <p>{{$t('label.no_notification')}}</p>
         </div>
     </div>
 </template>

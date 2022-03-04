@@ -51,7 +51,7 @@
                                     <option v-for="c in countries" :value="c.value">{{c.label}}</option>
                                 </select>
                                 <span v-show="countrySelected == '-1'"
-                                      class="st-is-danger">Please select a country</span>
+                                      class="st-is-danger">{{$t('label.please_select_country')}}</span>
                             </p>
                         </div>
 

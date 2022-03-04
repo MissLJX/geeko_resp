@@ -51,7 +51,7 @@
                 <div class="st-cell edit st-v-m">
                     <p @click="changeToLogin">{{disposeName}}</p>
                     <div class="bio" @click="toEditUserBio">
-                        <span>{{me && me.bio ? me.bio : "Introduce yourself to others…"}}</span>
+                        <span>{{me && me.bio ? me.bio : `${$t('label.introduce_to_others')}…`}}</span>
                         <span class="iconfont">&#xe6ce;</span>
                     </div>
                 </div>
@@ -658,6 +658,7 @@
                 flex: 1;
                 display: inline-block;
                 text-align: center;
+                max-width: 25%;
 
                 & > p{
                     &:first-child{

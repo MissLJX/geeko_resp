@@ -8,18 +8,18 @@
         <div class="el-email-block" style="margin-top: 0"> 
             <div>
                 <form @submit.prevent="changeAcountHandle">
-                    <p class="_title">Your new account:</p>
+                    <p class="_title">{{$t('label.your_new_account')}}:</p>
                     <p class="st-control el-email-control">
                         <input name="email" v-model="account.email" type="text"/>
                     </p>
 
-                    <p class="_title">password</p>
+                    <p class="_title">{{$t('label.password')}}</p>
                     <p class="st-control el-email-control">
                         <input name="password" v-model="account.password" type="password"/>
                     </p>
 
                     <div class="el-email-send-container">
-                        <btn type="submit" class="fill el-email-send">Send a confirm email</btn>
+                        <btn type="submit" class="fill el-email-send">{{$t('label.send_confirm_email')}}</btn>
                     </div>
                 </form>
             </div>
@@ -29,7 +29,7 @@
 
         <div class="el-email-block chan-email-padding">
             <div>
-                <p class="__font">Your contact / subscription address:</p>
+                <p class="__font">{{$t('label.your_address')}}:</p>
                 <div class="st-flex st-justify-b el-email-hor">
                     <div>
                         <p class="st-control el-email-control" style="margin-top: 0">
@@ -41,7 +41,7 @@
                         </p>
                     </div>
                     <div>
-                        <btn class="fill el-email-save" @click.native="changeEmailHandle">Save</btn>
+                        <btn class="fill el-email-save" @click.native="changeEmailHandle">{{$t('label.save')}}</btn>
                     </div>
                 </div>
 

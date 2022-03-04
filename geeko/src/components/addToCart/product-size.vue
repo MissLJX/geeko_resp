@@ -2,7 +2,7 @@
     <div class="product-size">
         <div class="size-container">
             <div class="_hdader">
-                size:
+                {{$t('label.size')}}:
             </div>
 
             <div class="_body">

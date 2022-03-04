@@ -27,11 +27,11 @@
 
                     <div class="suspend-container" v-if="suspendShow && suspendSumShow">
                         <div class="find-similar" @click.prevent="findSimlar(product.id)">
-                            Find Similar
+                            {{$t('label.find_similar')}}
                         </div>
 
                         <div class="delete" @click.prevent="deleteLikeProduct">
-                            Delete
+                            {{$t('label.delete')}}
                         </div>
                     </div>
 
@@ -159,10 +159,10 @@
                     show: true,
                     cfg: {
                         btnFont:{
-                            yes:"Confirm",
-                            no:"Cancel"
+                            yes:_this.$t('points_mall.points_confirm'),
+                            no:_this.$t('points_mall.points_cancel')
                         },
-                        message: "Are you sure you want to delete the item(s)?",
+                        message: _this.$t('label.sure_delete_items'),
                         yes: function () {
                             _this.likeHandle();
                             _this.suspendSumShow = false;

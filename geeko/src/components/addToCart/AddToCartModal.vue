@@ -21,7 +21,7 @@
 
         </div>
         <div class="_fd" @click="addToCart(false)" v-if="!isPointsProduct">
-            <div>Add to Cart</div>
+            <div>{{$t('label.add_to_cart')}}</div>
         </div>
 
         <div class="_fd pointsBtnBox" v-if="isPointsProduct">

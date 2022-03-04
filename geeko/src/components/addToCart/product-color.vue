@@ -1,8 +1,8 @@
 <template>
     <div class="product-color">
         <div class="color-container">
-            <div class="_color">Color</div>
-            <div class="_select">You selected {{variantProduct.color}}</div>
+            <div class="_color">{{$t('label.color')}}</div>
+            <div class="_select">{{$t('label.you_selected')}} {{variantProduct.color}}</div>
         </div>
 
         <div class="color-swiper">
