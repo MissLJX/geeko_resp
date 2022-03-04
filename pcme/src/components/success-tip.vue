@@ -30,7 +30,7 @@ export default {
     props:{
         content: {
             type: String,
-            default: 'Update Success!'
+            default: this.$t("update_success")+'!'
         },
         type: {
             type: String,

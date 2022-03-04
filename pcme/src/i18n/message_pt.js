@@ -196,6 +196,7 @@ export default {
     if_change_pwd: 'se você quiser alterar sua senha, você pode editá-la aqui',
     confirm_pwd: 'Confirme a Senha',
     remove_all_invaild: 'Remover todos os itens inválidos',
+    update_success: 'Erfolg aktualisieren',
     label:{
         redeem_coupon:"Use um cupom",
         hot_use_points:"Como usar os pontos?",

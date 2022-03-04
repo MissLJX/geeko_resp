@@ -194,6 +194,7 @@ export default {
     if_change_pwd: 'si vous voulez changer votre mot de passe, vous pouvez le modifier ici',
     confirm_pwd: 'Confirmez le mot de passe',
     remove_all_invaild: 'Supprimer tous les éléments non valides',
+    update_success: 'Mise à jour réussie',
     label:{
         redeem_coupon:"Utilisez le coupon",
         hot_use_points:"Comment utiliser les points?",

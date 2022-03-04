@@ -130,7 +130,7 @@
                 })
             },
             showNormalTip(){
-                this.$store.dispatch("setTipContent", 'Update Success');
+                this.$store.dispatch("setTipContent", this.$t("update_success"));
                 this.$store.dispatch("setShowTip", true);
                 this.$store.dispatch("setTipType", '');
             },

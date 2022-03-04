@@ -194,6 +194,8 @@ export default {
     please_check_email: 'Please check your current email address inbox for an activation link.',
     if_change_pwd: 'if you want to change your password,you can edit it here',
     confirm_pwd: 'Confirm Password',
+    remove_all_invaild: 'Remove all Invalid Items',
+    update_success: 'Update Success',
     label:{
         redeem_coupon:"Redeem Coupon",
         hot_use_points:"How to Use Points?",
