@@ -9,7 +9,7 @@
                     <input name="name" v-model="shipping.name" v-validate="'required'"
                            :class="{'st-input':true, 'st-input-danger':errors.has('name')}" type="text"
                     />
-                    <span v-show="errors.has('name')" class="st-is-danger">{{errors.first('name')}}</span>
+                    <span v-show="errors.has('name')" class="st-is-danger">{{$t("name_required")}}</span>
                 </div>
             </div>
             <div class="input-con required">
@@ -17,10 +17,10 @@
                 <div class="x-default-input">
                     <input name="streetAddress" v-model="shipping.streetAddress1" v-validate="'required'"
                            :class="{'st-input':true, 'st-input-danger':errors.has('streetAddress')}" type="text"
-                           placeholder="Street,Address,Company Name,C/O"
+                           :placeholder="$t('address_placeholder')"
                     />
                     <span v-show="errors.has('streetAddress')"
-                          class="st-is-danger">{{errors.first('streetAddress')}}</span>
+                          class="st-is-danger">{{$t("address_required")}}</span>
                 </div>
             </div>
             <div class="input-con">
@@ -28,7 +28,7 @@
                 <div class="x-default-input">
                     <input name="unit" v-model="shipping.unit"
                            :class="{'st-input':true}" type="text"
-                           placeholder="Apartment,Suite,Unite,Builting,Floor,etc(Optional)"/>
+                           :placeholder="$t('unit_placeholder')"/>
                 </div>
             </div>
             <div class="input-con required">
@@ -37,7 +37,7 @@
                     <input name="city" v-model="shipping.city" v-validate="'required'"
                            :class="{'st-input':true, 'st-input-danger':errors.has('city')}" type="text"
                            />
-                    <span v-show="errors.has('city')" class="st-is-danger">{{errors.first('city')}}</span>
+                    <span v-show="errors.has('city')" class="st-is-danger">{{$t("city_required")}}</span>
                 </div>
             </div>
             <div class="clearBoth">
@@ -78,7 +78,7 @@
                                :class="{'st-input':true, 'st-input-danger':errors.has('zipCode')}" type="text"
                         />
                         <span v-show="errors.has('zipCode')"
-                              class="st-is-danger">{{errors.first('zipCode')}}</span>
+                              class="st-is-danger">{{$t("zipcode_required")}}</span>
                     </div>
                 </div>
                 <div class="input-con required w-left">
@@ -91,7 +91,7 @@
                                type="text"
                                />
                         <span v-show="errors.has('phoneNumber')"
-                              class="st-is-danger">{{errors.first('phoneNumber')}}</span>
+                              class="st-is-danger">{{$t("phone_required")}}</span>
                     </div>
                 </div>
             </div>
@@ -102,7 +102,7 @@
                     <input name="CPF" v-model="shipping.cpf" v-validate="cpfValidate"
                            :class="{'st-input':true, 'st-input-dang() => {this.ifshowCPFtip = true}er':errors.has('CPF')}" type="text"
                     />
-                    <span v-show="errors.has('CPF')" class="st-is-danger">{{errors.first('CPF')}}</span>
+                    <span v-show="errors.has('CPF')" class="st-is-danger">{{$t("cpf_required")}}</span>
                 </div>
             </div>
             <div class="clearBoth">

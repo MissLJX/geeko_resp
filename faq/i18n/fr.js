@@ -98,4 +98,5 @@ export default {
   statusWatingApply:'En attente de candidature',
   facebook_check: 'Si vous cochez cette case, nous vous ferons parvenir le statut de suivi logistique et les informations de commande dans Messenger.',
   return_the_oder : 'Retourner la commande',
+  popular_search: 'Recherches populaires : Remboursement, Retour, Expédition',
 }

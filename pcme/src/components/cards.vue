@@ -1,6 +1,6 @@
 <template>
     <div class="el-cards">
-        <div class="nocard" v-if="(!getAllCards)">No Card.</div>
+        <div class="nocard" v-if="(!getAllCards)">{{$t("no_card")}}.</div>
         <div class="el-card">
             <div class="el-card-info tbl" v-for="card in getAllCards" :style="{'background-color': card.style && card.style.color ? card.style.color : '#fff'}">
                 <div class="tbl-cell el-card-img">

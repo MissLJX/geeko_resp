@@ -171,6 +171,18 @@ export default {
     share_get:"SHARE UP TO 50% OFF, GET $10",
     share_lucky:"Share lucky draw with your friends, and get up to 50% off together.  And you'll get $10 when they make a purchase.",
     required: 'Required',
+    address_placeholder: 'Street,Address,Company Name,C/O',
+    unit_placeholder: 'Apartment,Suite,Unite,Builting,Floor,etc(Optional)',
+    name_required: 'The Name field is required',
+    address_required: 'The Street Address field is required',
+    unit_required: 'The Unit field is required',
+    city_required: 'The City field is required',
+    country_required: 'The Country field is required',
+    state_required: 'The State / Province / Region field is required',
+    zipcode_required: 'The Zip Code / Postcode field is required',
+    phone_required: 'The Phone Number field is required',
+    cpf_required: 'The CPF field is required',
+    no_card: 'No Card',
     label:{
         redeem_coupon:"Redeem Coupon",
         hot_use_points:"How to Use Points?",
@@ -236,6 +248,8 @@ export default {
         whitch_are_your_favorite:"Which are your favorite categories?",
         who_do_you_ususlly:"Who do you usually buy clothes for?",
         whitch_are_your_styles:"Which are your favorite styles?",
+        complete_your_profile: 'Complete your profile for a more customized shopping experience.',
+        nickname:'Nickname'
     },
     measurements:{
         mea_info1: '"My Measurements" helps simplify the process of finding your perfect fit .Filling out "My Measurements" allows you to.',
@@ -481,5 +495,4 @@ export default {
         highlyReview: 'Shop the highly reviewed items',
         viewOrder: 'view order',
     },
-
 }

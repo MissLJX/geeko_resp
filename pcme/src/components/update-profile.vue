@@ -1,11 +1,11 @@
 <template>
     <div>
         <div class="_hd">
-            My Profile
+            {{$t("index.my_profile")}}
         </div>
 
         <div class="p-hd">
-            <strong>{{$t('updatepro')}}</strong> &nbsp;| &nbsp; Complete your profile for a more customized shopping experience.
+            <strong>{{$t('updatepro')}}</strong> &nbsp;| &nbsp; {{$t("index.complete_your_profile")}}
         </div>
         <div class="p-bd">
             <div class="imgarea">
@@ -33,7 +33,7 @@
             </div>
             <div class="namearea">
                 <div class="firstname">
-                    <label>Nickname:</label>
+                    <label>{{$t("index.nickname")}}:</label>
                     <input v-model="nickname"/>
                 </div>
 
