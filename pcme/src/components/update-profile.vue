@@ -288,6 +288,10 @@
                     height: 36px;
                     line-height: 36px;
                     cursor: pointer;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    width: 100%;
                 }
                 input{
                     opacity: 0;
