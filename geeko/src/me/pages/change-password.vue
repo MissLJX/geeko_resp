@@ -8,7 +8,7 @@
         <div class="el-change-body">
             <form ref="changeDom">
                 <div class="el-change-block">
-                    <label class="el-change-label">Current Password</label>
+                    <label class="el-change-label">{{$t('label.current_password')}}</label>
                     <p class="st-control el-change-control">
                         <input name="oldPassword" v-model="info.oldPassword" v-validate="'required'"
                                :class="{'st-input':true, 'st-input-danger':errors.has('oldPassword')}" type="text"/>
@@ -17,7 +17,7 @@
                 </div>
 
                 <div class="el-change-block">
-                    <label class="el-change-label">New Password</label>
+                    <label class="el-change-label">{{$t('label.new_password')}}</label>
                     <p class="st-control el-change-control">
                         <input name="password" v-model="info.newPassword" v-validate="{ required: true, min: 6, max:20 }"
                                :class="{'st-input':true, 'st-input-danger':errors.has('password')}" type="text"/>
@@ -27,12 +27,12 @@
 
 
                 <div class="el-change-block">
-                    <label class="el-change-label">Confirm Password</label>
+                    <label class="el-change-label">{{$t('label.confirm_pwd')}}</label>
                     <p class="st-control el-change-control">
                         <input name="confirmPassword"  v-validate="'required'" v-model="info.confirmPassword"
                                :class="{'st-input':true, 'st-input-danger':!confirmed || errors.has('confirmPassword')}" type="text"/>
                         <span v-show="errors.has('confirmPassword')" class="st-is-danger">{{errors.first('confirmPassword')}}</span>
-                        <span v-show="!confirmed" class="st-is-danger">Confirm Password must equals to the new password. </span>
+                        <span v-show="!confirmed" class="st-is-danger">{{$t('label.must_new_password')}}</span>
                     </p>
                 </div>
             </form>

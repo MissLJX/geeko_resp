@@ -143,7 +143,7 @@
                         this.reminderMessage = prompt.html;
                     }else{
                         this.$toast({
-                            content:"Update success!",
+                            content:`${_this.$t('label.update_success')}!`,
                             type:"success",
                             timer:2000,
                             style1:{

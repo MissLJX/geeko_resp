@@ -20,7 +20,7 @@
         </list>
         <div class="el-btn">
             <!-- <span class="c-clearAll" @click="clearAllHandle()">Remove all Invalid Items</span> -->
-            <span class="c-delete" @click="cancelSaveHandle()">Delete</span>
+            <span class="c-delete" @click="cancelSaveHandle()">{{$t('label.Delete')}}</span>
         </div>
     </div>
 </template>
@@ -153,6 +153,21 @@
         methods:{
             cancelSaveHandle(){
                 let _this = this;
+                // if(productIds && productIds.length <= 0){
+                //     _this.$store.dispatch('confirmShow', {
+                //         show: true,
+                //         cfg: {
+                //             btnFont:{
+                //                 yes:_this.$t('points_mall.points_confirm'),
+                //             },
+                //             message: _this.$t('label.must_select_product'),
+                //             yes: function () {
+                //                 _this.deleteHandle('1');
+                //                 _this.$store.dispatch('closeConfirm');
+                //             }
+                //         }
+                //     });
+                // }
                 _this.$store.dispatch('confirmShow', {
                     show: true,
                     cfg: {
@@ -187,7 +202,6 @@
                 this.clearAll = true;
             },
             deleteHandle(isDel){
-                console.log("isDel",isDel);
                 if(isDel === '1' && !this.clearAll){
                     let idArr = store.getters['me/save'];
                     let productIds = idArr.join(",");

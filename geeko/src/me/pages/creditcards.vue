@@ -2,7 +2,7 @@
     <div class="el-wallet-body">
         <page-header>{{$t('label.creditcard')}}</page-header>
         <card-list :creditcards="getAllCards" @delete="deleteHandle"></card-list>
-        <div style="text-align: center;line-height: 50px" v-if="!getAllCards">No Card.</div>
+        <div style="text-align: center;line-height: 50px" v-if="!getAllCards">{{$t('label.no_card')}}.</div>
     </div>
 </template>
 
@@ -28,7 +28,7 @@
             ]),
             getAllCards(){
                 let cardArr = [];
-                if(this.mercadocreditcards){
+                if(this.mercadocreditcards && this.mercadocreditcards.length > 0){
                     cardArr =  this.creditcards.concat(this.mercadocreditcards);
                 }else{
                     cardArr =  this.creditcards;

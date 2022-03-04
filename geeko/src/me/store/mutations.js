@@ -149,10 +149,10 @@ const mutations = {
         state.message = code
     },
     [types.Me_GET_CREDITCARDS](state,creditcards){
-        state.creditcards = creditcards
+        state.creditcards = !!creditcards ? creditcards : [];
     },
     [types.Me_GET_MERCADOCREDITCARDS](state,mercadocreditcards){
-        state.mercadocreditcards = mercadocreditcards
+        state.mercadocreditcards = !!mercadocreditcards ? mercadocreditcards : [];
     },
     [types.ME_DEL_CREDIT_CARD](state,id){
         state.id = id

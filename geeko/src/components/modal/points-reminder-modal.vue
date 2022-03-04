@@ -4,7 +4,7 @@
             <div class="container">
                 <div v-html="reminderMessage"></div>
 
-                <btn class="fill btn normal" style="font-family: 'AcuminPro-Bold';" @click.native="closeEvent">OK</btn>
+                <btn class="fill btn normal" style="font-family: 'AcuminPro-Bold';" @click.native="closeEvent">{{$t('label.ok')}}</btn>
             </div>
         </div>
         

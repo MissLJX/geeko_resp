@@ -106,7 +106,7 @@
                 this.$store.dispatch("globalLoadingShow",true);
                 this.$store.dispatch('me/confirmEmail', email).then((data)=>{
                     this.$store.dispatch("globalLoadingShow",false);
-                    _this.modalShow("A verification link has been sent to your email address, please check your mailbox.",true);
+                    _this.modalShow(_this.$t('label.checkmailbox'),true);
                 }).catch((e) => {
                     this.$store.dispatch("globalLoadingShow",false);
                     _this.modalShow(e.result,false);
@@ -118,7 +118,7 @@
                     show: true,
                     cfg: {
                         btnFont:{
-                            yes:"OK",
+                            yes:_this.$t('label.ok'),
                         },
                         message: message,
                         yes: function () {

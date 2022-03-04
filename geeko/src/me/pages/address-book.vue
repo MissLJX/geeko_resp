@@ -7,7 +7,7 @@
 
 
         <div class="sett-address-footer">
-            <div class="add-address"  @click="addAddressHandle">Add New Address</div>
+            <div class="add-address"  @click="addAddressHandle">{{$t('label.addNewAddress')}}</div>
         </div>
 
         <transition name="uper">

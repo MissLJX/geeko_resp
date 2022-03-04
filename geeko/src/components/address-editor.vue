@@ -16,7 +16,7 @@
                             <input name="name" v-model="shipping.name" v-validate="'required'"
                                    :class="{'st-input':true, 'st-input-danger':errors.has('name')}" type="text"
                                    :placeholder="$t('label.fullName') + ' *'"/>
-                            <span v-show="errors.has('name')" class="st-is-danger">{{errors.first('name')}}</span>
+                            <span v-show="errors.has('name')" class="st-is-danger">{{$t('label.name_required')}}</span>
                         </p>
                     </div>
 
@@ -27,7 +27,7 @@
                                    :class="{'st-input':true, 'st-input-danger':errors.has('streetAddress')}" type="text"
                                    :placeholder="$t('label.streetAddress')+' *'"/>
                             <span v-show="errors.has('streetAddress')"
-                                  class="st-is-danger">{{errors.first('streetAddress')}}</span>
+                                  class="st-is-danger">{{$t('label.address_required')}}</span>
                         </p>
                     </div>
 
@@ -61,10 +61,10 @@
 
                             <p class="st-control" v-if="hasStates">
                                 <select ref="state" class="st-select" v-model="stateSelected">
-                                    <option disabled value="-1">State *</option>
+                                    <option disabled value="-1">{{$t('label.state')}} *</option>
                                     <option v-for="s in states" :value="s.value">{{s.label}}</option>
                                 </select>
-                                <span v-show="stateSelected == '-1'" class="st-is-danger">Please select a state</span>
+                                <span v-show="stateSelected == '-1'" class="st-is-danger">{{$t('label.select_state')}}</span>
                             </p>
 
                             <p class="st-control" v-else>
@@ -79,7 +79,7 @@
                             <input name="city" v-model="shipping.city" v-validate="'required'"
                                    :class="{'st-input':true, 'st-input-danger':errors.has('city')}" type="text"
                                    :placeholder="$t('label.city')+' *'"/>
-                            <span v-show="errors.has('city')" class="st-is-danger">{{errors.first('city')}}</span>
+                            <span v-show="errors.has('city')" class="st-is-danger">{{$t('label.city_required')}}</span>
                         </p>
                     </div>
 
@@ -91,7 +91,7 @@
                                        :class="{'st-input':true, 'st-input-danger':errors.has('zipCode')}" type="text"
                                        :placeholder="$t('label.zipCode')+' *'"/>
                                 <span v-show="errors.has('zipCode')"
-                                      class="st-is-danger">{{errors.first('zipCode')}}</span>
+                                      class="st-is-danger">{{$t('label.zipcode_required')}}</span>
                             </p>
                         </div>
 
@@ -103,7 +103,7 @@
                                        type="text"
                                        :placeholder="$t('label.phoneNumber')+' *'"/>
                                 <span v-show="errors.has('phoneNumber')"
-                                      class="st-is-danger">{{errors.first('phoneNumber')}}</span>
+                                      class="st-is-danger">{{$t('label.phone_required')}}</span>
                             </p>
                         </div>
                     </div>

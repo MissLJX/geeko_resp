@@ -4,7 +4,7 @@
         <div class="el-address-btns st-table">
             <div class="st-cell">
                 <span class="__check st-v-m" @click.prevent="makeDefaultHandle" :class="{'active' : address.isDefaultAddress}"></span>
-                <span class="__default st-v-m">Default</span>
+                <span class="__default st-v-m">{{$t('label.default')}}</span>
             </div>
             <div class="st-cell st-t-r">
 
