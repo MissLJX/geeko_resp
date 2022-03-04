@@ -100,4 +100,5 @@ export default {
   statusWatingApply:'Wating for Apply',
   facebook_check: 'If you check this, we will send you logistics tracking status and order information in Messenger',
   return_the_oder: 'Return the Order',
+  popular_search: 'Popular Searches:Refund,Return,Shipping',
 }
