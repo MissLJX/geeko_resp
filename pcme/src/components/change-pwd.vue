@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="p-hd">
-            <strong>{{$t('changepwd')}}</strong> &nbsp;| &nbsp; if you want to change your password,you can edit it here.
+            <strong>{{$t('changepwd')}}</strong> &nbsp;| &nbsp; {{$t("if_change_pwd")}}
         </div>
         <div class="p-bd">
             <div class="curr-pwd">
@@ -19,7 +19,7 @@
                 <p><span>*</span>{{$t('newpwdatleast')}}</p>
             </div>
             <div class="confirm-pwd">
-                <strong>Confirm Password</strong>
+                <strong>{{$t("confirm_pwd")}}</strong>
                 <input name="confirmPassword"  v-validate="'required'" v-model="info.confirmPassword"
                        :class="{'st-input-danger':!confirmed || errors.has('confirmPassword')}" type="text"/>
                 <span v-show="errors.has('confirmPassword')" class="st-is-danger">{{errors.first('confirmPassword')}}</span>

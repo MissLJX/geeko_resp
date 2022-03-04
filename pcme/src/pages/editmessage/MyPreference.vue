@@ -26,7 +26,7 @@
         ></my-preference-item>
 
         <div class="footer-btn" @click="addPreference">
-            Save
+            {{$t("save")}}
         </div>
 
         <loading v-if="isLoadingShow"></loading>
