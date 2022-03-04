@@ -556,7 +556,7 @@ const SearchTipsBox = styled.div`
     }
 `
 const SearchBar1 = (props) => {
-    // console.log('searchbar:',props)
+    console.log(props)
     const [showClear, setShowClear] = useState(false);
     const [inputValue, setInputValue] = useState("");
     const [searchTips, setSearchTips] = useState([]);
@@ -625,7 +625,7 @@ const SearchBar1 = (props) => {
         <QuestionInputBox>
             <InputPositionBox>
                 <input id='textInput' type="text" 
-                       placeholder="Popular Searches:Refund,Return,Shipping" 
+                       placeholder={props.intl.formatMessage({id:'popular_search'})} 
                        onFocus={(e)=>{
                            setShowClear(true)
                         }
@@ -664,7 +664,7 @@ const SearchBar1 = (props) => {
         </QuestionInputBox>
     )
 }
-export const SearchBar = withRouter(SearchBar1)
+export const SearchBar = withRouter(injectIntl(SearchBar1))
 
 
 

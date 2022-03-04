@@ -173,6 +173,18 @@ export default {
     share_get:"JAA Jopa 50% ALENNUSTA, SAA 10 dollaria",  //google
     share_lucky:"Jaa onnen arvonta ystävillesi ja saat jopa 50% alennuksen yhdessä. Ja saat 10 dollaria, kun he tekevät ostoksen.",  //google
     required: 'Required',
+    address_placeholder: 'Street,Address,Company Name,C/O',
+    unit_placeholder: 'Apartment,Suite,Unite,Builting,Floor,etc(Optional)',
+    name_required: 'The Name field is required',
+    address_required: 'The Street Address field is required',
+    unit_required: 'The Unit field is required',
+    city_required: 'The City field is required',
+    country_required: 'The Country field is required',
+    state_required: 'The State / Province / Region field is required',
+    zipcode_required: 'The Zip Code / Postcode field is required',
+    phone_required: 'The Phone Number field is required',
+    cpf_required: 'The CPF field is required',
+    no_card: 'No Card',
     label:{
         redeem_coupon:"Redeem Coupon",
         hot_use_points:"How to Use Points?",
@@ -238,6 +250,8 @@ export default {
         whitch_are_your_favorite:"Which are your favorite categories?",
         who_do_you_ususlly:"Who do you usually buy clothes for?",
         whitch_are_your_styles:"Which are your favorite styles?",
+        complete_your_profile: 'Complete your profile for a more customized shopping experience.',
+        nickname:'Nickname'
     },
     measurements:{
         mea_info1: '"My Measurements" helps simplify the process of finding your perfect fit .Filling out "My Measurements" allows you to.',
