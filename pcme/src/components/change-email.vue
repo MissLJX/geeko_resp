@@ -1,23 +1,23 @@
 <template>
     <div>
-        <div class="p-hd">
-            <div class="p-l">
+        <div class="p-hd" style="display:flex;s">
+            <div class="p-l" style="white-space:nowrap;">
                 <strong>{{$t('regsiteremail')}}</strong>
             </div>
             <div class="p-l line">|</div>
             <div class="p-l tips">
-                1.Email verification is required to make this change,Please enter your new email address and check your inbox for the confirmation link.<br/><br/>
-                2.Confirm email address and <span>get 100 credits</span>.
+                {{$t('register_info_enter')}}<br/><br/>
+                {{$t('register_info_confirm')}} <span>{{$t('register_info_get')}}</span>.
             </div>
         </div>
         <div class="p-bd">
             <form @submit.prevent="changeAcountHandle">
                 <div class="curr-email">
-                    <strong>{{$t('curremail')}}</strong>
+                    <strong>{{$t('current_email_address')}}</strong>
                     <input type="text" :value="me.email" disabled class="i-disabled">
                 </div>
                 <div class="new-email">
-                    <strong>{{$t('newemail')}}</strong>
+                    <strong>{{$t('new_email_address')}}</strong>
                     <input name="email" v-validate="'required|email'" v-model="account.email"
                            :class="{'st-input':true, 'st-input-danger':errors.has('email')}" type="text"
                            :placeholder="$t('newemail')"/>
@@ -33,7 +33,7 @@
             </div>
             <div class="p-l line">|</div>
             <div class="p-l tips">
-                Here, you can set and change your contact email address, it's convenient for us to send a message to your contact.Email will not be publicly displayed.
+                {{$t('set_change_email')}}
             </div>
         </div>
         <div class="p-bd">
@@ -51,7 +51,7 @@
         <div class="mask" v-if="isAlert">
             <div class="confirm-con">
                 <p class="cancel-btn" @click="isAlert=false"><i class="iconfont">&#xe69a;</i></p>
-                <p><i class="iconfont">&#xe73c;</i>Please check your current email address inbox for an activation link.</p>
+                <p><i class="iconfont">&#xe73c;</i>{{$t("please_check_email")}}</p>
                 <div class="n-btn" @click="isAlert=false">{{$t('okay')}}</div>
             </div>
         </div>

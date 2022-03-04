@@ -15,7 +15,7 @@
                 </div>
                 <div class="points_btn_box">
                     <div class="points_btn" @click="closeMask">
-                        OK
+                        {{$t("ok")}}
                     </div>
                 </div>
             </div>

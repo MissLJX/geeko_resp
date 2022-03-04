@@ -2,8 +2,8 @@
 <template>
     <div>
         <div class="imghd">
-            <p>{{wannalistNum}} Products</p>
-            <p class="remove" @click="clearAllHandle()">Remove all Invalid Items</p>
+            <p>{{wannalistNum}} {{$t("")}}</p>
+            <p class="remove" @click="clearAllHandle()">{{$t("remove_all_invaild")}}</p>
         </div>
         <div class="imgCon">
             <ul>
