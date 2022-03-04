@@ -194,6 +194,7 @@ export default {
     if_change_pwd: 'Wenn Sie Ihr Passwort ändern möchten, können Sie es hier bearbeiten',
     confirm_pwd: 'Bestätige das Passwort',
     remove_all_invaild: 'Entfernen Sie alle ungültigen Elemente',
+    update_success: 'Erfolg aktualisieren',
     label:{
         redeem_coupon:"Coupon einl\u00f6sen",
         hot_use_points:"Wie werden Punkte verwendet?",
