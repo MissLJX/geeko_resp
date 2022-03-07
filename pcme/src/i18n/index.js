@@ -13,6 +13,13 @@ import NBMessage from './message_nb'
 import ISMessage from './message_is'
 import FIMessage from './message_fi'
 
+import VeeValidate from 'vee-validate'
+import validationMessagesEN from 'vee-validate/dist/locale/en';
+import validationMessagesDE from 'vee-validate/dist/locale/de';
+import validationMessagesFR from 'vee-validate/dist/locale/fr';
+import validationMessagesES from 'vee-validate/dist/locale/es';
+import validationMessagesPT from 'vee-validate/dist/locale/pt_BR';
+
 Vue.use(VueI18n)
 
 
@@ -42,12 +49,39 @@ const languages = [
     'fi'
 ]
 
+//  适配邮箱验证规则国际化 vee-validate
+const dictionary = {
+    en:validationMessagesEN,
+    de:validationMessagesDE,
+    fr:validationMessagesFR,
+    es:validationMessagesES,
+    pt:validationMessagesPT,
+    da:validationMessagesEN,
+    fi:validationMessagesEN,
+    sv:validationMessagesEN,
+    nb:validationMessagesEN,
+    is:validationMessagesEN
+};
 
 const getLang = lang => {
-    return lang? lang.split('_')[0]:'en'
+    return lang ? lang.split('_')[0]:'en'
 }
 
-export default new VueI18n({
-    locale: languages.find(language => language === getLang(window.locale)) || 'en', // set locale 
+const i18n = new VueI18n({
+    locale: languages.find(language => language === window.locale) || 'en', // set locale
     messages, // set locale messages
 })
+
+Vue.use(VeeValidate, {
+    i18nRootKey: 'validations', // customize the root path for validation messages.
+    i18n:i18n,
+    dictionary: dictionary
+ });
+
+export default i18n;
+
+
+// export default new VueI18n({
+//     locale: languages.find(language => language === getLang(window.locale)) || 'en', // set locale 
+//     messages, // set locale messages
+// })
