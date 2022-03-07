@@ -8,7 +8,7 @@ import i18n from './i18n'
 import router from './router'
 import App from './app.vue'
 import {sync} from 'vuex-router-sync'
-import VeeValidate from 'vee-validate'
+// import VeeValidate from 'vee-validate'
 
 import Loading from "./components/loading.vue"
 import Toast from "./components/toast/index"
@@ -23,7 +23,7 @@ Vue.prototype.GLOBAL = common
 import './css/style.scss'
 
 
-Vue.use(VeeValidate)
+// Vue.use(VeeValidate)
 
 // Vue.config.devtools = true
 

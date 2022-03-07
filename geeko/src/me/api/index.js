@@ -311,3 +311,7 @@ export const pointsCouponExchange = (id) => {
 export const getPointsGoShoppingId = () => {
     return axios.get('/message/get/M1586',{},{}).then(data=>data);
 }
+
+export const getShowRedeemCoupons = () =>{
+    return axios.get('/context/show-coupon-points-rule-list',{},{});
+}

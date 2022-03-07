@@ -103,7 +103,7 @@
         </div>
 
         <!-- redeemCoupon -->
-        <!-- <div class="_hd" style="padding-top:15px;">
+        <div class="_hd" style="padding-top:15px;">
             {{ $t("label.hot_use_points") }}
         </div>
 
@@ -119,18 +119,19 @@
                     </div>
                 </div>
             </a>
-        </div> -->
+        </div>
     </div>
 </template>
 
 <script>
-    import {getMessage} from "../api/index"
+    import { getMessage , getShowRedeemCoupons} from "../api/index"
 
     export default {
         data(){
             return{
                 selectValue:0,
-                discountMsg:null
+                discountMsg:null,
+                redeemCouponShow:false
             }
         },
         created:function(){
@@ -139,6 +140,10 @@
                     this.discountMsg = res.message;
                 }
             }))
+
+            getShowRedeemCoupons().then(data =>{
+                console.log(data);
+            });
         },
         mounted:function(){
             if(window.GeekoSensors){

@@ -86,6 +86,7 @@
         methods:{
             toChangeLanguage(value){
                 this.$i18n.locale = value;
+                // this.$validator.locale = value;
                 changeLocalLanguage(value);
                 this.languageLocale = value;
                 this.$emit('update:selectLanguageShow',false)
