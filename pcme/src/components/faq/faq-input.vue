@@ -40,7 +40,7 @@ export default {
         },
         placeHolder:{
             type:String,
-            default: 'Popular Searches:Refund,Return,Shipping'
+            // default: 'Popular Searches:Refund,Return,Shipping'
         }
     },
     data(){
@@ -49,6 +49,7 @@ export default {
         }
     },
     created() {
+        !this.placeHolder && (this.placeHolder = this.$t("support.popular_search"))
     },
     beforeDestroy(){
     },

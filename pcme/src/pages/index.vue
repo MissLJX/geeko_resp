@@ -54,7 +54,7 @@
                 this.$store.dispatch("setShowTip", true);
             },
             setTipContent(){
-                this.$store.dispatch("setTipContent", 'success');
+                this.$store.dispatch("setTipContent", this.$t("success"));
             },
             setTipType(){
                 this.$store.dispatch("setTipType", "points");

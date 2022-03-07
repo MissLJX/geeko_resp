@@ -176,10 +176,10 @@
         <div class="mask" v-if="isAlert">
             <div class="confirm-con cancel-con">
                 <p class="cancel-btn" @click="cancelOrder(0)"><i class="iconfont">&#xe69a;</i></p>
-                <p>Are you sure to cancel this order? After cancelling, it can not be recovered.</p>
-                <p data-v-f8505664="" style="margin-top: 10px; color: rgb(153, 153, 153);">"Please choose the reason for cancelling the order"</p>
+                <p>{{$t("sure_to_cancel_order")}}</p>
+                <p data-v-f8505664="" style="margin-top: 10px; color: rgb(153, 153, 153);">"{{$t("choose_reason")}}"</p>
                 <select v-model="selected" :class="{'redBorder':isRequired}" @change="isRequired=false">
-                    <option disabled="disabled" value="0">Please select a reason</option>
+                    <option disabled="disabled" value="0">{{$t("select_reason")}}</option>
                     <option v-if="cancelReasons" v-for="(optionValue,index) in cancelReasons" :value="optionValue.value">
                         {{index+1}}. {{optionValue.label}}
                     </option>
@@ -417,7 +417,7 @@
                             tipContent = res.prompt.html
                             this.$router.push({name:"orderConfirm", params:{tipContent: tipContent, id: this.orderdetail.id}});
                         } else {
-                            alert("Success!")
+                            alert(this.$t("success"))
                         }
                         this.isloding = false
                         _this.orderdetail.fulfillmentStatus = constant.TOTAL_STATUS_REVIEW;
@@ -442,7 +442,7 @@
                     this.isloding = true;
                     this.$store.dispatch('cancelOrder',{id:this.orderdetail.id,reason:this.selected}).then(()=>{
                         this.$store.dispatch('getOrder',this.orderdetail.id).then(()=>{
-                            alert("success")
+                            alert(this.$t("success"))
                         });
                         this.isloding = false
                     }).catch((e) => {

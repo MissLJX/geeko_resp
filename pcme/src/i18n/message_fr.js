@@ -107,9 +107,9 @@ export default {
     selectorder: 'Select Order',
     ticketid: 'Ticket ID',
     lastmsg: 'Dernier message',
-    created: 'Created',
-    status: 'Status',
-    submitticket: 'Submit A Ticket',
+    created: 'Créé',
+    status: 'Statut',
+    submitticket: 'Soumettre un ticket',
     updatepro: 'Mettre à jour le profil',
     uploadphoto: 'Télécharger une photo',
     firstName: 'Prénom',
@@ -131,7 +131,7 @@ export default {
     mywishlist: 'Listes de Favoris',
     logout: 'Déconnexion',
     shippinginfo: 'Informations d\'Expédition',
-    orderinfo: 'Order Information',
+    orderinfo: 'Informations sur la commande',
     price: 'Prix',
     shipping: 'Livraison Gratuite',
     share: 'Partager',
@@ -195,6 +195,12 @@ export default {
     confirm_pwd: 'Confirmez le mot de passe',
     remove_all_invaild: 'Supprimer tous les éléments non valides',
     update_success: 'Mise à jour réussie',
+    success: 'Succès',
+    view_detail: 'Voir les détails',
+    sure_to_cancel_order : 'Êtes-vous sûr d\'annuler cette commande ? Après l\'annulation, il ne peut pas être récupéré.',
+    choose_reason: 'Veuillez choisir la raison de l\'annulation de la commande',
+    select_reason: 'Veuillez sélectionner une raison',
+
     label:{
         redeem_coupon:"Utilisez le coupon",
         hot_use_points:"Comment utiliser les points?",
@@ -444,6 +450,8 @@ export default {
         s_product: 'Produit & Stock',
         s_payment: 'Paiement & Promos',
         s_account: 'Problèmes de compte',
+        popular_search: 'Recherches populaires : Remboursement, Retour, Expédition',
+
         // FAQ
         s_help_you: "Comment puis-je vous aider ?",
         // faq-index

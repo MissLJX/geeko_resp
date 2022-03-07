@@ -55,7 +55,7 @@ export default {
             searchList: [],
             groupQuestions: [],
             groupSelectQuestions: [],
-            questionType: 'order',
+            questionType: 'root-1',
             questionsOfType:[],
             questionContent: {},
             buttonList:[
@@ -63,51 +63,53 @@ export default {
                     imgUrl: "&#xe6ee;",
                     txt: this.$t("support.s_order"),
                     to: `${(window.ctx || '')}/support/faq`,
-                    content:"order",
+                    content: 'root-2',
                     type:""
                 },
                 {
                     imgUrl: "&#xe6f1;",
                     txt: this.$t("support.s_logistics"),
                     to: `${(window.ctx || '')}/support/faq`,
-                    content:"delivery",
+                    content:'root-5',
                     type:""
                 },
                 {
                     imgUrl: "&#xe6ed;",
                     txt: this.$t("support.s_return"),
                     to:`${(window.ctx || '')}/support/faq`,
-                    content:"return",
+                    content:'root-6',
                     type:""
                 },
                 {
                     imgUrl: "&#xe6ec;",
                     txt:this.$t("support.s_product"),
                     to: `${(window.ctx || '')}/support/faq`,
-                    content:"products",
+                    content:'root-4',
                     type:""
                 },
                 {
                     imgUrl: "&#xe6ef;",
                     txt: this.$t("support.s_payment"), 
                     to: `${(window.ctx || '')}/support/faq`,
-                    content:"payment",
+                    content:'root-3',
                     type:""
                 },
                 {
                     imgUrl: "&#xe6f2;",
                     txt: this.$t("support.s_account"),
                     to: `${(window.ctx || '')}/support/faq`,
-                    content:"account",
+                    content:'root-1',
                     type:""
                 },
             ],
         }
     },
     mounted(){
+        // console.log(this.questions, this.questionType)
+        // this.changeType(this.$t("support.s_order_type"))
         // console.log(this.$router.currentRoute.query.type)
         let type = this.$router.currentRoute.query.type ?
-                   this.$router.currentRoute.query.type :'order';
+                   this.$router.currentRoute.query.type : "root-2";
 
         if(this.questions.length > 0){
             let list = [];
@@ -118,7 +120,6 @@ export default {
                 }
             }
             this.searchList = list
-            // console.log(this.groupQuestions)
             this.changeType(type)
         }
     },
@@ -137,7 +138,7 @@ export default {
         changeType(e){
             // console.log(e)
             this.questionType = e
-            this.groupSelectQuestions = this.groupQuestions.find(q => q.title.toLowerCase() == e)?.questions || []
+            this.groupSelectQuestions = this.groupQuestions.find(q => q.id.toLowerCase() == e)?.questions || []
         },
         relatedSearch(e){
             // console.log("F: ",e)

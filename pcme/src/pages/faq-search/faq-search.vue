@@ -59,7 +59,7 @@ export default {
             searchList: [],
             groupQuestions: [],
             groupSelectQuestions: [],
-            questionType: 'order',
+            questionType: 'root-2',
             questionsOfType:[],
         }
     },
@@ -68,7 +68,7 @@ export default {
         
     },
     mounted(){
-        // console.log(this.$router.currentRoute.query.search)
+        console.log(this.questions)
         if(JSON.stringify(this.$router.currentRoute.query) != '{}' && this.$router.currentRoute.query){
             this.searchValue = this.$router.currentRoute.query.search
             this.searchValueFromUrl = this.$router.currentRoute.query.search

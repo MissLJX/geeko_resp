@@ -107,9 +107,9 @@ export default {
     selectorder:'Select Order',
     ticketid:'Ticket ID',
     lastmsg:'Última mensagem',
-    created:'Created',
+    created:'Criado',
     status:'Status',
-    submitticket:'Submit A Ticket',
+    submitticket:'Enviar um bilhete',
     updatepro:'ATUALIZAR perfil',
     uploadphoto:'Carregar foto',
     firstName: 'Primeiro nome',
@@ -131,7 +131,7 @@ export default {
     mywishlist:'Minha Lista de Desejos',
     logout:'Sair da Conta',
     shippinginfo:'Informações de entrega',
-    orderinfo:'Order Information',
+    orderinfo:'Informações do pedido',
     price:'Preço',
     shipping:'Envio',
     share:'Partilhar',
@@ -197,6 +197,12 @@ export default {
     confirm_pwd: 'Confirme a Senha',
     remove_all_invaild: 'Remover todos os itens inválidos',
     update_success: 'Erfolg aktualisieren',
+    success: 'Sucesso',
+    view_detail: 'Ver detalhes',
+    sure_to_cancel_order: 'Tem certeza de que deseja cancelar este pedido? Após o cancelamento, não pode ser recuperado.',
+    choose_reason: 'Por favor, escolha o motivo do cancelamento do pedido',
+    select_reason: 'Por favor, selecione um motivo',
+
     label:{
         redeem_coupon:"Use um cupom",
         hot_use_points:"Como usar os pontos?",
@@ -446,6 +452,8 @@ export default {
         s_product: 'Produto e estoque',
         s_payment: 'Payment & Promos',
         s_account: 'Problemas de conta',
+        popular_search: 'Pesquisas populares: Reembolso, Devolução, Envio',
+
         // Perguntas frequentes
         s_help_you: 'Como posso ajudá-lo?',
         // faq-index

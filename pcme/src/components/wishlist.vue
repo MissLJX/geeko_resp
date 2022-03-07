@@ -2,7 +2,7 @@
 <template>
     <div>
         <div class="imghd">
-            <p>{{wannalistNum}} {{$t("")}}</p>
+            <p>{{wannalistNum}} {{$t("points")}}</p>
             <p class="remove" @click="clearAllHandle()">{{$t("remove_all_invaild")}}</p>
         </div>
         <div class="imgCon">

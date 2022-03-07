@@ -198,6 +198,12 @@ export default {
     confirm_pwd: 'Confirm Password',
     remove_all_invaild: 'Remove all Invalid Items',
     update_success: 'Update Success',
+    success: 'Success',
+    view_detail: 'View Detail',
+    sure_to_cancel_order: 'Are you sure to cancel this order? After cancelling, it can not be recovered.',
+    choose_reason: 'Please choose the reason for cancelling the order',
+    select_reason: 'Please select a reason',
+
     label:{
         redeem_coupon:"Redeem Coupon",
         hot_use_points:"How to Use Points?",
@@ -447,6 +453,8 @@ export default {
         s_product: 'Product & Stock',
         s_payment: 'Payment & Promos',
         s_account: 'Account Issues',
+        popular_search: 'Popular Searches:Refund,Return,Shipping',
+
         // faq
         s_help_you: 'How Can I Help You?',
         // faq-index

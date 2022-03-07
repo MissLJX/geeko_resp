@@ -271,7 +271,7 @@
                                 tipContent = res.prompt.html
                                 this.$router.push({name:'reviewConfirm', params:{tipContent: tipContent}})
                             } else {
-                                alert("Success!");
+                                alert(this.$t("success")+"!");
                                 this.$router.go(-1);
                             }
                             

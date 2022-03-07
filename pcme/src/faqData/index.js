@@ -29,7 +29,12 @@ const messages = {
   pt: PtData,
   de: DeData,
   es: EsData,
-  fr: FrData
+  fr: FrData,
+  'sv': Data,
+  'da': Data,
+  'nb': Data,
+  'is': Data,
+  'fi': Data
 }
 
 const languages = [
@@ -37,13 +42,18 @@ const languages = [
   'de',
   'es',
   'fr',
-  'pt'
+  'pt',
+  'sv',
+  'da',
+  'nb',
+  'is',
+  'fi'
 ]
 // window.lang = 'en'
-const localelang = (window.lang || 'en').substring(0, 2)
+const localelang = (window.locale || 'en').substring(0, 2)
 
 const lang = languages.find(l => l == localelang)
-
+console.log(lang)
 const {questions, secondaries} = messages[lang] || messages['en']
-
+console.log( {questions, secondaries})
 export {questions, secondaries}

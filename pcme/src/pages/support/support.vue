@@ -54,42 +54,42 @@ export default {
                 imgUrl: "&#xe6ee;",
                 txt: this.$t("support.s_order"),
                 to: `${(window.ctx || '')}/support/faq`,
-                content:"order",
+                content:"root-2",
                 type:""
             },
             {
                 imgUrl: "&#xe6f1;",
                 txt: this.$t("support.s_logistics"),
                 to: `${(window.ctx || '')}/support/faq`,
-                content:"delivery",
+                content:"root-5",
                 type:""
             },
             {
                 imgUrl: "&#xe6ed;",
                 txt: this.$t("support.s_return"),
                 to:`${(window.ctx || '')}/support/faq`,
-                content:"return",
+                content:"root-6",
                 type:""
             },
             {
                 imgUrl: "&#xe6ec;",
                 txt:this.$t("support.s_product"),
                 to: `${(window.ctx || '')}/support/faq`,
-                content:"products",
+                content:"root-4",
                 type:""
             },
             {
                 imgUrl: "&#xe6ef;",
                 txt: this.$t("support.s_payment"), 
                 to: `${(window.ctx || '')}/support/faq`,
-                content:"payment",
+                content:"root-3",
                 type:""
             },
             {
                 imgUrl: "&#xe6f2;",
                 txt: this.$t("support.s_account"),
                 to: `${(window.ctx || '')}/support/faq`,
-                content:"account",
+                content:"root-1",
                 type:""
             },
         ],

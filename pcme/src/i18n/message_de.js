@@ -97,7 +97,7 @@ export default {
     item:'Gegenstand',
     total:'Summe',
     orderstatus:'Bestellstatus',
-    action:'Action',
+    action:'Aktion',
     shippingfrom:'Shipping From',
     overseas:'Übersee-Lager',
     contactseller:'Verkäufer kontaktieren',
@@ -107,7 +107,7 @@ export default {
     selectorder:'Select Order',
     ticketid:'Ticket ID',
     lastmsg:'Letzte Nachricht',
-    created:'Created',
+    created:'Erstellt',
     status:'Status',
     submitticket:'Ein Ticket erstellen',
     updatepro:'Profil Update',
@@ -131,7 +131,7 @@ export default {
     mywishlist:'Meine Wunschlisten',
     logout:'Ausloggen',
     shippinginfo:'Versandinformationen',
-    orderinfo:'Order Information',
+    orderinfo:'Bestellinformationen',
     price:'Preis',
     shipping:'Lieferung',
     share:'Teilen',
@@ -195,6 +195,12 @@ export default {
     confirm_pwd: 'Bestätige das Passwort',
     remove_all_invaild: 'Entfernen Sie alle ungültigen Elemente',
     update_success: 'Erfolg aktualisieren',
+    success: 'Erfolg',
+    view_detail: 'Im Detail sehen',
+    sure_to_cancel_order: 'Sind Sie sicher, dass Sie diese Bestellung stornieren möchten? Nach dem Abbrechen kann es nicht wiederhergestellt werden.',
+    choose_reason: 'Bitte wählen Sie den Grund für die Stornierung der Bestellung',
+    select_reason: 'Bitte wählen Sie einen Grund aus',
+
     label:{
         redeem_coupon:"Coupon einl\u00f6sen",
         hot_use_points:"Wie werden Punkte verwendet?",
@@ -444,6 +450,7 @@ export default {
         s_product: 'Produkt & Lager',
         s_payment: 'Zahlung & Promos',
         s_account: 'Kontoprobleme',
+        popular_search: 'Beliebte Suchanfragen:Rückerstattung,Rückgabe,Versand',
         // FAQ
         s_help_you: 'Wie kann ich Ihnen helfen?',
         // FAQ-Index
