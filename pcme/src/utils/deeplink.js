@@ -22,7 +22,7 @@ export default {
                     _url = '/me/m/order/detail/' + deepLink.params[0]
                     break
                 case 9:
-                    _url = '/me/m/order/ticket/' + deepLink.params[0]
+                    _url = '/me/m/faq/support-ticket/' + deepLink.params[0]
                     break
                 case 10:
                     _url = '/i/lottery'
