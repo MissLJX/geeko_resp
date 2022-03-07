@@ -124,6 +124,8 @@ export default {
         new_password:"New Password",
         must_new_password:"Confirm Password must equals to the new password.",
         must_select_product:"Please select at least one product",
+        my_preference_error_message:"My preferences can't all be empty",
+        my_measurements_error_message:"My MeasureMents can't all be empty",
     },
     point:{
         my_points:"My Points",

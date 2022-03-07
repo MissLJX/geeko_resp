@@ -123,6 +123,8 @@ export default {
         new_password:"Neues Passwort",
         must_new_password:"Confirm Password muss gleich dem neuen Passwort sein.",
         must_select_product:"Bitte wählen Sie mindestens ein Produkt aus",
+        my_preference_error_message:"Meine Einstellungen dürfen nicht alle leer sein",
+        my_measurements_error_message:"Meine Messungen dürfen nicht alle leer sein",
     },
     point:{
         my_points:"Meine Punkte",

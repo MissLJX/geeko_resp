@@ -113,7 +113,7 @@
                             btnFont:{
                                 yes:"OK",
                             },
-                            message: "My preferences can't all be empty",
+                            message: _this.$t('label.my_preference_error_message'),
                             yes: function () {
                                 _this.$store.dispatch('closeConfirm');
                             }

@@ -26,7 +26,7 @@
                     </span>
 
                     <div class="suspend-container" v-if="suspendShow && suspendSumShow">
-                        <div class="find-similar" @click.prevent="findSimlar(product.id)">
+                        <div class="find-similar global-overflow" @click.prevent="findSimlar(product.id)">
                             {{$t('label.find_similar')}}
                         </div>
 

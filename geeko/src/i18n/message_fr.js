@@ -123,6 +123,8 @@ export default {
         new_password:"Nouveau mot de passe",
         must_new_password:"Confirmer le mot de passe doit être égal au nouveau mot de passe.",
         must_select_product:"Veuillez sélectionner au moins un produit",
+        my_preference_error_message:"Mes préférences ne peuvent pas toutes être vides",
+        my_measurements_error_message:"Mes mesures ne peuvent pas toutes être vides",
     },
     point:{
         my_points:"Mes points",

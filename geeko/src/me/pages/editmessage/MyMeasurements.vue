@@ -423,7 +423,7 @@
                             btnFont:{
                                 yes:"OK",
                             },
-                            message: "My MeasureMents can't all be empty",
+                            message: _this.$t('label.my_measurements_error_message'),
                             yes: function () {
                                 _this.$store.dispatch('closeConfirm');
                             }

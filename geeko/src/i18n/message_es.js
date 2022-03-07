@@ -123,7 +123,10 @@ export default {
         new_password:"Nueva Contraseña",
         must_new_password:"Confirmar contraseña debe ser igual a la nueva contraseña.",
         must_select_product:"Seleccione al menos un producto",
+        my_preference_error_message:"Mis preferencias no pueden estar todas vacías",
+        my_measurements_error_message:"Mis medidas no pueden estar todas vacías",
     },
+    
     point:{
         my_points:"Mis puntos",
         points_expired_soon:"Puntos que vencen pronto",
