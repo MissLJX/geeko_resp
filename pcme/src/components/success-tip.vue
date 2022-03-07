@@ -30,7 +30,7 @@ export default {
     props:{
         content: {
             type: String,
-            default: this.$t("update_success")+'!'
+            
         },
         type: {
             type: String,
@@ -48,6 +48,7 @@ export default {
                 this.closeMask();
             },2000)
         }
+        !this.content && (this.content = this.$t("update_success")+'!')
     },
     methods:{
         toPointsPolicy(){

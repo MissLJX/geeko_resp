@@ -9,7 +9,7 @@
                     <input name="name" v-model="shipping.name" v-validate="'required'"
                            :class="{'st-input':true, 'st-input-danger':errors.has('name')}" type="text"
                     />
-                    <span v-show="errors.has('name')" class="st-is-danger">{{$t("name_required")}}</span>
+                    <span v-show="errors.has('name')" class="st-is-danger">{{errors.first("name")}}</span>
                 </div>
             </div>
             <div class="input-con required">
@@ -20,7 +20,7 @@
                            :placeholder="$t('address_placeholder')"
                     />
                     <span v-show="errors.has('streetAddress')"
-                          class="st-is-danger">{{$t("address_required")}}</span>
+                          class="st-is-danger">{{errors.first("streetAddress")}}</span>
                 </div>
             </div>
             <div class="input-con">
@@ -37,7 +37,7 @@
                     <input name="city" v-model="shipping.city" v-validate="'required'"
                            :class="{'st-input':true, 'st-input-danger':errors.has('city')}" type="text"
                            />
-                    <span v-show="errors.has('city')" class="st-is-danger">{{$t("city_required")}}</span>
+                    <span v-show="errors.has('city')" class="st-is-danger">{{errors.first("city")}}</span>
                 </div>
             </div>
             <div class="clearBoth">
@@ -78,7 +78,7 @@
                                :class="{'st-input':true, 'st-input-danger':errors.has('zipCode')}" type="text"
                         />
                         <span v-show="errors.has('zipCode')"
-                              class="st-is-danger">{{$t("zipcode_required")}}</span>
+                              class="st-is-danger">{{errors.first("zipCode")}}</span>
                     </div>
                 </div>
                 <div class="input-con required w-left">
@@ -91,7 +91,7 @@
                                type="text"
                                />
                         <span v-show="errors.has('phoneNumber')"
-                              class="st-is-danger">{{$t("phone_required")}}</span>
+                              class="st-is-danger">{{errors.first("phoneNumber")}}</span>
                     </div>
                 </div>
             </div>
@@ -102,7 +102,7 @@
                     <input name="CPF" v-model="shipping.cpf" v-validate="cpfValidate"
                            :class="{'st-input':true, 'st-input-dang() => {this.ifshowCPFtip = true}er':errors.has('CPF')}" type="text"
                     />
-                    <span v-show="errors.has('CPF')" class="st-is-danger">{{$t("cpf_required")}}</span>
+                    <span v-show="errors.has('CPF')" class="st-is-danger">{{errors.first("CPF")}}</span>
                 </div>
             </div>
             <div class="clearBoth">
