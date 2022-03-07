@@ -355,3 +355,8 @@ export const getPointsCouponList = () => {
 export const pointsCouponExchange = (id) => {
     return axios.post('/points-exchange-coupon/exchange',qs.stringify({id:id}),{}).then(data => data)
 }
+
+// 积分兑换优惠券通过后台系统参数 0336-w 是否显示
+export const getShowRedeemCoupons = () =>{
+    return axios.get('/context/show-coupon-points-rule-list',{},{});
+}

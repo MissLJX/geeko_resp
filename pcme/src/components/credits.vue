@@ -163,7 +163,7 @@
         </div>
 
         <!-- redeemCoupon -->
-        <!-- <div class="get-method">
+        <div class="get-method" v-if="redeemCouponShow">
             <div class="c-hd">{{ $t("label.hot_use_points") }}</div>
             <div class="_bd">
                 <a @click="()=>routTo({path:`${GLOBAL.getUrl('/me/m/redeem-coupon')}`, type:'RedeemCoupon'})">
@@ -178,7 +178,7 @@
                     </div>
                 </a>
             </div>
-        </div> -->
+        </div>
 
 
         <loding v-if="isLoadingShow"></loding>
@@ -225,7 +225,7 @@
     import loding from './loding.vue'
 
     import CountDowns from "./countdowns.vue"
-    import {getMessage, getSurveyQuestions} from '../api/index.js';
+    import {getMessage, getSurveyQuestions , getShowRedeemCoupons} from '../api/index.js';
 
     export default {
         computed: {
@@ -275,6 +275,7 @@
                 moreWayList: [],
                 earnMaskContent:'',
                 pointsExchange: '',
+                redeemCouponShow:false
             }
         },
         methods: {
@@ -386,6 +387,13 @@
             });
 
             !(this.dobulePoints && this.dobulePoints.points) && this.$store.dispatch("getDobulePointsData","M1578");
+
+            getShowRedeemCoupons().then(data =>{
+                console.log(data);
+                if(data && !!data.result){
+                    this.redeemCouponShow = data.result;
+                }
+            });
         },
         mounted(){
             if(window.GeekoSensors){

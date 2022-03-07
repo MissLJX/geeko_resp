@@ -91,12 +91,12 @@ const routes = [
                 name:"coupons",
                 meta: {title:'My Coupons'},
             },
-            // {
-            //     path:"redeem-coupon",
-            //     component:() =>import("../pages/redeem-coupons.vue"),
-            //     name:"redeem-coupon",
-            //     meta:{title:"Redeem Coupon"}
-            // },
+            {
+                path:"redeem-coupon",
+                component:() =>import("../pages/redeem-coupons.vue"),
+                name:"redeem-coupon",
+                meta:{title:"Redeem Coupon"}
+            },
             {
                 path:'credits',
                 // name:"credits",

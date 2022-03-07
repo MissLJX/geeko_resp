@@ -68,7 +68,7 @@ const getLang = lang => {
 }
 
 const i18n = new VueI18n({
-    locale: languages.find(language => language === window.locale) || 'en', // set locale
+    locale: languages.find(language => language === getLang(window.locale)) || 'en', // set locale
     messages, // set locale messages
 })
 

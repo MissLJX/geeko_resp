@@ -3,10 +3,10 @@
         <div class="couponsTitle">{{$t("mycoupons")}}</div>
 
         <!-- redeemCoupon -->
-        <!-- <router-link class="redeem-coupon-message" :to="{name:'redeem-coupon'}">
+        <router-link class="redeem-coupon-message" :to="{name:'redeem-coupon'}" v-if="redeemCouponShow">
             <span class="iconfont">&#xe6ca;</span>
             <span class="_font">{{ $t("label.use_points_redeem_coupon") }} ></span>
-        </router-link> -->
+        </router-link>
 
         <div v-show="coupons && coupons.length <= 0" class="el-list-loading"><i class="iconfont">&#xe69f;</i></div>
         <div class="coupon" v-for="item in coupons" :key="item.coupon.id">
@@ -55,18 +55,28 @@
     import {mapGetters} from 'vuex';
     // import * as utils from '../utils/geekoutil';
     import fecha from 'fecha'
+    import { getShowRedeemCoupons} from '../api/index.js';
 
     export default {
+        data(){
+            return {
+                redeemCouponShow:false
+            }
+        },
         computed: {
             ...mapGetters([
                 'coupons'
             ]),
-            
-            
         },
         created(){
             this.$store.dispatch('getCoupons');
             // console.log(this.coupons)
+            getShowRedeemCoupons().then(data =>{
+                console.log(data);
+                if(data && !!data.result){
+                    this.redeemCouponShow = data.result;
+                }
+            });
         },
         methods:{
             useHandle(id){

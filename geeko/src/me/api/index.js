@@ -312,6 +312,7 @@ export const getPointsGoShoppingId = () => {
     return axios.get('/message/get/M1586',{},{}).then(data=>data);
 }
 
+// 积分兑换优惠券通过后台系统参数 0336-w 是否显示
 export const getShowRedeemCoupons = () =>{
     return axios.get('/context/show-coupon-points-rule-list',{},{});
 }
