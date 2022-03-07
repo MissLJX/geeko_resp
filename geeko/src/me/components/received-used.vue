@@ -103,23 +103,25 @@
         </div>
 
         <!-- redeemCoupon -->
-        <div class="_hd" style="padding-top:15px;">
-            {{ $t("label.hot_use_points") }}
-        </div>
+        <template v-if="redeemCouponShow">
+            <div class="_hd" style="padding-top:15px;">
+                {{ $t("label.hot_use_points") }}
+            </div>
 
-        <div class="_bd">
-            <a @click="recordEventSkip(true,'/me/m/redeem-coupon','Redeem Coupon',$event)">
-                <div class="redeem-coupon">
-                    <div>
-                        <span class="iconContainer"></span>
+            <div class="_bd">
+                <a @click="recordEventSkip(true,'/me/m/redeem-coupon','Redeem Coupon',$event)">
+                    <div class="redeem-coupon">
+                        <div>
+                            <span class="iconContainer"></span>
+                        </div>
+                        <div class="_font">
+                            <p>{{ $t("label.redeem_coupon") }}</p>
+                            <p style="opacity: 0;"></p>
+                        </div>
                     </div>
-                    <div class="_font">
-                        <p>{{ $t("label.redeem_coupon") }}</p>
-                        <p style="opacity: 0;"></p>
-                    </div>
-                </div>
-            </a>
-        </div>
+                </a>
+            </div>
+        </template>
     </div>
 </template>
 
@@ -143,6 +145,9 @@
 
             getShowRedeemCoupons().then(data =>{
                 console.log(data);
+                if(data && !!data.result){
+                    this.redeemCouponShow = data.result;
+                }
             });
         },
         mounted:function(){

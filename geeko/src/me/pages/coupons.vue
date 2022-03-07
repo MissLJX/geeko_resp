@@ -10,7 +10,7 @@
         </div>
 
         <!-- redeemCoupon 84  正常 50-->
-        <div style="padding-top:84px;background-color: #f6f6f6;">
+        <div style="background-color: #f6f6f6;" :style="`padding-top:${redeemCouponShow?'84px':'50px'}`">
             <coupon-list :loading="loading" :finished="finished" :coupons="coupons" :isRedeem="false"></coupon-list>
         </div>
     </div>
@@ -28,6 +28,7 @@
     import { mapGetters } from "vuex";
     import store from "../../store/index.js";
     import Swiper from "../../components/swiper/swiper.vue"
+    import { getShowRedeemCoupons } from "../api/index"
 
 
     export default{
@@ -36,7 +37,8 @@
             return {
                 loading:false,
                 finished:false,
-                swiperData:[]
+                swiperData:[],
+                redeemCouponShow:false
             }
         },
         components: {
@@ -59,18 +61,24 @@
                 })
             }
 
-            // <!-- redeemCoupon -->
-            let obj = {
-                id:'100',
-                icon:"&#xe6ca;",
-                icon2:"&#xe694;",
-                message:this.$t("label.use_points_redeem_coupon"),
-                isClick:false,
-                clickFunction:() =>{
-                    this.$router.push(this.GLOBAL.getUrl("/me/m/redeem-coupon"));
+            getShowRedeemCoupons().then(data =>{
+                if(data && !!data.result){
+                    this.redeemCouponShow = data.result;
+
+                    // <!-- redeemCoupon -->
+                    let obj = {
+                        id:'100',
+                        icon:"&#xe6ca;",
+                        icon2:"&#xe694;",
+                        message:this.$t("label.use_points_redeem_coupon"),
+                        isClick:false,
+                        clickFunction:() =>{
+                            this.$router.push(this.GLOBAL.getUrl("/me/m/redeem-coupon"));
+                        }
+                    };
+                    this.swiperData.push(obj);
                 }
-            };
-            this.swiperData.push(obj);
+            });
         },
     }
 </script>
