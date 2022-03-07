@@ -95,7 +95,7 @@
                 let _this = this;
 
                 if(this.myPreference.favoriteCategories.length <= 0 && this.myPreference.usuallyBuyClothesFor.length <= 0 && this.myPreference.favoriteStyles.length <= 0){
-                    alert("My preferences can't all be empty");
+                    alert(_this.$t('label.my_preference_error_message'));
                     return;
                 }
 

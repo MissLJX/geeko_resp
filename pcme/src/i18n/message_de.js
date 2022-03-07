@@ -210,6 +210,8 @@ export default {
         points_check_redeem_text:'M\u00f6chten Sie diesen Coupon mit {points} Punkten einl\u00f6sen?',
         points_not_enough_text:'Sie haben nicht genügend Punkte, um diesen Coupon einzul\u00f6sen.',
         points_redeem_success:'Einl\u00f6sung erfolgreich!',
+        my_preference_error_message:"Meine Einstellungen dürfen nicht alle leer sein",
+        my_measurements_error_message:"Meine Messungen dürfen nicht alle leer sein",
     },
     point:{
         my_points:"Meine Punkte",

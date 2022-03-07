@@ -210,6 +210,8 @@ export default {
         points_check_redeem_text: '¿Quieres usar {points} puntos para canjear este cupón?',
         points_not_enough_text: 'No tienes suficientes puntos para canjear este cupón.',
         points_redeem_success: '¡Redención exitosa!',
+        my_preference_error_message:"Mis preferencias no pueden estar todas vacías",
+        my_measurements_error_message:"Mis medidas no pueden estar todas vacías",
     },
     point:{
         my_points:"Mis puntos",

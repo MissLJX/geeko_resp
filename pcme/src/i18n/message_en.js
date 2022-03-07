@@ -211,6 +211,8 @@ export default {
         points_check_redeem_text:'Do you want to use {points} points to redeem this coupon?',
         points_not_enough_text:'You do not have enough points to redeem this coupon.',
         points_redeem_success:'Redemption successful!',
+        my_preference_error_message:"My preferences can't all be empty",
+        my_measurements_error_message:"My MeasureMents can't all be empty",
     },
     point:{
         my_points:"My Points",

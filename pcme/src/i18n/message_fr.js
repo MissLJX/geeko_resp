@@ -210,6 +210,8 @@ export default {
         points_check_redeem_text:'Voulez-vous utiliser {points} points pour \u00e9changer ce coupon ?',
         points_not_enough_text:"Vous n'avez pas assez de points pour utiliser ce coupon.",
         points_redeem_success:'\u00e9change r\u00e9ussi !',
+        my_preference_error_message:"Mes préférences ne peuvent pas toutes être vides",
+        my_measurements_error_message:"Mes mesures ne peuvent pas toutes être vides",
     },
     point: {
         my_points: "Mes points",

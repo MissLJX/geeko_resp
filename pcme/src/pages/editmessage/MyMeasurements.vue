@@ -464,7 +464,7 @@
                 // return;
 
                 if(Object.keys(this.submitData).length <= 0){
-                    alert("My MeasureMents can't all be empty");
+                    alert(this.$t('label.my_measurements_error_message'));
                     this.isLoadingShow = false;
                     return;
                 }

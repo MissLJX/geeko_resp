@@ -212,6 +212,8 @@ export default {
         points_check_redeem_text: 'Deseja usar {points} pontos para resgatar este cupom?',
         points_not_enough_text: 'Você não tem pontos suficientes para resgatar este cupom.',
         points_redeem_success: 'Resgate bem-sucedido!',
+        my_preference_error_message:"Minhas preferências não podem estar todas vazias",
+        my_measurements_error_message:"Minhas Medidas não podem estar todas vazias",
     },
     point:{
         my_points:"Meus pontos",
