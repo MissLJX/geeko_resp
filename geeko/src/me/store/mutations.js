@@ -5,7 +5,7 @@ import _ from 'lodash'
 const mutations = {
     [types.ME_GET](state, _me){
         state.me = _me
-        state.headerImage = utils.IMAGE_PREFIX + '/icon/' + _me.id
+        state.headerImage = `https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/icon/${_me.id}?icon=${Date.now()}`;
     },
     [types.ME_GET_NO_LOGIN](state,flag){
         state.isLogin = flag;
