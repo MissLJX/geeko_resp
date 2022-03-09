@@ -387,13 +387,15 @@
             }
         },
         created:async function(){
-            store.dispatch('me/countNotifications');
-
-            store.dispatch('me/getOrderCountUnpaid');
-
-            store.dispatch('me/getHasNoCommentOrder')
-
             // store.dispatch("me/getShoppingCartNum");
+            if(this.isLogin){
+                store.dispatch('me/countNotifications');
+
+                store.dispatch('me/getOrderCountUnpaid');
+
+                store.dispatch('me/getHasNoCommentOrder')
+            }
+
             if(!this.isLogin){
                 // 未登录 清除这个cookie
                 utils.removeLocalCookie('_has_no_comment_order')

@@ -9,12 +9,16 @@ const actions = {
                 dispatch('getWishlist'),
                 // dispatch('getAllPoints')
             ]).then(([me, wishlist]) => {
-                commit(types.ME_GET, me)
-                commit(types.ME_GET_WISH_LIST, wishlist)
-                commit(types.ME_GET_NO_LOGIN,true);
-                return me
+                // 获取到了用户信息
+                if(!!me && JSON.stringify(me) !== '{}'){
+                    commit(types.ME_GET, me)
+                    commit(types.ME_GET_WISH_LIST, wishlist)
+                    commit(types.ME_GET_NO_LOGIN,true);
+                    return me
+                }else{
+                    throw new Error("The user does not exist.")
+                }
             }).then((me) => {
-                // console.log(me)
                 return dispatch('getFeed', me.id);
             }).then((feed) => {
                 commit(types.ME_GET_FEED, feed)
@@ -27,7 +31,9 @@ const actions = {
     },
     getMe({commit}){
         return api.get().then(me => {
-            commit(types.ME_GET, me)
+            if(me && JSON.stringify(me) !== '{}'){
+                commit(types.ME_GET, me);
+            }
             return me
         }).catch(e => {
             console.log("e",e);

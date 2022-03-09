@@ -144,7 +144,6 @@
             }))
 
             getShowRedeemCoupons().then(data =>{
-                console.log(data);
                 if(data && !!data.result){
                     this.redeemCouponShow = data.result;
                 }
