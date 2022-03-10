@@ -125,8 +125,17 @@ export default {
         must_select_product:"Seleccione al menos un producto",
         my_preference_error_message:"Mis preferencias no pueden estar todas vacías",
         my_measurements_error_message:"Mis medidas no pueden estar todas vacías",
+        old_new_password:"La contraseña antigua y la nueva no pueden ser iguales",
+        email_not_be_empty:"La dirección de correo electrónico no puede estar vacía, ingrese una dirección de correo electrónico válida",
+        email_address_not_available:"La dirección de correo electrónico no está disponible, ingrese una dirección de correo electrónico válida.",
+        password_not_be_empty:"La contraseña no puede estar vacía, por favor ingrese la contraseña para esta cuenta.",
+        temporarily_not_support:"Temporalmente no admitimos otras cuentas (Google, Facebook, Apple, etc.) para cambiar el correo electrónico.",
+        success_will_send_lastest:"¡Éxito! Enviaremos nuestro último boletín a su nueva dirección de correo electrónico.",
+        the_email_already_register:"Esta dirección de correo electrónico ya está registrada, cámbiela a otra dirección de correo electrónico válida.",
+        password_is_incorrect_error:"La contraseña es incorrecta, ingrese una contraseña válida para esta cuenta.",
+        relation_products:"Productos de Relación",
+        delete_all_expried_products:"¿Está seguro de que desea eliminar todos los productos vencidos?",
     },
-    
     point:{
         my_points:"Mis puntos",
         points_expired_soon:"Puntos que vencen pronto",

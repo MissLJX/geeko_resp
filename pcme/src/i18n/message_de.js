@@ -212,6 +212,7 @@ export default {
         points_redeem_success:'Einl\u00f6sung erfolgreich!',
         my_preference_error_message:"Meine Einstellungen dürfen nicht alle leer sein",
         my_measurements_error_message:"Meine Messungen dürfen nicht alle leer sein",
+        add_success:"Erfolg hinzufügen",
     },
     point:{
         my_points:"Meine Punkte",

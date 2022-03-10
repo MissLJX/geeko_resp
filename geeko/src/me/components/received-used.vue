@@ -213,10 +213,10 @@
                         show: true,
                         cfg: {
                             btnFont:{
-                                yes:"SHOP NOW",
+                                yes:_this.$t("label.shop_now"),
                             },
                             btnClose: true,
-                            message: "Buy and Earn",
+                            message: _this.$t("point.buy_and_earn"),
                             message2:response?.message,
                             yes: function () {
                                 _this.$store.dispatch('closeConfirm').then(() =>{

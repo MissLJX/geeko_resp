@@ -2,7 +2,7 @@
     <div class="relation-products">
         <nav-bar>
             <i class="iconfont el-back-font" slot="left" @click="$router.go(-1)">&#xe693;</i>
-            <span slot="center">Relation Products</span>
+            <span slot="center">{{ $t("label.Relation Products") }}</span>
         </nav-bar>
 
         <product-list

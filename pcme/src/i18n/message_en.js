@@ -201,7 +201,6 @@ export default {
     sure_to_cancel_order: 'Are you sure to cancel this order? After cancelling, it can not be recovered.',
     choose_reason: 'Please choose the reason for cancelling the order',
     select_reason: 'Please select a reason',
-    
     label:{
         redeem_coupon:"Redeem Coupon",
         hot_use_points:"How to Use Points?",
@@ -213,6 +212,7 @@ export default {
         points_redeem_success:'Redemption successful!',
         my_preference_error_message:"My preferences can't all be empty",
         my_measurements_error_message:"My MeasureMents can't all be empty",
+        add_success:"Add Success",
     },
     point:{
         my_points:"My Points",
