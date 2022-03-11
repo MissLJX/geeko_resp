@@ -212,6 +212,7 @@ export default {
         points_redeem_success:'\u00e9change r\u00e9ussi !',
         my_preference_error_message:"Mes préférences ne peuvent pas toutes être vides",
         my_measurements_error_message:"Mes mesures ne peuvent pas toutes être vides",
+        add_success:"Ajouter un succès",
     },
     point: {
         my_points: "Mes points",

@@ -111,7 +111,7 @@
                         show: true,
                         cfg: {
                             btnFont:{
-                                yes:"OK",
+                                yes:_this.$t("label.ok"),
                             },
                             message: _this.$t('label.my_preference_error_message'),
                             yes: function () {

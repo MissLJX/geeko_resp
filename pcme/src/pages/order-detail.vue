@@ -492,7 +492,7 @@
                 if(variantId){
                     formData.push({"variantId":variantId,"quantity":'1'})
                     this.$store.dispatch('addProducts',formData).then(()=>{
-                        this.isAddProductstTip = 'Add Success'
+                        this.isAddProductstTip = this.$t("label.add_success");
                         this.isAddProducts = true;
                         setTimeout(() => {
                             this.isAddProducts = false;
@@ -512,7 +512,7 @@
                         formData.push({"variantId":product.variantId,"quantity":'1'})
                     })
                     this.$store.dispatch('addProducts',formData).then(()=>{
-                        this.isAddProductstTip = 'Add Success'
+                        this.isAddProductstTip = this.$t("label.add_success");
                         this.isAddProducts = true;
                         setTimeout(() => {
                             this.isAddProducts = false;

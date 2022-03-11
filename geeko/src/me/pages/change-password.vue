@@ -39,7 +39,7 @@
         </div>
 
         <div class="sett-name-footer">
-            <div class="change-password-save"  @click="changePasswordHandle">Save</div>
+            <div class="change-password-save"  @click="changePasswordHandle">{{$t("label.save")}}</div>
         </div>
 
         <loading v-if="isLoadingShow"></loading>
@@ -120,13 +120,13 @@
                     this.confirmed = this.info.confirmPassword === this.info.newPassword;
                     if (result && this.confirmed) {
                         if(this.info.oldPassword === this.info.newPassword){
-                            alert("The old and new passwords cannot be the same.");
+                            alert(this.$t("label.old_new_password"));
                             return;
                         }
 
                         this.isLoadingShow = true;
                         this.$store.dispatch('me/changePassword', this.info).then(() => {
-                            alert("Success");
+                            alert(this.$t("label.update_success"));
                             this.isLoadingShow = false;
                             this.$router.go(-1)
                         }).catch(e => {

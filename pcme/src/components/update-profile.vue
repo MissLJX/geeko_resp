@@ -24,7 +24,7 @@
                                 url="/v9/customer/upload-icon"
                                 :headers="headers"
                                 img-format="png"
-                                langType="en"
+                                :langType="getLocale"
                         ></my-upload>
                     </div>
                 </div>
@@ -102,6 +102,27 @@
                     return this.birthday.year + "-" + this.pZone(this.birthday.month) + "-" + this.pZone(this.birthday.day);
                 }
                 return null;
+            },
+            getLocale(){
+                let language = 'en';
+                switch(window.locale){
+                    case 'es':
+                        language = 'es-MX';
+                        break;
+                    case 'de':
+                        language = 'de';
+                        break;
+                    case 'fr':
+                        language = 'fr';
+                        break;
+                    case 'pt':
+                        language = 'pt-br';
+                        break;
+                    default:
+                        language = 'en';
+                        break;
+                }
+                return language;
             }
         },
         methods:{
