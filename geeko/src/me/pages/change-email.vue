@@ -209,7 +209,7 @@
                     show: true,
                     cfg: {
                         btnFont:{
-                            yes:"OK",
+                            yes:_this.$t("label.ok"),
                         },
                         message: message,
                         message2:message2,
