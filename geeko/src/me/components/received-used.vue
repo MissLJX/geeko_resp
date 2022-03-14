@@ -109,7 +109,7 @@
             </div>
 
             <div class="_bd">
-                <a @click="recordEventSkip(true,'/me/m/redeem-coupon','Redeem Coupon',$event)">
+                <a @click="recordEventSkip(true,'/me/m/redeem-coupon','Redeem',$event)">
                     <div class="redeem-coupon">
                         <div>
                             <span class="iconContainer"></span>
@@ -191,6 +191,13 @@
                     page_content: "Points",
                     resourcepage_title:"Points_MoreWays",
                     resource_content:"MoreWays"
+                })
+
+                window.GeekoSensors.Track('PitPositionExposure', {
+                    page_sort:"Me",
+                    page_content: "Points",
+                    resourcepage_title:"Point_Redeem",
+                    resource_content:"Redeem"
                 })
             }
         },

@@ -73,6 +73,13 @@
                         message:this.$t("label.use_points_redeem_coupon"),
                         isClick:false,
                         clickFunction:() =>{
+                            if(window.GeekoSensors){
+                                window.GeekoSensors.Track('ELClick', {
+                                    clicks: 'redemption',
+                                    page_sort:"Me",
+                                    page_content:"Coupons"
+                                })
+                            }
                             this.$router.push(this.GLOBAL.getUrl("/me/m/redeem-coupon"));
                         }
                     };

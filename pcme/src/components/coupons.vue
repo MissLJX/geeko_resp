@@ -3,10 +3,10 @@
         <div class="couponsTitle">{{$t("mycoupons")}}</div>
 
         <!-- redeemCoupon -->
-        <router-link class="redeem-coupon-message" :to="{name:'redeem-coupon'}" v-if="redeemCouponShow">
+        <a @click="routTo" class="redeem-coupon-message" v-if="redeemCouponShow">
             <span class="iconfont">&#xe6ca;</span>
             <span class="_font">{{ $t("label.use_points_redeem_coupon") }} ></span>
-        </router-link>
+        </a>
 
         <div v-show="coupons && coupons.length <= 0" class="el-list-loading"><i class="iconfont">&#xe69f;</i></div>
         <div class="coupon" v-for="item in coupons" :key="item.coupon.id">
@@ -95,6 +95,18 @@
                 return ''
 
             },
+            routTo(e){
+                e.preventDefault();
+                if(window.GeekoSensors){
+                    window.GeekoSensors.Track('ELClick', {
+                        clicks: 'redemption',
+                        page_sort:"Me",
+                        page_content:"Coupons"
+                    })
+                }
+
+                this.$router.push({name:'redeem-coupon'})
+            }
         }
     }
 </script>
