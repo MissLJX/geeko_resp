@@ -47,7 +47,7 @@
                             <p class="st-control">
                                 <select ref="country" class="st-select" v-model="countrySelected"
                                         @change="changeCountry">
-                                    <option disabled value="-1">Country</option>
+                                    <option disabled value="-1">{{$t("label.country")}}</option>
                                     <option v-for="c in countries" :value="c.value">{{c.label}}</option>
                                 </select>
                                 <span v-show="countrySelected == '-1'"

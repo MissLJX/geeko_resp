@@ -135,6 +135,7 @@ export default {
         password_is_incorrect_error:"Senha incorreta, digite uma senha válida para esta conta.",
         relation_products:"Produtos de Relacionamento",
         delete_all_expried_products:"Tem certeza de que deseja remover todos os produtos expirados?",
+        time_must_current:"A data de nascimento deve ser menor que a hora atual",
     },
     point:{
         my_points:"Meus pontos",

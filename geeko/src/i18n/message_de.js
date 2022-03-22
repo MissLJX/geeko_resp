@@ -135,6 +135,7 @@ export default {
         password_is_incorrect_error: "Das Passwort ist falsch, bitte geben Sie ein gültiges Passwort für dieses Konto ein.",
         relation_products: "Beziehungsprodukte",
         delete_all_expried_products: "Sind Sie sicher, dass Sie alle abgelaufenen Produkte entfernen möchten?",
+        time_must_current:"Das Geburtsdatum muss vor der aktuellen Uhrzeit liegen",
     },
     point:{
         my_points:"Meine Punkte",
@@ -158,7 +159,7 @@ export default {
         description:"Beschreibung",
         sorry_inconvenience:"Entschuldigen Sie die Unannehmlichkeiten, wir werden das Problem so schnell wie m\u00f6glich beheben…",
         upload_image:"Bild hochladen",
-        maxinum_three_photos:"Maximum of 3 photos, only JPEG, GIF or PNG.",
+        maxinum_three_photos:"Maximal 3 Fotos, nur JPEG, GIF oder PNG.",
         submit:"einreichen",
         wu_have_success:"Wir haben Ihren Vorschlag erfolgreich erhalten und es wird einige Tage dauern, dieses Problem zu bearbeiten. Wir werden uns mit Ihnen in Verbindung setzen, wenn wir Informationen ben\u00f6tigen. Bitte überprüfen Sie unsere Antwort an Ihre E-Mail-Adresse. Danke für Ihre Kooperation.",
         submit_success:"Erfolgreich senden",

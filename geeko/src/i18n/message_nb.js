@@ -136,6 +136,7 @@ export default {
         password_is_incorrect_error:"Password is incorrect, please enter a valid password for this account.",
         relation_products:"Relation Products",
         delete_all_expried_products:"Are you sure you want to remove all expired products?",
+        time_must_current:"Date of birth must be less than the current time",
     },
     point:{
         my_points:"My Points",
