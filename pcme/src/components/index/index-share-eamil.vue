@@ -63,7 +63,7 @@
                 if(emails!==''){
                     let shareInfo={'emails':emails.slice(0,-1),'subject':this.subinfo,'content':this.noteinfo}
                     this.$store.dispatch('sendShareEmail', shareInfo).then(() => {
-                        alert("success");
+                        alert(this.$t('success'));
                         this.$emit("changeLoadin",false);
                         this.$emit('update:isShowEmail',false)
                     }).catch((e) => {

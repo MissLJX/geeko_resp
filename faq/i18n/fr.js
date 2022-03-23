@@ -44,6 +44,7 @@ export default {
   order_status_held: 'Tenu',
   count_items: '{count} élément (s)',
   ordertotal: 'Total',
+  confirm: 'Confirmer',
   rate: 'Évaluation',
   satisfied: 'Satisfait',
   unsatisfied: 'Insatisfait',

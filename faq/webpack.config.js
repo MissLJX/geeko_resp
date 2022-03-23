@@ -26,8 +26,8 @@ module.exports = {
     progress: true,
     proxy: {
       '/api': {
-        // target: 'https://www.chicme.com',
-        target: 'http://192.168.2.66:8080',
+        target: 'https://www.chicme.com',
+        // target: 'http://192.168.2.66:8080',
 				// cookiePathRewrite: {
 				// 	'/wanna': '/',
 				// },

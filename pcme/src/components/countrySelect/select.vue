@@ -8,7 +8,7 @@
                     <input type="text" 
                            @input="searchChange($event)"
                            @click.stop="()=>{}"
-                           placeholder="Country/Region"
+                           :placeholder="countryLabel"
                            >
                 </div>
                 <div class="selectOptionBox">
@@ -230,6 +230,9 @@ export default {
                 return includeCountry
             }
             
+        },
+        countryLabel(){
+            return this.$t("country")
         }
     },
     watch:{

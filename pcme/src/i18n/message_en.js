@@ -201,6 +201,32 @@ export default {
     sure_to_cancel_order: 'Are you sure to cancel this order? After cancelling, it can not be recovered.',
     choose_reason: 'Please choose the reason for cancelling the order',
     select_reason: 'Please select a reason',
+
+    add_success: 'Add Success',
+    confirm_your_order: 'Are you sure want to confirm your order?',
+    phone_enter_rule: 'Incorrect phone number format (numbers only, no formatting)',
+    phone_enter_rule_ae: 'Enter at least 8-9 numbers.',
+    phone_enter_rule_br:'Phone numbers should start with 50/52/54/55/56/58/2/3/4/6/7/9, followed by any 7 digits.',
+    phone_enter_rule_sa: 'Phone numbers should start with 50/53/55/51/58/59/54/56/57/11/12/13/14/16/17/811, followed by any 7 digits.',
+    zip_enter_rule_us: 'Please enter 5 digits or 5 digits with a 4-digits number (E.g. 20001 or 20001-0000)',
+    zip_enter_rule_uk: 'Wrong ZIP CODE! Please offer us one or two-letter and one-two figures with a space end with one figure and two letters. (e.g. TN37 7HL,CW8 3AD)',
+    zip_enter_rule_br: 'O formato do endereço está incorreto, preencha o formulário de [01310-000]',
+    cpf_enter_rule: 'Wrong CPF',
+    birth_date_error_alert: 'Date of birth must be less than the current time',
+
+    return_logistics: 'Return Logistics',
+    please_select_logistics: 'Please select your logistics',
+    logistics_company_name: 'Logistics Company Name',
+    logistics_or: 'Or',
+    upload_receipt: 'Upload Receipt',
+    choose_upload: 'Choose photo or pdf upload',
+    receipt: 'Receipt',
+    information_wrong: 'The information is wrong',
+    fill_in_again: 'Fill in again',
+    logistics_info_not_empty: 'Logistics information and logistics voucher can not be empty at the same time',
+    logistics_name_not_empty: 'Logistics Company Name Can not be empty',
+    track_number_not_empty: 'trackingNumber can not be empty',
+
     
     label:{
         redeem_coupon:"Redeem Coupon",

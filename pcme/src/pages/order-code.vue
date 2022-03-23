@@ -100,7 +100,7 @@
         <div class="mask" v-if="isConfirmAlert">
             <div class="confirm-con">
                 <p class="cancel-btn" @click="confirmOrder(0)"><i class="iconfont">&#xe69a;</i></p>
-                <p>Are you sure want to confirm your order?</p>
+                <p>{{$t("confirm_your_order")}}</p>
                 <div class="btn-arr">
                     <div class="n-btn" @click="confirmOrder(0)">{{$t('no')}}</div>
                     <div class="y-btn" @click="confirmOrder('1')">{{$t('yes')}}</div>
@@ -380,7 +380,7 @@
                 if(variantId){
                     formData.push({"variantId":variantId,"quantity":'1'})
                     this.$store.dispatch('addProducts',formData).then(()=>{
-                        this.isAddProductstTip = 'Add Success'
+                        this.isAddProductstTip = this.$t("add_success")
                         this.isAddProducts = true;
                         setTimeout(() => {
                             this.isAddProducts = false;
@@ -400,7 +400,7 @@
                         formData.push({"variantId":product.variantId,"quantity":'1'})
                     })
                     this.$store.dispatch('addProducts',formData).then(()=>{
-                        this.isAddProductstTip = 'Add Success'
+                        this.isAddProductstTip = this.$t("add_success")
                         this.isAddProducts = true;
                         setTimeout(() => {
                             this.isAddProducts = false;

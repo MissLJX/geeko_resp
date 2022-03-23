@@ -44,6 +44,7 @@ export default {
   order_status_held: 'Mantido',
   count_items: '{count} item (s)',
   ordertotal: 'Total',
+  confirm: 'Confirme',
   rate: 'Avaliação',
   satisfied: 'Satisfeito',
   unsatisfied: 'Insatisfeito',

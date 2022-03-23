@@ -77,7 +77,7 @@
                         this.isloding = true
                         this.$store.dispatch('changePassword', this.info).then(() => {
                             this.isloding = false
-                            alert('Success!')
+                            alert(this.$t('success'))
                         }).catch(e => {
                             this.isloding = false
                             alert(e.result)

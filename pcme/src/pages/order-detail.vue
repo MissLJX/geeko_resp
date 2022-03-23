@@ -111,22 +111,22 @@
                 </div>
 
                 <!-- return-logistics -->
-                <!-- <div 
+                <div 
                     class="r-btn black" 
                     v-if="this.order && this.order.logistics && this.order.logistics.packages && this.order.logistics.packages.length > 1 && order.status === 3"
                     @click="isReturnLogistics = true"
                 >
-                    <span>Return Logistics</span>
-                </div> -->
+                    <span>{{$t("return_logistics")}}</span>
+                </div>
             </div>
 
-            <!-- <return-logistics 
+            <return-logistics 
                 v-if="isReturnLogistics" 
                 :orderId="orderdetail.id" 
                 @logisticsShow="logisticsShow" 
                 :loddingShow.sync="isloding"
             >
-            </return-logistics> -->
+            </return-logistics>
 
             <!-- <select-order v-if="isShowSelect" v-on:closeSelect="closeSelect1" v-on:showTicket="showTicket"></select-order>
             <order-ticket  v-if="isShowTicket" v-on:closeSelect="closeSelect1" v-on:selectOrder="selectorder"></order-ticket> -->
@@ -194,7 +194,7 @@
         <div class="mask" v-if="isConfirmAlert">
             <div class="confirm-con">
                 <p class="cancel-btn" @click="confirmOrder(0)"><i class="iconfont">&#xe69a;</i></p>
-                <p>Are you sure want to confirm your order?</p>
+                <p>{{$t("confirm_your_order")}}</p>
                 <div class="btn-arr">
                     <div class="n-btn" @click="confirmOrder(0)">{{$t('no')}}</div>
                     <div class="y-btn" @click="confirmOrder('1')">{{$t('yes')}}</div>
@@ -219,7 +219,7 @@
     import faqOrderTicket from '../components/faq/faq-order-ticket.vue';
     import CountDown from '../components/countdow.vue';
     import loding from '../components/loding.vue';
-    // import ReturnLogistics from '../components/return-logistics.vue'
+    import ReturnLogistics from '../components/return-logistics.vue'
 
     export default {
         data(){
@@ -253,7 +253,7 @@
             'faq-select-order': faqSelectOrder,
             'faq-order-ticket': faqOrderTicket,
             'loding':loding,
-            // 'return-logistics':ReturnLogistics
+            'return-logistics':ReturnLogistics
         },
         computed:{
             ...mapGetters(['orderdetail','shareurl','cancelReasons']),
@@ -492,7 +492,7 @@
                 if(variantId){
                     formData.push({"variantId":variantId,"quantity":'1'})
                     this.$store.dispatch('addProducts',formData).then(()=>{
-                        this.isAddProductstTip = 'Add Success'
+                        this.isAddProductstTip = this.$t("add_success")
                         this.isAddProducts = true;
                         setTimeout(() => {
                             this.isAddProducts = false;
@@ -512,7 +512,7 @@
                         formData.push({"variantId":product.variantId,"quantity":'1'})
                     })
                     this.$store.dispatch('addProducts',formData).then(()=>{
-                        this.isAddProductstTip = 'Add Success'
+                        this.isAddProductstTip = this.$t("add_success")
                         this.isAddProducts = true;
                         setTimeout(() => {
                             this.isAddProducts = false;

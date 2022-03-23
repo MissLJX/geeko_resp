@@ -602,6 +602,7 @@ let list = [{
 }]
 
 var bodyScrollTop = document.body.scrollTop;
+let rateLoading = false;
 class TicketAdd extends React.Component {
   constructor (props) {
     super(props)
@@ -642,6 +643,7 @@ class TicketAdd extends React.Component {
       rateShow: false,
       rateTxt: '',// 评价文字
       rateType: '5',//评价好（5）不好（1）
+      userLastRate: '', // 用户最后一次评分
     }
     this.questionRef = createRef();
     this.handleImage = this.handleImage.bind(this)
@@ -848,10 +850,8 @@ class TicketAdd extends React.Component {
     // 接受传值的参数
     let params = this.props.history.location.state
     let id;
-    console.log(params,this.props.history.location)
     // 接受url传值的参数
     let urlParams = this.props.history.location.pathname ? this.props.history.location.pathname.split("/")[1] != 'wanna' ? this.props.history.location.pathname.split("/")[5] :  this.props.history.location.pathname.split("/")[6] : '';
-    console.log(urlParams)
     // if(!urlParams){
     // 不弹窗的传参
     let urlParamsNoMask = this.props.history.location.search ? 
@@ -1468,7 +1468,7 @@ class TicketAdd extends React.Component {
                 float:'right',
                 cursor:'pointer'
                 }}
-             onMouseDown={()=>setTimeout(()=>rateConfirm(rateType,rateTxt),200)}>
+             onMouseDown={()=>setTimeout(()=>rateConfirm(),200)}>
           {intl.formatMessage({id: 'confirm'})}
         </div>
 
@@ -1877,7 +1877,8 @@ class TicketAdd extends React.Component {
       let ticket = this.state.ticket || {}
       let replies = []
       replies = (ticket.ticketReplies || []).concat([])
-      let rateHistory = (ticket.ticketRateService || "")
+      console.log(this.state.userLastRate)
+      let rateHistory = (this.state.userLastRate || ticket.ticketRateService || "")
 
       replies.push({
         sender: 'seller',
@@ -1898,27 +1899,43 @@ class TicketAdd extends React.Component {
     }
 
     // 提交评价
-    const rateConfirm = (type,txt) => {
-      console.log(type,txt)
-      console.log(this.state.ticket.id)
-      let params = {
-        id: this.state.ticket ? this.state.ticket.id: '',
-        message: txt,
-        rate: +type,
+    const rateConfirm = () => {
+      // console.log(this.state.rateType,this.state.rateTxt)
+      let txt = this.state.rateTxt;
+      let type = this.state.rateType;
+      
+      if(!rateLoading){
+        rateLoading = true;
+        let params = {
+          id: this.state.ticket ? this.state.ticket.id: '',
+          message: txt,
+          rate: +type,
+        }
+        // console.log(params)
+        console.log(this.state.ticket)
+        sendRate(params).then(res => {
+          let ticket = this.state.ticket || {}
+          let ticketLength = ticket.ticketReplies.length
+          if(ticketLength > 0 && ticket.ticketReplies[ticketLength - 1].isRate){
+            ticket.ticketReplies.pop()
+          }
+          this.setState({
+            rateShow:false,
+            ticket,
+            userLastRate:{
+              rate: +type,
+              message: txt
+            }
+          })
+          rateLoading = false;
+        }).catch(err=>{
+          this.setState({
+            rateShow:false
+          })
+          rateLoading = false;
+        })
       }
-      console.log(params)
-      sendRate(params).then(res => {
-        let ticket = this.state.ticket || {}
-        ticket.ticketReplies.pop()
-        this.setState({
-          rateShow:false,
-          ticket
-        })
-      }).catch(err=>{
-        this.setState({
-          rateShow:false
-        })
-      })
+      
     }
 
     // 
@@ -1928,11 +1945,12 @@ class TicketAdd extends React.Component {
       replies = (ticket.ticketReplies || []).concat([])
       replies[replies.length - 1] = {
         ...replies[replies.length - 1],
-        rateTxt: e
+        rateTxt: e,
       }
       ticket.ticketReplies = replies
       this.setState({
-        ticket: ticket
+        ticket: ticket,
+        rateTxt: e,
       })
     }
 
@@ -1947,7 +1965,8 @@ class TicketAdd extends React.Component {
       }
       ticket.ticketReplies = replies
       this.setState({
-        ticket: ticket
+        ticket: ticket,
+        rateType: e
       })
     }
 

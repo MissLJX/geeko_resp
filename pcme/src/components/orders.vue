@@ -60,7 +60,7 @@
                             </div>
                             <div v-if="item.orderItems && item.orderItems.length > 4" class="viewmore" @click="checkDetail(item.id)">
                                 <div class="bg"></div>
-                                <p>View Detail</p>
+                                <p>{{$t("view_detail")}}</p>
                             </div>
                         </div>
                         <div class="tbl-cell v-m w-180 tx-c">
@@ -361,7 +361,7 @@
                         formData.push({"variantId":product.variantId,"quantity":'1'})
                     })
                     this.$store.dispatch('addProducts',formData).then(()=>{
-                        this.isAddProductstTip = 'Add Success'
+                        this.isAddProductstTip = this.$t("add_success")
                         this.isAddProducts = true;
                         setTimeout(() => {
                             this.isAddProducts = false;

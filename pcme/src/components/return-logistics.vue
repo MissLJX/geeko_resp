@@ -2,13 +2,13 @@
     <div class="return-logistics">
         <div class="return-logistics-container">
             <span class="return-close" @click="closeMask"><span class="iconfont">&#xe69a;</span></span>
-            <div class="__title">Return Logistics</div>
+            <div class="__title">{{$t("return_logistics")}}</div>
 
             <div class="return-notshow" v-if="returnLogisticsShow">
                 <div class="logistics-company">
-                    <p>Logistics Company：</p>
+                    <p>{{$t("logisticsCompany")}}：</p>
                     <select v-model="logisticsSelect">
-                        <option value="default" disabled>Please select your logistics</option>
+                        <option value="default" disabled>{{$t("please_select_logistics")}}</option>
                         <optgroup label="Commonly Used">
                             <template v-if="logisticsCompanies != null && logisticsCompanies.commonlyUsed.length > 0">
                                 <option :value="commonly.name" v-for="(commonly,index) in logisticsCompanies.commonlyUsed" :key="commonly.name+index">
@@ -27,25 +27,25 @@
                 </div>
 
                 <div class="tracking-number" v-show="logisticsSelect === 'Other'">
-                    <p>Logistics Company Name*</p>
+                    <p>{{$t("logistics_company_name")}}*</p>
                     <input type="text" v-model="logisticsName">
                 </div>
 
                 <div class="tracking-number">
-                    <p>Tracking Number：</p>
+                    <p>{{$t("tracknum")}}：</p>
                     <input type="text" v-model="logisticsNumber">
                 </div>
 
                 <div class="body-or">
                     <span>
-                        <span>Or</span>
+                        <span>{{$t("logistics_or")}}</span>
                     </span>
                 </div>
                 
                 <div class="upload-image">
                     <p class="__title">
-                        <span>Upload Receipt</span>
-                        <span>(Choose photo or pdf upload)</span>
+                        <span>{{$t("upload_receipt")}}</span>
+                        <span>({{$t("choose_upload")}})</span>
                     </p>
 
                     <div class="upload-container" id="imgboxid">
@@ -72,7 +72,7 @@
                     </div>
 
                     <div class="upload-submit" @click="sendUploadFiles">
-                        Submit
+                        {{$t("submit")}}
                     </div>
                 </div>
             </div>
@@ -80,17 +80,17 @@
             <div class="return-show" v-if="!returnLogisticsShow">
                 <div class="__hd st-table">
                     <div class="st-row" v-if="returnLogisticsValue.logisticsCompany">
-                        <div class="st-cell">Logistics Company</div>
+                        <div class="st-cell">{{$t("logisticsCompany")}}</div>
                         <div class="st-cell">{{returnLogisticsValue.logisticsCompany}}</div>
                     </div>
                     <div class="st-row" v-if="returnLogisticsValue.trackingNumber">
-                        <div class="st-cell">Tracking Number</div>
+                        <div class="st-cell">{{$t("tracknum")}}</div>
                         <div class="st-cell">{{returnLogisticsValue.trackingNumber}}</div>
                     </div>
                 </div>
 
                 <div class="receipt" v-if="returnLogisticsValue.receiptFiles && returnLogisticsValue.receiptFiles.length > 0">
-                    <p>Receipt</p>
+                    <p>{{$t("receipt")}}</p>
                     <ul>
                         <li v-for="(item,index) in returnLogisticsValue.receiptFiles" :key="item+index">
                             <img :src="getDifferenceImage(item)" alt="Image" @click="magnifyImage($event)">
@@ -106,7 +106,7 @@
                 </div>
 
                 <div class="footer">
-                    <span>The information is wrong? </span><a @click="returnLogisticsShowActive = true;">Fill in again</a>
+                    <span>{{$t("information_wrong")}}? </span><a @click="returnLogisticsShowActive = true;">{{$t("fill_in_again")}}</a>
                 </div>
             </div>
         </div>
@@ -239,7 +239,7 @@
             sendUploadFiles(){
                 var _this = this;
                 if(this.logisticsSelect === "default" && this.uploadedImages.length <= 0){
-                    alert("Logistics information and logistics voucher can not be empty at the same time!");
+                    alert(this.$t("logistics_info_not_empty")+"!");
                     return;
                 }
                 _this.$emit("update:loddingShow",true);
@@ -258,7 +258,7 @@
                     // 物流选择后的值   物流名
                     uploadFiles['logisticsCompany'] = this.logisticsSelect;
                 }else if(this.logisticsSelect === "Other" && !!!this.logisticsName && this.logisticsName === ""){
-                    alert("Logistics Company Name Can not be empty");
+                    alert(this.$t("logistics_name_not_empty"));
                     _this.$emit("update:loddingShow",false);
                     return;
                 }else{
@@ -267,7 +267,7 @@
 
                 if(this.logisticsSelect !== "default" || this.logisticsName !== ""){
                     if(!!!this.logisticsNumber && this.logisticsNumber === ""){
-                        alert("trackingNumber can not be empty");
+                        alert(this.$t("track_number_not_empty"));
                         _this.$emit("update:loddingShow",false);
                         return;
                     }else{
@@ -281,7 +281,7 @@
                 }
 
                 _this.$store.dispatch('addReturnLogistics',uploadFiles).then(result => {
-                    alert("Submitted successfully！");
+                    alert(this.$t("success")+'!');
                     this.$emit('logisticsShow');
                     console.log("result",result);
                 });

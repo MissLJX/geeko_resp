@@ -124,7 +124,7 @@
                 this.$store.dispatch('updateCustomerSave', obj).then(() => {
                     this.isloding = false
                 }).then(() => {
-                    alert('success')
+                    alert(this.$t('success'))
                 })
             },
             toggleShow() {

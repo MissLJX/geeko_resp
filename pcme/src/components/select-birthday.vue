@@ -227,7 +227,7 @@ export default {
  	  	    var d = new Date(Date.parse(regValue));
  		
             if(d >=curDate){
-                alert("Date of birth must be less than the current time!");
+                alert(this.$t("birth_date_error_alert")+"!");
                 return false;
             }
 	  	    return true;

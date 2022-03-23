@@ -67,18 +67,18 @@ const getLang = lang => {
     return lang ? lang.split('_')[0]:'en'
 }
 
-const i18n = new VueI18n({
+const i18n1 = new VueI18n({
     locale: languages.find(language => language === getLang(window.locale)) || 'en', // set locale
     messages, // set locale messages
 })
 
 Vue.use(VeeValidate, {
     i18nRootKey: 'validations', // customize the root path for validation messages.
-    i18n:i18n,
+    i18n:i18n1,
     dictionary: dictionary
  });
 
-export default i18n;
+export default i18n1;
 
 
 // export default new VueI18n({

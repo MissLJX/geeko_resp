@@ -45,6 +45,7 @@ export default {
   count_items: '{count} artículo (s)',
   ordertotal: 'Total',
   rate: 'Evaluacion',
+  confirm: 'Confirmar',
   satisfied: 'Satisfecho',
   unsatisfied: 'Insatisfecho',
   you_can_rate: 'Puedes comentar servicio al cliente aquí',
