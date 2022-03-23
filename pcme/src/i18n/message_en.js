@@ -239,6 +239,7 @@ export default {
         points_redeem_success:'Redemption successful!',
         my_preference_error_message:"My preferences can't all be empty",
         my_measurements_error_message:"My MeasureMents can't all be empty",
+        add_success:"Add Success",
     },
     point:{
         my_points:"My Points",

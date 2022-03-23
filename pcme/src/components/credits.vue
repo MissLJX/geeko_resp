@@ -166,7 +166,7 @@
         <div class="get-method" v-if="redeemCouponShow">
             <div class="c-hd">{{ $t("label.hot_use_points") }}</div>
             <div class="_bd">
-                <a @click="()=>routTo({path:`${GLOBAL.getUrl('/me/m/redeem-coupon')}`, type:'RedeemCoupon'})">
+                <a @click="()=>routTo({path:`${GLOBAL.getUrl('/me/m/redeem-coupon')}`, type:'Redeem'})">
                     <div class="methodBox">
                         <div>
                             <img src="https://image.geeko.ltd/chicme/2022022201/My-Points-Redeem-Coupon.png" alt="My-Points-Redeem-Coupon">
@@ -437,6 +437,13 @@
                     page_content: "Points",
                     resourcepage_title:"Points_MoreWays",
                     resource_content:"MoreWays"
+                })
+
+                window.GeekoSensors.Track('PitPositionExposure', {
+                    page_sort:"Me",
+                    page_content: "Points",
+                    resourcepage_title:"Point_Redeem",
+                    resource_content:"Redeem"
                 })
             }
         }

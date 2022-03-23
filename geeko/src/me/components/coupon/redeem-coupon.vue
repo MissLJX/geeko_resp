@@ -168,6 +168,16 @@
                         }
                     }
                 })
+
+                if(window.GeekoSensors){
+                    window.GeekoSensors.Track('ELClick', {
+                        is_redeem:"点击Redeem按钮触发",
+                        page_sort:"Me",
+                        page_content:"Coupons",
+                        fail_reason:this.$t("points_mall.points_not_enough_text"),
+                        coupon_type:this.coupon.coupon.name
+                    })
+                }
             },
             // 兑换成功提示
             forSuccessEvent(){
@@ -205,6 +215,16 @@
                         }
                     }
                 })
+
+                if(window.GeekoSensors){
+                    window.GeekoSensors.Track('ELClick', {
+                        is_redeem:"点击Redeem按钮触发",
+                        page_sort:"Me",
+                        page_content:"Coupons",
+                        is_success:true,
+                        coupon_type:this.coupon.coupon.name
+                    })
+                }
             }
         },
         mounted:function(){

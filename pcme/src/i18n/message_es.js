@@ -237,6 +237,7 @@ export default {
         points_redeem_success: '¡Redención exitosa!',
         my_preference_error_message:"Mis preferencias no pueden estar todas vacías",
         my_measurements_error_message:"Mis medidas no pueden estar todas vacías",
+        add_success:"Agregar éxito",
     },
     point:{
         my_points:"Mis puntos",

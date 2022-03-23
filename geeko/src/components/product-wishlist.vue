@@ -20,7 +20,7 @@
         </list>
         <div class="el-btn">
             <!-- <span class="c-clearAll" @click="clearAllHandle()">Remove all Invalid Items</span> -->
-            <span class="c-delete" @click="cancelSaveHandle()">{{$t('label.Delete')}}</span>
+            <span class="c-delete" @click="cancelSaveHandle()">{{$t('label.delete')}}</span>
         </div>
     </div>
 </template>
@@ -172,10 +172,10 @@
                     show: true,
                     cfg: {
                         btnFont:{
-                            yes:"Confirm",
-                            no:"Cancel"
+                            yes:_this.$t("points_mall.points_confirm"),
+                            no:_this.$t("points_mall.points_cancel")
                         },
-                        message: "Are you sure you want to delete the item(s)?",
+                        message: _this.$t("label.sure_delete_items"),
                         yes: function () {
                             _this.deleteHandle('1');
                             _this.$store.dispatch('closeConfirm');
@@ -197,7 +197,7 @@
                 }
             },
             clearAllHandle(){
-                this.tipMsg = 'Are you sure you want to remove all expired products?'
+                this.tipMsg = this.$t("label.delete_all_expried_products");
                 this.isAlert = true;
                 this.clearAll = true;
             },

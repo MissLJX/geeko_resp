@@ -109,7 +109,7 @@
             </div>
 
             <div class="_bd">
-                <a @click="recordEventSkip(true,'/me/m/redeem-coupon','Redeem Coupon',$event)">
+                <a @click="recordEventSkip(true,'/me/m/redeem-coupon','Redeem',$event)">
                     <div class="redeem-coupon">
                         <div>
                             <span class="iconContainer"></span>
@@ -192,6 +192,13 @@
                     resourcepage_title:"Points_MoreWays",
                     resource_content:"MoreWays"
                 })
+
+                window.GeekoSensors.Track('PitPositionExposure', {
+                    page_sort:"Me",
+                    page_content: "Points",
+                    resourcepage_title:"Point_Redeem",
+                    resource_content:"Redeem"
+                })
             }
         },
         computed:{
@@ -212,10 +219,10 @@
                         show: true,
                         cfg: {
                             btnFont:{
-                                yes:"SHOP NOW",
+                                yes:_this.$t("label.shop_now"),
                             },
                             btnClose: true,
-                            message: "Buy and Earn",
+                            message: _this.$t("point.buy_and_earn"),
                             message2:response?.message,
                             yes: function () {
                                 _this.$store.dispatch('closeConfirm').then(() =>{

@@ -200,7 +200,7 @@
                     var d = new Date(Date.parse(this.datatime.replace(/-/g,"/")));
                     var curDate = new Date();
                     if(d >=curDate){
-                        alert("Date of birth must be less than the current time！");
+                        alert(`${this.$t("label.time_must_current")}!`);
                         return fecha.format(new Date(), 'YYYY/MM/DD')
                     }else{
                         return fecha.format(new Date(this.datatime), 'YYYY/MM/DD')
@@ -284,7 +284,6 @@
                     _this.$validator.validateAll().then(result => {
                         console.log("result",result);
                         if(result && _this.datatime){
-                            console.log("全部满足");
                             // for (var [a, b] of formData.entries()) {
                             //     console.log("formData",a, b);
                             // }
@@ -295,7 +294,7 @@
                                     this.reminderMessage = prompt.html;
                                 }else{
                                     this.$toast({
-                                        content:"Update success!",
+                                        content:`${_this.$t('label.update_success')}!`,
                                         type:"success",
                                         timer:2000,
                                         style1:{

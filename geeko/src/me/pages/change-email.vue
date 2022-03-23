@@ -155,11 +155,11 @@
             changeAcountHandle(){
                 if(!this.account.email){
                     // 邮箱为空
-                    this.modalShow("The email address cannot be empty, please enter the valid email address.","");
+                    this.modalShow(this.$t("label.email_not_be_empty"),"");
                     return;
                 }else if(!this.validataEmail(this.account.email)){
                     // 邮箱格式错误
-                    this.modalShow("The email address is not available, please enter the valid email address.","",() => {
+                    this.modalShow(this.$t("label.email_address_not_available"),"",() => {
                         this.account.email = null;
                     });
                     return;
@@ -168,8 +168,8 @@
                 if(!this.account.password){
                     // 密码为空
                     this.modalShow(
-                        "The password cannot be empty, please enter the password for this account.",
-                        "Temporarily do not support other accounts (Google, Facebook, Apple, etc.) to change email."
+                        this.$t("label.password_not_be_empty"),
+                        this.$t("label.temporarily_not_support")
                     );
                     return;
                 }
@@ -178,7 +178,7 @@
                 this.$store.dispatch("globalLoadingShow",true);
                 this.$store.dispatch('me/changeAccountEmail', this.account).then((data) => {
                     // 发送邮件成功
-                    this.modalShow("A verification link has been sent to your email address, please check your mailbox.","",() => {
+                    this.modalShow(this.$t("label.checkmailbox"),"",() => {
                         this.account.email = null;
                         this.account.password = null;
                     });
@@ -195,7 +195,7 @@
                 this.$validator.validate('communicationEmail', this.subEmail.email).then((result) => {
                     _this.$store.dispatch('me/changeEmail', this.subEmail).then(() => {
                         _this.$store.dispatch("globalLoadingShow",false);
-                        _this.modalShow("Success! We will send our latest newsletter to your new email address.","");
+                        _this.modalShow(this.$t("label.success_will_send_lastest"),"");
                     });
                 })
             },
@@ -209,7 +209,7 @@
                     show: true,
                     cfg: {
                         btnFont:{
-                            yes:"OK",
+                            yes:_this.$t("label.ok"),
                         },
                         message: message,
                         message2:message2,
@@ -229,12 +229,12 @@
                 let message2 = "";
                 if(code === 401){
                     // 邮箱已经被注册的错误提示  401
-                    message = "This email address is already registered, please change to another valid email address.";
+                    message = this.$t("label.the_email_already_register");
                     name = "email";
                 }else if(code === 402){
                     // 密码错误的错误提示              402
-                    message = "Password is incorrect, please enter a valid password for this account.";
-                    message2 = "Temporarily do not support other accounts (Google, Facebook, Apple, etc.) to change email.";
+                    message = this.$t("label.password_is_incorrect_error");
+                    message2 = this.$t("label.temporarily_not_support");
                     name = "password";
                 }else{
                     message = errorMessage;
