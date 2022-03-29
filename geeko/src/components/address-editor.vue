@@ -10,15 +10,28 @@
             <form @submit.prevent="validateBeforeSubmit">
                 <div class="el-address-elements">
 
-                    <div>
-                        <label v-if="showLabel" :class="{'el-label':true}">{{$t('label.fullName')}}</label>
-                        <p class="st-control">
-                            <input name="name" v-model="shipping.name" v-validate="'required'"
-                                   :class="{'st-input':true, 'st-input-danger':errors.has('name')}" type="text"
-                                   :placeholder="$t('label.fullName') + ' *'"/>
-                            <span v-show="errors.has('name')" class="st-is-danger">{{$t('label.name_required')}}</span>
-                        </p>
+                    <div class="st-flex st-justify-b el-double-item-container">
+                        <div>
+                            <label v-if="showLabel" :class="{'el-label':true}">{{$t('label.firstName')}}</label>
+                            <p class="st-control">
+                                <input name="firstName" v-model="shipping.firstName" v-validate="'required'"
+                                    :class="{'st-input':true, 'st-input-danger':errors.has('firstName')}" type="text"
+                                    :placeholder="$t('label.firstName') + ' *'"/>
+                                <span v-show="errors.has('firstName')" class="st-is-danger">{{errors.first('firstName')}}</span>
+                            </p>
+                        </div>
+
+                        <div>
+                            <label v-if="showLabel" :class="{'el-label':true}">{{$t('label.lastName')}}</label>
+                            <p class="st-control">
+                                <input name="lastName" v-model="shipping.lastName" v-validate="'required'"
+                                    :class="{'st-input':true, 'st-input-danger':errors.has('lastName')}" type="text"
+                                    :placeholder="$t('label.lastName') + ' *'"/>
+                                <span v-show="errors.has('lastName')" class="st-is-danger">{{errors.first('lastName')}}</span>
+                            </p>
+                        </div>
                     </div>
+                    
 
                     <div>
                         <label v-if="showLabel" :class="{'el-label':true}">{{$t('label.streetAddress')}}</label>
@@ -195,9 +208,26 @@
     export default{
         data(){
             var initCountry = this.address && this.address.country ? this.address.country.value : '-1'
-            var initState = this.address && this.address.state ? this.address.state.value : '-1'
+            var initState = this.address && this.address.state ? this.address.state.value : '-1';
+            let addressItem = this.address;
+            if(addressItem){
+                addressItem =  _.cloneDeep(this.address);
+                if(addressItem.name && !addressItem.firstName && !addressItem.lastName){
+                    let arrs = addressItem.name.split(/\s+/);
+                    if(arrs && arrs.length > 1){
+                        addressItem.firstName = arrs[0];
+                        addressItem.lastName = arrs[1];
+                    }else{
+                        addressItem.firstName = arrs[0];
+                        addressItem.lastName = "";
+                    }
+                }
+            }
+
             return {
-                shipping: this.address ? _.cloneDeep(this.address) : {
+                shipping: addressItem ? _.cloneDeep(addressItem) : {
+                    firstName:null,
+                    lastName:null,
                     name: null,
                     streetAddress1: null,
                     unit: null,
@@ -246,6 +276,7 @@
                     if (result && (this.stateSelected != '-1' || !this.hasStates) && this.countrySelected != '-1') {
                         this.shipping.country = this.$refs.country.value
                         this.shipping.state = this.$refs.state.value
+                        this.shipping.name = `${this.shipping.firstName} ${this.shipping.lastName}`;
 
                         this.submiting = true
                         this.$store.dispatch('screenLoading', {loading: true})
