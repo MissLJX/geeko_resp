@@ -85,6 +85,27 @@ export default {
             })
         })
     },
+    postStringify(url, data, headers = {}){
+        return new Promise((resolve, reject) => {
+            instance.post(url, qs.stringify(data), {
+                headers: {...headers}
+            }).then((res) => {
+                if (res.data.code === 310) {
+                    reRequest().then((res) => {
+                        this.post(url, data, headers)
+                    }).catch((e) => {
+                        console.error(e)
+                        reject(e)
+                    })
+                } else {
+                    apiResult(res, resolve, reject)
+                }
+            }).catch((e) => {
+                console.error(e)
+                reject(e)
+            })
+        })
+    },
     cpost(url, data, headers = {}){
         return this.post(url, qs.stringify(data), {...headers, 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'})
     },

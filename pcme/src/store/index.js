@@ -21,6 +21,7 @@ const state = {
     orderCountUnpaid: 0,
     orderCountPaid: 0,
     orderCountHistory: 0,
+    orderCountReturns: 0,
 
     all: [],
     orderdetail:{},
@@ -31,6 +32,7 @@ const state = {
     unpaid: [],
     paid:[],
     history:[],
+    returns: [],
 
     allLoading: false,
     processingLoading: false,
@@ -40,6 +42,7 @@ const state = {
     unpaidLoading: false,
     paidLoading: false,
     historyLoading: false,
+    returnsLoading: false,
 
     tab: 'all',
     allSkip: 0,
@@ -50,6 +53,7 @@ const state = {
     unpaidSkip: 0,
     paidSkip:0,
     historySkip:0,
+    returnsSkip: 0,
 
     allDone: false,
     processingDone: false,
@@ -59,6 +63,7 @@ const state = {
     unpaidDone: false,
     paidDone: false,
     historyDone: false,
+    returnsDone: false,
 
     bbmessage: null,
     orderid:'',
@@ -152,6 +157,7 @@ const getters = {
     orderCountCanceled: state => state.orderCountCanceled,
     orderCountUnpaid: state => state.orderCountUnpaid,
     orderCountPaid: state => state.orderCountPaid,
+    orderCountReturns: state => state.orderCountReturns,
 
     all: state => state.all,
     orderdetail:state => state.orderdetail,
@@ -161,6 +167,7 @@ const getters = {
     canceled: state => state.canceled,
     unpaid: state => state.unpaid,
     paid: state => state.paid,
+    returns: state => state.returns,
 
     allLoading: state => state.allLoading,
     processingLoading: state => state.processingLoading,
@@ -169,6 +176,7 @@ const getters = {
     shippedLoading: state => state.shippedLoading,
     unpaidLoading: state => state.unpaidLoading,
     paidLoading: state => state.paidLoading,
+    returnsLoading: state => state.returnsLoading,
 
     tab: state => state.tab,
     allSkip: state => state.allSkip,
@@ -178,6 +186,8 @@ const getters = {
     shippedSkip: state => state.shippedSkip,
     unpaidSkip: state => state.unpaidSkip,
     paidSkip: state => state.paidSkip,
+    returnsSkip: state => state.returnsSkip,
+    historySkip: state => state.historySkip,
 
     allDone: state => state.allDone,
     processingDone: state => state.processingDone,
@@ -187,6 +197,7 @@ const getters = {
     unpaidDone: state => state.unpaidDone,
     paidDone: state => state.paidDone,
     historyDone: state => state.historyDone,
+    returnsDone: state => state.returnsDone,
 
     bbmessage: state => state.bbmessage,
     orderid: state => state.orderid,
@@ -294,6 +305,9 @@ const mutations = {
     [types.ME_ORDER_COUNT_PAID](state, count){
         state.orderCountPaid = count
     },
+    [types.ME_ORDER_COUNT_RETURN](state, count){
+        state.orderCountReturns = count
+    },
     //orders
     [types.HOME_ORDERS_ALL](state, orders) {
         state.all.push(...orders);
@@ -306,6 +320,9 @@ const mutations = {
     },
     [types.HOME_ORDER_ALL_SKIP](state, limit) {
         state.allSkip += limit;
+    },
+    [types.HOME_ORDER_ALL_SKIP_CLEAR](state, limit) {
+        state.allSkip = 0;
     },
     [types.HOME_ALL_DONE](state) {
         state.allDone = true;
@@ -320,6 +337,9 @@ const mutations = {
     [types.HOME_ORDERS_HISTORY_SKIP](state, limit) {
         state.historySkip += limit;
     },
+    [types.HOME_ORDERS_HISTORY_SKIP_CLEAR](state, limit) {
+        state.historySkip = 0;
+    },
     [types.HOME_HISTORY_DONE](state) {
         state.historyDone = true;
     },
@@ -332,6 +352,9 @@ const mutations = {
     },
     [types.HOME_ORDER_PROCESSING_SKIP](state, limit) {
         state.processingSkip += limit;
+    },
+    [types.HOME_ORDER_PROCESSING_SKIP_CLEAR](state, limit) {
+        state.processingSkip = 0;
     },
     [types.HOME_PROCESSING_DONE](state) {
         state.processingDone = true;
@@ -346,6 +369,9 @@ const mutations = {
     [types.HOME_ORDER_UNPAID_SKIP](state, limit) {
         state.unpaidSkip += limit;
     },
+    [types.HOME_ORDER_UNPAID_SKIP_CLEAR](state) {
+        state.unpaidSkip = 0;
+    },
     [types.HOME_UNPAID_DONE](state) {
         state.unpaidDone = true;
     },
@@ -358,6 +384,9 @@ const mutations = {
     },
     [types.HOME_ORDER_PAID_SKIP](state, limit) {
         state.paidSkip += limit;
+    },
+    [types.HOME_ORDER_PAID_SKIP_CLEAR](state) {
+        state.paidSkip = 0;
     },
     [types.HOME_PAID_DONE](state) {
         state.paidDone = true;
@@ -373,9 +402,13 @@ const mutations = {
     [types.HOME_ORDER_SHIPPED_SKIP](state, limit) {
         state.shippedSkip += limit;
     },
+    [types.HOME_ORDER_SHIPPED_SKIP_CLEAR](state) {
+        state.shippedSkip = 0;
+    },
     [types.HOME_SHIPPED_DONE](state) {
         state.shippedDone = true;
     },
+
     [types.HOME_ORDERS_CONFIRMED](state, orders) {
         state.confirmed.push(...orders);
     },
@@ -385,9 +418,13 @@ const mutations = {
     [types.HOME_ORDER_CONFIRMED_SKIP](state, limit) {
         state.confirmedSkip += limit;
     },
+    [types.HOME_ORDER_CONFIRMED_SKIP_CLEAR](state) {
+        state.confirmedSkip = 0;
+    },
     [types.HOME_CONFIRMED_DONE](state) {
         state.confirmedDone = true;
     },
+
     [types.HOME_ORDERS_CANCELED](state, orders) {
         state.canceled.push(...orders);
     },
@@ -397,8 +434,27 @@ const mutations = {
     [types.HOME_ORDER_CANCELED_SKIP](state, limit) {
         state.canceledSkip += limit;
     },
+    [types.HOME_ORDER_CANCELED_SKIP_CLEAR](state) {
+        state.canceledSkip = 0;
+    },
     [types.HOME_CANCELED_DONE](state) {
         state.canceledDone = true;
+    },
+
+    [types.HOME_ORDERS_RETURNS](state, orders) {
+        state.returns.push(...orders);
+    },
+    [types.HOME_LOADING_RETURNS](state, loading) {
+        state.returnsLoading = loading;
+    },
+    [types.HOME_ORDER_RETURNS_SKIP](state, limit) {
+        state.returnsSkip += limit;
+    },
+    [types.HOME_ORDER_RETURNS_SKIP_CLEAR](state) {
+        state.returnsSkip = 0;
+    },
+    [types.HOME_RETURNS_DONE](state) {
+        state.returnsDone = true;
     },
 
     [types.HOME_CHANGE_TAB](state, tab) {
@@ -745,6 +801,12 @@ const actions = {
             commit(types.ME_ORDER_COUNT_PAID, count)
         })
     },
+    getOrderCountReturn({commit}){
+        return api.getOrderCountReturns().then((count) => {
+            console.log(count)
+            commit(types.ME_ORDER_COUNT_RETURN, count)
+        })
+    },
     loadHistory({commit,state}, limit){
         if(state.historyDone){
             return
@@ -881,6 +943,36 @@ const actions = {
             commit(types.HOME_LOADING_CANCELED, false);
             return orders
         });
+    },
+
+    loadReturns({ commit }, limit) {
+        if (state.returnsDone) {
+            return;
+        }
+        commit(types.HOME_LOADING_RETURNS, true);
+        return api.getReturns(state.returnsSkip).then( orders => {
+            if (orders && orders.length > 0) {
+                commit(types.HOME_ORDERS_RETURNS, orders);
+                commit(types.HOME_ORDER_RETURNS_SKIP, limit);
+            } else {
+                commit(types.HOME_RETURNS_DONE);
+            }
+
+            commit(types.HOME_LOADING_RETURNS, false);
+            return orders
+        });
+    },
+
+    skipClear({commit}){
+        commit(types.HOME_ORDER_ALL_SKIP_CLEAR)
+        commit(types.HOME_ORDERS_HISTORY_SKIP_CLEAR)
+        commit(types.HOME_ORDER_PROCESSING_SKIP_CLEAR)
+        commit(types.HOME_ORDER_UNPAID_SKIP_CLEAR)
+        commit(types.HOME_ORDER_PAID_SKIP_CLEAR)
+        commit(types.HOME_ORDER_SHIPPED_SKIP_CLEAR)
+        commit(types.HOME_ORDER_CANCELED_SKIP_CLEAR)
+        commit(types.HOME_ORDER_CONFIRMED_SKIP_CLEAR)
+        commit(types.HOME_ORDER_RETURNS_SKIP_CLEAR)
     },
 
 
@@ -1154,6 +1246,16 @@ const actions = {
             });
         });
     },
+    editReturnLogistics({commit} , logistics){
+        return new Promise((reslove,reject) => {
+            api.editReturnLogistics(logistics).then(message => {
+                console.log("message",message);
+                reslove(message);
+            }).catch(err=>{
+                alert(err.result)
+            });
+        });
+    },
     getLogisticsCompanies({commit}){
         return new Promise((reslove,reject) => {
             api.getLogisticsCompanies().then((data) => {
@@ -1165,10 +1267,14 @@ const actions = {
         return new Promise((reslove,reject) => {
             api.getReturnLogistics(orderId).then((data) => {
                 let result = data.result;
-                if(!!result && result != null && result.length > 0 && result.length < 2){
-                    commit(types.GET_RETURN_LOGISTICS,result);
-                }else if(!!result && result != null && result.length > 1){
-                    result.splice(0,result.length - 1);
+                console.log(data)
+                // if(!!result && result != null && result.length > 0 && result.length < 2){
+                //     commit(types.GET_RETURN_LOGISTICS,result);
+                // }else if(!!result && result != null && result.length > 1){
+                //     result.splice(0,result.length - 1);
+                //     commit(types.GET_RETURN_LOGISTICS,result);
+                // }
+                if(result){
                     commit(types.GET_RETURN_LOGISTICS,result);
                 }
                 reslove(result);

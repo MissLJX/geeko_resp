@@ -11,3 +11,9 @@ export const PACKAGE_STATUS_PACKED = 1;     // Shipped状态订单中已打包�
 export const PACKAGE_STATUS_IN_TRANSITE = 2;        //Shipped状态订单中 已经发货正在运输
 export const PACKAGE_STATUS_DELIVERED = 3;      //Shipped状态订单中 订单被签收
 export const PACKAGE_STATUS_CANCELED = 4;       //被取消的包裹
+
+// // 0：return requested，1：refund requested，2：Return canceled，3：refunded  退货状态
+export const ORDER_RETURN_REQUESTED = 0;        //已经申请退货
+export const ORDER_RETURN_REFUND_REQUESTED = 1;     //客服已经同意退货申请，状态为已申请退款
+export const ORDER_RETURN_CANCELED = 2;     //退货被取消
+export const ORDER_RETURN_REFUNED = 3;      //退款成功

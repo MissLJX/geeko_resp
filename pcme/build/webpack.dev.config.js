@@ -48,11 +48,7 @@ const config = {
     proxy: {
 			'/api': {
 				target: 'https://www.chicme.xyz',
-<<<<<<< HEAD
 				// target: 'http://192.168.2.19:8080/',
-=======
-				// target: 'http://192.168.1.8:8080/',
->>>>>>> 1a1017d529d324ad6e244c219f8d79287cfc06e5
 				pathRewrite: { '^/api': '' },
 				cookieDomainRewrite: 'localhost',
 				cookiePathRewrite: {

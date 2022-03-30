@@ -229,6 +229,20 @@ export default {
     logistics_name_not_empty: 'Logistics Company Name Can not be empty',
     track_number_not_empty: 'trackingNumber can not be empty',
 
+    cancel_return:'Cancel Return',
+    edit_return_receipt: 'Edit Return Receipt',
+    return_receipt: 'Return Receipt',
+    return_record: 'Return Record',
+    return_canceled: 'Return Canceled',
+    sure_to_cancel_return: 'Are you sure you want to cancel the return',
+    check_return_detail:'You can check your order details to see the progress of your return',
+    courier_company:'Courier Company',
+    select_courier_company:'Please Select the Courier Company',
+    fill_courier_company:'Please fill in your courier company',
+    loading:'loading',
+    return_upload_tip: 'A photo of the receipt from the shipping company indicating the weight of the package and tracking number',
+    total_reund:'Total Reund',
+
     label:{
         redeem_coupon:"Redeem Coupon",
         hot_use_points:"How to Use Points?",

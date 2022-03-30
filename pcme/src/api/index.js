@@ -35,6 +35,9 @@ export const getOrderCountUnpaid = () => {
 export const getOrderCountPaid = () => {
     return axios.get(NVPATH + '/order/paid-orders-count').then(data => data.result)
 }
+export const getOrderCountReturns = () => {
+    return axios.get('/return-order/count').then(data => data.result)
+}
 //orders
 export const getOrder = (id) => {
     return axios.cpost(NVPATH + '/order/get-order-details',id).then(data => data.result)
@@ -44,6 +47,9 @@ export const getOrderByCode = (id) => {
 }
 export const getOrders =(skip, api_suffix) => {
     return axios.get(`${NVPATH}/order/${skip}/20/${api_suffix}`).then(data => data.result)
+}
+export const getReturns = (skip) => {
+    return axios.get(`return-order/${skip}/20/get-return-orders`).then(data => data.result)
 }
 export const confirmOrder = (id) =>{
     return axios.get('/v9/order/'+id+'/receipt')
@@ -236,7 +242,16 @@ export const getReturnLabel = (id) =>{
 
 // 退货用户上传物流信息
 export const addReturnLogistics = (logistics) => {
-    return axios.post('/v9/order/add-return-logistics',JSON.stringify(logistics) , {'Content-Type':"application/json"}).then(data => data.result);
+    return axios.post('return-order/add-return-logistics',JSON.stringify(logistics),{'Content-Type':"application/json"});
+    // return axios.post('/v9/order/add-return-logistics',JSON.stringify(logistics) , {'Content-Type':"application/json"}).then(data => data.result);
+}
+// 退货用户物流信息修改
+export const editReturnLogistics = (logistics) => {
+    return axios.post('/return-order/edit-return-logistics',JSON.stringify(logistics),{'Content-Type':"application/json"});
+}
+// 取消退货
+export const cancelReturnOrder = (id) => {
+    return axios.postStringify("/return-order/cancel",{id});
 }
 
 // 获取配置物流信息
@@ -245,7 +260,8 @@ export const getLogisticsCompanies = () => {
 }
 
 export const getReturnLogistics  = function(orderId){
-    return axios.get("/v9/order/get-return-logistics",{orderId});
+    // return axios.get("/v9/order/get-return-logistics",{orderId});
+    return axios.get("/return-order/get",{"id":orderId});
 }
 
 export const generalUploadImage = (imageFile) =>{

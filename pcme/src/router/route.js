@@ -18,6 +18,7 @@ import emailConfirm from '../pages/email-confirm.vue'
 import orderConfirm from '../pages/order-confirm.vue'
 import reviewConfirm from '../pages/review-confirm.vue'
 import OrderDetail from '../pages/order-detail.vue'
+import OrderReturnDetail from '../pages/order-return-detail.vue'
 import OrderCode from '../pages/order-code.vue'
 import LogisticsDetail from '../pages/logistics-detail.vue'
 import PackageLogisticsDetail from '../pages/package-logistics-detail.vue'
@@ -229,6 +230,11 @@ const routes = [
     {
         path:__Base_Path__+'/me/m/order/detail/:orderId',
         component: OrderDetail,
+        meta: {title:'OrderDetail'},
+    },
+    {
+        path:__Base_Path__+'/me/m/order/return-detail/:orderId',
+        component: OrderReturnDetail,
         meta: {title:'OrderDetail'},
     },
     {

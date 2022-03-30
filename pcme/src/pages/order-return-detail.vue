@@ -4,21 +4,34 @@
             <p style="text-transform:capitalize"><span @click="window.location.href = '/'">{{$t('home')}}</span><router-link :to="getUrl('/me/m')"> > {{$t('me')}}</router-link><router-link :to="getUrl('/me/m/order')"> > {{$t('myorders')}}</router-link> > {{$t('detail')}}</p>
         </div>
         <div class="detailCon">
-            <h2>{{$t('detail')}}</h2>
-            <h4>{{$t('shippinginfo')}}</h4>
-            <div class="shippinginfo">
-                <p>{{shipping.name}}</p>
-                <p>{{shipping.streetAddress1}}</p>
-                <p>{{shipping.zipCode}},{{shipping.city}},{{shippingstate && shippingstate.label ? shippingstate && shippingstate.label : shippingstate && shippingstate.value}},{{shippingcountry && shippingcountry.label}}</p>
+            <h2>{{$t("index.returns")}}</h2>
+
+            <div class="return-record" v-if="returnLogistics.returnRecords && returnLogistics.returnRecords.length > 0">
+                <p class="title">{{returnRecordFont}}</p>
+                <div class="container" v-if="returnLogistics.status !== constant.ORDER_RETURN_CANCELED">
+                    <div 
+                        class="return-item" 
+                        v-for="(item,index) in returnLogistics.returnRecords" 
+                        :key="item.status+index"
+                        :class="{
+                            'active':returnLogistics.status === item.status,
+                            'no-border':index === returnLogistics.returnRecords.length -1
+                        }"
+                    >
+                        <p class="hd">{{item.step}}</p>
+                        <p class="bd">{{item.description}}</p>
+                    </div>
+                </div>
             </div>
-            <div class="bgline"></div>
+
+            <!-- <div class="bgline"></div>
             <h4>{{$t('orderinfo')}}</h4>
             <div class="orderinfo">
                 <p v-if="orderdetail.id"><strong>{{$t('orderno')}}: {{orderdetail.id}}</strong></p>
                 <p v-if="orderdetail.paymentTime"><span>{{$t('paymentTime')}}: </span>{{getDate}}</p>
                 <p v-if="orderdetail.payMethodName"><span>{{$t('paymentMethod')}}: </span>{{orderdetail.payMethodName}}</p>
-            </div>
-            <div class="payNow" v-if="orderdetail.fulfillmentStatus === constant.TOTAL_STATUS_UNPAID && orderoffset >= 0">
+            </div> -->
+            <!-- <div class="payNow" v-if="orderdetail.fulfillmentStatus === constant.TOTAL_STATUS_UNPAID && orderoffset >= 0">
                 <div class="otherPay">
                     <div class="remain">{{$t("remaining")}}:<count-down :timeStyle="{color:'#fff'}" :timeLeft="orderoffset"></count-down></div>
                     <a class="paybtn" :href="getPayUrl" v-if="getBtnText && getPayUrl && orderdetail.fulfillmentStatus === constant.TOTAL_STATUS_UNPAID && orderoffset >= 0">{{getBtnText}}</a>
@@ -28,8 +41,8 @@
             </div>
             <div class="payTip" v-if="orderdetail.unPayMessage && orderoffset >= 0">
                 {{orderdetail.unPayMessage}}
-            </div>
-            <ul v-if="orderdetail && orderdetail.logistics && orderdetail.logistics.packages && orderdetail.logistics.packages.length > 1" class="packageTab">
+            </div> -->
+            <!-- <ul v-if="orderdetail && orderdetail.logistics && orderdetail.logistics.packages && orderdetail.logistics.packages.length > 1" class="packageTab">
                 <li class="tab" @click="changeTab(key)" :class="{'active': key===isActive}" v-for="(item,key) in orderdetail.logistics.packages" :key="key">
                     {{item.name}}
                 </li>
@@ -43,21 +56,21 @@
                 <p><span class="statusColor" :style="{backgroundColor : status_color}"></span>{{orderpro.statusView}}</p>
                 <p v-if="orderpro.trackingId && !orderpro.logisticsSupplierWebsiteURL"><a @click="checkPackageLogistics(orderpro.status,orderpro.trackingId)" >{{$t('track')}} ></a></p>
                 <p v-if="orderpro.logisticsSupplierWebsiteURL"><a :href="orderpro.logisticsSupplierWebsiteURL" >{{$t('track')}} ></a></p>
-            </div>
+            </div> -->
             <table class="infotabel">
                 <tr>
                     <td>{{$t('item')}}</td>
                     <td></td>
                     <td>{{$t('Qty')}}</td>
                     <td>{{$t('price')}}</td>
-                    <td><p @click="showTicket(orderdetail.id)"><i class="iconfont">&#xe716;</i><a>{{$t('contactseller')}}</a></p></td>
+                    <td><p @click="showTicket(returnLogistics.orderId)"><i class="iconfont">&#xe716;</i><a>{{$t('contactseller')}}</a></p></td>
                 </tr>
-                <tr v-for="(item,key) in orderpro.products">
+                <tr v-for="(item,key) in returnLogistics.returnOrderItems">
                     <td>
-                        <link-image :href="getProUrl(item)" :src="item.imageURL" :title="item.name"/>
+                        <link-image :href="getProUrl(item)" :src="item.productImageUrl" :title="item.name"/>
                     </td>
                     <td class="w-200">
-                        <p v-if="item.name">{{item.name}}</p>
+                        <p v-if="item.productName">{{item.productName}}</p>
                         <p class="grey" v-if="item.sku" style="margin: 10px 0px;">SKU:{{item.sku}}</p>
                         <p class="grey">{{item.color}} {{item.size}} </p>
                     </td>
@@ -65,24 +78,28 @@
                         <p><span>X{{item.qty}}</span></p>
                     </td>
                     <td>
-                        <p class="price">{{realprice(item.price)}}</p>
+                        <p class="price">{{realprice(item.refundItemTotal)}}</p>
                     </td>
                     <td>
-                        <div v-if="confirmedOrder" class="review-btn" :class="{'b-btn':confirmedOrder,'black':shippedOrder || processingOrder}">
+                        <!-- <div v-if="confirmedOrder" class="review-btn" :class="{'b-btn':confirmedOrder,'black':shippedOrder || processingOrder}">
                             <span  @click="review(item.productId,item.variantId)">{{$t('review')}}</span>
                         </div>
                         <div @click="addProduct(item.variantId)" v-if="item.variantId && orderdetail.fulfillmentStatus===constant.TOTAL_STATUS_CANCELED" class="review-btn">
                             <span>{{$t("repurchase")}}</span>
                         </div>
 
-                        <!-- <div v-if="confirmedOrder" class="returns-btn" @click="showTicket(orderdetail.id)">Return</div> -->
-                        <div v-if="orderpro.status === constant.PACKAGE_STATUS_DELIVERED && isNormalOrder" class="returns-btn" @click="showTicketReturn(orderdetail.id)">Return</div>
+                        // <div v-if="confirmedOrder" class="returns-btn" @click="showTicket(orderdetail.id)">Return</div>
+                        <div v-if="orderpro.status === constant.PACKAGE_STATUS_DELIVERED && isNormalOrder" class="returns-btn" @click="showTicketReturn(orderdetail.id)">Return</div> -->
                     </td>
                 </tr>
             </table>
             <div class="pricecon" v-if="isNormalOrder">
                 <div class="pricecon1" v-if="orderdetail">
-                    <p class="p-price">ItemTotal:<span class="price">{{paymentItemTotal}}</span></p>
+                    <p class="p-price">
+                        {{$t("total_reund")}}:
+                        <span class="price">{{paymentItemTotal}}</span>
+                    </p>
+                    <!-- <p class="p-price">Total Reund:<span class="price">{{paymentItemTotal}}</span></p>
                     <p class="p-price" v-if="orderdetail.shippingPrice && orderdetail.shippingPrice.amount!=='0'">{{$t('shipping')}}:<span class="price">{{shippingprice}}</span></p>
                     <p class="p-price" v-if="orderdetail.shippingInsurancePrice && orderdetail.shippingInsurancePrice.amount!=='0'">Insurance:<span class="price">{{shippingInsurancePrice}}</span></p>
                     <p class="p-price t-p">
@@ -94,11 +111,24 @@
                                 <span style="position: absolute;font-size: 14px;bottom: -6px;left: 15px;font-family: 'ACUMINPRO-BOLD';text-shadow: 1px 0 0 #e64545;">X{{orderdetail.doublePointsMultiple}}</span>
                             </span>
                         </span>
-                    </p>
+                    </p> -->
                 </div>
             </div>
             <div class="actionbtn">
-                <div class="r-btn" :class="{'b-btn':confirmedOrder,'black':shippedOrder || processingOrder}" v-if="shippedOrder || orderdetail.isCanCanceled || (orderdetail.id && orderdetail.fulfillmentStatus===constant.TOTAL_STATUS_CANCELED)">
+
+                <a 
+                    @click.prevent="cancelReturnProducts(returnLogistics)" 
+                    v-if="returnLogistics.status === constant.ORDER_RETURN_REQUESTED" 
+                    class="r-btn black"
+                >{{$t("cancel_return")}}</a>
+
+                <a class="r-btn black" 
+                    @click="returnProducts(returnLogistics)" 
+                    v-if="returnLogistics.id && returnLogistics.status===constant.ORDER_RETURN_REQUESTED">
+                    {{returnReceiptFont}}
+                </a>
+                
+                <!-- <div class="r-btn" :class="{'b-btn':confirmedOrder,'black':shippedOrder || processingOrder}" v-if="shippedOrder || orderdetail.isCanCanceled || (orderdetail.id && orderdetail.fulfillmentStatus===constant.TOTAL_STATUS_CANCELED)">
                     <span v-if="shippedOrder" @click="() => {this.isConfirmAlert = true}">{{$t('confirmorder')}}</span>
                     <span v-if="orderdetail.isCanCanceled" @click="() => {this.isAlert = true}">{{$t('cancelorder2')}}</span>
                     <span @click="addProducts(orderdetail.orderItems)" v-if="orderdetail.id && orderdetail.fulfillmentStatus===constant.TOTAL_STATUS_CANCELED">{{$t("repurchase")}}</span>
@@ -110,19 +140,18 @@
                     <span  @click="checkLogistics(orderdetail.id)">{{$t('track')}}</span>
                 </div>
 
-                <!-- return-logistics -->
                 <div 
                     class="r-btn black" 
                     v-if="this.order && this.order.logistics && this.order.logistics.packages && this.order.logistics.packages.length > 1 && order.status === 3"
                     @click="isReturnLogistics = true"
                 >
                     <span>{{$t("return_logistics")}}</span>
-                </div>
+                </div> -->
             </div>
 
             <return-logistics 
                 v-if="isReturnLogistics" 
-                :orderId="orderdetail.id" 
+                :orderId="returnLogistics.id" 
                 @logisticsShow="logisticsShow" 
                 :loddingShow.sync="isloding"
             >
@@ -131,9 +160,9 @@
             <!-- <select-order v-if="isShowSelect" v-on:closeSelect="closeSelect1" v-on:showTicket="showTicket"></select-order>
             <order-ticket  v-if="isShowTicket" v-on:closeSelect="closeSelect1" v-on:selectOrder="selectorder"></order-ticket> -->
             <faq-select-order v-if="isShowSelect" v-on:closeSelect="closeSelect1" v-on:showTicket="showTicket"></faq-select-order>
-            <faq-order-ticket  v-if="isShowTicket" v-on:closeSelect="closeSelect1" v-on:selectOrder="selectorder"></faq-order-ticket>
+            <faq-order-ticket v-if="isShowTicket" v-on:closeSelect="closeSelect1" v-on:selectOrder="selectorder"></faq-order-ticket>
 
-            <div v-if="getBtnText==='Imprimir boleto' && orderdetail.fulfillmentStatus == constant.TOTAL_STATUS_UNPAID && orderoffset >= 0 && couponshow && getPayUrl">
+            <!-- <div v-if="getBtnText==='Imprimir boleto' && orderdetail.fulfillmentStatus == constant.TOTAL_STATUS_UNPAID && orderoffset >= 0 && couponshow && getPayUrl">
                 <div class="mask"></div>
                 <div class="coupon-window">
                     <span class="coupon-close" @click="() => {this.couponshow = false}"><i class="iconfont">&#xe69a;</i></span>
@@ -171,9 +200,9 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
-        <div class="mask" v-if="isAlert">
+        <!-- <div class="mask" v-if="isAlert">
             <div class="confirm-con cancel-con">
                 <p class="cancel-btn" @click="cancelOrder(0)"><i class="iconfont">&#xe69a;</i></p>
                 <p>{{$t("sure_to_cancel_order")}}</p>
@@ -200,11 +229,15 @@
                     <div class="y-btn" @click="confirmOrder('1')">{{$t('yes')}}</div>
                 </div>
             </div>
-        </div>
+        </div> -->
         <loding v-if="isloding"></loding>
-        <transition name="fade">
+        <!-- <transition name="fade">
             <div v-if="isAddProducts" class="addProductsMask">{{isAddProductstTip}}</div>
-        </transition>
+        </transition> -->
+
+        <div class="confirm-mask" v-if="modalconfirmshow">
+            <modal-confirm :cfg="confirmCfg" />
+        </div>
     </div>
 </template>
 
@@ -220,6 +253,11 @@
     import CountDown from '../components/countdow.vue';
     import loding from '../components/loding.vue';
     import ReturnLogistics from '../components/return-logistics.vue'
+
+    import store from '../store';
+    import ModalConfirm from '../components/modal-confirm.vue';
+    import {cancelReturnOrder} from '../api/index';
+
 
     export default {
         data(){
@@ -243,6 +281,9 @@
                 isReturnLogistics:false,
                 constant:constant,
                 isNormalOrder: true,
+
+                strutBottomPaddingNumber:"",
+                modalconfirmshow: false,
             }
         },
         components: {
@@ -253,10 +294,29 @@
             'faq-select-order': faqSelectOrder,
             'faq-order-ticket': faqOrderTicket,
             'loding':loding,
-            'return-logistics':ReturnLogistics
+            'return-logistics':ReturnLogistics,
+            'modal-confirm':ModalConfirm
         },
         computed:{
-            ...mapGetters(['orderdetail','shareurl','cancelReasons']),
+            ...mapGetters(['orderdetail','shareurl','cancelReasons', 'returnLogistics']),
+             returnRecordFont(){
+                if(this.returnLogistics.status !== constant.ORDER_RETURN_CANCELED){
+                    return this.$t('return_record');
+                    // return 'Return Record'
+                }else{
+                    return this.$t('return_canceled');
+                    // return 'Return Canceled'
+                }
+            },
+            returnReceiptFont() {
+               if(this.returnLogistics.status === constant.ORDER_RETURN_REQUESTED && this.returnLogistics.logistics){
+                   return this.$t('edit_return_receipt');
+                // return 'edit return receipt'
+               }else{
+                   return this.$t('return_receipt');
+                // return 'return receipt'
+               }
+            },
             getPayUrl(){
                 switch(this.orderdetail.payMethod){
                     case '20':
@@ -346,8 +406,8 @@
             //     return utils.STATUS_LABEL(this.orderdetail.fulfillmentStatus)
             // },
             paymentItemTotal(){
-                if(this.order && this.orderdetail.paymentItemTotal){
-                    return utils.unitprice(this.orderdetail.paymentItemTotal);
+                if(this.returnLogistics && this.returnLogistics.refundTotal){
+                    return utils.unitprice(this.returnLogistics.refundTotal);
                 }
             },
             shippingprice(){
@@ -395,6 +455,72 @@
 
         },
         methods:{
+            cancelReturnProducts(item){
+                let _this = this;
+                this.modalconfirmshow = true;
+
+                this.confirmCfg =  {
+                    btnFont:[
+                        {
+                            type: 'no',
+                            text: this.$t("cancel"),
+                            fuc: function () {
+                                _this.modalconfirmshow = false;
+                                _this.$store.dispatch('closeConfirm').then(()=>{
+
+                                });
+                            },
+                            style:{}
+                        },
+                        {
+                            type: 'yes',
+                            text: this.$t("confirm"),
+                            fuc: function () {
+                                _this.modalconfirmshow = false;
+                                _this.$store.dispatch('closeConfirm').then(() => {
+                                    cancelReturnOrder(item.logistics.id).then(res => {
+                                        console.log(res)
+                                        _this.refreshData()
+                                    }).catch(err => {
+                                        alert(err.result)
+                                    })
+                                });
+                            },
+                            style:{}
+                        },
+                        
+                    ],
+                    btnClose: true,
+                    showSuccessIcon: false,
+                    message: this.$t("sure_to_cancel_return")+"?",
+                    message2:"",
+                    close: function () {
+                        _this.modalconfirmshow = false;
+                        _this.$store.dispatch('closeConfirm').then(()=>{});
+                    },
+                    style:{
+                        box:{
+                            width: '600px',
+                            height: '195px',
+                            borderRadius: '2px',
+                            padding: '40px'
+                        },
+                        message:{
+                            fontFamily: 'AcuminPro-Bold',
+                            fontSize: '16px',
+                            color: '#222222',
+                            margin: '20px 0 30px'
+                        },
+                        message2:{},
+                        icon:{},
+                        btnClose:{
+                            fontSize: '18px !important',
+                            color: '#222',
+                        },
+                    }
+                }
+                
+            },
             review(id,variantId){
                 this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/order-review', query: { orderid: this.orderdetail.id , productid: id , variantId:variantId }})
             },
@@ -526,7 +652,7 @@
                 }
             },
             getProUrl(product){
-                return "/product/"+product.name+"/"+product.sku+"/"+product.productId+".html"
+                return "/product/"+product.productName+"/"+product.sku+"/"+product.productId+".html"
             },
             getReturnLabel(){
                 window.recordReturnLabel ? window.recordReturnLabel(this.orderdetail.id) : "";
@@ -535,32 +661,136 @@
             getUrl(suffix){
                 return utils.PROJECT + suffix;
             },
-            // return-logistics
-            logisticsShow(){
+            returnProducts(item){
+                console.log(item)
+                this.showReturnOrder = item;
+                this.isReturnLogistics = true;
+                this.showReturnOrderId = item.id;
+                this.isReturnLoading = true;
+            },
+            logisticsShow(isSuccess){
+                let _this = this;
+
                 this.isReturnLogistics = false;
-                this.isloding = false;
+                this.isReturnLoading = false;
+                if(isSuccess){
+                    this.modalconfirmshow = true;
+
+                    this.confirmCfg =  {
+                        btnFont:[
+                            {
+                                type: 'yes',
+                                text: this.$t("edit_return_receipt"),
+                                fuc: function () {
+                                    _this.modalconfirmshow = false;
+                                    _this.$store.dispatch('closeConfirm').then(() => {
+                                        _this.returnProducts(_this.showReturnOrder);
+                                    });
+                                },
+                                style:{
+                                }
+                            },
+                            {
+                                type: 'no',
+                                text: this.$t("points_mall.viewOrder"),
+                                fuc: function () {
+                                    _this.modalconfirmshow = false;
+                                    _this.$store.dispatch('closeConfirm').then(()=>{
+                                        _this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/order/return-detail/'+_this.showReturnOrder.id})
+                                    });
+                                },
+                                style:{
+                                    background:'#222222',
+                                    backgroundColor: '#222222',
+                                    lineHeight: '36px',
+                                    color: '#ffffff'
+                                }
+                            },
+                        ],
+                        btnClose: true,
+                        showSuccessIcon: true,
+                        message: this.$t("support.s_submit_success"),
+                        message2:this.$t("check_return_detail"),
+                        close: function () {
+                            _this.modalconfirmshow = false;
+                            _this.$store.dispatch('closeConfirm').then(()=>{
+
+                            });
+                        },
+                        style:{
+                            box:{
+                                width: '600px',
+                                height: '272px',
+                                borderRadius: '2px',
+                                padding: '40px'
+                            },
+                            message:{
+                                fontSize: '16px',
+                                marginBottom: '10px'
+                            },
+                            message2:{
+                                fontSize: '14px',
+                                marginBottom: '30px'
+                            },
+                            icon:{
+                                marginTop: '20px',
+                            },
+                            btnClose:{
+                                fontSize: '18px !important',
+                                color: '#222',
+                            },
+                        }
+                    }
+                }
+            },
+
+            strutBottomPadding(){
+                // 1 29 69 99
+                let height = this.$refs.footerFixed ? this.$refs.footerFixed.offsetHeight : 0;
+                // 只有按钮没有时间时：69
+                if(height > 30 && height < 70){
+                    return 'p-b-69';
+                // 有按钮也有时间时：99
+                }else if(height > 70 && height < 100){
+                    return 'p-b-99';
+                }else{
+                    return 'p-b-0';
+                }
+            },
+
+            refreshData(){
+                store.dispatch('getReturnLogistics', this.$route.params.orderId)
             }
+        },
+        mounted(){
+            if(window.GeekoSensors){
+                window.GeekoSensors.Track('EventEnter', {
+                    page: 'order',
+                    orderId:this.order.id
+                })
+            }
+            this.strutBottomPaddingNumber = this.strutBottomPadding();
+
         },
         created(){
             
-            this.$store.dispatch('getOrder',this.$route.params.orderId).then((order)=>{
-                if(!order){
-                    window.location.href='/me/m/order';
-                }
-                this.order = this.orderdetail
-                this.orderpro = _.cloneDeep(this.orderdetail.logistics.packages[0])
-                this.shipping = this.orderdetail.shippingDetail
-                this.shippingstate = this.orderdetail.shippingDetail.state
-                this.shippingcountry =this.orderdetail.shippingDetail.country
-                this.isNormalOrder = this.orderdetail.type !== 1
-                this.isloding = false
-            }).catch((e) => {
-                console.error(e);
-               /* window.location.href='/me/m/order'*/
-            })
-            this.$store.dispatch('getCancelOrderReason')
-
-        }
+        },
+        beforeRouteEnter(to, from, next) {
+            console.log(to, this)
+            store.dispatch('paging', true);
+            store.dispatch('getReturnLogistics', to.params.orderId)
+                .then((order) => {
+                next((vm) => {
+                    console.log(order)
+                    if(!order){
+                        vm.$router.replace({path:vm.$GLOBAL.getUrl('/me/m/order/all')});
+                        return false;
+                    }
+                    vm.isloding = false;
+                });
+                store.dispatch('paging', false);
+            });
+        },
     }
 </script>
 
@@ -700,6 +930,7 @@
         margin: 0 auto;
         padding-top: 24px;
         h2 {
+            font-size: 24px;
             margin-bottom: 20px;
         }
         h4 {
@@ -740,6 +971,15 @@
             float: right;
             .p-price{
                 line-height: 30px;
+                display: flex;
+                border-bottom: 1px solid #e6e6e6;
+                justify-content: space-between;
+                font-size: 18px;
+                font-weight: normal;
+                font-stretch: normal;
+                letter-spacing: 0px;
+                color: #222222;
+
                 .price{
                     float: right;
                 }
@@ -764,9 +1004,13 @@
         }
     }
     .actionbtn{
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+
         .r-btn{
-            width: auto;
-            padding: 0 60px;
+            min-width: 145px;
+            padding: 0 20px;
             float: right;
             line-height: 40px;
             margin-bottom: 20px;
@@ -1043,5 +1287,76 @@
     }
     .redBorder{
         border: 1px solid #e64545 !important;
+    }
+
+    .return-record{
+
+        .title{
+            font-size: 18px;
+            color: #222222;
+            font-family: 'SlatePro-Medium';
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .container{
+            padding-left: 10px;
+            .return-item{
+                position: relative;
+                display: flex;
+                padding-left: 10px;
+                padding-bottom: 10px;
+                border-left: 1px solid #f2f2f2;
+                flex-direction: column;
+
+                .hd{
+                    font-size: 18px;
+                    color: #666666;
+                    font-family: 'SlatePro-Medium';
+                }
+
+                .bd{
+                    font-family: 'SlatePro';
+                    font-size: 18px;
+                    color: #666666;
+                    margin-top: 2px;
+                }
+
+                &::after{
+                    content: "";
+                    position: absolute;
+                    width: 7px;
+                    height: 7px;
+                    background-color: #f2f2f2;
+                    border-radius: 50%;
+                    display: inline-block;
+                    top: 2px;
+                    left: -4px;
+                }
+
+                &.active{
+                    &::after{
+                        background-color: #222222;
+                    }
+
+                    .hd{
+                        color: #222222;
+                        font-family: 'AcuminPro-Bold';
+                    }
+                }
+
+                &.no-border{
+                    border-left: 1px solid transparent;
+                }
+            }
+        }
+    }
+    .confirm-mask{
+        width: 100vw;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background: rgba(0,0,0,0.6);
     }
 </style>

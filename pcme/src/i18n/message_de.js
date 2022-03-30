@@ -226,6 +226,20 @@ export default {
     logistics_name_not_empty: 'Name des Logistikunternehmens darf nicht leer sein',
     track_number_not_empty: 'trackingNumber darf nicht leer sein',
 
+    cancel_return:'Rückgabe stornieren',
+    edit_return_receipt: 'Rücksendebeleg bearbeiten',
+    return_receipt: 'Rückschein',
+    return_record: 'Datensatz zurücksenden',
+    return_canceled: 'Rücksendung storniert',
+    sure_to_cancel_return: 'Sind Sie sicher, dass Sie die Rücksendung stornieren möchten',
+    check_return_detail:'Sie können Ihre Bestelldetails überprüfen, um den Fortschritt Ihrer Rücksendung zu sehen',
+    courier_company:'Kurierunternehmen',
+    select_courier_company:'Bitte wählen Sie das Kurierunternehmen aus',
+    fill_courier_company:'Bitte geben Sie Ihr Kurierunternehmen ein',
+    loading:'Laden',
+    return_upload_tip: 'Ein Foto der Quittung des Versandunternehmens, auf dem das Gewicht des Pakets und die Sendungsverfolgungsnummer angegeben sind',
+    total_reund:'Total Reund',
+
     label:{
         redeem_coupon:"Coupon einl\u00f6sen",
         hot_use_points:"Wie werden Punkte verwendet?",

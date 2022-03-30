@@ -3,7 +3,9 @@
         <span class="iconfont close" 
               :style="btnCloseStyle" 
               v-if="cfg.btnClose" 
-              @click="cfg.no">&#xe69a;</span>
+              @click="cfg.close">&#xe69a;</span>
+
+        <span v-if="cfg.showSuccessIcon" class="iconfont success_icon" :style="iconStyle">&#xe6b7;</span>
 
         <div class="bd">
             <p :style="messageStyle">{{cfg.message}}</p>
@@ -24,16 +26,16 @@
         </template>
 
         <div class="fd">
-            <button class="l-vue-btn" 
-                    @click="cfg.yes" 
-                    v-if="cfg.btnFont && cfg.btnFont.yes"
-                    :style="btnYes"
-                    >{{cfg.btnFont.yes}}</button>
-            <button class="l-vue-btn no" 
+            <button :class="{'l-vue-btn':true, 'no':item.type=='no'}" 
+                    @click="item.fuc" 
+                    :style="styleTransform(item.style)"
+                    v-for="item in cfg.btnFont"
+                    >{{item.text}}</button>
+            <!-- <button class="l-vue-btn no" 
                     @click="cfg.no" 
                     v-if="cfg.btnFont && cfg.btnFont.no"
                     :style="btnNo"
-                    >{{cfg.btnFont.no}}</button>
+                    >{{cfg.btnFont.no}}</button> -->
         </div>
     </div>
 </template>
@@ -41,7 +43,8 @@
 <style>
     .st-confirm {
         position: fixed;
-        width: 80%;
+        /* width: 80%; */
+        width: 600px;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
@@ -69,32 +72,39 @@
 
     .st-confirm > .close{
         position: absolute;
-        top: 3px;
-        right: 2px;
-        font-size: 10px;
+        top: 10px;
+        right: 10px;
+        font-size: 14px;
         line-height: 12px;
         color: #999;
-        transform: scale(0.83);
+        cursor: pointer;
+        /* transform: scale(0.83); */
     }
 
     .st-confirm > .fd{
         margin-top: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .st-confirm > .fd > .l-vue-btn{
-        height: 45px;
+        height: 36px;
         background:#222222;
         background-color: #222222;
-        line-height: 45px;
+        line-height: 36px;
         color: #ffffff;
-        width: 100%;
+        /* width: 100%; */
         border: none;
         cursor: pointer;
-        font-size: 20px;
+        font-size: 14px;
+        margin: 0 10px;
+        padding: 0 10px;
+        min-width: 160px;
     }
 
     .st-confirm > .fd > .l-vue-btn.no{
-        margin-top: 10px;
+        /* margin-top: 10px; */
         border: solid 1px #222222;
         color: #222222;
         background: #ffffff;
@@ -110,6 +120,15 @@
 
     .st-confirm .message2 p{
         line-height: normal;
+    }
+
+    .success_icon{
+        font-size: 40px !important;
+        line-height: 40px;
+        color: #20b759;
+        margin-bottom: 10px;
+        text-align: center;
+        display: block;
     }
 </style>
 
@@ -141,6 +160,9 @@
                             width: '250px',
                             borderRadius: '2px',
                             padding: '26px 25px'
+                        },
+                        icon:{
+
                         },
                         message:{
 
@@ -174,6 +196,11 @@
                     return this.styleTransform('btnClose');
                 }
             },
+            iconStyle(){
+                if(this.cfg.style && this.cfg.style.icon && JSON.stringify(this.cfg.style.icon)!='{}') {
+                    return this.styleTransform('icon');
+                }
+            },
             messageStyle(){
                 if(this.cfg.style && this.cfg.style.message && JSON.stringify(this.cfg.style.message)!='{}') {
                     return this.styleTransform('message');
@@ -202,8 +229,14 @@
             },
             // 自定义样式转成行内样式
             styleTransform(key){
-                let style = this.cfg.style[key + ''];
+                let style;
+                if(typeof key == 'object'){
+                    style = key;
+                } else {
+                    style = this.cfg.style[key + ''];
+                }
                 let keyStyle=''
+                
                 Object.keys(style).forEach((key1)=>{
                     keyStyle += this.toLine(key1) + ":" + style[key1+''] + ";"
                 })

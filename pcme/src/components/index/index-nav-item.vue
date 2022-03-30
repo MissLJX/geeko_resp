@@ -90,6 +90,7 @@
                 this.$emit("changeRouter",name);
             },
             changeStatus(status,name){
+                console.log(status, name)
                 this.changeOrderStatus(status);
                 this.$emit("changeRouter",name);
             },

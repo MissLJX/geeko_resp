@@ -228,6 +228,20 @@ export default {
     logistics_name_not_empty: 'O nome da empresa de logística não pode estar vazio',
     track_number_not_empty: 'trackingNumber não pode estar vazio',
 
+    cancel_return:'Cancelar Devolução',
+    edit_return_receipt: 'Editar recibo de devolução',
+    return_receipt: 'Recibo de Devolução',
+    return_record: 'Registro de retorno',
+    return_canceled: 'Devolução cancelada',
+    sure_to_cancel_return: 'Tem certeza que deseja cancelar a devolução',
+    check_return_detail:'Você pode verificar os detalhes do seu pedido para ver o progresso de sua devolução',
+    courier_company:'Empresa de Courier',
+    select_courier_company:'Por favor, selecione a empresa de entrega',
+    fill_courier_company:'Por favor, preencha sua empresa de courier',
+    loading:'carregando',
+    return_upload_tip: 'Uma foto do recibo da transportadora indicando o peso do pacote e o número de rastreamento',
+    total_reund:'Reembolso total',
+
     label:{
         redeem_coupon:"Use um cupom",
         hot_use_points:"Como usar os pontos?",

@@ -226,6 +226,20 @@ export default {
     logistics_name_not_empty : 'Le nom de l\'entreprise logistique ne peut pas être vide',
     track_number_not_empty : 'trackingNumber ne peut pas être vide',
 
+    cancel_return:'Annuler le retour',
+    edit_return_receipt: 'Modifier l\'accusé de réception',
+    return_receipt: 'Reçu de retour',
+    return_record: 'Retourner l\'enregistrement',
+    return_canceled: 'Retour annulé',
+    sure_to_cancel_return: 'Êtes-vous sûr de vouloir annuler le retour',
+    check_return_detail:'Vous pouvez vérifier les détails de votre commande pour voir la progression de votre retour',
+    courier_company:'Entreprise de messagerie',
+    select_courier_company:'Veuillez sélectionner l\'entreprise de messagerie',
+    fill_courier_company:'Veuillez indiquer votre société de messagerie',
+    loading:'chargement',
+    return_upload_tip: 'Une photo du reçu de la compagnie de transport indiquant le poids du colis et le numéro de suivi',
+    total_reund:'Total Reund',
+
     label:{
         redeem_coupon:"Utilisez le coupon",
         hot_use_points:"Comment utiliser les points?",

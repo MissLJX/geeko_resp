@@ -31,6 +31,10 @@
                 <div class="el-tbl-cell" @click="getData(6,'Canceled','click')" :class="{active:6===orderStatus}">
                     {{$t('cancelorder1')}}<span>{{orderCountCanceled}}</span>
                 </div>
+                <div class="el-tbl-cell" @click="getData(7,'Returns','click')" :class="{active:7===orderStatus}">
+                    {{$t('index.returns')}}<span>{{orderCountReturns}}</span>
+                    <!-- orderCountReturns -->
+                </div>
             </div>
         </div>
         <div class="bd">
@@ -46,27 +50,27 @@
             <div v-for="item in orderMethod" class="item-order">
                 <div class="i-hd">
                     <div class="tbl">
-                        <div class="tbl-cell tx-c">{{getDate(item.paymentTime)}}</div>
-                        <div class="tbl-cell tx-c"><span>{{$t('orderno')}}:</span>{{item.id}}</div>
+                        <div class="tbl-cell tx-c">{{getDate(item.paymentTime || item.createDate)}}</div>
+                        <div class="tbl-cell tx-c" v-if="!item.returnOrderItems"><span>{{$t('orderno')}}:</span>{{item.id}}</div>
                         <div class="tbl-cell tx-c"><span>{{$t('shippingfrom')}}:</span>{{$t('overseas')}}</div>
-                        <div class="tbl-cell tx-c"><i class="iconfont contactseller" >&#xe716;</i><a class="cur-p" @click="showTicket(item.id)">{{$t('contactseller')}}</a></div>
+                        <div class="tbl-cell tx-c"><i class="iconfont contactseller" >&#xe716;</i><a class="cur-p" @click="showTicket(item.orderId)">{{$t('contactseller')}}</a></div>
                     </div>
                 </div>
                 <div class="i-bd">
                     <div class="tbl">
                         <div class="tbl-cell w-523">
-                            <div class="proimg" v-if="item.orderItems && index < 4" v-for="(img,index) in item.orderItems">
+                            <div class="proimg" v-if="(item.orderItems || item.returnOrderItems) && index < 4" v-for="(img,index) in (item.orderItems || item.returnOrderItems)">
                                 <link-image :href="productUrl(img.productName,img.sku,img.productId)" :src="img.productImageUrl" :title="img.productName"/>
                             </div>
-                            <div v-if="item.orderItems && item.orderItems.length > 4" class="viewmore" @click="checkDetail(item.id)">
+                            <div v-if="(item.orderItems && item.orderItems.length > 4) || (item.returnOrderItems && item.returnOrderItems.length > 4)" class="viewmore" @click="checkDetail(item, item.returnOrderItems)">
                                 <div class="bg"></div>
                                 <p>{{$t("view_detail")}}</p>
                             </div>
                         </div>
                         <div class="tbl-cell v-m w-180 tx-c">
-                            <p>{{item.fulfillmentStatusView}}</p>
-                            <p class="detail cur-p" @click="checkDetail(item.id)">{{$t('detail')}}</p>
-                            <p class="detail cur-p" v-if="item.fulfillmentStatus !== constant.TOTAL_STATUS_UNPAID"  @click="checkLogistics(item.id)">{{$t('track')}}</p>
+                            <p>{{item.fulfillmentStatusView || status(item)}}</p>
+                            <p class="detail cur-p" @click="checkDetail(item, item.returnOrderItems)">{{$t('detail')}}</p>
+                            <p class="detail cur-p" v-if="item.fulfillmentStatus !== constant.TOTAL_STATUS_UNPAID && !item.returnOrderItems"  @click="checkLogistics(item.id)">{{$t('track')}}</p>
                         </div>
                         <div class="tbl-cell v-m w-190 tx-c">
                             <div class="pos-rel">
@@ -93,6 +97,18 @@
                             </div>
                             <!-- 重新加入购物车  -->
                             <div class="b-btn" @click="addProducts(item.orderItems)" v-if="item.id && item.fulfillmentStatus===constant.TOTAL_STATUS_CANCELED">{{$t("repurchase")}}</div>
+                            <!-- 退货按钮 -->
+                            <div class="b-btn" 
+                                 @click="cancelReturnProducts(item)" 
+                                 v-if="item.id && item.status===constant.ORDER_RETURN_REQUESTED">
+                                 {{$t("cancel_return")}}
+                            </div>
+                            <div class="b-btn" 
+                                 style="margin-top:10px;"
+                                 @click="returnProducts(item)" 
+                                 v-if="item.id && item.status===constant.ORDER_RETURN_REQUESTED">
+                                 {{returnReceiptFont(item)}}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -106,10 +122,24 @@
 
         <faq-select-order v-if="isShowSelect" v-on:closeSelect="closeSelect1" v-on:showTicket="showTicket"></faq-select-order>
         <faq-order-ticket  v-if="isShowTicket" v-on:closeSelect="closeSelect1" v-on:selectOrder="selectorder"></faq-order-ticket>
+        <return-logistics 
+            v-if="isShowReturn" 
+            :orderId="showReturnOrderId" 
+            @logisticsShow="logisticsShow" 
+            :loddingShow.sync="isReturnLoading"
+        >
+        </return-logistics>
 
         <transition name="fade">
             <div v-if="isAddProducts" class="addProductsMask">{{isAddProductstTip}}</div>
         </transition>
+
+        <!--  -->
+        <div class="confirm-mask" v-if="modalconfirmshow">
+            <modal-confirm :cfg="confirmCfg" />
+        </div>
+        
+
     </div>
 </template>
 
@@ -123,6 +153,9 @@
     import CountDown from './countdow.vue';
     import FaqSelectOrder from './faq/faq-select-order.vue';
     import FaqOrderTicket from './faq/faq-order-ticket.vue';
+    import ReturnLogistics from './return-logistics.vue';
+    import {cancelReturnOrder} from '../api/index';
+    import ModalConfirm from './modal-confirm.vue';
     
     export default {
         data (){
@@ -131,6 +164,7 @@
                 orderMethod:null,
                 isShowTicket:false,
                 isShowSelect:false,
+                isShowReturn: false,
                 method:'all',
                 isloded:false,
                 finished:false,
@@ -138,6 +172,10 @@
                 isAddProductstTip:'',
                 constant:constant,
                 showHistory:false,
+                showReturnOrder: null,
+                showReturnOrderId: '',
+                isReturnLoading: false,
+                modalconfirmshow: false,
             }
         },
         components: {
@@ -146,7 +184,9 @@
             'select-order':selectOrder,
             'count-down': CountDown,
             'faq-select-order':FaqSelectOrder,
-            'faq-order-ticket':FaqOrderTicket
+            'faq-order-ticket':FaqOrderTicket,
+            'return-logistics':ReturnLogistics,
+            'modal-confirm':ModalConfirm
         },
         computed: {
             ...mapGetters([
@@ -157,6 +197,7 @@
                 'orderCountReceipt',
                 'orderCountCanceled',
                 'orderCountAll',
+                'orderCountReturns',
                 'all',
                 'unpaid',
                 'paid',
@@ -165,6 +206,7 @@
                 'confirmed',
                 'canceled',
                 'history',
+                'returns',
                 'allLoading',
                 'processingLoading',
                 'confirmedLoading',
@@ -173,6 +215,7 @@
                 'unpaidLoading',
                 'paidLoading',
                 'historyLoding',
+                'returnsLoading',
                 'allDone',
                 'unpaidDone',
                 'paidDone',
@@ -181,7 +224,11 @@
                 'canceledDone',
                 'shippedDone',
                 'historyDone',
-                "orderStatus"
+                'returnsDone',
+                "orderStatus",
+                'showTip',
+                'tipContent',
+                'tipType',
             ]),
             ifDone(){
                 if(this.method==='all'){
@@ -208,17 +255,22 @@
                 if(this.method==='History'){
                     return this.historyDone
                 }
+                if(this.method==='Return'){
+                    return this.returnsDone
+                }
             },
-
+            
         },
         watch:{
             orderStatus(newStatus){
                 let orderName =  this.getOrderStatusName(this.orderStatus);
                 this.getData(newStatus,orderName,"click");
+            },
+            orderCountReturn(newV, oldV){
+                console.log(newV, oldV)
             }
         },
         created(){
-            console.log(this.$route.query)
             
             this.$store.dispatch('getOrderCountAll');
             this.$store.dispatch('getOrderCountProcessing');
@@ -226,6 +278,7 @@
             this.$store.dispatch('getOrderCountReceipt');
             this.$store.dispatch('getOrderCountCanceled');
             this.$store.dispatch('getOrderCountUnpaid');
+            this.$store.dispatch('getOrderCountReturn');
             // this.$store.dispatch('getOrderCountPaid');
 
             let orderName =  this.getOrderStatusName(this.orderStatus);
@@ -249,9 +302,181 @@
         },
         methods:{
             ...mapActions([
-                'loadAll',"changeOrderStatus"
+                "changeOrderStatus"
             ]),
+            returnReceiptFont(order){
+                if(order.status === constant.ORDER_RETURN_REQUESTED && order.logistics){
+                    // this.$t('edit_return_receipt')
+                   return  this.$t('edit_return_receipt');
+               }else{
+                //    this.$t('return.return_receipt')
+                   return  this.$t('return_receipt');
+               }
+            },
+            status(order){
+                // 0：return requested，1：refund requested，2：Return canceled，3：refunded
+                if(order.status === constant.ORDER_RETURN_REQUESTED){
+                    return "Return Requested";
+                }else if(order.status === constant.ORDER_RETURN_REFUND_REQUESTED){
+                    return "Refund Requested";
+                }else if(order.status === constant.ORDER_RETURN_CANCELED){
+                    return "Return Canceled";
+                }else{
+                    return "Refunded";
+                }
+            },
+            returnProducts(item){
+                console.log(item)
+                this.showReturnOrder = item;
+                this.isShowReturn = true;
+                this.showReturnOrderId = item.id;
+                this.isReturnLoading = true;
+            },
+            cancelReturnProducts(item){
+                let _this = this;
+                this.modalconfirmshow = true;
+
+                this.confirmCfg =  {
+                    btnFont:[
+                        {
+                            type: 'no',
+                            text: this.$t("cancel"),
+                            fuc: function () {
+                                _this.modalconfirmshow = false;
+                                _this.$store.dispatch('closeConfirm').then(()=>{
+
+                                });
+                            },
+                            style:{}
+                        },
+                        {
+                            type: 'yes',
+                            text: this.$t("confirm"),
+                            fuc: function () {
+                                _this.modalconfirmshow = false;
+                                _this.$store.dispatch('closeConfirm').then(() => {
+                                    cancelReturnOrder(item.id).then(res => {
+                                        if(res.code == 200){
+                                            _this.isloded = true
+                                            _this.getData('7','Returns',"click");
+                                        }
+                                    }).catch(err => {
+                                        alert(err.result)
+                                    })
+                                });
+                            },
+                            style:{}
+                        },
+                        
+                    ],
+                    btnClose: true,
+                    showSuccessIcon: false,
+                    message: this.$t("sure_to_cancel_return")+"?",
+                    message2:"",
+                    close: function () {
+                        _this.modalconfirmshow = false;
+                        _this.$store.dispatch('closeConfirm').then(()=>{});
+                    },
+                    style:{
+                        box:{
+                            width: '600px',
+                            height: '195px',
+                            borderRadius: '2px',
+                            padding: '40px'
+                        },
+                        message:{
+                            fontFamily: 'AcuminPro-Bold',
+                            fontSize: '16px',
+                            color: '#222222',
+                            margin: '20px 0 30px'
+                        },
+                        message2:{},
+                        icon:{},
+                        btnClose:{
+                            fontSize: '18px !important',
+                            color: '#222',
+                        },
+                    }
+                }
+                
+            },
+            logisticsShow(isSuccess){
+                let _this = this;
+
+                this.isShowReturn = false;
+                this.isReturnLoading = false;
+                if(isSuccess){
+                    this.modalconfirmshow = true;
+
+                    this.confirmCfg =  {
+                        btnFont:[
+                            {
+                                type: 'yes',
+                                text: this.$t("edit_return_receipt"),
+                                fuc: function () {
+                                    _this.modalconfirmshow = false;
+                                    _this.$store.dispatch('closeConfirm').then(() => {
+                                        _this.returnProducts(_this.showReturnOrder);
+                                    });
+                                },
+                                style:{
+                                }
+                            },
+                            {
+                                type: 'no',
+                                text: this.$t("points_mall.viewOrder"),
+                                fuc: function () {
+                                    _this.modalconfirmshow = false;
+                                    _this.$store.dispatch('closeConfirm').then(()=>{
+                                        _this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/order/return-detail/'+_this.showReturnOrder.id})
+                                    });
+                                },
+                                style:{
+                                    background:'#222222',
+                                    backgroundColor: '#222222',
+                                    lineHeight: '36px',
+                                    color: '#ffffff'
+                                }
+                            },
+                        ],
+                        btnClose: true,
+                        showSuccessIcon: true,
+                        message: this.$t("support.s_submit_success"),
+                        message2:this.$t("check_return_detail"),
+                        close: function () {
+                            _this.modalconfirmshow = false;
+                            _this.$store.dispatch('closeConfirm').then(()=>{
+
+                            });
+                        },
+                        style:{
+                            box:{
+                                width: '600px',
+                                height: '272px',
+                                borderRadius: '2px',
+                                padding: '40px'
+                            },
+                            message:{
+                                fontSize: '16px',
+                                marginBottom: '10px'
+                            },
+                            message2:{
+                                fontSize: '14px',
+                                marginBottom: '30px'
+                            },
+                            icon:{
+                                marginTop: '20px',
+                            },
+                            btnClose:{
+                                fontSize: '18px !important',
+                                color: '#222',
+                            },
+                        }
+                    }
+                }
+            },
             getData(index,method,flag){
+                // console.log(index, method, flag)
                 // this.index = index
                 if(this.isloded){
                     this.changeOrderStatus(index);
@@ -259,55 +484,65 @@
                     if(flag ==='click'){
                         this.orderMethod = ''
                     }
-                    this.isloded = false
-                    if(method==='all'){
-                        this.$store.dispatch('loadAll',20).then(()=> {
-                            this.orderMethod = this.all
-                            this.isloded = true
-                        })
-                    }
-                    if(method==='Unpaid'){
-                        this.$store.dispatch('loadUnpaid',20).then(()=> {
-                            this.orderMethod = this.unpaid
-                            this.isloded = true
-                        })
-                    }
-                    if(method==='Paid'){
-                        this.$store.dispatch('loadPaid',20).then(()=> {
-                            this.orderMethod = this.paid
-                            this.isloded = true
-                        })
-                    }
-                    if(method==='Processing'){
-                        this.$store.dispatch('loadProcessing',20).then(()=> {
-                            this.orderMethod = this.processing
-                            this.isloded = true
-                        })
-                    }
-                    if(method==='Shipped'){
-                        this.$store.dispatch('loadShipped',20).then(()=> {
-                            this.orderMethod = this.shipped
-                            this.isloded = true
-                        })
-                    }
-                    if(method==='Comfirmed'){
-                        this.$store.dispatch('loadConfirmed',20).then(()=> {
-                            this.orderMethod = this.confirmed
-                            this.isloded = true
-                        })
-                    }
-                    if(method==='Canceled'){
-                        this.$store.dispatch('loadCanceled',20).then(()=> {
-                            this.orderMethod = this.canceled
-                            this.isloded = true
-                        })
-                    }
-                    if(method==='History'){
-                        this.$store.dispatch('loadHistory',20).then(()=>{
-                            this.orderMethod = this.history
-                            this.isloded = true
-                        })
-                    }
+                    // 切换类型时清空skip值
+                    this.$store.dispatch('skipClear').then(()=>{
+                        this.isloded = false
+                        if(method==='all'){
+                            this.$store.dispatch('loadAll',20).then(()=> {
+                                this.orderMethod = this.all
+                                this.isloded = true
+                            })
+                        }
+                        if(method==='Unpaid'){
+                            this.$store.dispatch('loadUnpaid',20).then(()=> {
+                                this.orderMethod = this.unpaid
+                                this.isloded = true
+                            })
+                        }
+                        if(method==='Paid'){
+                            this.$store.dispatch('loadPaid',20).then(()=> {
+                                this.orderMethod = this.paid
+                                this.isloded = true
+                            })
+                        }
+                        if(method==='Processing'){
+                            this.$store.dispatch('loadProcessing',20).then(()=> {
+                                this.orderMethod = this.processing
+                                this.isloded = true
+                            })
+                        }
+                        if(method==='Shipped'){
+                            this.$store.dispatch('loadShipped',20).then(()=> {
+                                this.orderMethod = this.shipped
+                                this.isloded = true
+                            })
+                        }
+                        if(method==='Comfirmed'){
+                            this.$store.dispatch('loadConfirmed',20).then(()=> {
+                                this.orderMethod = this.confirmed
+                                this.isloded = true
+                            })
+                        }
+                        if(method==='Canceled'){
+                            this.$store.dispatch('loadCanceled',20).then(()=> {
+                                this.orderMethod = this.canceled
+                                this.isloded = true
+                            })
+                        }
+                        if(method==='History'){
+                            this.$store.dispatch('loadHistory',20).then(()=>{
+                                this.orderMethod = this.history
+                                this.isloded = true
+                            })
+                        }
+                        if(method==='Returns'){
+                            this.$store.dispatch('loadReturns',20).then(()=>{
+                                this.orderMethod = this.returns
+                                this.isloded = true
+                            })
+                        }
+                    })
+                    
                 }
             },
             getDate(paymentTime){
@@ -316,8 +551,12 @@
                 }
                 return utils.enTime(new Date(paymentTime))
             },
-            checkDetail(orderid){
-                this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/order/detail/'+orderid})
+            checkDetail(item, isReturn){
+                if(isReturn){
+                    this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/order/return-detail/'+item.id})
+                } else {
+                    this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/order/detail/'+item.id})
+                }
             },
             closeSelect1(){
                 this.isShowTicket = false
@@ -440,6 +679,8 @@
                     return "Shipped";
                 }else if(status === 5){
                     return "Comfirmed";
+                }else if(status === 7){
+                    return "Returns";
                 }else{
                     return "Canceled";
                 }
@@ -781,6 +1022,14 @@
     }
     .noMarginTop{
         margin-top: 0 !important;
+    }
+    .confirm-mask{
+        width: 100vw;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background: rgba(0,0,0,0.6);
     }
 
 </style>

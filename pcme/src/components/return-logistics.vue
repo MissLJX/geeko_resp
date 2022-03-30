@@ -6,8 +6,8 @@
 
             <div class="return-notshow" v-if="returnLogisticsShow">
                 <div class="logistics-company">
-                    <p>{{$t("logisticsCompany")}}：</p>
-                    <select v-model="logisticsSelect">
+                    <p><span style="color:red;">*</span>{{$t('courier_company')}}：</p>
+                    <!-- <select v-model="logisticsSelect">
                         <option value="default" disabled>{{$t("please_select_logistics")}}</option>
                         <optgroup label="Commonly Used">
                             <template v-if="logisticsCompanies != null && logisticsCompanies.commonlyUsed.length > 0">
@@ -23,30 +23,84 @@
                                 </option>
                             </template>
                         </optgroup>
-                    </select>
+                    </select> -->
+                    <div class="logistic_company_select">
+                        <div class="logistic_company_select_value" @click="()=> showCompanySelect = true">
+                            <!-- {{logisticsSelect}} -->
+                            <input type="text" :value="logisticsSelect" readonly>
+                        </div>
+                        <div class="logistic_company_select_options" v-if="showCompanySelect">
+                            <div class="courier-company-message">
+                                <span>{{$t("select_courier_company")}}</span>
+                            </div>
+                            <ul>
+                                <template v-if="logisticsCompanies != null && logisticsCompanies.commonlyUsed.length > 0">
+                                    <li 
+                                        class="__item" 
+                                        v-for="(commonly,index) in logisticsCompanies.commonlyUsed" 
+                                        @click="getLogisticsValue(commonly.name)" 
+                                        :key="commonly.name+index"
+                                        :class="{'active' : commonly.name === itemName}"
+                                    >
+                                        <img class="__image" :src="commonly.iconURL" :alt="commonly.name">
+                                        <span class="__font">{{commonly.name}}</span>
+                                    </li>
+                                </template>
+
+                                <template v-if="logisticsCompanies != null && logisticsCompanies.logisticsCompanies.length > 0">
+                                    <li 
+                                        class="__item" 
+                                        v-for="(logistics,index) in logisticsCompanies.logisticsCompanies"  
+                                        @click="getLogisticsValue(logistics.name,'1')"
+                                        :key="logistics.name+index"
+                                        :class="{'active' : logistics.name === itemName}"
+                                    >
+                                        <span class="__font">{{logistics.name}}</span>
+                                    </li>
+
+                                    <li class="other-item" v-if="otherInputShow">
+                                        <input type="text" :placeholder="fill_courier_company" v-model="otherInputValue">
+                                    </li>
+                                    
+                                </template>
+
+                                <template v-else>
+                                    <div class="__lodding">
+                                        {{$t("loading")}}...
+                                    </div>
+                                </template>
+                            </ul>
+
+                            <div class="footer-btn">
+                                <div class="confirm" @click="confirmLogistics">
+                                    {{$t("confirm")}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="tracking-number" v-show="logisticsSelect === 'Other'">
-                    <p>{{$t("logistics_company_name")}}*</p>
+                <!-- <div class="tracking-number" v-show="logisticsSelect === 'Other'">
+                    <p><span style="color:red;">*</span>{{$t("logistics_company_name")}}</p>
                     <input type="text" v-model="logisticsName">
-                </div>
+                </div> -->
 
                 <div class="tracking-number">
-                    <p>{{$t("tracknum")}}：</p>
+                    <p><span style="color:red;">*</span>{{$t("tracknum")}}：</p>
                     <input type="text" v-model="logisticsNumber">
                 </div>
 
-                <div class="body-or">
+                <!-- <div class="body-or">
                     <span>
                         <span>{{$t("logistics_or")}}</span>
                     </span>
-                </div>
+                </div> -->
                 
                 <div class="upload-image">
-                    <p class="__title">
-                        <span>{{$t("upload_receipt")}}</span>
-                        <span>({{$t("choose_upload")}})</span>
-                    </p>
+                    <div class="__title">
+                        <span><span style="color:red;">*</span>{{$t("upload_receipt")}}</span>
+                        <div class="upload-tip">{{$t("return_upload_tip")}}.</div>
+                    </div>
 
                     <div class="upload-container" id="imgboxid">
                         <ul v-if="uploadedImages && uploadedImages.length">
@@ -56,7 +110,7 @@
                                 <span class="pdf-name"  v-if="item && item.type ==='pdf'">{{item.originalFilename}}</span>
                             </li>
                         </ul>
-                        <div class="upload-img" id="uploadimg" v-show="uploadedImages.length<5">
+                        <div class="upload-img" id="uploadimg" v-show="uploadedImages.length<3">
                             <form ref="imageLoader">
                                 <input 
                                     type="file" 
@@ -67,7 +121,7 @@
                                 />
                             </form>
                             <div class="addbtn iconfont">&#xe644;</div>
-                            <div class="addnum">{{addnum}} / 5</div>
+                            <div class="addnum">{{addnum}} / 3</div>
                         </div>
                     </div>
 
@@ -117,11 +171,14 @@
                 <img :src="imageMagnificationSrc" alt="Image">
             </div>
         </div>
+
+        
     </div>
 </template>
 
 <script>
     import HtmlImageCompress from 'html-image-compress';
+    
 
     import { mapGetters } from 'vuex';
 
@@ -133,12 +190,18 @@
                 files:[],
                 addnum:0,
                 newfiles:[],
-                logisticsSelect:'default',
+                logisticsSelect:'',
                 logisticsName:'',
                 logisticsNumber:'',
                 returnLogisticsShowActive:false,
                 imageMagnificationShow:false,
-                imageMagnificationSrc:''
+                imageMagnificationSrc:'',
+                itemName: '',
+                otherInputShow: false,
+                otherInputValue: '',
+                showCompanySelect: false,
+                modalconfirmshow: false,
+                confirmCfg: ''
             }
         },
         props:{
@@ -151,21 +214,23 @@
         created(){
             let _this = this;
             _this.$emit("update:loddingShow",true);
-            this.$store.dispatch('getLogisticsCompanies','returnLogistics');
+            this.$store.dispatch('getLogisticsCompanies');
+        },
+        mounted(){
             this.$store.dispatch('getReturnLogistics',this.orderId).then((result) => {
-                console.log("result",result);
-                if(result && result.length > 0){
-                    var item = result[0];
+                // console.log("result",result);
+                if(result){
+                    var item = result.logistics;
                     this.logisticsSelect = item.logisticsCompany ? item.logisticsCompany : "";
                     this.logisticsNumber = item.trackingNumber ? item.trackingNumber : "";
                     this.uploadedImages = item.receiptFiles && item.receiptFiles.length > 0 ? item.receiptFiles : [];
                     this.addnum = item.receiptFiles && item.receiptFiles.length > 0 ? item.receiptFiles.length : 0;
                 }
-                _this.$emit("update:loddingShow",false);
+                this.$emit("update:loddingShow",false);
             });
         },
         components:{
-            HtmlImageCompress
+            HtmlImageCompress,
         },
         computed:{
             ...mapGetters(['logisticsCompanies','returnLogistics']),
@@ -173,10 +238,42 @@
                 return !!this.returnLogistics && this.returnLogistics.length < 0 || this.returnLogisticsShowActive;
             },
             returnLogisticsValue(){
+                // console.log(this.returnLogistics)
                 return !!this.returnLogistics && this.returnLogistics.length > 0 ? this.returnLogistics[0] : {};
+            },
+            fill_courier_company(){
+                return this.$t("fill_courier_company")
             }
+            
         },
         methods:{
+            getLogisticsValue(name,type){
+                this.itemName = name;
+                if(type){
+                    this.otherInputShow = true;
+                }else{
+                    this.otherInputShow = false;
+                }
+            },
+            confirmLogistics(){
+                // 当未选中other且选中其他内容时
+                if(!this.otherInputShow && this.itemName){
+                    // this.$emit('getSelectValue',this.itemName);
+                    // this.$emit('update:close',false);
+                    this.logisticsSelect = this.itemName;
+                    this.showCompanySelect = false;
+                }
+
+                // 选中other且输入框内容不为空时
+                if(this.otherInputShow && this.otherInputValue){
+                    // this.$emit('getSelectValue',this.otherInputValue);
+                    // this.$emit('update:close',false);
+                    this.logisticsSelect = this.otherInputValue;
+                    this.showCompanySelect = false;
+                }
+
+                
+            },
             loadImg(event) {
                 let _this = this;
                 this.newfiles = [...event.target.files];
@@ -184,7 +281,10 @@
                 let files = this.files;
                 _this.$emit("update:loddingShow",true);
 
-                console.log("this.files",this.files);
+                if(this.files.length > 3){
+                    // console.log('...')
+                    this.files.splice(3, this.files.length - 3)
+                }
 
                 let promises = this.files.filter((item) => {
                     return !!!(item.type.indexOf("pdf") >= 0);
@@ -199,7 +299,6 @@
 
                     // Image
                     _files.forEach((file,index) => {
-                        console.log("file",file);
                         formData.append("files",new File([file],files[index].name));
                     });
 
@@ -215,8 +314,8 @@
                     // }
 
                      _this.$store.dispatch('generalUploadImage',{formData}).then((result) => {
-                        console.log("result",result);
                         if(!!result && result.length > 0){
+                            _this.uploadedImages = []
                             result.forEach((item) => {
                                 _this.addNum += 1;
                                 _this.uploadedImages.push(item);
@@ -226,9 +325,9 @@
                     });
                 });
 
-                if (this.uploadedImages.length > 5) {
-                    this.uploadedImages.splice(5, this.uploadedImages.length - 5);
-                    this.files.splice(5, this.files.length - 5)
+                if (this.uploadedImages.length > 3) {
+                    this.uploadedImages.splice(3, this.uploadedImages.length - 3);
+                    this.files.splice(3, this.files.length - 3)
                 }
             },
             removeImg(index) {
@@ -237,35 +336,41 @@
                 this.addnum = this.addnum - 1;
             },
             sendUploadFiles(){
-                var _this = this;
-                if(this.logisticsSelect === "default" && this.uploadedImages.length <= 0){
+                let apiName = "addReturnLogistics";
+                let _this = this;
+                var uploadFiles = new Object();
+
+                // 物流信息ID
+                if(this.returnLogistics && this.returnLogistics.logistics && this.returnLogistics.logistics.id){
+                    uploadFiles['id'] = this.returnLogistics.logistics.id;
+                    apiName = "editReturnLogistics";
+                }
+                
+                if(!this.logisticsSelect && this.uploadedImages.length <= 0){
                     alert(this.$t("logistics_info_not_empty")+"!");
                     return;
                 }
                 _this.$emit("update:loddingShow",true);
-                 var uploadFiles = new Object();
+                 
 
                  if(this.orderId && this.orderId != null){
                     // formData.append('orderId',this.orderId);
-                    uploadFiles['orderId'] = this.orderId;
+                    uploadFiles['returnOrderId'] = this.orderId;
                 }
 
-                if(!!this.returnLogisticsValue && Object.keys(this.returnLogisticsValue).length > 0){
-                    uploadFiles['id'] = this.returnLogisticsValue.id;
-                }
-
-                if(this.logisticsSelect !== "default" && this.logisticsSelect !== null && this.logisticsSelect !== "Other"){
+                if(this.logisticsSelect && this.logisticsSelect !== null && this.logisticsSelect !== "Other"){
                     // 物流选择后的值   物流名
                     uploadFiles['logisticsCompany'] = this.logisticsSelect;
-                }else if(this.logisticsSelect === "Other" && !!!this.logisticsName && this.logisticsName === ""){
-                    alert(this.$t("logistics_name_not_empty"));
-                    _this.$emit("update:loddingShow",false);
-                    return;
-                }else{
-                    uploadFiles['logisticsCompany'] = this.logisticsName;
                 }
+                // else if(this.logisticsSelect === "Other" && !!!this.logisticsName && this.logisticsName === ""){
+                //     alert(this.$t("logistics_name_not_empty"));
+                //     _this.$emit("update:loddingShow",false);
+                //     return;
+                // }else{
+                //     uploadFiles['logisticsCompany'] = this.logisticsName;
+                // }
 
-                if(this.logisticsSelect !== "default" || this.logisticsName !== ""){
+                if(this.logisticsSelect){
                     if(!!!this.logisticsNumber && this.logisticsNumber === ""){
                         alert(this.$t("track_number_not_empty"));
                         _this.$emit("update:loddingShow",false);
@@ -277,18 +382,16 @@
 
                 if(this.uploadedImages.length > 0){
                     uploadFiles['receiptFiles'] = this.uploadedImages;
-                    console.log("uploadFiles",uploadFiles);
                 }
 
-                _this.$store.dispatch('addReturnLogistics',uploadFiles).then(result => {
-                    alert(this.$t("success")+'!');
-                    this.$emit('logisticsShow');
-                    console.log("result",result);
+                _this.$store.dispatch(apiName,uploadFiles).then(result => {
+                    // alert(this.$t("success")+'!');
+                    this.$emit('logisticsShow', true);
                 });
                     
             },
             closeMask(){
-                this.$emit('logisticsShow');
+                this.$emit('logisticsShow', false);
             },
             magnifyImage(event){
                 this.imageMagnificationSrc = event.target.src;
@@ -375,10 +478,11 @@
             .return-notshow{
                 .logistics-company{
                     & > p{
-                        font-family: SlatePro;
-                        font-size: 14px;
-                        color: #666666;
+                        font-family: AcuminPro-Bold;
+                        font-size: 16px;
+                        color: #222;
                         line-height: 25px;
+                        margin-bottom: 10px;
                     }
 
                     & > select{
@@ -394,10 +498,11 @@
                 .tracking-number{
                     margin-top: 15px;
                     & > p{
-                        font-family: SlatePro;
-                        font-size: 14px;
-                        color: #666666;
+                        font-family: AcuminPro-Bold;
+                        font-size: 16px;
+                        color: #222;
                         line-height: 25px;
+                        margin-bottom: 10px;
                     }
 
                     & > input{
@@ -438,8 +543,10 @@
 
                 .upload-image{
                     .__title{
+                        margin-top: 20px;
+
                         & > span:first-child{
-                            font-family: SlatePro-Medium;
+                            font-family:  AcuminPro-Bold;
                             font-size: 16px;
                             color: #222222;
                         }
@@ -449,6 +556,19 @@
                             font-family: SlatePro;
                             color: #666666;
                             margin-left: 5px;
+                        }
+
+                        .upload-tip{
+                            background-color: #f6f6f6;
+	                        border-radius: 2px;
+                            padding: 10px;
+                            font-family: SlatePro-Regular;
+                            font-size: 14px;
+                            font-weight: normal;
+                            font-stretch: normal;
+                            letter-spacing: 0px;
+                            color: #222222;
+                            margin-top: 10px;
                         }
                     }
 
@@ -538,7 +658,7 @@
                     .upload-submit{
                         height: 40px;
                         line-height: 40px;
-                        width: 240px;
+                        width: 100%;
                         background-color: #222222;
                         border-radius: 2px;
                         font-family: SlatePro-Medium;
@@ -546,7 +666,7 @@
                         color: #ffffff;
                         text-transform: uppercase;
                         text-align: center;
-                        margin-top: 40px;
+                        margin-top: 80px;
                         cursor: pointer;
                     }
                 }
@@ -659,4 +779,156 @@
             }
         }
     }
+    .logistic_company_select{
+        position: relative;
+        background: #fff;
+        width: 100%;
+
+        .logistic_company_select_value{
+            width: 100%;
+            height: 40px;
+            border-radius: 2px;
+            border: solid 1px #cacaca;
+            position: relative;
+            cursor: pointer;
+            
+
+            input{
+                border: none;
+                outline: none;
+                padding: 0 10px;
+                line-height: 38px;
+                width: 410px;
+                cursor: pointer;
+            }
+
+            &::after{
+                content: '\e7a9';
+                font-family: iconfont;
+                font-size: 12px;
+                color: #222222;
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%) rotate(90deg);
+                right: 10px;
+            }
+        }
+
+        .logistic_company_select_options{
+            z-index: 1;
+            position: absolute;
+            top: 0;
+            width: 440px;
+            background: #fff;
+            box-shadow: 3px 3px 8px 0px rgba(0,0,0,0.2);
+            border-radius: 2px;
+
+            .courier-company-message{
+                padding: 10px 0px 10px 12px;
+                background-color: #f6f6f6;
+                font-size: 16px;
+                color: #222222;
+                font-family: 'SlatePro-Medium';
+            }
+
+            .__title{
+                height: 22px;
+                line-height: 22px;
+                font-family: SlatePro-Medium;
+                font-size: 16px;
+                color: #121314;
+                background-color: #f7f7f7;
+                padding-left: 10px;
+            }
+
+            .commonly-used{
+                height: 36px;
+                line-height: 36px;
+                font-family: SlatePro-Medium;
+                font-size: 16px;
+                color: #121314;
+            }
+
+            .__item{
+                height: 44px;
+                line-height: 44px;
+                font-family: SlatePro;
+                font-size: 14px;
+                color: #121314;
+                padding-left: 12px;
+                position: relative;
+                cursor: pointer;
+
+                .__font{
+                    // display: block;
+                    position: relative;
+                    font-family: SlatePro;
+                    font-size: 14px;
+                    color: #121314;
+                    vertical-align: middle;
+                }
+
+                .__image{
+                    width: 42px;
+                    height: 21px;
+                    background-color: #eeeeee;
+                    vertical-align: middle;
+                    margin-right: 10px;
+                }
+
+                &.active::after{
+                    font-family: iconfont;
+                    content: '\E638';
+                    font-size: 15px;
+                    color: #222222;
+                    position: absolute;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    right: 12px;
+                }
+            }
+
+            .other-item{
+                padding:0px 12px;
+
+                input{
+                    border: 1px solid #999999;
+                    height: 34px;
+                    padding-left: 10px;
+                    width: 100%;
+                }
+            }
+
+            .__lodding{
+                height: 45px;
+                line-height: 45px;
+                text-align: center;
+                font-size: 16px;
+            }
+
+            .footer-btn{
+                width: 100%;
+                // position: fixed;
+                // bottom: 51px;
+                // left: 0px;
+                // right: 0px;
+                text-align: center;
+                padding: 0px 13px 20px 13px;
+                background-color: #fff;
+                margin-top: 80px;
+
+                .confirm{
+                    height: 42px;
+                    line-height: 42px;
+                    background-color: #222222;
+                    font-family: SlatePro-Medium;
+                    font-size: 17px;
+                    color: #ffffff;
+                    cursor: pointer;
+                }
+            }
+        
+        }
+    }
+    
 </style>
