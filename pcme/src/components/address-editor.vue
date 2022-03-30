@@ -3,15 +3,29 @@
         <form @submit.prevent="validateBeforeSubmit">
             <p class="cancel-btn1" @click="closeHandle"><i class="iconfont">&#xe69a;</i></p>
             <h4>{{$t('shippingaddress')}}</h4>
-            <div class="input-con required">
-                <label>{{$t('fullname')}}:</label>
-                <div class="x-default-input">
-                    <input name="name" v-model="shipping.name" v-validate="'required'"
-                           :class="{'st-input':true, 'st-input-danger':errors.has('name')}" type="text"
-                    />
-                    <span v-show="errors.has('name')" class="st-is-danger">{{errors.first("name")}}</span>
+
+            <div class="clearBoth">
+                <div class="input-con required w-left">
+                    <label>{{$t('firstName')}}:</label>
+                    <div class="x-default-input">
+                        <input name="firstName" v-model="shipping.firstName" v-validate="'required'"
+                            :class="{'st-input':true, 'st-input-danger':errors.has('firstName')}" type="text"
+                        />
+                        <span v-show="errors.has('firstName')" class="st-is-danger">{{errors.first("firstName")}}</span>
+                    </div>
+                </div>
+
+                <div class="input-con required w-left">
+                    <label>{{$t('lastName')}}:</label>
+                    <div class="x-default-input">
+                        <input name="lastName" v-model="shipping.lastName" v-validate="'required'"
+                            :class="{'st-input':true, 'st-input-danger':errors.has('lastName')}" type="text"
+                        />
+                        <span v-show="errors.has('lastName')" class="st-is-danger">{{errors.first("lastName")}}</span>
+                    </div>
                 </div>
             </div>
+            
             <div class="input-con required">
                 <label>{{$t('streetaddress')}}:</label>
                 <div class="x-default-input">
@@ -47,7 +61,7 @@
                         <select ref="country" class="x-select" v-model="countrySelected"
                                 @change="changeCountry">
                             <option disabled value="-1">{{$t('country')}}</option>
-                            <option v-for="c in countries" :value="c.value">{{c.label}}</option>
+                            <option v-for="c in countries" :value="c.value" :key="c.value">{{c.label}}</option>
                         </select>
                         <span v-show="countrySelected === '-1'"
                               class="st-is-danger">{{$t('selectcountry')}}</span>
@@ -59,7 +73,7 @@
                         <p v-if="hasStates">
                             <select ref="state" class="x-select" v-model="stateSelected">
                                 <option disabled value="-1">{{$t('state')}} *</option>
-                                <option v-for="s in states" :value="s.value">{{s.label}}</option>
+                                <option v-for="s in states" :value="s.value" :key="s.value">{{s.label}}</option>
                             </select>
                             <span v-show="stateSelected === '-1'" class="st-is-danger">{{$t('selectstate')}}</span>
                         </p>
@@ -142,9 +156,27 @@
             }else{
                 initZipValidate = 'required|zip_us'
             }
+
+            let addressItem = this.address;
+            if(addressItem){
+                addressItem =  _.cloneDeep(this.address);
+                if(addressItem.name && !addressItem.firstName && !addressItem.lastName){
+                    let arrs = addressItem.name.split(/\s+/);
+                    if(arrs && arrs.length > 1){
+                        addressItem.firstName = arrs[0];
+                        addressItem.lastName = arrs[1];
+                    }else{
+                        addressItem.firstName = arrs[0];
+                        addressItem.lastName = "";
+                    }
+                }
+            }
+
             return {
-                shipping: this.address ? _.cloneDeep(this.address) : {
+                shipping: addressItem ? _.cloneDeep(addressItem) : {
                     name: null,
+                    firstName:null,
+                    lastName:null,
                     streetAddress1: null,
                     unit: null,
                     country: null,
@@ -203,7 +235,8 @@
                     if (result && (this.stateSelected != '-1' || !this.hasStates) && this.countrySelected != '-1') {
                         this.shipping.country = this.$refs.country.value
                         this.shipping.state = this.$refs.state.value
-                        this.shipping.phoneArea
+                        // this.shipping.phoneArea
+                        this.shipping.name = `${this.shipping.firstName} ${this.shipping.lastName}`;
 
                         this.submiting = true
                         if (this.shipping.id) {
