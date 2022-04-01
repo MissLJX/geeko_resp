@@ -238,7 +238,7 @@ export default {
     fill_courier_company:'Veuillez indiquer votre société de messagerie',
     loading:'chargement',
     return_upload_tip: 'Une photo du reçu de la compagnie de transport indiquant le poids du colis et le numéro de suivi',
-    total_reund:'Total Reund',
+    total_reund:'Remboursement Total',
 
     label:{
         redeem_coupon:"Utilisez le coupon",

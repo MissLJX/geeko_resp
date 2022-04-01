@@ -49,13 +49,13 @@ export const getOrders =(skip, api_suffix) => {
     return axios.get(`${NVPATH}/order/${skip}/20/${api_suffix}`).then(data => data.result)
 }
 export const getReturns = (skip) => {
-    return axios.get(`return-order/${skip}/20/get-return-orders`).then(data => data.result)
+    return axios.get(`/return-order/${skip}/20/get-return-orders`).then(data => data.result)
 }
 export const confirmOrder = (id) =>{
-    return axios.get('/v9/order/'+id+'/receipt')
+    return axios.get(VPATH+'/order/'+id+'/receipt')
 }
 export const cancelOrder = (id,reason) =>{
-    return axios.get('/v9/order/cancel',{orderId:id,cancelReason:reason})
+    return axios.get(VPATH+'/order/cancel',{orderId:id,cancelReason:reason})
 }
 //coupons
 export const getCoupons = () => {
@@ -242,7 +242,7 @@ export const getReturnLabel = (id) =>{
 
 // 退货用户上传物流信息
 export const addReturnLogistics = (logistics) => {
-    return axios.post('return-order/add-return-logistics',JSON.stringify(logistics),{'Content-Type':"application/json"});
+    return axios.post('/return-order/add-return-logistics',JSON.stringify(logistics),{'Content-Type':"application/json"});
     // return axios.post('/v9/order/add-return-logistics',JSON.stringify(logistics) , {'Content-Type':"application/json"}).then(data => data.result);
 }
 // 退货用户物流信息修改
@@ -259,9 +259,9 @@ export const getLogisticsCompanies = () => {
     return axios.get('/context/anon/get-logistics-companies');
 }
 
-export const getReturnLogistics  = function(orderId){
+export const getReturnLogistics  = function(id){
     // return axios.get("/v9/order/get-return-logistics",{orderId});
-    return axios.get("/return-order/get",{"id":orderId});
+    return axios.postStringify("/return-order/get",{id});
 }
 
 export const generalUploadImage = (imageFile) =>{

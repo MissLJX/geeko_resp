@@ -10,28 +10,28 @@
         <!-- {{orderStatus}} -->
         <div class="hd" v-if="!showHistory">
             <div class="el-tbl">
-                <div class="el-tbl-cell" @click="getData(0,'all','click')" :class="{active:0===orderStatus}">
+                <div class="el-tbl-cell" @click="clearSkip(getData(0,'all','click'))" :class="{active:0===orderStatus}">
                     {{$t('all')}}<span>{{orderCountAll}}</span>
                 </div>
-                <div class="el-tbl-cell" @click="getData(1,'Unpaid','click')" :class="{active:1===orderStatus}">
+                <div class="el-tbl-cell" @click="clearSkip(getData(1,'Unpaid','click'))" :class="{active:1===orderStatus}">
                     {{$t('unpaid')}}<span>{{orderCountUnpaid}}</span>
                 </div>
-                <!-- <div class="el-tbl-cell" @click="getData(2,'Paid','click')" :class="{active:2===orderStatus}">
+                <!-- <div class="el-tbl-cell" @click="clearSkip(getData(2,'Paid','click'))" :class="{active:2===orderStatus}">
                     {{$t('paid')}}<span>{{orderCountPaid}}</span>
                 </div> -->
-                <div class="el-tbl-cell" @click="getData(3,'Processing','click')" :class="{active:3===orderStatus}">
+                <div class="el-tbl-cell" @click="clearSkip(getData(3,'Processing','click'))" :class="{active:3===orderStatus}">
                     {{$t('processing')}}<span>{{orderCountProcessing}}</span>
                 </div>
-                <div class="el-tbl-cell" @click="getData(4,'Shipped','click')" :class="{active:4===orderStatus}">
+                <div class="el-tbl-cell" @click="clearSkip(getData(4,'Shipped','click'))" :class="{active:4===orderStatus}">
                     {{$t('ordershipped')}}<span>{{orderCountShipped}}</span>
                 </div>
-                <div class="el-tbl-cell" @click="getData(5,'Comfirmed','click')" :class="{active:5===orderStatus}">
+                <div class="el-tbl-cell" @click="clearSkip(getData(5,'Comfirmed','click'))" :class="{active:5===orderStatus}">
                     {{$t('orderconfirm')}}<span>{{orderCountReceipt}}</span>
                 </div>
-                <div class="el-tbl-cell" @click="getData(6,'Canceled','click')" :class="{active:6===orderStatus}">
+                <div class="el-tbl-cell" @click="clearSkip(getData(6,'Canceled','click'))" :class="{active:6===orderStatus}">
                     {{$t('cancelorder1')}}<span>{{orderCountCanceled}}</span>
                 </div>
-                <div class="el-tbl-cell" @click="getData(7,'Returns','click')" :class="{active:7===orderStatus}">
+                <div class="el-tbl-cell" @click="clearSkip(getData(7,'Returns','click'))" :class="{active:7===orderStatus}">
                     {{$t('index.returns')}}<span>{{orderCountReturns}}</span>
                     <!-- orderCountReturns -->
                 </div>
@@ -100,13 +100,13 @@
                             <!-- 退货按钮 -->
                             <div class="b-btn" 
                                  @click="cancelReturnProducts(item)" 
-                                 v-if="item.id && item.status===constant.ORDER_RETURN_REQUESTED">
+                                 v-if="item.id && item.returnOrderItems && item.status===constant.ORDER_RETURN_REQUESTED">
                                  {{$t("cancel_return")}}
                             </div>
                             <div class="b-btn" 
                                  style="margin-top:10px;"
                                  @click="returnProducts(item)" 
-                                 v-if="item.id && item.status===constant.ORDER_RETURN_REQUESTED">
+                                 v-if="item.id && item.returnOrderItems && item.status===constant.ORDER_RETURN_REQUESTED">
                                  {{returnReceiptFont(item)}}
                             </div>
                         </div>
@@ -264,11 +264,10 @@
         watch:{
             orderStatus(newStatus){
                 let orderName =  this.getOrderStatusName(this.orderStatus);
-                this.getData(newStatus,orderName,"click");
+                this.clearSkip(
+                    this.getData(newStatus,orderName,"click")
+                )
             },
-            orderCountReturn(newV, oldV){
-                console.log(newV, oldV)
-            }
         },
         created(){
             
@@ -288,9 +287,13 @@
             // })
             this.isloded = true
             if(this.$route.query && this.$route.query.type && this.$route.query.type == 'review'){
-                this.getData(5,'Comfirmed','click')
+                this.clearSkip(
+                    this.getData(5,'Comfirmed','click')
+                )
             } else {
-                this.getData(this.orderStatus,orderName,"click");
+                this.clearSkip(
+                    this.getData(this.orderStatus,orderName,"click")
+                )
             }
         },
         mounted(){
@@ -358,7 +361,9 @@
                                     cancelReturnOrder(item.id).then(res => {
                                         if(res.code == 200){
                                             _this.isloded = true
-                                            _this.getData('7','Returns',"click");
+                                            _this.clearSkip(
+                                                _this.getData('7','Returns',"click")
+                                            )
                                         }
                                     }).catch(err => {
                                         alert(err.result)
@@ -475,6 +480,10 @@
                     }
                 }
             },
+            clearSkip(callback){
+                // 切换类型时清空skip值
+                this.$store.dispatch('skipClear').then(() => callback)
+            },
             getData(index,method,flag){
                 // console.log(index, method, flag)
                 // this.index = index
@@ -484,64 +493,62 @@
                     if(flag ==='click'){
                         this.orderMethod = ''
                     }
-                    // 切换类型时清空skip值
-                    this.$store.dispatch('skipClear').then(()=>{
-                        this.isloded = false
-                        if(method==='all'){
-                            this.$store.dispatch('loadAll',20).then(()=> {
-                                this.orderMethod = this.all
-                                this.isloded = true
-                            })
-                        }
-                        if(method==='Unpaid'){
-                            this.$store.dispatch('loadUnpaid',20).then(()=> {
-                                this.orderMethod = this.unpaid
-                                this.isloded = true
-                            })
-                        }
-                        if(method==='Paid'){
-                            this.$store.dispatch('loadPaid',20).then(()=> {
-                                this.orderMethod = this.paid
-                                this.isloded = true
-                            })
-                        }
-                        if(method==='Processing'){
-                            this.$store.dispatch('loadProcessing',20).then(()=> {
-                                this.orderMethod = this.processing
-                                this.isloded = true
-                            })
-                        }
-                        if(method==='Shipped'){
-                            this.$store.dispatch('loadShipped',20).then(()=> {
-                                this.orderMethod = this.shipped
-                                this.isloded = true
-                            })
-                        }
-                        if(method==='Comfirmed'){
-                            this.$store.dispatch('loadConfirmed',20).then(()=> {
-                                this.orderMethod = this.confirmed
-                                this.isloded = true
-                            })
-                        }
-                        if(method==='Canceled'){
-                            this.$store.dispatch('loadCanceled',20).then(()=> {
-                                this.orderMethod = this.canceled
-                                this.isloded = true
-                            })
-                        }
-                        if(method==='History'){
-                            this.$store.dispatch('loadHistory',20).then(()=>{
-                                this.orderMethod = this.history
-                                this.isloded = true
-                            })
-                        }
-                        if(method==='Returns'){
-                            this.$store.dispatch('loadReturns',20).then(()=>{
-                                this.orderMethod = this.returns
-                                this.isloded = true
-                            })
-                        }
-                    })
+                    this.isloded = false
+                    if(method==='all'){
+                        this.$store.dispatch('loadAll',20).then(()=> {
+                            this.orderMethod = this.all
+                            this.isloded = true
+                        })
+                    }
+                    if(method==='Unpaid'){
+                        this.$store.dispatch('loadUnpaid',20).then(()=> {
+                            this.orderMethod = this.unpaid
+                            this.isloded = true
+                        })
+                    }
+                    if(method==='Paid'){
+                        this.$store.dispatch('loadPaid',20).then(()=> {
+                            this.orderMethod = this.paid
+                            this.isloded = true
+                        })
+                    }
+                    if(method==='Processing'){
+                        this.$store.dispatch('loadProcessing',20).then(()=> {
+                            this.orderMethod = this.processing
+                            this.isloded = true
+                        })
+                    }
+                    if(method==='Shipped'){
+                        this.$store.dispatch('loadShipped',20).then(()=> {
+                            this.orderMethod = this.shipped
+                            this.isloded = true
+                        })
+                    }
+                    if(method==='Comfirmed'){
+                        this.$store.dispatch('loadConfirmed',20).then(()=> {
+                            this.orderMethod = this.confirmed
+                            this.isloded = true
+                        })
+                    }
+                    if(method==='Canceled'){
+                        this.$store.dispatch('loadCanceled',20).then(()=> {
+                            this.orderMethod = this.canceled
+                            this.isloded = true
+                        })
+                    }
+                    if(method==='History'){
+                        this.$store.dispatch('loadHistory',20).then(()=>{
+                            this.orderMethod = this.history
+                            this.isloded = true
+                        })
+                    }
+                    if(method==='Returns'){
+                        this.$store.dispatch('loadReturns',20).then(()=>{
+                            this.orderMethod = this.returns
+                            this.isloded = true
+                        })
+                    }
+                    
                     
                 }
             },
@@ -687,11 +694,16 @@
             },
             showHistoryMethod(){
                 this.showHistory = true;
-                this.getData(0,'History','click');
+                this.clearSkip(
+                    this.getData(0,'History','click')
+                )
+                
             },
             hideHistoryMethod(){
                 this.showHistory = false;
-                this.getData(0,'all','click');
+                this.clearSkip(
+                     this.getData(0,'all','click')
+                )
             }
         }
     }

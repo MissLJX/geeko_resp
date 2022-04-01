@@ -815,7 +815,7 @@
         }
 
         .logistic_company_select_options{
-            z-index: 1;
+            z-index: 4;
             position: absolute;
             top: 0;
             width: 440px;

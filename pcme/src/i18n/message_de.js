@@ -238,7 +238,7 @@ export default {
     fill_courier_company:'Bitte geben Sie Ihr Kurierunternehmen ein',
     loading:'Laden',
     return_upload_tip: 'Ein Foto der Quittung des Versandunternehmens, auf dem das Gewicht des Pakets und die Sendungsverfolgungsnummer angegeben sind',
-    total_reund:'Total Reund',
+    total_reund:'Total Refund',
 
     label:{
         redeem_coupon:"Coupon einl\u00f6sen",

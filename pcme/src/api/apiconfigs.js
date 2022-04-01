@@ -92,7 +92,7 @@ export default {
             }).then((res) => {
                 if (res.data.code === 310) {
                     reRequest().then((res) => {
-                        this.post(url, data, headers)
+                        this.postStringify(url, data, headers)
                     }).catch((e) => {
                         console.error(e)
                         reject(e)
