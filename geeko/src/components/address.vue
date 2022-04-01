@@ -1,7 +1,7 @@
 <template>
     <div class="el-address">
         <div class="__name">
-            <span>{{address.name}}</span>
+            <span>{{addressName}}</span>
             <span>({{address.phoneNumber}})</span>
         </div>
         <div class="__street">{{streetAddress}}</div>
@@ -51,6 +51,13 @@
                 if(stateStr)
                     return stateStr + ', ' + this.address.country.label
                 return this.address.country.label
+            },
+            addressName(){
+                if(this.address.firstName){
+                    return `${this.address.firstName} ${this.address.lastName}`;
+                }
+
+                return this.address.name;
             }
         }
     }
