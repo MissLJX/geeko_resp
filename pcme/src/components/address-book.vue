@@ -4,7 +4,7 @@
         <div class="add-block">
             <div class="address" v-for="address in addresses">
                 <div class="address-info">
-                    <p><strong>{{address.name}}</strong>({{address.phoneNumber}})</p>
+                    <p><strong>{{addressName(address)}}</strong>({{address.phoneNumber}})</p>
                     <p class="mt-20">{{address.streetAddress1}} , {{address.unit}}</p>
                     <!--<p>{{address.zipCode}} , {{address.city}} , {{address.state.label ? address.state.label :address.state.value}} , {{address.country.label}}</p>-->
                     <p>{{addressStr(address)}}</p>
@@ -104,6 +104,13 @@
                 }else{
                     return address.zipCode+','+address.city+','+address.country.label
                 }
+            },
+            addressName(address){
+                if(address.firstName){
+                    return `${address.firstName} ${address.lastName}`;
+                }
+
+                return address.name;
             }
         },
     }
