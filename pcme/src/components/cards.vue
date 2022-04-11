@@ -4,7 +4,7 @@
         <div class="el-card">
             <div class="el-card-info tbl" v-for="card in getAllCards" :style="{'background-color': card.style && card.style.color ? card.style.color : '#fff'}">
                 <div class="tbl-cell el-card-img">
-                    <img :src="card.cardStyle && card.style.imageURL ? card.style.imageURL : 'https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/chicme/Credit+Card.png'">
+                    <img :src="card.style && card.style.imageURL ? card.style.imageURL : 'https://image.geeko.ltd/chicme/Credit+Card.png'">
                 </div>
                 <div class="tbl-cell" :style="{'color': card.style && card.style.color && card.style.color !== '#ffffff' ? '#fff' : '#222'}">
                     <p class="el-card-name">{{card.style.name==='other' ? '' : card.style.name}}</p>
