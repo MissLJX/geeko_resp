@@ -1,6 +1,7 @@
 <template>
     <div>
-        <page-header>{{$t('label.notification')}}</page-header>
+        <!-- <page-header>{{$t('label.notification')}}</page-header> -->
+        <page-header>{{$t("notification.message")}}</page-header>
         <div>
             <slide-nav :navs="navs" @navchange="navchange"/>
         </div>
@@ -20,9 +21,12 @@
         data(){
             return {
                 navs: [
-                    {id: '1', name: 'Promotion', path: 'notification-promotion', active: 'notification-promotion' == this.$route.name || 'notification' == this.$route.path},
-                    {id: '2', name: this.$t('label.order'), path: 'notification-me', active: 'notification-me' == this.$route.name},
-                    {id: '3', name: this.$t('label.others'), path: 'notification-other', active: 'notification-other' == this.$route.name}
+                    // {id: '1', name: 'Activities', path: 'notification-promotion', active: 'notification-promotion' == this.$route.name || 'notification' == this.$route.path},
+                    // {id: '2', name: 'Promo', path: 'notification-me', active: 'notification-me' == this.$route.name},
+                    // {id: '3', name: 'Others', path: 'notification-other', active: 'notification-other' == this.$route.name}
+                    {id: '1', name: this.$t("notification.activities"), path: 'notification-activities', active: 'notification-activities' == this.$route.name || 'notification' == this.$route.path},
+                    {id: '2', name: this.$t("notification.promo"), path: 'notification-promo', active: 'notification-promo' == this.$route.name},
+                    {id: '3', name: this.$t("notification.others"), path: 'notification-others', active: 'notification-others' == this.$route.name}
                 ]
             }
         },

@@ -5,7 +5,7 @@ import {FormattedMessage, injectIntl} from 'react-intl';
 import { Page } from '../../components/page/page';
 import {EntryButton} from '../../components/newComponents/new-components'
 import styled from 'styled-components';
-import {list, getMe} from '../../api'
+import {list, getMe, getMessage} from '../../api'
 
 const EntryButtonBox = styled.div`
     display: flex;
@@ -113,6 +113,15 @@ const ContactIcon = styled.span`
     -moz-osx-font-smoothing: grayscale;
 `
 
+const TipText = styled.div`
+    display: block;
+    font-size: 12px;
+    color: rgb(230,69,69);
+    margin: 0px auto;
+    text-align: center;
+    margin-top: 20px;
+`
+
 let checkLogin = false;
 class Support extends React.PureComponent{
     constructor(props){
@@ -164,6 +173,7 @@ class Support extends React.PureComponent{
                     type:""
                 },
             ],
+            newsTip: 'To ensure the safety, the products will be throughly sterilized. Orders may experience delays for 2-3 days. We apologize for any inconvenience and appreciate your understanding.',
         }
     }
 
@@ -193,7 +203,6 @@ class Support extends React.PureComponent{
     }
 
     componentDidMount(){
-        console.log('mounted')
         const { me } = this.state
         if(window.addFaceBookJs){
             console.log('...')
@@ -201,6 +210,15 @@ class Support extends React.PureComponent{
             window.fbAsyncInit.hasRun = false;
             window.addFaceBookJs(me.id)
         }
+        getMessage('M1645').then(res => {
+            console.log(res)
+            if(res && res.code == 200 && res.result){
+                this.setState({
+                    newsTip: res.result.message
+                })
+            }
+        })
+
     }
 
     componentWillUpdate(){
@@ -303,9 +321,17 @@ class Support extends React.PureComponent{
                     </ContactUs>
 
                     {
+                        this.state.newsTip &&
+                        <TipText>
+                            {this.state.newsTip}
+                        </TipText>
+                    }
+                    
+
+                    {
                         !me.subscribeToFacebookMessage && 
                         <div style={{ textAlign: 'center', position: 'relative', top: 30 }}>
-                            <div id="fmsg" style={{ display: 'none', fontSize: 12, color: '#e64545', width: '80%',margin: '0 auto',}}>{intl.formatMessage({ id: 'facebook_check' })}</div>
+                            <div id="fmsg" style={{ display: 'none', fontSize: 12, color: this.state.newsTip?'#222':'rgb(230,69,69)', width: '80%',margin: '0 auto',}}>{intl.formatMessage({ id: 'facebook_check' })}</div>
                             <div className="fb-messenger-checkbox"
                                 target="_top"
                                 origin={window.__FB_Origin}
@@ -317,6 +343,7 @@ class Support extends React.PureComponent{
                                 center_align="true"
                                 >
                             </div>
+
                         </div>
                     }
                     

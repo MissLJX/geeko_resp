@@ -71,6 +71,18 @@ export const getOtherNotification = (skip) => {
     return axios.get('/notification/' + skip + '/20/get-other-notifications').then(data => data.result)
 }
 
+export const getActivityNotification = (skip) => {
+    return axios.get('/notification/' + skip + '/20//get-activity-notifications').then(data => data.result)
+}
+
+export const getPromoNotification = (skip) => {
+    return axios.get('/notification/' + skip + '/20/get-promotion2-notifications').then(data => data.result)
+}
+
+export const getOthersNotification = (skip) => {
+    return axios.get('/notification/' + skip + '/20/get-other2-notifications').then(data => data.result)
+}
+
 export const countUnreadNotification = () => {
     return axios.get('/notification/no-read-notifications').then(data => data.result)
 }

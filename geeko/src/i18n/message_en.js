@@ -416,5 +416,12 @@ export default {
     add:{
         sign_in: 'Sign In',
         addFavorites:'Add your favorites to your Wishlist now!',
+    },
+    notification:{
+        message: 'Message',
+        activities:'Activities',
+        promo: 'Promo',
+        others: 'Others',
+        empty_here: 'It’s empty here',
     }
 }

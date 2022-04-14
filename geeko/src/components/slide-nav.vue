@@ -34,7 +34,8 @@
             }
             padding: 0 15px;
             &.active a {
-                border-bottom: 2px solid #e5004f;
+                // border-bottom: 2px solid #e5004f;
+                border-bottom: 2px solid #222;
             }
         }
         &::after {

@@ -1,6 +1,6 @@
 <template>
     <div class="el-notifications">
-        <list :items="notifications" @listing="$emit('listing')" :loading="loading" :finished="finished">
+        <list :items="notifications" @listing="$emit('listing')" :loading="loading" :finished="finished" :showNoData="false">
             <template slot="li" slot-scope="props">
                 <li :key="props.item.id">
                     <notification class="el-notification" :notification="props.item"/>

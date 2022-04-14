@@ -14,6 +14,7 @@ export const getOrdersNew = (suffix, skip) => axios.get('/v9/order/' + skip + '/
 
 export const getQuestionType = () => axios.get("/message/anon/get-list/M1551")
 export const questionTypeChange = (type) => axios.post('/ticket/order/add', type)
+export const getMessage = (code) => axios.get('/message/get/'+code)
 
 /**
  * 

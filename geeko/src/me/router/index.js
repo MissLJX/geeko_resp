@@ -108,28 +108,51 @@ const Me = [
         // name: 'notification',
         meta: {title: 'Notification'},
         children: [
+            // {
+            //     path: '',
+            //     name: 'notification-promotion',
+            //     meta: {title: 'Notification promotion', depth: 1},
+            //     component: () => import(/* webpackChunkName: "notification-promotion" */ '../pages/notification/notification-promotion.vue')
+            // },
+            // {
+            //     path: 'promotion',
+            //     meta: {title: 'Notification promotion', depth: 1},
+            //     component: () => import(/* webpackChunkName: "notification-promotion" */ '../pages/notification/notification-promotion.vue')
+            // },
+            // {
+            //     path: 'order',
+            //     name: 'notification-me',
+            //     meta: {title: 'Notification me', depth: 2},
+            //     component: () => import(/* webpackChunkName: "notification-me" */ '../pages/notification/notification-order.vue')
+            // },
+            // {
+            //     path: 'other',
+            //     name: 'notification-other',
+            //     meta: {title: 'Notification others', depth: 3},
+            //     component: () => import(/* webpackChunkName: "notification-other" */ '../pages/notification/notification-other.vue')
+            // }
             {
                 path: '',
-                name: 'notification-promotion',
-                meta: {title: 'Notification promotion', depth: 1},
-                component: () => import(/* webpackChunkName: "notification-promotion" */ '../pages/notification/notification-promotion.vue')
+                name: 'notification-activities',
+                meta: {title: 'Notification Activities', depth: 1},
+                component: () => import(/* webpackChunkName: "notification-promotion" */ '../pages/notification/notification-activities.vue')
             },
             {
-                path: 'promotion',
-                meta: {title: 'Notification promotion', depth: 1},
-                component: () => import(/* webpackChunkName: "notification-promotion" */ '../pages/notification/notification-promotion.vue')
+                path: 'notification-activities',
+                meta: {title: 'Notification Activities', depth: 1},
+                component: () => import(/* webpackChunkName: "notification-promotion" */ '../pages/notification/notification-activities.vue')
             },
             {
-                path: 'order',
-                name: 'notification-me',
-                meta: {title: 'Notification me', depth: 2},
-                component: () => import(/* webpackChunkName: "notification-me" */ '../pages/notification/notification-order.vue')
+                path: 'notification-promo',
+                name: 'notification-promo',
+                meta: {title: 'Notification Promotion', depth: 2},
+                component: () => import(/* webpackChunkName: "notification-me" */ '../pages/notification/notification-promo.vue')
             },
             {
-                path: 'other',
-                name: 'notification-other',
-                meta: {title: 'Notification others', depth: 3},
-                component: () => import(/* webpackChunkName: "notification-other" */ '../pages/notification/notification-other.vue')
+                path: 'notification-others',
+                name: 'notification-others',
+                meta: {title: 'Notification Others', depth: 3},
+                component: () => import(/* webpackChunkName: "notification-other" */ '../pages/notification/notification-others.vue')
             }
         ]
     },

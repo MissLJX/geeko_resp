@@ -4,7 +4,7 @@
             <slot v-for="(item,index) in items" name="li" :item="item" track-by="$index" :index="index"></slot>
         </ul>
         <div v-show="loading" class="el-list-loading"><i class="iconfont">&#xe69f;</i></div>
-        <div class="el-no-more" v-show="finished && scrollable">{{$t('label.no_more_data')}}.</div>
+        <div class="el-no-more" v-show="showNoData && finished && scrollable">{{$t('label.no_more_data')}}.</div>
     </div>
 </template>
 
@@ -54,6 +54,10 @@
                 type: Boolean,
                 default: true
             },
+            showNoData: {
+                type: Boolean,
+                default: true
+            }
         },
         methods: {
             scrollHandle(evt){
