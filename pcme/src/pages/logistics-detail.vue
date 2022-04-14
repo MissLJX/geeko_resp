@@ -11,6 +11,9 @@
         </div>
         <div class="detailCon">
             <h2>{{$t('trackinfo')}}</h2>
+            <div class="delivery-tip" v-if="deliveryTip">
+                {{deliveryTip}}
+            </div>
             <ul v-if="logistics && logistics.packages" class="packageTab">
                 <li class="tab" @click="changeTab(key)" :class="{'active': key===isActive}" v-for="(item,key) in logistics.packages" :key="key">
                     {{item.name}}{{trackName}}
@@ -53,6 +56,7 @@
     import * as utils from '../utils/geekoutil';
     import _ from 'lodash';
     import loding from '../components/loding.vue';
+    import {getMessage} from '../api/index';
 
     export default {
         data(){
@@ -60,7 +64,8 @@
                 isActive:0,
                 changePackage:[],
                 isloding:true,
-                method:''
+                method:'',
+                deliveryTip: ''
             }
         },
         components: {
@@ -107,11 +112,32 @@
                 console.log(result);
                 this.isloding = false;
             })
+            getMessage("M1645").then(res=>{
+                // console.log(res)
+                if(res && res.message){
+                    this.deliveryTip = res.message
+                }
+            })
         }
     }
 </script>
 
 <style scoped lang="scss">
+    .delivery-tip{
+        display: block;
+        font-size: 12px;
+        color: rgb(230,69,69);
+        margin: 0px auto;
+        text-align: left;
+        background-color: #f6f6f6;
+        padding: 12px;
+        font-family: Roboto-Regular;
+        font-size: 14px;
+        font-weight: normal;
+        font-stretch: normal;
+        letter-spacing: 0px;
+        color: #e96060;
+    }
     .datail{
         width: 1140px;
         margin: 0 auto;

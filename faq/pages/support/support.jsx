@@ -173,7 +173,7 @@ class Support extends React.PureComponent{
                     type:""
                 },
             ],
-            newsTip: 'To ensure the safety, the products will be throughly sterilized. Orders may experience delays for 2-3 days. We apologize for any inconvenience and appreciate your understanding.',
+            newsTip: '',
         }
     }
 

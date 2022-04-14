@@ -11,7 +11,8 @@
             </router-link>
                 
             <router-link to="/me/m/notification">
-                <p class="iconfont">&#xe60b;</p>
+                <!-- <p class="iconfont">&#xe60b;</p> -->
+                <p class="iconfont">&#xe70b;</p>
                 <p>{{$t("index.messages")}}</p>
             </router-link>
         </div>
@@ -25,6 +26,12 @@
 </script>
 
 <style scoped lang="scss">
+@font-face {
+  font-family: 'iconfont';  /* Project id 384296 */
+  src: url('//at.alicdn.com/t/font_384296_4k0ybw8fob4.woff2?t=1649817988386') format('woff2'),
+       url('//at.alicdn.com/t/font_384296_4k0ybw8fob4.woff?t=1649817988386') format('woff'),
+       url('//at.alicdn.com/t/font_384296_4k0ybw8fob4.ttf?t=1649817988386') format('truetype');
+}
     .index-service-container{
         ._hd{
             font-family: 'AcuminPro-Bold';

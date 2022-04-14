@@ -6,7 +6,8 @@
             </a>
             
             <a @click.prevent="specificationLogin('/me/m/notification',1)">
-                <span class="iconfont" :class="{'active' : notificationCount > 0}">&#xe60b;</span>
+                <!-- <span class="iconfont" :class="{'active' : notificationCount > 0}">&#xe60b;</span> -->
+                <span class="iconfont" style="display: inline-block;transform: scale(1.3);" :class="{'active' : notificationCount > 0}">&#xe70b;</span>
             </a>
             
             <a @click.prevent="specificationLogin('/me/m/settings',1)">
@@ -447,6 +448,12 @@
 </script>
 
 <style scoped lang="scss">
+@font-face {
+  font-family: 'iconfont';  /* Project id 384296 */
+  src: url('//at.alicdn.com/t/font_384296_4k0ybw8fob4.woff2?t=1649817988386') format('woff2'),
+       url('//at.alicdn.com/t/font_384296_4k0ybw8fob4.woff?t=1649817988386') format('woff'),
+       url('//at.alicdn.com/t/font_384296_4k0ybw8fob4.ttf?t=1649817988386') format('truetype');
+}
 .animation_points_icon{
     animation: icon_exchange 5s linear infinite;
     position: absolute;

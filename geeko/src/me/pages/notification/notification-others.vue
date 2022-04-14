@@ -2,7 +2,7 @@
     <div class="notification-body">
         <notification-list @listing="listingHandle" :loading="loading" :finished="finished"
                            :notifications="notifications"/>
-        <notification-empty v-if="finished && notifications.length == 0"></notification-empty>
+        <notification-empty v-if="empty"></notification-empty>
 
     </div>
 </template>
@@ -57,7 +57,7 @@
 
         },
         created(){
-            if (!this.notifications || !this.notifications.length)
+            if ((!this.notifications || !this.notifications.length) && !this.finished)
                 this.listingHandle()
         }
     }

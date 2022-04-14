@@ -2,14 +2,14 @@
     <div class="detailCon">
         <h2>Details</h2>
         <div>
-            <h4>Logistics Information</h4>
+            <h4>{{$t("logisticsInfo")}}</h4>
             <div class="info" >
-                <p v-if="packagelogistics.slug"><span>Logistics Company: </span>{{packagelogistics.slug}}</p>
-                <p v-if="packagelogistics.trackingNumber"><span>Tracking Number: </span>{{packagelogistics.trackingNumber}}</p>
+                <p v-if="packagelogistics.slug"><span>{{$t("logisticsCompany")}}: </span>{{packagelogistics.slug}}</p>
+                <p v-if="packagelogistics.trackingNumber"><span>{{$t("tracknum")}}: </span>{{packagelogistics.trackingNumber}}</p>
             </div>
         </div>
         <div class="logisticsinfo">
-            <h4 v-if="packagelogistics.statusView">Current Stataus: {{packagelogistics.statusView}}</h4>
+            <h4 v-if="packagelogistics.statusView">{{$t("currentStataus")}}: {{packagelogistics.statusView}}</h4>
             <ul class="logisticslist" v-for="(item,key) in logisticslist">
                 <li :class="{'btxt':key === 0}">
                     <span :class="{'activebgball':key===0,'bgball':key!==0}"></span>
