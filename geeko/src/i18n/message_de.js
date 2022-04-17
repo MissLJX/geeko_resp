@@ -414,5 +414,12 @@ export default {
     add:{
         sign_in: 'Anmelden',
         addFavorites:'Fügen Sie jetzt Ihre Favoriten zu Ihrer Wunschliste hinzu!',
+    },
+    notification:{
+        message: 'Nachricht',
+        activities:'Aktivitäten',
+        promo: 'Promo',
+        others: 'Andere',
+        empty_here: 'Hier ist leer',
     }
 }

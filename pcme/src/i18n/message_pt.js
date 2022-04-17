@@ -559,4 +559,11 @@ export default {
         highlyReview: 'Compre os itens altamente revisados',
         viewOrder: 'ver pedido',
     },
+    notification:{
+        message: 'Mensagem',
+        activities:'Atividades',
+        promo: 'Promoção',
+        others: 'Outros',
+        empty_here: 'Está vazio aqui',
+    }
 }

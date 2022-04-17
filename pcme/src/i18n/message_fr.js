@@ -557,4 +557,11 @@ export default {
         highlyReview: 'Achetez les articles les plus appréciés',
         viewOrder: "voir l'ordre",
     },
+    notification:{
+        message: 'Message',
+        activities:'Activités',
+        promo: 'Promotion',
+        others: 'Autres',
+        empty_here: 'C\'est vide ici',
+    }
 }

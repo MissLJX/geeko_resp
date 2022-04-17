@@ -5,12 +5,13 @@
         </div>
 
         <div class="_bd">
-            <router-link to="/me/m/faq/support-ticket">
+            <router-link :to="url+'faq/support-ticket'">
                 <p style="font-size:25px;" class="iconfont">&#xe6e8;</p>
                 <p>{{$t("ticket")}}</p>
             </router-link>
                 
-            <router-link to="/me/m/notification">
+                <!-- to="/me/m/notification" -->
+            <router-link :to="url+'notification'">
                 <!-- <p class="iconfont">&#xe60b;</p> -->
                 <p class="iconfont">&#xe70b;</p>
                 <p>{{$t("index.messages")}}</p>
@@ -21,7 +22,12 @@
 
 <script>
     export default {
-        name:"IndexServiceContainer"
+        name:"IndexServiceContainer",
+        computed:{
+            url(){
+                return window.location.pathname + "/"
+            }
+        }
     }
 </script>
 

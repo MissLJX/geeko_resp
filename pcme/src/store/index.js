@@ -1358,7 +1358,8 @@ const actions = {
 
     //notification
     getOrderNotifications({commit}, {skip}){
-        return api.getOrderNotifications(skip).then((nts) => {
+        // return api.getOrderNotifications(skip).then((nts) => {
+        return api.getActivityNotification(skip).then((nts) => {
             commit(types.ME_GET_NOTIFICATION_O_LOADED)
 
             if (nts && nts.length) {
@@ -1374,7 +1375,8 @@ const actions = {
     },
 
     getPromotionNotifications({commit}, {skip}){
-        return api.getPromotionNotification(skip).then((nts) => {
+        // return api.getPromotionNotification(skip).then((nts) => {
+        return api.getPromoNotification(skip).then((nts) => {
             commit(types.ME_GET_NOTIFICATION_P_LOADED)
             if (nts && nts.length) {
                 commit(types.ME_GET_NOTIFICATIONS_PROMOTION, nts)
@@ -1388,7 +1390,8 @@ const actions = {
     },
 
     getOtherNotifications({commit}, {skip}){
-        return api.getOtherNotification(skip).then((nts) => {
+        // return api.getOtherNotification(skip).then((nts) => {
+        return api.getOthersNotification(skip).then((nts) => {
             commit(types.ME_GET_NOTIFICATION_OT_LOADED)
             if (nts && nts.length) {
                 commit(types.ME_GET_NOTIFICATIONS_OTHER, nts)

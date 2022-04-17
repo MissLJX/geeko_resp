@@ -556,4 +556,11 @@ export default {
         highlyReview: 'Kaufen Sie die hoch bewerteten Artikel',
         viewOrder: 'Bestellung ansehen',
     },
+    notification:{
+        message: 'Nachricht',
+        activities:'Aktivitäten',
+        promo: 'Promo',
+        others: 'Andere',
+        empty_here: 'Hier ist leer',
+    }
 }

@@ -414,5 +414,12 @@ export default {
     add:{
         sign_in: "S'identifier",
         addFavorites:'Ajoutez vos favoris \u00e0 votre liste de souhaits maintenant !',
+    },
+    notification:{
+        message: 'Message',
+        activities:'Activités',
+        promo: 'Promotion',
+        others: 'Autres',
+        empty_here: 'C\'est vide ici',
     }
 }

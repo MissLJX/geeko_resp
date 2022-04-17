@@ -3,7 +3,7 @@
         <div class="_hd st-table st-fullwidth">
             <div class="st-cell st-v-m">{{$t("mywishlist")}}</div>
             <div class="st-cell st-v-m st-t-r" v-show="disposeWishlistProducts">
-                <router-link to="/me/m/wishlist">
+                <router-link :to="url+'/wishlist'">
                     {{$t("index.view_all")}} >
                 </router-link>
             </div>
@@ -74,6 +74,9 @@
             ...mapGetters(['wishProducts','wishskip']),
             disposeWishlistProducts(){
                 return this.wishProducts && this.wishProducts.length > 0;
+            },
+            url(){
+                return window.location.pathname
             }
         },
         methods:{

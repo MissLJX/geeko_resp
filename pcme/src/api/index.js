@@ -230,6 +230,16 @@ export const getPromotionNotification = (skip) => {
 export const getOtherNotification = (skip) => {
     return axios.get('/notification/' + skip + '/20/get-other-notifications').then(data => data.result)
 }
+// 新notification
+export const getActivityNotification = (skip) => {
+    return axios.get('/notification/' + skip + '/20//get-activity-notifications').then(data => data.result)
+}
+export const getPromoNotification = (skip) => {
+    return axios.get('/notification/' + skip + '/20/get-promotion2-notifications').then(data => data.result)
+}
+export const getOthersNotification = (skip) => {
+    return axios.get('/notification/' + skip + '/20/get-other2-notifications').then(data => data.result)
+}
 //用户个人信息集合
 export const getFeedSummary = (customerId) => {
     return axios.get(VPATH +'/customer/anon/'+customerId+'/feed-summary').then(data => data.result)

@@ -66,23 +66,41 @@ const routes = [
                 // name:"notification",
                 meta: {title:'My Messages'},
                 children: [
+                    // {
+                    //     path: '',
+                    //     name: 'promotion',
+                    //     meta: {title: 'Notification promotion', depth: 1},
+                    //     component: () => import('../components/notification/notification-promotion.vue')
+                    // },
+                    // {
+                    //     path: 'order',
+                    //     name: 'order',
+                    //     meta: {title: 'Notification me', depth: 2},
+                    //     component: () => import('../components/notification/notification-order.vue')
+                    // },
+                    // {
+                    //     path: 'other',
+                    //     name: 'other',
+                    //     meta: {title: 'Notification others', depth: 3},
+                    //     component: () => import('../components/notification/notification-other.vue')
+                    // },
                     {
                         path: '',
-                        name: 'promotion',
-                        meta: {title: 'Notification promotion', depth: 1},
-                        component: () => import('../components/notification/notification-promotion.vue')
+                        name: 'activities',
+                        meta: {title: 'Notification activities', depth: 1},
+                        component: () => import('../components/notification/notification-activities.vue')
                     },
                     {
-                        path: 'order',
-                        name: 'order',
-                        meta: {title: 'Notification me', depth: 2},
-                        component: () => import('../components/notification/notification-order.vue')
+                        path: 'promo',
+                        name: 'promo',
+                        meta: {title: 'Notification promo', depth: 2},
+                        component: () => import('../components/notification/notification-promo.vue')
                     },
                     {
-                        path: 'other',
-                        name: 'other',
+                        path: 'others',
+                        name: 'others',
                         meta: {title: 'Notification others', depth: 3},
-                        component: () => import('../components/notification/notification-other.vue')
+                        component: () => import('../components/notification/notification-others.vue')
                     }
                 ]
             },

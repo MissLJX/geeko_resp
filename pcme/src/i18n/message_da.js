@@ -559,4 +559,11 @@ export default {
         highlyReview: 'Shop the highly reviewed items',
         viewOrder: 'view order',
     },
+    notification:{
+        message: 'Message',
+        activities:'Activities',
+        promo: 'Promo',
+        others: 'Others',
+        empty_here: 'It’s empty here',
+    }
 }

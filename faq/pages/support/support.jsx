@@ -210,6 +210,10 @@ class Support extends React.PureComponent{
             window.fbAsyncInit.hasRun = false;
             window.addFaceBookJs(me.id)
         }
+        this.getM1645()
+    }
+
+    getM1645(){
         getMessage('M1645').then(res => {
             console.log(res)
             if(res && res.code == 200 && res.result){
@@ -218,12 +222,22 @@ class Support extends React.PureComponent{
                 })
             }
         })
-
     }
+
 
     componentWillUpdate(){
         console.log('update')
     }
+
+    // componentDidUpdate(prevProps){
+    //     const {intl: oldLang } = prevProps
+    //     const {intl: lang} = this.props
+    //     // alert("1: "+oldLang.locale+" 2:"+ lang.locale)
+    //     if(oldLang.locale != lang.locale){
+    //     //     console.log('lang update')
+    //     this.getM1645()
+    //     }
+    // }
  
 
     // contact us 

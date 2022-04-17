@@ -182,7 +182,7 @@
                         },
                         {
                             name:this.$t("mymessages"),
-                            routerName:"notification",
+                            routerName:this.$t("mymessages"),
                             routerPath:"/me/m/notification"
                         },
                         {

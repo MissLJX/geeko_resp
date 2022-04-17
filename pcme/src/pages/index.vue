@@ -1,7 +1,7 @@
 <template>
     <div class="el-me-body">
         <div class="el-me-hd">
-            <p style="text-transform:capitalize"><span @click="window.location.href = '/'">{{$t('home')}}</span><router-link :to="getUrl('/me/m')"> > {{$t('me')}}</router-link><span v-if="isActive !== 'Me'"> > {{isActive}}</span></p>
+            <p style="text-transform:capitalize"><span @click="window.location.href = '/'">{{$t('home')}}</span><router-link :to="getUrl('/me/m')"> > {{$t('me')}}</router-link><span v-if="isActive != $t('me')"> > {{isActive}}</span></p>
         </div>
         <div class="el-me-bd">
             <div class="el-me-nav">
@@ -45,6 +45,7 @@
                 })
             },
             changeClass(currIndex){
+                console.log(currIndex)
                 this.isActive = currIndex
             },
             getUrl(suffix){
@@ -70,11 +71,11 @@
         beforeRouteEnter(to,from,next){
             if(to.path && !!to.path && to.path.includes("notification")){
                 next(vm => {
-                    vm.isActive = "notification";
+                    vm.isActive = vm.$t("mymessages");
                 });
             }else if(to.path && !!to.path && to.path.includes("credits")){
                 next(vm => {
-                    vm.isActive = "credits";
+                    vm.isActive = vm.$t("credits");
                 });
             }else if(to.name && !!to.name){
                 next(vm => {
@@ -89,7 +90,7 @@
                 if(!to.name && to.path == "/me/m"){
                     this.isActive = "Me";
                 }else if(to.path && !!to.path && to.path.includes("notification")){
-                    this.isActive = "notification";
+                    this.isActive = this.$t("mymessages");
                 }else if(to.path && !!to.path && to.path.includes("credits")){
                     this.isActive = "credits";
                 }else{

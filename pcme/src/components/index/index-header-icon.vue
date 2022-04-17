@@ -13,7 +13,7 @@
         </div>
 
         <div class="m-header-icon">
-            <router-link to="/me/m/coupons">
+            <router-link :to="url+'coupons'">
                 <p class="iconfont">
                     <span class="_font" v-if="feed && feed.canUseCouponCount">{{feed && feed.canUseCouponCount}}</span>
                     <span v-else>&#xe6dc;</span>
@@ -21,7 +21,7 @@
                 <p>{{$t("index.coupons")}}</p>
             </router-link>
 
-            <router-link to="/me/m/credits">
+            <router-link :to="url+'credits'">
                 <p class="iconfont" v-if="!isLogin">
                     <span class="_font" v-if="feed && feed.points">{{feed && feed.points}}</span>
                     <span v-else>&#xe6db;</span>
@@ -33,7 +33,7 @@
                 <p>{{$t("point.points")}}</p>
             </router-link>
             
-            <router-link to="/me/m/cards">
+            <router-link :to="url+'cards'">
                 <p class="iconfont">&#xe6dd;</p>
                 <p>{{$t("index.wallet")}}</p>
             </router-link>
@@ -71,6 +71,9 @@
             //         return utils.imageutil.getHeaderImg(this.me.id)
             //     }
             // },
+            url(){
+                return window.location.pathname + "/"
+            },
             isLogin(){
                 return window.__is_login__
             },
