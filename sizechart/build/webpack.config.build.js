@@ -26,7 +26,7 @@ const config = {
     output: {
         path: setPath('dist'),
         publicPath: '/',
-        filename:'[name].js'
+        filename: '[name].[chunkhash].js'
     },
 
     optimization: {
