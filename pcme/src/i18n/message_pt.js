@@ -254,6 +254,7 @@ export default {
         my_preference_error_message:"Minhas preferências não podem estar todas vazias",
         my_measurements_error_message:"Minhas Medidas não podem estar todas vazias",
         add_success:"Adicionar sucesso",
+        copy_complate:"Cópia completa",
     },
     point:{
         my_points:"Meus pontos",

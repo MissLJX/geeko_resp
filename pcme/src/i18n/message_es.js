@@ -252,6 +252,7 @@ export default {
         my_preference_error_message:"Mis preferencias no pueden estar todas vacías",
         my_measurements_error_message:"Mis medidas no pueden estar todas vacías",
         add_success:"Agregar éxito",
+        copy_complate:"Copia completa",
     },
     point:{
         my_points:"Mis puntos",
