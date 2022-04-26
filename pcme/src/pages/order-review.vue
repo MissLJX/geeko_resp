@@ -298,7 +298,7 @@
                     this.uploadedImages.push(src)
                 })
 
-                console.log("this.uploadedImages",this.uploadedImages);
+                // console.log("this.uploadedImages",this.uploadedImages);
 
                 if (this.uploadedImages.length > 5) {
                     this.uploadedImages.splice(5, this.uploadedImages.length - 5);

@@ -153,8 +153,27 @@ const Me = [
                 name: 'notification-others',
                 meta: {title: 'Notification Others', depth: 3},
                 component: () => import(/* webpackChunkName: "notification-other" */ '../pages/notification/notification-others.vue')
-            }
+            },
         ]
+    },
+
+    {
+        path: ROUTER_PATH_ME+'/notification-ticket',
+        name: 'notification-ticket',
+        meta: {title: 'Notification Ticket', depth: 4},
+        component: () => import(/* webpackChunkName: "notification-other" */ '../pages/notification/notification-ticket.vue')
+    },
+    {
+        path: ROUTER_PATH_ME+'/notification-order',
+        name: 'notification-order',
+        meta: {title: 'Notification Order', depth: 4},
+        component: () => import(/* webpackChunkName: "notification-other" */ '../pages/notification/notification-order-new.vue')
+    },
+    {
+        path: ROUTER_PATH_ME+'/notification-news',
+        name: 'notification-news',
+        meta: {title: 'Notification News'},
+        component: () => import(/* webpackChunkName: "notification-other" */ '../pages/notification/notification-news.vue')
     },
     {
         path: ROUTER_PATH_ME + '/wishlist',

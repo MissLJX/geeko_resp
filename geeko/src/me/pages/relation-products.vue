@@ -62,7 +62,7 @@
         },
         watch:{
             "$route":function(to, from){
-                console.log(to.params.productId);
+                // console.log(to.params.productId);
             }
         }
     }

@@ -53,7 +53,7 @@ const languages = [
 const localelang = (window.locale || 'en').substring(0, 2)
 
 const lang = languages.find(l => l == localelang)
-console.log(lang)
+// console.log(lang)
 const {questions, secondaries} = messages[lang] || messages['en']
-console.log( {questions, secondaries})
+// console.log( {questions, secondaries})
 export {questions, secondaries}

@@ -77,7 +77,7 @@ export default {
         },
         getReviewOrder(){
             this.$store.dispatch("getReviewOrder").then(res => {
-                console.log(res)
+                // console.log(res)
                 if(!this.reviewOrderList || this.reviewOrderList.length < 0){
                     this.chanegData(2)
                 }

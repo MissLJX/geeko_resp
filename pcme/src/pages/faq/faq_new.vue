@@ -122,7 +122,7 @@ export default {
             this.questions_new.forEach(q => {
                 list_new = list_new.concat(q.children)
             })
-            console.log(list_new)
+            // console.log(list_new)
             this.searchList = list
             // console.log(this.groupQuestions)
             this.changeType(type)
@@ -146,7 +146,7 @@ export default {
             this.groupSelectQuestions = this.groupQuestions.find(q => q.title.toLowerCase() == e).questions
         },
         relatedSearch(e){
-            console.log("F: ",e)
+            // console.log("F: ",e)
             this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/faq/search-result-detail', query: {showId: e} })
         },
         goToDetail(item){

@@ -70,6 +70,42 @@ const mutations = {
     [types.ME_GET_NOTIFICATION_OT_FINISHED](state){
         state.otherNtFinished = true
     },
+    [types.ME_GET_NOTIFICATION_TICKET](state, ticketNotifications){
+        state.ticketNotifications = _.concat(state.ticketNotifications,ticketNotifications)
+    },
+    [types.ME_GET_NOTIFICATION_TICKET_SKIP](state){
+        state.ticketNtSkip += 20
+    },
+    [types.ME_GET_NOTIFICATION_TICKET_LOADED](state){
+        state.ticketNtLoaded = true
+    },
+    [types.ME_GET_NOTIFICATION_TICKET_FINISHED](state){
+        state.ticketNtFinished = true
+    },
+    [types.ME_GET_NOTIFICATION_ORDERNEW](state, orderNewNotifications){
+        state.orderNewNotifications = _.concat(state.orderNewNotifications,orderNewNotifications)
+    },
+    [types.ME_GET_NOTIFICATION_ORDERNEW_SKIP](state){
+        state.orderNewNtSkip += 20
+    },
+    [types.ME_GET_NOTIFICATION_ORDERNEW_LOADED](state){
+        state.orderNewNtLoaded = true
+    },
+    [types.ME_GET_NOTIFICATION_ORDERNEW_FINISHED](state){
+        state.orderNewNtFinished = true
+    },
+    [types.ME_GET_NOTIFICATION_NEWS](state, newsNotifications){
+        state.newsNotifications = _.concat(state.newsNotifications,newsNotifications)
+    },
+    [types.ME_GET_NOTIFICATION_NEWS_SKIP](state){
+        state.newsNtSkip += 20
+    },
+    [types.ME_GET_NOTIFICATION_NEWS_LOADED](state){
+        state.newsNtLoaded = true
+    },
+    [types.ME_GET_NOTIFICATION_NEWS_FINISHED](state){
+        state.newsNtFinished = true
+    },
     [types.ME_GET_WISH_PRODUCTS](state, wishProducts){
         state.wishProducts = _.concat(state.wishProducts, wishProducts)
     },
@@ -127,6 +163,27 @@ const mutations = {
     [types.ME_GET_NOTIFICATION_COUNT](state, count){
         state.notificationCount = count
     },
+
+    [types.ME_GET_ACTIVITY_NOTIFICATION_NO_READ](state, count){
+        state.activityNotificationnoRead = count
+    },
+    [types.ME_GET_PROMO_NOTIFICATION_NO_READ](state, count){
+        state.promoNotificationnoRead = count
+    },
+    [types.ME_GET_OTHER_NOTIFICATION_NO_READ](state, count){
+        state.otherNotificationnoRead = count
+    },
+    [types.ME_GET_TICKET_NOTIFICATION_NO_READ](state, count){
+        state.ticketNotificationnoRead = count
+    },
+    [types.ME_GET_ORDER_NOTIFICATION_NO_READ](state, count){
+        state.orderNotificationnoRead = count
+    },
+    [types.ME_GET_NEWS_NOTIFICATION_NO_READ](state, count){
+        state.newsNotificationnoRead = count
+    },
+    
+
     [types.ME_CHANGE_CURRENCY](state, currency){
         state.me.currency = currency
     },

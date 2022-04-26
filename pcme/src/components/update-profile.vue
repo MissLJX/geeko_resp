@@ -127,7 +127,7 @@
         },
         methods:{
             getChildDate:function(value){
-                console.log(value);
+                // console.log(value);
                 this.birthday = value;
             },
             infoSaveHandle(){
@@ -152,20 +152,20 @@
                 this.show = !this.show;
             },
             cropSuccess(imgDataUrl, field){
-                console.log('-------- crop success --------');
-                console.log("imgDataUrl",imgDataUrl)
+                // console.log('-------- crop success --------');
+                // console.log("imgDataUrl",imgDataUrl)
                 this.headerImageContainer = imgDataUrl;
             },
             cropUploadSuccess(jsonData, field){
-                console.log('-------- upload success --------');
-                console.log(jsonData);
-                console.log('field: ' + field);
+                // console.log('-------- upload success --------');
+                // console.log(jsonData);
+                // console.log('field: ' + field);
                 this.$store.dispatch("setHeaderImage2",this.headerImageContainer);
             },
             cropUploadFail(status, field){
-                console.log('-------- upload fail --------');
-                console.log(status);
-                console.log('field: ' + field);
+                // console.log('-------- upload fail --------');
+                // console.log(status);
+                // console.log('field: ' + field);
             },
             pZone:function(value){
                 return value < 10 ? '0' + value : value;

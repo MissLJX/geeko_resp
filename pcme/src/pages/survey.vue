@@ -421,7 +421,7 @@
                     }
                     this.getData()
                 },(err)=>{
-                    console.log(err)
+                    console.log('获取问卷内容报错: ',err)
                     this.getData()
                 })
                 
@@ -459,7 +459,7 @@
                 selectedQuestion.inputValue = data.inputValue
             },
             submit(){
-                console.log('submit')
+                // console.log('submit')
 
                 let params = {};
                 if(this.result_id){

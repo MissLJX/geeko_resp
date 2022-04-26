@@ -29,7 +29,7 @@ const set = (key, value, exp) => {
             window.localStorage.setItem(key, JSON.stringify(wrapper))
         }
     }catch(e){
-        console.log(e)
+        console.log('设置本地数据报错: ',e)
     }
 }
 
@@ -39,7 +39,7 @@ const remove = key => {
             window.localStorage.removeItem(key)
         }
     }catch(e){
-        console.log(e)
+        console.log('移除本地数据报错: ',e)
     }
 }
 

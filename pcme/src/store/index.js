@@ -105,9 +105,18 @@ const state = {
     packagelogistics:[],
     cancelReasons:[],
 
+    activityNotificationnoRead: 0,
+    promoNotificationnoRead: 0,
+    otherNotificationnoRead: 0,
+    ticketNotificationnoRead: 0,
+    orderNotificationnoRead: 0,
+    newsNotificationnoRead: 0,
     orderNotifications: [],
     promotionNotifications: [],
     otherNotifications: [],
+    ticketNotifications: [],
+    orderNewNotifications: [],
+    newsNotifications: [],
     promotionNtSkip: 0,
     promotionNtLoaded: false,
     promotionNtFinished: false,
@@ -117,9 +126,19 @@ const state = {
     otherNtSkip: 0,
     otherNtLoaded: false,
     otherNtFinished: false,
+    ticketNtSkip: 0,
+    ticketNtLoaded: false,
+    ticketNtFinished: false,
+    orderNewNtSkip: 0,
+    orderNewNtLoaded: false,
+    orderNewNtFinished: false,
+    newsNtSkip: 0,
+    newsNtLoaded: false,
+    newsNtFinished: false,
     notificationCount: 0,
     wannalistNum:0,
     returnLabelPdf:null,
+    
 
     logisticsCompanies:null,
 
@@ -246,6 +265,25 @@ const getters = {
     otherNotifications: state => state.otherNotifications,
     wannalistNum: state => state.wannalistNum,
     returnLabelPdf:state => state.returnLabelPdf,
+
+    ticketNotifications: state => state.ticketNotifications,
+    orderNewNotifications: state => state.orderNewNotifications,
+    newsNotifications: state => state.newsNotifications,
+    activityNotificationnoRead: state => state.activityNotificationnoRead,
+    promoNotificationnoRead: state => state.promoNotificationnoRead,
+    otherNotificationnoRead: state => state.otherNotificationnoRead,
+    ticketNotificationnoRead: state => state.ticketNotificationnoRead,
+    orderNotificationnoRead: state => state.orderNotificationnoRead,
+    newsNotificationnoRead: state => state.newsNotificationnoRead,
+    ticketNtSkip: state => state.ticketNtSkip,
+    ticketNtLoaded: state => state.ticketNtLoaded,
+    ticketNtFinished: state => state.ticketNtFinished,
+    orderNewNtSkip: state => state.orderNewNtSkip,
+    orderNewNtLoaded: state => state.orderNewNtLoaded,
+    orderNewNtFinished: state => state.orderNewNtFinished,
+    newsNtSkip: state => state.newsNtSkip,
+    newsNtLoaded: state => state.newsNtLoaded,
+    newsNtFinished: state => state.newsNtFinished,
 
     logisticsCompanies:state => state.logisticsCompanies,
 
@@ -657,6 +695,60 @@ const mutations = {
     [types.ME_GET_NOTIFICATION_OT_FINISHED](state){
         state.otherNtFinished = true
     },
+    [types.ME_GET_ACTIVITY_NOTIFICATION_NO_READ](state, count){
+        state.activityNotificationnoRead = count
+    },
+    [types.ME_GET_PROMO_NOTIFICATION_NO_READ](state, count){
+        state.promoNotificationnoRead = count
+    },
+    [types.ME_GET_OTHER_NOTIFICATION_NO_READ](state, count){
+        state.otherNotificationnoRead = count
+    },
+    [types.ME_GET_TICKET_NOTIFICATION_NO_READ](state, count){
+        state.ticketNotificationnoRead = count
+    },
+    [types.ME_GET_ORDER_NOTIFICATION_NO_READ](state, count){
+        state.orderNotificationnoRead = count
+    },
+    [types.ME_GET_NEWS_NOTIFICATION_NO_READ](state, count){
+        state.newsNotificationnoRead = count
+    },
+    [types.ME_GET_NOTIFICATION_TICKET](state, ticketNotifications){
+        state.ticketNotifications = _.concat(state.ticketNotifications,ticketNotifications)
+    },
+    [types.ME_GET_NOTIFICATION_TICKET_SKIP](state){
+        state.ticketNtSkip += 20
+    },
+    [types.ME_GET_NOTIFICATION_TICKET_LOADED](state){
+        state.ticketNtLoaded = true
+    },
+    [types.ME_GET_NOTIFICATION_TICKET_FINISHED](state){
+        state.ticketNtFinished = true
+    },
+    [types.ME_GET_NOTIFICATION_ORDERNEW](state, orderNewNotifications){
+        state.orderNewNotifications = _.concat(state.orderNewNotifications,orderNewNotifications)
+    },
+    [types.ME_GET_NOTIFICATION_ORDERNEW_SKIP](state){
+        state.orderNewNtSkip += 20
+    },
+    [types.ME_GET_NOTIFICATION_ORDERNEW_LOADED](state){
+        state.orderNewNtLoaded = true
+    },
+    [types.ME_GET_NOTIFICATION_ORDERNEW_FINISHED](state){
+        state.orderNewNtFinished = true
+    },
+    [types.ME_GET_NOTIFICATION_NEWS](state, newsNotifications){
+        state.newsNotifications = _.concat(state.newsNotifications,newsNotifications)
+    },
+    [types.ME_GET_NOTIFICATION_NEWS_SKIP](state){
+        state.newsNtSkip += 20
+    },
+    [types.ME_GET_NOTIFICATION_NEWS_LOADED](state){
+        state.newsNtLoaded = true
+    },
+    [types.ME_GET_NOTIFICATION_NEWS_FINISHED](state){
+        state.newsNtFinished = true
+    },
     [types.ME_GET_FEED_SUMMARY](state,wannalistNum){
         state.wannalistNum = wannalistNum
     },
@@ -682,7 +774,7 @@ const mutations = {
         state.youlikeskip += 20;
     },
     [types.CHANGE_GET_ME_DATA](state,customer){
-        console.log("customer",customer)
+        // console.log("customer",customer)
         let name = customer.name;
         let changeValue = customer.customer[name];
         state.me[name] = _.cloneDeep(changeValue);
@@ -745,7 +837,7 @@ const actions = {
                 commit(types.ME_GET_FEED_SUMMARYRY_ALL_DATA, feed)
                 commit(types.ME_INITIALIZED)
             }).catch((e) => {
-                console.log("e",e);
+                console.log("init报错: ",e);
             });
         }
     },
@@ -803,7 +895,7 @@ const actions = {
     },
     getOrderCountReturn({commit}){
         return api.getOrderCountReturns().then((count) => {
-            console.log(count)
+            // console.log(count)
             commit(types.ME_ORDER_COUNT_RETURN, count)
         })
     },
@@ -1241,7 +1333,7 @@ const actions = {
     addReturnLogistics({commit} , logistics){
         return new Promise((reslove,reject) => {
             api.addReturnLogistics(logistics).then(message => {
-                console.log("message",message);
+                // console.log("message",message);
                 reslove(message);
             });
         });
@@ -1249,7 +1341,7 @@ const actions = {
     editReturnLogistics({commit} , logistics){
         return new Promise((reslove,reject) => {
             api.editReturnLogistics(logistics).then(message => {
-                console.log("message",message);
+                // console.log("message",message);
                 reslove(message);
             }).catch(err=>{
                 alert(err.result)
@@ -1267,7 +1359,7 @@ const actions = {
         return new Promise((reslove,reject) => {
             api.getReturnLogistics(orderId).then((data) => {
                 let result = data.result;
-                console.log(data)
+                // console.log(data)
                 // if(!!result && result != null && result.length > 0 && result.length < 2){
                 //     commit(types.GET_RETURN_LOGISTICS,result);
                 // }else if(!!result && result != null && result.length > 1){
@@ -1287,7 +1379,7 @@ const actions = {
         })
     },
     clearTickets({commit},id){
-        console.log('ss')
+        // console.log('ss')
         commit(types.GLOBAL_GET_TICKETS, [])
     },
     getTicket({commit},id){
@@ -1404,6 +1496,115 @@ const actions = {
     getOtherNtSkip({commit}){
         commit(types.ME_GET_NOTIFICATION_OT_SKIP)
     },
+    getTicketNotifications({commit}, {skip}){
+        // return api.getOtherNotification(skip).then((nts) => {
+        return api.getTicketNotification(skip).then((nts) => {
+            commit(types.ME_GET_NOTIFICATION_TICKET_LOADED)
+            if (nts && nts.length) {
+                commit(types.ME_GET_NOTIFICATION_TICKET, nts)
+            } else {
+                commit(types.ME_GET_NOTIFICATION_TICKET_FINISHED)
+            }
+        })
+    },
+
+    getTicketNtSkip({commit}){
+        commit(types.ME_GET_NOTIFICATION_TICKET_SKIP)
+    },
+
+    getOrderNewNotifications({commit}, {skip}){
+        // return api.getOtherNotification(skip).then((nts) => {
+        return api.getOrdersNewNotification(skip).then((nts) => {
+            commit(types.ME_GET_NOTIFICATION_ORDERNEW_LOADED)
+            if (nts && nts.length) {
+                commit(types.ME_GET_NOTIFICATION_ORDERNEW, nts)
+            } else {
+                commit(types.ME_GET_NOTIFICATION_ORDERNEW_FINISHED)
+            }
+        })
+    },
+
+    getOrderNewNtSkip({commit}){
+        commit(types.ME_GET_NOTIFICATION_ORDERNEW_SKIP)
+    },
+
+    getNewsNotifications({commit}, {skip}){
+        // return api.getOtherNotification(skip).then((nts) => {
+        return api.getNewsNotification(skip).then((nts) => {
+            commit(types.ME_GET_NOTIFICATION_NEWS_LOADED)
+            if (nts && nts.length) {
+                commit(types.ME_GET_NOTIFICATION_NEWS, nts)
+            } else {
+                commit(types.ME_GET_NOTIFICATION_NEWS_FINISHED)
+            }
+        })
+    },
+
+    getNewsNtSkip({commit}){
+        commit(types.ME_GET_NOTIFICATION_NEWS_SKIP)
+    },
+
+    getActivityNotificationsNoRead({commit}){
+        return api.getActivityNotificationNoRead().then(res => {
+            // console.log(res)
+            if(res && res.result){
+                commit(types.ME_GET_ACTIVITY_NOTIFICATION_NO_READ, res.result)
+            } else {
+                commit(types.ME_GET_ACTIVITY_NOTIFICATION_NO_READ, 0)
+            }
+        })
+    },
+    getPromoNotificationsNoRead({commit}){
+        return api.getPromoNotificationNoRead().then(res => {
+            // console.log(res)
+            if(res && res.result){
+                commit(types.ME_GET_PROMO_NOTIFICATION_NO_READ, res.result)
+            } else {
+                commit(types.ME_GET_PROMO_NOTIFICATION_NO_READ, 0)
+            }
+        })
+    },
+    getOtherNotificationsNoRead({commit}){
+        return api.getOthersNotificationNoRead().then(res => {
+            // console.log(res)
+            if(res && res.result){
+                commit(types.ME_GET_OTHER_NOTIFICATION_NO_READ, res.result)
+            } else {
+                commit(types.ME_GET_OTHER_NOTIFICATION_NO_READ, 0)
+            }
+        })
+    },
+    getTicketNotificationsNoRead({commit}){
+        return api.getTicketNotificationNoRead().then(res => {
+            // console.log(res)
+            if(res && res.result){
+                commit(types.ME_GET_TICKET_NOTIFICATION_NO_READ, res.result)
+            } else {
+                commit(types.ME_GET_TICKET_NOTIFICATION_NO_READ, 0)
+            }
+        })
+    },
+    getOrderNotificationsNoRead({commit}){
+        return api.getOrdersNotificationNoRead().then(res => {
+            // console.log(res)
+            if(res && res.result){
+                commit(types.ME_GET_ORDER_NOTIFICATION_NO_READ, res.result)
+            } else {
+                commit(types.ME_GET_ORDER_NOTIFICATION_NO_READ, 0)
+            }
+        })
+    },
+    getNewsNotificationsNoRead({commit}){
+        return api.getNewsNotificationNoRead().then(res => {
+            // console.log(res)
+            if(res && res.result){
+                commit(types.ME_GET_NEWS_NOTIFICATION_NO_READ, res.result)
+            } else {
+                commit(types.ME_GET_NEWS_NOTIFICATION_NO_READ, 0)
+            }
+        })
+    },
+
     getFeedSummary({commit, state}){
         return api.getFeedSummary(state.me.id).then((userinfo) => {
             if(userinfo) {
@@ -1448,9 +1649,9 @@ const actions = {
         return new Promise((reslove,reject) => {
             api.updateCustomerSave({"customer":customer.customer}).then((result) => {
                 reslove(result);
-                console.log("customer",customer);
+                // console.log("customer",customer);
                 if(customer.name === 'myPreference'){
-                    console.log("customer",customer.name);
+                    // console.log("customer",customer.name);
                     customer["customer"] = customer["definition"];
                 }
 
@@ -1470,7 +1671,7 @@ const actions = {
         commit(types.CHANGE_ORDER_ACTIVE_STATUS,status);
     },
     updateSurvey({commit},params){
-        console.log(params)
+        // console.log(params)
         return new Promise((reslove,reject) => {
             api.surveySave(params).then((result) => {
                 reslove(result);

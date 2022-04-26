@@ -219,12 +219,12 @@ export default {
                 includeCountry.forEach((item)=>{
                     // console.log(item)
                     item.labelS = item.label.replace(reg, (e)=>{
-                        console.log(e)
+                        // console.log(e)
                         return '<span style="color:#999;padding:0;">'+e+'</span>'
                     })
-                    console.log(item.label)
+                    // console.log(item.label)
                 })
-                console.log(includeCountry[0])
+                // console.log(includeCountry[0])
                 return includeCountry
             } else {
                 includeCountry.forEach(item => {

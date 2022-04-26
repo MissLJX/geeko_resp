@@ -162,7 +162,7 @@ export const actions = {
             commit(types.GET_PRODUCT_DETAIL_MESSAGE_PRODUCT_ID,productId);
             return result.result;
         }).catch((e) => {
-            console.log(e)
+            console.log('getProductDetailMessage报错: ',e)
         });
     },
     addToCartIsShow({commit},flag){
@@ -172,7 +172,7 @@ export const actions = {
         commit(types.GLOBAL_LOADING_SHOW,flag);
     },
     addToCart({commit},product){
-        console.log(product)
+        // console.log(product)
         return api.addProducts(product);
     },
     setIsPointsProduct({commit},flag){

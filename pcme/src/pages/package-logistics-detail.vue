@@ -69,7 +69,7 @@
             this.$store.dispatch('getPackageLogistics',{type:this.$route.query.type,packageId:this.$route.query.packageid}).then(()=>{
                 this.isloding = false
             }).catch((result) => {
-                console.log(result);
+                console.log('getPackageLogistics报错: ', result);
                 this.isloding = false;
             })
         }

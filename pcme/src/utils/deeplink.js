@@ -7,10 +7,12 @@ export default {
             var deepLink = this.model.deepLink, _url
             switch (deepLink.type) {
                 case 1:
-                    _url = '/i/collection/products?collectionId=' + deepLink.params[0]
+                    // _url = '/i/collection/products?collectionId=' + deepLink.params[0]
+                        _url = `/collection/products/${deepLink.params[0]}.html`
                     break
                 case 2:
-                    _url = '/i/product_detail?productId=' + deepLink.params[0]
+                    // _url = '/i/product_detail?productId=' + deepLink.params[0]
+                        _url = `/product/details/${deepLink.params[0]}.html`
                     break
                 case 3:
                     _url = '/me/m/coupons'
@@ -40,7 +42,8 @@ export default {
                     _url = '/i/trending-now'
                     break
                 case 15:
-                    _url = '/i/category/products?categoryId=' + deepLink.params[0]
+                    // _url = '/i/category/products?categoryId=' + deepLink.params[0]
+                        _url = `/category/products/${deepLink.params[0]}.html`
                     break
                 case 16:
                     _url = deepLink.params[0]

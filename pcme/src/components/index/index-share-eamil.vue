@@ -67,7 +67,7 @@
                         this.$emit("changeLoadin",false);
                         this.$emit('update:isShowEmail',false)
                     }).catch((e) => {
-                        console.log("e",e);
+                        // console.log("e",e);
                         alert(e.result);
                         this.$emit("changeLoadin",false);
                         this.$emit('update:isShowEmail',false)

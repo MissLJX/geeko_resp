@@ -3,7 +3,10 @@
         <div class="el-slide-nav-container">
             <ul class="el-slide-nav" ref="navdom" :style="{width:'100%'}">
                 <li v-for="nav in navs" :class="{'active':nav.active}" @click="navHandle($event, nav.id)" :style="{width:100*(1/navs.length)+'%'}">
-                    <router-link replace  :to="{name:nav.path}">{{nav.name}}</router-link>
+                    <router-link replace  :to="{name:nav.path}">
+                        {{nav.name}}
+                        <span class="has_no_read" v-if="nav.noRead"></span>
+                    </router-link>
                 </li>
             </ul>
         </div>
@@ -36,6 +39,14 @@
             &.active a {
                 // border-bottom: 2px solid #e5004f;
                 border-bottom: 2px solid #222;
+            }
+
+            .has_no_read{
+                display: inline-block;
+                width: 7px;
+                height: 7px;
+                background: #e64545;
+                border-radius: 50%;
             }
         }
         &::after {

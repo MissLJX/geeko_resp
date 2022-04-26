@@ -479,7 +479,7 @@
                                 _this.modalconfirmshow = false;
                                 _this.$store.dispatch('closeConfirm').then(() => {
                                     cancelReturnOrder(item.logistics.id).then(res => {
-                                        console.log(res)
+                                        // console.log(res)
                                         _this.refreshData()
                                     }).catch(err => {
                                         alert(err.result)
@@ -662,7 +662,7 @@
                 return utils.PROJECT + suffix;
             },
             returnProducts(item){
-                console.log(item)
+                // console.log(item)
                 this.showReturnOrder = item;
                 this.isReturnLogistics = true;
                 this.showReturnOrderId = item.id;
@@ -776,12 +776,12 @@
             
         },
         beforeRouteEnter(to, from, next) {
-            console.log(to, this)
+            // console.log(to, this)
             store.dispatch('paging', true);
             store.dispatch('getReturnLogistics', to.params.orderId)
                 .then((order) => {
                 next((vm) => {
-                    console.log(order)
+                    // console.log(order)
                     if(!order){
                         vm.$router.replace({path:vm.$GLOBAL.getUrl('/me/m/order/all')});
                         return false;

@@ -57,9 +57,9 @@
         },
         watch:{
             $route:function(oldValue,newValue){
-                console.log("我什么时候被触发呢");
-                console.log("oldValue",oldValue);
-                console.log("newValue",newValue);
+                // console.log("我什么时候被触发呢");
+                // console.log("oldValue",oldValue);
+                // console.log("newValue",newValue);
             }
         }
     }

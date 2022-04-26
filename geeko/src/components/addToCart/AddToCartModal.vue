@@ -99,7 +99,7 @@
             this.productId = this.$store.getters.productId;
             this.variantId = this.product.variants[0].id;
             this.isPointsProduct = this.$store.getters.isPointsProduct;
-            console.log(this.isPointsProduct, this.product, this.variantProduct)
+            // console.log(this.isPointsProduct, this.product, this.variantProduct)
         },
         components:{
             "product-swiper":ProductSwiper,
@@ -122,12 +122,12 @@
                     params.pointsMallSales = true
                 }
                 this.$store.dispatch("addToCart",params).then(() => {
-                    console.log("success");
+                    // console.log("success");
                     this.$store.dispatch("addToCartIsShow",false);
                     this.$store.dispatch("setIsPointsProduct", false);
                     window.countShoppingCart ? window.countShoppingCart() : "";
                 }).catch((e) => {
-                    console.log("e",e);
+                    console.log("addToCart报错",e);
                     this.$store.dispatch("addToCartIsShow",false);
                     this.$store.dispatch("setIsPointsProduct", false);
                 });

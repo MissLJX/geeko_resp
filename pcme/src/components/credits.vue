@@ -389,7 +389,7 @@
             !(this.dobulePoints && this.dobulePoints.points) && this.$store.dispatch("getDobulePointsData","M1578");
 
             getShowRedeemCoupons().then(data =>{
-                console.log(data);
+                // console.log(data);
                 if(data && !!data.result){
                     this.redeemCouponShow = data.result;
                 }

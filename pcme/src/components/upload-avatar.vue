@@ -47,7 +47,7 @@
              * [param] field
              */
             cropSuccess(imgDataUrl, field){
-                console.log('-------- crop success --------');
+                // console.log('-------- crop success --------');
                 this.imgDataUrl = imgDataUrl;
             },
             /**
@@ -57,9 +57,9 @@
              * [param] field
              */
             cropUploadSuccess(jsonData, field){
-                console.log('-------- upload success --------');
-                console.log(jsonData);
-                console.log('field: ' + field);
+                // console.log('-------- upload success --------');
+                // console.log(jsonData);
+                // console.log('field: ' + field);
             },
             /**
              * upload fail
@@ -68,9 +68,9 @@
              * [param] field
              */
             cropUploadFail(status, field){
-                console.log('-------- upload fail --------');
-                console.log(status);
-                console.log('field: ' + field);
+                // console.log('-------- upload fail --------');
+                // console.log(status);
+                // console.log('field: ' + field);
             }
         }
     }

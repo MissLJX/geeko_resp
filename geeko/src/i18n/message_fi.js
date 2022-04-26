@@ -422,5 +422,9 @@ export default {
         promo: 'Promo',
         others: 'Others',
         empty_here: 'It’s empty here',
+        ticket: 'Ticket',
+        orders: 'Orders',
+        news: 'News',
+        ticketid:'Ticket ID',
     }
 }

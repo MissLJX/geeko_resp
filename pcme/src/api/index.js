@@ -232,13 +232,40 @@ export const getOtherNotification = (skip) => {
 }
 // 新notification
 export const getActivityNotification = (skip) => {
-    return axios.get('/notification/' + skip + '/20//get-activity-notifications').then(data => data.result)
+    return axios.get('/notification/' + skip + '/20/get-activity-notifications').then(data => data.result)
+}
+export const getActivityNotificationNoRead = (skip) => {
+    return axios.get('/notification/no-read-activity-notifications').then(data => data.result)
 }
 export const getPromoNotification = (skip) => {
     return axios.get('/notification/' + skip + '/20/get-promotion2-notifications').then(data => data.result)
 }
+export const getPromoNotificationNoRead = (skip) => {
+    return axios.get('/notification/no-read-promotion2-notifications').then(data => data.result)
+}
 export const getOthersNotification = (skip) => {
     return axios.get('/notification/' + skip + '/20/get-other2-notifications').then(data => data.result)
+}
+export const getOthersNotificationNoRead = (skip) => {
+    return axios.get('/notification/no-read-other2-notifications').then(data => data.result)
+}
+export const getTicketNotification = (skip) => {
+    return axios.get('/notification/' + skip + '/20/get-other2-ticket-notifications').then(data => data.result)
+}
+export const getTicketNotificationNoRead = (skip) => {
+    return axios.get('/notification/no-read-other2-ticket-notifications').then(data => data.result)
+}
+export const getNewsNotification = (skip) => {
+    return axios.get('/notification/'+skip+'/20/get-other2-news-notifications').then(data => data.result)
+}
+export const getNewsNotificationNoRead = (skip) => {
+    return axios.get('/notification/no-read-other2-news-notifications').then(data => data.result)
+}
+export const getOrdersNewNotification = (skip) => {
+    return axios.get('/notification/'+skip+'/20/get-other2-orders-notifications').then(data => data.result)
+}
+export const getOrdersNotificationNoRead = (skip) => {
+    return axios.get('/notification/no-read-other2-orders-notifications').then(data => data.result)
 }
 //用户个人信息集合
 export const getFeedSummary = (customerId) => {
@@ -327,7 +354,7 @@ export const getYouLikeProducts = (skip) => {
 
 // 传body体修改用户的信息
 export const updateCustomerSave = (customer) => {
-    console.log("customer",customer);
+    // console.log("customer",customer);
     return axios.post(VPATH + "/customer/save",customer,{}).then(data => data);
 }
 
@@ -385,4 +412,9 @@ export const pointsCouponExchange = (id) => {
 // 积分兑换优惠券通过后台系统参数 0336-w 是否显示
 export const getShowRedeemCoupons = () =>{
     return axios.get('/context/show-coupon-points-rule-list',{},{});
+}
+
+// 消息未读数量
+export const getNoReadNotificationNum = () => {
+    return axios.get('/notification/no-read-notifications');
 }

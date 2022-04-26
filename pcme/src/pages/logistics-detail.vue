@@ -109,7 +109,7 @@
                 this.method = this.$route.query.method
                 this.isloding = false
             }).catch((result) => {
-                console.log(result);
+                console.log('getLogistics报错: ',result);
                 this.isloding = false;
             })
             getMessage("M1645").then(res=>{

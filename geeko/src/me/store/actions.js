@@ -24,7 +24,7 @@ const actions = {
                 commit(types.ME_GET_FEED, feed)
                 commit(types.ME_INITIALIZED)
             }).catch((e) => {
-                console.log("initcatch",e);
+                // console.log("initcatch",e);
                 commit(types.ME_GET_NO_LOGIN,false);
             });
         }
@@ -36,7 +36,7 @@ const actions = {
             }
             return me
         }).catch(e => {
-            console.log("e",e);
+            // console.log("e",e);
             commit(types.ME_GET_NO_LOGIN,false);
             return null
         })
@@ -96,7 +96,7 @@ const actions = {
             }
             return {};
         }).catch(error => {
-            console.log("error",error);
+            // console.log("error",error);
         });
     },
 
@@ -165,7 +165,7 @@ const actions = {
             commit(types.ME_GET_WISH_LIST, wishlist)
             return wishlist
         }).catch(e => {
-            console.log("wishlistcatch",e);
+            // console.log("wishlistcatch",e);
             return [];
         })
     },
@@ -215,6 +215,115 @@ const actions = {
 
     getOtherNtSkip({commit}){
         commit(types.ME_GET_NOTIFICATION_OT_SKIP)
+    },
+
+    getTicketNotifications({commit}, {skip}){
+        // return api.getOtherNotification(skip).then((nts) => {
+        return api.getTicketNotification(skip).then((nts) => {
+            commit(types.ME_GET_NOTIFICATION_TICKET_LOADED)
+            if (nts && nts.length) {
+                commit(types.ME_GET_NOTIFICATION_TICKET, nts)
+            } else {
+                commit(types.ME_GET_NOTIFICATION_TICKET_FINISHED)
+            }
+        })
+    },
+
+    getTicketNtSkip({commit}){
+        commit(types.ME_GET_NOTIFICATION_TICKET_SKIP)
+    },
+
+    getOrderNewNotifications({commit}, {skip}){
+        // return api.getOtherNotification(skip).then((nts) => {
+        return api.getOrdersNewNotification(skip).then((nts) => {
+            commit(types.ME_GET_NOTIFICATION_ORDERNEW_LOADED)
+            if (nts && nts.length) {
+                commit(types.ME_GET_NOTIFICATION_ORDERNEW, nts)
+            } else {
+                commit(types.ME_GET_NOTIFICATION_ORDERNEW_FINISHED)
+            }
+        })
+    },
+
+    getOrderNewNtSkip({commit}){
+        commit(types.ME_GET_NOTIFICATION_ORDERNEW_SKIP)
+    },
+
+    getNewsNotifications({commit}, {skip}){
+        // return api.getOtherNotification(skip).then((nts) => {
+        return api.getNewsNotification(skip).then((nts) => {
+            commit(types.ME_GET_NOTIFICATION_NEWS_LOADED)
+            if (nts && nts.length) {
+                commit(types.ME_GET_NOTIFICATION_NEWS, nts)
+            } else {
+                commit(types.ME_GET_NOTIFICATION_NEWS_FINISHED)
+            }
+        })
+    },
+
+    getNewsNtSkip({commit}){
+        commit(types.ME_GET_NOTIFICATION_NEWS_SKIP)
+    },
+
+    getActivityNotificationsNoRead({commit}){
+        return api.getActivityNotificationNoRead().then(res => {
+            // console.log(res)
+            if(res && res.result){
+                commit(types.ME_GET_ACTIVITY_NOTIFICATION_NO_READ, res.result)
+            } else {
+                commit(types.ME_GET_ACTIVITY_NOTIFICATION_NO_READ, 0)
+            }
+        })
+    },
+    getPromoNotificationsNoRead({commit}){
+        return api.getPromoNotificationNoRead().then(res => {
+            // console.log(res)
+            if(res && res.result){
+                commit(types.ME_GET_PROMO_NOTIFICATION_NO_READ, res.result)
+            } else {
+                commit(types.ME_GET_PROMO_NOTIFICATION_NO_READ, 0)
+            }
+        })
+    },
+    getOtherNotificationsNoRead({commit}){
+        return api.getOthersNotificationNoRead().then(res => {
+            // console.log(res)
+            if(res && res.result){
+                commit(types.ME_GET_OTHER_NOTIFICATION_NO_READ, res.result)
+            } else {
+                commit(types.ME_GET_OTHER_NOTIFICATION_NO_READ, 0)
+            }
+        })
+    },
+    getTicketNotificationsNoRead({commit}){
+        return api.getTicketNotificationNoRead().then(res => {
+            // console.log(res)
+            if(res && res.result){
+                commit(types.ME_GET_TICKET_NOTIFICATION_NO_READ, res.result)
+            } else {
+                commit(types.ME_GET_TICKET_NOTIFICATION_NO_READ, 0)
+            }
+        })
+    },
+    getOrderNotificationsNoRead({commit}){
+        return api.getOrdersNotificationNoRead().then(res => {
+            // console.log(res)
+            if(res && res.result){
+                commit(types.ME_GET_ORDER_NOTIFICATION_NO_READ, res.result)
+            } else {
+                commit(types.ME_GET_ORDER_NOTIFICATION_NO_READ, 0)
+            }
+        })
+    },
+    getNewsNotificationsNoRead({commit}){
+        return api.getNewsNotificationNoRead().then(res => {
+            // console.log(res)
+            if(res && res.result){
+                commit(types.ME_GET_NEWS_NOTIFICATION_NO_READ, res.result)
+            } else {
+                commit(types.ME_GET_NEWS_NOTIFICATION_NO_READ, 0)
+            }
+        })
     },
 
     getWishproducts({commit, state}, {skip}){
@@ -414,7 +523,7 @@ const actions = {
     },
     generalUploadImage({commit},{formData}){
         return new Promise((reslove,reject) => {
-            console.log("formData",formData);
+            // console.log("formData",formData);
             api.generalUploadImage(formData).then((result) => {
                 reslove(result);
             });
@@ -477,7 +586,7 @@ const actions = {
         commit(types.GET_RELATION_PRODUCTS_SKIP);
     },
     updateSurvey({commit},params){
-        console.log(params)
+        // console.log(params)
         return new Promise((reslove,reject) => {
             api.surveySave(params).then((result) => {
                 reslove(result);
@@ -489,7 +598,7 @@ const actions = {
         // console.log(params)
         return new Promise((reslove,reject) => {
             api.surveyGet(params).then((result) => {
-                console.log(result)
+                // console.log(result)
                 reslove(result);
                 commit(types.GET_SURVEY_ANSWER, params);
             });

@@ -101,9 +101,28 @@ const routes = [
                         name: 'others',
                         meta: {title: 'Notification others', depth: 3},
                         component: () => import('../components/notification/notification-others.vue')
-                    }
+                    },
+                    {
+                        path: 'ticket',
+                        name: 'others',
+                        meta: {title: 'Notification Ticket', depth: 4},
+                        component: () => import(/* webpackChunkName: "notification-other" */ '../components/notification/notification-ticket.vue')
+                    },
+                    {
+                        path: 'order',
+                        name: 'others',
+                        meta: {title: 'Notification Order', depth: 4},
+                        component: () => import(/* webpackChunkName: "notification-other" */ '../components/notification/notification-orders.vue')
+                    },
+                    {
+                        path: 'news',
+                        name: 'others',
+                        meta: {title: 'Notification News', depth: 4},
+                        component: () => import(/* webpackChunkName: "notification-other" */ '../components/notification/notification-news.vue')
+                    },
                 ]
             },
+            
             {
                 path:'coupons',
                 component:Coupons,

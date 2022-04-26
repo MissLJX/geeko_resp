@@ -45,7 +45,7 @@ export default {
             listingHandle(){
                 this.loading = true
                 this.$store.dispatch("getOftenBoughtWithList", {id:'3a6fa19d-8b19-4e54-ab03-5f7a7012d62c'}).then((res) => {
-                    console.log(res)
+                    // console.log(res)
                     // if(finished) this.finished = finished;
                     this.loading = false
                     // if(!!empty){

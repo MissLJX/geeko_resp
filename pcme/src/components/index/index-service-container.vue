@@ -11,22 +11,41 @@
             </router-link>
                 
                 <!-- to="/me/m/notification" -->
-            <router-link :to="url+'notification'">
+            <router-link :to="url+'notification'" class="notification_icon">
                 <!-- <p class="iconfont">&#xe60b;</p> -->
-                <p class="iconfont">&#xe70b;</p>
+                <p class="iconfont">
+                    &#xe70b;
+                    <span class="no_read_num" v-if="noReadNum">{{noReadNum}}</span>
+                </p>
                 <p>{{$t("index.messages")}}</p>
+                
             </router-link>
         </div>
     </div>
 </template>
 
 <script>
+    import {getNoReadNotificationNum} from '../../api/index.js'
+
     export default {
         name:"IndexServiceContainer",
+        data(){
+            return{
+                noReadNum: 0
+            }
+        },
         computed:{
             url(){
                 return window.location.pathname + "/"
             }
+        },
+        created(){
+            getNoReadNotificationNum().then(res => {
+                // console.log(res)
+                if(res && res.code == 200 && res.result){
+                    this.noReadNum = res.result
+                }
+            })
         }
     }
 </script>
@@ -72,6 +91,29 @@
                         overflow: hidden;
                         text-overflow: ellipsis;
                     }
+                }
+            }
+
+            .notification_icon {
+                position: relative;
+                // display: inline-block;
+
+                .no_read_num{
+                    position: absolute;
+                    display: block;
+                    min-width: 18px;
+                    height: 18px;
+                    border-radius: 50%;
+                    background-color: #e64545;
+                    color: #fff;
+                    text-align: center;
+                    line-height: 18px;
+                    position: absolute;
+                    top: -10px;
+                    left: 57%;
+                    color: #fff;
+                    font-size: 12px;
+                    padding: 0px 4px;
                 }
             }
         }

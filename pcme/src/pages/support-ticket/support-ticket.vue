@@ -124,8 +124,8 @@
         computed: {
             ...mapGetters(['tickets']),
             ticketList(){
-                if(this.tickets.length > 0){
-                    // console.log(this.tickets,this.listDefault)
+                console.log(this.tickets.length, this.listDefault)
+                if(this.tickets.length > 0 && (this.tickets.length > this.listDefault.length)){
                     this.listDefault = this.listDefault.concat(this.tickets)
                     this.listDefault = this.listDefault.map(l => {
                         if(l.type != 3){
@@ -267,7 +267,18 @@
         beforeDestroy(){
             let scrollBox = this.$refs.scrollBox;
             scrollBox.removeEventListener("scroll", (e)=>this.boxScroll(e), true)
-        }
+        },
+        beforeRouteEnter(to,from,next){
+            console.log(to.path, from.path, to.path != from.path)
+            if(to.path != from.path){
+                next(vm => {
+                    vm.listDefault = []
+                    vm.$store.dispatch('clearTickets')
+                })
+            } else {
+                next()
+            }
+        },
     }
 </script>
 

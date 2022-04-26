@@ -1,9 +1,21 @@
 <template>
     <div class="message-con">
         <div class="tab-list">
-            <p :class="{'active':isActive==='activities'}" @click="changeClass('activities')"><router-link :to="getUrl('/me/m/notification/')">{{$t("notification.activities")}}</router-link></p>
-            <p :class="{'active':isActive==='promo'}" @click="changeClass('promo')"><router-link :to="getUrl('/me/m/notification/promo')">{{$t("notification.promo")}}</router-link></p>
-            <p :class="{'active':isActive==='others'}" @click="changeClass('others')"><router-link :to="getUrl('/me/m/notification/others')">{{$t("notification.others")}}</router-link></p>
+            <router-link :to="getUrl('/me/m/notification/')">
+                <p :class="{'active':isActive==='activities', 'no-read':activityNoRead>0}" @click="changeClass('activities')">
+                    {{$t("notification.activities")}}
+                </p>
+            </router-link>
+            <router-link :to="getUrl('/me/m/notification/promo')">
+                <p :class="{'active':isActive==='promo', 'no-read':promoNoRead>0}" @click="changeClass('promo')">
+                    {{$t("notification.promo")}}
+                </p>
+            </router-link>
+            <router-link :to="getUrl('/me/m/notification/others')">
+                <p :class="{'active':isActive==='others', 'no-read':otherNoRead>0}" @click="changeClass('others')">
+                    {{$t("notification.others")}}
+                </p>
+            </router-link>
         </div>
         <div class="noti-con">
             <keep-alive>
@@ -15,11 +27,26 @@
 
 <script>
     import {PROJECT} from '../utils/geekoutil'
+    import store from '../store'
     export default {
         data(){
             return{
                 isActive:this.$route.name
             }
+        },
+        computed:{
+            activityNoRead(){
+                let num = store.getters["activityNotificationnoRead"]
+                return num
+            },
+            promoNoRead(){
+                let num = store.getters["promoNotificationnoRead"]
+                return num
+            },
+            otherNoRead(){
+                let num = store.getters["otherNotificationnoRead"]
+                return num
+            },
         },
         methods:{
             changeClass(currIndex){
@@ -30,7 +57,10 @@
             }
         },
         created() {
-            console.log(this.$route.name)
+            store.dispatch("me/getActivityNotificationsNoRead")
+            store.dispatch("me/getPromoNotificationsNoRead")
+            store.dispatch("me/getOtherNotificationsNoRead")
+            // console.log(this.$route.name)
         }
     }
 </script>
@@ -48,6 +78,6 @@
 }
 .tab-list p.active{
     border-bottom: 1px solid #222;
-    color: rgba(229, 0, 79, 0.9);
+    // color: rgba(229, 0, 79, 0.9);
 }
 </style>

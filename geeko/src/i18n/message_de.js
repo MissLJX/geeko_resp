@@ -421,5 +421,9 @@ export default {
         promo: 'Promo',
         others: 'Andere',
         empty_here: 'Hier ist leer',
+        ticket: 'Fahrkarte',
+        orders: 'Bestellungen',
+        news: 'Neuigkeiten',
+        ticketid: 'Ticket-ID',
     }
 }

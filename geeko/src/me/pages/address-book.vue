@@ -88,7 +88,7 @@
         },
         methods: {
             listing(){
-                console.log('listing....')
+                // console.log('listing....')
             },
             listEditHandle(address){
                 this.editing = address

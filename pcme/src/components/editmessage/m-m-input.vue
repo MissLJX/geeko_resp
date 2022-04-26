@@ -81,8 +81,8 @@
         },
         mounted(){
             // console.log(this.slotList)
-            console.log(this.inputData)
-            console.log(this.inputData[this.$t("measurements.mea_perference")+""])
+            // console.log(this.inputData)
+            // console.log(this.inputData[this.$t("measurements.mea_perference")+""])
             this.radioSelect = this.inputData[this.$t("measurements.mea_perference")+""]['select']
         },
         methods:{

@@ -72,7 +72,7 @@
             this.$store.dispatch('getCoupons');
             // console.log(this.coupons)
             getShowRedeemCoupons().then(data =>{
-                console.log(data);
+                // console.log(data);
                 if(data && !!data.result){
                     this.redeemCouponShow = data.result;
                 }

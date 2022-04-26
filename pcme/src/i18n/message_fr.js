@@ -105,7 +105,7 @@ export default {
     orderdetail: 'Order Detail',
     view: 'Découvre',
     selectorder: 'Select Order',
-    ticketid: 'Ticket ID',
+    ticketid : 'identifiant du billet',
     lastmsg: 'Dernier message',
     created: 'Créé',
     status: 'Statut',
@@ -563,5 +563,8 @@ export default {
         promo: 'Promotion',
         others: 'Autres',
         empty_here: 'C\'est vide ici',
+        ticket: 'Billet',
+        orders: 'Commandes',
+        news: 'Nouvelles'
     }
 }

@@ -62,7 +62,7 @@
             listingHandle(){
                 this.loading = true
                 store.dispatch("me/getWishproducts", {skip: this.skip}).then(({empty, finished}) => {
-                    console.log("finished",finished);
+                    // console.log("finished",finished);
                     if(finished) this.finished = finished
                     if(empty) this.empty = empty
                     this.loading = false;

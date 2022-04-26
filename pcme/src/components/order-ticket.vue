@@ -178,7 +178,7 @@
                 evt.preventDefault()
                 var files = this.files;
                 var myFiles = evt.target.files;
-                console.log("myFiles",myFiles);
+                // console.log("myFiles",myFiles);
                 var maxSize = 10485760;
                 if(myFiles[0].size<maxSize){
                     var formData = new FormData(this.$refs.imageLoader);
@@ -239,7 +239,7 @@
             },
             starClickHandle(data){
                 this.rateData.rate = data;
-                console.log(this.rateData.rate)
+                // console.log(this.rateData.rate)
             },
             sendRateData(flag){
                 let formData = new FormData();

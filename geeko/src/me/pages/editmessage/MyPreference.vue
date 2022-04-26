@@ -157,7 +157,7 @@
                         }).show();
                     }
                 }).catch((e) =>{
-                    console.log(e);
+                    console.log('更新数据报错: ',e);
                     _this.$store.dispatch("globalLoadingShow",false);
                 });
             },

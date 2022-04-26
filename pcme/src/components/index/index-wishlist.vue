@@ -66,7 +66,7 @@
             this.$store.dispatch("getWishproducts",this.wishskip).then(({finished}) => {
                 this.$store.dispatch("getWishskip");
                 this.ifloding = false;
-                console.log("finished",finished);
+                // console.log("finished",finished);
                 if(finished) this.isWishListEmptyShow = finished;
             });
         },

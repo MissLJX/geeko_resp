@@ -59,7 +59,7 @@
             }
         },
         created(){
-            console.log(this.notification)
+            // console.log(this.notification)
         },
         components: {
             'model-1': Model1,

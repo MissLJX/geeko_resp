@@ -704,6 +704,14 @@ class TicketAdd extends React.Component {
           })
 
           this.initScroll()
+        }).catch(err => {
+          if(err.code == 300){
+            if(window.isShowApp=="true"){
+              window.location.href = "chic-me://chic.me/loginRoot"
+            } else {
+              window.location.href = `${(window.ctx || '')}/i/login?redirectUrl=`+ window.location.pathname + (window.location.search||'')
+            }
+          }
         })
       } else {
         const htmlImageCompress = new HtmlImageCompress(files[0], {quality: 0.7, imageType: type})
@@ -820,6 +828,14 @@ class TicketAdd extends React.Component {
         //   })
         // },2000)
         this.initScroll()
+      }).catch(err => {
+        if(err.code == 300){
+          if(window.isShowApp=="true"){
+            window.location.href = "chic-me://chic.me/loginRoot"
+          } else {
+            window.location.href = `${(window.ctx || '')}/i/login?redirectUrl=`+ window.location.pathname + (window.location.search||'')
+          }
+        }
       })
     } else {
       alert('This ticket is not exist!')
@@ -848,11 +864,10 @@ class TicketAdd extends React.Component {
     
     
     // 接受传值的参数
-    let params = this.props.history.location.state
+    let params = this.props.history.location.state 
     let id;
     // 接受url传值的参数
     let urlParams = this.props.history.location.pathname ? this.props.history.location.pathname.split("/")[1] != 'wanna' ? this.props.history.location.pathname.split("/")[5] :  this.props.history.location.pathname.split("/")[6] : '';
-    // if(!urlParams){
     // 不弹窗的传参
     let urlParamsNoMask = this.props.history.location.search ? 
                   this.props.history.location.search.indexOf('id') != -1 ?
@@ -860,13 +875,12 @@ class TicketAdd extends React.Component {
                   this.props.history.location.search.split('=')[1].split("&")[0]:
                   this.props.history.location.search.split('=')[1]:
                   '':''
-    // }
     // 客服邮件跳转过来携带code 可能会存在code=*******&isApp=1....的情况
     const customerCode = this.props.history.location.search ? 
                          this.props.history.location.search.indexOf('code') != -1 ?
-                         this.props.history.location.search.split('=')[1].indexOf('&') != -1 ?
-                         this.props.history.location.search.split('=')[1].split("&")[0]:
-                         this.props.history.location.search.split('=')[1]:
+                         this.props.history.location.search.split('code=')[1].indexOf('&') != -1 ?
+                         this.props.history.location.search.split('code=')[1].split("&")[0]:
+                         this.props.history.location.search.split('code=')[1]:
                          '':''
     // console.log(this.props.location, urlParams, customerCode)
     // console.log(this.props.history.location.pathname.split("/"))
@@ -878,12 +892,14 @@ class TicketAdd extends React.Component {
       })
       window.isShowApp = params.isShowApp ? params.isShowApp : 'false'
     }
+    
+    // return
     // 如果链接中没有传值 而且本地没有数据 则会跳转到ticket列表
     if(!id && !localStorage.__order && !urlParams && !urlParamsNoMask && !customerCode){
       this.props.history.push({pathname: `${window.ctx || ''}/support/ticket`})
     }
     // app消息通知带ticketid跳转
-    if(urlParams && urlParams.match(/[a-z]/ig)){
+    if(urlParams && !!(urlParams.match(/[a-z]/ig))){
       id = urlParams
       urlParams = null
     }
@@ -891,18 +907,26 @@ class TicketAdd extends React.Component {
     this.getQuestionType(urlParams,id,customerCode,(urlParams,id,customerCode)=>{
       // console.log(urlParams)
       if(urlParamsNoMask){
+        console.log('1')
         this.getMsgById(urlParamsNoMask)
       } else if(urlParams){
+        console.log('2')
         this.getMsgByLinkId(urlParams)
       } else if (id) {
+        // ticketid
+        console.log('3')
         localStorage.__order = ""
         this.getMsgByUrlId(id)
       } else if(customerCode){
+        // 客服code
+        console.log('4')
         this.getMsgByCode(customerCode)
       } else {
         if (localStorage.__order) {
+          console.log('5')
           this.getMsgByLocalData()
         } else {
+          console.log('6')
           this.setState({
             isNew: true,
             loading: false,
@@ -1562,6 +1586,14 @@ class TicketAdd extends React.Component {
               top.scrollIntoView()
               top = null
             })
+          }
+        }).catch(err => {
+          if(err.code == 300){
+            if(window.isShowApp=="true"){
+              window.location.href = "chic-me://chic.me/loginRoot"
+            } else {
+              window.location.href = `${(window.ctx || '')}/i/login?redirectUrl=`+ window.location.pathname + (window.location.search||'')
+            }
           }
         })
         

@@ -205,7 +205,7 @@
                 if(isDel === '1' && !this.clearAll){
                     let idArr = store.getters['me/save'];
                     let productIds = idArr.join(",");
-                    console.log(productIds)
+                    // console.log(productIds)
                     this.$emit('refresh',{productIds});
                     this.$emit('listing','refresh');
                 }else if(isDel === '1' && this.clearAll){

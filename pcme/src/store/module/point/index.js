@@ -76,7 +76,7 @@ const actions = {
                 return {finished:true}
             }
         }).catch(error => {
-            console.log("error",error);
+            console.log("getPointsAll报错: ",error);
         });
     },
     getPointsAllSkip({commit}){
@@ -91,7 +91,7 @@ const actions = {
                 return {finished:true}
             }
         }).catch(error => {
-            console.log("error",error);
+            console.log("getPointsRecived报错: ",error);
         });
     },
     getPointsRecivedSkip({commit}){
@@ -106,7 +106,7 @@ const actions = {
                 return {finished:true}
             }
         }).catch(error => {
-            console.log("error",error);
+            console.log("getPointsUsed报错: ",error);
         });
     },
     getPointsUsedSkip({commit}){
@@ -121,7 +121,7 @@ const actions = {
                 return {finished:true}
             }
         }).catch(error => {
-            console.log("error",error);
+            console.log("getPointsExpired报错: ",error);
         });
     },
     getPointsExpiredSkip({commit}){

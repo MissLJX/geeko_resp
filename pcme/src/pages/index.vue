@@ -45,7 +45,7 @@
                 })
             },
             changeClass(currIndex){
-                console.log(currIndex)
+                // console.log(currIndex)
                 this.isActive = currIndex
             },
             getUrl(suffix){

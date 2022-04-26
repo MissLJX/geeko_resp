@@ -75,12 +75,40 @@ export const getActivityNotification = (skip) => {
     return axios.get('/notification/' + skip + '/20//get-activity-notifications').then(data => data.result)
 }
 
+export const getActivityNotificationNoRead = (skip) => {
+    return axios.get('/notification/no-read-activity-notifications').then(data => data.result)
+}
+
 export const getPromoNotification = (skip) => {
     return axios.get('/notification/' + skip + '/20/get-promotion2-notifications').then(data => data.result)
+}
+export const getPromoNotificationNoRead = (skip) => {
+    return axios.get('/notification/no-read-promotion2-notifications').then(data => data.result)
 }
 
 export const getOthersNotification = (skip) => {
     return axios.get('/notification/' + skip + '/20/get-other2-notifications').then(data => data.result)
+}
+export const getOthersNotificationNoRead = (skip) => {
+    return axios.get('/notification/no-read-other2-notifications').then(data => data.result)
+}
+export const getTicketNotification = (skip) => {
+    return axios.get('/notification/' + skip + '/20/get-other2-ticket-notifications').then(data => data.result)
+}
+export const getTicketNotificationNoRead = (skip) => {
+    return axios.get('/notification/no-read-other2-ticket-notifications').then(data => data.result)
+}
+export const getNewsNotification = (skip) => {
+    return axios.get('/notification/'+skip+'/20/get-other2-news-notifications').then(data => data.result)
+}
+export const getNewsNotificationNoRead = (skip) => {
+    return axios.get('/notification/no-read-other2-news-notifications').then(data => data.result)
+}
+export const getOrdersNewNotification = (skip) => {
+    return axios.get('/notification/'+skip+'/20/get-other2-orders-notifications').then(data => data.result)
+}
+export const getOrdersNotificationNoRead = (skip) => {
+    return axios.get('/notification/no-read-other2-orders-notifications').then(data => data.result)
 }
 
 export const countUnreadNotification = () => {

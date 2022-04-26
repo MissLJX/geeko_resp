@@ -282,7 +282,7 @@
                     });
 
                     _this.$validator.validateAll().then(result => {
-                        console.log("result",result);
+                        // console.log("result",result);
                         if(result && _this.datatime){
                             // for (var [a, b] of formData.entries()) {
                             //     console.log("formData",a, b);

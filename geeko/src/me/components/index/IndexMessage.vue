@@ -5,9 +5,12 @@
                 <span class="iconfont">&#xe6a2;</span>
             </a>
             
-            <a @click.prevent="specificationLogin('/me/m/notification',1)">
+            <a @click.prevent="specificationLogin('/me/m/notification',1)" class="notification_icon">
                 <!-- <span class="iconfont" :class="{'active' : notificationCount > 0}">&#xe60b;</span> -->
                 <span class="iconfont" style="display: inline-block;transform: scale(1.3);" :class="{'active' : notificationCount > 0}">&#xe70b;</span>
+                <span class="no_read_num" v-if="notificationCount > 0" >
+                    {{notificationCount}}
+                </span>
             </a>
             
             <a @click.prevent="specificationLogin('/me/m/settings',1)">
@@ -505,7 +508,7 @@
             & .iconfont{
                 font-size:18px;
                 color:#222222;
-                margin-left: 5px;
+                margin-left: 15px;
                 position: relative;
 
                 &.active{
@@ -541,6 +544,29 @@
 
             .special-count{
                 padding: 1.5px 5px;
+            }
+
+            .notification_icon {
+                position: relative;
+                // display: inline-block;
+
+                .no_read_num{
+                    position: absolute;
+                    display: block;
+                    min-width: 16px;
+                    height: 16px;
+                    border-radius: 50%;
+                    background-color: #e64545;
+                    color: #fff;
+                    text-align: center;
+                    line-height: 16px;
+                    font-size: 12px;
+                    padding: 0px 4px;
+                    top: -10px;
+                    left: 70%;
+                    color: #fff;
+                    z-index: 1;
+                }
             }
         }
 

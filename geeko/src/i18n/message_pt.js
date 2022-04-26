@@ -421,5 +421,9 @@ export default {
         promo: 'Promoção',
         others: 'Outros',
         empty_here: 'Está vazio aqui',
+        ticket: 'Bilhete',
+        orders: 'Pedidos',
+        news: 'Notícias',
+        ticketid: 'ID do bilhete',
     }
 }

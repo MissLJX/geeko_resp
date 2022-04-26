@@ -122,14 +122,14 @@
         methods: {
             getCollectionId(){
                 getPointsGoShoppingId().then(res=>{
-                    console.log(res)
+                    // console.log(res)
                     if(res.code == 200){
                         this.goShoppongCollectionId = JSON.parse(res.result.message).goShoppongCollectionId
                     }
                 })
             },
             changeTag(type){
-                console.log('...',this.loading)
+                // console.log('...',this.loading)
                 if(this.loading){
                     return 
                 }
@@ -174,7 +174,7 @@
             },
             getTagsCollectionId(){
                 getPointsMallCollectionId().then(res => {
-                    console.log(res)
+                    // console.log(res)
                     if(res && res.code==200){
                         // for(let i = 0; i < res.result.length; i++){
                             // if(res.result[i]['name'].indexOf('全') != -1){
@@ -192,13 +192,13 @@
             },
             getCouponList(){
                 getPointsCouponList().then(data => {
-                    console.log(data)
+                    // console.log(data)
                 })
             },
             exchangeCoupon(id){
                 if(!id)return
                 exchangeCoupon(id).then(res => {
-                    console.log(res)
+                    // console.log(res)
                     if(window.GeekoSensors){
                         window.GeekoSensors.Track('ProductListClick', {
                             referrer: document.referrer,

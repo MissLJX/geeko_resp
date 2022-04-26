@@ -184,7 +184,7 @@
                 var src = window.navigator.userAgent.indexOf("Chrome") >= 1 || window.navigator.userAgent.indexOf("Safari") >= 1 ? window.webkitURL.createObjectURL(file) : window.URL.createObjectURL(file);
 
                 var formData = new FormData(this.$refs.file);
-                console.log("src",src);
+                // console.log("src",src);
                 this.$store.dispatch('me/setHeaderImage', {formData,imageUrl: src});
             },
             infoSaveHandle(){

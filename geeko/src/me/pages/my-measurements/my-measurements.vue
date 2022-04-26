@@ -350,7 +350,7 @@ export default {
                 }
                 final[item] = final[item].trim();
             }
-            console.log(final)
+            // console.log(final)
         }
     },
     components:{

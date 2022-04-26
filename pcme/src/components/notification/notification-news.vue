@@ -1,34 +1,9 @@
 <template>
     <div class="notification-body">
-        <!-- <notification-list @listing="listingHandle" :loading="loading" :finished="finished"
+        <div class="notification_header">{{$t("notification.news")}}</div>
+        <notification-list @listing="listingHandle" :loading="loading" :finished="finished"
                            :notifications="notifications"/>
-         <notification-empty v-if="empty"></notification-empty> -->
-
-         <div class="notification_type_list">
-            <router-link class="notification_type_item" to="/me/m/notification/ticket">
-                <div>
-                    <span class="iconfont">&#xe6e8;</span>
-                    <span class="notification_type_item_txt">{{$t("notification.ticket")}}</span>
-                    <span class="has_no_read" v-if="ticketNoRead > 0"></span>
-                </div>
-            </router-link>
-            
-            <router-link class="notification_type_item" to="/me/m/notification/order">
-                <div>
-                    <span class="iconfont">&#xe6ee;</span>
-                    <span class="notification_type_item_txt">{{$t("notification.orders")}}</span>
-                    <span class="has_no_read" v-if="orderNoRead > 0"></span>
-                </div>
-            </router-link>
-
-            <router-link class="notification_type_item" to="/me/m/notification/news">
-                <div>
-                    <span class="iconfont">&#xe774;</span>
-                <span class="notification_type_item_txt">{{$t("notification.news")}}</span>
-                <span class="has_no_read" v-if="newsNoRead > 0"></span>
-                </div>
-            </router-link>
-        </div>
+         <notification-empty v-if="empty"></notification-empty>
     </div>
 </template>
 
@@ -36,6 +11,19 @@
     .notification-body {
         background-color: #fff;
         padding-top: 12px;
+    }
+
+    .notification_header{
+        width: 100%;
+        text-align: center;
+        font-family: Roboto-Medium;
+        font-size: 20px;
+        font-weight: normal;
+        font-stretch: normal;
+        letter-spacing: 0px;
+        color: #222222;
+        text-transform: capitalize;
+        margin: 20px 0;
     }
 
     .notification_type_list{
@@ -111,19 +99,19 @@
         },
         computed: {
             notifications(){
-                return this.$store.getters['otherNotifications']
+                return this.$store.getters['newsNotifications']
             },
             skip(){
-                return this.$store.getters['otherNtSkip']
+                return this.$store.getters['newsNtSkip']
             },
             loaded(){
-                return this.$store.getters['otherNtLoaded']
+                return this.$store.getters['newsNtLoaded']
             },
             empty(){
                 return this.loaded && (!this.notifications || !this.notifications.length)
             },
             finished(){
-                return this.$store.getters['otherNtFinished']
+                return this.$store.getters['newsNtFinished']
             },
             ticketNoRead(){
                 let num = this.$store.getters["ticketNotificationnoRead"]
@@ -141,9 +129,9 @@
         methods: {
             listingHandle(){
                 this.loading = true
-                this.$store.dispatch("getOtherNotifications", {skip: this.skip}).then(() => {
+                this.$store.dispatch("getNewsNotifications", {skip: this.skip}).then(() => {
                     this.loading = false
-                    this.$store.dispatch("getOtherNtSkip")
+                    this.$store.dispatch("getNewsNtSkip")
                 })
             }
         },
