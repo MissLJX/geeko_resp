@@ -255,6 +255,7 @@ export default {
         my_preference_error_message:"My preferences can't all be empty",
         my_measurements_error_message:"My MeasureMents can't all be empty",
         add_success:"Add Success",
+        copy_complate:"Copy complete",
     },
     point:{
         my_points:"My Points",

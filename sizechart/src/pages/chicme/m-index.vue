@@ -653,19 +653,20 @@
         },
         computed: {
             getLang(){
-                if(window.locale && (window.locale ==='de_DE' || window.locale === 'es_ES')){
+                console.log(window.locale)
+                if(window.locale && (window.locale ==='DE' || window.locale === 'ES')){
                     return 'EU'
-                }else if(window.locale && window.locale ==='en_GB'){
+                }else if(window.locale && window.locale ==='GB'){
                     this.picked='0';
                     this.isActive = true;
                     return 'UK'
-                }else if(window.locale && window.locale ==='pt_BR'){
+                }else if(window.locale && window.locale ==='BR'){
                     return 'BR'
-                }else if(window.locale && window.locale ==='en_CA'){
+                }else if(window.locale && window.locale ==='CA'){
                     this.picked='0';
                     this.isActive = true;
                     return 'CA'
-                }else if(window.locale && window.locale ==='fr_FR'){
+                }else if(window.locale && window.locale ==='FR'){
                     return 'FR'
                 }else {
                     this.picked='0';

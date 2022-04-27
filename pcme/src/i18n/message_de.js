@@ -252,6 +252,7 @@ export default {
         my_preference_error_message:"Meine Einstellungen dürfen nicht alle leer sein",
         my_measurements_error_message:"Meine Messungen dürfen nicht alle leer sein",
         add_success:"Erfolg hinzufügen",
+        copy_complate:"Kopie vollständig",
     },
     point:{
         my_points:"Meine Punkte",

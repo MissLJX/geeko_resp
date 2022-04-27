@@ -28,7 +28,16 @@
                 <h4>{{$t('logisticsInfo')}}</h4>
                 <div class="info" >
                     <p v-if="changePackage.slug"><span>{{$t('logisticsCompany')}}: </span>{{changePackage.slug}}</p>
-                    <p v-if="changePackage.trackingNumber"><span>{{$t('tracknum')}}: </span>{{changePackage.trackingNumber}}</p>
+                    <p v-if="changePackage.trackingNumber">
+                        <span>{{$t('tracknum')}}: </span>
+                        <span>{{changePackage.trackingNumber}}</span>
+                        <span 
+                            class="iconfont tag-read"
+                            style="cursor: pointer;"
+                            :data-clipboard-text="changePackage.trackingNumber" 
+                            @click="onCopy"
+                        >&#xe776;</span>
+                    </p>
                     <P v-if="changePackage.logisticsSupplierWebsiteURL"><span>{{$t('trackingDetailInfo')}}: </span><a style="text-decoration: underline" :href="changePackage.logisticsSupplierWebsiteURL">{{changePackage.logisticsSupplierWebsiteURL}}</a></P>
                 </div>
             </div>
@@ -47,6 +56,12 @@
                 </ul>
             </div>
         </div>
+
+        <div class="success_box" v-if="showMessage">  
+            <div class="iconfont _icon">&#xe6b7;</div>
+            <div class="_font">{{$t('label.copy_complate')}}</div>
+        </div>
+
         <loding v-if="isloding"></loding>
     </div>
 </template>
@@ -57,6 +72,7 @@
     import _ from 'lodash';
     import loding from '../components/loding.vue';
     import {getMessage} from '../api/index';
+    import Clipboard from 'clipboard';
 
     export default {
         data(){
@@ -65,7 +81,8 @@
                 changePackage:[],
                 isloding:true,
                 method:'',
-                deliveryTip: ''
+                deliveryTip: '',
+                showMessage:false
             }
         },
         components: {
@@ -102,6 +119,24 @@
             },
             getUrl(suffix){
                 return utils.PROJECT + suffix;
+            },
+            onCopy(){
+                let clipboard = new Clipboard('.tag-read');
+                clipboard.on('success', e => {
+                    console.log('e', e)
+                    // alert('Content copied!')
+                    this.showMessage = true;
+
+                    setTimeout(() =>{
+                        this.showMessage = false;
+                    },2000);
+                    clipboard.destroy()
+                })
+
+                clipboard.on('error', e => {
+                    alert('Failed to copy texts')
+                    clipboard.destroy()
+                })
             }
         },
         created(){
@@ -251,4 +286,36 @@
         }
     }
 
+    .success_box{
+        width: 210px;
+        height: 62px;
+        background-color: #ffffff;
+        box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.2);
+        border-radius: 5px;
+        border-radius: 5px;
+        position: fixed;
+        top: calc(50% - 31px);
+        left: calc(50% - 105px);
+        font-family: 'SLATEPRO';
+        font-size: 16px;
+        color: #222222;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        white-space: nowrap;
+
+        ._icon{
+            font-size: 22px;
+            color: #20b759;
+            margin-right: 7px;
+        }
+
+        ._font{
+            font-size: 14px;
+            color: #222222;
+            font-family: 'SlatePro-Medium';
+            text-transform: capitalize;
+        }
+    }
+    
 </style>
