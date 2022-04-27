@@ -57,9 +57,9 @@
             }
         },
         created() {
-            store.dispatch("me/getActivityNotificationsNoRead")
-            store.dispatch("me/getPromoNotificationsNoRead")
-            store.dispatch("me/getOtherNotificationsNoRead")
+            store.dispatch("getActivityNotificationsNoRead")
+            store.dispatch("getPromoNotificationsNoRead")
+            store.dispatch("getOtherNotificationsNoRead")
             // console.log(this.$route.name)
         }
     }
@@ -75,9 +75,21 @@
 .tab-list p{
     padding: 13px 24px;
     text-transform: uppercase;
+    position: relative;
 }
 .tab-list p.active{
     border-bottom: 1px solid #222;
     // color: rgba(229, 0, 79, 0.9);
+}
+.tab-list p.no-read::after{
+    content: '';
+    display: block;
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: #e64545;
+    top: 17px;
+    right: 12px;
 }
 </style>

@@ -5,7 +5,7 @@
         <notification-empty v-if="empty"></notification-empty> -->
         <div class="notification_type_list">
             <router-link class="notification_type_item" to="/me/m/notification-ticket">
-                <div>
+                <div style="display: flex;align-items: center;">
                     <span class="iconfont">&#xe6e8;</span>
                     <span class="notification_type_item_txt">{{$t("notification.ticket")}}</span>
                     <span class="has_no_read" v-if="ticketNoRead > 0"></span>
@@ -13,18 +13,18 @@
             </router-link>
             
             <router-link class="notification_type_item" to="/me/m/notification-order">
-                <div>
+                <div style="display: flex;align-items: center;">
                     <span class="iconfont">&#xe6ee;</span>
-                <span class="notification_type_item_txt">{{$t("notification.orders")}}</span>
-                <span class="has_no_read" v-if="orderNoRead > 0"></span>
+                    <span class="notification_type_item_txt">{{$t("notification.orders")}}</span>
+                    <span class="has_no_read" v-if="orderNoRead > 0"></span>
                 </div>
             </router-link>
 
             <router-link class="notification_type_item" to="/me/m/notification-news">
-                <div>
+                <div style="display: flex;align-items: center;">
                     <span class="iconfont">&#xe774;</span>
-                <span class="notification_type_item_txt">{{$t("notification.news")}}</span>
-                <span class="has_no_read" v-if="newsNoRead > 0"></span>
+                    <span class="notification_type_item_txt">{{$t("notification.news")}}</span>
+                    <span class="has_no_read" v-if="newsNoRead > 0"></span>
                 </div>
             </router-link>
         </div>
@@ -95,21 +95,21 @@
             }
         },
         computed: {
-            notifications(){
-                return store.getters['me/otherNotifications']
-            },
-            skip(){
-                return store.getters['me/otherNtSkip']
-            },
-            loaded(){
-                return store.getters['me/otherNtLoaded']
-            },
-            empty(){
-                return this.loaded && (!this.notifications || !this.notifications.length)
-            },
-            finished(){
-                return store.getters['me/otherNtFinished']
-            },
+            // notifications(){
+            //     return store.getters['me/otherNotifications']
+            // },
+            // skip(){
+            //     return store.getters['me/otherNtSkip']
+            // },
+            // loaded(){
+            //     return store.getters['me/otherNtLoaded']
+            // },
+            // empty(){
+            //     return this.loaded && (!this.notifications || !this.notifications.length)
+            // },
+            // finished(){
+            //     return store.getters['me/otherNtFinished']
+            // },
 
             ticketNoRead(){
                 let num = store.getters["me/ticketNotificationnoRead"]
@@ -126,11 +126,11 @@
         },
         methods: {
             listingHandle(){
-                this.loading = true
-                store.dispatch("me/getOtherNotifications", {skip: this.skip}).then(() => {
-                    this.loading = false
-                    store.dispatch("me/getOtherNtSkip")
-                })
+                // this.loading = true
+                // store.dispatch("me/getOtherNotifications", {skip: this.skip}).then(() => {
+                //     this.loading = false
+                //     store.dispatch("me/getOtherNtSkip")
+                // })
             },
             goPage(){
 

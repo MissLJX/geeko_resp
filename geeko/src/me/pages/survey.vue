@@ -252,7 +252,7 @@
                     }
                     this.getData()
                 },(err)=>{
-                    console.log(err)
+                    console.log('获取问卷题目报错: ',err)
                     this.getData()
                 })
             },

@@ -3,7 +3,6 @@
         <!-- <notification-list @listing="listingHandle" :loading="loading" :finished="finished"
                            :notifications="notifications"/>
          <notification-empty v-if="empty"></notification-empty> -->
-
          <div class="notification_type_list">
             <router-link class="notification_type_item" to="/me/m/notification/ticket">
                 <div>
@@ -110,21 +109,21 @@
             }
         },
         computed: {
-            notifications(){
-                return this.$store.getters['otherNotifications']
-            },
-            skip(){
-                return this.$store.getters['otherNtSkip']
-            },
-            loaded(){
-                return this.$store.getters['otherNtLoaded']
-            },
-            empty(){
-                return this.loaded && (!this.notifications || !this.notifications.length)
-            },
-            finished(){
-                return this.$store.getters['otherNtFinished']
-            },
+            // notifications(){
+            //     return this.$store.getters['otherNotifications']
+            // },
+            // skip(){
+            //     return this.$store.getters['otherNtSkip']
+            // },
+            // loaded(){
+            //     return this.$store.getters['otherNtLoaded']
+            // },
+            // empty(){
+            //     return this.loaded && (!this.notifications || !this.notifications.length)
+            // },
+            // finished(){
+            //     return this.$store.getters['otherNtFinished']
+            // },
             ticketNoRead(){
                 let num = this.$store.getters["ticketNotificationnoRead"]
                 return num
@@ -140,11 +139,11 @@
         },
         methods: {
             listingHandle(){
-                this.loading = true
-                this.$store.dispatch("getOtherNotifications", {skip: this.skip}).then(() => {
-                    this.loading = false
-                    this.$store.dispatch("getOtherNtSkip")
-                })
+                // this.loading = true
+                // this.$store.dispatch("getOtherNotifications", {skip: this.skip}).then(() => {
+                //     this.loading = false
+                //     this.$store.dispatch("getOtherNtSkip")
+                // })
             }
         },
         components: {
@@ -152,6 +151,9 @@
             'notification-empty': NotificationEmpty,
         },
         created(){
+            this.$store.dispatch("getTicketNotificationsNoRead")
+            this.$store.dispatch("getOrderNotificationsNoRead")
+            this.$store.dispatch("getNewsNotificationsNoRead")
             if ((!this.notifications || !this.notifications.length) && !this.finished)
                 this.listingHandle()
         }

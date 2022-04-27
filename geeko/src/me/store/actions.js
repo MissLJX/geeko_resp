@@ -267,7 +267,6 @@ const actions = {
 
     getActivityNotificationsNoRead({commit}){
         return api.getActivityNotificationNoRead().then(res => {
-            // console.log(res)
             if(res && res.result){
                 commit(types.ME_GET_ACTIVITY_NOTIFICATION_NO_READ, res.result)
             } else {

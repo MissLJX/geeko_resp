@@ -26,38 +26,14 @@
                     // {id: '1', name: 'Activities', path: 'notification-promotion', active: 'notification-promotion' == this.$route.name || 'notification' == this.$route.path},
                     // {id: '2', name: 'Promo', path: 'notification-me', active: 'notification-me' == this.$route.name},
                     // {id: '3', name: 'Others', path: 'notification-other', active: 'notification-other' == this.$route.name}
-                    {id: '1', name: this.$t("notification.activities"), path: 'notification-activities', active: 'notification-activities' == this.$route.name || 'notification' == this.$route.path, noRead: 0},
-                    {id: '2', name: this.$t("notification.promo"), path: 'notification-promo', active: 'notification-promo' == this.$route.name,noRead: 0},
-                    {id: '3', name: this.$t("notification.others"), path: 'notification-others', active: 'notification-others' == this.$route.name,noRead: 0}
+                    {id: '1', name: this.$t("notification.activities"), path: 'notification-activities', active: 'notification-activities' == this.$route.name || 'notification' == this.$route.path, noRead: this.activityNoRead},
+                    {id: '2', name: this.$t("notification.promo"), path: 'notification-promo', active: 'notification-promo' == this.$route.name,noRead: this.promoNoRead},
+                    {id: '3', name: this.$t("notification.others"), path: 'notification-others', active: 'notification-others' == this.$route.name,noRead: this.otherNoRead}
                 ]
             }
         },
         computed:{
-            activityNoRead(){
-                let nav = this.navs.find(n => n.id == '1')
-                let num = store.getters["me/activityNotificationnoRead"]
-                if(nav.noRead != num){
-                    nav.noRead = num
-                }
-                return num
-            },
-            promoNoRead(){
-                let nav = this.navs.find(n => n.id == '2')
-                let num = store.getters["me/promoNotificationnoRead"]
-                if(nav.noRead != num){
-                    nav.noRead = num
-                }
-                return num
-            },
-            otherNoRead(){
-                let nav = this.navs.find(n => n.id == '3')
-                let num = store.getters["me/otherNotificationnoRead"]
-                if(nav.noRead != num){
-                    nav.noRead = num
-                }
-                return num
-            },
-
+            ...mapGetters('me',['activityNotificationnoRead','promoNotificationnoRead','otherNotificationnoRead']),
         },
         created(){
             store.dispatch("me/getActivityNotificationsNoRead")
@@ -68,6 +44,17 @@
             //             this.otherNoRead,
             //             )
 
+        },
+        watch:{
+            activityNotificationnoRead(newV, oldV){
+                this.navs[0].noRead = newV
+            },
+            promoNotificationnoRead(newV, oldV){
+                this.navs[1].noRead = newV
+            },
+            otherNotificationnoRead(newV, oldV){
+                this.navs[2].noRead = newV
+            },
         },
         methods: {
             navchange(id){
