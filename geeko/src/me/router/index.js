@@ -302,12 +302,12 @@ const Me = [
         name:"get-more-chances",
         meta:{title:"Get More Chances"}
     },
-    // {
-    //     path:ROUTER_PATH_ME + "/test",
-    //     component:() => import("../pages/Test.vue"),
-    //     name:"Test",
-    //     meta:{title:"Test"}
-    // }
+    {
+        path:ROUTER_PATH_ME + "/vip",
+        component:() => import(/* webpackChunkName: "edit-name" */ "../pages/user-vip.vue"),
+        name:"user-vip",
+        meta:{title:"User Vip"}
+    },
 ]
 
 export default Me
