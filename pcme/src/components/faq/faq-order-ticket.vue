@@ -367,7 +367,7 @@
         },
         data (){
             return{
-                selected: '666',
+                selected: '',
                 isRequired:false,
                 msg:'',
                 addticket:'',
@@ -434,6 +434,9 @@
                     alert(this.$t("support.s_select_ph"))
                 }
             },
+            selected:function(oldValue,newValue){
+                // console.log("selected newValue",newValue,"oldValue",oldValue);
+            }
         },
         computed: {
             ...mapGetters(['ticket','ticket_con','ticketid','ticket_sub','questionType']),
@@ -450,8 +453,9 @@
             },
             canBeRated(){
                 if(this.ticket_con && this.ticket_con.questionTypeCode){
+                    // console.log("questionTypeCode: ",this.ticket_con.questionTypeCode)
                     this.selected = this.ticket_con.questionTypeCode
-                    if(this.selected && (!this.ticket_con.subject || this.ticket_con.subject == 'undefined' || !this.ticket_con.subject.match(/[a-z]/ig))){
+                    if(this.ticket_con.questionTypeCode && (!this.ticket_con.subject || this.ticket_con.subject == 'undefined' || !this.ticket_con.subject.match(/[a-z]/ig))){
                         var fData = new FormData();
                         if(this.ticket_con?.operaId){
                             fData.append("operaId",this.ticket_con.operaId)
@@ -459,13 +463,14 @@
                             fData.append("operaId",this._orderId ? this._orderId :this.ticketid)
                         }
                         // console.log(fData.operaId)
-                        fData.append("questionType",this.list.find(q => q.value == this.selected).label)
-                        fData.append("questionTypeCode",this.selected)
+                        fData.append("questionType",this.list.find(q => q.value == this.ticket_con.questionTypeCode).label)
+                        fData.append("questionTypeCode",this.ticket_con.questionTypeCode)
                         this.$store.dispatch("addTicket",fData).then(res=>{})
                     }
-                    if(!this.selected && this.ticket_con && this.ticket_con.subject && (this.ticket_con.subject == '7' || this.ticket_con.subject == '000')){
+                    if(!this.ticket_con.questionTypeCode && this.ticket_con && this.ticket_con.subject && (this.ticket_con.subject == '7' || this.ticket_con.subject == '000')){
                         let otherSubject = this.list[this.list.length-1].value;
-                        this.selected = otherSubject
+                        // console.log("otherSubject: ",otherSubject)
+                        this.ticket_con.questionTypeCode = otherSubject
                         var fData = new FormData();
                         if(this.ticket_con?.operaId){
                             fData.append("operaId",this.ticket_con.operaId)
@@ -483,8 +488,10 @@
                     this.rateData.message = this.ticket_con && this.ticket_con.ticketRateService ? this.ticket_con.ticketRateService.message : ''
                     this.initReviewMsg = this.ticket_con && this.ticket_con.ticketRateService ? this.ticket_con.ticketRateService.message : ''
                     this.rateData.id = this.ticket_con ? this.ticket_con.id: null
+                } else {
+                    this.selected = ''
                 }
-                return this.selected && this.selected != '666' && this.ticket_con && this.ticket_con.ticketReplies && this.ticket_con.ticketReplies.length > 0
+                return this.ticket_con.questionTypeCode && this.ticket_con.questionTypeCode != '666' && this.ticket_con && this.ticket_con.ticketReplies && this.ticket_con.ticketReplies.length > 0
             },
             addRated(){
                 if(this.ticket_con && this.ticket_con.reviewFlag === 1){
@@ -561,7 +568,9 @@
                 this.isLoading = true
                 this.$store.dispatch("addTicket",fData).then(res=>{
                     this.isLoading = false
+                    // console.log(e.value)
                     this.selected = e.value;
+                    // console.log(this.selected)
                     
                     this.isRequired = false
                     let qTReasonList = this.usedQuestionType.find(q => q.value == e.value).reasons ? 

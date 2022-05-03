@@ -402,6 +402,7 @@
                 this.isShowTicket = false
             },
             showTicket(id){
+                this.$store.dispatch('clearTicket')
                 this.$store.dispatch('getTicket',id).then(()=>{
                     this.isShowTicket = true;
                 })
@@ -459,6 +460,7 @@
             showTicketReturn(data){
                 this.isShowSelect = false
                 localStorage._orderId = JSON.stringify(data);
+                this.$store.dispatch('clearTicket')
                 this.$store.dispatch('getTicket',data).then(()=>{
                     this.isShowTicket = true;
                 })

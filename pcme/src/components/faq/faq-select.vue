@@ -55,9 +55,9 @@ export default {
         document.removeEventListener("click",this.closeItem,false);   
     },
     watch:{
-    //    selectValue:function(oldValue,newValue){
-    //        console.log("newValue",newValue,"oldValue",oldValue);
-    //    }
+       selectValue:function(oldValue,newValue){
+        //    console.log("newValue",newValue,"oldValue",oldValue);
+       }
     },
     computed:{
         value(){

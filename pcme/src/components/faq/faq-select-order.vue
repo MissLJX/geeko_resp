@@ -238,6 +238,7 @@
                 this.$emit('closeSelect');
             },
             submitTicket(){
+                console.log(this.pickedOrder)
                 if(this.pickedOrder){
                     a+=1;
                     this.$emit('showTicket',this.pickedOrder)
@@ -390,7 +391,8 @@
 
                 .img-flex{
                     display: flex;
-                    overflow-x: auto;
+                    overflow-y: hidden;
+                    overflow-x: scroll;
                     margin-left: 26px;
                     padding-bottom: 8px;
 

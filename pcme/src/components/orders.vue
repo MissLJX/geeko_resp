@@ -53,7 +53,7 @@
                         <div class="tbl-cell tx-c">{{getDate(item.paymentTime || item.createDate)}}</div>
                         <div class="tbl-cell tx-c" v-if="!item.returnOrderItems"><span>{{$t('orderno')}}:</span>{{item.id}}</div>
                         <div class="tbl-cell tx-c"><span>{{$t('shippingfrom')}}:</span>{{$t('overseas')}}</div>
-                        <div class="tbl-cell tx-c"><i class="iconfont contactseller" >&#xe716;</i><a class="cur-p" @click="showTicket(item.orderId)">{{$t('contactseller')}}</a></div>
+                        <div class="tbl-cell tx-c"><i class="iconfont contactseller" >&#xe716;</i><a class="cur-p" @click="showTicket(item.orderId ? item.orderId : item.id ? item.id:'')">{{$t('contactseller')}}</a></div>
                     </div>
                 </div>
                 <div class="i-bd">
@@ -570,6 +570,7 @@
                 this.isShowSelect = false
             },
             showTicket:function(data){
+                this.$store.dispatch('clearTicket')
                 this.$store.dispatch('getTicket',data).then(()=>{
                     this.isShowTicket = true;
                 })

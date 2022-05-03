@@ -73,8 +73,8 @@
                         _url = '/me/m/order/detail/' + deepLink.params[0]
                         break
                     case 9:
-                        if(id){
-                            _url = '/me/m/faq/support-ticket/'+id
+                        if(deepLink.params[0]){
+                            _url = '/me/m/faq/support-ticket/'+deepLink.params[0]
                         } else {
                             _url = '/me/m/faq/support-ticket'
                         }

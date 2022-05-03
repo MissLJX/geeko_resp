@@ -74,6 +74,7 @@
             },
             showTicket:function(data){
                 this.isShowSelect = false
+                this.$store.dispatch('clearTicket')
                 this.$store.dispatch('getTicket',data).then(()=>{
                     this.isShowTicket = true;
                 })

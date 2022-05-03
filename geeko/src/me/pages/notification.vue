@@ -26,9 +26,9 @@
                     // {id: '1', name: 'Activities', path: 'notification-promotion', active: 'notification-promotion' == this.$route.name || 'notification' == this.$route.path},
                     // {id: '2', name: 'Promo', path: 'notification-me', active: 'notification-me' == this.$route.name},
                     // {id: '3', name: 'Others', path: 'notification-other', active: 'notification-other' == this.$route.name}
-                    {id: '1', name: this.$t("notification.activities"), path: 'notification-activities', active: 'notification-activities' == this.$route.name || 'notification' == this.$route.path, noRead: this.activityNoRead},
-                    {id: '2', name: this.$t("notification.promo"), path: 'notification-promo', active: 'notification-promo' == this.$route.name,noRead: this.promoNoRead},
-                    {id: '3', name: this.$t("notification.others"), path: 'notification-others', active: 'notification-others' == this.$route.name,noRead: this.otherNoRead}
+                    {id: '1', name: this.$t("notification.activities"), path: 'notification-activities', active: 'notification-activities' == this.$route.name || 'notification' == this.$route.path, noRead: this.activityNotificationnoRead},
+                    {id: '2', name: this.$t("notification.promo"), path: 'notification-promo', active: 'notification-promo' == this.$route.name,noRead: this.promoNotificationnoRead},
+                    {id: '3', name: this.$t("notification.others"), path: 'notification-others', active: 'notification-others' == this.$route.name,noRead: this.otherNotificationnoRead}
                 ]
             }
         },
@@ -39,20 +39,18 @@
             store.dispatch("me/getActivityNotificationsNoRead")
             store.dispatch("me/getPromoNotificationsNoRead")
             store.dispatch("me/getOtherNotificationsNoRead")
-            // console.log(this.activityNoRead, 
-            //             this.promoNoRead, 
-            //             this.otherNoRead,
-            //             )
 
         },
         watch:{
             activityNotificationnoRead(newV, oldV){
+                // console.log(newV,oldV)
                 this.navs[0].noRead = newV
             },
             promoNotificationnoRead(newV, oldV){
                 this.navs[1].noRead = newV
             },
             otherNotificationnoRead(newV, oldV){
+                // console.log(newV,oldV)
                 this.navs[2].noRead = newV
             },
         },

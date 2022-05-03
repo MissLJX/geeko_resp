@@ -38,6 +38,12 @@
                           :fromOrder="fromOrder"
                           ></order-ticket>
         </transition>
+
+        <transition name="selectOrder">
+            <select-order v-if="isShowSelect" 
+                      v-on:closeSelect="closeSelect1" 
+                      v-on:showTicket="showTicketById"></select-order>
+        </transition>
     </div>
 </template>
 
@@ -165,6 +171,7 @@
     import NotificationList from './notification-list.vue'
     import NotificationEmpty from './motification-empty.vue'
     import orderTicket from '../../components/faq/faq-order-ticket.vue';
+    import selectOrder from '../../components/faq/faq-select-order.vue';
     import * as utils from '../../utils/geekoutil';
     export default{
         data(){
@@ -204,15 +211,16 @@
             showTicket(data){
                 this.isShowSelect = false
                 this.$store.dispatch('clearTicket')
-                if(this.testString(data)){
-                    this.$store.dispatch('getTicket',data).then(()=>{
-                        this.isShowTicket = true;
-                    })
-                } else {
-                    this.$store.dispatch('getTicketByTicketId',data).then(()=>{
-                        this.isShowTicket = true;
-                    })
-                }
+                this.$store.dispatch('getTicketByTicketId',data).then(()=>{
+                    this.isShowTicket = true;
+                })
+            },
+             showTicketById:function(data){
+                this.isShowSelect = false
+                this.$store.dispatch('clearTicket')
+                this.$store.dispatch('getTicket',data).then(()=>{
+                    this.isShowTicket = true;
+                })
             },
             testString(str){
                 let arr = str.split("")
@@ -240,7 +248,8 @@
         components: {
             'notification-list': NotificationList,
             'notification-empty': NotificationEmpty,
-            'order-ticket':orderTicket
+            'order-ticket':orderTicket,
+            'select-order': selectOrder
         },
         created(){
             if ((!this.notifications || !this.notifications.length) && !this.finished)

@@ -1,6 +1,6 @@
 <template>
     <div class="el-notification" :class="{'read':notification.read}">
-        <div class="el-eachmodel">
+        <div class="el-eachmodel" :class="{'no-read':!notification.read }" v-if="notification.type != '9'">
             <model-1 :model="notification.model" v-if="notification.model.type == '1'" :sendtime="sendTime"/>
             <model-2 :model="notification.model" v-if="notification.model.type == '2'" :sendtime="sendTime"/>
             <model-3 :model="notification.model" v-if="notification.model.type == '3'" :sendtime="sendTime"/>
@@ -29,6 +29,19 @@
         .el-eachmodel{
             padding: 0 12px 12px 0;
             background-color: #fff;
+            position: relative;
+
+            &.no-read::after{
+                content: '';
+                display: block;
+                position: absolute;
+                width: 7px;
+                height: 7px;
+                border-radius: 50%;
+                background-color: #e64545;
+                top: 6px;
+                right: 12px;
+            }
         }
         &.read{
 

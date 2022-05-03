@@ -1,14 +1,15 @@
-<!--积分-->
+<!--小图+content-->
 <template>
     <a :href="url">
         <div class="n-mode">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-                <div v-if="model.content" class="max-w-240">
-                    {{model.content}}
-                </div>
-                <p class="i-sendtime" v-if="sendtime">{{sendtime}}</p>
+            <img  v-if="model.image" :src="imageUrl">
+            <div v-if="model.content" class="max-w-240">
+                {{model.content}}
             </div>
-            <div class="el-credit-num" :class="{'green':model.num < 0}">{{num}}</div>
+            <p class="i-sendtime" v-if="sendtime">
+                <span class="no-read" v-if="!isRead"></span>
+                {{sendtime}}
+            </p>
         </div>
     </a>
 </template>
@@ -17,13 +18,23 @@
     .max-w-240{
         max-width: 240px;
     }
+    .no-read{
+        display: block;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background-color: #e64545;
+    }
     .n-mode{
         width: 452px;
         background-color: #ffffff;
         border: solid 1px #e6e6e6;
+        display: flex;
+        justify-content: space-between;
         color: #222;
         overflow: hidden;
         padding: 25px 12px;
+        align-items: center;
         img{
             width: 60px;
             height: 60px;
@@ -33,17 +44,12 @@
     .mgr-5{
         margin-right: 5px;
     }
+
     .i-sendtime{
         color:#999;
         font-size: 12px;
     }
-    .el-credit-num {
-        color: #e64545;
-        padding-top: 15px;
-        &.green {
-            color: green;
-        }
-    }
+
 </style>
 
 <script type="text/ecmascript-6">
@@ -71,8 +77,8 @@
                         _url = '/me/m/order/detail/' + deepLink.params[0]
                         break
                     case 9:
-                        if(deepLink.params[0]){
-                            _url = '/me/m/faq/support-ticket/'+deepLink.params[0]
+                        if(id){
+                            _url = '/me/m/faq/support-ticket/'+id
                         } else {
                             _url = '/me/m/faq/support-ticket'
                         }
@@ -107,8 +113,18 @@
                 }
                 return _url
             },
-            num(){
-                return this.model.num < 0 ? this.model.num : ('+' + this.model.num)
+            imageUrl(){
+                if(this.model.image && this.model.image.indexOf('http') >= 0){
+                    return this.model.image
+                }
+                return "https://image.geeko.ltd" + this.model.image
+            }
+        },
+        methods:{
+            imgurl(imgage){
+                if(imgage){
+                    return "https://image.geeko.ltd"+imgage
+                }
             }
         },
         props: {

@@ -84,7 +84,7 @@
             onCopy(){
                 let clipboard = new Clipboard('.tag-read');
                 clipboard.on('success', e => {
-                    console.log('e', e)
+                    // console.log('e', e)
                     // alert('Content copied!')
                     this.showMessage = true;
 

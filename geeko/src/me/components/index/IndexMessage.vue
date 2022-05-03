@@ -256,7 +256,6 @@
         watch:{
             hasNoCommentOrder(newV, oldV){
                 let cookie = utils.getLocalCookie('_has_no_comment_order')
-                console.log(newV)
                 if(!cookie && this.isLogin){
                     if(newV){
                         this.showMask()

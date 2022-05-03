@@ -28,7 +28,7 @@
                     <tr v-if="!tickets">{{$t('nomoredata')}}</tr>
                     <template  >
                         <tr v-for="(ticket, index) in ticketList" :key="index">
-                            <td @click="showTicket(ticket.id)"><span>{{ticket.id}}</span></td>
+                            <td @click="showTicket(ticket.operaId)"><span>{{ticket.id}}</span></td>
                             <td>{{getlastmsg(ticket.ticketReplies)}}</td>
                             <td>{{getDate(ticket.openDate)}}</td>
                             <td :class="{
@@ -177,15 +177,15 @@
             showTicket:function(data){
                 this.isShowSelect = false
                 this.$store.dispatch('clearTicket')
-                if(this.testString(data)){
+                // if(this.testString(data)){
                     this.$store.dispatch('getTicket',data).then(()=>{
                         this.isShowTicket = true;
                     })
-                } else {
-                    this.$store.dispatch('getTicketByTicketId',data).then(()=>{
-                        this.isShowTicket = true;
-                    })
-                }
+                // } else {
+                    // this.$store.dispatch('getTicketByTicketId',data).then(()=>{
+                    //     this.isShowTicket = true;
+                    // })
+                // }
             },
             testString(str){
                 let arr = str.split("")
@@ -194,6 +194,14 @@
                 } else {
                     return false
                 }
+            },
+            showTicketByTicketId(id){
+                this.isShowSelect = false
+                this.$store.dispatch('clearTicket')
+                this.$store.dispatch('getTicketByTicketId',id).then(()=>{
+                    this.isShowTicket = true;
+                })
+                
             },
             showTicketByCode(code){
                 this.isShowSelect = false
@@ -243,18 +251,28 @@
             this.$store.dispatch('getTickets', {skip:0,state:9})
         },
         mounted(){
-            // console.log(this.$route)
-            // console.log(this.$router.currentRoute.query?.id && !urlIdShowed)
+            console.log(this.$route)
+            console.log(this.$router.currentRoute)
+            // /:id tkid
             if(this.$route.params?.id && !urlIdShowed){
                 localStorage.removeItem("_code")
                 localStorage._orderId = this.$route.params?.id
-                this.showTicket(localStorage._orderId)
+                this.showTicketByTicketId(localStorage._orderId)
             }
+            // id= orderid不弹窗
             if((this.$router.currentRoute.query?.id) && !urlIdShowed){
                 localStorage.removeItem("_code")
                 localStorage._orderId = this.$router.currentRoute.query?.id
                 this.showTicket(localStorage._orderId)
             }
+            // orderid= orderid
+            if((this.$router.currentRoute.query?.orderid) && !urlIdShowed){
+                localStorage.removeItem("_code")
+                localStorage._orderId = this.$router.currentRoute.query?.orderid
+                this.showTicket(localStorage._orderId)
+            }
+
+            // code=
             if(this.$router.currentRoute.query?.code && !urlIdShowed){
                 localStorage.removeItem("_orderId")
                 localStorage._code = this.$router.currentRoute.query?.code

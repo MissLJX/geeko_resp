@@ -1,3 +1,11 @@
+/*
+1. /me/m/faq/support-ticket/00000001   用tkid
+2. /me/m/faq/support-ticket?id=89382104 用orderid不弹窗
+3. /me/m/faq/support-ticket?code=2471874891830 用code
+4. /me/m/faq/support-ticket?orderid=89382104 用orderid
+
+*/ 
+
 import React, { createRef, Fragment } from 'react'
 import {Link} from 'react-router-dom'
 import {get, getByOrderId, sendImage, sendTicket, getQuestionType, questionTypeChange, sendRate, getByCode} from '../../api'
@@ -862,15 +870,21 @@ class TicketAdd extends React.Component {
     }
     document.title = this.props.intl.formatMessage({id: 'Ticket'});
     
-    
-    // 接受传值的参数
+    // 从ticket列表跳转过来 用history接受传值的参数
     let params = this.props.history.location.state 
     let id;
     // 接受url传值的参数
     let urlParams = this.props.history.location.pathname ? this.props.history.location.pathname.split("/")[1] != 'wanna' ? this.props.history.location.pathname.split("/")[5] :  this.props.history.location.pathname.split("/")[6] : '';
     // 不弹窗的传参
     let urlParamsNoMask = this.props.history.location.search ? 
-                  this.props.history.location.search.indexOf('id') != -1 ?
+                  (this.props.history.location.search.indexOf('id') != -1 && this.props.history.location.search.indexOf('orderid') == -1) ?
+                  this.props.history.location.search.split('=')[1].indexOf('&') != -1 ?
+                  this.props.history.location.search.split('=')[1].split("&")[0]:
+                  this.props.history.location.search.split('=')[1]:
+                  '':''
+    // 其他页面传orderid过来
+    let urlParamsOrderid = this.props.history.location.search ? 
+                  this.props.history.location.search.indexOf('orderid') != -1 ?
                   this.props.history.location.search.split('=')[1].indexOf('&') != -1 ?
                   this.props.history.location.search.split('=')[1].split("&")[0]:
                   this.props.history.location.search.split('=')[1]:
@@ -882,8 +896,7 @@ class TicketAdd extends React.Component {
                          this.props.history.location.search.split('code=')[1].split("&")[0]:
                          this.props.history.location.search.split('code=')[1]:
                          '':''
-    // console.log(this.props.location, urlParams, customerCode)
-    // console.log(this.props.history.location.pathname.split("/"))
+
     // 链接中有传值-ticket列表点击过来的
     if(params){
       id = params.id ? params.id : ''
@@ -895,11 +908,11 @@ class TicketAdd extends React.Component {
     
     // return
     // 如果链接中没有传值 而且本地没有数据 则会跳转到ticket列表
-    if(!id && !localStorage.__order && !urlParams && !urlParamsNoMask && !customerCode){
+    if(!id && !localStorage.__order && !urlParams && !urlParamsNoMask && !customerCode && !urlParamsOrderid){
       this.props.history.push({pathname: `${window.ctx || ''}/support/ticket`})
     }
     // app消息通知带ticketid跳转
-    if(urlParams && !!(urlParams.match(/[a-z]/ig))){
+    if(urlParams && window.isApp){
       id = urlParams
       urlParams = null
     }
@@ -921,6 +934,9 @@ class TicketAdd extends React.Component {
         // 客服code
         console.log('4')
         this.getMsgByCode(customerCode)
+      } else if(urlParamsOrderid){
+        console.log('7')
+        this.getMsgById(urlParamsOrderid)
       } else {
         if (localStorage.__order) {
           console.log('5')

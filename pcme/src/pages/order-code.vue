@@ -298,6 +298,7 @@
                 this.isShowTicket = false
             },
             showTicket(id){
+                this.$store.dispatch('clearTicket')
                 this.$store.dispatch('getTicket',id).then(()=>{
                     this.isShowTicket = true;
                 })
@@ -347,6 +348,7 @@
             },
             showTicket:function(data){
                 this.isShowSelect = false
+                this.$store.dispatch('clearTicket')
                 this.$store.dispatch('getTicket',data).then(()=>{
                     this.isShowTicket = true;
                 })
