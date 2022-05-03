@@ -21,7 +21,7 @@ export default {
                     _url = '/me/m/credits'
                     break
                 case 8:
-                    _url = '/me/m/order/detail/' + deepLink.params[0]
+                    _url = '/me/m/order'
                     break
                 case 9:
                     if(deepLink.params[0]){
@@ -54,6 +54,9 @@ export default {
                     break
                 case 17:
                     _url = '/shoppingcart/show'
+                    break
+                case 22:
+                    _url = '/me/m/order/detail/' + deepLink.params[0]
                     break
                 default:
                     _url = '#'
