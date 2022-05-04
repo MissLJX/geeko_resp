@@ -111,7 +111,7 @@
 </script>
 
 <style scoped lang="scss">
-    .swiper-slide{
+    .card-grade .swiper-slide{
         width: 80%;
         height: 187px;
         border-radius: 5px;
@@ -120,6 +120,10 @@
 
     .card-grade{
         margin-top: 20px;
+    }
+
+    .vip-grade{
+        padding-top: 40px;
     }
 
     .grade-process{
@@ -195,7 +199,6 @@
 
     .vip-name{
         padding:0px 30px;
-        margin-top: 40px;
 
         ._name{
             font-size: 16px;

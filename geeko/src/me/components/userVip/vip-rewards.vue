@@ -4,67 +4,11 @@
         <p class="next-title">LEVEL UP TO UNLOCK…</p>
 
         <div class="rewards-container" :class="!showFullHeight?'':'full-height'">
-            <div>
+            <div v-for="(rewards,index) in dataArr" :key="index+rewards.title" @click="showModal=true">
                 <span class="bg-icon">
-                    <span class="iconfont">&#xe771;</span>
+                    <span class="iconfont" v-html="rewards.icon"></span>
                 </span>
-                <p class="_font">Points Redemption</p>
-            </div>
-
-            <div>
-                <span class="bg-icon">
-                    <span class="iconfont">&#xe771;</span>
-                </span>
-                <p class="_font">APP Exclusive XX% OFF</p>
-            </div>
-
-            <div>
-                <span class="bg-icon">
-                    <span class="iconfont">&#xe771;</span>
-                </span>
-                <p class="_font">Points Redemption</p>
-            </div>
-
-            <div>
-                <span class="bg-icon">
-                    <span class="iconfont">&#xe771;</span>
-                </span>
-                <p class="_font">APP Exclusive XX% OFF</p>
-            </div>
-
-            <div>
-                <span class="bg-icon">
-                    <span class="iconfont">&#xe771;</span>
-                </span>
-                <p class="_font">Points Redemption</p>
-            </div>
-
-            <div>
-                <span class="bg-icon">
-                    <span class="iconfont">&#xe771;</span>
-                </span>
-                <p class="_font">APP Exclusive XX% OFF</p>
-            </div>
-
-            <div>
-                <span class="bg-icon">
-                    <span class="iconfont">&#xe771;</span>
-                </span>
-                <p class="_font">APP Exclusive XX% OFF</p>
-            </div>
-
-            <div>
-                <span class="bg-icon">
-                    <span class="iconfont">&#xe771;</span>
-                </span>
-                <p class="_font">APP Exclusive XX% OFF</p>
-            </div>
-
-            <div>
-                <span class="bg-icon">
-                    <span class="iconfont">&#xe771;</span>
-                </span>
-                <p class="_font">APP Exclusive XX% OFF</p>
+                <p class="_font">{{rewards.title}}</p>
             </div>
         </div>
 
@@ -74,17 +18,76 @@
                 <span></span>
             </span>
         </div>
+
+        <vip-rewards-modal 
+            :show-modal.sync="showModal" 
+            :datas="dataArr"
+
+        ></vip-rewards-modal>
     </div>
 </template>
 
 <script>
+    import VipRewardsModal from './vip-rewards-modal.vue'
+
     export default {
         name:"VipReawrds",
         data(){
             return {
                 siteName:window.name,
-                showFullHeight:false
+                showFullHeight:false,
+                dataArr:[
+                    {
+                        icon:"&#xe771;",
+                        title:"Points Redemption",
+                        content:"xxxxxxxxxxxxxx Points Redemption"
+                    },
+                    {
+                        icon:"&#xe771;",
+                        title:"APP Exclusive XX% OFF",
+                        content:"xxxxxxxxxxxxxx APP Exclusive XX% OFF"
+                    },
+                    {
+                        icon:"&#xe771;",
+                        title:"Exclusive Icon",
+                        content:"xxxxxxxxxxxxxx Exclusive Icon"
+                    },
+                    {
+                        icon:"&#xe771;",
+                        title:"Level-up Coupon",
+                        content:"xxxxxxxxxxxxxx Level-up Coupon"
+                    },
+                    {
+                        icon:"&#xe771;",
+                        title:"Free Shipping",
+                        content:"xxxxxxxxxxxxxx Free Shipping"
+                    },
+                    {
+                        icon:"&#xe771;",
+                        title:"Double Points",
+                        content:"xxxxxxxxxxxxxx Double Points"
+                    },
+                    {
+                        icon:"&#xe771;",
+                        title:"VIP Service",
+                        content:"xxxxxxxxxxxxxx VIP Service"
+                    },
+                    {
+                        icon:"&#xe771;",
+                        title:"Speedy Return",
+                        content:"xxxxxxxxxxxxxx Speedy Return"
+                    },
+                    {
+                        icon:"&#xe771;",
+                        title:"Coming Soon",
+                        content:"xxxxxxxxxxxxxx Coming Soon"
+                    }
+                ],
+                showModal:false
             }
+        },
+        components:{
+            VipRewardsModal,
         }
     }
 </script>
