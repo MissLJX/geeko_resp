@@ -53,7 +53,13 @@
                     </div>
                 </div>
                 <div class="st-cell edit st-v-m">
-                    <p @click="changeToLogin">{{disposeName}}</p>
+                    <p>
+                        <span class="user-name" @click="changeToLogin">{{disposeName}}</span>
+                        <span class="vip-level" @click="toVipPageEvent">
+                            <span class="iconfont">&#xe70e;</span>
+                            <span class="level">V0></span>
+                        </span>
+                    </p>
                     <div class="bio" @click="toEditUserBio">
                         <span>{{me && me.bio ? me.bio : `${$t('label.introduce_to_others')}…`}}</span>
                         <span class="iconfont">&#xe6ce;</span>
@@ -183,8 +189,12 @@
                         <p>{{$t("point.survey")}}</p>
                     </a>
                     <a @click.prevent="specificationLogin('/me/m/makeSug',1)" click-name="Suggestion">
-                        <p class="iconfont">&#xe6e5;</p>
+                        <p class="iconfont" style="font-size:18px;">&#xe6e5;</p>
                         <p>{{$t("point.suggestion")}}</p>
+                    </a>
+                    <a @click.prevent="specificationLogin('/me/m/vip',1)" click-name="Vip">
+                        <p class="iconfont">&#xe70e;</p>
+                        <p>VIP</p>
                     </a>
                 </div>
             </div>
@@ -297,6 +307,9 @@
                 if(!this.isLogin){
                     window.location.href = "/i/login?redirectUrl=/me/m";
                 }
+            },
+            toVipPageEvent(){
+                this.$router.push({name:'user-vip'});
             },
             getName(value){
                 return value ? value : '';
@@ -646,10 +659,38 @@
                     font-family: 'SlatePro-Medium';
                     font-size: 20px;
                     color: #000000;
-                    white-space: nowrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    width: 180px;
+                    display: flex;
+                    align-items: center;
+                    
+
+                    .user-name{
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        max-width: 150px;
+                        display: inline-block;
+                        margin-right: 5px;
+                    }
+
+                    .vip-level{
+                        padding: 1px 10px;
+                        background-color: #222222;
+                        border-radius: 13px;
+                        display: inline-block;
+
+                        .level{
+                            font-size: 14px;
+                            color: #ddc35e;
+                            font-family: 'AcuminPro-Bold';
+                            vertical-align: middle;
+                        }
+
+                        .iconfont{
+                            color: #ddc35e;
+                            font-size: 14px;
+                            vertical-align: middle;
+                        }
+                    }
                 }
 
                 & .bio{
@@ -811,6 +852,10 @@
 
                 .service-bd{
                     margin-top: 15px;
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: space-between;
+
                     & > a{
                         color: #222222;
                         display: inline-block;

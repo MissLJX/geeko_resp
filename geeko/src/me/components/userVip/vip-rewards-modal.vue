@@ -1,86 +1,72 @@
 <template>
-    <div class="vip-rewards-modal">
-        <bottom-to-top>
-            <div class="rewards-modal" v-if="showModal">
-                <p class="close-icon">
-                    <span class="iconfont" @click="closeModalEvent">&#xe69a;</span>
-                </p>
+    <div class="rewards-modal">
+        <p class="close-icon">
+            <span class="iconfont" @click="closeModalEvent">&#xe69a;</span>
+        </p>
 
-                <p class="title">CHICME VIP REWARDS</p>
+        <p class="title">CHICME VIP REWARDS</p>
 
-                <div 
-                    class="swiper-container rewards-swiper" 
-                    v-swiper:mySwiper="swiperOption" 
-                    @slideChange="onSlideChange"
-                >
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide">
-                            <span class="rewards-container">1</span>
-                        </div>
-                        <div class="swiper-slide">
-                            <span class="rewards-container">2</span>
-                        </div>
-                        <div class="swiper-slide">
-                            <span class="rewards-container">3</span>
-                        </div>
-                        <div class="swiper-slide">
-                            <span class="rewards-container">4</span>
-                        </div>
-                    </div>
+        <div 
+            class="swiper-container rewards-swiper" 
+            v-swiper:mySwiper="swiperOption" 
+            @slideChange="onSlideChange"
+        >
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <span class="rewards-container">1</span>
                 </div>
-
-                <p class="next-title">APP Exclusive XX% OFF</p>
-
-                <div class="content">
-                    xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxx
-                    xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxx
-                    xxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxx
-                    xxxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxx
-                    xxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-                    xxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxx
+                <div class="swiper-slide">
+                    <span class="rewards-container">2</span>
                 </div>
-
-                <div class="rewards-button">
-                    <button>Download Now</button>
+                <div class="swiper-slide">
+                    <span class="rewards-container">3</span>
                 </div>
-                
+                <div class="swiper-slide">
+                    <span class="rewards-container">4</span>
+                </div>
             </div>
-        </bottom-to-top>
+        </div>
 
-        <mask-component v-if="showModal" @click.native="closeModalEvent"></mask-component>
+        <p class="next-title">{{selectedModalReawrds.title}}</p>
+
+        <div class="content">
+            {{selectedModalReawrds.content}}
+        </div>
+
+        <div class="rewards-button">
+            <button>Download Now</button>
+        </div>
     </div>
 </template>
 
 <script>
-    import BottomToTop from '../../../components/transition/bottom-to-top.vue'
-    import MaskComponent from '../../../components/Mask-component.vue'
-
     import { directive } from 'vue-awesome-swiper'
 
     export default {
         name:"VipRewardsModal",
         data(){
-            console.log('this.datas', this.datas);
             return {
                 swiperOption: {
                     slidesPerView:'auto',
                     slideToClickedSlide: true,
                     centeredSlides: true,
                     spaceBetween : 14,
-                    // initialSlide: 0,
+                    initialSlide: 0,
                 },
+                currentIndex:0
             }
-        },
-        components:{
-            BottomToTop,
-            MaskComponent
         },
         methods:{
             onSlideChange(){
-                console.log('this.mySwiper', this.mySwiper.activeIndex)
+                this.currentIndex = this.mySwiper.activeIndex;
             },
             closeModalEvent(){
                 this.$emit('update:showModal',false);
+            }
+        },
+        computed:{
+            selectedModalReawrds(){
+                return this.datas[this.currentIndex];
             }
         },
         directives: {

@@ -2,6 +2,7 @@
     <div class="vip-grade">
         <div class="vip-name">
             <span class="_name">{{disposeName}}</span>
+            <span class="iconfont">&#xe70e;</span>
         </div>
 
         <div class="grade-process">
@@ -204,6 +205,14 @@
             font-size: 16px;
             color: #ffffff;
             font-family: 'AcuminPro-Bold';
+        }
+
+        .iconfont{
+            color: #fff;
+        }
+
+        & > span{
+            vertical-align: middle;
         }
     }  
 </style>

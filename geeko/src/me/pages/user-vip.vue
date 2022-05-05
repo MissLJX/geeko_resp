@@ -54,6 +54,10 @@
                 return this.$store.getters['me/shoppingCartCount'];
             }
         },
+        created:function(){
+            // 请求所有的数据
+            // 获取到当前用户的VIP等级与缓存中的等级对比是否需要弹出升级弹窗
+        },
         components:{
             PageHeader,
             VipGrade,
@@ -68,7 +72,6 @@
         background-image: linear-gradient(135deg, 
 		#d7d7d7 0%, 
 		#707070 100%);
-        padding-bottom: 50px;
         padding-top: 50px;
 
         .cart-icon{
@@ -103,6 +106,7 @@
     .content{
         position: relative;
         height: 100%;
+        padding-bottom: 50px;
 
         .content-container{
             position: relative;
@@ -126,13 +130,12 @@
         .content-bg{
             position: absolute;
             z-index: 1;
-            background-image: url(https://s3.us-west-2.amazonaws.com/image.chic-fusion.com/chicme/2021111101/content_v0_bg.png);
+            background-image: url(https://s3.us-west-2.amazonaws.com/image.chic-fusion.com/chicme/2021111101/content_v0_bg2.png);
             background-size: cover;
-            top: 100px;
-            left: -20%;
-            width: 137%;
-            height: calc(100% - 235px);
-            height: 100%;    
+            top: 130px;
+            left: 0;
+            width: 100%;
+            height: calc(100% - 130px);
         }
     }
 </style>

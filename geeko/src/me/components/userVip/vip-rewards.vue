@@ -7,6 +7,9 @@
             <div v-for="(rewards,index) in dataArr" :key="index+rewards.title" @click="showModal=true">
                 <span class="bg-icon">
                     <span class="iconfont" v-html="rewards.icon"></span>
+                    <span class="reward-lock">
+                        <span class="_container"><span class="iconfont">&#xe70c;</span> <span class="level">v1</span></span>
+                    </span>
                 </span>
                 <p class="_font">{{rewards.title}}</p>
             </div>
@@ -15,20 +18,26 @@
         <div class="view-rewards">
             <span @click="showFullHeight=!showFullHeight">
                 <span>View Reawrds</span>
-                <span></span>
+                <span class="iconfont" :class="showFullHeight?'active':''">&#xe779;</span>
             </span>
         </div>
 
-        <vip-rewards-modal 
-            :show-modal.sync="showModal" 
-            :datas="dataArr"
-
-        ></vip-rewards-modal>
+        <bottom-to-top>
+            <vip-rewards-modal 
+                :show-modal.sync="showModal" 
+                :datas="dataArr"
+                v-if="showModal"
+            ></vip-rewards-modal>
+        </bottom-to-top>
+        
+        <mask-component v-if="showModal" @click.native="showModal=false"></mask-component>
     </div>
 </template>
 
 <script>
     import VipRewardsModal from './vip-rewards-modal.vue'
+    import BottomToTop from '../../../components/transition/bottom-to-top.vue'
+    import MaskComponent from '../../../components/Mask-component.vue'
 
     export default {
         name:"VipReawrds",
@@ -88,6 +97,8 @@
         },
         components:{
             VipRewardsModal,
+            BottomToTop,
+            MaskComponent
         }
     }
 </script>
@@ -137,9 +148,42 @@
                     text-align: center;
                     display: inline-block;
                     border-radius: 50%;
+                    position: relative;
 
                     & > .iconfont{
                         color: #fff;
+                    }
+
+                    .reward-lock{
+                        position: absolute;
+                        color: #fff;
+                        bottom: -5px;
+                        display: inline-block;
+                        transform: translateX(-50%);
+                        left: 50%;
+                        line-height: normal;
+
+                        ._container{
+                            display:flex;
+                            align-items: center;
+                            border-radius: 5px;
+                            background-color: aqua;
+
+                            .level{
+                                display: inline-block;
+                                font-size: 12px;
+                                color: #222;
+                                transform: scale(0.8);
+                                font-family: 'AcuminPro-Bold';
+                            }
+
+                            .iconfont{
+                                display: inline-block;
+                                font-size: 12px;
+                                color: #222;
+                                transform: scale(0.8);
+                            }
+                        }
                     }
                 }
 
@@ -163,6 +207,27 @@
 
         .view-rewards{
             text-align: center;
+
+            & > span{
+                span{
+                    vertical-align: middle;
+                }
+
+                .iconfont{
+                    display: inline-block;
+                    transform: rotate(0deg);
+                    -webkit-transform: rotate(0deg);
+                    transition: -webkit-transform .5s;
+                    transition: transform .5s;
+                    transition: transform .5s,-webkit-transform .5s;
+                    
+
+                    &.active{
+                        transform: rotate(180deg);
+                        -webkit-transform: rotate(180deg);
+                    }
+                }
+            }
         }
     }
 </style>
