@@ -1,10 +1,10 @@
 <template>
     <li class="vip-faq-items" v-if="Object.keys(item).length > 0">
         <div class="title" @click="showContent=!showContent">
-            <span class="iconfont jt-icon" :class="showContent?'active':''">&#xe70d;</span><span class="_font">{{item.title}}</span>
+            <span class="iconfont jt-icon" :class="showContent?'active':''">&#xe70d;</span><span class="_font">{{item.question}}</span>
         </div>
         <div class="content" v-if="showContent">
-            <span>{{item.content}}</span>
+            <span>{{item.answer}}</span>
         </div>
     </li>
 </template>

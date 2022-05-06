@@ -178,4 +178,13 @@ export const isEmojiCharacter =  function(substring) {
 }
 
 
+export const isAndroid = function(){
+	return navigator.userAgent.indexOf('Android') > -1;
+}
+
+export const isIOS = function(){
+	return !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+}
+
+
 

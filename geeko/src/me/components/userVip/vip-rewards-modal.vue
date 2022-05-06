@@ -12,17 +12,12 @@
             @slideChange="onSlideChange"
         >
             <div class="swiper-wrapper">
-                <div class="swiper-slide">
-                    <span class="rewards-container">1</span>
-                </div>
-                <div class="swiper-slide">
-                    <span class="rewards-container">2</span>
-                </div>
-                <div class="swiper-slide">
-                    <span class="rewards-container">3</span>
-                </div>
-                <div class="swiper-slide">
-                    <span class="rewards-container">4</span>
+                <div class="swiper-slide" v-for="(reward,index) in datas" :key="index">
+                    <span class="rewards-container" :style="`background-image:url(${reward.icon});`">
+                        <span class="reward-lock" v-if="currentLevel < reward.level">
+                            <span class="_container"><span class="iconfont">&#xe70c;</span> <span class="level">v{{reward.level}}</span></span>
+                        </span> 
+                    </span>
                 </div>
             </div>
         </div>
@@ -30,17 +25,37 @@
         <p class="next-title">{{selectedModalReawrds.title}}</p>
 
         <div class="content">
-            {{selectedModalReawrds.content}}
+            {{selectedModalReawrds.description}}
         </div>
 
         <div class="rewards-button">
-            <button>Download Now</button>
+            <template v-if="currentLevel >= selectedModalReawrds.level">
+                <!-- id为1 积分兑换优惠券 -->
+                <router-link class="l-button" :to="{name:'redeem-coupon'}" v-if="selectedModalReawrds.id == 1">Redeem now</router-link>
+
+                <!-- id 为2 App专属价格 -->
+                <button v-if="selectedModalReawrds.id == 2" @click="toAppEvent">Download Now</button>
+
+                 <!-- id为4 查看升级优惠券 -->
+                <router-link class="l-button" :to="{name:'coupons'}" v-if="selectedModalReawrds.id == 4">Check My Coupons</router-link>
+
+                <!-- id为7 constant us -->
+                <a class="l-button" :href="GLOBAL.getUrl(`/support`)" v-if="selectedModalReawrds.id == 7">Contact Us</a>
+            </template>
+
+            <!-- id 为 5 free shipping -->
+            <button 
+                v-if="selectedModalReawrds.id == 5" 
+                :disabled="!(currentLevel > selectedModalReawrds.level)"
+                @click="getRewardEvent"
+            >Get Reward</button>{{shippingDIsabled}}
         </div>
     </div>
 </template>
 
 <script>
     import { directive } from 'vue-awesome-swiper'
+    import { isIOS,isAndroid } from '../../../utils/geekoutils'
 
     export default {
         name:"VipRewardsModal",
@@ -51,9 +66,9 @@
                     slideToClickedSlide: true,
                     centeredSlides: true,
                     spaceBetween : 14,
-                    initialSlide: 0,
+                    initialSlide: this.modalIndex,
                 },
-                currentIndex:0
+                currentIndex:this.modalIndex
             }
         },
         methods:{
@@ -62,11 +77,33 @@
             },
             closeModalEvent(){
                 this.$emit('update:showModal',false);
+            },
+            toAppEvent(){
+                if (isAndroid()) {
+                    setTimeout(function(){
+                        window.location.href = `https://play.google.com/store/apps/details?id=${window.iosAppStoreId}`;
+                    },200);
+                    window.location.href = "chic-me://chic.me/";
+                    return;
+                }
+                if (isIOS()) {
+                    setTimeout(function(){
+                        window.location.href = `https://itunes.apple.com/us/app/chic-me-shopping-sharing-saving/id${window.isAndroidAppStoreId}?l=zh&ls=1&mt=8'`;
+                    },200);
+                    window.location.href = "chic-me://chic.me";
+                    return;
+                }
+            },
+            getRewardEvent(){
+                console.log('click');
             }
         },
         computed:{
             selectedModalReawrds(){
                 return this.datas[this.currentIndex];
+            },
+            shippingDIsabled(){
+                console.log('currentLevel > selectedModalReawrds.level', this.currentLevel > this.selectedModalReawrds.level)
             }
         },
         directives: {
@@ -82,6 +119,14 @@
                 default:function(){
                     return []
                 }
+            },
+            currentLevel:{
+                type:Number,
+                default:0
+            },
+            modalIndex:{
+                type:Number,
+                default:0
             }
         }
     }
@@ -126,13 +171,45 @@
                     display: inline-block;
                     width: 45px;
                     height: 45px;
-                    line-height: 45px;
                     border-radius: 50%;
-                    text-align: center;
                     background-image: linear-gradient(137deg, 
                     #444444 0%, 
                     #000000 100%);
-                    color: #b8cce4;
+                    position: relative;
+                    background-size: cover;
+                    background-repeat: no-repeat;
+
+                    .reward-lock{
+                        position: absolute;
+                        color: #fff;
+                        bottom: -5px;
+                        display: inline-block;
+                        transform: translateX(-50%);
+                        left: 50%;
+                        line-height: normal;
+
+                        ._container{
+                            display:flex;
+                            align-items: center;
+                            border-radius: 5px;
+                            background-color: aqua;
+
+                            .level{
+                                display: inline-block;
+                                font-size: 12px;
+                                color: #222;
+                                transform: scale(0.8);
+                                font-family: 'AcuminPro-Bold';
+                            }
+
+                            .iconfont{
+                                display: inline-block;
+                                font-size: 12px;
+                                color: #222;
+                                transform: scale(0.8);
+                            }
+                        }
+                    }
                 }
             }
 
@@ -147,7 +224,7 @@
         }
 
         .next-title{
-            margin-top: 12px;
+            margin-top: 20px;
             text-align: center;
             font-size: 16px;
             color: #222222;
@@ -177,7 +254,27 @@
                 font-size: 16px;
                 font-family: 'AcuminPro-Bold';
                 text-align: center;
-                padding: 0 40px;
+                width: 80%;
+                display: inline-block;
+
+                &:disabled{
+                    background-color: #ccc;
+                    color: #fff;
+                }
+            }
+
+            .l-button{
+                height: 40px;
+                line-height: 40px;
+                background-color: #222222;
+                border-radius: 2px;
+                color: #fff;
+                font-size: 16px;
+                font-family: 'AcuminPro-Bold';
+                text-align: center;
+                // padding: 0 40px;
+                width: 80%;
+                display: inline-block;
             }
         }
     }

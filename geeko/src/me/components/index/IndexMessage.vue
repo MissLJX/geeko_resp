@@ -55,9 +55,9 @@
                 <div class="st-cell edit st-v-m">
                     <p>
                         <span class="user-name" @click="changeToLogin">{{disposeName}}</span>
-                        <span class="vip-level" @click="toVipPageEvent">
+                        <span class="vip-level" @click="toVipPageEvent" v-if="me && me.vipUser && me.vipUser.level">
                             <span class="iconfont">&#xe70e;</span>
-                            <span class="level">V0></span>
+                            <span class="level">V{{me.vipUser.level}}></span>
                         </span>
                     </p>
                     <div class="bio" @click="toEditUserBio">

@@ -18,21 +18,34 @@
         </div>
         
 
-        <div class="content">
+        <div class="content" v-if="vipData && vipData.length > 0">
             <div class="content-container">
                 <!-- 上部分关于卡片的 -->
-                <vip-grade :index="1"></vip-grade>
+                <vip-grade 
+                    :vip-data="vipData" 
+                    :current-index.sync="currentLevel"
+                    :current-vip-data="currentVipData"
+                ></vip-grade>
 
                 <!-- 奖励与权益部分 -->
-                <vip-rewards></vip-rewards>
+                <vip-rewards
+                    :current-level="currentLevel"
+                    :current-vip-data="currentVipData"
+                ></vip-rewards>
 
                 <!-- FAQS -->
-                <vip-faq></vip-faq>
+                <vip-faq
+                    :faqs="faqs"
+                ></vip-faq>
             </div>
 
-            <div class="grade-bg"></div>
-            <div class="content-bg"></div>
+            <template v-if="currentVipData">
+                <div class="grade-bg" :style="`background-image:url(${currentVipData.cardBackground})`"></div>
+                <div class="content-bg" :style="`background-image:url(${currentVipData.background})`"></div>
+            </template>
         </div>
+
+        <div v-else class="el-list-loading"><i class="iconfont">&#xe69f;</i></div>
     </div>
 </template>
 
@@ -41,22 +54,49 @@
     import VipGrade from '../components/userVip/vip-grade.vue'
     import VipRewards from "../components/userVip/vip-rewards.vue"
     import VipFaq from '../components/userVip/vip-faq.vue'
+    import { getUserVipData } from '../api/index'
 
     export default {
         name:"UserVip",
         data(){
             return {
-                siteName:window.name
+                siteName:window.name,
+                currentLevel:0,
+                faqs:null,
+                vipData:[],
+                theme:null
             }
         },
         computed:{
             shoppingCartCount(){
                 return this.$store.getters['me/shoppingCartCount'];
+            },
+            currentVipData(){
+                console.log('this.vipData[this.currentLevel]', this.vipData[this.currentLevel])
+                return this.vipData[this.currentLevel]
             }
         },
         created:function(){
             // 请求所有的数据
             // 获取到当前用户的VIP等级与缓存中的等级对比是否需要弹出升级弹窗
+            
+        },
+        beforeRouteEnter(to, from, next){
+            getUserVipData().then(response =>{
+                console.log('response', response)
+                if(response.code === 200 && response.result){
+                    next(vm =>{
+                        const {result} = response;
+                        console.log('first', result.level)
+                        vm.currentLevel = result.level;
+                        vm.faqs = result.faqs;
+                        vm.vipData = result.vipStyles;
+                    });
+                }else{
+                    alert('Vip Data is Null!');
+                    next();
+                }
+            });
         },
         components:{
             PageHeader,
@@ -69,9 +109,9 @@
 
 <style scoped lang="scss">
     .user-vip{
-        background-image: linear-gradient(135deg, 
-		#d7d7d7 0%, 
-		#707070 100%);
+        // background-image: linear-gradient(135deg, 
+		// #d7d7d7 0%, 
+		// #707070 100%);
         padding-top: 50px;
 
         .cart-icon{
@@ -136,6 +176,25 @@
             left: 0;
             width: 100%;
             height: calc(100% - 130px);
+        }
+    }
+
+    .el-list-loading {
+        text-align: center;
+        padding: 10px 0;
+        i {
+            font-size: 24px;
+            display: inline-block;
+            animation: list-loading 1.5s infinite linear;
+        }
+    }
+
+    @keyframes list-loading {
+        from {
+            transform: rotate(0);
+        }
+        to {
+            transform: rotate(360deg);
         }
     }
 </style>

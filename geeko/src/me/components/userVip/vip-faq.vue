@@ -7,7 +7,7 @@
         </div>
 
         <ul>
-            <template v-for="(faq,index) in dataArr">
+            <template v-for="(faq,index) in faqs">
                 <vip-faq-items :item="faq" :key="index"></vip-faq-items>
             </template>
         </ul>
@@ -35,6 +35,15 @@
                         content:"666666"
                     }
                 ]
+            }
+        },
+        props:{
+            faqs:{
+                type:Array,
+                required:true,
+                default:function(){
+                    return {}
+                }
             }
         },
         components:{

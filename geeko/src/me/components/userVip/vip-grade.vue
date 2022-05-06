@@ -12,20 +12,13 @@
 
             <div class="num-grade" :style="`transform:translate(-${tranFormNum}px,-50%);`">
                 <div class="_container">
-                    <div class="main" :class="index===0?'active':''">
-                        <div class="next">V0</div>
-                    </div>
-
-                    <div class="main" :class="index===1?'active':''">
-                        <div class="next">V1</div>
-                    </div>
-
-                    <div class="main" :class="index===2?'active':''">
-                        <div class="next">V2</div>
-                    </div>
-                    
-                    <div class="main" :class="index===3?'active':''">
-                        <div class="next">V3</div>
+                    <div 
+                        class="main" 
+                        :class="currentIndex===index?'active':''" 
+                        v-for="(levelItem,index) in vipData"
+                        :key="levelItem.level+index"
+                    >
+                        <div class="next" :style="`color:${levelItem.theme.highlight}`">V{{levelItem.level}}</div>
                     </div>
                 </div>
             </div>
@@ -38,10 +31,13 @@
             @slideChange="onSlideChange"
         >
             <div class="swiper-wrapper">
-                <div class="swiper-slide">
-                    <div class="notification-container"></div>
+                <div class="swiper-slide" 
+                    v-for="(levelItem,index) in vipData"
+                    :key="levelItem.level+index"
+                >
+                    <div class="vip-container" :style="`background-image:url(${levelItem.cardImageURL});`"></div>
                 </div>
-                <div class="swiper-slide">
+                <!-- <div class="swiper-slide">
                     <div class="notification-container"></div>
                 </div>
                 <div class="swiper-slide">
@@ -49,7 +45,7 @@
                 </div>
                  <div class="swiper-slide">
                     <div class="notification-container"></div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -61,48 +57,68 @@
     export default {
         name:"VipGrade",
         data(){
+            console.log('this.currentIndex', this.currentIndex)
+            console.log('this.mySwiper', this.mySwiper)
             return {
                 swiperOption: {
                     slidesPerView:'auto',
                     centeredSlides: true,
                     spaceBetween : 20,
-                    // initialSlide: 0,
-                },
-                index:0
+                    initialSlide: this.currentIndex,
+                }
             }
         },
         computed:{
             tranFormNum(){
-                return this.index * 50;
+                console.log('tranFormNumthis.index', this.currentIndex)
+                return this.currentIndex * 50;
             },
             disposeName(){
                 let me = this.$store.getters['me/me'];
-                // if(me && me.nickname){
-                //     return me.nickname;
-                // }else if(me && me.name && (me.name.firstName || me.name.lastName)){
-                //     return this.getName(me.name.firstName) + " " + this.getName(me.name.lastName);
-                // }else if(!(me && me.nickname && me.name && me.name.firstName && me.name.lastName)){
-                //     return me.email;
-                // }
+                if(me && me.nickname){
+                    return me.nickname;
+                }else if(me && me.name && (me.name.firstName || me.name.lastName)){
+                    return this.getName(me.name.firstName) + " " + this.getName(me.name.lastName);
+                }else if(!(me && me.nickname && me.name && me.name.firstName && me.name.lastName)){
+                    return me.email;
+                }
                 return 'XXXXXXXXXXX';
             },
+        },
+        watch:{
+            'currentIndex':function(newValue,oldValue){
+                this.mySwiper.slideTo(newValue)
+            }
         },
         directives: {
             swiper: directive
         },
-        // props:{
-        //     index:{
-        //         type:Number,
-        //         default:0
-        //     }
-        // },
+        props:{
+            currentIndex:{
+                type:Number,
+                default:0
+            },
+            vipData:{
+                type:Array,
+                default:function(){
+                    return []
+                }
+            },
+            currentVipData:{
+                type:Object,
+                default:function(){
+                    return {}
+                }
+            }
+        },
         mounted() {
-            console.log('Current Swiper instance object', this.mySwiper)
+            
             // this.mySwiper.slideTo(3, 1000, false)
         },
         methods:{
             onSlideChange(swiper){
-                this.index = this.mySwiper.activeIndex;
+                // this.index = this.mySwiper.activeIndex;
+                this.$emit('update:currentIndex',this.mySwiper.activeIndex);
             },
             getName(value){
                 return value ? value : '';
@@ -113,14 +129,21 @@
 
 <style scoped lang="scss">
     .card-grade .swiper-slide{
-        width: 80%;
+        width: 85%;
         height: 187px;
-        border-radius: 5px;
-        background-color: aqua;
     }
 
     .card-grade{
         margin-top: 20px;
+
+        .vip-container{
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-image: url(https://image.geeko.ltd/chicme/2022050503/V0-card.png);
+            width: 100%;
+            height: 100%;
+            border-radius: 5px;
+        }
     }
 
     .vip-grade{

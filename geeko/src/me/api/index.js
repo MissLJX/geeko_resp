@@ -356,3 +356,7 @@ export const getPointsGoShoppingId = () => {
 export const getShowRedeemCoupons = () =>{
     return axios.get('/context/show-coupon-points-rule-list',{},{});
 }
+
+export const getUserVipData = () =>{
+    return axios.get(`${VPATH}/customer/vip-show`);
+}

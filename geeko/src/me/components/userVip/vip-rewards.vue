@@ -4,12 +4,11 @@
         <p class="next-title">LEVEL UP TO UNLOCK…</p>
 
         <div class="rewards-container" :class="!showFullHeight?'':'full-height'">
-            <div v-for="(rewards,index) in dataArr" :key="index+rewards.title" @click="showModal=true">
-                <span class="bg-icon">
-                    <span class="iconfont" v-html="rewards.icon"></span>
-                    <span class="reward-lock">
-                        <span class="_container"><span class="iconfont">&#xe70c;</span> <span class="level">v1</span></span>
-                    </span>
+            <div v-for="(rewards,index) in currentVipData.rewards" :key="index+rewards.id" @click="() =>selectedReawrdsEvent(index)">
+                <span class="bg-icon" :style="`background-image:url(${rewards.icon});`">
+                    <span class="reward-lock" v-if="currentLevel < rewards.level">
+                        <span class="_container"><span class="iconfont">&#xe70c;</span> <span class="level">v{{rewards.level}}</span></span>
+                    </span> 
                 </span>
                 <p class="_font">{{rewards.title}}</p>
             </div>
@@ -25,7 +24,9 @@
         <bottom-to-top>
             <vip-rewards-modal 
                 :show-modal.sync="showModal" 
-                :datas="dataArr"
+                :datas="currentVipData.rewards"
+                :current-level="currentLevel"
+                :modal-index="modalIndex"
                 v-if="showModal"
             ></vip-rewards-modal>
         </bottom-to-top>
@@ -92,13 +93,34 @@
                         content:"xxxxxxxxxxxxxx Coming Soon"
                     }
                 ],
-                showModal:false
+                showModal:false,
+                modalIndex:0
+            }
+        },
+        props:{
+            currentLevel:{
+                type:Number,
+                required:true,
+                default:0
+            },
+            currentVipData:{
+                type:Object,
+                required:true,
+                default:function(){
+                    return {}
+                }
             }
         },
         components:{
             VipRewardsModal,
             BottomToTop,
             MaskComponent
+        },
+        methods:{
+            selectedReawrdsEvent(index){
+                this.showModal = true;
+                this.modalIndex = index;
+            }
         }
     }
 </script>
@@ -149,6 +171,8 @@
                     display: inline-block;
                     border-radius: 50%;
                     position: relative;
+                    background-size: cover;
+                    background-repeat: no-repeat;
 
                     & > .iconfont{
                         color: #fff;
