@@ -6,8 +6,8 @@
         <div class="rewards-container" :class="!showFullHeight?'':'full-height'">
             <div v-for="(rewards,index) in currentVipData.rewards" :key="index+rewards.id" @click="() =>selectedReawrdsEvent(index)">
                 <span class="bg-icon" :style="`background-image:url(${rewards.icon});`">
-                    <span class="reward-lock" v-if="currentLevel < rewards.level">
-                        <span class="_container"><span class="iconfont">&#xe70c;</span> <span class="level">v{{rewards.level}}</span></span>
+                    <span class="reward-lock" v-if="userLevel < rewards.level">
+                        <span class="_container" :style="`background-color:${themeColor[rewards.level]};`"><span class="iconfont">&#xe70c;</span> <span class="level">v{{rewards.level}}</span></span>
                     </span> 
                 </span>
                 <p class="_font">{{rewards.title}}</p>
@@ -27,6 +27,8 @@
                 :datas="currentVipData.rewards"
                 :current-level="currentLevel"
                 :modal-index="modalIndex"
+                :themeColor="themeColor"
+                :user-level="userLevel"
                 v-if="showModal"
             ></vip-rewards-modal>
         </bottom-to-top>
@@ -109,7 +111,17 @@
                 default:function(){
                     return {}
                 }
-            }
+            },
+            themeColor:{
+                type:Array,
+                default:function(){
+                    return []
+                }
+            },
+            userLevel:{
+                type:Number,
+                default:0
+            },
         },
         components:{
             VipRewardsModal,
@@ -127,7 +139,7 @@
 
 <style scoped lang="scss">
     .vip-reawrds{
-        margin-top: 25px;
+        // margin-top: 25px;
         padding: 0 30px;
 
         .title{

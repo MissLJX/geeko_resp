@@ -56,7 +56,7 @@
                     <p>
                         <span class="user-name" @click="changeToLogin">{{disposeName}}</span>
                         <span class="vip-level" @click="toVipPageEvent" v-if="me && me.vipUser && me.vipUser.level">
-                            <span class="iconfont">&#xe70e;</span>
+                            <span class="iconfont">&#xe783;</span>
                             <span class="level">V{{me.vipUser.level}}></span>
                         </span>
                     </p>
@@ -193,7 +193,7 @@
                         <p>{{$t("point.suggestion")}}</p>
                     </a>
                     <a @click.prevent="specificationLogin('/me/m/vip',1)" click-name="Vip">
-                        <p class="iconfont">&#xe70e;</p>
+                        <p class="iconfont">&#xe783;</p>
                         <p>VIP</p>
                     </a>
                 </div>

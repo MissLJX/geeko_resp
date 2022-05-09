@@ -25,12 +25,18 @@
                     :vip-data="vipData" 
                     :current-index.sync="currentLevel"
                     :current-vip-data="currentVipData"
+                    :theme-color="themeColor"
+                    :expired-time="expiredTime"
+                    :user-level="userLevel"
+                    :progress="progress"
                 ></vip-grade>
 
                 <!-- 奖励与权益部分 -->
                 <vip-rewards
                     :current-level="currentLevel"
                     :current-vip-data="currentVipData"
+                    :theme-color="themeColor"
+                    :user-level="userLevel"
                 ></vip-rewards>
 
                 <!-- FAQS -->
@@ -64,7 +70,9 @@
                 currentLevel:0,
                 faqs:null,
                 vipData:[],
-                theme:null
+                expiredTime:null,
+                userLevel:0,
+                progress:null
             }
         },
         computed:{
@@ -74,30 +82,106 @@
             currentVipData(){
                 console.log('this.vipData[this.currentLevel]', this.vipData[this.currentLevel])
                 return this.vipData[this.currentLevel]
+            },
+            themeColor(){
+                console.log('this.vipData', this.vipData);
+                let dataArr = this.vipData.map(item =>{
+                    return item.theme.highlight;
+                });
+                return dataArr
             }
         },
         created:function(){
             // 请求所有的数据
             // 获取到当前用户的VIP等级与缓存中的等级对比是否需要弹出升级弹窗
-            
-        },
-        beforeRouteEnter(to, from, next){
             getUserVipData().then(response =>{
-                console.log('response', response)
                 if(response.code === 200 && response.result){
-                    next(vm =>{
-                        const {result} = response;
-                        console.log('first', result.level)
-                        vm.currentLevel = result.level;
-                        vm.faqs = result.faqs;
-                        vm.vipData = result.vipStyles;
-                    });
+                    console.log('response', response)
+                    const {result} = response;
+                    this.currentLevel = result.level;
+                    this.userLevel = result.level;
+                    this.faqs = result.faqs;
+                    this.vipData = result.vipStyles;
+                    this.expiredTime = result.expiredDate;
+                    this.progress = result.progress;
+
+                    let cacheLevel = window.localStorage.getItem('customer_vip_level');
+                    if(!cacheLevel){
+                        window.localStorage.setItem('customer_vip_level',this.userLevel);
+                    }else{
+                        if(cacheLevel > this.userLevel){
+                            console.log('To upgrade the pop-up');
+                        }else{
+                            console.log('No To upgrade the pop-up')
+                            this.modalShow();
+                        }
+                    }
                 }else{
                     alert('Vip Data is Null!');
-                    next();
                 }
             });
         },
+        methods:{
+            modalShow(){
+                let _this = this;
+                this.$store.dispatch('confirmShow', {
+                    show: true,
+                    cfg: {
+                        btnFont:{
+                            yes:"CONFIRM",
+                        },
+                        message: "Congratulations!",
+                        message2:`<img src="https://image.geeko.ltd/chicme/2022050503/V3card.png" style="width:70%;"/><br/><br/><p style="font-size: 12px;color: #999999;">Your VIP level has been level-up to <span style="color: #e64545;">V3</span>, go check out your new rewards!</p>`,
+                        htmlMessage2:true,
+                        yes: function () {
+                            _this.$store.dispatch('closeConfirm').then(() =>{
+                               
+                            });
+                        },
+                        style:{
+                            box:{
+                                padding:"15px 8px 12px",
+                                width:"80%"
+                            },
+                            message:{
+                                fontSize:"14px",
+                                fontFamily: 'AcuminPro-Bold'
+                            },
+                            message2:{
+                                color:"#222222",
+                                fontSize:"14px",
+                                marginTop:'14px'
+                            },
+                            btnYes:{
+                                fontSize:"14px",
+                                fontFamily: 'SlatePro-Medium',
+                                textTransform: 'uppercase',
+                                height: "42px",
+                                lineHeight: "42px"
+                            }
+                        }
+                    }
+                })
+            }
+        },
+        // beforeRouteEnter(to, from, next){
+            // getUserVipData().then(response =>{
+            //     if(response.code === 200 && response.result){
+            //         next(vm =>{
+            //             const {result} = response;
+            //             vm.currentLevel = result.level;
+            //             vm.userLevel = result.level;
+            //             vm.faqs = result.faqs;
+            //             vm.vipData = result.vipStyles;
+            //             vm.expiredTime = result.expiredDate;
+            //             vm.progress = result.progress;
+            //         });
+            //     }else{
+            //         alert('Vip Data is Null!');
+            //         next();
+            //     }
+            // });
+        // },
         components:{
             PageHeader,
             VipGrade,

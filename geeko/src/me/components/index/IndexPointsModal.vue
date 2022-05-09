@@ -61,6 +61,7 @@
         font-family: 'AcuminPro-Bold';
         text-align: center;
         color: #222222;
+        border-radius: 2px;
 
         &::after{
             content: ' ';

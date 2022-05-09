@@ -14,8 +14,8 @@
             <div class="swiper-wrapper">
                 <div class="swiper-slide" v-for="(reward,index) in datas" :key="index">
                     <span class="rewards-container" :style="`background-image:url(${reward.icon});`">
-                        <span class="reward-lock" v-if="currentLevel < reward.level">
-                            <span class="_container"><span class="iconfont">&#xe70c;</span> <span class="level">v{{reward.level}}</span></span>
+                        <span class="reward-lock" v-if="userLevel < reward.level">
+                            <span class="_container" :style="`background-color:${themeColor[reward.level]};`"><span class="iconfont">&#xe70c;</span> <span class="level">v{{reward.level}}</span></span>
                         </span> 
                     </span>
                 </div>
@@ -29,7 +29,7 @@
         </div>
 
         <div class="rewards-button">
-            <template v-if="currentLevel >= selectedModalReawrds.level">
+            <template v-if="userLevel >= selectedModalReawrds.level">
                 <!-- id为1 积分兑换优惠券 -->
                 <router-link class="l-button" :to="{name:'redeem-coupon'}" v-if="selectedModalReawrds.id == 1">Redeem now</router-link>
 
@@ -46,7 +46,7 @@
             <!-- id 为 5 free shipping -->
             <button 
                 v-if="selectedModalReawrds.id == 5" 
-                :disabled="!(currentLevel > selectedModalReawrds.level)"
+                :disabled="!(userLevel > selectedModalReawrds.level)"
                 @click="getRewardEvent"
             >Get Reward</button>{{shippingDIsabled}}
         </div>
@@ -96,6 +96,42 @@
             },
             getRewardEvent(){
                 console.log('click');
+            },
+            modalShow(){
+                let _this = this;
+                this.$store.dispatch('confirmShow', {
+                    show: true,
+                    cfg: {
+                        btnFont:{
+                            yes:this.$t("survey.survey_go_shopping"),
+                        },
+                        message2:`<span class="iconfont" style="color:#ff8031;font-size:60px;">&#xe6b7;</span><br/><br/><p style="font-size:16px;font-family: 'AcuminPro-Bold';">${this.$t("points_mall.points_redeem_success")}</p><br/>`,
+                        htmlMessage2:true,
+                        yes: function () {
+                            _this.$store.dispatch('closeConfirm').then(() =>{
+                               window.location.href = _this.GLOBAL.getUrl(`/`);
+                            });
+                        },
+                        style:{
+                            box:{
+                                padding:"15px 8px 12px",
+                                width:"80%"
+                            },
+                            message2:{
+                                color:"#222222",
+                                fontSize:"14px",
+                                fontFamily: 'SlatePro-Medium',
+                            },
+                            btnYes:{
+                                fontSize:"14px",
+                                fontFamily: 'SlatePro-Medium',
+                                textTransform: 'uppercase',
+                                height: "42px",
+                                lineHeight: "42px"
+                            }
+                        }
+                    }
+                })
             }
         },
         computed:{
@@ -127,7 +163,17 @@
             modalIndex:{
                 type:Number,
                 default:0
-            }
+            },
+            themeColor:{
+                type:Array,
+                default:function(){
+                    return []
+                }
+            },
+            userLevel:{
+                type:Number,
+                default:0
+            },
         }
     }
 </script>

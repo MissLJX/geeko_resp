@@ -18,7 +18,7 @@
                         v-for="(levelItem,index) in vipData"
                         :key="levelItem.level+index"
                     >
-                        <div class="next" :style="`color:${levelItem.theme.highlight}`">V{{levelItem.level}}</div>
+                        <div class="next" :style="`color:${themeColor[index]}`">V{{levelItem.level}}</div>
                     </div>
                 </div>
             </div>
@@ -35,7 +35,12 @@
                     v-for="(levelItem,index) in vipData"
                     :key="levelItem.level+index"
                 >
-                    <div class="vip-container" :style="`background-image:url(${levelItem.cardImageURL});`"></div>
+                    <vip-grade-items 
+                        :level-item="levelItem" 
+                        :expired-time="expiredData"
+                        :user-level="userLevel"
+                        :progress="progress"
+                    ></vip-grade-items>
                 </div>
                 <!-- <div class="swiper-slide">
                     <div class="notification-container"></div>
@@ -53,6 +58,8 @@
 
 <script>
     import { directive } from 'vue-awesome-swiper'
+    import VipGradeItems from './vip-grade-items.vue'
+    import fecha from 'fecha'
 
     export default {
         name:"VipGrade",
@@ -63,7 +70,7 @@
                 swiperOption: {
                     slidesPerView:'auto',
                     centeredSlides: true,
-                    spaceBetween : 20,
+                    spaceBetween : 14,
                     initialSlide: this.currentIndex,
                 }
             }
@@ -84,6 +91,11 @@
                 }
                 return 'XXXXXXXXXXX';
             },
+            expiredData(){ 
+                if(this.expiredTime){
+                    return fecha.format(this.expiredTime,"YYYY-MM-DD");
+                }
+            }
         },
         watch:{
             'currentIndex':function(newValue,oldValue){
@@ -109,10 +121,28 @@
                 default:function(){
                     return {}
                 }
+            },
+            themeColor:{
+                type:Array,
+                default:function(){
+                    return []
+                }
+            },
+            expiredTime:{
+                type:Number
+            },
+            userLevel:{
+                type:Number,
+                default:0
+            },
+            progress:{
+                type:Object,
+                default:function(){
+                    return {}
+                }
             }
         },
         mounted() {
-            
             // this.mySwiper.slideTo(3, 1000, false)
         },
         methods:{
@@ -123,26 +153,57 @@
             getName(value){
                 return value ? value : '';
             },
+        },
+        components:{
+            VipGradeItems
         }
     }
 </script>
 
 <style scoped lang="scss">
-    .card-grade .swiper-slide{
-        width: 85%;
-        height: 187px;
-    }
-
     .card-grade{
         margin-top: 20px;
+        height: 212px;
 
-        .vip-container{
-            background-repeat: no-repeat;
-            background-size: cover;
-            background-image: url(https://image.geeko.ltd/chicme/2022050503/V0-card.png);
-            width: 100%;
-            height: 100%;
-            border-radius: 5px;
+        .swiper-slide{
+            width: 85%;
+            height: 187px;
+        }
+    }
+
+    @media screen and (min-width: 300px) and (max-width: 321px){
+        .card-grade{
+            margin-top: 20px;
+            height: 192px;
+
+            .swiper-slide{
+                width: 85%;
+                height: 167px;
+            }
+        }
+    }
+
+    @media screen and (min-width: 325px) and (max-width: 376px){
+        .card-grade{
+            margin-top: 20px;
+            height: 212px;
+
+            .swiper-slide{
+                width: 85%;
+                height: 187px;
+            }
+        }
+    }
+
+    @media screen and (min-width: 380px) and (max-width: 415px){
+        .card-grade{
+            margin-top: 20px;
+            height: 232px;
+
+            .swiper-slide{
+                width: 85%;
+                height: 207px;
+            }
         }
     }
 
