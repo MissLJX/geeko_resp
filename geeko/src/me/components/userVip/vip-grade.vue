@@ -40,17 +40,9 @@
                         :expired-time="expiredData"
                         :user-level="userLevel"
                         :progress="progress"
+                        :expired-description="expiredDescription"
                     ></vip-grade-items>
                 </div>
-                <!-- <div class="swiper-slide">
-                    <div class="notification-container"></div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="notification-container"></div>
-                </div>
-                 <div class="swiper-slide">
-                    <div class="notification-container"></div>
-                </div> -->
             </div>
         </div>
     </div>
@@ -64,8 +56,6 @@
     export default {
         name:"VipGrade",
         data(){
-            console.log('this.currentIndex', this.currentIndex)
-            console.log('this.mySwiper', this.mySwiper)
             return {
                 swiperOption: {
                     slidesPerView:'auto',
@@ -77,7 +67,6 @@
         },
         computed:{
             tranFormNum(){
-                console.log('tranFormNumthis.index', this.currentIndex)
                 return this.currentIndex * 50;
             },
             disposeName(){
@@ -140,6 +129,10 @@
                 default:function(){
                     return {}
                 }
+            },
+            expiredDescription:{
+                type:String,
+                default:''
             }
         },
         mounted() {
@@ -147,7 +140,6 @@
         },
         methods:{
             onSlideChange(swiper){
-                // this.index = this.mySwiper.activeIndex;
                 this.$emit('update:currentIndex',this.mySwiper.activeIndex);
             },
             getName(value){
@@ -222,7 +214,6 @@
             height: 11px;
             line-height: 11px;
             background-color: rgba(255,255,255,0.35);
-            // background-color: red;
             width: 100%;
             position: absolute;
             top: 50%;
@@ -232,7 +223,6 @@
             & > div{
                 height: 5px;
 	            background-color: #ffffff;
-                // background-color: yellow;
                 position: absolute;
                 top: 50%;
                 left: 50%;

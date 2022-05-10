@@ -55,9 +55,9 @@
                 <div class="st-cell edit st-v-m">
                     <p>
                         <span class="user-name" @click="changeToLogin">{{disposeName}}</span>
-                        <span class="vip-level" @click="toVipPageEvent" v-if="me && me.vipUser && me.vipUser.level">
+                        <span class="vip-level" @click="toVipPageEvent" v-if="me && me.vipUser">
                             <span class="iconfont">&#xe783;</span>
-                            <span class="level">V{{me.vipUser.level}}></span>
+                            <span class="level" :style="`color:${levelColor};`">V{{me.vipUser.level}}></span>
                         </span>
                     </p>
                     <div class="bio" @click="toEditUserBio">
@@ -192,9 +192,13 @@
                         <p class="iconfont" style="font-size:18px;">&#xe6e5;</p>
                         <p>{{$t("point.suggestion")}}</p>
                     </a>
-                    <a @click.prevent="specificationLogin('/me/m/vip',1)" click-name="Vip">
+                    <a class="vip-container" @click.prevent="specificationLogin('/me/m/vip',1)" click-name="Vip" v-if="me && me.vipUser">
                         <p class="iconfont">&#xe783;</p>
                         <p>VIP</p>
+
+                        <span class="vip-new" v-if="showNewVip">
+                            <span>{{ $t('label.new') }}</span>
+                        </span>
                     </a>
                 </div>
             </div>
@@ -219,6 +223,7 @@
             return {
                 swiperData:[],
                 noCommentedMaskShow: false,
+                showNewVip:false
             }
         },
         components:{
@@ -261,6 +266,31 @@
             },
             getDownLoadImage(){
                 return !!window.downloadIcon;
+            },
+            levelColor:function(){
+                if(this.me && this.me.vipUser){
+                    let customerLevel = this.me.vipUser.level;
+                    let color = "";
+                    switch(customerLevel){
+                        case 0:
+                            color = "#f5f5f5";
+                            break;
+                        case 1:
+                            color = "#b8cce4";
+                            break;
+                        case 2:
+                            color = "#eeb3bc";
+                            break;
+                        case 3:
+                            color = "#ddc35e";
+                            break;
+                        default:
+                            color = "#ddc35e";
+                            break;
+                    }
+
+                    return color;
+                }
             }
         },
         watch:{
@@ -449,6 +479,16 @@
             }
 
             !(this.dobulePoints && this.dobulePoints.me) && store.dispatch("me/getDobulePointsData","M1578");
+
+
+            if(this.me && this.me.vipUser){
+                let cacheLevel = window.localStorage.getItem('customer_vip_level');
+                let customerLevel = this.me.vipUser.level;
+
+                if(customerLevel > cacheLevel){
+                    this.showNewVip = true;
+                }
+            }
         },
         mounted(){
             // let cookie = utils.getLocalCookie('_has_no_comment_order')
@@ -874,6 +914,29 @@
                                 white-space: nowrap;
                                 overflow: hidden;
                                 text-overflow: ellipsis;
+                            }
+                        }
+                    }
+
+                    .vip-container{
+                        position: relative;
+
+                        .vip-new{
+                            display: inline-block;
+                            position: absolute;
+                            background-color: #e64545;
+                            padding: 0 2px;
+                            border-radius: 8px;
+                            top: -11px;
+                            right: 13%;
+
+                            & > span{
+                                font-family: 'AcuminPro-Bold';
+                                font-size: 12px;
+                                color: #ffffff;
+                                display: inline-block;
+                                transform: scale(0.7);
+                                text-transform: uppercase;
                             }
                         }
                     }

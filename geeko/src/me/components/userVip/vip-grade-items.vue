@@ -1,11 +1,11 @@
 <template>
     <div class="vip-grade-item" :style="`background-image:url(${levelItem.cardImageURL});`">
         <span class="expired-time" v-if="expiredTime">
-            <span>Expired in {{expiredTime}}</span>
+            <span>{{ $t('label.expired_in') }} {{expiredTime}}</span>
             <span class="iconfont" @click="expiredEvent">&#xe718;</span>
 
             <div class="expired-message" v-if="showExpired">
-                XXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+                {{expiredDescription}}
             </div>
         </span>
 
@@ -36,7 +36,7 @@
         </div>
 
         <div class="view-rules">
-            <a href="/fs/vip-rules">View Rules ></a>
+            <a :href="GLOBAL.getUrl(`/fs/vip-policy`)">{{ $t('label.view_rules') }} ></a>
         </div>
     </div>
 </template>
@@ -45,7 +45,6 @@
     export default {
         name:"VipGradeItems",
         data(){
-            console.log('this.expiredTime', this.expiredTime)
             return {
                 showExpired:false,
                 showCondition:false
@@ -77,6 +76,10 @@
                 default:function(){
                     return {}
                 }
+            },
+            expiredDescription:{
+                type:String,
+                default:''
             }
         },
         methods:{
@@ -134,6 +137,7 @@
                 z-index: 2;
                 right: -25px;
                 top: 26px;
+                width: 63vw;
                 color: #222222;
                 font-size: 12px;
                 text-align: center;
@@ -155,6 +159,30 @@
                     -moz-transform:rotate(315deg); 	/* Firefox */
                     -webkit-transform:rotate(315deg); /* Safari 和 Chrome */
                     box-shadow: 0px 0px 0px 0 transparent, 0 0px 0px 0px transparent, 0 0 0 0 transparent, 1px -1px 2px -1px rgba(0,0,0,0.25);
+                }
+            }
+
+            @media screen and (min-width: 300px) and (max-width: 321px){
+                .expired-message{
+                    &::after{
+                        right: 14%;
+                    }
+                }
+            }
+
+            @media screen and (min-width: 325px) and (max-width: 376px){
+                .expired-message{
+                    &::after{
+                        right: 12%;
+                    }
+                }
+            }
+
+            @media screen and (min-width: 380px) and (max-width: 415px){
+                .expired-message{
+                    &::after{
+                        right: 11%;
+                    }
                 }
             }
         }

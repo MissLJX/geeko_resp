@@ -358,5 +358,9 @@ export const getShowRedeemCoupons = () =>{
 }
 
 export const getUserVipData = () =>{
-    return axios.get(`${VPATH}/customer/vip-show`);
+    return axios.get(`${VPATH}/customer/vip-show`,{},{});
+}
+
+export const redeemFreeShipping = (path) =>{
+    return axios.get(path,{},{});
 }

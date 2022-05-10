@@ -4,7 +4,7 @@
             <span class="iconfont" @click="closeModalEvent">&#xe69a;</span>
         </p>
 
-        <p class="title">CHICME VIP REWARDS</p>
+        <p class="title">{{ $t('label.vip_rewards',{name:siteName}) }}</p>
 
         <div 
             class="swiper-container rewards-swiper" 
@@ -17,6 +17,12 @@
                         <span class="reward-lock" v-if="userLevel < reward.level">
                             <span class="_container" :style="`background-color:${themeColor[reward.level]};`"><span class="iconfont">&#xe70c;</span> <span class="level">v{{reward.level}}</span></span>
                         </span> 
+
+                        <span class="reward-lock" v-if="userLevel==reward.level && upgradeFlag">
+                            <span class="_container new-level" :style="`background-color:${themeColor[reward.level]};`">
+                                <span class="level">{{ $t('label.new') }}</span>
+                            </span>
+                        </span>
                     </span>
                 </div>
             </div>
@@ -31,24 +37,25 @@
         <div class="rewards-button">
             <template v-if="userLevel >= selectedModalReawrds.level">
                 <!-- id为1 积分兑换优惠券 -->
-                <router-link class="l-button" :to="{name:'redeem-coupon'}" v-if="selectedModalReawrds.id == 1">Redeem now</router-link>
+                <router-link class="l-button" :to="{name:'redeem-coupon'}" v-if="selectedModalReawrds.id == 1">{{ $t('label.redeem_now') }}</router-link>
 
                 <!-- id 为2 App专属价格 -->
-                <button v-if="selectedModalReawrds.id == 2" @click="toAppEvent">Download Now</button>
+                <button v-if="selectedModalReawrds.id == 2" @click="toAppEvent">{{ $t('label.download_now') }}</button>
 
                  <!-- id为4 查看升级优惠券 -->
-                <router-link class="l-button" :to="{name:'coupons'}" v-if="selectedModalReawrds.id == 4">Check My Coupons</router-link>
+                <router-link class="l-button" :to="{name:'coupons'}" v-if="selectedModalReawrds.id == 4">{{ $t('label.check_my_coupons') }}</router-link>
 
                 <!-- id为7 constant us -->
-                <a class="l-button" :href="GLOBAL.getUrl(`/support`)" v-if="selectedModalReawrds.id == 7">Contact Us</a>
+                <a class="l-button" :href="GLOBAL.getUrl(`/support`)" v-if="selectedModalReawrds.id == 7">{{ $t('index.contact_us') }}</a>
             </template>
 
             <!-- id 为 5 free shipping -->
+            <!--  -->
             <button 
                 v-if="selectedModalReawrds.id == 5" 
                 :disabled="!(userLevel > selectedModalReawrds.level)"
                 @click="getRewardEvent"
-            >Get Reward</button>{{shippingDIsabled}}
+            >{{ $t('label.get_reward') }}</button>
         </div>
     </div>
 </template>
@@ -56,6 +63,7 @@
 <script>
     import { directive } from 'vue-awesome-swiper'
     import { isIOS,isAndroid } from '../../../utils/geekoutils'
+    import { redeemFreeShipping } from '../../api/index'
 
     export default {
         name:"VipRewardsModal",
@@ -68,7 +76,8 @@
                     spaceBetween : 14,
                     initialSlide: this.modalIndex,
                 },
-                currentIndex:this.modalIndex
+                currentIndex:this.modalIndex,
+                siteName:window.name,
             }
         },
         methods:{
@@ -95,7 +104,16 @@
                 }
             },
             getRewardEvent(){
-                console.log('click');
+                let path = this.selectedModalReawrds?.deepLink?.params?.[0];
+                if(path){
+                    redeemFreeShipping(path).then(response =>{
+                        if(response.code === 200){
+                            this.modalShow();
+                        }else{
+                            alert(response?.result);
+                        }
+                    });
+                }
             },
             modalShow(){
                 let _this = this;
@@ -137,9 +155,6 @@
         computed:{
             selectedModalReawrds(){
                 return this.datas[this.currentIndex];
-            },
-            shippingDIsabled(){
-                console.log('currentLevel > selectedModalReawrds.level', this.currentLevel > this.selectedModalReawrds.level)
             }
         },
         directives: {
@@ -174,6 +189,10 @@
                 type:Number,
                 default:0
             },
+            upgradeFlag:{
+                type:Boolean,
+                default:false
+            }
         }
     }
 </script>
@@ -186,7 +205,8 @@
         left: 0;
         width: 100%;
         bottom: 0;
-        padding-bottom: 25px;
+        padding-bottom: 95px;
+        min-height: 350px;
 
         .close-icon{
             text-align: right;
@@ -255,6 +275,22 @@
                                 transform: scale(0.8);
                             }
                         }
+
+                        .new-level{
+                            background-image: linear-gradient(135deg, 
+                                #f4a7a7 0%, 
+                                #e64545 100%);
+                            box-shadow: 0px 0px 1px 0px 
+                                #000000;
+                            border-radius: 8px;
+
+                            .level{
+                                color: #fff;
+                                text-transform: uppercase;
+                                transform: scale(0.7);
+                                font-family: 'SlatePro-Medium';
+                            }
+                        }
                     }
                 }
             }
@@ -286,7 +322,9 @@
 
         .rewards-button{
             text-align: center;
-            margin-top: 30px;
+            position: absolute;
+            bottom: 25px;
+            width: 100%;
 
             & > button{
                 height: 40px;

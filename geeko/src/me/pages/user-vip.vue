@@ -5,7 +5,7 @@
                 <span>{{siteName}} VIP</span>
 
                 <span slot="oplabel" class="cart-icon">
-                    <a href="/cart">
+                    <a :href="GLOBAL.getUrl(`/cart`)">
                         <span class="iconfont">&#xe6a4;</span>
                         <span 
                             class="_num" 
@@ -19,7 +19,7 @@
         
 
         <div class="content" v-if="vipData && vipData.length > 0">
-            <div class="content-container">
+            <div class="content-container" :style="`z-index:${modalIndex?'11':'2'};`">
                 <!-- 上部分关于卡片的 -->
                 <vip-grade 
                     :vip-data="vipData" 
@@ -29,6 +29,7 @@
                     :expired-time="expiredTime"
                     :user-level="userLevel"
                     :progress="progress"
+                    :expired-description="expiredDescription"
                 ></vip-grade>
 
                 <!-- 奖励与权益部分 -->
@@ -37,6 +38,8 @@
                     :current-vip-data="currentVipData"
                     :theme-color="themeColor"
                     :user-level="userLevel"
+                    :upgrade-flag="upgradeFlag"
+                    :modal-index.sync="modalIndex"
                 ></vip-rewards>
 
                 <!-- FAQS -->
@@ -71,8 +74,11 @@
                 faqs:null,
                 vipData:[],
                 expiredTime:null,
+                expiredDescription:'',
                 userLevel:0,
-                progress:null
+                progress:null,
+                upgradeFlag:false,
+                modalIndex:false
             }
         },
         computed:{
@@ -80,11 +86,9 @@
                 return this.$store.getters['me/shoppingCartCount'];
             },
             currentVipData(){
-                console.log('this.vipData[this.currentLevel]', this.vipData[this.currentLevel])
                 return this.vipData[this.currentLevel]
             },
             themeColor(){
-                console.log('this.vipData', this.vipData);
                 let dataArr = this.vipData.map(item =>{
                     return item.theme.highlight;
                 });
@@ -96,7 +100,6 @@
             // 获取到当前用户的VIP等级与缓存中的等级对比是否需要弹出升级弹窗
             getUserVipData().then(response =>{
                 if(response.code === 200 && response.result){
-                    console.log('response', response)
                     const {result} = response;
                     this.currentLevel = result.level;
                     this.userLevel = result.level;
@@ -104,34 +107,39 @@
                     this.vipData = result.vipStyles;
                     this.expiredTime = result.expiredDate;
                     this.progress = result.progress;
+                    this.expiredDescription = result.expiredDescription;
 
                     let cacheLevel = window.localStorage.getItem('customer_vip_level');
-                    if(!cacheLevel){
+                    if(cacheLevel == null){
                         window.localStorage.setItem('customer_vip_level',this.userLevel);
                     }else{
-                        if(cacheLevel > this.userLevel){
+                        if(cacheLevel < this.userLevel){
                             console.log('To upgrade the pop-up');
+                            let upGarade = result.vipStyles[result.level];
+                            upGarade && this.modalShow(upGarade.cardImageURL,upGarade.level);
+                            window.localStorage.setItem('customer_vip_level',this.userLevel);
+                            this.upgradeFlag = true;
                         }else{
                             console.log('No To upgrade the pop-up')
-                            this.modalShow();
+                            window.localStorage.setItem('customer_vip_level',this.userLevel);
                         }
                     }
                 }else{
-                    alert('Vip Data is Null!');
+                    console.log('Vip Data is Null!');
                 }
             });
         },
         methods:{
-            modalShow(){
+            modalShow(image,level){
                 let _this = this;
                 this.$store.dispatch('confirmShow', {
                     show: true,
                     cfg: {
                         btnFont:{
-                            yes:"CONFIRM",
+                            yes:this.$t('points_mall.points_confirm'),
                         },
-                        message: "Congratulations!",
-                        message2:`<img src="https://image.geeko.ltd/chicme/2022050503/V3card.png" style="width:70%;"/><br/><br/><p style="font-size: 12px;color: #999999;">Your VIP level has been level-up to <span style="color: #e64545;">V3</span>, go check out your new rewards!</p>`,
+                        message: `${this.$t('label.congratulations')}!`,
+                        message2:`<img src="${image}" style="width:70%;"/><br/><br/><p style="font-size: 12px;color: #999999;">${this.$t('label.your_vip_level_to')} <span style="color: #e64545;">V${level}</span>, ${this.$t('label.your_new_rewards')}</p>`,
                         htmlMessage2:true,
                         yes: function () {
                             _this.$store.dispatch('closeConfirm').then(() =>{

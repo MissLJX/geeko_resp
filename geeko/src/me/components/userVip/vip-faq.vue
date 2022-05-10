@@ -2,7 +2,7 @@
     <div class="vip-faq">
         <div class="faq-hd">
             <div class="faq-divide"></div>
-            <div class="faq-title">FAQS</div>
+            <div class="faq-title">{{ $t('label.faqs') }}</div>
             <div class="faq-divide"></div>
         </div>
 

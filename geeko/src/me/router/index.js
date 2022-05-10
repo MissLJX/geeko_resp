@@ -304,7 +304,7 @@ const Me = [
     },
     {
         path:ROUTER_PATH_ME + "/vip",
-        component:() => import(/* webpackChunkName: "edit-name" */ "../pages/user-vip.vue"),
+        component:() => import(/* webpackChunkName: "user-vip" */ "../pages/user-vip.vue"),
         name:"user-vip",
         meta:{title:"User Vip",keepAlive:true},
     },

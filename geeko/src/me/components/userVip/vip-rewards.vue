@@ -1,14 +1,20 @@
 <template>
     <div class="vip-reawrds">
-        <p class="title">{{siteName}} VIP REWARDS</p>
-        <p class="next-title">LEVEL UP TO UNLOCK…</p>
+        <p class="title">{{ $t('label.vip_rewards',{name:siteName}) }}</p>
+        <p class="next-title">{{ $t('label.level_up_unlock') }}…</p>
 
         <div class="rewards-container" :class="!showFullHeight?'':'full-height'">
             <div v-for="(rewards,index) in currentVipData.rewards" :key="index+rewards.id" @click="() =>selectedReawrdsEvent(index)">
                 <span class="bg-icon" :style="`background-image:url(${rewards.icon});`">
                     <span class="reward-lock" v-if="userLevel < rewards.level">
                         <span class="_container" :style="`background-color:${themeColor[rewards.level]};`"><span class="iconfont">&#xe70c;</span> <span class="level">v{{rewards.level}}</span></span>
-                    </span> 
+                    </span>  
+
+                    <span class="reward-lock" v-if="userLevel==rewards.level && currentLevel==rewards.level && upgradeFlag">
+                        <span class="_container new-level" :style="`background-color:${themeColor[rewards.level]};`">
+                            <span class="level">{{ $t('label.new') }}</span>
+                        </span>
+                    </span>
                 </span>
                 <p class="_font">{{rewards.title}}</p>
             </div>
@@ -16,7 +22,7 @@
 
         <div class="view-rewards">
             <span @click="showFullHeight=!showFullHeight">
-                <span>View Reawrds</span>
+                <span>{{ $t('label.view_rewards') }}</span>
                 <span class="iconfont" :class="showFullHeight?'active':''">&#xe779;</span>
             </span>
         </div>
@@ -29,6 +35,7 @@
                 :modal-index="modalIndex"
                 :themeColor="themeColor"
                 :user-level="userLevel"
+                :upgrade-flag="upgradeFlag"
                 v-if="showModal"
             ></vip-rewards-modal>
         </bottom-to-top>
@@ -99,6 +106,25 @@
                 modalIndex:0
             }
         },
+        computed:{
+            // upgradeLavel(){
+            //     let cosutmerLevel = this.userLevel;
+            //     let cacheLevel = window.localStorage.getItem('customer_vip_level');
+            //     console.log('cosutmerLevel', cosutmerLevel);
+            //     console.log('cacheLevel', cacheLevel);
+            //     if(cacheLevel >= 0 && cosutmerLevel){
+            //         return cosutmerLevel > cacheLevel;
+            //     }
+                
+            //     return false;
+            // }
+        },
+        watch:{
+            'showModal':function(newValue,oldValue){
+                console.log('newValue', newValue)
+                this.$emit('update:modalIndex',newValue);
+            }
+        },
         props:{
             currentLevel:{
                 type:Number,
@@ -122,6 +148,10 @@
                 type:Number,
                 default:0
             },
+            upgradeFlag:{
+                type:Boolean,
+                default:false
+            }
         },
         components:{
             VipRewardsModal,
@@ -218,6 +248,22 @@
                                 font-size: 12px;
                                 color: #222;
                                 transform: scale(0.8);
+                            }
+                        }
+
+                        .new-level{
+                            background-image: linear-gradient(135deg, 
+                                #f4a7a7 0%, 
+                                #e64545 100%);
+                            box-shadow: 0px 0px 1px 0px 
+                                #000000;
+                            border-radius: 8px;
+
+                            .level{
+                                color: #fff;
+                                text-transform: uppercase;
+                                transform: scale(0.7);
+                                font-family: 'SlatePro-Medium';
                             }
                         }
                     }
