@@ -1,6 +1,6 @@
 <template>
     <div class="vip-grade-item" :style="`background-image:url(${levelItem.cardImageURL});`">
-        <span class="expired-time" v-if="expiredTime">
+        <span class="expired-time" v-if="showExpiredData && expiredTime">
             <span>{{ $t('label.expired_in') }} {{expiredTime}}</span>
             <span class="iconfont" @click="expiredEvent">&#xe718;</span>
 
@@ -25,7 +25,7 @@
             
             <div class="progress">
                 <span>
-                    <span :style="`width:${progress.speed}%;background-color:${levelItem.theme.highlight};`"></span>
+                    <span :style="`width:${speedValue}%;background-color:${levelItem.theme.highlight};`"></span>
                 </span>
             </div>
 
@@ -53,6 +53,14 @@
         computed:{
             showProgress(){
                 return this.levelItem.level == this.userLevel;
+            },
+            showExpiredData(){
+                return this.levelItem.level <= this.userLevel;
+            },
+            speedValue(){
+                if(this.progress && this.progress.speed >= 0){
+                    return Math.round(this.progress.speed * 100).toFixed(1)
+                }
             }
         },
         props:{

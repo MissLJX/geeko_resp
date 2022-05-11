@@ -53,7 +53,7 @@
             <!--  -->
             <button 
                 v-if="selectedModalReawrds.id == 5" 
-                :disabled="!(userLevel > selectedModalReawrds.level)"
+                :disabled="selectedModalReawrds.buttonDisabled || !(userLevel >= selectedModalReawrds.level) || buttonDisahled"
                 @click="getRewardEvent"
             >{{ $t('label.get_reward') }}</button>
         </div>
@@ -78,6 +78,7 @@
                 },
                 currentIndex:this.modalIndex,
                 siteName:window.name,
+                buttonDisahled:false
             }
         },
         methods:{
@@ -106,12 +107,13 @@
             getRewardEvent(){
                 let path = this.selectedModalReawrds?.deepLink?.params?.[0];
                 if(path){
+                    this.buttonDisahled = true;
                     redeemFreeShipping(path).then(response =>{
-                        if(response.code === 200){
-                            this.modalShow();
-                        }else{
-                            alert(response?.result);
-                        }
+                        this.modalShow();
+                        this.buttonDisahled = true;
+                    }).catch(response =>{
+                        this.modalShow2(response?.result);
+                        this.buttonDisahled = false;
                     });
                 }
             },
@@ -139,6 +141,41 @@
                                 color:"#222222",
                                 fontSize:"14px",
                                 fontFamily: 'SlatePro-Medium',
+                            },
+                            btnYes:{
+                                fontSize:"14px",
+                                fontFamily: 'SlatePro-Medium',
+                                textTransform: 'uppercase',
+                                height: "42px",
+                                lineHeight: "42px"
+                            }
+                        }
+                    }
+                })
+            },
+            modalShow2(message){
+                let _this = this;
+                this.$store.dispatch('confirmShow', {
+                    show: true,
+                    cfg: {
+                        btnFont:{
+                            yes:this.$t('points_mall.points_confirm'),
+                        },
+                        message2:message,
+                        yes: function () {
+                            _this.$store.dispatch('closeConfirm').then(() =>{
+                               
+                            });
+                        },
+                        style:{
+                            box:{
+                                padding:"15px 8px 12px",
+                                width:"80%"
+                            },
+                            message2:{
+                                color:"#222222",
+                                fontSize:"14px",
+                                marginTop:'14px'
                             },
                             btnYes:{
                                 fontSize:"14px",
@@ -207,6 +244,8 @@
         bottom: 0;
         padding-bottom: 95px;
         min-height: 350px;
+        background-size: cover;
+        background-image: url(https://image.geeko.ltd/chicme/20220511/bg.png);
 
         .close-icon{
             text-align: right;

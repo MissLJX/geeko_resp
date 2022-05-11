@@ -56,7 +56,7 @@
                     <p>
                         <span class="user-name" @click="changeToLogin">{{disposeName}}</span>
                         <span class="vip-level" @click="toVipPageEvent" v-if="me && me.vipUser">
-                            <span class="iconfont">&#xe783;</span>
+                            <span class="iconfont" :style="`color:${levelColor};`">&#xe783;</span>
                             <span class="level" :style="`color:${levelColor};`">V{{me.vipUser.level}}></span>
                         </span>
                     </p>
@@ -894,12 +894,12 @@
                     margin-top: 15px;
                     display: flex;
                     flex-wrap: wrap;
-                    justify-content: space-between;
+                    // justify-content: space-between;
 
                     & > a{
                         color: #222222;
                         display: inline-block;
-                        width: calc(25% - 10px);
+                        width: 25%;
                         text-align: center;
 
                         & > p{

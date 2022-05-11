@@ -1,6 +1,6 @@
 <template>
     <div class="user-vip">
-        <div class="fixed-header">
+        <div class="fixed-header" v-show="!modalIndex">
             <page-header>
                 <span>{{siteName}} VIP</span>
 
@@ -83,6 +83,7 @@
         },
         computed:{
             shoppingCartCount(){
+                console.log("this.$store.getters['me/shoppingCartCount']",this.$store.getters['me/shoppingCartCount'])
                 return this.$store.getters['me/shoppingCartCount'];
             },
             currentVipData(){
@@ -98,6 +99,7 @@
         created:function(){
             // 请求所有的数据
             // 获取到当前用户的VIP等级与缓存中的等级对比是否需要弹出升级弹窗
+            this.$store.dispatch("me/getShoppingCartNum");
             getUserVipData().then(response =>{
                 if(response.code === 200 && response.result){
                     const {result} = response;
@@ -220,12 +222,13 @@
                 text-align: center;
                 font-size: 12px;
             }
+
+            .special-count{
+                padding: 1.5px 5px;
+            }
         }
     }
 
-    .special-count{
-        padding: 1.5px 5px;
-    }
 
     .fixed-header{
         position: fixed;
