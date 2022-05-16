@@ -35,27 +35,33 @@
         </div>
 
         <div class="rewards-button">
-            <template v-if="userLevel >= selectedModalReawrds.level">
+            
+            <!-- <template v-if="userLevel >= selectedModalReawrds.level"> -->
                 <!-- id为1 积分兑换优惠券 -->
-                <router-link class="l-button" :to="{name:'redeem-coupon'}" v-if="selectedModalReawrds.id == 1">{{ $t('label.redeem_now') }}</router-link>
+                <!-- <router-link class="l-button" :to="{name:'redeem-coupon'}" v-if="selectedModalReawrds.id == 1">{{ $t('label.redeem_now') }}</router-link> -->
 
                 <!-- id 为2 App专属价格 -->
-                <button v-if="selectedModalReawrds.id == 2" @click="toAppEvent">{{ $t('label.download_now') }}</button>
+                <!-- <button v-if="selectedModalReawrds.id == 2" @click="toAppEvent">{{ $t('label.download_now') }}</button> -->
 
                  <!-- id为4 查看升级优惠券 -->
-                <router-link class="l-button" :to="{name:'coupons'}" v-if="selectedModalReawrds.id == 4">{{ $t('label.check_my_coupons') }}</router-link>
+                <!-- <router-link class="l-button" :to="{name:'coupons'}" v-if="selectedModalReawrds.id == 4">{{ $t('label.check_my_coupons') }}</router-link> -->
 
                 <!-- id为7 constant us -->
-                <a class="l-button" :href="GLOBAL.getUrl(`/support`)" v-if="selectedModalReawrds.id == 7">{{ $t('index.contact_us') }}</a>
-            </template>
+                <!-- <a class="l-button" :href="GLOBAL.getUrl(`/support`)" v-if="selectedModalReawrds.id == 7">{{ $t('index.contact_us') }}</a> -->
+            <!-- </template> -->
+            <button 
+                v-if="selectedModalReawrds.buttonText && selectedModalReawrds.id != 5" 
+                @click="modalRewardsEvent"
+                :disabled="selectedModalReawrds.buttonDisabled"
+            >{{selectedModalReawrds.buttonText}}</button>
 
             <!-- id 为 5 free shipping -->
             <!--  -->
             <button 
                 v-if="selectedModalReawrds.id == 5" 
-                :disabled="selectedModalReawrds.buttonDisabled || !(userLevel >= selectedModalReawrds.level) || buttonDisahled"
+                :disabled="selectedModalReawrds.buttonText || selectedModalReawrds.buttonDisabled || buttonDisahled"
                 @click="getRewardEvent"
-            >{{ $t('label.get_reward') }}</button>
+            >{{selectedModalReawrds.buttonText}}</button>
         </div>
     </div>
 </template>
@@ -87,6 +93,30 @@
             },
             closeModalEvent(){
                 this.$emit('update:showModal',false);
+            },
+            modalRewardsEvent(){
+                let type = this.selectedModalReawrds?.deepLink?.type;
+                switch(type){
+                    case 33:
+                        // 积分兑换优惠券
+                        this.$router.push({name:'redeem-coupon'});
+                        break;
+                    case 34:
+                        // App专属价格 跳转app
+                        this.toAppEvent();
+                        break;
+                    case 3:
+                        // 查看升级优惠券
+                        this.$router.push({name:'coupons'});
+                        break;
+                    case 25:
+                        // constant us
+                        window.location.href = this.GLOBAL.getUrl(`/support/ticketvip`);
+                        break;
+                    default:
+                        console.log('deeplink can not be empty');
+                        break;
+                }
             },
             toAppEvent(){
                 if (isAndroid()) {
@@ -127,10 +157,14 @@
                         },
                         message2:`<span class="iconfont" style="color:#ff8031;font-size:60px;">&#xe6b7;</span><br/><br/><p style="font-size:16px;font-family: 'AcuminPro-Bold';">${this.$t("points_mall.points_redeem_success")}</p><br/>`,
                         htmlMessage2:true,
+                        btnClose: true,
                         yes: function () {
                             _this.$store.dispatch('closeConfirm').then(() =>{
                                window.location.href = _this.GLOBAL.getUrl(`/`);
                             });
+                        },
+                        no:function () {
+                            _this.$store.dispatch('closeConfirm');
                         },
                         style:{
                             box:{
@@ -148,6 +182,13 @@
                                 textTransform: 'uppercase',
                                 height: "42px",
                                 lineHeight: "42px"
+                            },
+                            btnClose:{
+                                fontSize: "20px",
+                                fontWeight: "bold",
+                                top:"5px",
+                                right:"4px",
+                                color:"#222"
                             }
                         }
                     }

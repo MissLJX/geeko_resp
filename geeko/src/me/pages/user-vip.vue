@@ -83,7 +83,6 @@
         },
         computed:{
             shoppingCartCount(){
-                console.log("this.$store.getters['me/shoppingCartCount']",this.$store.getters['me/shoppingCartCount'])
                 return this.$store.getters['me/shoppingCartCount'];
             },
             currentVipData(){

@@ -121,7 +121,6 @@
         },
         watch:{
             'showModal':function(newValue,oldValue){
-                console.log('newValue', newValue)
                 this.$emit('update:modalIndex',newValue);
             }
         },
@@ -151,6 +150,12 @@
             upgradeFlag:{
                 type:Boolean,
                 default:false
+            }
+        },
+        mounted:function(){
+            if(this.$route.query.reward_index){
+                let index = parseInt(this.$route.query.reward_index);
+                this.selectedReawrdsEvent(index);
             }
         },
         components:{
