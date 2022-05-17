@@ -273,19 +273,19 @@
                     let color = "";
                     switch(customerLevel){
                         case 0:
-                            color = "#f5f5f5";
+                            color = "#B4CCE7";
                             break;
                         case 1:
-                            color = "#b8cce4";
+                            color = "#F8B0BC";
                             break;
                         case 2:
-                            color = "#eeb3bc";
+                            color = "#A9D4C0";
                             break;
                         case 3:
-                            color = "#ddc35e";
+                            color = "#DDC35E";
                             break;
                         default:
-                            color = "#ddc35e";
+                            color = "#DDC35E";
                             break;
                     }
 

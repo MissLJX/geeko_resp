@@ -25,7 +25,8 @@
             
             <div class="progress">
                 <span>
-                    <span :style="`width:${speedValue}%;background-color:${levelItem.theme.highlight};`"></span>
+                    <!-- background-color:${levelItem.theme.highlight}; -->
+                    <span :style="`width:${speedValue}%;`"></span>
                 </span>
             </div>
 
@@ -122,7 +123,7 @@
         .expired-time{
             position: absolute;
             display: inline-block;
-            color: #bababa;
+            color: #ffffff;
             font-size: 12px;
             top: 14px;
             right: 12px;
@@ -208,16 +209,16 @@
                 & > span{
                     width: 100%;
                     height: 6px;
-                    background-color: #222222;
                     display: inline-block;
                     position: relative;
                     vertical-align: middle;
                     border-radius: 3px;
+                    border: 1px solid #fff;
 
                     & > span{
                         height: 6px;
                         display: inline-block;
-                        background-color: #b8cce4;
+                        background-color: #ffffff;
                         position: absolute;
                         top: 0;
                         left: 0;
@@ -227,7 +228,7 @@
             }
 
             .condition{
-                color: #bababa;
+                color: #ffffff;
                 font-size: 12px;
                 display: inline-block;
                 position: relative;
@@ -326,7 +327,7 @@
             & > a{
                 text-decoration: underline;
                 font-size: 12px;
-                color: #bababa;
+                color: #ffffff;
             }
         }
     }
