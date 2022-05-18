@@ -485,7 +485,7 @@
                 let cacheLevel = window.localStorage.getItem('customer_vip_level');
                 let customerLevel = this.me.vipUser.level;
 
-                if(customerLevel > cacheLevel){
+                if(customerLevel > cacheLevel || (cacheLevel == null && customerLevel > 0)){
                     this.showNewVip = true;
                 }
             }

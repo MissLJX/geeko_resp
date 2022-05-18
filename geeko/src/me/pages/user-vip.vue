@@ -113,6 +113,12 @@
                     let cacheLevel = window.localStorage.getItem('customer_vip_level');
                     if(cacheLevel == null){
                         window.localStorage.setItem('customer_vip_level',this.userLevel);
+
+                        if(this.userLevel > 0){
+                            let upGarade = result.vipStyles[result.level];
+                            upGarade && this.modalShow(upGarade.cardImageURL,upGarade.level);
+                            this.upgradeFlag = true;
+                        }
                     }else{
                         if(cacheLevel < this.userLevel){
                             console.log('To upgrade the pop-up');
