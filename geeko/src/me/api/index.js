@@ -364,3 +364,8 @@ export const getUserVipData = () =>{
 export const redeemFreeShipping = (path) =>{
     return axios.get(path,{},{});
 }
+
+// vip 开关接口：/context/show-vip
+export const getWhetherShowVip = () =>{
+    return axios.get(`/context/show-vip`,{},{});
+}

@@ -19,7 +19,7 @@ const instance = axios.create({
         wid: utils.getWid(),
         // wid: "8ce7d08c-a5bd-4237-9db2-51966035e6b5",
         deviceType: 'msite',
-        xtoken: window.secret || ''
+        xtoken: window.secret || window.xtoken ||  ''
     }
 })
 
@@ -52,7 +52,13 @@ export default {
             }).then((res) => {
                 if (res.data.code === 310) {
                     reRequest().then((res) => {
-                    this.get(url, params, headers)
+                    // this.get(url, params, headers)
+                    instance.get(url,{
+                        params,
+                        headers
+                    }).then((res) =>{
+                        apiResult(res, resolve, reject)
+                    });
                 }).catch((e) => {
                     console.error(e)
                     reject(e)
@@ -73,7 +79,12 @@ export default {
             }).then((res) => {
                 if (res.data.code === 310) {
                     reRequest().then((res) => {
-                    this.post(url, data, headers)
+                    // this.post(url, data, headers)
+                    instance.post(url, data, {
+                        headers: {...headers}
+                    }).then(res =>{
+                        apiResult(res, resolve, reject)
+                    });
                 }).catch((e) => {
                     console.error(e)
                     reject(e)

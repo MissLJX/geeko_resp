@@ -70,6 +70,7 @@
     import { directive } from 'vue-awesome-swiper'
     import { isIOS,isAndroid } from '../../../utils/geekoutils'
     import { redeemFreeShipping } from '../../api/index'
+    import getDeepLinkUrl from '../../../utils/deeplink'
 
     export default {
         name:"VipRewardsModal",
@@ -114,7 +115,8 @@
                         window.location.href = this.GLOBAL.getUrl(`/support/ticketvip`);
                         break;
                     default:
-                        console.log('deeplink can not be empty');
+                        console.log('default deeplink');
+                        window.location.href = getDeepLinkUrl(this.selectedModalReawrds?.deepLink);
                         break;
                 }
             },

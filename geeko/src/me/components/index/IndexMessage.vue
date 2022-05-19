@@ -55,7 +55,7 @@
                 <div class="st-cell edit st-v-m">
                     <p>
                         <span class="user-name" @click="changeToLogin">{{disposeName}}</span>
-                        <span class="vip-level" @click="toVipPageEvent" v-if="me && me.vipUser">
+                        <span class="vip-level" @click="toVipPageEvent" v-if="showVip && me && me.vipUser">
                             <span class="iconfont" :style="`color:${levelColor};`">&#xe783;</span>
                             <span class="level" :style="`color:${levelColor};`">V{{me.vipUser.level}}></span>
                         </span>
@@ -192,7 +192,7 @@
                         <p class="iconfont" style="font-size:18px;">&#xe6e5;</p>
                         <p>{{$t("point.suggestion")}}</p>
                     </a>
-                    <a class="vip-container" @click.prevent="specificationLogin('/me/m/vip',1)" click-name="Vip" v-if="me && me.vipUser">
+                    <a class="vip-container" @click.prevent="specificationLogin('/me/m/vip',1)" click-name="Vip" v-if="showVip && me && me.vipUser">
                         <p class="iconfont">&#xe783;</p>
                         <p>VIP</p>
 
@@ -216,6 +216,7 @@
 
     import Swiper from "../../../components/swiper/swiper.vue"
     import _ from "lodash"
+    import { getWhetherShowVip } from '../../api/index'
 
     export default {
         name:"IndexMessage",
@@ -223,7 +224,8 @@
             return {
                 swiperData:[],
                 noCommentedMaskShow: false,
-                showNewVip:false
+                showNewVip:false,
+                showVip:false
             }
         },
         components:{
@@ -480,15 +482,19 @@
 
             !(this.dobulePoints && this.dobulePoints.me) && store.dispatch("me/getDobulePointsData","M1578");
 
+            getWhetherShowVip().then(response =>{
+                if(response?.result){
+                    this.showVip = response?.result;
+                    if(this.me && this.me.vipUser){
+                        let cacheLevel = window.localStorage.getItem('customer_vip_level');
+                        let customerLevel = this.me.vipUser.level;
 
-            if(this.me && this.me.vipUser){
-                let cacheLevel = window.localStorage.getItem('customer_vip_level');
-                let customerLevel = this.me.vipUser.level;
-
-                if(customerLevel > cacheLevel || (cacheLevel == null && customerLevel > 0)){
-                    this.showNewVip = true;
+                        if(customerLevel > cacheLevel || (cacheLevel == null && customerLevel > 0)){
+                            this.showNewVip = true;
+                        }
+                    }
                 }
-            }
+            });
         },
         mounted(){
             // let cookie = utils.getLocalCookie('_has_no_comment_order')
