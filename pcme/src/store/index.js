@@ -165,6 +165,9 @@ const state = {
     reviewOrderList: [],
     modalconfirmshow: false,
     confirmCfg:null,
+
+    vipConfig: '',
+    vipShow: false,
 };
 const getters = {
     me: state => state.me,
@@ -309,6 +312,9 @@ const getters = {
     reviewOrderList: state => state.reviewOrderList,
     modalconfirmshow: state => state.modalconfirmshow,
     confirmCfg: state => state.confirmCfg,
+
+    vipConfig: state => state.vipConfig,
+    vipShow: state => state.vipShow,
 };
 const mutations = {
     [types.INIT_ME](state, me){
@@ -361,6 +367,8 @@ const mutations = {
     },
     [types.HOME_ORDER_ALL_SKIP_CLEAR](state, limit) {
         state.allSkip = 0;
+        state.all = [];
+        state.allDone = false;
     },
     [types.HOME_ALL_DONE](state) {
         state.allDone = true;
@@ -377,6 +385,8 @@ const mutations = {
     },
     [types.HOME_ORDERS_HISTORY_SKIP_CLEAR](state, limit) {
         state.historySkip = 0;
+        state.history = [];
+        state.historyDone = false;
     },
     [types.HOME_HISTORY_DONE](state) {
         state.historyDone = true;
@@ -393,6 +403,8 @@ const mutations = {
     },
     [types.HOME_ORDER_PROCESSING_SKIP_CLEAR](state, limit) {
         state.processingSkip = 0;
+        state.processing = [];
+        state.processingDone = false;
     },
     [types.HOME_PROCESSING_DONE](state) {
         state.processingDone = true;
@@ -409,6 +421,8 @@ const mutations = {
     },
     [types.HOME_ORDER_UNPAID_SKIP_CLEAR](state) {
         state.unpaidSkip = 0;
+        state.unpaid = [];
+        state.unpaidDone = false;
     },
     [types.HOME_UNPAID_DONE](state) {
         state.unpaidDone = true;
@@ -425,6 +439,8 @@ const mutations = {
     },
     [types.HOME_ORDER_PAID_SKIP_CLEAR](state) {
         state.paidSkip = 0;
+        state.paid = [];
+        state.paidDone = false;
     },
     [types.HOME_PAID_DONE](state) {
         state.paidDone = true;
@@ -442,6 +458,8 @@ const mutations = {
     },
     [types.HOME_ORDER_SHIPPED_SKIP_CLEAR](state) {
         state.shippedSkip = 0;
+        state.shipped = [];
+        state.shippedDone = false;
     },
     [types.HOME_SHIPPED_DONE](state) {
         state.shippedDone = true;
@@ -458,6 +476,8 @@ const mutations = {
     },
     [types.HOME_ORDER_CONFIRMED_SKIP_CLEAR](state) {
         state.confirmedSkip = 0;
+        state.confirmed = [];
+        state.confirmedDone = false;
     },
     [types.HOME_CONFIRMED_DONE](state) {
         state.confirmedDone = true;
@@ -474,6 +494,8 @@ const mutations = {
     },
     [types.HOME_ORDER_CANCELED_SKIP_CLEAR](state) {
         state.canceledSkip = 0;
+        state.canceled = [];
+        state.canceledDone = false;
     },
     [types.HOME_CANCELED_DONE](state) {
         state.canceledDone = true;
@@ -490,6 +512,8 @@ const mutations = {
     },
     [types.HOME_ORDER_RETURNS_SKIP_CLEAR](state) {
         state.returnsSkip = 0;
+        state.returns = [];
+        state.returnsDone = false;
     },
     [types.HOME_RETURNS_DONE](state) {
         state.returnsDone = true;
@@ -815,6 +839,12 @@ const mutations = {
     },
     [types.CHANGE_ME_FEED_POINT_COUNT](state,point){
         state.feed && (state.feed.points -= point);
+    },
+    [types.GET_VIP_CONFIG](state, config){
+        state.vipConfig = config
+    },
+    [types.GET_IS_SHOW_VIP_CONFIG](state, config){
+        state.vipShow = config
     }
 }
 const actions = {
@@ -829,6 +859,7 @@ const actions = {
             return Promise.all([
                 dispatch('getMe'),
             ]).then(([me]) => {
+                // console.log(me)
                 commit(types.ME_GET, me)
                 return me
             }).then((me) => {
@@ -1729,6 +1760,19 @@ const actions = {
     },
     changeMeFeedPoints({ commit },point){
         commit(types.CHANGE_ME_FEED_POINT_COUNT,point);
+    },
+    getVipConfigs({commit}){
+        return api.getVipConfig().then(res => {
+            res && res.code==200 && commit(types.GET_VIP_CONFIG, res.result)
+        })
+    },
+    getIsShowVipConfig({commit}){
+        return api.getIsShowVip().then(res => {
+            console.log(res)
+            res && res.code==200 && commit(types.GET_IS_SHOW_VIP_CONFIG, res.result)
+        }).catch(err => {
+            console.log('getIsShowVipConfig报错:', err.result)
+        })
     }
 }
 export default new Vuex.Store({

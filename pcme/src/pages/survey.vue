@@ -706,7 +706,7 @@
                 text-transform: uppercase;
                 text-align: center;
                 line-height: 42px;
-                font-family: Roboto-Bold;
+                font-family: AcuminPro-Bold;
                 font-size: 14px;
                 font-weight: bold;
                 font-stretch: normal;   

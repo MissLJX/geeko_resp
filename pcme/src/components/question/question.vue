@@ -273,7 +273,7 @@
             }
             .answer-selected {
                 .answer-content{
-                    // font-family: Roboto-Medium;
+                    // font-family: SlatePro-Medium;
                     color: #222;
                     // text-shadow: 0 0 #222;
                     font-weight: bold;

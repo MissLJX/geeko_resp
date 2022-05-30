@@ -1685,7 +1685,7 @@
                         background-color: #222222;
                         border-radius: 2px;
                         text-transform: uppercase;
-                        font-family: Roboto-Bold;
+                        font-family: AcuminPro-Bold;
                         font-size: 14px;
                         font-weight: normal;
                         font-stretch: normal;

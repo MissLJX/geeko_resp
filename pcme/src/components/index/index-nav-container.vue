@@ -40,6 +40,7 @@
             v-bind="$attrs" 
             v-on='$listeners'
         ></index-nav-item>
+
     </div>
 </template>
 
@@ -58,6 +59,7 @@
                 MyAccount:{
                     title:this.$t("index.my_account"),
                     list:[
+                        
                         {
                             name:this.$t("index.my_profile"),
                             routerName:"updateProfile",
@@ -220,6 +222,24 @@
                             pushButton:true
                         }
                     ]
+                }
+            }
+        },
+        computed:{
+            vipShow:function(){
+                return this.$store.getters.vipShow;
+            },
+        },
+        watch:{
+            vipShow(newV, oldV){
+                if(newV){
+                    this.MyAccount.list.unshift({
+                        name:(this.GLOBAL.sitename||'Chicme')+' Vip',
+                        routerName:(this.GLOBAL.sitename||'Chicme')+' Vip',
+                        routerPath:"/me/m/vip",
+                    })
+                } else {
+                    this.MyAccount.list.shift()
                 }
             }
         }

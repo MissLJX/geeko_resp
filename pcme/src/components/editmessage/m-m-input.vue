@@ -182,7 +182,7 @@ input[type=radio]{
                     /* border-bottom: 1px solid rgba(34, 34, 34, 0.2); */
                     /* padding: 0 3px 5px; */
                     text-align: center;
-                    font-family: Roboto-Medium;
+                    font-family: SlatePro-Medium;
                     font-size: 14px;
                     font-weight: 600;
                     font-stretch: normal;

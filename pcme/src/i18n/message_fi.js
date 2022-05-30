@@ -570,5 +570,24 @@ export default {
         ticket: 'Ticket',
         orders: 'Orders',
         news: 'News'
+    },
+    my_vip:{
+        vip_title: '{website} VIP',
+        expired_in:'Expired in',
+        level_requirement:'Level Requirement',
+        level_up_rule_1: 'US$0.01 or 1 order(s)(over US$0.01) are required to earn V1 level.',
+        level_up_rule_2: 'US$100.00 or 2 order(s)(over US$0.01) are required to earn V2 level.',
+        level_up_rule_3: 'US$200.00 or 3 order(s)(over US$0.01) are required to earn V3 level.',
+        view_rules: 'view rules',
+        vip_rewards:'{website} VIP REWARDS',
+        redeem_now: 'Redeem Now',
+        download_now: 'Download Now',
+        check_coupons: 'Check My Coupons',
+        get_reward: 'Get Reward',
+        vip_faqs: 'FAQS',
+        vip_congratulations: 'Congratulations',
+        vip_level_up: 'Your VIP level has been level-up to  <span style="color:#e64545;">V{level}</span>, go check out your new rewards!',
+        redeem_success: 'Redemption successful',
+        new: 'new',
     }
 }

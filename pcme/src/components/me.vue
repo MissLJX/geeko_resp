@@ -44,7 +44,7 @@
         <div class="_right-container">
             <!-- right service -->
             <div class="_top">
-                <index-service-container></index-service-container>
+                <index-service-container :me="me"></index-service-container>
             </div>
 
             <!-- right you map also likes -->
@@ -165,6 +165,7 @@
         created(){
             store.dispatch("point/getCustomerPointsNum");
             store.dispatch('getShareKey','copy');
+            store.dispatch("getIsShowVipConfig");
             !(this.dobulePoints && this.dobulePoints.me) && store.dispatch("getDobulePointsData","M1578");
         }
     }

@@ -141,7 +141,7 @@
         height: 32px;
         line-height: 32px;
         /* border: solid 1px #f6f6f6; */
-        font-family: Roboto-Medium;
+        font-family: SlatePro-Medium;
         font-size: 12px;
         font-weight: normal;
         font-stretch: normal;
@@ -178,7 +178,7 @@
             min-height: 25px;
             background-color: #f6f6f6;
             // border-radius: 2px;
-            font-family: Roboto-Medium;
+            font-family: SlatePro-Medium;
             font-size: 12px;
             font-weight: normal;
             font-stretch: normal;
@@ -198,7 +198,7 @@
         }
 
         .m-m-option{
-            font-family: Roboto-Medium;
+            font-family: SlatePro-Medium;
             font-size: 12px;
             font-weight: 600;
             font-stretch: normal;

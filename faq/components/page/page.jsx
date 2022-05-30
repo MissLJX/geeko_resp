@@ -3,6 +3,17 @@ import styled from 'styled-components'
 import {withRouter} from 'react-router-dom'
 
 const PageHeaderDiv = styled.div`
+    @font-face {
+        font-family: 'iconfont';  /* Project id 384296 */
+        src: url('//at.alicdn.com/t/font_384296_7dp6xnq8izd.woff2?t=1651826405142') format('woff2'),
+            url('//at.alicdn.com/t/font_384296_7dp6xnq8izd.woff?t=1651826405142') format('woff'),
+            url('//at.alicdn.com/t/font_384296_7dp6xnq8izd.ttf?t=1651826405142') format('truetype');
+    }
+    font-family:"iconfont" !important;
+    font-size:16px;
+    font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     width: 100%;
     height: 44px;
     background: #fff;
@@ -25,12 +36,6 @@ const PageHeaderDiv = styled.div`
 `
 
 const IconStyle = styled.i`
-    @font-face {
-        font-family: 'iconfont';  /* Project id 384296 */
-        src: url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.woff2?t=1630652306181') format('woff2'),
-            url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.woff?t=1630652306181') format('woff'),
-            url('https://at.alicdn.com/t/font_384296_i4gbs9w8xo.ttf?t=1630652306181') format('truetype');
-    }
     font-family:"iconfont" !important;
     font-size:16px;
     font-style:normal;

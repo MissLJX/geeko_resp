@@ -1091,7 +1091,7 @@ class TicketAdd extends React.Component {
 
       this.initScroll()
     }).catch((data) => {
-      alert('111'+data.result)
+      alert(data.result)
       if (data.code === 401) {
         window.location.href = `${window.ctx || ''}/me/m`
       }
@@ -1303,7 +1303,7 @@ class TicketAdd extends React.Component {
 
       this.initScroll()
     }).catch((data) => {
-      alert('222'+data.result)
+      alert(data.result)
       if (data.code === 401) {
         window.location.href = `${window.ctx || ''}/me/m`
       }

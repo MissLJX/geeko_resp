@@ -88,28 +88,30 @@ input:-webkit-autofill{
 
 /**=============================================**/
 
+
 @font-face {
-  font-family: 'SlatePro';
-  src: url('https://s3.geeko.ltd/fonts/SlatePro.ttf');
-  font-display: swap;
+	font-family: 'SlatePro';
+	src: url('https://s3.geeko.ltd/fonts/Roboto-Regular.ttf.gz');
+	font-display: swap;
 }
 
 @font-face {
-  font-family: 'SlatePro-Medium';
-  src: url('https://s3.geeko.ltd/fonts/SlatePro-Medium.ttf');
-  font-display: swap;
+	font-family: 'Roboto-Regular';
+	src: url('https://s3.geeko.ltd/fonts/Roboto-Regular.ttf.gz');
+	font-display: swap;
 }
 
 @font-face {
-  font-family: 'AcuminPro-Bold';
-  src: url('https://s3.geeko.ltd/fonts/Roboto-Bold.ttf.gz');
-  font-display: swap;
+	font-family: 'SlatePro-Medium';
+	src: url('https://s3.geeko.ltd/fonts/Roboto-Medium.ttf.gz');
+	font-display: swap;
 }
 
+
 @font-face {
-  font-family: "Roboto-Medium";
-  src: url("https://s3.geeko.ltd/fonts/Roboto-Medium.ttf");
-  font-display: swap
+	font-family: 'AcuminPro-Bold';
+	src: url('https://s3.geeko.ltd/fonts/Roboto-Bold.ttf.gz');
+	font-display: swap;
 }
 
 

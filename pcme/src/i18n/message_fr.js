@@ -567,5 +567,24 @@ export default {
         ticket: 'Billet',
         orders: 'Commandes',
         news: 'Nouvelles'
+    },
+    my_vip:{
+        vip_title: '{website} VIP',
+        expired_in:'Expiré dans',
+        level_requirement:'Niveau requis',
+        level_up_rule_1: '0,01 USD ou 1 commande(s) (plus de 0,01 USD) sont nécessaires pour gagner le niveau V1.',
+        level_up_rule_2: '100,00 USD ou 2 commandes (supérieures à 0,01 USD) sont nécessaires pour gagner le niveau V2.',
+        level_up_rule_3: '200,00 USD ou 3 commandes (plus de 0,01 USD) sont nécessaires pour gagner le niveau V3.',
+        view_rules: 'voir les règles',
+        vip_rewards:'{website} RÉCOMPENSES VIP',
+        redeem_now: 'Échanger maintenant',
+        download_now: 'Télécharger maintenant',
+        check_coupons: 'Vérifier mes coupons',
+        get_reward: 'Obtenir une récompense',
+        vip_faqs: 'FAQ',
+        vip_congratulations: 'Félicitations',
+        vip_level_up: 'Votre niveau VIP est passé au niveau <span style="color:#e64545;">V{level}</span>, allez voir vos nouvelles récompenses !',
+        redeem_success: 'Rachat réussi',
+        new: 'Nouveau',
     }
 }

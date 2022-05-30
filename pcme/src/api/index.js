@@ -5,7 +5,7 @@ const NVPATH = '/v9'
 import * as http_infos from "./http_infos";
 
 export const get = () => {
-    return axios.get(VPATH + '/customer/get', {}, {}).then(data => data.result)
+    return axios.get(VPATH + '/customer/get', {}, {}).then(data => data.result).catch(err => console.log(err))
 }
 //logout
 export function logout(){
@@ -417,4 +417,17 @@ export const getShowRedeemCoupons = () =>{
 // 消息未读数量
 export const getNoReadNotificationNum = () => {
     return axios.get('/notification/no-read-notifications');
+}
+
+// 获取vip信息
+export const getVipConfig = () => {
+    return axios.get(NVPATH+'/customer/vip-show');
+}
+
+export const getApi = (url) => {
+    return axios.get(url, {}, {});
+}
+
+export const getIsShowVip = () => {
+    return axios.get('/context/show-vip');
 }

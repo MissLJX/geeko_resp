@@ -481,11 +481,12 @@
                 }
             },
             clearSkip(callback){
+                console.log('sss')
                 // 切换类型时清空skip值
                 this.$store.dispatch('skipClear').then(() => callback)
             },
             getData(index,method,flag){
-                // console.log(index, method, flag)
+                console.log(index, method, flag)
                 // this.index = index
                 if(this.isloded){
                     this.changeOrderStatus(index);

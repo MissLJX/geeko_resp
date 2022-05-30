@@ -1,5 +1,6 @@
 <template>
     <div class="el-body" :style="getContainerBackground">
+        
         <router-view></router-view>
 
         <loding v-show="paging"></loding>
@@ -70,7 +71,10 @@
                 return this.$store.getters.paging
             },
             getContainerBackground(){
-                return this.$route.path === utils.PROJECT + "/me/m" || this.$route.path === utils.PROJECT + "/me/m/" ? {backgroundColor:"#f7f7f7"} : {backgroundColor:"#ffffff"}
+                return this.$route.path === utils.PROJECT + "/me/m" || 
+                       this.$route.path === utils.PROJECT + "/me/m/" || 
+                       this.$route.path === utils.PROJECT + "/me/m/vip"? 
+                       {backgroundColor:"#f7f7f7"} : {backgroundColor:"#ffffff"}
             },
             modalconfirmshow(){
                 return this.$store.getters.modalconfirmshow;

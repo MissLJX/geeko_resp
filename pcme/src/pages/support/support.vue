@@ -213,7 +213,7 @@ export default {
         margin-top: 23px;
 
         .contactTxt{
-            font-family: Roboto-Medium;
+            font-family: SlatePro-Medium;
             font-size: 16px;
             font-weight: normal;
             font-stretch: normal;

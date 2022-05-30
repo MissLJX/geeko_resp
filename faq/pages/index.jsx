@@ -14,6 +14,7 @@ import SupportNew from './support/support.jsx';
 import FAQ from './FAQ/FAQ.jsx'
 import ContactUs from './contact-us/contact-us.jsx'
 import Ticket1 from './ticket/ticket.jsx'
+import TicketVip from './contact-us/contact-us-vip.jsx'
 import Order from './order/order.jsx'
 import TicketAdd from './ticket-add/ticket-add.jsx'
 import Question1 from './question/question.jsx'
@@ -74,6 +75,7 @@ export default () => (
         <Route path={`${window.ctx || ''}/support/question`} component={Question1}/>
         <Route path={`${window.ctx || ''}/support/contact-us`} component={ContactUs}/>
         <Route path={`${window.ctx || ''}/support/ticket`} component={Ticket1}/>
+        <Route path={`${window.ctx || ''}/support/ticketvip`} component={TicketVip}/>
         <Route path={`${window.ctx || ''}/support/order`} component={Order}/>
         <Route path={`${window.ctx || ''}/me/m/faq/support-ticket`} component={TicketAdd}/>
         <Route path={`${window.ctx || ''}/me/m/faq/support-ticket/:code`} component={TicketAdd}/>

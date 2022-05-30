@@ -64,7 +64,7 @@
     .notification_header{
         width: 100%;
         text-align: center;
-        font-family: Roboto-Medium;
+        font-family: SlatePro-Medium;
         font-size: 20px;
         font-weight: normal;
         font-stretch: normal;

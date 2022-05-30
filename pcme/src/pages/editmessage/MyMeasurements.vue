@@ -98,7 +98,7 @@
         margin-top: 22px;
         
          .m-m-info-title{
-            font-family: Roboto-Bold;
+            font-family: AcuminPro-Bold;
             font-size: 16px;
             font-weight: 600;
             font-stretch: normal;
@@ -163,7 +163,7 @@
         width: 300px;
         text-transform: uppercase;
         height: 42px;
-        font-family: Roboto-Bold;
+        font-family: AcuminPro-Bold;
         font-size: 14px;
         font-weight: 600;
         font-stretch: normal;

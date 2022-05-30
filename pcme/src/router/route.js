@@ -28,6 +28,7 @@ import Survey from '../pages/survey.vue'
 import FaqIndex from '../pages/faq-index/faq-index.vue'
 import Faq from '../pages/faq/faq.vue'
 import Support from "../pages/support/support.vue"
+import MyVip from '../components/my-vip.vue'
 const __Base_Path__ = window.ctx || ''
 
 const routes = [
@@ -208,6 +209,12 @@ const routes = [
                 name:"updateProfile",
                 component:UpdateProfile,
                 meta: {title:'Update Profile'},
+            },
+            {
+                path:'vip',
+                name:(window.site||'Chicme')+' Vip',
+                component: MyVip,
+                meta: {title: 'vip'}
             },
             {
                 path:'makeSug',

@@ -3,7 +3,13 @@
         <div class="m-hd">
             <div class="el-me-headerImage" :style="{'background-image': 'url('+headerImage+'),url('+baseHeaderUrl+')' }"></div>
             <div class="el-me-info">
-                <p class="el-me-fullname">{{fullName}}</p>
+                <p class="el-me-fullname">
+                    {{fullName}}
+                    <router-link class="vipLevel" :to="url+'vip'" :style="{'color':vipStyle}" v-if="me.vipUser && vipShow">
+                        <span class="iconfont" :style="{'color':vipStyle}">&#xe783;</span>
+                        <span>V{{vipLevel}} {{'>'}}</span>
+                    </router-link>
+                </p>
                 <p class="el-me-email">
                     {{me.email}}
                     <span class="verify" v-if="!me.isConfirmEmail" @click="confirmEmail">{{$t('verify')}}</span>
@@ -80,6 +86,9 @@
             headerImage:function(){
                 return this.$store.getters.headerImage;
             },
+            vipShow:function(){
+                return this.$store.getters.vipShow;
+            },
             baseHeaderUrl() {
                 return 'https://image.geeko.ltd/site/pc/icon35.png';
             },
@@ -94,6 +103,16 @@
             },
             hasOwnApp(){
                 return window.downloadIcon ? true : false
+            },
+            vipLevel(){
+                let level = this.me.vipUser ? this.me.vipUser.level ? this.me.vipUser.level : 0 : 0;
+                // if(!localStorage['customer_vip_level']){
+                //     localStorage['customer_vip_level'] = level
+                // }
+                return level
+            },
+            vipStyle(){
+                return this.vipLevel == 0 ? '#B4CCE7' : this.vipLevel == 1 ? '#F8B0BC' : this.vipLevel == 2 ? '#A9D4C0' : '#DDC35E';
             }
         },
         methods:{
@@ -109,12 +128,22 @@
             },
             getName(value){
                 return value ? value : '';
-            }
+            },
+        },
+        created(){
+            // console.log(this.me)
         }
     }
 </script>
 
 <style lang="scss" scoped>
+
+@font-face {
+  font-family: 'iconfont';  /* Project id 384296 */
+  src: url('//at.alicdn.com/t/font_384296_7dp6xnq8izd.woff2?t=1651826405142') format('woff2'),
+       url('//at.alicdn.com/t/font_384296_7dp6xnq8izd.woff?t=1651826405142') format('woff'),
+       url('//at.alicdn.com/t/font_384296_7dp6xnq8izd.ttf?t=1651826405142') format('truetype');
+}
 
 .animation_points_icon{
     animation: icon_exchange 5s linear infinite;
@@ -173,6 +202,29 @@
                 .el-me-fullname{
                     font-size: 16px;
                     color: #222;
+
+                    .vipLevel{
+                        // width: 55px;
+                        // height: 21px;
+                        background-color: #222222;
+                        border-radius: 10px;
+                        color: #fff;
+                        padding: 1px 5px;
+                        margin-left: 13px;
+
+                        span{
+                            font-family: AcuminPro-Bold;
+                            font-size: 14px;
+                            font-weight: normal;
+                            font-stretch: normal;
+                            letter-spacing: 0px;
+                        }
+
+                        .iconfont{
+                            color:#fff;
+                            font-size: 12px;
+                        }
+                    }
                 }
                 .el-me-email{
                     font-size: 14px;

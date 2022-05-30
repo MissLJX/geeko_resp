@@ -21,6 +21,17 @@
                 
             </router-link>
         </div>
+
+        <div class="_bd" v-if="me.vipUser && vipShow">
+            <router-link class="hasNew" :to="url+'vip'">
+                <p style="font-size:24px;" class="iconfont">&#xe783;</p>
+                <p>VIP</p>
+                <span class="newTip" v-if="showVipNew">
+                    <span>{{$t("my_vip.new")}}</span>
+                </span>
+            </router-link>
+        </div>
+
     </div>
 </template>
 
@@ -29,6 +40,12 @@
 
     export default {
         name:"IndexServiceContainer",
+        props:{
+            me:{
+                type:Object,
+                require: true
+            }
+        },
         data(){
             return{
                 noReadNum: 0
@@ -37,7 +54,22 @@
         computed:{
             url(){
                 return window.location.pathname + "/"
-            }
+            },
+            vipShow:function(){
+                return this.$store.getters.vipShow;
+            },
+            showVipNew(){
+                if(localStorage['customer_vip_level'] && (localStorage['customer_vip_level'] < this.vipLevel)){
+                    // localStorage['customer_vip_level'] = this.vipLevel
+                    return true
+                } else {
+                    // localStorage['customer_vip_level'] = this.vipLevel
+                    return false
+                }
+            },
+            vipLevel(){
+                return this.me.vipUser ? this.me.vipUser.level ? this.me.vipUser.level : 0 : 0
+            },
         },
         created(){
             getNoReadNotificationNum().then(res => {
@@ -90,6 +122,36 @@
                         white-space: nowrap;
                         overflow: hidden;
                         text-overflow: ellipsis;
+                    }
+                }
+            }
+
+            .hasNew{
+                position: relative;
+
+                .newTip{
+                    position: absolute;
+                    top: -3px;
+                    right: calc(50% - 26px);
+                    display: block;
+                    /* width: 20px; */
+                    height: 9px;
+                    background-color: #e64545;
+                    border-radius: 5px;
+                    line-height: 9px;
+                    color: #fff;
+                    text-align: center;
+                    font-family: AcuminPro-Bold;
+                    font-weight: normal;
+                    font-stretch: normal;
+                    letter-spacing: 0px;
+                    color: #ffffff;
+
+                    span{
+                        font-size: 12px;
+                        transform: scale(0.5);
+                        text-transform: uppercase;
+                        display: block;
                     }
                 }
             }

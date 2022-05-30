@@ -100,4 +100,5 @@ export default {
   facebook_check: 'Si marca esta opción, le enviaremos el estado de seguimiento de la logística y la información del pedido en Messenger.',
   return_the_oder: 'Devolver el Pedido',
   popular_search: 'Búsquedas populares:Reembolso,Devolución,Envío',
+  vip_service: 'Servicio VIP',
 }
