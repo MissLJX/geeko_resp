@@ -73,7 +73,7 @@
                 let me = this.$store.getters['me/me'];
                 if(me && me.nickname){
                     return me.nickname;
-                }else if(me && me.name && (me.name.firstName || me.name.lastName)){
+                }else if(me && me.name && !!(me.name.firstName || me.name.lastName)){
                     return this.getName(me.name.firstName) + " " + this.getName(me.name.lastName);
                 }else if(!(me && me.nickname && me.name && me.name.firstName && me.name.lastName)){
                     return me.email;

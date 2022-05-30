@@ -58,8 +58,8 @@
             <!-- id 为 5 free shipping -->
             <!--  -->
             <button 
-                v-if="selectedModalReawrds.id == 5" 
-                :disabled="selectedModalReawrds.buttonText || selectedModalReawrds.buttonDisabled || buttonDisahled"
+                v-if="selectedModalReawrds.id == 5 && selectedModalReawrds.buttonText" 
+                :disabled="selectedModalReawrds.buttonDisabled || buttonDisabled"
                 @click="getRewardEvent"
             >{{selectedModalReawrds.buttonText}}</button>
         </div>
@@ -85,7 +85,6 @@
                 },
                 currentIndex:this.modalIndex,
                 siteName:window.name,
-                buttonDisahled:false
             }
         },
         methods:{
@@ -139,13 +138,12 @@
             getRewardEvent(){
                 let path = this.selectedModalReawrds?.deepLink?.params?.[0];
                 if(path){
-                    this.buttonDisahled = true;
+                    this.$emit('update:buttonDisabled',true);
                     redeemFreeShipping(path).then(response =>{
                         this.modalShow();
-                        this.buttonDisahled = true;
                     }).catch(response =>{
                         this.modalShow2(response?.result);
-                        this.buttonDisahled = false;
+                        this.$emit('update:buttonDisabled',false);
                     });
                 }
             },
@@ -270,6 +268,10 @@
                 default:0
             },
             upgradeFlag:{
+                type:Boolean,
+                default:false
+            },
+            buttonDisabled:{
                 type:Boolean,
                 default:false
             }
