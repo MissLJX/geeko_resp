@@ -356,3 +356,16 @@ export const getPointsGoShoppingId = () => {
 export const getShowRedeemCoupons = () =>{
     return axios.get('/context/show-coupon-points-rule-list',{},{});
 }
+
+export const getUserVipData = () =>{
+    return axios.get(`${VPATH}/customer/vip-show`,{},{});
+}
+
+export const redeemFreeShipping = (path) =>{
+    return axios.get(path,{},{});
+}
+
+// vip 开关接口：/context/show-vip
+export const getWhetherShowVip = () =>{
+    return axios.get(`/context/show-vip`,{},{});
+}

@@ -53,7 +53,13 @@
                     </div>
                 </div>
                 <div class="st-cell edit st-v-m">
-                    <p @click="changeToLogin">{{disposeName}}</p>
+                    <p>
+                        <span class="user-name" @click="changeToLogin">{{disposeName}}</span>
+                        <span class="vip-level" @click="toVipPageEvent" v-if="showVip && me && me.vipUser">
+                            <span class="iconfont" :style="`color:${levelColor};`">&#xe783;</span>
+                            <span class="level" :style="`color:${levelColor};`">V{{me.vipUser.level}}></span>
+                        </span>
+                    </p>
                     <div class="bio" @click="toEditUserBio">
                         <span>{{me && me.bio ? me.bio : `${$t('label.introduce_to_others')}…`}}</span>
                         <span class="iconfont">&#xe6ce;</span>
@@ -183,8 +189,16 @@
                         <p>{{$t("point.survey")}}</p>
                     </a>
                     <a @click.prevent="specificationLogin('/me/m/makeSug',1)" click-name="Suggestion">
-                        <p class="iconfont">&#xe6e5;</p>
+                        <p class="iconfont" style="font-size:18px;">&#xe6e5;</p>
                         <p>{{$t("point.suggestion")}}</p>
+                    </a>
+                    <a class="vip-container" @click.prevent="specificationLogin('/me/m/vip',1)" click-name="Vip" v-if="showVip && me && me.vipUser">
+                        <p class="iconfont">&#xe783;</p>
+                        <p>VIP</p>
+
+                        <span class="vip-new" v-if="showNewVip">
+                            <span>{{ $t('label.new') }}</span>
+                        </span>
                     </a>
                 </div>
             </div>
@@ -202,6 +216,7 @@
 
     import Swiper from "../../../components/swiper/swiper.vue"
     import _ from "lodash"
+    import { getWhetherShowVip } from '../../api/index'
 
     export default {
         name:"IndexMessage",
@@ -209,6 +224,8 @@
             return {
                 swiperData:[],
                 noCommentedMaskShow: false,
+                showNewVip:false,
+                showVip:false
             }
         },
         components:{
@@ -251,6 +268,31 @@
             },
             getDownLoadImage(){
                 return !!window.downloadIcon;
+            },
+            levelColor:function(){
+                if(this.me && this.me.vipUser){
+                    let customerLevel = this.me.vipUser.level;
+                    let color = "";
+                    switch(customerLevel){
+                        case 0:
+                            color = "#B4CCE7";
+                            break;
+                        case 1:
+                            color = "#F8B0BC";
+                            break;
+                        case 2:
+                            color = "#A9D4C0";
+                            break;
+                        case 3:
+                            color = "#DDC35E";
+                            break;
+                        default:
+                            color = "#DDC35E";
+                            break;
+                    }
+
+                    return color;
+                }
             }
         },
         watch:{
@@ -297,6 +339,9 @@
                 if(!this.isLogin){
                     window.location.href = "/i/login?redirectUrl=/me/m";
                 }
+            },
+            toVipPageEvent(){
+                this.$router.push({name:'user-vip'});
             },
             getName(value){
                 return value ? value : '';
@@ -436,6 +481,20 @@
             }
 
             !(this.dobulePoints && this.dobulePoints.me) && store.dispatch("me/getDobulePointsData","M1578");
+
+            getWhetherShowVip().then(response =>{
+                if(response?.result){
+                    this.showVip = response?.result;
+                    if(this.me && this.me.vipUser){
+                        let cacheLevel = window.localStorage.getItem('customer_vip_level');
+                        let customerLevel = this.me.vipUser.level;
+
+                        if(customerLevel > cacheLevel || (cacheLevel == null && customerLevel > 0)){
+                            this.showNewVip = true;
+                        }
+                    }
+                }
+            });
         },
         mounted(){
             // let cookie = utils.getLocalCookie('_has_no_comment_order')
@@ -646,10 +705,38 @@
                     font-family: 'SlatePro-Medium';
                     font-size: 20px;
                     color: #000000;
-                    white-space: nowrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    width: 180px;
+                    display: flex;
+                    align-items: center;
+                    
+
+                    .user-name{
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        max-width: 150px;
+                        display: inline-block;
+                        margin-right: 5px;
+                    }
+
+                    .vip-level{
+                        padding: 1px 10px;
+                        background-color: #222222;
+                        border-radius: 13px;
+                        display: inline-block;
+
+                        .level{
+                            font-size: 14px;
+                            color: #ddc35e;
+                            font-family: 'AcuminPro-Bold';
+                            vertical-align: middle;
+                        }
+
+                        .iconfont{
+                            color: #ddc35e;
+                            font-size: 14px;
+                            vertical-align: middle;
+                        }
+                    }
                 }
 
                 & .bio{
@@ -811,10 +898,14 @@
 
                 .service-bd{
                     margin-top: 15px;
+                    display: flex;
+                    flex-wrap: wrap;
+                    // justify-content: space-between;
+
                     & > a{
                         color: #222222;
                         display: inline-block;
-                        width: calc(25% - 10px);
+                        width: 25%;
                         text-align: center;
 
                         & > p{
@@ -829,6 +920,29 @@
                                 white-space: nowrap;
                                 overflow: hidden;
                                 text-overflow: ellipsis;
+                            }
+                        }
+                    }
+
+                    .vip-container{
+                        position: relative;
+
+                        .vip-new{
+                            display: inline-block;
+                            position: absolute;
+                            background-color: #e64545;
+                            padding: 0 2px;
+                            border-radius: 8px;
+                            top: -11px;
+                            right: 13%;
+
+                            & > span{
+                                font-family: 'AcuminPro-Bold';
+                                font-size: 12px;
+                                color: #ffffff;
+                                display: inline-block;
+                                transform: scale(0.7);
+                                text-transform: uppercase;
                             }
                         }
                     }

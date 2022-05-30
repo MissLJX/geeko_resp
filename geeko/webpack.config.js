@@ -77,7 +77,7 @@ module.exports = {
         proxy: {
 			'/api': {
 				target: 'https://www.chicme.xyz',
-				// target: 'http://192.168.1.8:8080/',
+				// target: 'http://192.168.0.103:8080/',
 				pathRewrite: { '^/api': '' },
 				cookieDomainRewrite: 'localhost',
 				cookiePathRewrite: {

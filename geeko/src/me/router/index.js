@@ -8,7 +8,7 @@ const Me = [
         path: ROUTER_PATH_ME,
         component: () => import(/* webpackChunkName: "me" */ '../pages/index3.vue'),
         name: 'me',
-        meta: {title: 'me'}
+        meta: {title: 'me',keepAlive:true},
     },
     {
         path: ROUTER_PATH_ME + '/creditcards',
@@ -302,12 +302,12 @@ const Me = [
         name:"get-more-chances",
         meta:{title:"Get More Chances"}
     },
-    // {
-    //     path:ROUTER_PATH_ME + "/test",
-    //     component:() => import("../pages/Test.vue"),
-    //     name:"Test",
-    //     meta:{title:"Test"}
-    // }
+    {
+        path:ROUTER_PATH_ME + "/vip",
+        component:() => import(/* webpackChunkName: "user-vip" */ "../pages/user-vip.vue"),
+        name:"user-vip",
+        meta:{title:"User Vip",keepAlive:true},
+    },
 ]
 
 export default Me
