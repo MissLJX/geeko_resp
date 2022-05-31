@@ -64,6 +64,9 @@ export default ( deepLink ) => {
 	case 17:
 		_url = '/shoppingcart/show'
 		break
+	case 36:
+		_url = '/me/m/vip'
+		break
 	default:
 		_url = '#'
 	}

@@ -4,7 +4,7 @@
         <p class="next-title">{{ $t('label.level_up_unlock') }}…</p>
 
         <div class="rewards-container" :class="!showFullHeight?'':'full-height'">
-            <div v-for="(rewards,index) in currentVipData.rewards" :key="index+rewards.id" @click="() =>selectedReawrdsEvent(index)">
+            <div v-for="(rewards,index) in currentVipData.rewards" :key="index+rewards.id" @click="() =>selectedReawrdsEvent(index,rewards)">
                 <span class="bg-icon" :style="`background-image:url(${rewards.icon});`">
                     <span class="reward-lock" v-if="userLevel < rewards.level">
                         <span class="_container" :style="`background-color:${themeColor[rewards.level]};`"><span class="iconfont">&#xe70c;</span> <span class="level">v{{rewards.level}}</span></span>
@@ -124,6 +124,18 @@
         watch:{
             'showModal':function(newValue,oldValue){
                 this.$emit('update:modalIndex',newValue);
+
+                // 关闭弹窗时记录时间 false
+                if(!newValue){
+                    if(window.GeekoSensors){
+                        window.GeekoSensors.Track('ELClick', {
+                            clicks: this.selectedModalReawrds.refId,
+                            page_sort:"VIP",
+                            page_content:"Rewards",
+                            get_rewards:false
+                        })
+                    }
+                }
             }
         },
         props:{
@@ -155,8 +167,9 @@
             }
         },
         mounted:function(){
-            if(this.$route.query.reward_index){
-                let index = parseInt(this.$route.query.reward_index);
+            if(this.$route.query.reward_id){
+                let id = this.$route.query.reward_id;
+                let index = this.currentVipData.rewards.findIndex((item) =>item.refId == id);
                 this.selectedReawrdsEvent(index);
             }
         },
@@ -166,9 +179,17 @@
             MaskComponent
         },
         methods:{
-            selectedReawrdsEvent(index){
+            selectedReawrdsEvent(index,reawrd){
                 this.showModal = true;
                 this.modalIndex = index;
+
+                if(window.GeekoSensors){
+                    window.GeekoSensors.Track('ELClick', {
+                        clicks: reawrd.refId,
+                        page_sort:"VIP",
+                        page_content:"Rewards"
+                    })
+                }
             }
         }
     }

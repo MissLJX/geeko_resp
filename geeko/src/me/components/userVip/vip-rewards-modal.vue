@@ -12,7 +12,7 @@
             @slideChange="onSlideChange"
         >
             <div class="swiper-wrapper">
-                <div class="swiper-slide" v-for="(reward,index) in datas" :key="index">
+                <div class="swiper-slide" v-for="(reward,index) in datas" :key="index" @click="() =>rewardEvent(reward)">
                     <span class="rewards-container" :style="`background-image:url(${reward.icon});`">
                         <span class="reward-lock" v-if="userLevel < reward.level">
                             <span class="_container" :style="`background-color:${themeColor[reward.level]};`"><span class="iconfont">&#xe70c;</span> <span class="level">v{{reward.level}}</span></span>
@@ -88,6 +88,15 @@
             }
         },
         methods:{
+            rewardEvent(reward){
+                if(window.GeekoSensors){
+                    window.GeekoSensors.Track('ELClick', {
+                        clicks: reward.refId,
+                        page_sort:"VIP",
+                        page_content:"Rewards"
+                    })
+                }
+            },
             onSlideChange(){
                 this.currentIndex = this.mySwiper.activeIndex;
             },
@@ -114,9 +123,17 @@
                         window.location.href = this.GLOBAL.getUrl(`/support/ticketvip`);
                         break;
                     default:
-                        console.log('default deeplink');
                         window.location.href = getDeepLinkUrl(this.selectedModalReawrds?.deepLink);
                         break;
+                }
+
+                if(window.GeekoSensors){
+                    window.GeekoSensors.Track('ELClick', {
+                        clicks: this.selectedModalReawrds.refId,
+                        page_sort:"VIP",
+                        page_content:"Rewards",
+                        get_rewards:true
+                    })
                 }
             },
             toAppEvent(){
@@ -137,10 +154,20 @@
             },
             getRewardEvent(){
                 let path = this.selectedModalReawrds?.deepLink?.params?.[0];
+                let _this = this;
                 if(path){
                     this.$emit('update:buttonDisabled',true);
                     redeemFreeShipping(path).then(response =>{
                         this.modalShow();
+
+                        if(window.GeekoSensors){
+                            window.GeekoSensors.Track('ELClick', {
+                                clicks: _this.selectedModalReawrds.refId,
+                                page_sort:"VIP",
+                                page_content:"Rewards",
+                                get_rewards:true
+                            })
+                        }
                     }).catch(response =>{
                         this.modalShow2(response?.result);
                         this.$emit('update:buttonDisabled',false);
