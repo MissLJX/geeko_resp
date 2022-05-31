@@ -54,6 +54,13 @@
             "index-nav-item":IndexNavItem,
             "index-nav-one-item":IndexNavOneItem
         },
+        props:{
+            vipShow:{
+                type: Boolean,
+                // default: false,
+                require: true,
+            }
+        },
         data(){
             return {
                 MyAccount:{
@@ -226,21 +233,24 @@
             }
         },
         computed:{
-            vipShow:function(){
-                return this.$store.getters.vipShow;
-            },
+            // vipShow:function(){
+            //     return this.$store.getters.vipShow;
+            // },
         },
         watch:{
             vipShow(newV, oldV){
+                // console.log('vipShow',newV, oldV)
                 if(newV){
+                    // console.log('sss')
                     this.MyAccount.list.unshift({
-                        name:(this.GLOBAL.sitename||'Chicme')+' Vip',
-                        routerName:(this.GLOBAL.sitename||'Chicme')+' Vip',
+                        name:window.name+' Vip',
+                        routerName:window.name+' Vip',
                         routerPath:"/me/m/vip",
                     })
-                } else {
-                    this.MyAccount.list.shift()
-                }
+                } 
+                // else {
+                //     this.MyAccount.list.shift()
+                // }
             }
         }
     }

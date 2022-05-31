@@ -44,7 +44,7 @@
         <div class="_right-container">
             <!-- right service -->
             <div class="_top">
-                <index-service-container :me="me"></index-service-container>
+                <index-service-container :me="me" ></index-service-container>
             </div>
 
             <!-- right you map also likes -->
@@ -141,7 +141,10 @@
             },
             copy_link(){
                 return window.site + '/i/share/register?key='+this.copylink
-            }
+            },
+            vipShow:function(){
+                return this.$store.getters.vipShow;
+            },
         },
         mounted(){
         },

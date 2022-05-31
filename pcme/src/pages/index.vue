@@ -9,9 +9,8 @@
                     <p class="h-title">
                         <router-link :to="getUrl('/me/m')">{{$t("point.personal_center")}}</router-link>
                     </p>
-
                     <!-- 导航中的路由 -->
-                    <index-nav-container :isActive="isActive" @changeRouter="changeClass"></index-nav-container>
+                    <index-nav-container :isActive="isActive" @changeRouter="changeClass" :vipShow="vipShow"></index-nav-container>
 
                 </div>
             </div>
@@ -59,10 +58,18 @@
             },
             setTipType(){
                 this.$store.dispatch("setTipType", "points");
-            }
+            },
+            
+            
         },
         computed:{
             ...mapGetters(['showTip','tipContent','tipType']),
+            vipShow:function(){
+                return this.$store.getters.vipShow;
+            },
+        },
+        mounted(){
+            this.$store.dispatch("getIsShowVipConfig");
         },
         components:{
             "index-nav-container":IndexNavContainer,

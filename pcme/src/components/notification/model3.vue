@@ -97,6 +97,9 @@
                     case 22:
                         _url = '/me/m/order/detail/' + deepLink.params[0]
                         break
+                    case 36:
+                        _url = '/me/m/vip'
+                        break
                     default:
                         _url = '#'
                 }

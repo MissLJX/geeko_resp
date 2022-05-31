@@ -25,7 +25,8 @@
         <div class="_bd" v-if="me.vipUser && vipShow">
             <router-link class="hasNew" :to="url+'vip'">
                 <p style="font-size:24px;" class="iconfont">&#xe783;</p>
-                <p>VIP</p>
+                <p style="margin-top: 4px;">VIP</p>
+                <!--  v-if="showVipNew" {{$t("my_vip.new")}} -->
                 <span class="newTip" v-if="showVipNew">
                     <span>{{$t("my_vip.new")}}</span>
                 </span>
@@ -59,10 +60,13 @@
                 return this.$store.getters.vipShow;
             },
             showVipNew(){
-                if(localStorage['customer_vip_level'] && (localStorage['customer_vip_level'] < this.vipLevel)){
+                if((!localStorage['customer_vip_level'] && this.vipLevel > 0) || (localStorage['customer_vip_level'] && (localStorage['customer_vip_level'] < this.vipLevel))){
                     // localStorage['customer_vip_level'] = this.vipLevel
                     return true
                 } else {
+                    if(localStorage['customer_vip_level'] && (localStorage['customer_vip_level'] > this.vipLevel)){
+                        localStorage['customer_vip_level'] = this.vipLevel;
+                    }
                     // localStorage['customer_vip_level'] = this.vipLevel
                     return false
                 }
@@ -132,7 +136,8 @@
                 .newTip{
                     position: absolute;
                     top: -3px;
-                    right: calc(50% - 26px);
+                    // right: calc(50% - 26px);
+                    left: 50%;
                     display: block;
                     /* width: 20px; */
                     height: 9px;

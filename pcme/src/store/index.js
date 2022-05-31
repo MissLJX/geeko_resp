@@ -1768,7 +1768,7 @@ const actions = {
     },
     getIsShowVipConfig({commit}){
         return api.getIsShowVip().then(res => {
-            console.log(res)
+            // console.log(res)
             res && res.code==200 && commit(types.GET_IS_SHOW_VIP_CONFIG, res.result)
         }).catch(err => {
             console.log('getIsShowVipConfig报错:', err.result)

@@ -112,6 +112,20 @@
                 if(arr.includes(name)){
                     this.isShow = true;
                 }
+            },
+            num:function(newV, oldV){
+                if(newV != oldV){
+                    this.containerHeight = {height:newV * 39 + "px",overflow: "hidden"};
+
+                    let name = this.$route.name;
+                    let arr = this.disposeRouteName();
+                    if(arr.includes(name)){
+                        this.isShow = true;
+                    }
+                }
+            },
+            list:function(newV, oldV){
+                console.log(newV, oldV)
             }
         }
     }
