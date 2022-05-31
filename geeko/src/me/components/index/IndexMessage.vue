@@ -192,7 +192,7 @@
                         <p class="iconfont" style="font-size:18px;">&#xe6e5;</p>
                         <p>{{$t("point.suggestion")}}</p>
                     </a>
-                    <a class="vip-container" @click.prevent="specificationLogin('/me/m/vip',1)" click-name="Vip" v-if="showVip && me && me.vipUser">
+                    <a class="vip-container" @click.prevent="specificationLogin('/me/m/vip',1)" click-name="Vip" v-if="showVip">
                         <p class="iconfont">&#xe783;</p>
                         <p>VIP</p>
 
@@ -248,7 +248,7 @@
             disposeName(){
                 if(this.isLogin && this.me && this.me.nickname){
                     return this.me.nickname;
-                }else if(this.isLogin && this.me.name && (this.me.name.firstName || this.me.name.lastName)){
+                }else if(this.isLogin && this.me.name && !!(this.me.name.firstName || this.me.name.lastName)){
                     return this.getName(this.me.name.firstName) + " " + this.getName(this.me.name.lastName);
                 }else if(this.isLogin && !(this.me && this.me.nickname && this.me.name && this.me.name.firstName && this.me.name.lastName)){
                     return this.me.email;

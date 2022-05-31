@@ -36,6 +36,7 @@
                 :themeColor="themeColor"
                 :user-level="userLevel"
                 :upgrade-flag="upgradeFlag"
+                :button-disabled.sync="buttonDisabled"
                 v-if="showModal"
             ></vip-rewards-modal>
         </bottom-to-top>
@@ -103,7 +104,8 @@
                     }
                 ],
                 showModal:false,
-                modalIndex:0
+                modalIndex:0,
+                buttonDisabled:false
             }
         },
         computed:{
