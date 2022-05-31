@@ -297,7 +297,6 @@
             }
         },
         mounted(){
-            
             window.addEventListener('scroll',this.scrollHandle)
         },
         destroyed(){
@@ -481,7 +480,7 @@
                 }
             },
             clearSkip(callback){
-                console.log('sss')
+                // console.log('sss')
                 // 切换类型时清空skip值
                 this.$store.dispatch('skipClear').then(() => callback)
             },
@@ -560,6 +559,7 @@
                 return utils.enTime(new Date(paymentTime))
             },
             checkDetail(item, isReturn){
+                this.clearSkip(()=>{});
                 if(isReturn){
                     this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/order/return-detail/'+item.id})
                 } else {
@@ -581,6 +581,7 @@
                 this.isShowTicket = false;
             },
             checkLogistics(orderid){
+                this.clearSkip(()=>{});
                 this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/order/logistics-detail', query: { orderid: orderid , method: 'orderlist' } })
             },
             orderoffset(order){
@@ -707,7 +708,7 @@
                      this.getData(0,'all','click')
                 )
             }
-        }
+        },
     }
 </script>
 

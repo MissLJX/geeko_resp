@@ -30,6 +30,7 @@ import Faq from '../pages/faq/faq.vue'
 import Support from "../pages/support/support.vue"
 import MyVip from '../components/my-vip.vue'
 const __Base_Path__ = window.ctx || ''
+const site = window.name || 'ChicMe' 
 
 const routes = [
     {
@@ -212,7 +213,7 @@ const routes = [
             },
             {
                 path:'vip',
-                name:(window.site||'Chicme')+' Vip',
+                name:site+' Vip',
                 component: MyVip,
                 meta: {title: 'vip'}
             },

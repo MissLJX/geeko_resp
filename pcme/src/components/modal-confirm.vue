@@ -26,16 +26,23 @@
         </template>
 
         <div class="fd">
+            
             <button :class="{'l-vue-btn':true, 'no':item.type=='no'}" 
-                    @click="item.fuc" 
+                    @click="item.fuc || cfg.no" 
                     :style="styleTransform(item.style)"
                     v-for="item in cfg.btnFont"
+                    v-if="isButtonList"
                     >{{item.text}}</button>
-            <!-- <button class="l-vue-btn no" 
+            <button class="l-vue-btn yes" 
+                    v-if="!isButtonList && cfg.btnFont && cfg.btnFont.yes"
+                    @click="cfg.yes" 
+                    :style="btnYes"
+                    >{{cfg.btnFont.yes}}</button>
+            <button class="l-vue-btn no" 
+                    v-if="!isButtonList && cfg.btnFont && cfg.btnFont.no"
                     @click="cfg.no" 
-                    v-if="cfg.btnFont && cfg.btnFont.no"
                     :style="btnNo"
-                    >{{cfg.btnFont.no}}</button> -->
+                    >{{cfg.btnFont.no}}</button>
         </div>
     </div>
 </template>
@@ -140,6 +147,7 @@
             'cfg'
             /**
              * 新cfg例子
+             * 
              * cfg: {
                     btnFont:{
                         yes:"OK",
@@ -183,7 +191,7 @@
              */
         ],
         mounted(){
-            // console.log(this.cfg)
+            console.log(this.cfg)
         },
         computed:{
             boxStyle(){
@@ -220,6 +228,9 @@
                 if(this.cfg.style && this.cfg.style.btnNo && JSON.stringify(this.cfg.style.btnNo)!='{}') {
                     return this.styleTransform('btnNo');
                 }
+            },
+            isButtonList(){
+                return Object.prototype.toString.call(this.cfg.btnFont) == '[object Array]' ? true : false
             }
         },
         methods:{
@@ -229,6 +240,7 @@
             },
             // 自定义样式转成行内样式
             styleTransform(key){
+                if(!key){return}
                 let style;
                 if(typeof key == 'object'){
                     style = key;
@@ -236,7 +248,7 @@
                     style = this.cfg.style[key + ''];
                 }
                 let keyStyle=''
-                
+                console.log(key,style)
                 Object.keys(style).forEach((key1)=>{
                     keyStyle += this.toLine(key1) + ":" + style[key1+''] + ";"
                 })

@@ -4,7 +4,7 @@
                            :notifications="notifications"/>
          <notification-empty v-if="empty"></notification-empty> -->
          <div class="notification_type_list">
-            <router-link class="notification_type_item" to="/me/m/notification/ticket">
+            <router-link class="notification_type_item" to="/me/m/notification/ticket" @click="()=>linkTo('/me/m/notification/ticket')">
                 <div>
                     <span class="iconfont">&#xe6e8;</span>
                     <span class="notification_type_item_txt">{{$t("notification.ticket")}}</span>
@@ -144,6 +144,10 @@
                 //     this.loading = false
                 //     this.$store.dispatch("getOtherNtSkip")
                 // })
+            },
+            linkTo(url){
+                e.preventDefault();
+                this.$route.push({pathname:url});
             }
         },
         components: {

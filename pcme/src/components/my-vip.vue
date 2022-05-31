@@ -49,10 +49,9 @@
             </div>
             <div class="rulesBox">
                 <div class="rulesTitle">{{$t('my_vip.level_requirement')}}</div>
-                <div>{{$t('my_vip.level_up_rule_1')}}</div>
-                <div>{{$t('my_vip.level_up_rule_2')}}</div>
-                <div>{{$t('my_vip.level_up_rule_3')}}</div>
+                <div v-html="vipConfig.levelRequirement"></div>
                 <div><a href="/fs/vip-policy-pc">{{$t('my_vip.view_rules')}} {{'>'}}</a> </div>
+
             </div>
         </div>
 
@@ -62,7 +61,7 @@
                 <div class="rewardItem" 
                      v-for="(item) in rewards" 
                      :key="item.title" 
-                     @click="()=>rewardRuleShow(item.id)"
+                     @click="()=>rewardRuleShow(item.id, item.refId)"
                      >
                      <!-- @mouseleave="()=>rewardRuleHide(item)" -->
                     <!-- <span class="iconfont">&#xe70e;</span> -->
@@ -84,7 +83,7 @@
                         <span>V{{item.level}}</span>
                         <div class="triangle" :style="'border-right-color:'+highLightList[item.level]+';'"></div>
                     </span>
-                    <div class="rewardRules" v-if="item.showRules && item.description" >
+                    <div class="rewardRules" v-if="item.showRules && item.description || item.id == showTagId" >
                         <div class="rewardRulesTitle">{{item.title}}</div>
                         <div class="rewardRulesClose iconfont" @click.stop="()=>rewardRuleHide(item.id)">&#xe7c9;</div>
                         <div class="rewardRulesContent">{{item.description}}</div>
@@ -94,10 +93,10 @@
                         </div>
 
                         <!-- 兑换优惠券 -->
-                        <router-link to="/me/m/redeem-coupon" :class="{'rewardRulesBtn':true}" v-if="item.id == 1 && !item.buttonDisabled && item.buttonText" >
+                        <div @click="() => goLink('redeem-coupon')" :class="{'rewardRulesBtn':true}" v-if="item.id == 1 && !item.buttonDisabled && item.buttonText" >
                             <!-- {{$t('my_vip.redeem_now')}} -->
                             {{item.buttonText}}
-                        </router-link>
+                        </div>
 
                         <!-- 下载app -->
                         <div class="rewardRulesBtn" v-if="item.id == 2 && !item.buttonDisabled && item.buttonText">
@@ -106,13 +105,13 @@
                         </div>
 
                         <!-- 检测我的优惠券 -->
-                        <router-link to="/me/m/coupons" class="rewardRulesBtn" v-if="item.id == 4 && vipLevel >= 1 && !item.buttonDisabled && item.buttonText">
+                        <div class="rewardRulesBtn" @click="() => goLink('coupons')" v-if="item.id == 4 && vipLevel >= 1 && !item.buttonDisabled && item.buttonText">
                             <!-- {{$t('my_vip.check_coupons')}} -->
                             {{item.buttonText}}
-                        </router-link>
+                        </div>
 
                         <!-- freeshipping -->
-                        <div :class="{'rewardRulesBtn':true, 'redeemed': couponRedeemed}" v-if="item.id == 5 && vipLevel >= 2 && !item.buttonDisabled && item.buttonText" @click="()=>getReward(item.deepLink.params[0])">                        
+                        <div :class="{'rewardRulesBtn':true, 'redeemed': couponRedeemed}" v-if="item.id == 5 && vipLevel >= 2 && !item.buttonDisabled && item.buttonText" @click="()=>getReward(item.deepLink.params[0],item.refId)">                        
                             <!-- {{$t('my_vip.get_reward')}} -->
                             {{item.buttonText}}
                         </div>
@@ -130,7 +129,9 @@
         </div>
         <div class="vipFaqs">
             <div class="vipFaqsTitle">
-                {{$t('my_vip.vip_faqs')}}
+                <span class="line1"></span>
+                <span>{{$t('my_vip.vip_faqs')}}</span>
+                <span class="line2"></span>
             </div>
             <div class="vipFaqsContent">
                 <div class="vipFaqItem" v-for="(item) in faqlists" :key="item.question">
@@ -169,7 +170,7 @@
                 </div>
             </div>
         </div>
-
+        <!-- <button @click="()=>goLink()">link</button> -->
     </div>
 </template>
 
@@ -541,10 +542,10 @@
 
                 .rewardRules{
                     position: absolute;
-                    bottom: -223px;
+                    top: 80px;
                     left: 0;
                     width: 236px;
-                    height: 213px;
+                    max-height: 213px;
                     background-color: #ffffff;
                     border-radius: 2px;
                     box-shadow: 0px 0px 10px 0px rgba(34,34,34,0.3);
@@ -589,7 +590,7 @@
 
                     .rewardRulesContent{
                         font-family: SlatePro;
-                        font-size: 12px;
+                        font-size: 14px;
                         font-weight: normal;
                         font-stretch: normal;
                         letter-spacing: 0px;
@@ -642,26 +643,29 @@
             position: relative;
             text-align: center;
             margin-bottom: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
-            &::after{
-                content: '';
+            .line1{
                 display: block;
                 width: 200px;
                 height: 1px;
                 background: #222;
-                position: absolute;
-                top: 50%;
-                left: calc(50% - 250px);
+                margin-right: 20px;
+                // position: absolute;
+                // top: 50%;
+                // left: calc(50% - 250px);
             }
-            &::before{
-                content: '';
+            .line2{
                 display: block;
                 width: 200px;
                 height: 1px;
                 background: #222;
-                position: absolute;
-                top: 50%;
-                right: calc(50% - 250px);
+                margin-left: 20px;
+                // position: absolute;
+                // top: 50%;
+                // right: calc(50% - 250px);
             }
         }
 
@@ -847,6 +851,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import {getApi} from '../api/index';
+import * as utils from '../utils/geekoutil';
 export default {
     data(){
         return{
@@ -860,10 +865,14 @@ export default {
             rewards: [],
             hasMaskShow: false,
             couponRedeemed: false,
+            showTagId: -999,
         }
     },
     computed:{
         ...mapGetters(['me']),
+        url(){
+                return utils.ROUTER_PATH_ME_M + "/"
+        },
         headerName(){
             return  this.$t("my_vip.vip_title",{website:this.GLOBAL.sitename||'ChicMe'})
         },
@@ -876,7 +885,6 @@ export default {
         vipLevel(){
             if(this.vipConfig.level){
                 if((localStorage['customer_vip_level'] && (localStorage['customer_vip_level'] < this.vipConfig.level)) || (!localStorage['customer_vip_level']&&this.vipConfig.level>0)){
-
                     this.showLevelUp = true;
                     this.levelUpNow = true;
                     localStorage['customer_vip_level'] = this.vipConfig.level
@@ -945,6 +953,11 @@ export default {
         this.$store.dispatch("getVipConfigs").then((res) => {})
         document.addEventListener("click",this.maskClose,false)
     },
+    mounted(){
+        if(this.$route.query && this.$route.query.refId){
+            this.showTagId = this.$route.query.refId
+        }
+    },
     beforeDestroy(){
         document.removeEventListener("click",this.maskClose,false)
     },
@@ -957,8 +970,16 @@ export default {
                 return f
             })
         },
-        rewardRuleShow(e){
+        rewardRuleShow(e, id){
             // console.log('...')
+            if(window.GeekoSensors){
+                window.GeekoSensors.Track('ELClick', {
+                    clicks: id,
+                    page_sort:"VIP",
+                    page_content:"Rewards",
+                    platform_type:'PC'
+                })
+            }
             this.rewards = this.rewards.map(v => {
                 if(v.id == e){
                     v.showRules = true
@@ -970,6 +991,15 @@ export default {
             })
         },
         rewardRuleHide(e){
+            if(window.GeekoSensors){
+                window.GeekoSensors.Track('ELClick', {
+                    clicks: id,
+                    get_rewards: false,
+                    page_sort:"VIP",
+                    page_content:"Rewards",
+                    platform_type:'PC'
+                })
+            }
             this.rewards = this.rewards.map(v => {
                 if(v.id == e){
                     v.showRules = false
@@ -990,11 +1020,29 @@ export default {
             
         },
         linkTo(url){
+            if(window.GeekoSensors){
+                window.GeekoSensors.Track('ELClick', {
+                    clicks: id,
+                    get_rewards: true,
+                    page_sort:"VIP",
+                    page_content:"Rewards",
+                    platform_type:'PC'
+                })
+            }
             window.location.href = url;
         },
-        getReward(url){
+        getReward(url, id){
             if(this.couponRedeemed){
                 return
+            }
+            if(window.GeekoSensors){
+                window.GeekoSensors.Track('ELClick', {
+                    clicks: id,
+                    get_rewards: true,
+                    page_sort:"VIP",
+                    page_content:"Rewards",
+                    platform_type:'PC'
+                })
             }
             // 获取免邮优惠券
             getApi(url).then(res => {
@@ -1010,6 +1058,18 @@ export default {
         redeemClick(){
             this.showRedemption = false;
             window.location.href = '/'
+        },
+        goLink(url){
+            if(window.GeekoSensors){
+                window.GeekoSensors.Track('ELClick', {
+                    clicks: id,
+                    get_rewards: true,
+                    page_sort:"VIP",
+                    page_content:"Rewards",
+                    platform_type:'PC'
+                })
+            }
+            this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/' + url})
         }
     }
 
