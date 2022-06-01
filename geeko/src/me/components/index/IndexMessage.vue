@@ -4,7 +4,7 @@
             <a @click.prevent="specificationLogin('/me/m/wishlist',1)">
                 <span class="iconfont">&#xe6a2;</span>
             </a>
-            
+
             <a @click.prevent="specificationLogin('/me/m/notification',1)" class="notification_icon">
                 <!-- <span class="iconfont" :class="{'active' : notificationCount > 0}">&#xe60b;</span> -->
                 <span class="iconfont" style="display: inline-block;transform: scale(1.3);" :class="{'active' : notificationCount > 0}">&#xe70b;</span>
@@ -33,7 +33,7 @@
             <div class="iconfont">&#xe694;</div>
         </div> -->
         
-        <swiper v-if="swiperData && swiperData.length > 0" :notification-data.sync="swiperData" :email="email"></swiper>
+        <swiper v-if="swiperData && swiperData.length > 0" :notification-data.sync="swiperData" :email="userEmail"></swiper>
 
         <div class="guest-user" v-if="me && me.temporary">
             <span>{{$t("label.guest_user")}}</span>
@@ -54,7 +54,7 @@
                 </div>
                 <div class="st-cell edit st-v-m">
                     <p>
-                        <span class="user-name" @click="changeToLogin">{{disposeName}}</span>
+                        <span class="user-name" @click="changeToLogin">{{ disposeName }}</span>
                         <span class="vip-level" @click="toVipPageEvent" v-if="showVip && me && me.vipUser">
                             <span class="iconfont" :style="`color:${levelColor};`">&#xe783;</span>
                             <span class="level" :style="`color:${levelColor};`">V{{me.vipUser.level}}></span>
@@ -246,20 +246,26 @@
                 }
             },
             disposeName(){
-                if(this.isLogin && this.me && this.me.nickname){
-                    return this.me.nickname;
-                }else if(this.isLogin && this.me.name && !!(this.me.name.firstName || this.me.name.lastName)){
-                    return this.getName(this.me.name.firstName) + " " + this.getName(this.me.name.lastName);
-                }else if(this.isLogin && !(this.me && this.me.nickname && this.me.name && this.me.name.firstName && this.me.name.lastName)){
-                    return this.me.email;
+                let me = store.getters['me/me'];
+                console.log('me', me)
+                if(this.isLogin && me && me.nickname){
+                    return me.nickname;
+                }else if(this.isLogin && me.name && (!this.isEmptyStr(me.name.firstName) || !this.isEmptyStr(me.name.lastName))){
+                    return this.getName(me.name.firstName) + " " + this.getName(me.name.lastName);
+                }else if(this.isLogin && !(me && me.nickname && me.name && me.name.firstName && me.name.lastName)){
+                    console.log("email");
+                    console.log('me.email', me.email);
+                    console.log('me.email2', !!me.email);
+                    return me.email;
                 }
+
                 return this.$t("index.login_or_register");
             },
             getHeaderImage(){
                 let headerIcon = store.getters["me/headerImage"];
                 return headerIcon ? headerIcon : this.baseHeaderUrl;
             },
-            email(){
+            userEmail(){
                 if(this.isLogin){
                     return this.me.email;
                 }else{
@@ -313,6 +319,12 @@
                     return icon;
                 }
                 return;
+            },
+            isEmptyStr:function (s) {
+                if (s == undefined || s === '') {
+                    return true
+                }
+                return false
             },
             getOrderNum(num){
                 return this.isLogin && num > 0 ? num : "";

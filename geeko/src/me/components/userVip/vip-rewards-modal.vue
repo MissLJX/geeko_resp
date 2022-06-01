@@ -99,6 +99,7 @@
             },
             onSlideChange(){
                 this.currentIndex = this.mySwiper.activeIndex;
+                this.$emit('update:rewardEventIndex',this.mySwiper.activeIndex);
             },
             closeModalEvent(){
                 this.$emit('update:showModal',false);

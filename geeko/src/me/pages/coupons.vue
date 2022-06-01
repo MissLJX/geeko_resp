@@ -49,18 +49,20 @@
         computed:{
             ...mapGetters('me', ['coupons']),
         },
+        activated(){
+            this.loading = true;
+            store.dispatch('me/getCoupons').then((data) => {
+                this.loading = false;
+
+                if(data && data.length <=0){
+                    this.finished = true;
+                }
+            })
+        },
         created(){
-            if(!(this.coupons && this.coupons.length > 0)){
-                this.loading = true;
-                store.dispatch('me/getCoupons').then((data) => {
-                    this.loading = false;
-
-                    if(data && data.length <=0){
-                        this.finished = true;
-                    }
-                })
-            }
-
+            // if(!(this.coupons && this.coupons.length > 0)){
+            
+            // }
             getShowRedeemCoupons().then(data =>{
                 if(data && !!data.result){
                     this.redeemCouponShow = data.result;

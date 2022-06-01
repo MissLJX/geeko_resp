@@ -37,6 +37,7 @@
                 :user-level="userLevel"
                 :upgrade-flag="upgradeFlag"
                 :button-disabled.sync="buttonDisabled"
+                :reward-event-index.sync="rewardEventIndex"
                 v-if="showModal"
             ></vip-rewards-modal>
         </bottom-to-top>
@@ -105,7 +106,8 @@
                 ],
                 showModal:false,
                 modalIndex:0,
-                buttonDisabled:false
+                buttonDisabled:false,
+                rewardEventIndex:0
             }
         },
         computed:{
@@ -127,9 +129,10 @@
 
                 // 关闭弹窗时记录时间 false
                 if(!newValue){
+                    let reward = this?.currentVipData?.rewards[this.rewardEventIndex];
                     if(window.GeekoSensors){
                         window.GeekoSensors.Track('ELClick', {
-                            clicks: this.selectedModalReawrds.refId,
+                            clicks: reward?.refId,
                             page_sort:"VIP",
                             page_content:"Rewards",
                             get_rewards:false
@@ -182,6 +185,7 @@
             selectedReawrdsEvent(index,reawrd){
                 this.showModal = true;
                 this.modalIndex = index;
+                this.rewardEventIndex = index;
 
                 if(window.GeekoSensors){
                     window.GeekoSensors.Track('ELClick', {
