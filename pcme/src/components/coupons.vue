@@ -69,6 +69,9 @@
             ]),
         },
         created(){
+            
+        },
+        activated(){
             this.$store.dispatch('getCoupons');
             // console.log(this.coupons)
             getShowRedeemCoupons().then(data =>{
