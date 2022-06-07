@@ -54,7 +54,9 @@
                 </div>
                 <div class="st-cell edit st-v-m">
                     <p>
-                        <span class="user-name" @click="changeToLogin">{{ disposeName }}</span>
+                        <span class="user-name" @click="changeToLogin">{{nameTestFuc(me)}}</span>
+                        <span style="display:none;">--{{disposeName}}--</span>
+                        <span style="display:none;">--{{nameTestFuc(me)}}--</span>
                         <span class="vip-level" @click="toVipPageEvent" v-if="showVip && me && me.vipUser">
                             <span class="iconfont" :style="`color:${levelColor};`">&#xe783;</span>
                             <span class="level" :style="`color:${levelColor};`">V{{me.vipUser.level}}></span>
@@ -249,8 +251,10 @@
                 let me = store.getters['me/me'];
                 console.log('me', me)
                 if(this.isLogin && me && me.nickname){
+                    console.log('nikename')
                     return me.nickname;
                 }else if(this.isLogin && me.name && (!this.isEmptyStr(me.name.firstName) || !this.isEmptyStr(me.name.lastName))){
+                    console.log('name');
                     return this.getName(me.name.firstName) + " " + this.getName(me.name.lastName);
                 }else if(this.isLogin && !(me && me.nickname && me.name && me.name.firstName && me.name.lastName)){
                     console.log("email");
@@ -309,6 +313,14 @@
                         this.showMask()
                     }
                 }
+            },
+            disposeName(newValue,oldValue){
+                console.log('newValue', newValue);
+                console.log('oldValue', oldValue);
+            },
+            me:function(newValue,oldValue){
+                console.log('menewValue', newValue);
+                console.log('meoldValue', oldValue);
             }
         },
         methods:{
@@ -444,6 +456,21 @@
                         }
                     }
                 })
+            },
+            nameTestFuc(me){
+                console.log("nameTestFuc",me);
+                if(this.isLogin && me && me.nickname){
+                    console.log('nikename')
+                    return me.nickname;
+                }else if(this.isLogin && me.name && (!this.isEmptyStr(me.name.firstName) || !this.isEmptyStr(me.name.lastName))){
+                    console.log('name');
+                    return this.getName(me.name.firstName) + " " + this.getName(me.name.lastName);
+                }else if(this.isLogin && !(me && me.nickname && me.name && me.name.firstName && me.name.lastName)){
+                    console.log("nameTestFucemail");
+                    // console.log('me.email', me.email);
+                    // console.log('me.email2', !!me.email);
+                    return me.email;
+                }
             }
         },
         created:async function(){
