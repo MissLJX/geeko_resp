@@ -39,6 +39,11 @@ const JoinDetail = Loadable({
 	loading: Loading
 })
 
+const JoinMore = Loadable({
+  loader: () => import(/* webpackChunkName: "page--joindmore" */ './pages/join-more.jsx'),
+	loading: Loading
+})
+
 export default [
   {
     title: '上海极高信息技术有限公司',
@@ -48,7 +53,7 @@ export default [
   },
   {
     title: '加入我们 | 招聘',
-    path: '/join/:detail',
+    path: '/join/:type/:detail',
     component: JoinDetail,
     loadData: getSource('1')
   },
@@ -56,6 +61,11 @@ export default [
     title: '加入我们 | 招聘',
     path: '/join',
     component: Join
+  },
+  {
+    title: '更多职位信息',
+    path: '/join-more',
+    component: JoinMore
   },
   {
     title: '极高业务',

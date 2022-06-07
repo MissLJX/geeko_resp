@@ -1,171 +1,21 @@
 import React from 'react'
-import { data } from '../store'
-import {BANNER} from '../components/banner.jsx'
+import { data , geekoHonor } from '../store'
 import {BLOCKIMAGE} from '../components/elements.jsx'
 import Styled from 'styled-components'
 import {CONTAINER} from '../components/layout.jsx'
 import JoinForm from '../components/join-form.jsx'
 
-const JOBS = Styled.ul`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-
-  & > li{
-    width: 374px;
-    margin-top: 55px;
-  }
-  @media (max-width: 1200px) {
-    & > li{
-      width: 100%;
-      margin-top: 25px;
-    }
-  }
-`
-
-const JOB = Styled.div`
-  height: 660px;
-  background-color: #ffffff;
-  box-shadow: 0px 6px 9px 0px  rgba(204, 204, 204, 0.5);
-  position: relative;
-
-  .__hd{
-    position: relative;
-    figcaption{
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: #fff;
-      font-size: 2.6rem;
-      color: #f5f5f5;
-      font-weight: bold;
-      word-break: keep-all;
-    }
-  }
-
-  .__bd{
-    padding: 20px;
-  }
-
-  .__joinus{
-    width: 160px;
-    height: 30px;
-    background-color: #222222;
-    color: #fff;
-    line-height: 30px;
-    text-align:center;
-    position: absolute;
-    right: 20px;
-    bottom: 20px;
-    cursor: pointer;
-  }
-`
-
-const JOBD = Styled.div`
-  .__title{
-    font-size: 1.2rem;
-    line-height: 1.6rem;
-    color: #222222;
-    font-weight: bold;
-  }
-`
-
-const DS = Styled.ul`
-  & > li{
-    font-size: 1.2rem;
-    line-height: 1.5rem;
-    color: #666666;
-    list-style-type: decimal;
-    list-style-position: inside;
-  }
-`
-
-const JOBDS = Styled.ul`
-  & > li{
-    margin-top: 12px;
-    &:first-child{
-      margin-top: 0;
-    }
-  }
-`
-
-const Epy = ({job, joinHandle}) => <JOB>
-  <figure className="__hd">
-    <BLOCKIMAGE src={ job.image }/>
-    <figcaption>
-      {job.title}
-    </figcaption>
-  </figure>
-  <div className="__bd">
-    <JOBDS>
-    {
-      job.descriptions.map( d => <li key={d.id}>
-        <JOBD>
-          <div className="__title">{d.title}</div>
-          <DS>
-          {
-            d.descriptions.map( (dd, i) => <li key={i}>
-              {dd}
-            </li>
-            )
-          }
-          </DS>
-        </JOBD>
-      </li>
-      )
-    }
-    </JOBDS>
-  </div>
-  <div onClick={ () => {joinHandle(job.title)} } className="__joinus">加入我们</div>
-</JOB>
-
 const DETAILCONTAINER = Styled.div`
     padding-bottom: 50px;
+    margin-top:89px;
+    background-color:#f0f0f0;
+    min-height:100vh;
     @media (max-width: 1200px) {
+      background-color:#ffffff;
+      margin-top:60px;
       & > li{
         width: 100%;
         padding-bottom:30px;
-      }
-    }
-`
-
-const TAG = Styled.a`
-    display: inline-block;
-    width: 220px;
-	  height: 30px;
-    font-size: 1.6rem;
-    text-align: center;
-    line-height: 28px;
-    border: solid 1px #666666;
-    color: #222;
-    text-decoration: none;
-    &.selected{
-      background-color: #222222;
-      color: #ffffff;
-    }
-`
-
-const TAGS = Styled.ul`
-    margin-top: 20px;
-    &::after{
-      content:'';
-      clear: both;
-      display: block;
-    }
-    & > li{
-      margin-top: 15px;
-      margin-left: 25px;
-      float: left;
-      &:nth-child(5n+1){
-        margin-left: 0;
-      }
-    }
-    @media (max-width: 1200px) {
-      & > li{
-        float: none;
-        margin-left: auto;
-        text-align: center;
       }
     }
 `
@@ -208,6 +58,167 @@ const FIXEDWINDOW = Styled.div`
     }
 `
 
+const GOBACKHISTORY = Styled.div`
+    background-color:#f0f0f0;
+    padding:15px 0px 15px 20px;
+    font-size:14px;
+    font-weight:bold;
+    color:#222222;
+    cursor:pointer;
+    margin-left: -20px;
+    margin-right: -20px;
+
+    @media (min-width: 1200px) {
+      padding-left:0;
+      font-size:16px;
+      margin:0;
+    }
+`;
+
+const BANNER = Styled.div`
+  ._container{
+    display:flex;
+    align-items: center;
+    margin-bottom:50px;
+
+    ._title{
+      font-size:28px;
+      font-weight:bold;
+    }
+
+    ._city{
+      font-size:20px;
+      margin-left:20px;
+      color:#666666;
+      font-weight:bold;
+    }
+  }
+
+  @media (max-width: 1200px) {
+    background: url(${props => props.src1}) center/100% 150px no-repeat;
+    min-height:150px;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 -20px;
+
+    ._container{
+      text-align:center;
+      display:block;
+      margin-bottom:0px;
+      ._title{
+        font-size: 20px;
+        color: #fff;
+        font-weight: bold;
+      }
+
+      ._city{
+        margin-top:13px;
+        display: inline-block;
+        background-color: #fff;
+        color: #222;
+        padding: 2px 15px;
+        border-radius: 10px;
+        font-weight: bold;
+        text-align: center;
+        margin-left:0px;
+      }
+    }
+  }
+`;
+
+const JOBDESCRIPTION = Styled.div`
+    margin-top:20px;
+    ._title{
+      font-size:20px;
+      font-weight:bold;
+      color:#222222;
+    }
+
+    ._content{
+      margin-top:15px;
+      .__title{
+        font-size:14px;
+        color:#666666;
+        font-weight:bold;
+      }
+
+      ._description,._item{
+        font-size:14px;
+        color:#666666;
+        font-weight:bold;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      margin-top:0px;
+    }
+`;
+
+const MOREJOBHREF = Styled.a`
+  display: inline-block;
+  width: 100%;
+  background-color: #f4f4f5;
+  height: 36px;
+  line-height: 36px;
+  text-align: center;
+  text-decoration: none;
+  color: #222;
+  font-weight: bold;
+  margin-top: 20px;
+
+  @media (min-width: 1200px) {
+    width:240px;
+  }
+`;
+
+const JOINUS = Styled.div`
+    margin-top:20px;
+
+    button{
+      display:inline-block;
+      width: 100%;
+      border: none;
+      box-shadow: none;
+      outline: none;
+      background-color: #222;
+      color: #fff;
+      height: 36px;
+      line-height: 36px;
+      text-align: center;
+      font-size: 16px;
+    }
+
+    @media (min-width: 1200px) {
+      position: absolute;
+      top: 40px;
+      right: 30px;
+      width: 160px;
+      margin-top:0px;
+
+      button{
+        width: 160px;
+        font-size: 20px;
+        font-weight: bold;
+        border-radius: 4px;
+      }
+    }
+`;
+
+const PRIVATECONTAINER = Styled.div`
+  width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  background-color:#ffffff;
+  padding:40px 20px;
+  position:relative;
+
+  @media (max-width: 1200px) {
+    padding: 0px 20px;
+    width: 100%;
+  }
+`;
+
 export default class extends React.Component{
   constructor(props){
     super(props)
@@ -220,16 +231,19 @@ export default class extends React.Component{
     } else {
       this.state = {
         data: null,
-        selectedId: null
+        selectedId: null,
+        geekoHonor:geekoHonor,
+        cityType:0
       };
     }
-    this.joinHandle = this.joinHandle.bind(this)
+    this.joinHandle = this.joinHandle.bind(this);
+    this.moreGoBack = this.moreGoBack.bind(this);
+    this.moreEvent = this.moreEvent.bind(this);
   }
 
   componentDidMount() {
-
-    const { match } = this.props
-    const id = match.params.detail
+    const { location } = this.props
+    const jobItem = location.state.data;
 
     setTimeout(() => {
       if (window.__ROUTE_DATA__) {
@@ -239,7 +253,8 @@ export default class extends React.Component{
         delete window.__ROUTE_DATA__
       } else {
         this.setState({
-          data: data[id]
+          data: jobItem,
+          cityType:location.state.type
         })
       }
     }, 0)
@@ -252,37 +267,96 @@ export default class extends React.Component{
     })
   }
 
+  moreGoBack(){
+    const { history } = this.props;
+    history.goBack();
+  }
+
+  moreEvent(evt){
+    evt.preventDefault();
+    const { history } = this.props;
+    history.push("/join-more");
+  }
 
   render(){
+    const { geekoHonor } = this.state;
     return <DETAILCONTAINER>
+      <CONTAINER>
+        <GOBACKHISTORY>
+          <span onClick={this.moreGoBack}>{'<'} 返回职位列表</span>
+        </GOBACKHISTORY>
+      </CONTAINER>
+      
       {
         this.state.data && <div>
-          <section>
-            <BANNER src={this.state.data.banner.pc} src1={this.state.data.banner.msite}/>
-          </section>
-          <CONTAINER>
-
-
-
-          {
-            this.state.data.jobs && <React.Fragment>
-                <TAGS>
+          <PRIVATECONTAINER>
+            <BANNER src1={this.state.data.image}>
+              <div className='_container'>
+                <p className='_title'>{this.state.data.title}</p>
+                <span className='_city'>
                 {
-                  this.state.data.jobs.map( job => <li key={job.id}>
-                    <TAG onClick={ () => {this.setState({selectedId: job.id})}} className={this.state.selectedId === job.id ? 'selected' : ''} href={`#${job.id}`}>{job.title}</TAG>
-                  </li>)
+                  this.state.data.regionType == 1 && <span>上海市</span>
                 }
-                </TAGS>
-                <JOBS>
                 {
-                  this.state.data.jobs.map( job => <li key={job.id} id={job.id}>
-                    <Epy job={job} joinHandle={this.joinHandle}/>
-                  </li>)
+                  this.state.data.regionType == 3 && <span>南京市</span>
                 }
-              </JOBS>
-            </React.Fragment>
-          }
-          </CONTAINER>
+                {
+                  this.state.data.regionType == 2 && <span>广州市</span>
+                }
+                {
+                  this.state.data.regionType == 4 && <span>肇庆市</span>
+                }
+                </span>
+              </div>
+            </BANNER>
+
+              <JOBDESCRIPTION>
+                <div className='_title'>职位描述</div>
+
+                {
+                  this.state.data.descriptions.map((item,index) =>{
+                    return <div className='_content' key={item.id+index}>
+                        <div className='__title'>
+                          <span>【{item.title}】</span>
+                        </div>
+      
+                        <div className='_description'>
+                          {
+                            item.descriptions.map((item2,index2) =>{
+                              return <p className='_item' key={item2+index2}>{item2}</p>;
+                            })
+                          }
+                        </div>
+                      </div>
+                  })
+                }
+                
+              </JOBDESCRIPTION>
+                
+              {
+                geekoHonor && <JOBDESCRIPTION>
+                  <div className='_title'>{geekoHonor.title}</div>
+
+                  <div className='_content'>
+                    <div className='_description'>
+                        {
+                          geekoHonor.descrptions.map((item,index) =>{
+                            return <p className='_item' key={item+index}>{item}</p>;
+                          })
+                        }
+                    </div>
+                  </div>
+                </JOBDESCRIPTION>
+              }
+
+              <MOREJOBHREF href='/' onClick={this.moreEvent}>
+                <span>查看更多职位信息 {'>>'}</span>
+              </MOREJOBHREF>
+
+              <JOINUS>
+                <button onClick={()=>this.joinHandle(this.state.data.title)}>加入我们</button>
+              </JOINUS>
+          </PRIVATECONTAINER>
         </div>
       }
 
@@ -295,13 +369,6 @@ export default class extends React.Component{
           </div>
         </FIXEDWINDOW>
       }
-
-      
-
-      
-
-      
-      
     </DETAILCONTAINER>
   }
 }

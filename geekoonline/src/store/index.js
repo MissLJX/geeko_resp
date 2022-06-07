@@ -1,5 +1,8 @@
-export const data = {
-  'shanghai': {
+// regionType 1 上海  2 广州  3 南京  4  肇庆
+// 社会招聘
+export const data = [
+  {
+    regionType:1,
     banner: {
       pc: '/images/shanghai/1.jpg',
       msite: '/images/shanghai/1_1.jpg'
@@ -9,6 +12,9 @@ export const data = {
         id: 'shanghai-job-1',
         title: 'Ins红人运营',
         image: '/images/shanghai/10.jpg',
+        regionType:1,
+        time:"2022-06-06",
+        isHot:true,
         descriptions: [
           {
             id: 'shanghai-job-1-dsc-1',
@@ -70,6 +76,8 @@ export const data = {
         id: 'shanghai-job-3',
         title: 'Facebook/Google广告投放',
         image: '/images/shanghai/2.jpg',
+        regionType:1,
+        time:"2022-06-06",
         descriptions: [
           {
             id: 'shanghai-job-3-dsc-1',
@@ -99,6 +107,8 @@ export const data = {
         id: 'shanghai-job-4',
         title: '平面设计师',
         image: '/images/shanghai/9.jpg',
+        regionType:1,
+        time:"2022-06-06",
         descriptions: [
           {
             id: 'shanghai-job-4-dsc-1',
@@ -125,6 +135,8 @@ export const data = {
         id: 'shanghai-job-5',
         title: '美工',
         image: '/images/shanghai/8.jpg',
+        regionType:1,
+        time:"2022-06-06",
         descriptions: [
           {
             id: 'shanghai-job-5-dsc-1',
@@ -160,6 +172,8 @@ export const data = {
         id: 'shanghai-job-6',
         title: '服装设计师',
         image: '/images/shanghai/6.jpg',
+        regionType:1,
+        time:"2022-06-06",
         descriptions: [
           {
             id: 'shanghai-job-6-dsc-1',
@@ -187,6 +201,8 @@ export const data = {
         id: 'shanghai-job-7',
         title: '英语编辑（基础Listing）',
         image: '/images/shanghai/10.jpg',
+        regionType:1,
+        time:"2022-06-06",
         descriptions: [
           {
             id: 'shanghai-job-7-dsc-1',
@@ -212,6 +228,8 @@ export const data = {
         id: 'shanghai-job-8',
         title: '网站运营（shopify、自建站）',
         image: '/images/shanghai/3.jpg',
+        regionType:1,
+        time:"2022-06-06",
         descriptions: [
           {
             id: 'shanghai-job-8-dsc-1',
@@ -239,6 +257,8 @@ export const data = {
         id: 'shanghai-job-9',
         title: 'web前端',
         image: '/images/shanghai/4.jpg',
+        regionType:1,
+        time:"2022-06-06",
         descriptions: [
           {
             id: 'shanghai-job-9-dsc-1',
@@ -269,7 +289,8 @@ export const data = {
 
     ]
   },
-  'guangzhou': {
+  {
+    regionType:2,
     banner: {
       pc: '/images/guangzhou/1.jpg',
       msite: '/images/guangzhou/1_1.jpg'
@@ -279,6 +300,8 @@ export const data = {
         id: 'guangzhou-job-1',
         title: '线上采购员',
         image: '/images/guangzhou/12.jpg',
+        regionType:2,
+        time:"2022-06-06",
         descriptions: [
           {
             id: 'guangzhou-job-1-dsc-1',
@@ -296,6 +319,8 @@ export const data = {
         id: 'guangzhou-job-2',
         title: '工厂跟单员',
         image: '/images/guangzhou/5.jpg',
+        regionType:2,
+        time:"2022-06-06",
         descriptions: [
           {
             id: 'guangzhou-job-2-dsc-1',
@@ -314,6 +339,8 @@ export const data = {
         id: 'guangzhou-job-3',
         title: '摄影师助理',
         image: '/images/guangzhou/10.jpg',
+        regionType:2,
+        time:"2022-06-06",
         descriptions: [
           {
             id: 'guangzhou-job-3-dsc-1',
@@ -343,6 +370,8 @@ export const data = {
         id: 'guangzhou-job-4',
         title: '搭配师',
         image: '/images/guangzhou/4.jpg',
+        regionType:2,
+        time:"2022-06-06",
         descriptions: [
           {
             id: 'guangzhou-job-4-dsc-1',
@@ -371,6 +400,8 @@ export const data = {
         id: 'guangzhou-job-5',
         title: '印花员',
         image: '/images/guangzhou/13.jpg',
+        regionType:2,
+        time:"2022-06-06",
         descriptions: [
           {
             id: 'guangzhou-job-5-dsc-1',
@@ -389,6 +420,8 @@ export const data = {
         id: 'guangzhou-job-6',
         title: '板房助理',
         image: '/images/guangzhou/3.jpg',
+        regionType:2,
+        time:"2022-06-06",
         descriptions: [
           {
             id: 'guangzhou-job-6-dsc-1',
@@ -413,6 +446,8 @@ export const data = {
         id: 'guangzhou-job-7',
         title: '试衣模特',
         image: '/images/guangzhou/11.jpg',
+        regionType:2,
+        time:"2022-06-06",
         descriptions: [
           {
             id: 'guangzhou-job-7-dsc-1',
@@ -430,6 +465,8 @@ export const data = {
         id: 'guangzhou-job-8',
         title: '上架员',
         image: '/images/guangzhou/9.jpg',
+        regionType:2,
+        time:"2022-06-06",
         descriptions: [
           {
             id: 'guangzhou-job-8-dsc-1',
@@ -447,6 +484,8 @@ export const data = {
         id: 'guangzhou-job-9',
         title: '入库员',
         image: '/images/guangzhou/8.jpg',
+        regionType:2,
+        time:"2022-06-06",
         descriptions: [
           {
             id: 'guangzhou-job-9-dsc-1',
@@ -471,6 +510,8 @@ export const data = {
         id: 'guangzhou-job-10',
         title: '拣货员',
         image: '/images/guangzhou/6.jpg',
+        regionType:2,
+        time:"2022-06-06",
         descriptions: [
           {
             id: 'guangzhou-job-10-dsc-1',
@@ -496,6 +537,8 @@ export const data = {
         id: 'guangzhou-job-11',
         title: '拣货员',
         image: '/images/guangzhou/7.jpg',
+        regionType:2,
+        time:"2022-06-06",
         descriptions: [
           {
             id: 'guangzhou-job-11-dsc-1',
@@ -513,6 +556,8 @@ export const data = {
         id: 'guangzhou-job-12',
         title: '拣货员',
         image: '/images/guangzhou/2.jpg',
+        regionType:2,
+        time:"2022-06-06",
         descriptions: [
           {
             id: 'guangzhou-job-12-dsc-1',
@@ -527,7 +572,8 @@ export const data = {
       }
     ]
   },
-  'nanjing': {
+  {
+    regionType:3,
     banner: {
       pc: '/images/shanghai/1.jpg',
       msite: '/images/shanghai/1_1.jpg'
@@ -537,6 +583,8 @@ export const data = {
         id: 'nanjing-job-1',
         title: '英语商务专员',
         image: '/images/nanjing/7.jpg',
+        regionType:3,
+        time:"2022-06-06",
         descriptions: [
           {
             id: 'nanjing-job-1-dsc-1',
@@ -562,6 +610,8 @@ export const data = {
         id: 'nanjing-job-2',
         title: '小语种商务专员',
         image: '/images/nanjing/5.jpg',
+        regionType:3,
+        time:"2022-06-06",
         descriptions: [
           {
             id: 'nanjing-job-2-dsc-1',
@@ -587,6 +637,8 @@ export const data = {
         id: 'nanjing-job-3',
         title: '国外新媒体运营',
         image: '/images/nanjing/2.jpg',
+        regionType:3,
+        time:"2022-06-06",
         descriptions: [
           {
             id: 'nanjing-job-3-dsc-1',
@@ -613,6 +665,8 @@ export const data = {
         id: 'nanjing-job-4',
         title: '自营站运营',
         image: '/images/nanjing/8.jpg',
+        regionType:3,
+        time:"2022-06-06",
         descriptions: [
           {
             id: 'nanjing-job-4-dsc-1',
@@ -637,6 +691,8 @@ export const data = {
         id: 'nanjing-job-5',
         title: '跨境电商运营专员',
         image: '/images/nanjing/3.jpg',
+        regionType:3,
+        time:"2022-06-06",
         descriptions: [
           {
             id: 'nanjing-job-5-dsc-1',
@@ -661,6 +717,8 @@ export const data = {
         id: 'nanjing-job-6',
         title: '小语种运营专员',
         image: '/images/nanjing/6.jpg',
+        regionType:3,
+        time:"2022-06-06",
         descriptions: [
           {
             id: 'nanjing-job-6-dsc-1',
@@ -685,6 +743,8 @@ export const data = {
         id: 'nanjing-job-7',
         title: '美工',
         image: '/images/nanjing/4.jpg',
+        regionType:3,
+        time:"2022-06-06",
         descriptions: [
           {
             id: 'nanjing-job-7-dsc-1',
@@ -705,7 +765,43 @@ export const data = {
       }
     ]
   }
-}
+];
+
+// 校园招聘
+export const data2 = [
+  {
+    banner: {
+      pc: '/images/shanghai/1.jpg',
+      msite: '/images/shanghai/1_1.jpg'
+    },
+    jobs: [
+    ]
+  },
+  {
+    banner: {
+      pc: '/images/guangzhou/1.jpg',
+      msite: '/images/guangzhou/1_1.jpg'
+    },
+    jobs: [
+    ]
+  },
+  {
+    banner: {
+      pc: '/images/shanghai/1.jpg',
+      msite: '/images/shanghai/1_1.jpg'
+    },
+    jobs: [
+    ]
+  }
+];
+
+export const geekoHonor = {
+  title:"Geeko荣誉",
+  descrptions:[
+    "1、PAYPAL BEST移动体验奖",
+    "2、谷歌xBrandZ中国最具潜力全球化品牌15强"
+  ]
+};
 
 
 export const getSource = (type) => {
