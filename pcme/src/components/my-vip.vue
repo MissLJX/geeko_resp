@@ -83,9 +83,9 @@
                         <span>V{{item.level}}</span>
                         <div class="triangle" :style="'border-right-color:'+highLightList[item.level]+';'"></div>
                     </span>
-                    <div class="rewardRules" v-if="item.showRules && item.description || item.id == showTagId" >
+                    <div class="rewardRules" v-if="(item.showRules && item.description) || item.refId == showTagId" >
                         <div class="rewardRulesTitle">{{item.title}}</div>
-                        <div class="rewardRulesClose iconfont" @click.stop="()=>rewardRuleHide(item.id)">&#xe7c9;</div>
+                        <div class="rewardRulesClose iconfont" @click.stop="()=>rewardRuleHide(item.id, item.refId)">&#xe7c9;</div>
                         <div class="rewardRulesContent">{{item.description}}</div>
 
                         <div v-if="item.buttonText && item.buttonDisabled" class="rewardRulesBtn" style="background:#999;">
@@ -93,7 +93,7 @@
                         </div>
 
                         <!-- 兑换优惠券 -->
-                        <div @click="() => goLink('redeem-coupon')" :class="{'rewardRulesBtn':true}" v-if="item.id == 1 && !item.buttonDisabled && item.buttonText" >
+                        <div @click="() => goLink('redeem-coupon',item.refId)" :class="{'rewardRulesBtn':true}" v-if="item.id == 1 && !item.buttonDisabled && item.buttonText" >
                             <!-- {{$t('my_vip.redeem_now')}} -->
                             {{item.buttonText}}
                         </div>
@@ -105,7 +105,7 @@
                         </div>
 
                         <!-- 检测我的优惠券 -->
-                        <div class="rewardRulesBtn" @click="() => goLink('coupons')" v-if="item.id == 4 && vipLevel >= 1 && !item.buttonDisabled && item.buttonText">
+                        <div class="rewardRulesBtn" @click="() => goLink('coupons',item.refId)" v-if="item.id == 4 && vipLevel >= 1 && !item.buttonDisabled && item.buttonText">
                             <!-- {{$t('my_vip.check_coupons')}} -->
                             {{item.buttonText}}
                         </div>
@@ -117,7 +117,7 @@
                         </div>
 
                         <!-- 联系专属客服 -->
-                        <div class="rewardRulesBtn" v-if="item.id == 7 && vipLevel >= 3 && !item.buttonDisabled && item.buttonText" @click="()=>linkTo('/support/')">
+                        <div class="rewardRulesBtn" v-if="item.id == 7 && vipLevel >= 3 && !item.buttonDisabled && item.buttonText" @click="()=>linkTo('/support/', item.refId)">
                             <!-- {{$t("support.s_contact_us")}} -->
                             {{item.buttonText}}
                         </div>
@@ -954,8 +954,10 @@ export default {
         document.addEventListener("click",this.maskClose,false)
     },
     mounted(){
-        if(this.$route.query && this.$route.query.refId){
-            this.showTagId = this.$route.query.refId
+        if(this.$route.query && this.$route.query.reward_id){
+            this.showTagId = this.$route.query.reward_id
+            this.hasMaskShow = true;
+            // console.log(this.showTagId)
         }
     },
     beforeDestroy(){
@@ -990,7 +992,9 @@ export default {
                 return v
             })
         },
-        rewardRuleHide(e){
+        rewardRuleHide(e,id){
+            // console.log('rewardRuleHide',this.showTagId)
+            this.showTagId = '';
             if(window.GeekoSensors){
                 window.GeekoSensors.Track('ELClick', {
                     clicks: id,
@@ -1008,6 +1012,8 @@ export default {
             })
         },
         maskClose(e){
+            // console.log('maskClose',this.showTagId)
+            this.showTagId = ''
             // console.log('sss', this.$refs.main, e.target, this.$refs.main.contains(e.target))
             if (this.$refs.main && !this.$refs.main.contains(e.target)) {
                 if(this.hasMaskShow){
@@ -1019,7 +1025,7 @@ export default {
             }
             
         },
-        linkTo(url){
+        linkTo(url,id){
             if(window.GeekoSensors){
                 window.GeekoSensors.Track('ELClick', {
                     clicks: id,
@@ -1059,7 +1065,7 @@ export default {
             this.showRedemption = false;
             window.location.href = '/'
         },
-        goLink(url){
+        goLink(url,id){
             if(window.GeekoSensors){
                 window.GeekoSensors.Track('ELClick', {
                     clicks: id,
