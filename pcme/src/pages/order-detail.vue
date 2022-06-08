@@ -528,7 +528,8 @@
                 }
             },
             getProUrl(product){
-                return "/product/"+product.name+"/"+product.sku+"/"+product.productId+".html"
+                // return "/product/"+product.name+"/"+product.productId+".html"
+                return '/' + utils.productIdUrl(product)
             },
             getReturnLabel(){
                 window.recordReturnLabel ? window.recordReturnLabel(this.orderdetail.id) : "";

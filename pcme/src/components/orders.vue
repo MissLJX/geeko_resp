@@ -596,7 +596,7 @@
                 }
             },
             productUrl(name,sku,id){
-                return window.ctx + "/product/"+name+"/"+sku+"/"+id+".html"
+                return window.ctx + "/product/"+name+"/"+id+".html"
             },
             checkoutUrl(id){
                 if(id){
