@@ -1,5 +1,5 @@
 import React from 'react'
-import {BANNER} from '../components/banner.jsx'
+import {SMALLBANNER} from '../components/banner.jsx'
 import {TITLE1, CONTENT1, CONTENT1S} from '../components/text.jsx'
 import {BLOCKIMAGE} from '../components/elements.jsx'
 import {RES1, CONTAINER} from '../components/layout.jsx'
@@ -50,6 +50,10 @@ const BLOCKER = Styled.div`
   margin-top: 50px
   @media (max-width: 1200px) {
     margin-top: 20px;
+
+    &.__none{
+      display:none;
+    }
   }
 `
 
@@ -62,18 +66,6 @@ const HISTORIES = Styled.ul`
     border-left: 1px solid #222;
     position: relative;
     padding-left: 25px;
-    &::before{
-      width: 18px;
-      height: 18px;
-      border: 2px solid #222;
-      background-color: #fff;
-      border-radius: 50%;
-      left: -10px;
-      top: 0;
-      content:'';
-      display: block;
-      position: absolute;
-    }
 
     &:last-child{
       border-left: none;
@@ -85,8 +77,9 @@ const HISTORIES = Styled.ul`
       vertical-align: top;
       position: relative;
       top: -5px;
-      &:first-child{
-        width: 113px;
+
+      &.__width{
+        width:85px;
       }
     }
 
@@ -99,34 +92,133 @@ const HISTORIES = Styled.ul`
     .__dsc{
       font-size: 18px;
       line-height: 29px;
+      color:#666666;
+    }
+
+    .__circle{
+      width: 14px;
+      height: 14px;
+      border: 1px solid #222;
+      background-color: #fff;
+      border-radius: 50%;
+      left: -7px;
+      top: 0;
+      display: block;
+      position: absolute;
+
+      & > span{
+        width: 7px;
+        height: 7px;
+        background-color: #666666;
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+      }
     }
   }
+`;
+
+const VIDEOCONTAINER = Styled.div`
+  margin-top:14px;
+
+  @media (min-width: 1200px) {
+    margin-top:40px;
+    width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+`;
+
+const FLOATRES1 = Styled.div`
+  & > *:nth-child(1){
+    width: ${props => props.width1}px;
+  }
+  & > *:nth-child(2){
+    width: ${props => props.width2}px;
+    float:right;
+  }
+
+  & > *:nth-child(3){
+    width: ${props => props.width3}px;
+  }
+
+  .__image{
+    float:right;
+    width:600px;
+    padding-left:20px;
+
+    &.__none_pc{
+      display:none;
+    }
+  }
+
+  @media (max-width: 1200px) {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    & > *:nth-child(1){
+      width: 100%;
+    }
+    & > *:nth-child(2){
+      width: 100%;
+    }
+    & > *:nth-child(3){
+      width: 100%;
+    }
+
+    .__image{
+      float:none;
+      width:100%;
+      padding-left:0px;
+      margin-top:20px;
+
+      &.__none_msite{
+        display:none;
+      }
+
+      &.__none_pc{
+        display:block;
+      }
+    }
+  }
+
 `
+
+
 
 export default () => <div>
   <section>
-    <BANNER src="/images/about/3.jpg" src1="/images/about/3_1.jpg" style={{position:'relative'}}>
-      <BANNERTITLE>
+    <SMALLBANNER src="/images/about/pc_home_1.jpg" src1="/images/about/m_home_1.jpg" style={{position:'relative'}}>
+      {/* <BANNERTITLE>
         <div className="__title">有温度的快时尚跨境电商</div>
         <div className="__dsc">以快时尚女装为业务主体，主要面对欧美、南美等消费市场是专注于欧美女装快时尚的跨境B2C互联网企业</div>
-      </BANNERTITLE>
-    </BANNER>
+      </BANNERTITLE> */}
+    </SMALLBANNER>
 
   </section>
+
+  <VIDEOCONTAINER>
+    <section>
+      <video style={{width: '100%'}} src="/images/chic.mp4" preload autoplay="autoplay" controls/>
+    </section>
+  </VIDEOCONTAINER>
+  
   <CONTAINER>
-  <section style={{marginTop: 50}}>
-    <video style={{width: '100%'}} src="/images/chic.mp4" preload autoplay="autoplay" controls/>
-  </section>
-  </CONTAINER>
-  <CONTAINER>
-    <section style={{padding: '40px 0'}}>
-      <RES1 width1={624} width2={513}>
+    <section style={{padding: '20px 0'}}>
+      <FLOATRES1 width1={1200} width2={600}>
         <BLOCKER >
           <div>
             <TITLE1>公司简介</TITLE1>
           </div>
           
           <CONTENT1S style={{marginTop: 14}}>
+            <div className='__image __none_msite'>
+              <BLOCKIMAGE src="/images/about/pc_home_2.jpg"/>
+            </div>
             <CONTENT1>
             上海极高是一家成立于2015年的跨境B2C互联网企业，专注于经营跨境电商快时尚领域，为全球消费者提供高性价比的时尚产品。公司总部设在上海，并在广州、南京、香港、合肥、新加坡、欧洲、美国等多个地方开设分支机构，目前已经进入了北美、南美、欧洲等市场。
             </CONTENT1>
@@ -163,14 +255,17 @@ export default () => <div>
             <CONTENT1>
             欢迎你加入我们，亲手创造全球时尚电商行业下一个奇迹，不再遗憾！
             </CONTENT1>
+
+            <div style={{clear:'both'}}></div>
+
+            <div className='__image __none_pc'>
+              <BLOCKIMAGE src="/images/about/pc_home_2.jpg"/>
+            </div>
           </CONTENT1S>
         </BLOCKER>
-        <BLOCKER>
-          <BLOCKIMAGE src="/images/about/1.jpg"/>
-        </BLOCKER>
-      </RES1>
+      </FLOATRES1>
 
-      <RES1 width1={466} width2={635} style={{direction: 'rtl'}}>
+      <RES1 width1={586} width2={555} style={{direction: 'rtl'}}>
         
         <BLOCKER style={{direction: 'ltr'}}>
           <div>
@@ -179,42 +274,50 @@ export default () => <div>
           
           <HISTORIES style={{marginTop: 23}}>
             <li>
-              <div><span className="__title">2015年5月</span></div>
+              <span className='__circle'><span></span></span>
+              <div className='__width'><span className="__title">2015/5</span></div>
               <div><p className="__dsc">上海极高公司成立</p></div>
             </li>
             <li>
-              <div><span className="__title">2015年8月</span></div>
+              <span className='__circle'><span></span></span>
+              <div className='__width'><span className="__title">2015/8</span></div>
               <div><p className="__dsc">chicme品牌上线运营</p></div>
             </li>
             <li>
-              <div><span className="__title">2015年10月</span></div>
+              <span className='__circle'><span></span></span>
+              <div className='__width'><span className="__title">2015/10</span></div>
               <div><p className="__dsc">注册用户超过100万</p></div>
             </li>
             <li>
-              <div><span className="__title">2016年</span></div>
+              <span className='__circle'><span></span></span>
+              <div className='__width'><span className="__title">2016</span></div>
               <div><p className="__dsc">南京、广州分公司成立</p></div>
             </li>
             <li>
-              <div><span className="__title">2017年</span></div>
+              <span className='__circle'><span></span></span>
+              <div className='__width'><span className="__title">2017</span></div>
               <div><p className="__dsc">美国公司成立.销售额激增</p></div>
             </li>
             <li>
-              <div><span className="__title">2018年</span></div>
+              <span className='__circle'><span></span></span>
+              <div className='__width'><span className="__title">2018</span></div>
               <div><p className="__dsc">旗下品牌超过10个</p></div>
             </li>
             <li>
-              <div><span className="__title">2019年</span></div>
+              <span className='__circle'><span></span></span>
+              <div className='__width'><span className="__title">2019</span></div>
               <div><p className="__dsc">业务覆盖全球，增长率稳定</p></div>
             </li>
             <li>
-              <div><span className="__title">2020年</span></div>
+              <span className='__circle'><span></span></span>
+              <div className='__width'><span className="__title">2020</span></div>
               <div><p className="__dsc">谷歌和BrandZ评选中国最具潜力全球化品牌15强&Paypal最佳移动体验奖</p></div>
             </li>
           </HISTORIES>
         </BLOCKER>
 
-        <BLOCKER >
-          <BLOCKIMAGE src="/images/about/2.jpg"/>
+        <BLOCKER className='__none'>
+          <BLOCKIMAGE src="/images/about/pc_home_3.jpg"/>
         </BLOCKER>
       </RES1>
 

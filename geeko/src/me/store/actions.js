@@ -34,9 +34,11 @@ const actions = {
             if(me && JSON.stringify(me) !== '{}'){
                 commit(types.ME_GET, me);
             }
+
+            console.log('getMeme', me);
             return me
         }).catch(e => {
-            // console.log("e",e);
+            console.log("e",e);
             commit(types.ME_GET_NO_LOGIN,false);
             return null
         })
