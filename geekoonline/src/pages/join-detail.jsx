@@ -1,5 +1,5 @@
 import React from 'react'
-import { data , geekoHonor } from '../store'
+import { data,data2,geekoHonor } from '../store'
 import {BLOCKIMAGE} from '../components/elements.jsx'
 import Styled from 'styled-components'
 import {CONTAINER} from '../components/layout.jsx'
@@ -40,9 +40,9 @@ const FIXEDWINDOW = Styled.div`
 
       .__close{
         position: absolute;
-        right: 10px;
-        top: 10px;
-        font-size: 25px;
+        right: 5px;
+        top: 5px;
+        font-size: 18px;
         font-family: iconfont;
         cursor: pointer;
       }
@@ -52,7 +52,7 @@ const FIXEDWINDOW = Styled.div`
 
     @media (max-width: 1200px) {
       .__window{
-        padding: 40px 25px;
+        padding: 25px 25px 20px 25px;
         width: 90%;
       }
     }
@@ -122,6 +122,7 @@ const BANNER = Styled.div`
         font-weight: bold;
         text-align: center;
         margin-left:0px;
+        font-size:14px;
       }
     }
   }
@@ -131,7 +132,7 @@ const JOBDESCRIPTION = Styled.div`
     margin-top:20px;
     ._title{
       font-size:20px;
-      font-weight:bold;
+      // font-weight:bold;
       color:#222222;
     }
 
@@ -140,13 +141,13 @@ const JOBDESCRIPTION = Styled.div`
       .__title{
         font-size:14px;
         color:#666666;
-        font-weight:bold;
+        // font-weight:bold;
       }
 
       ._description,._item{
         font-size:14px;
         color:#666666;
-        font-weight:bold;
+        // font-weight:bold;
       }
     }
 
@@ -233,7 +234,7 @@ export default class extends React.Component{
         data: null,
         selectedId: null,
         geekoHonor:geekoHonor,
-        cityType:0
+        show: true,
       };
     }
     this.joinHandle = this.joinHandle.bind(this);
@@ -242,8 +243,18 @@ export default class extends React.Component{
   }
 
   componentDidMount() {
-    const { location } = this.props
-    const jobItem = location.state.data;
+    const { location , match } = this.props
+    let jobItem;
+    if(!location.state){
+      const { params } = match;
+      const disposeData = params.type == 0 ? data : data2;
+      const disposeitem = disposeData.find(item =>item.regionType == params.regionType);
+      jobItem = disposeitem.jobs.find(item=>item.id==params.detail);
+    }else{
+      jobItem = location.state.data;
+    }
+    
+    
 
     setTimeout(() => {
       if (window.__ROUTE_DATA__) {
@@ -254,7 +265,6 @@ export default class extends React.Component{
       } else {
         this.setState({
           data: jobItem,
-          cityType:location.state.type
         })
       }
     }, 0)

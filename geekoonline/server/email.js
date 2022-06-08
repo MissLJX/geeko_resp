@@ -7,7 +7,7 @@ const transporter = nodemailer.createTransport({
   auth: {
     user: 'ziruxi@qq.com',
     // 这里密码不是qq密码，是你设置的smtp授权码
-    pass: 'lgxsyjmjfnmqbija'
+    pass: 'zklhnvuijlvzbghb'
   }
 })
 
@@ -20,7 +20,7 @@ export const sendEmail = ( opts ) => {
   transporter.sendMail(opts, (error, info) => {
     if (error) {
       return console.log(error);
-    }
+    } 
     console.log('Message sent: %s', info.messageId);
   });
 }

@@ -14,7 +14,7 @@ import Loadable from 'react-loadable'
 import {sendEmail} from './email'
 
 
-const PORT = process.env.PORT || 3000
+const PORT = 3001 || process.env.PORT || 3001
 const application = express()
 
 
@@ -78,30 +78,49 @@ const serverRenderer = (req, res, next) => {
 
 
 }
+// bin.array('file', 12) bin.single('file')
+router.post('/api/personal', bin.array('file', 12) , function(req, res, next){
+  // var filename = req.file.originalname;
+  // fs.renameSync('./bin/'+req.file.filename,'./bin/'+filename)
 
+  const {name, phone, email, info, position} = req.body;
 
-router.post('/api/personal', bin.single('file') , function(req, res, next){
-  var filename = req.file.originalname
-  fs.renameSync('./bin/'+req.file.filename,'./bin/'+filename)
+  // let dataArr = [];
+  // req.files.forEach(function(item){
+  //   let fileName = item.originalname;
+  //   fs.renameSync('./bin/'+item.filename,'./bin/'+fileName)
+  //   dataArr.push(
+  //     {
+  //       filename: fileName,
+  //       path: './bin/'+fileName
+  //     }
+  //   );
+  // });
 
-  const {name, phone, email, info, position} = req.body
+  let dataArr = [];
+  for(let i = 0;i<req.files.length;i++){
+    let item = req.files[i];
+    let fileName = item.originalname;
+    fs.renameSync('./bin/'+item.filename,'./bin/'+fileName)
+    dataArr.push(
+      {
+        filename: fileName,
+        path: './bin/'+fileName
+      }
+    );
+  }
 
-  console.log(req.body)
 
   let mailOptions = {
     from: 'ziruxi@qq.com', // sender address
-    to: 'xialuping@geeko.online', // list of receivers
+    to: 'whalefallxh@163.com', // list of receivers
     subject: `${ position } | ${name} | ${phone} | ${email}`, // Subject line
     // 发送text或者html格式
     // text: `${info}`, // plain text body
     html: `<b>${ position } | ${name} | ${phone} | ${email}</b><br/><p>${info}</p>`, // html body
-    attachments: [
-      {
-        filename: filename,
-        path: './bin/'+filename
-      }
-    ]
+    attachments: dataArr
   }
+  console.log('mailOptions', mailOptions)
   sendEmail(mailOptions)
   res.json('投递成功!!!')
 })

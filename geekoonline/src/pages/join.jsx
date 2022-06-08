@@ -68,6 +68,10 @@ const BLOCKER = Styled.div`
 
 const BLOCKER2 = Styled.div`
   padding-top: 89px;
+
+  & > video{
+    display:block;
+  }
   
   @media (max-width: 1200px) {
     padding-top: 60px;
@@ -103,7 +107,6 @@ const ART = Styled.div`
     line-height: 40px;
     letter-spacing: 0px;
     color: #222222;
-    font-weight:bold;
     margin-top:5px;
   }
 

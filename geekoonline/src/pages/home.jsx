@@ -1,12 +1,20 @@
 import React from 'react'
 import {SMALLBANNER} from '../components/banner.jsx'
-import {TITLE1, CONTENT1, CONTENT1S} from '../components/text.jsx'
+import {CONTENT1S} from '../components/text.jsx'
 import {BLOCKIMAGE} from '../components/elements.jsx'
 import {RES1, CONTAINER} from '../components/layout.jsx'
 import Styled from 'styled-components'
 
 
-
+const TITLE1 = Styled.span`
+  font-size: 4.4rem;
+  letter-spacing: 0px;
+  color: #000000;
+  font-weight:bold;
+  @media (max-width: 1200px) {
+    font-size: 3.5rem;
+  }
+`
 
 const BANNERTITLE = Styled.div`
   position: absolute;
@@ -62,7 +70,7 @@ const HISTORIES = Styled.ul`
   & > li{
 
     display: table;
-    padding-bottom: 30px;
+    padding-bottom: 18px;
     border-left: 1px solid #222;
     position: relative;
     padding-left: 25px;
@@ -84,13 +92,13 @@ const HISTORIES = Styled.ul`
     }
 
     .__title{
-      font-size: 18px;
+      font-size: 16px;
       line-height: 29px;
       font-weight: bold;
     }
 
     .__dsc{
-      font-size: 18px;
+      font-size: 16px;
       line-height: 29px;
       color:#666666;
     }
@@ -117,6 +125,12 @@ const HISTORIES = Styled.ul`
         border-radius: 50%;
         transform: translate(-50%, -50%);
       }
+    }
+  }
+
+  @media (min-width: 1200px) {
+    & > li{
+      padding-bottom: 30px;
     }
   }
 `;
@@ -188,6 +202,18 @@ const FLOATRES1 = Styled.div`
 
 `
 
+const CONTENT1 = Styled.p`
+  font-size: 1.8rem;
+  line-height: 3.4rem;
+  letter-spacing: .1rem;
+  color: #000000;
+  @media (max-width: 1200px) {
+    font-size: 1.6rem;
+    line-height: 2.6rem;
+    letter-spacing: .1rem;
+  }
+`
+
 
 
 export default () => <div>
@@ -208,7 +234,7 @@ export default () => <div>
   </VIDEOCONTAINER>
   
   <CONTAINER>
-    <section style={{padding: '20px 0'}}>
+    <section style={{padding: '0px 0px 20px 0px'}}>
       <FLOATRES1 width1={1200} width2={600}>
         <BLOCKER >
           <div>
@@ -265,7 +291,7 @@ export default () => <div>
         </BLOCKER>
       </FLOATRES1>
 
-      <RES1 width1={586} width2={555} style={{direction: 'rtl'}}>
+      <RES1 width1={686} width2={455} style={{direction: 'rtl'}}>
         
         <BLOCKER style={{direction: 'ltr'}}>
           <div>
