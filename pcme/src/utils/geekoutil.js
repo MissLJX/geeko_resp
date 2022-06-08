@@ -148,8 +148,13 @@ const _url_analyst = function (name) {
 }
 
 export const producturl = function (product) {
-    return _.concat('product', _url_analyst(product.name), product.parentSku, product.id + '.html').join('/')
+    return _.concat('product', _url_analyst(product.name), product.id + '.html').join('/')
 }
+
+export const productIdUrl = function (product) {
+    return _.concat('product', _url_analyst(product.productName || product.name), (product.id || product.productId) + '.html').join('/')
+}
+
 export const STATUS_COLOR = function (value) {
     var label;
     let color;

@@ -654,7 +654,8 @@
                 }
             },
             getProUrl(product){
-                return "/product/"+product.productName+"/"+product.sku+"/"+product.productId+".html"
+                // return "/product/"+product.productName+"/"+product.productId+".html"
+                return '/' + utils.productIdUrl(product)
             },
             getReturnLabel(){
                 window.recordReturnLabel ? window.recordReturnLabel(this.orderdetail.id) : "";
