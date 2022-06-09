@@ -1,12 +1,12 @@
 <template>
     <div class="el-notification" :class="{'read':notification.read}">
-        <div class="el-eachmodel" :class="{'no-read':!notification.read }" v-if="notification.type != '9'">
-            <model-1 :model="notification.model" v-if="notification.model.type == '1'" :sendtime="sendTime"/>
-            <model-2 :model="notification.model" v-if="notification.model.type == '2'" :sendtime="sendTime"/>
-            <model-3 :model="notification.model" v-if="notification.model.type == '3'" :sendtime="sendTime"/>
-            <model-4 :model="notification.model" v-if="notification.model.type == '4'" :sendtime="sendTime"/>
-            <model-5 :model="notification.model" v-if="notification.model.type == '5'" :sendtime="sendTime"/>
-            <model-6 :model="notification.model" v-if="notification.model.type == '6'" :sendtime="sendTime"/>
+        <div class="el-eachmodel" :class="{'no-read':!notification.read }" v-if="notification.type != '9'" >
+            <model-1 :model="notification.model" @record="geekoSensor" v-if="notification.model.type == '1'" :sendtime="sendTime"/>
+            <model-2 :model="notification.model" @record="geekoSensor" v-if="notification.model.type == '2'" :sendtime="sendTime"/>
+            <model-3 :model="notification.model" @record="geekoSensor" v-if="notification.model.type == '3'" :sendtime="sendTime"/>
+            <model-4 :model="notification.model" @record="geekoSensor" v-if="notification.model.type == '4'" :sendtime="sendTime"/>
+            <model-5 :model="notification.model" @record="geekoSensor" v-if="notification.model.type == '5'" :sendtime="sendTime"/>
+            <model-6 :model="notification.model" @record="geekoSensor" v-if="notification.model.type == '6'" :sendtime="sendTime"/>
         </div>
     </div>
 </template>
@@ -81,6 +81,17 @@
             'model-4': Model4,
             'model-5': Model5,
             'model-6': Model6
+        },
+        methods:{
+            geekoSensor(utmTerm){
+                if(window.GeekoSensors){
+                    window.GeekoSensors.Track('StationMsg', {
+                        type: '消息中心',
+                        action:"click",
+                        message_id:utmTerm
+                    })
+                }
+            }
         }
     }
 </script>

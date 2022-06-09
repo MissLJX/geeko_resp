@@ -18,7 +18,7 @@
                     <tr v-if="!notifications">{{$t('nomoredata')}}</tr>
                     <template  >
                         <tr v-for="(ticket, index) in notifications" :key="index">
-                            <td @click="showTicket(ticket.model.targetId)">
+                            <td @click="showTicket(ticket.model.targetId, ticket.model.deepLink.utmTerm || 'utmTerm 未返回')">
                                 <span>{{ticket.model.targetId}}</span>
                                 <span class="no-read" v-if="!ticket.read"></span>
                             </td>
@@ -208,7 +208,14 @@
                     this.$store.dispatch("getTicketNtSkip")
                 })
             },
-            showTicket(data){
+            showTicket(data, utmTerm){
+                if(window.GeekoSensors){
+                    window.GeekoSensors.Track('StationMsg', {
+                        type: '消息中心',
+                        action:"click",
+                        message_id: utmTerm
+                    })
+                }
                 this.isShowSelect = false
                 this.$store.dispatch('clearTicket')
                 this.$store.dispatch('getTicketByTicketId',data).then(()=>{

@@ -1,6 +1,6 @@
 <!--coupon-->
 <template>
-    <a :href="url">
+    <a :href="url" @click="(e) => geekoSensor(e)">
         <div class="n-mode">
             <div v-if="model.description" class="mgr-5">
                 {{model.description}}
@@ -115,13 +115,22 @@
                     return this.model.image
                 }
                 return "https://image.geeko.ltd" + this.model.image
-            }
+            },
+            utmTerm(){
+                if(this.model.deepLink && this.model.deepLink.utmTerm){
+                    return this.model.deepLink.utmTerm
+                }
+                return 'utmTerm 未返回'
+            },
         },
         methods:{
             imgurl(image){
                 if(image){
                     return "https://image.geeko.ltd"+image
                 }
+            },
+            geekoSensor(e){
+                this.$emit("record", this.utmTerm)
             }
         },
         props: {
