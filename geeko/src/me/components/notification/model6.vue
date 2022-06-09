@@ -1,5 +1,5 @@
 <template>
-    <a :href="url" class="el-model-6">
+    <a :href="url" @click="(e) => geekoSensor(e)" class="el-model-6">
         <div class="content" v-html="model.content"></div>
         <div class="st-table st-fullwidth el-model6-images">
             <div class="st-cell">
@@ -59,6 +59,17 @@
         computed: {
             prefix(){
                 return IMAGE_PREFIX
+            },
+            utmTerm(){
+                if(this.model.deepLink && this.model.deepLink.utmTerm){
+                    return this.model.deepLink.utmTerm
+                }
+                return 'utmTerm 未返回'
+            },
+        },
+        methods:{
+            geekoSensor(e){
+                this.$emit("record", this.utmTerm)
             }
         }
     }

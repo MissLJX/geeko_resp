@@ -1,6 +1,6 @@
 <template>
     <div>
-        <a :href="url">
+        <a :href="url" @click="(e) => geekoSensor(e)">
             <div class="st-table st-fullwidth">
                 <div class="st-cell st-v-t">
                     <p>{{model.description}}</p>
@@ -72,8 +72,19 @@
 
                 return ''
 
-            }
+            },
+            utmTerm(){
+                if(this.model.deepLink && this.model.deepLink.utmTerm){
+                    return this.model.deepLink.utmTerm
+                }
+                return 'utmTerm 未返回'
+            },
         },
-        mixins: [deeplinkmixin]
+        mixins: [deeplinkmixin],
+        methods:{
+            geekoSensor(e){
+                this.$emit("record", this.utmTerm)
+            }
+        }
     }
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <a :href="url">
+    <a :href="url" @click="(e) => geekoSensor(e)">
         <div class="st-table">
             <div class="st-cell el-model-1-image st-v-t" :class="{'deep1': isSqure}">
                 <img :src="imageUrl">
@@ -46,6 +46,17 @@
         computed: {
             isSqure(){
                 return false
+            },
+            utmTerm(){
+                if(this.model.deepLink && this.model.deepLink.utmTerm){
+                    return this.model.deepLink.utmTerm
+                }
+                return 'utmTerm 未返回'
+            },
+        },
+        methods:{
+            geekoSensor(e){
+                this.$emit("record", this.utmTerm)
             }
         }
     }

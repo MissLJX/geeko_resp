@@ -7,7 +7,7 @@
             <div class="st-cell el-model-1-content st-v-t" v-html="model.content"></div>
         </div>
     </a> -->
-    <a :href="url">
+    <a :href="url" @click="(e) => geekoSensor(e)">
         <div class="ticket_notification_item">
             <div class="ticket_notification_item_header">
                 <div class="ticket_notification_item_id">
@@ -129,6 +129,18 @@
         computed: {
             isSqure(){
                 return false
+            },
+            utmTerm(){
+                if(this.model.deepLink && this.model.deepLink.utmTerm){
+                    return this.model.deepLink.utmTerm
+                }
+                return 'utmTerm 未返回'
+            },
+        },
+        methods:{
+            geekoSensor(e){
+                // e.preventDefault()
+                this.$emit("record", this.utmTerm)
             }
         }
     }
