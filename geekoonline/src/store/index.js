@@ -11,7 +11,7 @@ export const data = [
       {
         id: 'shanghai-job-1',
         title: '资深网站运营',
-        image: '/images/shanghai/10.jpg',
+        image: '/images/shanghai/2.jpg',
         regionType:1,
         time:"2022-06-06",
         descriptions: [
@@ -42,10 +42,10 @@ export const data = [
       {
         id: 'shanghai-job-2',
         title: '用户运营专员',
-        image: '/images/shanghai/10.jpg',
+        image: '/images/shanghai/8.jpg',
         regionType:1,
         time:"2022-06-06",
-        isHot:true,
+        isHot:false,
         descriptions: [
           {
             id: 'shanghai-job-2-dsc-1',
@@ -101,7 +101,7 @@ export const data = [
       {
         id: 'shanghai-job-4',
         title: '数据分析师',
-        image: '/images/shanghai/9.jpg',
+        image: '/images/shanghai/10.jpg',
         regionType:1,
         time:"2022-06-06",
         descriptions: [
@@ -131,7 +131,7 @@ export const data = [
       {
         id: 'shanghai-job-5',
         title: '财务经理',
-        image: '/images/shanghai/8.jpg',
+        image: '/images/shanghai/7.jpg',
         regionType:1,
         time:"2022-06-06",
         descriptions: [
@@ -161,7 +161,7 @@ export const data = [
       {
         id: 'shanghai-job-6',
         title: '高级财务专员',
-        image: '/images/shanghai/6.jpg',
+        image: '/images/shanghai/7.jpg',
         regionType:1,
         time:"2022-06-06",
         descriptions: [
@@ -194,7 +194,7 @@ export const data = [
       {
         id: 'shanghai-job-7',
         title: '总账会计',
-        image: '/images/shanghai/10.jpg',
+        image: '/images/shanghai/7.jpg',
         regionType:1,
         time:"2022-06-06",
         descriptions: [
@@ -268,7 +268,7 @@ export const data = [
       {
         id: 'guangzhou-job-1',
         title: '欧美女装买手',
-        image: '/images/guangzhou/12.jpg',
+        image: '/images/shanghai/10.jpg',
         regionType:2,
         time:"2022-06-06",
         descriptions: [
@@ -299,7 +299,7 @@ export const data = [
       {
         id: 'guangzhou-job-2',
         title: '欧美大码女装、配饰买手',
-        image: '/images/guangzhou/5.jpg',
+        image: '/images/shanghai/10.jpg',
         regionType:2,
         time:"2022-06-06",
         descriptions: [
@@ -330,7 +330,7 @@ export const data = [
       {
         id: 'guangzhou-job-3',
         title: '服装仓库质检员（仓库QC）',
-        image: '/images/guangzhou/10.jpg',
+        image: '/images/shanghai/10.jpg',
         regionType:2,
         time:"2022-06-06",
         descriptions: [
@@ -369,7 +369,7 @@ export const data = [
       {
         id: 'nanjing-job-1',
         title: '英语客户维护专员',
-        image: '/images/nanjing/7.jpg',
+        image: '/images/shanghai/8.jpg',
         regionType:3,
         time:"2022-06-06",
         descriptions: [
@@ -400,7 +400,7 @@ export const data = [
       {
         id: 'nanjing-job-2',
         title: '德语客户维护专员',
-        image: '/images/nanjing/5.jpg',
+        image: '/images/shanghai/8.jpg',
         regionType:3,
         time:"2022-06-06",
         descriptions: [
@@ -433,7 +433,7 @@ export const data = [
       {
         id: 'nanjing-job-3',
         title: '葡萄牙语客户维护专员',
-        image: '/images/nanjing/2.jpg',
+        image: '/images/shanghai/8.jpg',
         regionType:3,
         time:"2022-06-06",
         descriptions: [
@@ -465,7 +465,7 @@ export const data = [
       {
         id: 'nanjing-job-4',
         title: '法语客户维护专员',
-        image: '/images/nanjing/8.jpg',
+        image: '/images/shanghai/8.jpg',
         regionType:3,
         time:"2022-06-06",
         descriptions: [
@@ -498,7 +498,7 @@ export const data = [
       {
         id: 'nanjing-job-5',
         title: '西班牙语客户维护专员',
-        image: '/images/nanjing/3.jpg',
+        image: '/images/shanghai/8.jpg',
         regionType:3,
         time:"2022-06-06",
         descriptions: [
@@ -530,7 +530,7 @@ export const data = [
       {
         id: 'nanjing-job-6',
         title: '意大利语客户维护专员',
-        image: '/images/nanjing/6.jpg',
+        image: '/images/shanghai/8.jpg',
         regionType:3,
         time:"2022-06-06",
         descriptions: [
@@ -562,7 +562,7 @@ export const data = [
       {
         id: 'nanjing-job-7',
         title: '亚马逊运营专员',
-        image: '/images/nanjing/4.jpg',
+        image: '/images/shanghai/8.jpg',
         regionType:3,
         time:"2022-06-06",
         descriptions: [
@@ -592,14 +592,14 @@ export const data = [
       },
       {
         id: 'nanjing-job-8',
-        title: '亚马逊运营专员',
-        image: '/images/nanjing/4.jpg',
+        title: '速卖通运营专员',
+        image: '/images/shanghai/8.jpg',
         regionType:3,
         time:"2022-06-06",
         descriptions: [
           {
             id: 'nanjing-job-8-dsc-1',
-            title: '速卖通运营专员',
+            title: '岗位职能',
             descriptions: [
               '1、【独立运营】独立负责在速卖通平台上产品运营相关工作，完成销售目标；',
               '2、【编辑上架】熟悉产品并控制产品风险，按速卖通平台规则和公司要求编辑产品信息、上传产品、实施新品推广计划；',
@@ -633,7 +633,7 @@ export const data = [
       {
         id: 'zhaoqing-job-1',
         title: '服装搭配摄影师',
-        image: '/images/zhaoqing/7.jpg',
+        image: '/images/shanghai/11.jpg',
         regionType:4,
         time:"2022-06-06",
         descriptions: [
@@ -675,10 +675,9 @@ export const data2 = [
       {
         id: 'shanghai-job-1',
         title: '德语网站运营',
-        image: '/images/shanghai/10.jpg',
+        image: '/images/shanghai/8.jpg',
         regionType:1,
         time:"2022-06-06",
-        isHot:true,
         descriptions: [
           {
             id: 'shanghai-job-1-dsc-1',
@@ -708,7 +707,7 @@ export const data2 = [
         image: '/images/shanghai/10.jpg',
         regionType:1,
         time:"2022-06-06",
-        isHot:true,
+        isHot:false,
         descriptions: [
           {
             id: 'shanghai-job-2-dsc-1',
@@ -735,7 +734,7 @@ export const data2 = [
       {
         id: 'shanghai-job-3',
         title: 'Java开发工程师',
-        image: '/images/shanghai/10.jpg',
+        image: '/images/shanghai/4.jpg',
         regionType:1,
         time:"2022-06-06",
         descriptions: [
@@ -766,7 +765,7 @@ export const data2 = [
       {
         id: 'shanghai-job-4',
         title: '广告素材设计',
-        image: '/images/shanghai/10.jpg',
+        image: '/images/shanghai/9.jpg',
         regionType:1,
         time:"2022-06-06",
         descriptions: [
@@ -795,7 +794,7 @@ export const data2 = [
       {
         id: 'shanghai-job-5',
         title: '视频剪辑',
-        image: '/images/shanghai/10.jpg',
+        image: '/images/shanghai/9.jpg',
         regionType:1,
         time:"2022-06-06",
         descriptions: [
@@ -827,7 +826,7 @@ export const data2 = [
       {
         id: 'shanghai-job-6',
         title: '品类企划助理',
-        image: '/images/shanghai/10.jpg',
+        image: '/images/shanghai/7.jpg',
         regionType:1,
         time:"2022-06-06",
         descriptions: [

@@ -469,8 +469,9 @@ export default withRouter(class extends React.Component{
   }
 
   selectChangeCity(evt){
+    let value = parseInt(evt.target.value);
     this.setState({
-      selectedCity:evt.target.value
+      selectedCity:value
     });
   }
 
@@ -568,11 +569,11 @@ export default withRouter(class extends React.Component{
 
               <div className='_container2'>
                 <select name="select" onChange={this.selectChangeCity}>
-                  <option value="0">工作城市</option>
-                  <option value="1">上海市</option>
-                  <option value="3">南京市</option>
-                  <option value="2">广州市</option>
-                  <option value="4">肇庆市</option>
+                  <option value={0}>工作城市</option>
+                  <option value={1}>上海市</option>
+                  <option value={3}>南京市</option>
+                  <option value={2}>广州市</option>
+                  <option value={4}>肇庆市</option>
                 </select>
               </div>
 

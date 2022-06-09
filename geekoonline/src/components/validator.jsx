@@ -16,6 +16,12 @@ export const number = (value) => {
 	}
 }
 
+export const number2 = (value) => {
+	if (value && !validator.isInt(value)) {
+		return `必须为的数字`
+	}
+}
+
 export const email = (value) => {
 	if (!validator.isEmail(value)) {
 		return `${value} 不是个正确的电子邮件地址`

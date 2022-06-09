@@ -170,11 +170,13 @@ const MOREJOBHREF = Styled.a`
 
   @media (min-width: 1200px) {
     width:240px;
+    margin-top: 0px;
   }
 `;
 
 const JOINUS = Styled.div`
     margin-top:20px;
+    width:100%;
 
     button{
       display:inline-block;
@@ -182,20 +184,22 @@ const JOINUS = Styled.div`
       border: none;
       box-shadow: none;
       outline: none;
-      background-color: #222;
+      background-color: #167dde;
       color: #fff;
       height: 36px;
       line-height: 36px;
       text-align: center;
       font-size: 16px;
+      font-weight: bold;
     }
 
     @media (min-width: 1200px) {
-      position: absolute;
-      top: 40px;
-      right: 30px;
+      // position: absolute;
+      // top: 40px;
+      // right: 30px;
       width: 160px;
       margin-top:0px;
+      margin-right:35px;
 
       button{
         width: 160px;
@@ -220,6 +224,77 @@ const PRIVATECONTAINER = Styled.div`
   }
 `;
 
+const SUCCESSMODAL = Styled.div`
+  text-align:center;
+  padding-top:30px;
+  padding-bottom:15px;
+
+  ._title{
+    font-size: 18px;
+    font-weight: bold;
+    color: #222222;
+  }
+
+  ._content{
+    font-size: 12px;
+    font-weight: bold;
+    color: #222222;
+  }
+
+  ._sure{
+    height: 42px;
+    line-height: 42px;
+    border: none;
+    box-shadow: none;
+    outline: none;
+    background-color: #222;
+    color: #fff;
+    width: 100%;
+    cursor: pointer;
+    display: inline-block;
+    margin-top: 50px;
+    font-size:14px;
+    font-weight:bold;
+  }
+
+  @media (min-width: 1200px) {
+    ._title{
+      font-size:28px;
+    }
+
+    ._content{
+      margin-top:30px;
+      font-size:14px;
+    }
+
+    ._sure{
+      margin-top:100px;
+    }
+  }
+`;
+
+
+const APPLYPMOREOSITION = Styled.div`
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top:30px;
+
+  @media (max-width: 1200px) {
+    margin-top:0px;
+  }
+`;
+
+const SuccessModal = props =>{
+  console.log('props', props)
+  return <SUCCESSMODAL>
+    <p className='_title'>提交成功~</p>
+    <p className='_content'>您的简历已成功提交，我们会尽快进行简历初筛，初筛若通过，会尽快与您联系，请保持您的邮箱及电话通畅。</p>
+
+    <button className='_sure' onClick={() =>props.onClose()}>确认</button>
+  </SUCCESSMODAL>
+}
+
 export default class extends React.Component{
   constructor(props){
     super(props)
@@ -234,12 +309,15 @@ export default class extends React.Component{
         data: null,
         selectedId: null,
         geekoHonor:geekoHonor,
-        show: true,
+        show: false,
+        showModal:false
       };
     }
     this.joinHandle = this.joinHandle.bind(this);
     this.moreGoBack = this.moreGoBack.bind(this);
     this.moreEvent = this.moreEvent.bind(this);
+    this.onSuccessEvent = this.onSuccessEvent.bind(this);
+    this.onCloseEvent = this.onCloseEvent.bind(this);
   }
 
   componentDidMount() {
@@ -286,6 +364,14 @@ export default class extends React.Component{
     evt.preventDefault();
     const { history } = this.props;
     history.push("/join-more");
+  }
+
+  onSuccessEvent(){
+    this.setState({show: true,showModal:true})
+  }
+
+  onCloseEvent(){
+    this.setState({show: false,showModal:false})
   }
 
   render(){
@@ -344,7 +430,7 @@ export default class extends React.Component{
               </JOBDESCRIPTION>
                 
               {
-                geekoHonor && <JOBDESCRIPTION>
+                geekoHonor && <JOBDESCRIPTION style={{marginTop:20}}>
                   <div className='_title'>{geekoHonor.title}</div>
 
                   <div className='_content'>
@@ -359,13 +445,16 @@ export default class extends React.Component{
                 </JOBDESCRIPTION>
               }
 
-              <MOREJOBHREF href='/' onClick={this.moreEvent}>
-                <span>查看更多职位信息 {'>>'}</span>
-              </MOREJOBHREF>
+              <APPLYPMOREOSITION>
+                <JOINUS>
+                  <button onClick={()=>this.joinHandle(this.state.data.title)}>申请职位</button>
+                </JOINUS>
 
-              <JOINUS>
-                <button onClick={()=>this.joinHandle(this.state.data.title)}>加入我们</button>
-              </JOINUS>
+                <MOREJOBHREF href='/' onClick={this.moreEvent}>
+                  <span>查看更多职位信息 {'>>'}</span>
+                </MOREJOBHREF>
+              </APPLYPMOREOSITION>
+              
           </PRIVATECONTAINER>
         </div>
       }
@@ -374,8 +463,17 @@ export default class extends React.Component{
       {
         this.state.show && <FIXEDWINDOW>
           <div className="__window">
-            <JoinForm position={this.state.position}/>
-            <span className="__close" onClick={ () => {this.setState({show: false})}}>&#xe69a;</span>
+            {
+              !this.state.showModal && <React.Fragment>
+                <JoinForm position={this.state.position} onSuccess={this.onSuccessEvent} />
+                <span className="__close" onClick={this.onCloseEvent}>&#xe69a;</span>
+              </React.Fragment>
+            }
+            
+            {
+              this.state.showModal &&  <SuccessModal onClose={this.onCloseEvent} />
+            }
+            
           </div>
         </FIXEDWINDOW>
       }

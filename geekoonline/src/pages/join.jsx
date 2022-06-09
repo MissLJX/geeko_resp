@@ -7,6 +7,7 @@ import {ICONS, Icon} from '../components/icontext-join.jsx'
 // import {Map, Marker, NavigationControl, InfoWindow} from 'react-bmap'
 import { Link } from 'react-router-dom'
 import JoinForm from '../components/join-form.jsx';
+import CompanyMessage from '../components/company-message.jsx'
 import { data,data2 } from '../store/index';
 import _ from 'lodash';
 import JoinMore from './join-more.jsx'
@@ -534,7 +535,7 @@ export default class extends React.Component{
                 <div className="__title">GEEKO福利</div>
                 <div style={{marginTop: 20}}>
                   <p>一、入职即购买社保（医疗、养老、工伤、失业、生育）、公积金；</p>
-                  <p>二、年度旅游；部门团建；定期体检；餐费补贴；交通补贴、带薪年假等；</p>
+                  <p>二、年度旅游；部门团建；定期体检；带薪年假等；</p>
                   <p>三、节假日礼品，生日福利，看电影、下午茶等活动；</p>
                   <p>四、公司根据年度整体效益，为做出贡献的优秀员工发放年末红包进行奖励！</p>
                 </div>
@@ -578,7 +579,7 @@ export default class extends React.Component{
   
     <CONTAINERGREY>
       <JOINCONTAINER>
-        <RES1 width1={624} width2={489} style={{padding:0}}>
+        <RES1 width1={624} width2={489} style={{padding:0,alignItems:'center'}}>
           <MAP className="__c"  ref={ this.maprender.bind(this) } id="mapjoin">
             {/* <Map center={{lng: 121.618243, lat: 31.259722}} zoom="17" >
                 <Marker position={{lng: 121.618243, lat: 31.259722}} />
@@ -586,7 +587,7 @@ export default class extends React.Component{
             </Map> */}
           </MAP>
           <div className="__c">
-            <JoinForm formHandle={ this.onSumbit.bind(this) }/>
+            <CompanyMessage />
           </div>
         </RES1>
       </JOINCONTAINER>

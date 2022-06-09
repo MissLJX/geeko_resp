@@ -44,6 +44,10 @@ const FILE = Styled.div`
     position: relative;
     cursor: pointer;
     text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
     & > input{
       width: 100%;
       height: 100%;
@@ -75,6 +79,12 @@ const ERRORCONTAINER = Styled.div`
         }
       }
     }
+    
+    &.__error{
+      & > input{
+        color:#e64545;
+      }
+    }
 `;
 
 
@@ -84,7 +94,7 @@ const _form = ({ getValues, validate, validateAll, showError, hideError, childre
 
 const _input = ({ error, isChanged, isUsed, divStyle, ...props }) => (
   
-  <ERRORCONTAINER style={divStyle} className={isChanged && isUsed && error ? 'error' : ''}>
+  <ERRORCONTAINER style={divStyle} className={isChanged && isUsed && error ? 'error __error' : ''}>
     <INPUT {...props} placeholder={isChanged && isUsed && error || props.placeholder} />
     <div className="__errortext"></div>
   </ERRORCONTAINER>
@@ -114,7 +124,7 @@ const _fileinput = ({ error, isChanged, isUsed, divStyle, ...props }) => (
   <div style={divStyle} className={isChanged && isUsed && error ? 'error' : ''}>
     <FILE>
      <INPUT  {...props}/>
-     <span className="__text">{props.text}</span>
+     <span className="__text">{props.fileName || props.text}</span>
     </FILE>
 
     <div className={isChanged&&isUsed&& error?"__errortext":""} style={{lineHeight: '20px',fontWeight: 'bold'}}>{props.description}</div>

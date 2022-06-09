@@ -1,6 +1,6 @@
 import React from 'react'
 import Styled from 'styled-components'
-import {required, email, phone} from './validator.jsx'
+import {required, email, phone,number2} from './validator.jsx'
 import { Form, Input, TextArea, Button, File} from './control-join.jsx'
 import { personal } from '../api'
 
@@ -9,27 +9,49 @@ const BUTTONS = Styled.div`
   justify-content: space-between;
 `
 
-const LABELVALUE = Styled.div`
-  .__label{
-    font-size: 12px;
-	  font-weight: bold;
-	  color: #000000;
-  }
-  .__value{
-    font-size: 12px;
-	  color: #000000;
-  }
-`
+const NORMALINPURCONTAINER = Styled.div`
+  margin-top:12px;
+  
+  & > input{
+    height: 36px;
+    background-color: #ffffff;
+    border: solid 1px #ebebeb;
+    outline: none;
+    box-shadow: none;
+    width: 100%;
+    padding-left: 10px;
 
-const LABEVALUES = Styled.div`
-  & > div{
-    margin-top: 13px;
-    &:first-child{
-      margin-top:0;
+    &::placeholder{
+      color:#666666;
     }
   }
-  margin-top: 25px;
-`
+`;
+
+const PRICEINPUTCONTAINER = Styled.div`
+  margin-top:12px;
+
+  ._label{
+    font-size:14px;
+  }
+
+  ._content{
+    display:flex;
+    align-items: center;
+
+    & > div{
+      width:45%;
+
+      &._center{
+        width:10%;
+        text-align:center;
+      }
+
+      & input{
+        text-align:center;
+      }
+    }
+  }
+`;
 
 const JoinForm = class extends React.Component{
   constructor(props){
@@ -39,7 +61,9 @@ const JoinForm = class extends React.Component{
       name: '',
       phone: '',
       email: '',
-      info: '',
+      // info: '',
+      price1:0,
+      price2:0,
       attachments: [],
       attachments2: [],
       loading: false
@@ -53,7 +77,6 @@ const JoinForm = class extends React.Component{
     let value;
     const name = target.name;
     const fileSize = 52428800;  //50M
-    console.log('target', target.name)
 
     switch(target.type){
       case 'checkbox':
@@ -62,6 +85,7 @@ const JoinForm = class extends React.Component{
       case 'file':
         value = target.files;
         let file = target.files[0];
+        console.log('file', file)
         if(file && (file.size > fileSize)){
           alert("上传文件请小于50M");
           return false;
@@ -79,22 +103,18 @@ const JoinForm = class extends React.Component{
 
   prepare(){
     let data = new FormData()
-    let dataArr = [];
     data.append('position', this.state.position)
     data.append('name', this.state.name)
     data.append('phone', this.state.phone)
     data.append('email', this.state.email)
-    data.append('info', this.state.info)
-    if(this.state.attachments.length > 0){
-      // dataArr.push(this.state.attachments[0]);
-      data.append('file', this.state.attachments[0])
-    }
+    data.append('price1', this.state.price1)
+    data.append('price2', this.state.price2)
+    // data.append('info', this.state.info)
+    data.append('file', this.state.attachments[0])
     if(this.state.attachments2.length > 0){
-      // dataArr.push(this.state.attachments2[0]);
       data.append('file', this.state.attachments2[0])
     }
     
-    // data.append('file2', this.state.attachments2[0])
     return data
   }
 
@@ -106,10 +126,10 @@ const JoinForm = class extends React.Component{
         loading: true
       })
       personal(this.prepare()).then( (data) => {
-        alert(data.data)
         this.setState({
           loading: false
         })
+        this.props.onSuccess();
       }).catch(() => {
         this.setState({
           loading: false
@@ -135,9 +155,29 @@ const JoinForm = class extends React.Component{
         <Input placeholder="联系邮箱*" name="email" validations={[required, email]} onChange={this.handleInputChange}/>
       </div>
 
-      <div style={{marginTop: 12}}>
+      <NORMALINPURCONTAINER>
+        <input value={this.state.position} readOnly />
+      </NORMALINPURCONTAINER>
+
+      {/* <div style={{marginTop: 12}}>
         <TextArea placeholder="个人信息" name="info" onChange={this.handleInputChange}/>
-      </div>
+      </div> */}
+
+      <PRICEINPUTCONTAINER>
+        <label className='_label'>期望薪资*</label>
+
+        <div className='_content'>
+          <div>
+            <Input name="price1" validations={[required, number2]} onChange={this.handleInputChange}/>
+          </div>
+          <div className='_center'>
+            <span>至</span>
+          </div>
+          <div>
+            <Input name="price2" validations={[required, number2]} onChange={this.handleInputChange}/>
+          </div>
+        </div>
+      </PRICEINPUTCONTAINER>
 
       <div style={{marginTop: 12}}>
           <File 
@@ -146,7 +186,8 @@ const JoinForm = class extends React.Component{
             text={`上传简历*`} 
             onChange={this.handleInputChange} 
             validations={[required]}
-            description={`支持pdf、doc、ppt、docx、pptx、wps、jpg、jpeg、png、txt 等简历格式。`}
+            fileName={this.state.attachments[0] && this.state.attachments[0].name}
+            description={`请上传简历，支持pdf、doc、ppt、docx、pptx、wps、jpg、jpeg、png、txt 等简历格式。`}
           />
       </div>
 
@@ -157,6 +198,7 @@ const JoinForm = class extends React.Component{
           type="file" 
           text={`上传作品集`} 
           onChange={this.handleInputChange} 
+          fileName={this.state.attachments2[0] && this.state.attachments2[0].name}
           description={`支持文档、图片、压缩包、视频、音频、设计文件等格式文件。单次上传文件的总容量请小于50MB。`}
         />
       </div>
@@ -164,22 +206,6 @@ const JoinForm = class extends React.Component{
       <div style={{marginTop: 12}}>
         <Button ref={c => this.button = c} ingoredisable="true" style={{cursor: 'pointer', backgroundColor: '#000000', color:'#fff', border: 'none', width: '100%', height: 36}}>提交</Button>
       </div>
-
-      {/* <LABEVALUES>
-        <LABELVALUE>
-          <span className="__label">上海地址：</span>
-          <span className="__value">上海市浦东新区锦绣东路2777弄36号10楼</span>
-        </LABELVALUE>
-        <LABELVALUE>
-          <span className="__label">电话：</span>
-          <span className="__value">021 61762186</span>
-        </LABELVALUE>
-        <LABELVALUE>
-          <span className="__label">E-mail：</span>
-          <span className="__value">hr@geeko.online</span>
-        </LABELVALUE>
-      </LABEVALUES> */}
-      
     </Form>
   }
 }

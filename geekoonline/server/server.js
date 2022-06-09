@@ -14,7 +14,7 @@ import Loadable from 'react-loadable'
 import {sendEmail} from './email'
 
 
-const PORT = 3001 || process.env.PORT || 3001
+const PORT = process.env.PORT || 3000
 const application = express()
 
 
@@ -83,7 +83,7 @@ router.post('/api/personal', bin.array('file', 12) , function(req, res, next){
   // var filename = req.file.originalname;
   // fs.renameSync('./bin/'+req.file.filename,'./bin/'+filename)
 
-  const {name, phone, email, info, position} = req.body;
+  const {name, phone, email , position , price1 , price2 } = req.body;
 
   // let dataArr = [];
   // req.files.forEach(function(item){
@@ -114,13 +114,12 @@ router.post('/api/personal', bin.array('file', 12) , function(req, res, next){
   let mailOptions = {
     from: 'ziruxi@qq.com', // sender address
     to: 'whalefallxh@163.com', // list of receivers
-    subject: `${ position } | ${name} | ${phone} | ${email}`, // Subject line
+    subject: `${ position } | ${name} | ${phone} | ${email} | ${price1}-${price2}`, // Subject line
     // 发送text或者html格式
     // text: `${info}`, // plain text body
-    html: `<b>${ position } | ${name} | ${phone} | ${email}</b><br/><p>${info}</p>`, // html body
+    html: `<b>${ position } | ${name} | ${phone} | ${email} | ${price1}-${price2}</b><br/><p></p>`, // html body
     attachments: dataArr
   }
-  console.log('mailOptions', mailOptions)
   sendEmail(mailOptions)
   res.json('投递成功!!!')
 })
