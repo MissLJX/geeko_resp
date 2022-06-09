@@ -3,18 +3,19 @@
         <div class="el-notification-send-time" v-if="notification.type!='9'">{{sendTime}}</div>
 
         <div class="el-eachmodel" :class="{'no-read':!notification.read}" v-if="notification.type!='9'">
-            <model-1 :model="notification.model" v-if="notification.model.type == '1'"/>
-            <model-2 :model="notification.model" v-if="notification.model.type == '2'"/>
-            <model-3 :model="notification.model" v-if="notification.model.type == '3'"/>
-            <model-4 :model="notification.model" v-if="notification.model.type == '4'"/>
-            <model-5 :model="notification.model" v-if="notification.model.type == '5'"/>
-            <model-6 :model="notification.model" v-if="notification.model.type == '6'"/>
+            <model-1 :model="notification.model" @record="geekoSensor" v-if="notification.model.type == '1'"/>
+            <model-2 :model="notification.model" @record="geekoSensor" v-if="notification.model.type == '2'"/>
+            <model-3 :model="notification.model" @record="geekoSensor" v-if="notification.model.type == '3'"/>
+            <model-4 :model="notification.model" @record="geekoSensor" v-if="notification.model.type == '4'"/>
+            <model-5 :model="notification.model" @record="geekoSensor" v-if="notification.model.type == '5'"/>
+            <model-6 :model="notification.model" @record="geekoSensor" v-if="notification.model.type == '6'"/>
         </div>
 
         <div class="el-eachmodel" v-if="notification.type=='9'" style="margin-bottom: 15px;">
             <model-1-ticket :model="notification.model" 
                             :isRead="notification.read" 
                             :sendTime="sendTime"
+                            @record="geekoSensor"
                             v-if="notification.model.type == '3'"/>
         </div>
 
@@ -95,6 +96,22 @@
             'model-5': Model5,
             'model-6': Model6,
             'model-1-ticket': Model1Ticket
+        },
+        methods:{
+            geekoSensor(utmTerm){
+                // alert(JSON.stringify({
+                //         type: '消息中心',
+                //         action:"click",
+                //         message_id:utmTerm
+                //     }))
+                if(window.GeekoSensors){
+                    window.GeekoSensors.Track('StationMsg', {
+                        type: '消息中心',
+                        action:"click",
+                        message_id:utmTerm
+                    })
+                }
+            }
         }
     }
 </script>

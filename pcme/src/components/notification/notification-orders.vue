@@ -57,10 +57,13 @@
                 return this.$store.getters['orderNewNtFinished']
             },
         },
+        watch:{
+            
+        },
         methods: {
             listingHandle(){
                 this.loading = true
-                this.$store.dispatch("getOrderNewNotifications", {skip: this.skip}).then(() => {
+                this.$store.dispatch("getOrderNewNotifications", {skip: this.skip}).then((res) => {
                     this.loading = false
                     this.$store.dispatch("getOrderNewNtSkip")
                 })

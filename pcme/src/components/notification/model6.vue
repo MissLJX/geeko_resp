@@ -1,6 +1,6 @@
 <!--content+多图-->
 <template>
-    <a :href="url">
+    <a :href="url" @click="(e) => geekoSensor(e)">
         <div class="n-mode">
             <img  v-if="model.image" :src="imgurl(model.image)" />
             <div style="display: flex">
@@ -114,13 +114,22 @@
                         _url = '#'
                 }
                 return _url
-            }
+            },
+            utmTerm(){
+                if(this.model.deepLink && this.model.deepLink.utmTerm){
+                    return this.model.deepLink.utmTerm
+                }
+                return 'utmTerm 未返回'
+            },
         },
         methods:{
             imgurl(imgage){
                 if(imgage){
                     return "https://image.geeko.ltd"+imgage
                 }
+            },
+            geekoSensor(e){
+                this.$emit("record", this.utmTerm)
             }
         },
         props: {

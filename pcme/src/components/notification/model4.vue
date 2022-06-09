@@ -1,6 +1,6 @@
 <!--积分-->
 <template>
-    <a :href="url">
+    <a :href="url" @click="(e) => geekoSensor(e)">
         <div class="n-mode">
             <div style="display:flex;justify-content:space-between;align-items:center;">
                 <div v-if="model.content" class="max-w-240">
@@ -115,7 +115,13 @@
             },
             num(){
                 return this.model.num < 0 ? this.model.num : ('+' + this.model.num)
-            }
+            },
+            utmTerm(){
+                if(this.model.deepLink && this.model.deepLink.utmTerm){
+                    return this.model.deepLink.utmTerm
+                }
+                return 'utmTerm 未返回'
+            },
         },
         props: {
             model: {
@@ -125,6 +131,11 @@
             sendtime:{
                 type:String,
                 required: true
+            }
+        },
+        methods:{
+            geekoSensor(e){
+                this.$emit("record", this.utmTerm)
             }
         }
     }

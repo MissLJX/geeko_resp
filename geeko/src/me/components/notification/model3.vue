@@ -1,5 +1,5 @@
 <template>
-    <a :href="url">
+    <a :href="url" @click="(e) => geekoSensor(e)">
         <div class="el-model-3-content" v-html="model.content"></div>
     </a>
 </template>
@@ -21,6 +21,19 @@
                 required: true
             }
         },
-        mixins: [deeplinkmixin]
+        mixins: [deeplinkmixin],
+        computed:{
+            utmTerm(){
+                if(this.model.deepLink && this.model.deepLink.utmTerm){
+                    return this.model.deepLink.utmTerm
+                }
+                return 'utmTerm 未返回'
+            },
+        },
+        methods:{
+            geekoSensor(e){
+                this.$emit("record", this.utmTerm)
+            }
+        }
     }
 </script>
