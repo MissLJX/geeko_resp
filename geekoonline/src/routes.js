@@ -53,7 +53,7 @@ export default [
   },
   {
     title: '加入我们 | 招聘',
-    path: '/join/:type/:detail',
+    path: '/join/:type/:regionType/:detail',
     component: JoinDetail,
     loadData: getSource('1')
   },

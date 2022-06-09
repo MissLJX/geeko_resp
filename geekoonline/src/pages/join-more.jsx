@@ -39,7 +39,7 @@ const SEARCHCONTAINER = Styled.div`
       font-size: 14px;
       color: #222222;
 
-      &::input-placeholder{
+      &::placeholder{
         color:#666666;
       }
     }
@@ -247,7 +247,9 @@ const SEARCHCONTAINER = Styled.div`
 `;
 
 const SEARCHRESULR = Styled.div`
-  border-bottom:10px solid #f0f0f0;
+  &.__border{
+    border-bottom:10px solid #f0f0f0;
+  }
 
   ._content{
     padding:0px 20px 20px;
@@ -256,8 +258,9 @@ const SEARCHRESULR = Styled.div`
       display:flex;
       flex-wrap:wrap;
       align-items: center;
-      border-bottom:1px solid #cacaca;
+      border-bottom:1px solid #e6e6e6;
       padding-top: 10px;
+      text-decoration: none;
 
       & > p{
         width:50%;
@@ -271,11 +274,23 @@ const SEARCHRESULR = Styled.div`
 
       ._title{
         width:60%;
-        & > a{
+        & > ._container{
           font-size: 14px;
           color: #4896D4;
           text-decoration: none;
           font-weight: bold;
+
+          & > span{
+            vertical-align: middle;
+
+            &.__hot{
+              display: inline-block;
+              background: url(/images/icon/hot_icon.png) center/cover no-repeat;
+              width: 20px;
+              height: 20px;
+              margin-left:3px;
+            }
+          }
         }
       }
 
@@ -327,7 +342,9 @@ const SEARCHRESULR = Styled.div`
   }
 
   @media (min-width: 1200px) {
-    border-bottom:none;
+    &.__border{
+      border-bottom:none;
+    }
 
     ._content{
       padding:0;
@@ -343,8 +360,15 @@ const SEARCHRESULR = Styled.div`
         ._title{
           width:25%;
 
-          & > a{
+          & > ._container{
             font-size:18px;
+
+            .__hot{
+              display: inline-block;
+              background: url(https://s3-us-west-2.amazonaws.com/image.chic-fusion.com/heatSearcher/99ebbfc0-e011-497c-b909-3d17770a663f) center/cover no-repeat;
+              width: 20px;
+              height: 20px;
+            }
           }
         }
 
@@ -408,6 +432,7 @@ export default withRouter(class extends React.Component{
       selectedCity:'',
       searchValue:'',
       searchResult:null,
+      flagClickSearch:false,
       socialData:socialData,
       schoolData:schoolData
     }
@@ -453,28 +478,32 @@ export default withRouter(class extends React.Component{
     this.setState({
       selectedInvite:value
     },() =>{
-      this.searchEvent(true);
+      this.searchEvent(false,false);
     });
   }
 
-  searchEvent(flag=false){
+  searchEvent(flag,isButton){
     let state = this.state;
     let data = state.selectedInvite==0?state.socialData:state.schoolData;
     let disposeData = _.cloneDeep(data);
+    let flag2 = false;
     if(!flag && state.searchValue){
+      flag2 = true;
       disposeData = disposeData.filter(item=>item.title.includes(state.searchValue));
     }
 
     if(!flag && !!state.selectedCity){
+      flag2 = true;
       disposeData = disposeData.filter(item=>item.regionType==state.selectedCity);
     }
 
-    if(!!this.props.isJoin){
+    if(!!this.props.isJoin && !isButton){
         disposeData = disposeData.slice(0,6)
     }
 
     this.setState({
-      searchResult:disposeData
+      searchResult:disposeData,
+      flagClickSearch:flag2
     });
   }
 
@@ -547,7 +576,7 @@ export default withRouter(class extends React.Component{
                 </select>
               </div>
 
-              <button onClick={()=>this.searchEvent(false)}>
+              <button onClick={()=>this.searchEvent(false,true)}>
                 <span>搜索职位</span>
                 <span className='__icon'>&#xe772;</span>
               </button>
@@ -575,7 +604,7 @@ export default withRouter(class extends React.Component{
       </section>
 
       <section>
-        <SEARCHRESULR>
+        <SEARCHRESULR className={isJoin?"__border":""}>
           <JSONBIGCONTAINER>
           <ul className='_content'>
               {
@@ -584,9 +613,15 @@ export default withRouter(class extends React.Component{
                     {
                       this.state.searchResult.map(item =>{
                         return <li key={item.id}>
-                                <div className='_item'>
+                                <Link to={{pathname:`/join/${this.state.selectedInvite}/${item.regionType}/${item.id}`,state:{data:item,type:this.state.selectedInvite}}} className='_item'>
                                   <p className='_title'>
-                                    <Link to={{pathname:`/join/${this.state.selectedInvite}/${item.id}`,state:{data:item,type:this.state.selectedInvite}}}>{item.title}</Link>
+                                    <span className='_container'>
+                                      <span>{item.title}</span>
+                                      
+                                      {
+                                        item.isHot && <span className='__hot'></span>
+                                      }
+                                    </span>
                                   </p>
                                   <p className='_invite __pc'>{this.state.selectedInvite==0?"社会招聘":"校园招聘"}</p>
                                   <p className='_region __pc'>
@@ -604,7 +639,7 @@ export default withRouter(class extends React.Component{
                                     }
                                   </p>
                                   <p className='_time'>发布时间:{item.time}</p>
-                                </div>
+                                </Link>
                               </li>
                       })
                     }
@@ -612,7 +647,7 @@ export default withRouter(class extends React.Component{
                     {
                         isJoin && <li>
                             <Link to="/join-more" className='more-post'>
-                            <span>查看更多职位信息 {'>>'}</span>
+                            <span>查看{this.state.flagClickSearch?"其他":"更多"}职位信息 {'>>'}</span>
                             </Link>
                         </li>
                     }
