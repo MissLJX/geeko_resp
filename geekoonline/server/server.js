@@ -113,7 +113,7 @@ router.post('/api/personal', bin.array('file', 12) , function(req, res, next){
 
   let mailOptions = {
     from: 'ziruxi@qq.com', // sender address
-    to: 'whalefallxh@163.com', // list of receivers
+    to: 'hr@geeko.online', // list of receivers
     subject: `${ position } | ${name} | ${phone} | ${email} | ${price1}-${price2}`, // Subject line
     // 发送text或者html格式
     // text: `${info}`, // plain text body
