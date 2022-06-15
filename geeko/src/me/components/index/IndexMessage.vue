@@ -54,9 +54,30 @@
                 </div>
                 <div class="st-cell edit st-v-m">
                     <p>
-                        <span class="user-name" @click="changeToLogin">{{nameTestFuc(me)}}</span>
-                        <span style="display:none;">--{{disposeName}}--</span>
-                        <span style="display:none;">--{{nameTestFuc(me)}}--</span>
+                        <template v-if="isLogin">
+                            <span class="user-name" 
+                                @click="changeToLogin" 
+                                :test="'nikename'+me.nickname"
+                                v-if="me && me.nickname"
+                            >{{me.nickname}}</span>
+                            <span 
+                                class="user-name" 
+                                :test="`name ${getName(me.name.firstName)}  ${getName(me.name.lastName)}`"
+                                @click="changeToLogin" 
+                                v-else-if="me.name && (!this.isEmptyStr(me.name.firstName) || !this.isEmptyStr(me.name.lastName))"
+                            >{{getName(me.name.firstName) + " " + getName(me.name.lastName)}}</span>
+                            <span 
+                                class="user-name" 
+                                :test="'email '+me.email"
+                                @click="changeToLogin" 
+                                v-else
+                            >{{me.email}}</span>
+                        </template>
+
+                        <template v-else>
+                            <span class="user-name" @click="changeToLogin">{{$t("index.login_or_register")}}</span>
+                        </template>
+                        
                         <span class="vip-level" @click="toVipPageEvent" v-if="showVip && me && me.vipUser">
                             <span class="iconfont" :style="`color:${levelColor};`">&#xe783;</span>
                             <span class="level" :style="`color:${levelColor};`">V{{me.vipUser.level}}></span>
@@ -314,14 +335,6 @@
                     }
                 }
             },
-            disposeName(newValue,oldValue){
-                console.log('newValue', newValue);
-                console.log('oldValue', oldValue);
-            },
-            me:function(newValue,oldValue){
-                console.log('menewValue', newValue);
-                console.log('meoldValue', oldValue);
-            }
         },
         methods:{
             getFeedNum(num,icon){

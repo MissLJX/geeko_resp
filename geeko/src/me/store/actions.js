@@ -35,7 +35,6 @@ const actions = {
                 commit(types.ME_GET, me);
             }
 
-            console.log('getMeme', me);
             return me
         }).catch(e => {
             console.log("e",e);
