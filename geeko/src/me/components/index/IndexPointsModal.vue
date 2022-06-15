@@ -68,7 +68,7 @@
             position: absolute;
             width: 10px;
             height: 10px;
-            left:54%;
+            left:55%;
             top: -5px;
             background-color: #ffffff;
             transform:rotate(315deg);

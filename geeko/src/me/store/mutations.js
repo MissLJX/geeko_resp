@@ -269,6 +269,9 @@ const mutations = {
     },
     [types.CHANGE_ME_FEED_POINT_COUNT](state,point){
         state.feed && (state.feed.points -= point);
+    },
+    [types.GET_PAGE_IS_VIP_SHOW](state,flag){
+        state.vipShow = flag;
     }
 }
 

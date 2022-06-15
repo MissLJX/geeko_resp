@@ -69,7 +69,8 @@ const state = {
     survey: {},
     wishlistEvent:{"requestId":"","experimentId":""},
     hasNoCommentOrder: false,
-    dobulePoints:null
+    dobulePoints:null,
+    vipShow:false
 }
 
 export default state;
