@@ -35,7 +35,6 @@ const actions = {
                 commit(types.ME_GET, me);
             }
 
-            console.log('getMeme', me);
             return me
         }).catch(e => {
             console.log("e",e);
@@ -625,6 +624,9 @@ const actions = {
     },
     changeMeFeedPoints({ commit },point){
         commit(types.CHANGE_ME_FEED_POINT_COUNT,point);
+    },
+    getMeVipShow({ commit },flag){
+        commit(types.GET_PAGE_IS_VIP_SHOW,flag);
     }
 }
 

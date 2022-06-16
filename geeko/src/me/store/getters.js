@@ -73,7 +73,8 @@ const getters = {
 
     hasNoCommentOrder: state => state.hasNoCommentOrder,
 
-    dobulePoints:state => state.dobulePoints
+    dobulePoints:state => state.dobulePoints,
+    vipShow:state=>state.vipShow
 }
 
 export default getters;

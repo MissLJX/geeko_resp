@@ -40,65 +40,100 @@
             <span class="iconfont" @click="gustUserModalEvent()">&#xe718;</span>
         </div>
 
-        <div class="header-icon">
-            <div class="st-table">
-                <div class="st-cell st-v-m icon-container">
-                    <div class="icon" 
-                        :style="{'background-image': 'url('+getHeaderImage+'),url('+baseHeaderUrl+')' }" 
-                        @click="specificationLogin('/me/m/edit-message',1)"
-                    >
-                        <span class="_bg" v-if="isLogin">
-                            <span class="iconfont _icon">&#xe6ce;</span>
-                        </span>
+        <div class="header-icon-container" :class="!isVipUser?'no-vip-class':''">
+            <div class="header-icon" :style="{'backgroundImage':`${isVipUser?'url('+me.vipUser.backgroundImageURL+')':''}`}">
+                <div class="st-flex" style="width:100%;align-items: center;">
+                    <div class="icon-container">
+                        <div class="icon" 
+                            :style="{'background-image': 'url('+getHeaderImage+'),url('+baseHeaderUrl+')' }" 
+                            @click="specificationLogin('/me/m/edit-message',1)"
+                        >
+                            <span class="_bg" v-if="isLogin">
+                                <span class="iconfont _icon">&#xe6ce;</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="edit">
+                        <p>
+                            <template v-if="isLogin">
+                                <span class="user-name" 
+                                    @click="changeToLogin" 
+                                    :test="'nikename'+me.nickname"
+                                    v-if="me && me.nickname"
+                                >{{me.nickname}}</span>
+                                <span 
+                                    class="user-name" 
+                                    :test="`name ${getName(me.name.firstName)}  ${getName(me.name.lastName)}`"
+                                    @click="changeToLogin" 
+                                    v-else-if="me.name && (!this.isEmptyStr(me.name.firstName) || !this.isEmptyStr(me.name.lastName))"
+                                >{{getName(me.name.firstName) + " " + getName(me.name.lastName)}}</span>
+                                <span 
+                                    class="user-name" 
+                                    :test="'email '+me.email"
+                                    @click="changeToLogin" 
+                                    v-else
+                                >{{me.email}}</span>
+                            </template>
+
+                            <template v-else>
+                                <span class="user-name" @click="changeToLogin">{{$t("index.login_or_register")}}</span>
+                            </template>
+                            
+                            <!-- <span class="vip-level" @click="toVipPageEvent" v-if="showVip && me && me.vipUser">
+                                <span class="iconfont" :style="`color:${levelColor};`">&#xe783;</span>
+                                <span class="level" :style="`color:${levelColor};`">V{{me.vipUser.level}}></span>
+                            </span> -->
+
+                            <span class="iconfont vip-icon" v-if="isVipUser">&#xe70e;</span>
+                        </p>
+                        <div class="bio" @click="toEditUserBio">
+                            <span>{{me && me.bio ? me.bio : `${$t('label.introduce_to_others')}…`}}</span>
+                            <span class="iconfont">&#xe6ce;</span>
+                        </div>
                     </div>
                 </div>
-                <div class="st-cell edit st-v-m">
-                    <p>
-                        <span class="user-name" @click="changeToLogin">{{nameTestFuc(me)}}</span>
-                        <span style="display:none;">--{{disposeName}}--</span>
-                        <span style="display:none;">--{{nameTestFuc(me)}}--</span>
-                        <span class="vip-level" @click="toVipPageEvent" v-if="showVip && me && me.vipUser">
-                            <span class="iconfont" :style="`color:${levelColor};`">&#xe783;</span>
-                            <span class="level" :style="`color:${levelColor};`">V{{me.vipUser.level}}></span>
-                        </span>
-                    </p>
-                    <div class="bio" @click="toEditUserBio">
-                        <span>{{me && me.bio ? me.bio : `${$t('label.introduce_to_others')}…`}}</span>
-                        <span class="iconfont">&#xe6ce;</span>
-                    </div>
-                </div>
+
+                <span class="vip-header-message" @click="toVipPageEvent" v-if="isVipUser">
+                    <span class="iconfont" style="position:relative;top:-1px;">&#xe70e;</span>
+                    <span class="__font">{{ siteName }} VIP V{{ me.vipUser.level }}</span>
+                    <span class="hot-icon" v-if="showNewVip"></span>
+                    <span class="iconfont" style="font-size:14px;">&#xe694;</span>
+                </span>
             </div>
         </div>
+        
 
-        <div class="discount">
+        <div class="discount" :class="!isVipUser?'no-vip-class':''">
             <!-- click-name  记录事件全局捕获了此事件  命名都不重复即可 -->
-            <a @click.prevent="specificationLogin('/me/m/coupons',1)" click-name="Coupons">
-                <p class="iconfont">
-                    <span :class="{'_font' : isLogin}">{{getFeedNum(feed && feed.canUseCouponCount,"&#xe6dc;")}}</span>
-                </p>
-                <p>{{$t("label.coupons")}}</p>
-            </a>
-            <a @click.prevent="specificationLogin('/me/m/credits',1)" click-name="Points">
-                <p class="iconfont" v-if="!isLogin">
-                    <span :class="{'_font' : isLogin}">{{getFeedNum(feed && feed.points,"&#xe6db;")}}</span>
-                </p>
-                <div style="position:relative;height:23px;" v-if="isLogin">
-                    <img class="animation_points_icon" style="width:23px;" src="https://image.geeko.ltd/2021-11-01-lottery/2021-11-01-lottery-points.png" alt="">
-                    <span class="animation_points_text _font">{{getFeedNum(feed && feed.points,"&#xe6db;")}}</span>
-                </div>
-                <p>{{$t("index.points")}}</p>
-            </a>
-            <a @click.prevent="specificationLogin('/me/m/creditcards',1)" click-name="Wallet">
-                <p class="iconfont">&#xe6dd;</p>
-                <p>{{$t("index.wallet")}}</p>
-            </a>
-
-            <template v-if="getDownLoadImage">
-                <a href="/share" click-name="Get$10">
-                    <p class="iconfont">&#xe6da;</p>
-                    <p>{{$t("label.refer")}}</p>
+            <div class="discount-container">
+                <a @click.prevent="specificationLogin('/me/m/coupons',1)" click-name="Coupons">
+                    <p class="iconfont">
+                        <span :class="{'_font' : isLogin}">{{getFeedNum(feed && feed.canUseCouponCount,"&#xe6dc;")}}</span>
+                    </p>
+                    <p>{{$t("label.coupons")}}</p>
                 </a>
-            </template>
+                <a @click.prevent="specificationLogin('/me/m/credits',1)" click-name="Points">
+                    <p class="iconfont" v-if="!isLogin">
+                        <span :class="{'_font' : isLogin}">{{getFeedNum(feed && feed.points,"&#xe6db;")}}</span>
+                    </p>
+                    <div style="position:relative;height:23px;" v-if="isLogin">
+                        <img class="animation_points_icon" style="width:23px;" src="https://image.geeko.ltd/2021-11-01-lottery/2021-11-01-lottery-points.png" alt="">
+                        <span class="animation_points_text _font">{{getFeedNum(feed && feed.points,"&#xe6db;")}}</span>
+                    </div>
+                    <p>{{$t("index.points")}}</p>
+                </a>
+                <a @click.prevent="specificationLogin('/me/m/creditcards',1)" click-name="Wallet">
+                    <p class="iconfont">&#xe6dd;</p>
+                    <p>{{$t("index.wallet")}}</p>
+                </a>
+
+                <template v-if="getDownLoadImage">
+                    <a href="/share" click-name="Get$10">
+                        <p class="iconfont">&#xe6da;</p>
+                        <p>{{$t("label.refer")}}</p>
+                    </a>
+                </template>
+            </div>
 
             <!-- 积分膨胀提示组件 -->
             <index-points-modal :index-message="dobulePoints.me.message" v-if="dobulePoints && dobulePoints.me"></index-points-modal>
@@ -194,7 +229,7 @@
                         <p class="iconfont" style="font-size:18px;">&#xe6e5;</p>
                         <p>{{$t("point.suggestion")}}</p>
                     </a>
-                    <a class="vip-container" @click.prevent="specificationLogin('/me/m/vip',1)" click-name="Vip" v-if="showVip">
+                    <a class="vip-container" @click.prevent="specificationLogin('/me/m/vip',1)" click-name="Vip" v-if="isVipUser">
                         <p class="iconfont">&#xe783;</p>
                         <p>VIP</p>
 
@@ -227,7 +262,8 @@
                 swiperData:[],
                 noCommentedMaskShow: false,
                 showNewVip:false,
-                showVip:false
+                siteName:window.name,
+                firstPage:false
             }
         },
         components:{
@@ -236,7 +272,7 @@
         },
         computed:{
             ...mapGetters('me', [
-                'pointsAllSkip','me', "isLogin", 'feed', 'notificationCount', 'orderCountUnpaid',"shoppingCartCount","messageM1518","hasNoCommentOrder","dobulePoints"
+                'pointsAllSkip','me', "isLogin", 'feed', 'notificationCount', 'orderCountUnpaid',"shoppingCartCount","messageM1518","hasNoCommentOrder","dobulePoints","vipShow"
             ]),
             baseHeaderUrl() {
                 if (window.name === 'chicme') {
@@ -264,6 +300,9 @@
                 }
 
                 return this.$t("index.login_or_register");
+            },
+            isVipUser(){
+                return this.vipShow && this.me && this.me.vipUser;
             },
             getHeaderImage(){
                 let headerIcon = store.getters["me/headerImage"];
@@ -314,14 +353,6 @@
                     }
                 }
             },
-            disposeName(newValue,oldValue){
-                console.log('newValue', newValue);
-                console.log('oldValue', oldValue);
-            },
-            me:function(newValue,oldValue){
-                console.log('menewValue', newValue);
-                console.log('meoldValue', oldValue);
-            }
         },
         methods:{
             getFeedNum(num,icon){
@@ -456,21 +487,6 @@
                         }
                     }
                 })
-            },
-            nameTestFuc(me){
-                console.log("nameTestFuc",me);
-                if(this.isLogin && me && me.nickname){
-                    console.log('nikename')
-                    return me.nickname;
-                }else if(this.isLogin && me.name && (!this.isEmptyStr(me.name.firstName) || !this.isEmptyStr(me.name.lastName))){
-                    console.log('name');
-                    return this.getName(me.name.firstName) + " " + this.getName(me.name.lastName);
-                }else if(this.isLogin && !(me && me.nickname && me.name && me.name.firstName && me.name.lastName)){
-                    console.log("nameTestFucemail");
-                    // console.log('me.email', me.email);
-                    // console.log('me.email2', !!me.email);
-                    return me.email;
-                }
             }
         },
         created:async function(){
@@ -520,20 +536,23 @@
             }
 
             !(this.dobulePoints && this.dobulePoints.me) && store.dispatch("me/getDobulePointsData","M1578");
+            
+            if(!this.vipShow){
+                getWhetherShowVip().then(response =>{
+                    if(response?.result){
+                        store.dispatch("me/getMeVipShow",true);
+                        if(this.me && this.me.vipUser){
+                            let cacheLevel = window.localStorage.getItem('customer_vip_level');
+                            let customerLevel = this.me.vipUser.level;
 
-            getWhetherShowVip().then(response =>{
-                if(response?.result){
-                    this.showVip = response?.result;
-                    if(this.me && this.me.vipUser){
-                        let cacheLevel = window.localStorage.getItem('customer_vip_level');
-                        let customerLevel = this.me.vipUser.level;
-
-                        if(customerLevel > cacheLevel || (cacheLevel == null && customerLevel > 0)){
-                            this.showNewVip = true;
+                            if(customerLevel > cacheLevel || (cacheLevel == null && customerLevel > 0)){
+                                this.showNewVip = true;
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
+            
         },
         mounted(){
             // let cookie = utils.getLocalCookie('_has_no_comment_order')
@@ -705,141 +724,236 @@
             }
         }
 
-        .header-icon{
-            padding: 0px 14px;
-            margin-top: 20px;
-            .icon{
-                width: 78px;
-                height: 78px;
-                background: no-repeat 50%/cover;
-                border-radius: 50%;
-                position: relative;
+        .header-icon-container{
+            padding: 10px 12px 0px;
+            
 
-                ._bg{
-                    width: 22px;
-                    height: 22px;
-                    line-height: 25px;
-                    background-color: #222222;
+            .header-icon{
+                padding: 0px 14px;
+                // margin-top: 20px;
+                background-size: 100%;
+                background-repeat: no-repeat;
+                background-position: top center;
+                padding-top: 40px;
+                background-color: #fff;
+                border-top-right-radius: 10px;
+                border-top-left-radius: 10px;
+
+                .icon{
+                    width: 78px;
+                    height: 78px;
+                    background: no-repeat 50%/cover;
                     border-radius: 50%;
-                    display: inline-block;
-                    position: absolute;
-                    right: 0px;
-                    bottom: 0px;
-                    text-align: center;
-                    cursor: pointer;
+                    position: relative;
 
-                    ._icon{
-                        color: #ffffff;
-                        font-size: 13px;
+                    ._bg{
+                        width: 22px;
+                        height: 22px;
+                        line-height: 25px;
+                        background-color: #222222;
+                        border-radius: 50%;
+                        display: inline-block;
+                        position: absolute;
+                        right: 0px;
+                        bottom: 0px;
+                        text-align: center;
+                        cursor: pointer;
+
+                        ._icon{
+                            color: #ffffff;
+                            font-size: 13px;
+                        }
                     }
                 }
-            }
 
-            .icon-container{
-                width: 100px;
-            }
+                .icon-container{
+                    width: 100px;
+                }
 
-            .edit{
-                & > p{
-                    font-family: 'SlatePro-Medium';
-                    font-size: 20px;
-                    color: #000000;
-                    display: flex;
-                    align-items: center;
-                    
+                .edit{
+                    width: calc(100% - 100px);
+                    & > p{
+                        font-family: 'SlatePro-Medium';
+                        font-size: 14px;
+                        color: #ffffff;
+                        display: flex;
+                        align-items: center;
+                        
 
-                    .user-name{
+                        .user-name{
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            max-width: 150px;
+                            display: inline-block;
+                            margin-right: 5px;
+                        }
+
+                        .vip-icon{
+                            font-size: 14px;
+                            position: relative;
+                            top: -1px;
+                        }
+
+                        .vip-level{
+                            padding: 1px 10px;
+                            background-color: #222222;
+                            border-radius: 13px;
+                            display: inline-block;
+
+                            .level{
+                                font-size: 14px;
+                                color: #ddc35e;
+                                font-family: 'AcuminPro-Bold';
+                                vertical-align: middle;
+                            }
+
+                            .iconfont{
+                                color: #ddc35e;
+                                font-size: 14px;
+                                vertical-align: middle;
+                            }
+                        }
+                    }
+
+                    & .bio{
+                        height: 28px;
+                        background-color: #f5f5f5;
+                        border-radius: 14px;
+                        line-height: 28px;
+                        // text-align: center;
+                        padding: 0px 15px;
+                        margin-top: 7px;
+                        width: 100%;
                         white-space: nowrap;
                         overflow: hidden;
                         text-overflow: ellipsis;
-                        max-width: 150px;
-                        display: inline-block;
-                        margin-right: 5px;
-                    }
-
-                    .vip-level{
-                        padding: 1px 10px;
-                        background-color: #222222;
-                        border-radius: 13px;
-                        display: inline-block;
-
-                        .level{
-                            font-size: 14px;
-                            color: #ddc35e;
-                            font-family: 'AcuminPro-Bold';
-                            vertical-align: middle;
-                        }
-
-                        .iconfont{
-                            color: #ddc35e;
-                            font-size: 14px;
-                            vertical-align: middle;
-                        }
-                    }
-                }
-
-                & .bio{
-                    height: 28px;
-	                background-color: #f5f5f5;
-	                border-radius: 14px;
-                    line-height: 28px;
-                    text-align: center;
-                    padding: 0px 15px;
-                    margin-top: 7px;
-                    width: 150px;
-                    white-space: nowrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    position: relative;
-                    color: #999999;
-
-                    & span{
-                        font-size: 12px;
+                        position: relative;
                         color: #999999;
-                    }
 
-                    & .iconfont{
-                        color: #bbbbbb;
-                        position: absolute;
-                        right: 5px;
-                        z-index: 2;
+                        & span{
+                            font-size: 12px;
+                            color: #999999;
+                        }
+
+                        & .iconfont{
+                            color: #bbbbbb;
+                            position: absolute;
+                            right: 5px;
+                            z-index: 2;
+                        }
                     }
                 }
+
+                .vip-header-message{
+                    text-align: right;
+                    color: #fff;
+                    padding: 23px 0px 15px;
+                    display: block;
+
+                    & > * {
+                        vertical-align: middle;
+                    }
+
+                    .__font{
+                        text-transform: uppercase;
+                        font-family: 'AcuminPro-Bold';
+                    }
+
+                    .hot-icon{
+                        display: inline-block;
+                        width: 6px;
+                        height: 6px;
+                        background-color: red;
+                        border-radius: 50%;
+                        vertical-align: middle;
+                        position: relative;
+                    }
+                }
+            }
+
+            @media screen and (min-width: 300px) and (max-width: 321px){
+                .header-icon{
+                    background-size: cover;
+                }
+            }
+
+            @media screen and (min-width: 380px) and (max-width: 415px){
+                .header-icon{
+                    background-size: cover;
+                }
+            }
+
+            &.no-vip-class{
+                padding: 0;
+                margin-top: 20px;
+                .header-icon{
+                    padding-top: 0;
+                    background-color: transparent;
+                    border-radius: initial;
+
+                    .edit{
+                        width: calc(100% - 100px);
+                        & > p{
+                            color: #222222;
+                            font-size: 20px;
+                        }
+                    }
+                }
+                
             }
         }
+        
 
         .discount{
-            display: flex;
-            margin-top: 20px;
-            padding: 0px 5px;
             position: relative;
+            padding: 0px 12px;
 
-            & > a{
-                flex: 1;
-                display: inline-block;
-                text-align: center;
-                max-width: 25%;
+            .discount-container{
+                display: flex;
+                position: relative;
+                background-color: #ffffff;
+                border-bottom-left-radius: 10px;
+                border-bottom-right-radius: 10px;
+                padding: 15px 0px;
 
-                & > p{
-                    &:first-child{
-                        font-size: 20px;
+                & > a{
+                    flex: 1;
+                    display: inline-block;
+                    text-align: center;
+                    max-width: 25%;
+
+                    & > p{
+                        &:first-child{
+                            font-size: 20px;
+                        }
+
+                        &:last-child{
+                            font-size: 12px;
+                            color: #000000;
+                            margin-top: 4px;
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                        }
                     }
+                }
 
-                    &:last-child{
-                        font-size: 12px;
-                        color: #000000;
-                        margin-top: 4px;
-                        white-space: nowrap;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-                    }
+                ._font{
+                    font-family: 'SlatePro-Medium';
+                    font-size: 16px;
+                    color: #000000;
                 }
             }
 
-            ._font{
-                font-family: 'SlatePro-Medium';
-                font-size: 16px;
-                color: #000000;
+            &.no-vip-class{
+                padding: 0px 5px;
+                margin-top: 20px;
+
+                .discount-container{
+                    background-color: transparent;
+                    padding: 0;
+                }
             }
         }
 
