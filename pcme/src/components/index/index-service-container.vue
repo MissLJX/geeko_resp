@@ -23,14 +23,18 @@
         </div>
 
         <div class="_bd" v-if="me.vipUser && vipShow">
-            <router-link class="hasNew" :to="url+'vip'">
+            <!-- <router-link class="hasNew" :to="url+'vip'">
                 <p style="font-size:24px;" class="iconfont">&#xe783;</p>
                 <p style="margin-top: 4px;">VIP</p>
-                <!--  v-if="showVipNew" {{$t("my_vip.new")}} -->
                 <span class="newTip" v-if="showVipNew">
                     <span>{{$t("my_vip.new")}}</span>
                 </span>
-            </router-link>
+            </router-link> -->
+
+             <a href="/share" v-if="hasOwnApp">
+                <p class="iconfont">&#xe6da;</p>
+                <p>{{$t("points_mall.referAFriend")}}</p>
+            </a>
         </div>
 
     </div>
@@ -58,6 +62,9 @@
             },
             vipShow:function(){
                 return this.$store.getters.vipShow;
+            },
+            hasOwnApp(){
+                return window.downloadIcon ? true : false
             },
             showVipNew(){
                 if((!localStorage['customer_vip_level'] && this.vipLevel > 0) || (localStorage['customer_vip_level'] && (localStorage['customer_vip_level'] < this.vipLevel))){
@@ -123,9 +130,13 @@
                         font-size: 12px;
                         color: #000000;
                         margin-top: 4px;
-                        white-space: nowrap;
+                        white-space: normal;
                         overflow: hidden;
                         text-overflow: ellipsis;
+                        word-break: break-word;
+                        display: -webkit-box;
+                        -webkit-line-clamp: 2;
+                        -webkit-box-orient: vertical;
                     }
                 }
             }

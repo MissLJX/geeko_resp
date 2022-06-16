@@ -1,20 +1,34 @@
 <template>
     <div class="index-header-icon">
-        <div class="m-hd">
-            <div class="el-me-headerImage" :style="{'background-image': 'url('+headerImage+'),url('+baseHeaderUrl+')' }"></div>
+        <div class="m-hd" :style="headBackImg">
+            <router-link class="toProfile" :to="getUrl('/me/m/updateProfile')">
+                <div class="el-me-headerImage" :style="{'background-image': 'url('+headerImage+'),url('+baseHeaderUrl+')' }"></div>
+                <span class="iconfont">&#xe6ce;</span>
+            </router-link>
             <div class="el-me-info">
                 <p class="el-me-fullname">
                     {{fullName}}
-                    <router-link class="vipLevel" :to="url+'vip'" :style="{'color':vipStyle}" v-if="me.vipUser && vipShow">
+                    <span style="font-size:20px;" class="iconfont">&#xe783;</span>
+                    <!-- <router-link class="vipLevel" :to="url+'vip'" :style="{'color':vipStyle}" v-if="me.vipUser && vipShow">
                         <span class="iconfont" :style="{'color':vipStyle}">&#xe783;</span>
                         <span>V{{vipLevel}} {{'>'}}</span>
-                    </router-link>
+                    </router-link> -->
                 </p>
                 <p class="el-me-email">
                     {{me.email}}
                     <span class="verify" v-if="!me.isConfirmEmail" @click="confirmEmail">{{$t('verify')}}</span>
-                    <span class="have-verify" v-if="me.isConfirmEmail"><i class="iconfont">&#xe73d;</i>{{$t('verified')}}</span>
+                    <!-- <span class="have-verify" v-if="me.isConfirmEmail"><i class="iconfont">&#xe73d;</i>{{$t('verified')}}</span> -->
                 </p>
+            </div>
+            <div >
+                <router-link class="toVipTag" :to="getUrl('/me/m/vip')">
+                    <span class="iconfont">&#xe783;</span>
+                    <span>
+                        {{vipTag}}
+                        <span class="red_point" v-if="showVipNew"></span>
+                    </span>
+                    <span class="iconfont">&#xe690;</span>
+                </router-link>
             </div>
         </div>
 
@@ -44,10 +58,21 @@
                 <p>{{$t("index.wallet")}}</p>
             </router-link>
             
-            <a href="/share" v-if="hasOwnApp">
+            <!-- <a href="/share" v-if="hasOwnApp">
                 <p class="iconfont">&#xe6da;</p>
                 <p>{{$t("points_mall.referAFriend")}}</p>
-            </a>
+            </a> -->
+            <router-link class="hasNew" :to="url+'vip'" v-if="me.vipUser && vipShow">
+                <p style="font-size:24px;" class="iconfont">&#xe783;</p>
+                <p style="margin-top: 4px;">VIP</p>
+                <span class="newTip" v-if="showVipNew">
+                    <span>{{$t("my_vip.new")}}</span>
+                </span>
+            </router-link>
+
+            <a v-if="!(me.vipUser && vipShow)" href="javascript:;" style="visibility:hidden;"></a>
+
+
         </div>
     </div>
 </template>
@@ -77,6 +102,9 @@
             //         return utils.imageutil.getHeaderImg(this.me.id)
             //     }
             // },
+            vipShow:function(){
+                return this.$store.getters.vipShow;
+            },
             url(){
                 return window.location.pathname + "/"
             },
@@ -113,7 +141,25 @@
             },
             vipStyle(){
                 return this.vipLevel == 0 ? '#B4CCE7' : this.vipLevel == 1 ? '#F8B0BC' : this.vipLevel == 2 ? '#A9D4C0' : '#DDC35E';
-            }
+            },
+            headBackImg(){
+                return `background-image: url(https://image.geeko.ltd/chicme/20220615/PCME${this.vipLevel}.png);`
+            },
+            vipTag(){
+                return window.name + ' VIP V'+this.vipLevel; 
+            },
+            showVipNew(){
+                if((!localStorage['customer_vip_level'] && this.vipLevel > 0) || (localStorage['customer_vip_level'] && (localStorage['customer_vip_level'] < this.vipLevel))){
+                    // localStorage['customer_vip_level'] = this.vipLevel
+                    return true
+                } else {
+                    if(localStorage['customer_vip_level'] && (localStorage['customer_vip_level'] > this.vipLevel)){
+                        localStorage['customer_vip_level'] = this.vipLevel;
+                    }
+                    // localStorage['customer_vip_level'] = this.vipLevel
+                    return false
+                }
+            },
         },
         methods:{
             confirmEmail(){
@@ -128,6 +174,9 @@
             },
             getName(value){
                 return value ? value : '';
+            },
+            getUrl(suffix){
+                return utils.PROJECT + suffix;
             },
         },
         created(){
@@ -188,9 +237,36 @@
     }
 }
     .index-header-icon{
+        background: #f7f7f7;
+
         .m-hd{
             display: flex;
-            align-items: center;
+            align-items: flex-start;
+            width: 100%;
+            height: 200px;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            padding: 30px 22px;
+            position: relative;
+
+            .toProfile{
+                position: relative;
+
+                .iconfont{
+                    display: block;
+                    width: 22px;
+                    height: 22px;
+                    background: #000;
+                    color: #fff;
+                    text-align: center;
+                    line-height: 22px;
+                    border-radius: 50%;
+                    font-size: 12px;
+                    position: absolute;
+                    right: 0;
+                    bottom: 0;
+                }
+            }
             .el-me-headerImage {
                 width: 96px;
                 height: 96px;
@@ -198,10 +274,19 @@
                 border-radius: 50%;
             }
             .el-me-info{
+                margin-top: 17px;
                 margin-left: 20px;
                 .el-me-fullname{
-                    font-size: 16px;
-                    color: #222;
+                    font-size: 22px;
+                    // color: #222;
+                    color: #fff;
+                    font-family: Roboto-Bold;
+                    font-weight: bold;
+                    line-height: 25px;
+                    // max-width: 68%;
+                    // overflow: hidden;
+                    // text-overflow: ellipsis;
+                    // white-space: nowrap;
 
                     .vipLevel{
                         // width: 55px;
@@ -228,18 +313,21 @@
                 }
                 .el-me-email{
                     font-size: 14px;
-                    color: #666;
+                    // color: #666;
+                    color: #fff;
                     margin-top: 12px;
                     span{
                         margin-left: 10px;
                     }
                     .verify{
-                        color: #E64545;
+                        // color: #E64545;
+                        color: #fff;
                         text-decoration: underline;
                         cursor: pointer;
                     }
                     .have-verify{
-                        color: #57b936;
+                        // color: #57b936;
+                        color: #fff;
                         font-size: 14px;
                     }
                 }
@@ -249,13 +337,39 @@
                 clear: both;
                 content: '';
             }
+            .toVipTag{
+                position: absolute;
+                right: 12px;
+                bottom: 18px;
+                font-size: 14px;
+                font-family: Roboto-Bold, Roboto;
+                font-weight: bold;
+                color: #FFFFFF;
+                line-height: 17px;
+                text-transform: uppercase;
+                cursor: pointer;
+
+                .iconfont{
+                    font-size: 12px;
+                }
+
+                .red_point{
+                    display: inline-block;
+                    width: 5px;
+                    height: 5px;
+                    background: #E64545;
+                    margin-bottom: 3px;
+                    border-radius: 50%;
+                }
+            }
         }
 
         .m-header-icon{
             display: flex;
             justify-content: space-between;
             background-color: #ffffff;
-            margin: 0px -20px;
+            // margin: 0px -20px;
+            height: 95px;
             margin-top: 20px;
             align-items: center;
 
@@ -287,6 +401,44 @@
                 font-family: 'AcuminPro-Bold';
                 font-size: 18px;
                 color: #000000;
+            }
+        }
+    }
+
+    .hasNew{
+        position: relative;
+        p {
+            color:#DDC35E !important;
+        }
+        
+        .iconfont{
+            color:#DDC35E !important;
+        }
+
+        .newTip{
+            position: absolute;
+            top: -3px;
+            // right: calc(50% - 26px);
+            left: 50%;
+            display: block;
+            /* width: 20px; */
+            height: 16px;
+            background-color: #e64545;
+            border-radius: 8px;
+            line-height: 16px;
+            color: #fff;
+            text-align: center;
+            font-family: AcuminPro-Bold;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0px;
+            color: #ffffff;
+
+            span{
+                font-size: 18px;
+                transform: scale(0.5);
+                text-transform: uppercase;
+                display: block;
             }
         }
     }

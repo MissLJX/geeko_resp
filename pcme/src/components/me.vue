@@ -9,11 +9,11 @@
                     :isShowConfirm.sync="isShowConfirm"
                     :isloding.sync="isloding"
                 ></index-header-icon>
-                <div class="view-more">
+                <!-- <div class="view-more">
                     <router-link :to="getUrl('/me/m/updateProfile')">
                         {{$t("index.my_profile")}} >
                     </router-link>
-                </div>
+                </div> -->
 
                 <index-points-modal :index-message="dobulePoints.me.message" v-if="dobulePoints && dobulePoints.me"></index-points-modal>
             </div>
@@ -185,8 +185,9 @@
 
             ._top{
                 position: relative;
-                background-color: #ffffff;
-                padding: 24px 20px;
+                // background-color: #ffffff;
+                // padding: 24px 20px;
+                // padding: 0 20px;
             }
 
             ._order{
