@@ -127,12 +127,14 @@
                     <p>{{$t("index.wallet")}}</p>
                 </a>
 
-                <template v-if="getDownLoadImage">
-                    <a href="/share" click-name="Get$10">
-                        <p class="iconfont">&#xe6da;</p>
-                        <p>{{$t("label.refer")}}</p>
-                    </a>
-                </template>
+                <a class="vip-container" @click.prevent="specificationLogin('/me/m/vip',1)" click-name="Vip" v-if="isVipUser">
+                    <p class="iconfont vip-p1">&#xe783;</p>
+                    <p class="vip-p2">VIP</p>
+
+                    <span class="vip-new" v-if="true">
+                        <span>{{ $t('label.new') }}</span>
+                    </span>
+                </a>
             </div>
 
             <!-- 积分膨胀提示组件 -->
@@ -229,14 +231,13 @@
                         <p class="iconfont" style="font-size:18px;">&#xe6e5;</p>
                         <p>{{$t("point.suggestion")}}</p>
                     </a>
-                    <a class="vip-container" @click.prevent="specificationLogin('/me/m/vip',1)" click-name="Vip" v-if="isVipUser">
-                        <p class="iconfont">&#xe783;</p>
-                        <p>VIP</p>
 
-                        <span class="vip-new" v-if="showNewVip">
-                            <span>{{ $t('label.new') }}</span>
-                        </span>
-                    </a>
+                    <template v-if="getDownLoadImage">
+                        <a href="/share" click-name="Get$10">
+                            <p class="iconfont">&#xe6da;</p>
+                            <p>{{$t("label.refer")}}</p>
+                        </a>
+                    </template>
                 </div>
             </div>
         </div>
@@ -944,6 +945,44 @@
                     font-size: 16px;
                     color: #000000;
                 }
+
+                .vip-container{
+                    position: relative;
+
+                    & > p{
+                        &.vip-p1{
+                            color: #DDC35E;
+                        }
+
+                        &.vip-p2{
+                            color: #DDC35E;
+                            font-size: 12px;
+                            margin-top: 4px;
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                        }
+                    }
+
+                    .vip-new{
+                        display: inline-block;
+                        position: absolute;
+                        background-color: #e64545;
+                        padding: 0 2px;
+                        border-radius: 8px;
+                        top: -11px;
+                        right: 13%;
+
+                        & > span{
+                            font-family: 'AcuminPro-Bold';
+                            font-size: 12px;
+                            color: #ffffff;
+                            display: inline-block;
+                            transform: scale(0.7);
+                            text-transform: uppercase;
+                        }
+                    }
+                }
             }
 
             &.no-vip-class{
@@ -1073,29 +1112,6 @@
                                 white-space: nowrap;
                                 overflow: hidden;
                                 text-overflow: ellipsis;
-                            }
-                        }
-                    }
-
-                    .vip-container{
-                        position: relative;
-
-                        .vip-new{
-                            display: inline-block;
-                            position: absolute;
-                            background-color: #e64545;
-                            padding: 0 2px;
-                            border-radius: 8px;
-                            top: -11px;
-                            right: 13%;
-
-                            & > span{
-                                font-family: 'AcuminPro-Bold';
-                                font-size: 12px;
-                                color: #ffffff;
-                                display: inline-block;
-                                transform: scale(0.7);
-                                text-transform: uppercase;
                             }
                         }
                     }
