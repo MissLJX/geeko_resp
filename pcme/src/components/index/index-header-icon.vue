@@ -1,26 +1,25 @@
 <template>
     <div class="index-header-icon">
         <div class="m-hd" :style="headBackImg">
-            <router-link class="toProfile" :to="getUrl('/me/m/updateProfile')">
+            <div class="el-me-headerImage" v-if="!vipShow" :style="{'background-image': 'url('+headerImage+'),url('+baseHeaderUrl+')' }"></div>
+
+            <router-link v-if="vipShow" class="toProfile" :to="getUrl('/me/m/updateProfile')">
                 <div class="el-me-headerImage" :style="{'background-image': 'url('+headerImage+'),url('+baseHeaderUrl+')' }"></div>
                 <span class="iconfont">&#xe6ce;</span>
             </router-link>
-            <div class="el-me-info">
-                <p class="el-me-fullname">
+
+            <div class="el-me-info" :style="meInfoStyle">
+                <p class="el-me-fullname" :style="fullnameStyle">
                     {{fullName}}
-                    <span style="font-size:20px;" class="iconfont">&#xe783;</span>
-                    <!-- <router-link class="vipLevel" :to="url+'vip'" :style="{'color':vipStyle}" v-if="me.vipUser && vipShow">
-                        <span class="iconfont" :style="{'color':vipStyle}">&#xe783;</span>
-                        <span>V{{vipLevel}} {{'>'}}</span>
-                    </router-link> -->
+                    <span v-if="vipShow" style="font-size:20px;" class="iconfont">&#xe783;</span>
                 </p>
-                <p class="el-me-email">
+                <p class="el-me-email" :style="emailStyle">
                     {{me.email}}
-                    <span class="verify" v-if="!me.isConfirmEmail" @click="confirmEmail">{{$t('verify')}}</span>
-                    <!-- <span class="have-verify" v-if="me.isConfirmEmail"><i class="iconfont">&#xe73d;</i>{{$t('verified')}}</span> -->
+                    <span class="verify" v-if="!me.isConfirmEmail" :style="verifyStyle" @click="confirmEmail">{{$t('verify')}}</span>
+                    <span class="have-verify" v-if="me.isConfirmEmail && !vipShow"><i class="iconfont">&#xe73d;</i>{{$t('verified')}}</span>
                 </p>
             </div>
-            <div >
+            <div v-if="me.vipUser && vipShow">
                 <router-link class="toVipTag" :to="getUrl('/me/m/vip')">
                     <span class="iconfont">&#xe783;</span>
                     <span>
@@ -32,7 +31,7 @@
             </div>
         </div>
 
-        <div class="m-header-icon">
+        <div class="m-header-icon" :style="headerIconStyle">
             <router-link :to="url+'coupons'">
                 <p class="iconfont">
                     <span class="_font" v-if="feed && feed.canUseCouponCount">{{feed && feed.canUseCouponCount}}</span>
@@ -58,10 +57,11 @@
                 <p>{{$t("index.wallet")}}</p>
             </router-link>
             
-            <!-- <a href="/share" v-if="hasOwnApp">
+            <a href="/share" v-if="hasOwnApp && !vipShow">
                 <p class="iconfont">&#xe6da;</p>
                 <p>{{$t("points_mall.referAFriend")}}</p>
-            </a> -->
+            </a>
+
             <router-link class="hasNew" :to="url+'vip'" v-if="me.vipUser && vipShow">
                 <p style="font-size:24px;" class="iconfont">&#xe783;</p>
                 <p style="margin-top: 4px;">VIP</p>
@@ -70,7 +70,7 @@
                 </span>
             </router-link>
 
-            <a v-if="!(me.vipUser && vipShow)" href="javascript:;" style="visibility:hidden;"></a>
+            <!-- <a v-if="!(me.vipUser && vipShow)" href="javascript:;" style="visibility:hidden;"></a> -->
 
 
         </div>
@@ -143,7 +143,34 @@
                 return this.vipLevel == 0 ? '#B4CCE7' : this.vipLevel == 1 ? '#F8B0BC' : this.vipLevel == 2 ? '#A9D4C0' : '#DDC35E';
             },
             headBackImg(){
-                return `background-image: url(https://image.geeko.ltd/chicme/20220615/PCME${this.vipLevel}.png);`
+                return this.vipShow && `
+                                        align-items:flex-start;
+                                        height: 200px;
+                                        padding: 30px 22px;
+                                        background-color: #dcdcdc;
+                                        border-radius: 12px;
+                                        background-image: url(https://image.geeko.ltd/chicme/20220615/PCME${this.vipLevel}.png);`
+            },
+            meInfoStyle(){
+                return this.vipShow && 'margin-top:17px;'
+            },
+            headerIconStyle(){
+                return this.vipShow && `margin-top:20px`;
+            },
+            fullnameStyle(){
+                return this.vipShow && `color:#fff;
+                                        font-size:22px;
+                                        font-family: Roboto-Bold;
+                                        font-weight: bold;
+                                        line-height: 25px;
+                                        `
+            },
+            emailStyle(){
+                return this.vipShow && `color:#fff;`
+            },
+            verifyStyle(){
+                return this.vipShow && `color: #fff;`
+
             },
             vipTag(){
                 return window.name + ' VIP V'+this.vipLevel; 
@@ -241,13 +268,15 @@
 
         .m-hd{
             display: flex;
-            align-items: flex-start;
+            align-items: center;
             width: 100%;
-            height: 200px;
+            
             background-size: 100% 100%;
             background-repeat: no-repeat;
-            padding: 30px 22px;
+            padding: 24px 20px 0;
             position: relative;
+            background-color: #fff;
+            
 
             .toProfile{
                 position: relative;
@@ -274,19 +303,11 @@
                 border-radius: 50%;
             }
             .el-me-info{
-                margin-top: 17px;
+                // margin-top: 17px;
                 margin-left: 20px;
                 .el-me-fullname{
-                    font-size: 22px;
-                    // color: #222;
-                    color: #fff;
-                    font-family: Roboto-Bold;
-                    font-weight: bold;
-                    line-height: 25px;
-                    // max-width: 68%;
-                    // overflow: hidden;
-                    // text-overflow: ellipsis;
-                    // white-space: nowrap;
+                    font-size: 16px;
+                    color: #222;
 
                     .vipLevel{
                         // width: 55px;
@@ -313,21 +334,21 @@
                 }
                 .el-me-email{
                     font-size: 14px;
-                    // color: #666;
-                    color: #fff;
+                    color: #666;
+                    // color: #fff;
                     margin-top: 12px;
                     span{
                         margin-left: 10px;
                     }
                     .verify{
-                        // color: #E64545;
-                        color: #fff;
+                        color: #E64545;
+                        // color: #fff;
                         text-decoration: underline;
                         cursor: pointer;
                     }
                     .have-verify{
-                        // color: #57b936;
-                        color: #fff;
+                        color: #57b936;
+                        // color: #fff;
                         font-size: 14px;
                     }
                 }
@@ -370,7 +391,7 @@
             background-color: #ffffff;
             // margin: 0px -20px;
             height: 95px;
-            margin-top: 20px;
+            // margin-top: 20px;
             align-items: center;
 
             & > a{
