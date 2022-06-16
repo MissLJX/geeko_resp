@@ -9,7 +9,7 @@
                     :isShowConfirm.sync="isShowConfirm"
                     :isloding.sync="isloding"
                 ></index-header-icon>
-                <div class="view-more">
+                <div class="view-more" v-if="!vipShow">
                     <router-link :to="getUrl('/me/m/updateProfile')">
                         {{$t("index.my_profile")}} >
                     </router-link>
@@ -185,8 +185,9 @@
 
             ._top{
                 position: relative;
-                background-color: #ffffff;
-                padding: 24px 20px;
+                // background-color: #ffffff;
+                // padding: 24px 20px;
+                // padding: 0 20px;
             }
 
             ._order{
