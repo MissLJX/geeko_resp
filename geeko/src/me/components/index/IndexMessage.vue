@@ -131,7 +131,7 @@
                     <p class="iconfont vip-p1">&#xe783;</p>
                     <p class="vip-p2">VIP</p>
 
-                    <span class="vip-new" v-if="true">
+                    <span class="vip-new" v-if="showNewVip">
                         <span>{{ $t('label.new') }}</span>
                     </span>
                 </a>
