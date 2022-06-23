@@ -1,9 +1,9 @@
 <template>
     <div class="mainArea">
-        <div class="close">
+        <div class="close iframe-display-class">
             <i class="iconfont">&#xe69a;</i>
         </div>
-        <div style="text-align: center; font-weight: bold; padding-top: 21px; font-size: 18px;">{{$t('label.size_chart')}}</div>
+        <div class="iframe-display-class" style="text-align: center; font-weight: bold; padding-top: 21px; font-size: 18px;">{{$t('label.size_chart')}}</div>
         <div class="selectArea" v-show="!ifShoe">
             <div class="sizeSelect">
                 <span>{{$t('label.sizeconversation')}}</span>
