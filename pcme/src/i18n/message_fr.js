@@ -240,6 +240,9 @@ export default {
     return_upload_tip: 'Une photo du reçu de la compagnie de transport indiquant le poids du colis et le numéro de suivi',
     total_reund:'Remboursement Total',
 
+    modify: 'MODIFIER',
+	please_sure_address_correct: 'Veuillez vous assurer que l\'adresse que vous indiquez est correcte',
+
     label:{
         redeem_coupon:"Utilisez le coupon",
         hot_use_points:"Comment utiliser les points?",

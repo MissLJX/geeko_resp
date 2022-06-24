@@ -7,6 +7,9 @@ export default {
         shoppingCart: 'Panier',
         loading: 'chargement',
         addressTip: '* Indique qu\'un champ est requis',
+        confirm: 'Confirmer',
+        modify: 'MODIFIER',
+	    please_sure_address_correct: 'Veuillez vous assurer que l\'adresse que vous indiquez est correcte',
     },
     label: {
         save: 'Enregistrer',

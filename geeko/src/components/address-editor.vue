@@ -7,7 +7,7 @@
 
         <div class="el-media-size">
             <p class="el-address-tip">{{$t('message.addressTip')}}</p>
-            <form @submit.prevent="validateBeforeSubmit">
+            <form @submit.prevent="submit">
                 <div class="el-address-elements">
 
                     <div class="st-flex st-justify-b el-double-item-container">
@@ -129,6 +129,16 @@
             </form>
 
         </div>
+        <country-tip-mask 
+            v-if="showCountryTip"
+            @closeMask="closeMask" 
+            @goon="maskGoOn"
+            :streetAddress="shipping.streetAddress1"
+            :zipCode="shipping.zipCode"
+            :city="shipping.city"
+            :countryLabel="countryLabel"
+            :stateLabel="stateLabel"
+            />
     </div>
 </template>
 
@@ -204,10 +214,11 @@
 
     import _ from 'lodash'
     import Btn from '../components/btn.vue'
+    import CountryTipMask from './country-tip-mask.vue'
 
     export default{
         data(){
-            var initCountry = this.address && this.address.country ? this.address.country.value : '-1'
+            var initCountry = this.address && this.address.country ? this.address.country.value : window.__country ? window.__country :'US'
             var initState = this.address && this.address.state ? this.address.state.value : '-1';
             let addressItem = this.address;
             if(addressItem){
@@ -242,7 +253,9 @@
                 stateInputed: this.address && this.address.state ? this.address.state.value : '',
                 initCountry,
                 initState,
-                submiting: false
+                submiting: false,
+                showCountryTip: false, // 展示国家跟ip不符提示弹窗
+                countrySelectChange: false, // 是否切换国家(未切换是弹窗的条件之一)
             }
         },
         props: {
@@ -259,16 +272,29 @@
             countries(){
                 return this.$store.getters.countries
             },
+            hasCountries(){
+                return this.$store.getters.countries && this.$store.getters.countries.length
+            },
             states(){
                 return this.$store.getters.states
             },
             hasStates(){
                 return this.$store.getters.states && this.$store.getters.states.length
+            },
+             stateLabel(){
+                return this.hasStates ? this.states.find(s => s.value == this.shipping.state).label : this.shipping.state
+            },
+            countryLabel(){
+                return this.hasCountries ? this.countries.find(c => c.value == this.shipping.country).label : this.shipping.country
             }
         },
         methods: {
             closeHandle(){
                 this.$emit('close')
+            },
+            submit(){
+                this.shipping.checkIPCountry = !this.countrySelectChange && !this.address
+                this.validateBeforeSubmit()
             },
             validateBeforeSubmit(){
                 this.$validator.validateAll().then((result) => {
@@ -286,9 +312,13 @@
                                 this.$store.dispatch('screenLoading', {loading: false})
                                 this.$emit('close')
                             }).catch((r) => {
-                                alert(r.result)
                                 this.$store.dispatch('screenLoading', {loading: false})
                                 this.submiting = false
+                                if(r.code == '401'){
+                                    this.showCountryTip = true
+                                } else {
+                                    alert(r.result)
+                                }
                             })
                         } else {
                             this.$store.dispatch('me/addAddress', this.shipping).then(() => {
@@ -296,13 +326,15 @@
                                 this.$store.dispatch('screenLoading', {loading: false})
                                 this.$emit('close')
                             }).catch((r) => {
-                                alert(r.result)
                                 this.$store.dispatch('screenLoading', {loading: false})
                                 this.submiting = false
+                                if(r.code == '401'){
+                                    this.showCountryTip = true
+                                } else {
+                                    alert(r.result)
+                                }
                             })
                         }
-
-
                         return;
                     }
                 });
@@ -323,13 +355,22 @@
 
             },
             changeCountry(evt){
+                this.countrySelectChange = true
                 evt.preventDefault()
                 this.stateSelected = '-1'
                 this.getStates(true)
+            },
+            closeMask(){
+                this.showCountryTip = false
+            },
+            maskGoOn(){
+                this.shipping.checkIPCountry = false
+                this.validateBeforeSubmit()
             }
         },
         components: {
-            'btn': Btn
+            'btn': Btn,
+            'country-tip-mask': CountryTipMask
         },
         created(){
             this.getStates(false)

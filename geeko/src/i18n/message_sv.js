@@ -8,6 +8,9 @@ export default {
         shoppingCart: 'shoppa Kundvagn',
         loading: 'Läser in',
         addressTip: '* Anger att ett f\u00e4lt \u00e4r obligatoriskt',
+        confirm:'Confirm',
+        modify: 'modify',
+	    please_sure_address_correct: 'Please make sure the address you fill is correct',
     },
     label: {
         save: 'Spara',

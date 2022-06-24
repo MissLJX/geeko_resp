@@ -8,6 +8,9 @@ export default {
         shoppingCart: 'Innkaupakarfa',
         loading: 'Hleður',
         addressTip: '* Gefur til kynna \u00e1skilinn reit',
+        confirm:'Confirm',
+        modify: 'modify',
+	    please_sure_address_correct: 'Please make sure the address you fill is correct',
     },
     label: {
         save: 'Vista',

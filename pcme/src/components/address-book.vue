@@ -31,6 +31,7 @@
             </div>
         </div>
         <div class="mask" v-if="isEdit">
+            
             <address-editor :address="editing" @close="close"/>
         </div>
         <loding v-if="isloding"></loding>

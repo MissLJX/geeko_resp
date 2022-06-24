@@ -240,6 +240,9 @@ export default {
     return_upload_tip: 'Una foto del recibo de la empresa de transporte que indica el peso del paquete y el número de seguimiento',
     total_reund:'Reembolso Total',
 
+    modify: 'MODIFICAR',
+	please_sure_address_correct: 'Por favor, asegúrese de que la dirección que rellena es correcta',
+
     label:{
         redeem_coupon:"Canjear cupón",
         hot_use_points:"¿Cómo usar los puntos?",

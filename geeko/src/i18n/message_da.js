@@ -8,6 +8,9 @@ export default {
         shoppingCart: 'Indk\u00f8bskurv',
         loading: 'Indlæser',
         addressTip: '* Angiver, at et felt er p\u00e5kr\u00e6vet',
+        confirm:'Confirm',
+        modify: 'modify',
+	    please_sure_address_correct: 'Please make sure the address you fill is correct',
     },
     label: {
         save: 'Gem',

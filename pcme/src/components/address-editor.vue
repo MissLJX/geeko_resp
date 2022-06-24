@@ -1,6 +1,6 @@
 <template>
     <div class="edit-con">
-        <form @submit.prevent="validateBeforeSubmit">
+        <form @submit.prevent="submit">
             <p class="cancel-btn1" @click="closeHandle"><i class="iconfont">&#xe69a;</i></p>
             <h4>{{$t('shippingaddress')}}</h4>
 
@@ -124,14 +124,26 @@
                 <div class="input-con required w-left cancel-btn" @click="closeHandle">{{$t('cancel')}}</div>
             </div>
         </form>
+
+        <country-tip-mask 
+            v-if="showCountryTip"
+            @closeMask="closeMask" 
+            @goon="maskGoOn"
+            :streetAddress="shipping.streetAddress1"
+            :zipCode="shipping.zipCode"
+            :city="shipping.city"
+            :countryLabel="countryLabel"
+            :stateLabel="stateLabel"
+            />
     </div>
 </template>
 
 <script>
     import _ from 'lodash'
+    import CountryTipMask from './country-tip-mask.vue'
     export default{
         data(){
-            var initCountry = this.address && this.address.country ? this.address.country.value : 'US'
+            var initCountry = this.address && this.address.country ? this.address.country.value : window.__country ? window.__country :'US'
             var initState = this.address && this.address.state ? this.address.state.value : '-1'
             var initPhoneValidate = 'required|phone';
             if(this.address && this.address.country){
@@ -196,6 +208,8 @@
                 zip_validate:initZipValidate,
                 cpfValidate:'required|cpf',
                 ifshowCPFtip:false,
+                showCountryTip: false, // 展示国家跟ip不符提示弹窗
+                countrySelectChange: false, // 是否切换国家(未切换是弹窗的条件之一)
             }
         },
         props: {
@@ -212,6 +226,9 @@
             countries(){
                 return this.$store.getters.countries
             },
+            hasCountries(){
+                return this.$store.getters.countries && this.$store.getters.countries.length
+            },
             states(){
                 return this.$store.getters.states
             },
@@ -225,10 +242,20 @@
                     return this.$t('pleasewait')
                 }
             },
+            stateLabel(){
+                return this.hasStates ? this.states.find(s => s.value == this.shipping.state).label : this.shipping.state
+            },
+            countryLabel(){
+                return this.hasCountries ? this.countries.find(c => c.value == this.shipping.country).label : this.shipping.country
+            }
         },
         methods: {
             closeHandle(){
                 this.$emit('close')
+            },
+            submit(){
+                this.shipping.checkIPCountry = !this.countrySelectChange && !this.address
+                this.validateBeforeSubmit()
             },
             validateBeforeSubmit(){
                 this.$validator.validateAll().then((result) => {
@@ -244,16 +271,24 @@
                                 this.submiting = false
                                 this.$emit('close')
                             }).catch((r) => {
-                                alert(r.result)
                                 this.submiting = false
+                                if(r.code == '401'){
+                                    this.showCountryTip = true
+                                } else {
+                                    alert(r.result)
+                                }
                             })
                         } else {
                             this.$store.dispatch('addAddress', this.shipping).then(() => {
                                 this.submiting = false
                                 this.$emit('close')
                             }).catch((r) => {
-                                alert(r.result)
                                 this.submiting = false
+                                if(r.code == '401'){
+                                    this.showCountryTip = true
+                                } else {
+                                    alert(r.result)
+                                }
                             })
                         }
                         return;
@@ -270,6 +305,7 @@
                 } else {}
             },
             changeCountry(evt){
+                this.countrySelectChange = true
                 evt.preventDefault()
                 this.phone_validate = 'required|phone'
                 this.zip_validate = 'required'
@@ -293,10 +329,20 @@
 
                 this.stateSelected = '-1'
                 this.getStates(true)
+            },
+            closeMask(){
+                this.showCountryTip = false
+            },
+            maskGoOn(){
+                this.shipping.checkIPCountry = false
+                this.validateBeforeSubmit()
             }
         },
         created(){
             this.getStates(false);
+        },
+        components:{
+            "country-tip-mask":CountryTipMask
         }
     }
 </script>
@@ -459,5 +505,76 @@
     }
     .cpficon{
         cursor: pointer;
+    }
+
+    .mask{
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,.4);
+        text-align: left;
+        overflow-y: auto;
+        z-index: 999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .contentBoxPc{
+            width: 461px;
+            background-color: #ffffff;
+            border-radius: 3px;
+            padding: 22px 18px;
+
+            .tipContentPc{
+                font-size: 18px;
+                font-family: AcuminPro-Bold, Roboto;
+                font-weight: bold;
+                color: #222222;
+                line-height: 21px;
+                margin-bottom: 43px;
+            }
+
+            .tipCountryPc{
+                font-size: 16px;
+                font-family: Roboto;
+                font-weight: 400;
+                color: #222222;
+                line-height: 19px;
+
+                .countryLabel{
+                    color:#E64545;
+                }
+            }
+
+            .tipButtonBoxPc{
+                margin-top: 38px;
+            }
+
+            .tipButton{
+                width: 100%;
+                height: 42px;
+                line-height: 42px;
+                background-color: #222;
+                border-radius: 2px;
+                border: solid 1px #222222;
+                text-align: center;
+                font-family: AcuminPro-Bold;
+                font-size: 18px;
+                font-weight: normal;
+                font-stretch: normal;
+                letter-spacing: 0px;
+                color: #fff;
+                text-transform: uppercase;
+                margin-top: 12px;
+                cursor: pointer;
+            }
+
+            .whiteBtn{
+                background-color: #fff;
+                color: #222;
+            }
+        }
     }
 </style>

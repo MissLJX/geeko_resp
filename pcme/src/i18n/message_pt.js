@@ -242,6 +242,9 @@ export default {
     return_upload_tip: 'Uma foto do recibo da transportadora indicando o peso do pacote e o número de rastreamento',
     total_reund:'Reembolso total',
 
+    modify: 'MODIFICAR',
+	please_sure_address_correct: 'Por favor certifique-se de que o endereço que preenche está correcto',
+
     label:{
         redeem_coupon:"Use um cupom",
         hot_use_points:"Como usar os pontos?",

@@ -7,6 +7,9 @@ export default {
         shoppingCart: 'Bolsa de la Compra',
         loading: 'cargando',
         addressTip: '* Indica que se requiere un campo',
+        confirm:'Confirmar',
+        modify: 'MODIFICAR',
+        please_sure_address_correct: 'Por favor, asegúrese de que la dirección que rellena es correcta',
     },
     label: {
         save: 'Guardar',

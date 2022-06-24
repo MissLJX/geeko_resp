@@ -243,6 +243,9 @@ export default {
     return_upload_tip: 'A photo of the receipt from the shipping company indicating the weight of the package and tracking number',
     total_reund:'Total Reund',
 
+    modify: 'modify',
+	please_sure_address_correct: 'Please make sure the address you fill is correct',
+
     label:{
         redeem_coupon:"Redeem Coupon",
         hot_use_points:"How to Use Points?",

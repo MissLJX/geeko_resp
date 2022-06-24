@@ -8,6 +8,9 @@ export default {
         shoppingCart: 'Ostosk\u00e4rry',
         loading: 'Ladataan',
         addressTip: '* Osoittaa, ett\u00e4 kentt\u00e4 on pakollinen',
+        confirm:'Confirm',
+        modify: 'modify',
+	    please_sure_address_correct: 'Please make sure the address you fill is correct',
     },
     label: {
         save: 'Tallenna',

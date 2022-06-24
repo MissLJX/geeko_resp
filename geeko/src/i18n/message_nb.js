@@ -8,6 +8,9 @@ export default {
         shoppingCart: 'Handlevogn',
         loading: 'Laster inn',
         addressTip: '* Angir at et felt er obligatorisk',
+        confirm:'Confirm',
+        modify: 'modify',
+	    please_sure_address_correct: 'Please make sure the address you fill is correct',
     },
     label: {
         save: 'Lagre',

@@ -7,6 +7,9 @@ export default {
         shoppingCart: 'Shopping Cart',
         loading: 'loading',
         addressTip: '* Indicates a field is required',
+        confirm:'Confirm',
+        modify: 'modify',
+	    please_sure_address_correct: 'Please make sure the address you fill is correct',
     },
     label: {
         save: 'Save',
