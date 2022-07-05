@@ -1,9 +1,9 @@
-<script src="../../build/dist/0.js"></script>
 <template>
+
     <div>
         <div class="imghd">
-            <p>{{wannalistNum}} {{$t("points")}}</p>
-            <p class="remove" @click="clearAllHandle()">{{$t("remove_all_invaild")}}</p>
+            <p>{{wannalistNum}} {{$t("products")}}</p>
+            <p class="remove" v-if="wishProducts && wishProducts.length > 0" @click="clearAllHandle()">{{$t("remove_all_invaild")}}</p>
         </div>
         <div class="imgCon">
             <ul>
@@ -135,7 +135,9 @@
                 }
             },
             clearAllHandle(){
-                this.isAlert = true;
+                if(this.wishProducts && this.wishProducts.length > 0){
+                    this.isAlert = true;
+                }
             },
             removeAll(flag){
                 this.isAlert = false;

@@ -244,6 +244,8 @@ export default {
     modify: 'modify',
 	please_sure_address_correct: 'Please make sure the address you fill is correct',
 
+    products:'Products',
+
     label:{
         redeem_coupon:"Redeem Coupon",
         hot_use_points:"How to Use Points?",

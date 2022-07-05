@@ -243,6 +243,8 @@ export default {
     modify: 'ÄNDERN',
 	please_sure_address_correct: 'Bitte vergewissern Sie sich, dass die von Ihnen eingegebene Adresse korrekt ist',
 
+    products:'Produkte',
+
     label:{
         redeem_coupon:"Coupon einl\u00f6sen",
         hot_use_points:"Wie werden Punkte verwendet?",
