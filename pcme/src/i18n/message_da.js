@@ -248,6 +248,8 @@ export default {
 
     products:'Products',
 
+    return: "Return",
+
     label:{
         redeem_coupon:"Redeem Coupon",
         hot_use_points:"How to Use Points?",
@@ -538,14 +540,14 @@ export default {
         s_confirmed: 'CONFIRMED',
         s_canceled: 'CANCELED',
         s_all_c: 'All',
-        s_wating_for_replied: 'Wating for Replied',
+        s_wating_for_replied: 'Waiting for Replied',
         s_replied: 'Replied',
         s_resolved: 'Resolved',
         s_rate_my_service: 'Rate My Service',
         s_rate_info: "We'd love to hear what you think of our customer service to help us to serve you better.",
         s_rate_satisfied: 'Satisfied',
         s_rate_unsatisfied: 'Unsatisfied',
-        s_wating_for_apply: 'Wating for Apply',
+        s_wating_for_apply: 'Waiting for Apply',
         facebook_check: 'If you check this, we will send you logistics tracking status and order information in Messenger',
     },
     points_mall:{

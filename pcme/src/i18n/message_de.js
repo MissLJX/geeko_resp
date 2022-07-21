@@ -245,6 +245,8 @@ export default {
 
     products:'Produkte',
 
+    return: "Zurückkehren",
+
     label:{
         redeem_coupon:"Coupon einl\u00f6sen",
         hot_use_points:"Wie werden Punkte verwendet?",
@@ -528,12 +530,12 @@ export default {
         s_select_order: 'Bitte wählen Sie Ihre Bestellung aus',
         s_items: 'Artikel',
         s_all: 'ALLE',
-        s_unbezahlt: 'UNBEZAHLT',
+        s_unpaid: 'UNBEZAHLT',
         s_paid:"BEZAHLT",
         s_processing: "VERARBEITUNG",
-        s_versandt: 'VERSENDET',
+        s_shipped: 'VERSENDET',
         s_confirmed: 'BESTÄTIGT',
-        s_storniert: 'ABGESAGT',
+        s_canceled: 'ABGESAGT',
         s_all_c: 'Alle',
         s_wating_for_replied: 'Warten auf Antwort',
         s_replied: 'Beantwortet',
@@ -542,7 +544,7 @@ export default {
         s_rate_info: "Wir würden gerne hören, was Sie von unserem Kundenservice halten, damit wir Sie besser bedienen können.",
         s_rate_satisfied: 'Zufrieden',
         s_rate_unsatisfied: 'Unzufrieden',
-        s_wating_for_apply: 'Warte auf Bewerben',
+        s_wating_for_apply: 'Warten auf Bewerben',
         facebook_check: 'Wenn Sie dies überprüfen, senden wir Ihnen den Status der Sendungsverfolgung und Bestellinformationen in Messenger',
     },
     points_mall:{

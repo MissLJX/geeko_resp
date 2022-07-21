@@ -244,6 +244,7 @@ export default {
 	please_sure_address_correct: 'Por favor, asegúrese de que la dirección que rellena es correcta',
 
     products:'Productos',
+    return: "Devolver",
 
     label:{
         redeem_coupon:"Canjear cupón",

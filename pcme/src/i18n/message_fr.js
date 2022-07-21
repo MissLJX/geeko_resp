@@ -244,6 +244,7 @@ export default {
 	please_sure_address_correct: 'Veuillez vous assurer que l\'adresse que vous indiquez est correcte',
 
     products:'Des produits',
+    return: "Revenir",
 
     label:{
         redeem_coupon:"Utilisez le coupon",
@@ -532,9 +533,9 @@ export default {
         s_unpaid: 'UNPAID',
         s_paid: "PAYÉ",
         s_processing: "TRAITEMENT",
-        s_expédié: 'EXPÉDIÉ',
+        s_shipped: 'EXPÉDIÉ',
         s_confirmed: 'CONFIRMÉ',
-        s_canneled: 'ANNULÉ',
+        s_canceled: 'ANNULÉ',
         s_all_c: 'Tous',
         s_wating_for_replied: 'En attente de réponse',
         s_replied: 'Répondu',

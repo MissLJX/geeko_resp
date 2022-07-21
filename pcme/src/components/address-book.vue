@@ -60,11 +60,15 @@
         },
         computed: {
             ...mapGetters(['addresses','countries','states']),
-
         },
         created(){
             this.$store.dispatch('getAddresses');
             this.$store.dispatch('getCountries');
+        },
+        watch:{
+            addresses(nV, oV){
+                console.log('addresses: ',nV, oV)
+            }
         },
         methods:{
             makedefault(id){

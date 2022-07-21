@@ -538,7 +538,7 @@ const actions = {
                     customer["customer"] = customer["definition"];
                 }
                 commit(types.CHANGE_GET_ME_DATA,customer);
-            });
+            }).catch(err => reject(err));
         });
     },
     getCurrencyList({commit}){

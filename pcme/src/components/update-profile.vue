@@ -34,17 +34,17 @@
             <div class="namearea">
                 <div class="firstname">
                     <label>{{$t("index.nickname")}}:</label>
-                    <input v-model="nickname"/>
+                    <input maxlength="100" v-model="nickname"/>
                 </div>
 
                 <div class="firstname">
                     <label>{{$t('firstName')}}:</label>
-                    <input v-model="firstname"/>
+                    <input maxlength="100" v-model="firstname"/>
                 </div>
                 <div class="lastname">
                     <label>{{$t('lastName')}}:</label>
                     <div class="st-cell st-v-m">
-                        <input v-model="lastname"/>
+                        <input maxlength="100" v-model="lastname"/>
                     </div>
                 </div>
 
@@ -146,6 +146,9 @@
                     this.isloding = false
                 }).then(() => {
                     alert(this.$t('success'))
+                }).catch((err)=>{
+                    alert(err && err.result)
+                    this.isloding = false
                 })
             },
             toggleShow() {

@@ -3,6 +3,7 @@
         <edit-message-container :header-title="$t('index.name')" :btn-name="$t('label.save')" @toSubmit="addUserName">
             <div>
                 <input 
+                    maxlength="100"
                     type="text" 
                     name="firstName" 
                     autocomplete="off"
@@ -13,6 +14,7 @@
 
             <div>
                 <input 
+                    maxlength="100"
                     type="text" 
                     name="lastName" 
                     autocomplete="off"
@@ -62,7 +64,7 @@
                 store.dispatch("me/updateCustomerSave",obj).then(result => {
                     _this.isLoadingShow = false;
                     _this.$router.go(-1);
-                });
+                }).catch(err => alert(err && err.result));
             }
         },
         created(){

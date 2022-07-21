@@ -246,6 +246,7 @@ export default {
 	please_sure_address_correct: 'Por favor certifique-se de que o endereço que preenche está correcto',
 
     products:'Produtos',
+    return: "Retornar",
 
     label:{
         redeem_coupon:"Use um cupom",

@@ -598,6 +598,25 @@
                         overflow: auto;
                         margin-bottom: 4px;
                         flex: 1;
+                        line-height: 16px;
+
+                        /*定义整体的宽度*/
+                        &::-webkit-scrollbar {
+                            width: 6px;
+                        }
+                        /*定义滚动条轨道*/
+                        &::-webkit-scrollbar-track {
+                            border-radius: 5px;
+                        }
+                        /*定义滑块*/
+                        &::-webkit-scrollbar-thumb {
+                            width: 6px;
+                            border-radius: 3px;
+                            background-color: #cccccc;
+                        }
+                        &::-webkit-scrollbar-thumb:hover{
+                            background-color: #999; 
+                        }
                     }
 
                     .rewardRulesBtn{

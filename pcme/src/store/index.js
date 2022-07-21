@@ -587,19 +587,14 @@ const mutations = {
         state.currencies = currencies
     },
     [types.ME_UPDATE_ADDRESS](state, address){
-        var _address
-        if (state.addresses && (_address = state.addresses.find(o => o.id === address.id))) {
-            _address.name = address.name
-            _address.country = address.country
-            _address.phoneNumber = address.phoneNumber
-            _address.zipCode = address.zipCode
-            _address.unit = address.unit
-            _address.state = address.state
-            _address.streetAddress1 = address.streetAddress1
-            _address.city = address.city
-
+        if(state.addresses){
+            state.addresses.forEach((o, i)=> {
+                if(o.id == address.id){
+                    address.isDefaultAddress = o.isDefaultAddress
+                    state.addresses.splice(i,1,address)
+                }
+            })
         }
-
     },
     [types.ME_ADD_ADDRESS](state, address){
         state.addresses.forEach(item => {
@@ -1690,7 +1685,7 @@ const actions = {
                     commit(types.CHANGE_GET_ME_DATA,{name:"nickname",customer:{nickname:customer.customer.nickname}});
                 }
                 commit(types.CHANGE_GET_ME_DATA,customer);
-            });
+            }).catch(err => reject(err));
         });
     },
     getMyPreferenceMessageCode({commit},code){
