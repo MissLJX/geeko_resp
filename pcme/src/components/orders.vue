@@ -88,8 +88,8 @@
                             </div>
                             <!--线上其他支付按钮+倒计时-->
                             <div class="pos-rel">
-                                <a class="b-btn" :href="checkoutUrl(item.id)"  v-if="item.id && item.fulfillmentStatus===constant.TOTAL_STATUS_UNPAID && !item.mercadopagoPayURL && !item.boletoPayCodeURL && orderoffset(item) >= 0">{{$t("paynow")}}</a>
-                                <div class="offTip" v-if="item.id && item.fulfillmentStatus===constant.TOTAL_STATUS_UNPAID && !item.mercadopagoPayURL && !item.boletoPayCodeURL && orderoffset(item) >= 0">
+                                <a class="b-btn" :href="checkoutUrl(item.id)"  v-if="item.id && item.fulfillmentStatus===constant.TOTAL_STATUS_UNPAID && !item.mercadopagoPayURL && !item.boletoPayCodeURL && !item.payCodeUrl && orderoffset(item) >= 0">{{$t("paynow")}}</a>
+                                <div class="offTip" v-if="item.id && item.fulfillmentStatus===constant.TOTAL_STATUS_UNPAID && !item.mercadopagoPayURL && !item.boletoPayCodeURL && !item.payCodeUrl && orderoffset(item) >= 0">
                                     <div class="triangle"></div>
                                     <span class="label">{{$t("remaining")}}:</span>
                                     <count-down :timeStyle="{color:'#fff'}" :timeLeft="orderoffset(item)"></count-down>
@@ -669,6 +669,8 @@
                     case '41':
                     case '43':
                     case '44':
+                    case '129':	
+                    case '130':
                         return 'Generar Ticket'
                     case '29':
                         return 'Gerar Ticket'

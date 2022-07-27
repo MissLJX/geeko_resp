@@ -20,7 +20,7 @@
                     <div class="remain">{{$t("remaining")}}:<count-down :timeStyle="{color:'#fff'}" :timeLeft="orderoffset"></count-down></div>
                     <a class="paybtn" :href="getPayUrl" v-if="getBtnText && getPayUrl && orderdetail.status === 0 && orderoffset >= 0">{{getBtnText}}</a>
                     <a class="paybtn" :href="checkoutUrl(orderdetail.id)" v-if="getBtnText2 && getPayUrl && orderdetail.status === 0 && orderoffset >= 0">{{getBtnText2}}</a>
-                    <a class="paybtn" :href="checkoutUrl(orderdetail.id)" v-if="!orderdetail.mercadopagoPayURL && !orderdetail.boletoPayCodeURL && orderdetail.status === 0 && orderoffset >= 0">{{$t("paynow")}}</a>
+                    <a class="paybtn" :href="checkoutUrl(orderdetail.id)" v-if="!orderdetail.mercadopagoPayURL && !orderdetail.boletoPayCodeURL && !orderdetail.payCodeUrl && orderdetail.status === 0 && orderoffset >= 0">{{$t("paynow")}}</a>
                 </div>
             </div>
             <div class="payTip" v-if="orderdetail.unPayMessage && orderoffset >= 0">
@@ -198,6 +198,8 @@
                     case '41':
                     case '43':
                     case '44':
+                    case '129':	
+                    case '130':
                         return 'Generar Ticket'
                     case '29':
                         return 'Gerar Ticket'
@@ -225,6 +227,8 @@
                     case '41':
                     case '43':
                     case '44':
+                    case '129':	
+                    case '130':
                         return 'Otro método de pago'
                     case '16':
                     case '23':
