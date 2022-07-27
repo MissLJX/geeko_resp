@@ -305,6 +305,7 @@
             .el-me-info{
                 // margin-top: 17px;
                 margin-left: 20px;
+                flex: 1;
                 .el-me-fullname{
                     font-size: 16px;
                     color: #222;

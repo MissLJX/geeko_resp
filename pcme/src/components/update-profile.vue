@@ -39,12 +39,12 @@
 
                 <div class="firstname">
                     <label>{{$t('firstName')}}:</label>
-                    <input maxlength="100" v-model="firstname"/>
+                    <input maxlength="50" v-model="firstname"/>
                 </div>
                 <div class="lastname">
                     <label>{{$t('lastName')}}:</label>
                     <div class="st-cell st-v-m">
-                        <input maxlength="100" v-model="lastname"/>
+                        <input maxlength="50" v-model="lastname"/>
                     </div>
                 </div>
 

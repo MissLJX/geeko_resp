@@ -3,7 +3,7 @@
         <edit-message-container :header-title="$t('index.name')" :btn-name="$t('label.save')" @toSubmit="addUserName">
             <div>
                 <input 
-                    maxlength="100"
+                    maxlength="50"
                     type="text" 
                     name="firstName" 
                     autocomplete="off"
@@ -14,7 +14,7 @@
 
             <div>
                 <input 
-                    maxlength="100"
+                    maxlength="50"
                     type="text" 
                     name="lastName" 
                     autocomplete="off"
