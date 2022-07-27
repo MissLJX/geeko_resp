@@ -339,6 +339,10 @@
                     case '43':
                     case '44':
                         return this.orderdetail.boletoPayCodeURL
+                    case '129':	
+                    case '130':
+                        return this.orderdetail.payCodeUrl
+                    default:
                         return null
                 }
             },

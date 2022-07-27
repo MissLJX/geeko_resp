@@ -646,6 +646,10 @@
                     case '43':
                     case '44':
                         return item.boletoPayCodeURL
+                    case '129':	
+                    case '130':
+                        return item.payCodeUrl
+                    default:
                         return null
                 }
             },
