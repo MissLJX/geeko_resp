@@ -122,7 +122,7 @@
                     </div>
                     <p>{{$t("index.points")}}</p>
                 </a>
-                <a @click.prevent="specificationLogin('/me/m/creditcards',1)" click-name="Wallet">
+                <a @click.prevent="specificationLogin('/me/m/wallet',1)" click-name="Wallet">
                     <p class="iconfont">&#xe6dd;</p>
                     <p>{{$t("index.wallet")}}</p>
                 </a>

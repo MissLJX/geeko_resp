@@ -34,10 +34,25 @@
         <div class="mask" v-if="addToCartModalShow" @click="modalHide"></div>
 
         <loading v-if="loadingShow"></loading>
+
+        <div class="fixed-bottom"></div>
     </div>
 </template>
 
 <style scoped lang="scss">
+    .fixed-bottom{
+        background-color: aqua;
+        height: 51px;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        border-top: solid 1px #eeeeee;
+        display: flex;
+        padding-top: 7px;
+        z-index: 10;
+    }
+
     .el-body {
         font-size: 14px;
     }
