@@ -312,7 +312,7 @@ const Me = [
         path: `${ROUTER_PATH_ME}/wallet`,
         component: () => import(/* webpackChunkName: "wallet" */ "../pages/wallet.vue"),
         name: "wallet",
-        meat: { title: "My Wallet", keepAlive: false }
+        meta: { title: "My Wallet", keepAlive: false }
     }
 ]
 

@@ -4,7 +4,7 @@
             <nav-bar style="background-color:transparent;">
                 <i class="iconfont" slot="left" @click="$router.go(-1)" style="color:#fff;">&#xe693;</i>
                 <span slot="center" style="color:#fff;">My Wallet</span>
-                <a href="/fs/wallet-policy" slot="right">
+                <a :href="GLOBAL.getUrl('/fs/wallet-policy')" slot="right">
                     <span class="iconfont" style="font-size:20px;color:#fff;">&#xe73f;</span>
                 </a>
             </nav-bar>
@@ -33,6 +33,12 @@
         components:{
             "nav-bar":NavBar,
             "WalletHistory": WalletHistory
+        },
+        mounted(){
+            document.body.style.overflow = 'hidden';
+        },
+        destroyed(){
+            document.body.style.overflow = 'auto';
         }
     }
 </script>

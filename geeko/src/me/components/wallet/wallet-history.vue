@@ -3,47 +3,65 @@
         <div class="wallet-history-hd">Wallet History</div>
 
         <div class="wallet-history-tab">
-            <span class="wallet-history-tab-item">
-                <span class="active">ALL</span>
-            </span>
 
-            <span class="wallet-history-tab-item" style="text-align:left;">
-                <span>Earned</span>
-            </span>
-
-            <span class="wallet-history-tab-item" style="text-align:center;">
-                <span>Used</span>
-            </span>
-
-            <span class="wallet-history-tab-item" style="text-align:right;">
-                <span>Expired</span>
+            <span 
+                class="wallet-history-tab-item" 
+                @click="componentName=nav.name"
+                v-for="(nav, index) in navs"
+                :key="nav.id+index"
+                :style="{...nav.style}"
+            >
+                <span :class="{'active':componentName==nav.name}">{{ nav.label }}</span>
             </span>
         </div>
-
-        <keep-alive>
-            <component :is="componentName"></component>
-        </keep-alive>
+        
+        <!-- <div class="wallet-history-bd"> -->
+        <transition :name="transitionName">
+            <keep-alive>
+                <component :is="componentName" class="child-view"></component>
+            </keep-alive>
+        </transition>
+        <!-- </div> -->
     </div>
 </template>
 
 <script>
     import WalletAll from "./wallet-all.vue";
+    import WalletEarned from "./wallet-earned.vue";
+    import WalletUsed from "./wallet-used.vue";
+    import WalletExpired from "./wallet-expired.vue";
 
     export default {
         name:"WalletHistory",
         data(){
             return {
-                componentName:"WalletAll"
+                navs: [
+                    {id: 1, label: 'ALL', level:1, name: 'WalletAll', style:{}},
+                    {id: 2, label: "Earned", level:2, name: 'WalletEarned', style:{textAlign:"left"}},
+                    {id: 3, label: "Used", level:3, name: 'WalletUsed', style:{textAlign:"center"}},
+                    {id: 4, label: "Expired", level:4, name: 'WalletExpired', style:{textAlign:"right"}}
+                ],
+                componentName:"WalletAll",
+                transitionName: 'slide-left'
             }
         },
         components:{
-            "WalletAll":WalletAll
+            "WalletAll": WalletAll,
+            "WalletEarned": WalletEarned,
+            "WalletUsed": WalletUsed,
+            "WalletExpired": WalletExpired
+        },
+        watch:{
+            componentName:function (newValue,oldValue){
+                const toDepth = this.navs.find(item=>item.name==newValue).level;
+                const fromDepth = this.navs.find(item=>item.name==oldValue).level;
+                this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
+            }
         }
     }
 </script>
 
 <style scoped lang="scss">
-
     .wallet-history-container{
         background-color: #fff;
         box-shadow: 0px 3px 20px 5px rgba(34, 34, 34, 0.1);
@@ -87,5 +105,24 @@
                 }
             }
         }
+    }
+
+    .child-view {
+        //position: absolute;
+        transition: all .3s cubic-bezier(.4, 0, .1, 1);
+        width: 100%;
+    }
+
+    .slide-left-enter, .slide-right-leave-active {
+        opacity: 0;
+        -webkit-transform: translate(30px, 0);
+        transform: translate(30px, 0);
+    }
+
+    .slide-left-leave-active, .slide-right-enter {
+        position: absolute;
+        opacity: 0;
+        -webkit-transform: translate(-30px, 0);
+        transform: translate(-30px, 0);
     }
 </style>

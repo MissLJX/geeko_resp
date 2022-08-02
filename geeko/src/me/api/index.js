@@ -369,3 +369,7 @@ export const redeemFreeShipping = (path) =>{
 export const getWhetherShowVip = () =>{
     return axios.get(`/context/show-vip`,{},{});
 }
+
+export const getCashHistoryRecord = ({skip, limit, path}) =>{
+    return axios.get(`/cash-history-record/${skip}/${limit}/${path}`, {}, {})
+}

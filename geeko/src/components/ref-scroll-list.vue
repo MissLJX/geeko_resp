@@ -63,12 +63,6 @@
         methods: {
             scrollHandle(evt){
                 evt.preventDefault()
-                // let [scrollTop, documentHeight, windowHeight] = [
-                //     document.documentElement.scrollTop || document.body.scrollTop,
-                //     document.body.clientHeight,
-                //     window.screen.height
-                // ]
-                
                 let clientHeight = this.$refs.listRef.clientHeight;
                 let scrollTop = this.$refs.listRef.scrollTop;
                 let scrollHeight = this.$refs.listRef.scrollHeight;
@@ -86,7 +80,7 @@
         
         },
         destroyed(){
-            this.$refs.listRef.removeEventListener('scroll', this.scrollHandle)
+            this.$refs.listRef && this.$refs.listRef.removeEventListener('scroll', this.scrollHandle)
         },
         activated(){
             if (this.scrollable){
