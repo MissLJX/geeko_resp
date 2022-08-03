@@ -12,6 +12,7 @@
     .el-credits {
         overflow-y: auto;
         flex: 1;
+        position: relative;
     }
 </style>
 

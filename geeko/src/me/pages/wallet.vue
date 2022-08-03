@@ -3,7 +3,7 @@
         <div class="fixed-container">
             <nav-bar style="background-color:transparent;">
                 <i class="iconfont" slot="left" @click="$router.go(-1)" style="color:#fff;">&#xe693;</i>
-                <span slot="center" style="color:#fff;">My Wallet</span>
+                <span slot="center" style="color:#fff;">{{ $t("label.my_wallet") }}</span>
                 <a :href="GLOBAL.getUrl('/fs/wallet-policy')" slot="right">
                     <span class="iconfont" style="font-size:20px;color:#fff;">&#xe73f;</span>
                 </a>
@@ -11,9 +11,9 @@
 
             <div class="wallet-position">
                 <div class="wallet-credit">
-                    <p class="wallet-font1">Wallet Credit</p>
-                    <p class="wallet-price">$0.00</p>
-                    <p class="wallet-message">Only Applicable for ChicMe Purchases</p>
+                    <p class="wallet-font1">{{ $t("label.wallet_credit") }}</p>
+                    <p class="wallet-price">{{ price }}</p>
+                    <p class="wallet-message">{{ $t("label.only_applicable", {name: siteName}) }}</p>
                 </div>
             </div>
         </div>
@@ -27,12 +27,32 @@
 <script>
     import NavBar from "../components/nav-bar.vue";
     import WalletHistory from "../components/wallet/wallet-history.vue";
+    import { getCashWallet } from "../api/index";
+    import { unitprice } from "./../../utils/geekoutils";
 
     export default {
         name:"Wallet",
+        data(){
+            return {
+                walletPrice:null,
+                siteName:window.name,
+            }
+        },
         components:{
             "nav-bar":NavBar,
             "WalletHistory": WalletHistory
+        },
+        computed:{
+            price(){
+                return this.walletPrice ? unitprice(this.walletPrice) : "$0.00";
+            }
+        },
+        created(){
+            getCashWallet().then(response =>{
+                this.walletPrice = response.result;
+            }).catch(response =>{
+                alert(response.result);
+            });
         },
         mounted(){
             document.body.style.overflow = 'hidden';

@@ -1,6 +1,6 @@
 <template>
     <div class="wallet-history-container">
-        <div class="wallet-history-hd">Wallet History</div>
+        <div class="wallet-history-hd">{{ $t("label.wallet_history") }}</div>
 
         <div class="wallet-history-tab">
 
@@ -16,11 +16,11 @@
         </div>
         
         <!-- <div class="wallet-history-bd"> -->
-        <transition :name="transitionName">
-            <keep-alive>
-                <component :is="componentName" class="child-view"></component>
-            </keep-alive>
-        </transition>
+        <!-- <transition :name="transitionName"> -->
+        <keep-alive>
+            <component :is="componentName" class="child-view"></component>
+        </keep-alive>
+        <!-- </transition> -->
         <!-- </div> -->
     </div>
 </template>
@@ -36,10 +36,10 @@
         data(){
             return {
                 navs: [
-                    {id: 1, label: 'ALL', level:1, name: 'WalletAll', style:{}},
-                    {id: 2, label: "Earned", level:2, name: 'WalletEarned', style:{textAlign:"left"}},
-                    {id: 3, label: "Used", level:3, name: 'WalletUsed', style:{textAlign:"center"}},
-                    {id: 4, label: "Expired", level:4, name: 'WalletExpired', style:{textAlign:"right"}}
+                    {id: 1, label: this.$t("point.all"), level:1, name: 'WalletAll', style:{}},
+                    {id: 2, label: this.$t("label.earned"), level:2, name: 'WalletEarned', style:{textAlign:"left"}},
+                    {id: 3, label: this.$t("point.used"), level:3, name: 'WalletUsed', style:{textAlign:"center"}},
+                    {id: 4, label: this.$t("point.expired"), level:4, name: 'WalletExpired', style:{textAlign:"right"}}
                 ],
                 componentName:"WalletAll",
                 transitionName: 'slide-left'
@@ -109,7 +109,7 @@
 
     .child-view {
         //position: absolute;
-        transition: all .3s cubic-bezier(.4, 0, .1, 1);
+        transition: all .5s cubic-bezier(.4, 0, .1, 1);
         width: 100%;
     }
 

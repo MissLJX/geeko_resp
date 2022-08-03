@@ -85,15 +85,15 @@
             walletType(){
                 let wallet = this.credit;
                 if(wallet.targetId){
-                    return `Order # ${wallet.targetId}`
+                    return `${this.$t("label.order_wallet")} # ${wallet.targetId}`
                 }
                 if(wallet.expired){
-                    return "Expired"
+                    return this.$t("point.expired")
                 }else{
                     if(wallet.expiredDate){
-                        return `Expired on:${this.getExpiredDate(wallet.expiredDate)}`;
+                        return `${this.$t("label.expied_on")}:${this.getExpiredDate(wallet.expiredDate)}`;
                     }else{
-                        return "Earned"
+                        return this.$t("label.earned")
                     }
                 }
             }

@@ -373,3 +373,7 @@ export const getWhetherShowVip = () =>{
 export const getCashHistoryRecord = ({skip, limit, path}) =>{
     return axios.get(`/cash-history-record/${skip}/${limit}/${path}`, {}, {})
 }
+// 
+export const getCashWallet = () =>{
+    return axios.get(`/wallet/get-cash`, {}, {})
+}

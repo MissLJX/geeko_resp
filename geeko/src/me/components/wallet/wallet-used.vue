@@ -1,4 +1,4 @@
-<template id="wallet-earned">
+<template id="wallet-used">
     <WalletList  
         :wallets="wallets"
         :loading="loading"

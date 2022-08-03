@@ -16,7 +16,7 @@
 
                 <li>
                     <router-link class="el-me-tool-list-item" :to="{name: 'creditcards'}">
-                        <touch-go class="el-me-tool-list-touch" :label1="'My Payment Options'">
+                        <touch-go class="el-me-tool-list-touch" :label1="$t('label.my_payment_options')">
                         </touch-go>
                     </router-link>
                 </li>
