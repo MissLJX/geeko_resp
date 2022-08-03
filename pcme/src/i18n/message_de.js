@@ -592,5 +592,22 @@ export default {
         vip_level_up: 'Ihr VIP-Level wurde auf <span style="color:#e64545;">V{level}</span> erhöht, sehen Sie sich Ihre neuen Belohnungen an!',
         redeem_success: 'Einlösung erfolgreich',
         new: 'Neu',
+    },
+    my_wallet:{
+        my_wallet: 'Meine Brieftasche',
+        wallet_credit:'Wallet-Guthaben',
+        whats_this:'Was ist das',
+        only_apply:'Nur gültig für Käufe auf {website}',
+        wallet_history: 'Wallet-Verlauf',
+        wallet_all: 'Alle',
+        wallet_earned: 'Verdient',
+        wallet_used: 'Gebraucht',
+        wallet_expired: 'Abgelaufen',
+        date_and_time: 'Datum und Uhrzeit',
+        Typ: 'Typ',
+        amount: 'Betrag',
+        expiration_date: 'Ablaufdatum',
+        order: 'Bestellen',
+        expired_on: 'Abgelaufen am'
     }
 }

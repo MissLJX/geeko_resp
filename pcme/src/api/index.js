@@ -431,3 +431,11 @@ export const getApi = (url) => {
 export const getIsShowVip = () => {
     return axios.get('/context/show-vip');
 }
+
+export const getCashHistory = (skip, limit, type) => {
+    return axios.get(`/cash-history-record/${skip}/${limit}/get-${type}`);
+}
+
+export const getUserCash = () => {
+    return axios.get(`/wallet/get-cash`);
+} 

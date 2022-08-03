@@ -116,6 +116,12 @@
                             name:this.$t("point.my_points"),
                             routerName:"credits",
                             routerPath:"/me/m/credits"
+                        },
+                        {
+                            // name:this.$t("point.my_points"),
+                            name: 'My Wallet',
+                            routerName:"wallet",
+                            routerPath:"/me/m/wallet"
                         }
                     ]
                 },

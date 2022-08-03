@@ -591,5 +591,22 @@ export default {
         vip_level_up: 'Tu nivel VIP ha subido de nivel a <span style="color:#e64545;">V{level}</span>, ve a ver tus nuevas recompensas!',
         redeem_success: 'Redención exitosa',
         new: 'nuevo',
+    },
+    my_wallet:{
+        my_wallet: 'Mi billetera',
+        wallet_credit:'Crédito de billetera',
+        whats_this:'Qué es esto',
+        only_apply:'Solo aplicable para compras en {website}',
+        wallet_history: 'Historial de la billetera',
+        wallet_all: 'Todos',
+        wallet_earned: 'Ganado',
+        wallet_used: 'Usado',
+        wallet_expired: 'Caducado',
+        date_and_time: 'Fecha y hora',
+        type: 'Tipo',
+        amount: 'Cantidad',
+        expiration_date: 'Fecha de vencimiento',
+        order: 'orden',
+        expired_on: 'Caducó el'
     }
 }

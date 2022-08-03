@@ -592,5 +592,22 @@ export default {
         vip_level_up: 'Your VIP level has been level-up to  <span style="color:#e64545;">V{level}</span>, go check out your new rewards!',
         redeem_success: 'Redemption successful',
         new: 'new',
+    },
+    my_wallet:{
+        my_wallet: 'My Wallet',
+        wallet_credit:'Wallet Credit',
+        whats_this:'What\'s this',
+        only_apply:'Only Applicable for {website} Purchases',
+        wallet_history: 'Wallet History',
+        wallet_all: 'All',
+        wallet_earned: 'Earned',
+        wallet_used: 'Used',
+        wallet_expired: 'Expired',
+        date_and_time: 'Date and Time',
+        type: 'Type',
+        amount: 'Amount',
+        expiration_date: 'Expiration Date',
+        order: 'Order',
+        expired_on: 'Expired on'
     }
 }

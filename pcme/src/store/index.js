@@ -168,6 +168,7 @@ const state = {
 
     vipConfig: '',
     vipShow: false,
+    cashHistory: [],
 };
 const getters = {
     me: state => state.me,
@@ -315,6 +316,7 @@ const getters = {
 
     vipConfig: state => state.vipConfig,
     vipShow: state => state.vipShow,
+    cashHistory: state => state.cashHistory,
 };
 const mutations = {
     [types.INIT_ME](state, me){
@@ -840,7 +842,13 @@ const mutations = {
     },
     [types.GET_IS_SHOW_VIP_CONFIG](state, config){
         state.vipShow = config
-    }
+    },
+    [types.GET_CASH_HISTORY](state, list){
+        state.cashHistory = list
+    },
+    [types.CLEAR_CASH_HISTORY](state, flag){
+        state.cashHistory = []
+    },
 }
 const actions = {
     // init({commit}){
@@ -1767,6 +1775,22 @@ const actions = {
             res && res.code==200 && commit(types.GET_IS_SHOW_VIP_CONFIG, res.result)
         }).catch(err => {
             console.log('getIsShowVipConfig报错:', err.result)
+        })
+    },
+    getCashHistoryData({commit}, {skip,limit,type}){
+        console.log(skip,limit,type)
+        return api.getCashHistory(skip,limit,type).then(res => {
+            if(res && res.code == 200){
+                commit(types.GET_CASH_HISTORY, res.reslut)
+            }
+        }).catch(err => {
+            console.log('getCashHistoryData报错:', err.result, err)
+        })
+    },
+    clearCashHistory({commit}){
+        return new Promise((reslove, reject) => {
+            commit(types.CLEAR_CASH_HISTORY, true)
+            reslove('success')
         })
     }
 }

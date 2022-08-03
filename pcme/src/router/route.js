@@ -29,26 +29,33 @@ import FaqIndex from '../pages/faq-index/faq-index.vue'
 import Faq from '../pages/faq/faq.vue'
 import Support from "../pages/support/support.vue"
 import MyVip from '../components/my-vip.vue'
-const __Base_Path__ = window.ctx || ''
-const site = window.name || 'ChicMe' 
+import Wallet from '../components/my-wallet/my-wallet.vue'
 
-const routes = [
-    {
+const __Base_Path__ = window.ctx || ''
+const site = window.name || 'ChicMe'
+
+const routes = [{
         /*path:'/ivrose/me/m',*/
-        path:__Base_Path__ + '/me/m',
+        path: __Base_Path__ + '/me/m',
         component: Index,
-        meta: {title:'Me'},
-        children:[
-            {
-                path:'/',
-                component:Me,
-                meta: {title:'Me'},
+        meta: {
+            title: 'Me'
+        },
+        children: [{
+                path: '/',
+                component: Me,
+                meta: {
+                    title: 'Me'
+                },
             },
             {
-                path:'order',
-                component:Orders,
-                name:'orders',
-                meta: { keepAlive: true ,title:"My Orders"}
+                path: 'order',
+                component: Orders,
+                name: 'orders',
+                meta: {
+                    keepAlive: true,
+                    title: "My Orders"
+                }
             },
             // {
             //     path:'tickets',
@@ -63,10 +70,12 @@ const routes = [
             //     meta: {title: 'Support'}
             // },
             {
-                path:'notification',
-                component:Notification,
+                path: 'notification',
+                component: Notification,
                 // name:"notification",
-                meta: {title:'My Messages'},
+                meta: {
+                    title: 'My Messages'
+                },
                 children: [
                     // {
                     //     path: '',
@@ -89,271 +98,393 @@ const routes = [
                     {
                         path: '',
                         name: 'activities',
-                        meta: {title: 'Notification activities', depth: 1},
+                        meta: {
+                            title: 'Notification activities',
+                            depth: 1
+                        },
                         component: () => import('../components/notification/notification-activities.vue')
                     },
                     {
                         path: 'promo',
                         name: 'promo',
-                        meta: {title: 'Notification promo', depth: 2},
+                        meta: {
+                            title: 'Notification promo',
+                            depth: 2
+                        },
                         component: () => import('../components/notification/notification-promo.vue')
                     },
                     {
                         path: 'others',
                         name: 'others',
-                        meta: {title: 'Notification others', depth: 3},
+                        meta: {
+                            title: 'Notification others',
+                            depth: 3
+                        },
                         component: () => import('../components/notification/notification-others.vue')
                     },
                     {
                         path: 'ticket',
                         name: 'others',
-                        meta: {title: 'Notification Ticket', depth: 4},
-                        component: () => import(/* webpackChunkName: "notification-other" */ '../components/notification/notification-ticket.vue')
+                        meta: {
+                            title: 'Notification Ticket',
+                            depth: 4
+                        },
+                        component: () => import( /* webpackChunkName: "notification-other" */ '../components/notification/notification-ticket.vue')
                     },
                     {
                         path: 'order',
                         name: 'others',
-                        meta: {title: 'Notification Order', depth: 4},
-                        component: () => import(/* webpackChunkName: "notification-other" */ '../components/notification/notification-orders.vue')
+                        meta: {
+                            title: 'Notification Order',
+                            depth: 4
+                        },
+                        component: () => import( /* webpackChunkName: "notification-other" */ '../components/notification/notification-orders.vue')
                     },
                     {
                         path: 'news',
                         name: 'others',
-                        meta: {title: 'Notification News', depth: 4},
-                        component: () => import(/* webpackChunkName: "notification-other" */ '../components/notification/notification-news.vue')
+                        meta: {
+                            title: 'Notification News',
+                            depth: 4
+                        },
+                        component: () => import( /* webpackChunkName: "notification-other" */ '../components/notification/notification-news.vue')
                     },
                 ]
             },
-            
+
             {
-                path:'coupons',
-                component:Coupons,
-                name:"coupons",
-                meta: {title:'My Coupons'},
+                path: 'coupons',
+                component: Coupons,
+                name: "coupons",
+                meta: {
+                    title: 'My Coupons'
+                },
             },
             {
-                path:"redeem-coupon",
-                component:() =>import("../pages/redeem-coupons.vue"),
-                name:"redeem-coupon",
-                meta:{title:"Redeem Coupon"}
+                path: "redeem-coupon",
+                component: () => import("../pages/redeem-coupons.vue"),
+                name: "redeem-coupon",
+                meta: {
+                    title: "Redeem Coupon"
+                }
             },
             {
-                path:'credits',
+                path: 'wallet',
+                component: Wallet,
+                name: "wallet",
+                meta: {
+                    title: 'My Wallet'
+                },
+            },
+            {
+                path: 'credits',
                 // name:"credits",
-                component:Credits,
-                meta: {title:'My Credits'},
-                children:[
-                    {
-                        path:"",
-                        component:() => import("../pages/point/PointsAll.vue"),
-                        name:"points-all",
-                        meta:{title:"Points All",depth:1,keepAlive:true}
+                component: Credits,
+                meta: {
+                    title: 'My Credits'
+                },
+                children: [{
+                        path: "",
+                        component: () => import("../pages/point/PointsAll.vue"),
+                        name: "points-all",
+                        meta: {
+                            title: "Points All",
+                            depth: 1,
+                            keepAlive: true
+                        }
                     },
                     {
-                        path:"all",
-                        naem:"points-all2",
-                        component:() => import("../pages/point/PointsAll.vue"),
-                        meta:{title:"Points All",depth:1,keepAlive:true}
+                        path: "all",
+                        naem: "points-all2",
+                        component: () => import("../pages/point/PointsAll.vue"),
+                        meta: {
+                            title: "Points All",
+                            depth: 1,
+                            keepAlive: true
+                        }
                     },
                     {
-                        path:"recived",
-                        component:() => import("../pages/point/PointsRecived.vue"),
-                        name:"points-recived",
-                        meta:{title:"Points Recived",depth:2,keepAlive:true}
+                        path: "recived",
+                        component: () => import("../pages/point/PointsRecived.vue"),
+                        name: "points-recived",
+                        meta: {
+                            title: "Points Recived",
+                            depth: 2,
+                            keepAlive: true
+                        }
                     },
                     {
-                        path:"used",
-                        component:() => import("../pages/point/PointsUsed.vue"),
-                        name:"points-used",
-                        meta:{title:"Points Used",depth:3,keepAlive:true}
+                        path: "used",
+                        component: () => import("../pages/point/PointsUsed.vue"),
+                        name: "points-used",
+                        meta: {
+                            title: "Points Used",
+                            depth: 3,
+                            keepAlive: true
+                        }
                     },
                     {
-                        path:"expired",
-                        component:() => import("../pages/point/PointsExpired.vue"),
-                        name:"points-expired",
-                        meta:{title:"Points Expired",depth:4,keepAlive:true}
+                        path: "expired",
+                        component: () => import("../pages/point/PointsExpired.vue"),
+                        name: "points-expired",
+                        meta: {
+                            title: "Points Expired",
+                            depth: 4,
+                            keepAlive: true
+                        }
                     }
                 ]
             },
             {
-                path:'cards',
-                name:"cards",
-                component:Cards,
-                meta: {title:'My Credit Cards'},
+                path: 'cards',
+                name: "cards",
+                component: Cards,
+                meta: {
+                    title: 'My Credit Cards'
+                },
             },
             {
-                path:'wishlist',
-                name:"wishlist",
-                component:Wishlist,
-                meta: {title:'My Wishlist'},
+                path: 'wishlist',
+                name: "wishlist",
+                component: Wishlist,
+                meta: {
+                    title: 'My Wishlist'
+                },
             },
             {
-                path:'addressBook',
-                name:"addressBook",
-                component:AddressBook,
-                meta: {title:'Address Book'},
+                path: 'addressBook',
+                name: "addressBook",
+                component: AddressBook,
+                meta: {
+                    title: 'Address Book'
+                },
             },
             {
-                path:'change-email',
-                name:"changeEmail",
-                component:ChangeEmail,
-                meta: {title:'Change Email'},
+                path: 'change-email',
+                name: "changeEmail",
+                component: ChangeEmail,
+                meta: {
+                    title: 'Change Email'
+                },
             },
             {
-                path:'changePwd',
-                name:"changePwd",
-                component:ChangePwd,
-                meta: {title:'Change Password'},
+                path: 'changePwd',
+                name: "changePwd",
+                component: ChangePwd,
+                meta: {
+                    title: 'Change Password'
+                },
             },
             {
-                path:'updateProfile',
-                name:"updateProfile",
-                component:UpdateProfile,
-                meta: {title:'Update Profile'},
+                path: 'updateProfile',
+                name: "updateProfile",
+                component: UpdateProfile,
+                meta: {
+                    title: 'Update Profile'
+                },
             },
             {
-                path:'vip',
-                name:site+' Vip',
+                path: 'vip',
+                name: site + ' Vip',
                 component: MyVip,
-                meta: {title: 'vip'}
+                meta: {
+                    title: 'vip'
+                }
             },
             {
-                path:'makeSug',
-                name:"makeSug",
-                component:MakeSug,
-                meta: {title:'Make Suggestion'},
+                path: 'makeSug',
+                name: "makeSug",
+                component: MakeSug,
+                meta: {
+                    title: 'Make Suggestion'
+                },
             },
-            
+
             {
-                path:"my-preference",
-                name:"my-preference",
-                component:() => import("../pages/editmessage/MyPreference.vue"),
-                meta:{title:"My Preference"}
-            },
-            {
-                path:"my-measurements",
-                name:"my-measurements",
-                component:() => import("../pages/editmessage/MyMeasurements.vue"),
-                meta:{title:"My Measurements"}
+                path: "my-preference",
+                name: "my-preference",
+                component: () => import("../pages/editmessage/MyPreference.vue"),
+                meta: {
+                    title: "My Preference"
+                }
             },
             {
-                path:"support",
+                path: "my-measurements",
+                name: "my-measurements",
+                component: () => import("../pages/editmessage/MyMeasurements.vue"),
+                meta: {
+                    title: "My Measurements"
+                }
+            },
+            {
+                path: "support",
                 name: "support",
                 component: () => import("../pages/support/support.vue"),
-                meta:{title:"Support"},
+                meta: {
+                    title: "Support"
+                },
                 alias: "tickets"
             }
         ]
-        },
+    },
     {
-        path:__Base_Path__+'/me/m/confirmSuccess*',
+        path: __Base_Path__ + '/me/m/confirmSuccess*',
         // component: confirmSuccess,
         component: emailConfirm,
-        meta: {title:'ConfirmEmail'},
+        meta: {
+            title: 'ConfirmEmail'
+        },
     },
     {
-        path:__Base_Path__+'/me/m/emailConfirm',
+        path: __Base_Path__ + '/me/m/emailConfirm',
         component: emailConfirm,
-        name:'confirmEmail',
-        meta: {title:'ConfirmEmail'},
+        name: 'confirmEmail',
+        meta: {
+            title: 'ConfirmEmail'
+        },
         props: true
     },
     {
-        path:__Base_Path__+'/me/m/orderConfirm',
+        path: __Base_Path__ + '/me/m/orderConfirm',
         component: orderConfirm,
-        name:'orderConfirm',
-        meta: {title:'OrderConfirm'},
+        name: 'orderConfirm',
+        meta: {
+            title: 'OrderConfirm'
+        },
         props: true
     },
     {
-        path:__Base_Path__+'/me/m/reviewConfirm',
+        path: __Base_Path__ + '/me/m/reviewConfirm',
         component: reviewConfirm,
         name: 'reviewConfirm',
-        meta: {title:'ReviewConfirm'},
+        meta: {
+            title: 'ReviewConfirm'
+        },
         props: true
     },
     {
-        path:__Base_Path__+'/me/m/order/detail/:orderId',
+        path: __Base_Path__ + '/me/m/order/detail/:orderId',
         component: OrderDetail,
-        meta: {title:'OrderDetail'},
+        meta: {
+            title: 'OrderDetail'
+        },
     },
     {
-        path:__Base_Path__+'/me/m/order/return-detail/:orderId',
+        path: __Base_Path__ + '/me/m/order/return-detail/:orderId',
         component: OrderReturnDetail,
-        meta: {title:'OrderDetail'},
+        meta: {
+            title: 'OrderDetail'
+        },
     },
     {
-        path:__Base_Path__+'/me/m/order/code/:code',
+        path: __Base_Path__ + '/me/m/order/code/:code',
         component: OrderCode,
-        meta: {title:'OrderCode'},
+        meta: {
+            title: 'OrderCode'
+        },
     },
     {
-        path:__Base_Path__+'/me/m/order-review',
+        path: __Base_Path__ + '/me/m/order-review',
         component: OrderReview,
-        meta: {title:'OrderReview'},
+        meta: {
+            title: 'OrderReview'
+        },
     },
     {
-        path:__Base_Path__+'/me/m/order/logistics-detail',
+        path: __Base_Path__ + '/me/m/order/logistics-detail',
         component: LogisticsDetail,
-        meta: {title:'LogisticsDetail'},
+        meta: {
+            title: 'LogisticsDetail'
+        },
     },
     {
-        path:__Base_Path__+'/me/m/packeage-logistics-detail',
+        path: __Base_Path__ + '/me/m/packeage-logistics-detail',
         component: PackageLogisticsDetail,
-        meta: {title:'PackageLogisticsDetail'},
+        meta: {
+            title: 'PackageLogisticsDetail'
+        },
     },
     {
-        path:__Base_Path__+'/me/m/load',
+        path: __Base_Path__ + '/me/m/load',
         component: uploadAvatar,
-        meta: {title:'LogisticsDetail'},
+        meta: {
+            title: 'LogisticsDetail'
+        },
     },
     {
-        path:__Base_Path__+'/me/m/survey',
+        path: __Base_Path__ + '/me/m/survey',
         component: Survey,
-        meta: {title:'Survey'},
+        meta: {
+            title: 'Survey'
+        },
     },
-    
+
     {
-        path:__Base_Path__+'/me/m/faq',
+        path: __Base_Path__ + '/me/m/faq',
         component: FaqIndex,
-        meta: {title:'FAQ'},
-        children:[
-            {
-                path:"",
-                component:() => import("../pages/faq/faq.vue"),
-                name:"FAQ",
-                meta:{title:"FAQ",depth:1,keepAlive:true}
+        meta: {
+            title: 'FAQ'
+        },
+        children: [{
+                path: "",
+                component: () => import("../pages/faq/faq.vue"),
+                name: "FAQ",
+                meta: {
+                    title: "FAQ",
+                    depth: 1,
+                    keepAlive: true
+                }
             },
             {
-                path:"faq",
-                component:() => import("../pages/faq/faq.vue"),
-                name:"FAQ",
-                meta:{title:"FAQ",depth:1,keepAlive:true}
+                path: "faq",
+                component: () => import("../pages/faq/faq.vue"),
+                name: "FAQ",
+                meta: {
+                    title: "FAQ",
+                    depth: 1,
+                    keepAlive: true
+                }
             },
             {
-                path:"faq-new",
-                component:() => import("../pages/faq/faq_new.vue"),
-                name:"FAQ_new",
-                meta:{title:"FAQ_new",depth:1,keepAlive:true}
+                path: "faq-new",
+                component: () => import("../pages/faq/faq_new.vue"),
+                name: "FAQ_new",
+                meta: {
+                    title: "FAQ_new",
+                    depth: 1,
+                    keepAlive: true
+                }
             },
             {
-                path:"search-result",
-                component:() => import("../pages/faq-search/faq-search.vue"),
-                name:"search-result",
-                meta:{title:"Search Results",depth:1,keepAlive:true}
+                path: "search-result",
+                component: () => import("../pages/faq-search/faq-search.vue"),
+                name: "search-result",
+                meta: {
+                    title: "Search Results",
+                    depth: 1,
+                    keepAlive: true
+                }
             },
             {
-                path:"search-result-detail",
-                component:() => import("../pages/faq-search-detail/faq-search-detail.vue"),
-                name:"search-result-detail",
-                meta:{title:"Search Results",depth:1,keepAlive:true}
+                path: "search-result-detail",
+                component: () => import("../pages/faq-search-detail/faq-search-detail.vue"),
+                name: "search-result-detail",
+                meta: {
+                    title: "Search Results",
+                    depth: 1,
+                    keepAlive: true
+                }
             },
             {
-                path:"support-ticket/:id?",
+                path: "support-ticket/:id?",
                 name: "support-ticket",
                 component: () => import("../pages/support-ticket/support-ticket.vue"),
                 // component: () => import("../components/tickets.vue"),
-                meta:{title:"Tickets",depth:1,keepAlive:true}
+                meta: {
+                    title: "Tickets",
+                    depth: 1,
+                    keepAlive: true
+                }
             }
         ]
     },
