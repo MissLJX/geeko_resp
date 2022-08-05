@@ -308,6 +308,12 @@ const Me = [
         name:"user-vip",
         meta:{title:"User Vip",keepAlive:true},
     },
+    {
+        path: `${ROUTER_PATH_ME}/wallet`,
+        component: () => import(/* webpackChunkName: "wallet" */ "../pages/wallet.vue"),
+        name: "wallet",
+        meta: { title: "My Wallet", keepAlive: false }
+    }
 ]
 
 export default Me
