@@ -59,6 +59,7 @@
 
         .el-credit-right{
             text-align: right;
+            width: 60px;
         }
     }
 
