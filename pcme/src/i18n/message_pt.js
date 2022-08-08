@@ -244,9 +244,11 @@ export default {
 
     modify: 'MODIFICAR',
 	please_sure_address_correct: 'Por favor certifique-se de que o endereço que preenche está correcto',
-
     products:'Produtos',
     return: "Retornar",
+    unused_coupons:"Unused Coupons",
+    expired_coupons:"Expired Coupons",
+    expired_coupoons_message:"Expired coupons will be removed from the coupon pocket after 7 days.",
 
     label:{
         redeem_coupon:"Use um cupom",

@@ -439,3 +439,8 @@ export const getCashHistory = (skip, limit, type) => {
 export const getUserCash = () => {
     return axios.get(`/wallet/get-cash`);
 } 
+
+// 参数：status（1：已使用，2：已过期）
+export const getExpiredCoupons = (skip,status) => {
+    return axios.get(NVPATH + '/coupon/'+ skip +'/20/history',{status})
+}

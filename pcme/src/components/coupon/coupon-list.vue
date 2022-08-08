@@ -1,9 +1,10 @@
 <template id="coupon-list">
     <div class="coupon-list">
-        <list :items="coupons" :loading="loading" :finished="finished" @listing="$emit('listing')">
+        <list :items="coupons" :loading="loading" :scrollable="scrollable" :finished="finished" @listing="$emit('listing')">
             <template slot="li" slot-scope="props">
                 <li :key="props.item.coupon.id">
-                    <redeem-coupon :coupon="props.item" :index="props.index" v-on="$listeners" />
+                    <coupon v-if="!isRedeem" :coupon="props.item" :isExpired="isExpired" />
+                    <redeem-coupon v-else :coupon="props.item" :index="props.index" v-on="$listeners" />
                 </li>
             </template>
         </list>
@@ -12,6 +13,7 @@
 <script>
     import List from "../../components/list.vue"
     import RedeemCoupon from "./redeem-coupon.vue"
+    import Coupon from "./coupon.vue";
 
     export default {
         name:"CouponList",
@@ -30,12 +32,21 @@
             },
             scrollable:{
                 type:Boolean,
+                default:true
+            },
+            isRedeem:{
+                type:Boolean,
+                default:false
+            },
+            isExpired:{
+                type:Boolean,
                 default:false
             }
         },
         components:{
             "list":List,
-            "redeem-coupon":RedeemCoupon
+            "redeem-coupon":RedeemCoupon,
+            "coupon": Coupon
         }
     }
 </script>
