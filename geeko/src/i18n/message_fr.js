@@ -161,6 +161,9 @@ export default {
         expied_on:"Expiré le",
         order_wallet:"Commander",
         my_payment_options:"Mon mode de paiement",
+        unused_coupons:"Unused Coupons",
+        expired_coupons:"Expired Coupons",
+        expired_coupoons_message:"Expired coupons will be removed from the coupon pocket after 7 days.",
     },
     point:{
         my_points:"Mes points",

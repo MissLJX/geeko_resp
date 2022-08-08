@@ -1,29 +1,32 @@
 <template>
     <div class="el-coupon st-table">
         <div class="x-table __vm x-fw __fixed"
-            :style="{background:`url('https://s3.us-west-2.amazonaws.com/image.chic-fusion.com/chicme/2021-12-17/coupon_available.png') no-repeat`,
+            :style="{background:`url(${isExpired?
+                'https://image.geeko.ltd/chicme/20220801/expired_coupon.png':
+                'https://image.geeko.ltd/chicme/2021-12-17/coupon_available.png'}) no-repeat`,
                 'background-size': '100% 100%'}"
             >
             <div class='couponMainInfo'>
                 <div class="x-cell" style="height: 100%">
                     <div style="display: flex; align-items: center; justify-content: flex-start">
-                        <span class="couponAmount" :style="{'color':'#ff782a'}">{{coupontAmount}}</span>
+                        <span class="couponAmount" :style="{'color':`${isExpired?'#666666':'#ff782a'}`}">{{coupontAmount}}</span>
                     </div>
                     
-                    <div v-if="coupon.coupon.condition" :style="{ 'margin-top': 4, 'color':'#ff782a' }">
+                    <div v-if="coupon.coupon.condition" :style="{ 'margin-top': 4, 'color':`${isExpired?'#666666':'#ff782a'}` }">
                         <span class='description'>{{coupon.coupon.condition}}</span>
                     </div>
                 
-                    <div v-if="coupon.coupon.description" :style="{ 'margin-top': 4, 'color': '#ff782a' }">
+                    <div v-if="coupon.coupon.description" :style="{ 'margin-top': 4, 'color':`${isExpired?'#666666':'#ff782a'}` }">
                         <span class='description'>{{coupon.coupon.description}}</span>
                     </div>
                     
-                    <div v-if="coupon.coupon.infoMsg" :style="{ 'margin-top': 4, 'color': '#ff782a' }">
+                    <div v-if="coupon.coupon.infoMsg" :style="{ 'margin-top': 4, 'color':`${isExpired?'#666666':'#ff782a'}` }">
                         <span class='description'>{{coupon.coupon.infoMsg}}</span>
                     </div>
                 </div>
-                <!-- <div class="x-cell">
-                </div> -->
+                <div class="x-cell expired-cla" v-if="isExpired">
+                    {{ $t('point.expired') }}
+                </div>
             </div>
             <div class='dateInfo'>
                 <li v-if="expireDate">
@@ -57,18 +60,21 @@
 
         .couponMainInfo{
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: space-between;
             max-height: 93px;
+            min-height: 90px;
             border-bottom: 1px solid #fff;
-            padding: 13px 0px 5px 15px;
+            padding: 13px 15px 5px 15px;
 
-            // & > div:last-child{
-            //     width: 70px;
-            //     text-align: right;
-            //     position:relative;
-            //     right: 27px;
-            // }
+            & > div.expired-cla{
+                width: 70px;
+                text-align: center;
+                position:relative;
+                // right: 27px;
+                padding: 2px 5px;
+                background: #BBBBBB;
+            }
         }
         .dateInfo{
             padding: 4px 15px;
@@ -103,7 +109,7 @@
             coupon: {
                 type: Object
             },
-            isExpried:{
+            isExpired:{
                 type:Boolean,
                 default:false
             }
