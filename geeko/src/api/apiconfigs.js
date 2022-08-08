@@ -44,7 +44,7 @@ const apiResult = function (res, resolve, reject) {
 
 
 export default {
-    get(url, params, headers = []){
+    get(url, params, headers = {}){
         return new Promise((resolve, reject) => {
             instance.get(url, {
                 params,
