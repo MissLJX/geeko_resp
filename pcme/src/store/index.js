@@ -169,6 +169,7 @@ const state = {
     vipConfig: '',
     vipShow: false,
     cashHistory: [],
+    cashFinished: false,
 };
 const getters = {
     me: state => state.me,
@@ -317,6 +318,7 @@ const getters = {
     vipConfig: state => state.vipConfig,
     vipShow: state => state.vipShow,
     cashHistory: state => state.cashHistory,
+    cashFinished: state => state.cashFinished,
 };
 const mutations = {
     [types.INIT_ME](state, me){
@@ -844,11 +846,14 @@ const mutations = {
         state.vipShow = config
     },
     [types.GET_CASH_HISTORY](state, list){
-        state.cashHistory = list
+        state.cashHistory = state.cashHistory.concat(list)
     },
     [types.CLEAR_CASH_HISTORY](state, flag){
         state.cashHistory = []
     },
+    [types.SET_CASH_HISTORY_FINISHED](state,flag){
+        state.cashFinished = flag
+    }
 }
 const actions = {
     // init({commit}){
@@ -1778,17 +1783,22 @@ const actions = {
         })
     },
     getCashHistoryData({commit}, {skip,limit,type}){
-        console.log(skip,limit,type)
         return api.getCashHistory(skip,limit,type).then(res => {
             if(res && res.code == 200){
-                commit(types.GET_CASH_HISTORY, res.reslut)
+                commit(types.GET_CASH_HISTORY, res.result)
+                // console.log(res.result, limit, skip)
+                if(res.result.length < limit){
+                    commit(types.SET_CASH_HISTORY_FINISHED, true)
+                }
             }
+            return res
         }).catch(err => {
             console.log('getCashHistoryData报错:', err.result, err)
         })
     },
     clearCashHistory({commit}){
         return new Promise((reslove, reject) => {
+            commit(types.SET_CASH_HISTORY_FINISHED, false)
             commit(types.CLEAR_CASH_HISTORY, true)
             reslove('success')
         })

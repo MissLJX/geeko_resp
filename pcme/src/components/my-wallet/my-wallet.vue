@@ -11,7 +11,7 @@
             <div class="creditContent">
                 <div>{{$t("total")}}</div>
                 <div class="creditNum">{{walletNum}}</div>
-                <div class="creditTip">{{$t("my_wallet.only_apply",{website:Golbal.sitename})}}</div>
+                <div class="creditTip">{{$t("my_wallet.only_apply",{website:websiteName})}}</div>
             </div>
         </div>
 
@@ -33,7 +33,7 @@
                         <th>{{$t("my_wallet.date_and_time")}}</th>
                         <th>{{$t("my_wallet.type")}}</th>
                         <th>{{$t("my_wallet.amount")}}</th>
-                        <th>{{$t("my_wallet.expired_time")}}</th>
+                        <th>{{$t("my_wallet.expiration_date")}}</th>
                     </tr>
                     <tr class="tableLine" v-for="(item, index) in cashHistory" :key="index">
                         <td>{{getTime(item.createTime)}}</td>
@@ -45,10 +45,10 @@
                             <div class="status" v-if="!item.targetId && !item.expired && !item.expiredDate">{{$t("my_wallet.wallet_earned")}}</div>
                         </td>
                         <td>
-                            <span :class="{'loseCash':!item.positive}">
-                            <span v-if="item.positive">+</span>
-                            <span v-if="!item.positive">-</span>
-                                {{getMoney(item.usedAmount || 0)}}
+                            <span :class="{'loseCash':item.positive}">
+                                <span v-if="item.positive">+</span>
+                                <span v-if="!item.positive">-</span>
+                                {{getMoney(item.amount || 0)}}
                             </span>
                             
                         </td>
@@ -69,45 +69,6 @@ import * as utils from "../../utils/geekoutil"
 import {mapGetters} from 'vuex'
 import {getUserCash} from '../../api/index'
 
-let data = [
-    {
-        name: 'hhhskjdhka dsjka dhsjak ',
-        targetId: '0100200232',
-        amount: {amount:10.00, currency:'US',unit:"$"},
-        createTime: 1659433173269,
-        usedAmount: {amount:2.00, currency:'US',unit:"$"},
-        expiredDate: 1659433173269,
-        positive: false,
-        expired: false
-    },
-    {
-        name: 'dsa gdua njksa uds',
-        amount: {amount:10.00, currency:'US',unit:"$"},
-        createTime: 1659433173269,
-        usedAmount: {amount:2.00, currency:'US',unit:"$"},
-        expiredDate: 1659433173269,
-        positive: false,
-        expired: true
-    },
-    {
-        name: 'dasd dsdf rq f safs ',
-        amount: {amount:10.00, currency:'US',unit:"$"},
-        createTime: 1659433173269,
-        usedAmount: {amount:2.00, currency:'US',unit:"$"},
-        expiredDate: 1659433173269,
-        positive: false,
-        expired: false
-    },
-    {
-        name: 'ghashdkjahkj shja gjdsasg ajagd',
-        amount: {amount:10.00, currency:'US',unit:"$"},
-        createTime: 1659433173269,
-        usedAmount: {amount:2.00, currency:'US',unit:"$"},
-        positive: false,
-        expired: false
-    },
-]
-
 export default {
     data(){
         return {
@@ -117,22 +78,26 @@ export default {
             skip: 0,
             limit: 20,
             userWallet: '',
-            data,
+            data: [],
         }
     },
     computed:{
-         ...mapGetters(['cashHistory']),
+         ...mapGetters(['cashHistory','cashFinished']),
          walletNum(){
             if(this.userWallet){
                 return this.getMoney(this.userWallet)
             }
             return '0.00'
-         }
+         },
+         websiteName(){
+            return this.GLOBAL.sitename || 'ChicMe';
+        },
     },
     activated(){
-        this.finished = false;
-        this.getCashHistoryByType(this.seletedHistoryType);
         window.addEventListener('scroll', this.scrollHandle)
+        this.$store.dispatch("clearCashHistory").then(res => {
+            this.getCashHistoryByType(this.seletedHistoryType)
+        })
         getUserCash().then(res => {
             if(res && res.code == 200){
                 this.userWallet = res.result
@@ -147,7 +112,6 @@ export default {
     },
     methods:{
         typeChange(type){
-            this.finished = false;
             this.skip = 0;
             this.seletedHistoryType = type
             this.$store.dispatch("clearCashHistory").then(res => {
@@ -158,8 +122,10 @@ export default {
             if(!this.loading){
                 this.loading = true
                 this.$store.dispatch("getCashHistoryData",{skip: this.skip, limit:this.limit, type}).then(res => {
+                    console.log(res)
                     this.loading = false
                     if(res && res.code){
+                        this.data = res.result
                         this.skip += 20
                     }
                 }).catch(err => {
@@ -178,7 +144,7 @@ export default {
 
 
             if (scrollTop + windowHeight >= documentHeight - 100) {
-                if (!this.loading && !this.finished) {
+                if (!this.loading && !this.cashFinished) {
                     this.getCashHistoryByType(this.seletedHistoryType)
                 }
             }
