@@ -41,7 +41,7 @@
         data(){
             return {
                 redeemCouponShow:false,
-                componentName:"ExpiredCoupons"
+                componentName:"UnusedCoupons"
             }
         },
         computed: {

@@ -244,9 +244,9 @@ export default {
 	please_sure_address_correct: 'Por favor, asegúrese de que la dirección que rellena es correcta',
     products:'Productos',
     return: "Devolver",
-    unused_coupons:"Unused Coupons",
-    expired_coupons:"Expired Coupons",
-    expired_coupoons_message:"Expired coupons will be removed from the coupon pocket after 7 days.",
+    unused_coupons:"Cupones no utilizados",
+    expired_coupons:"Cupones caducados",
+    expired_coupoons_message:"Los cupones caducados se eliminarán de la bolsa de cupones después de 7 días.",
 
     label:{
         redeem_coupon:"Canjear cupón",

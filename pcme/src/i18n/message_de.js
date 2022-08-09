@@ -244,9 +244,9 @@ export default {
 	please_sure_address_correct: 'Bitte vergewissern Sie sich, dass die von Ihnen eingegebene Adresse korrekt ist',
     products:'Produkte',
     return: "Zurückkehren",
-    unused_coupons:"Unused Coupons",
-    expired_coupons:"Expired Coupons",
-    expired_coupoons_message:"Expired coupons will be removed from the coupon pocket after 7 days.",
+    unused_coupons:"Unbenutzte Gutscheine",
+    expired_coupons:"Abgelaufene Coupons",
+    expired_coupoons_message:"Abgelaufene Coupons werden nach 7 Tagen aus dem Couponfach entfernt.",
 
     label:{
         redeem_coupon:"Coupon einl\u00f6sen",
