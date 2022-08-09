@@ -2,7 +2,7 @@
     <div class="el-coupon st-table">
         <div class="x-table __vm x-fw __fixed"
             :style="{background:`url(${isExpired?
-                'https://image.geeko.ltd/chicme/20220801/expired_coupon.png':
+                'https://image.geeko.ltd/chicme/20220801/expired_coupon-3.png':
                 'https://image.geeko.ltd/chicme/2021-12-17/coupon_available.png'}) no-repeat`,
                 'background-size': '100% 100%'}"
             >

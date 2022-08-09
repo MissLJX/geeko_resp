@@ -88,7 +88,7 @@
         },
         created(){
             getShowRedeemCoupons().then(data =>{
-                data.result = true;
+                // data.result = true;
                 if(data && !!data.result){
                     this.redeemCouponShow = data.result;
 
