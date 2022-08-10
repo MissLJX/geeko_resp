@@ -250,6 +250,10 @@ export default {
 
     return: "Return",
 
+    unused_coupons: 'Unused Coupons',
+    expired_coupons: 'Expired Coupons',
+    expired_tip: 'Expired coupons will be removed from the coupon pocket after 7 days.',
+
     label:{
         redeem_coupon:"Redeem Coupon",
         hot_use_points:"How to Use Points?",

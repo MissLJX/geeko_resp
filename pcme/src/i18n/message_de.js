@@ -247,6 +247,10 @@ export default {
 
     return: "Zurückkehren",
 
+    used_coupons: 'Unbenutzte Gutscheine',
+    expired_coupons: 'Abgelaufene Gutscheine',
+    expired_tip: 'Abgelaufene Gutscheine werden nach 7 Tagen aus der Gutscheintasche entfernt.',
+
     label:{
         redeem_coupon:"Coupon einl\u00f6sen",
         hot_use_points:"Wie werden Punkte verwendet?",

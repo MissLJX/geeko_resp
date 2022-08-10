@@ -246,6 +246,10 @@ export default {
     products:'Productos',
     return: "Devolver",
 
+    unused_coupons: 'Cupones sin usar',
+    expired_coupons: 'Cupones Caducados',
+    expired_tip: 'Los cupones vencidos se eliminarán del bolsillo de cupones después de 7 días.',
+
     label:{
         redeem_coupon:"Canjear cupón",
         hot_use_points:"¿Cómo usar los puntos?",

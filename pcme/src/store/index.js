@@ -69,6 +69,7 @@ const state = {
     orderid:'',
 
     coupons:[],
+    couponsHistory: [],
     message:'',
     credits:[],
     wishProducts: [],
@@ -227,6 +228,7 @@ const getters = {
     orderid: state => state.orderid,
 
     coupons: state => state.coupons,
+    couponsHistory: state => state.couponsHistory,
     message: state => state.message,
     credits: credits => state.credits,
     wishProducts: state => state.wishProducts,
@@ -541,6 +543,9 @@ const mutations = {
     //coupons
     [types.ME_COUPONS](state,coupons) {
         state.coupons = coupons;
+    },
+    [types.ME_COUPONS_HISTORY](state, coupons){
+        state.couponsHistory = [...state.couponsHistory ,...coupons]
     },
     //credits
     [types.ME_GET_CREDITS](state, _credits){
@@ -1155,6 +1160,14 @@ const actions = {
     },
     useCoupon(context, couponId){
         return api.useCoupon(couponId)
+    },
+    getCouponsHistory({commit},skip){
+        return api.getCouponsHistory({state:2, skip,limit:20}).then(res => {
+            if(res && res.code == 200){
+                commit(types.ME_COUPONS_HISTORY, res.result)
+                return res.result
+            }
+        })
     },
     //credits
     getCredits({commit}, {skip}){

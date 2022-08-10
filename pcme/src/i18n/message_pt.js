@@ -248,6 +248,10 @@ export default {
     products:'Produtos',
     return: "Retornar",
 
+    unused_coupons: 'Cupons não utilizados',
+    expired_coupons: 'Cupons expirados',
+    expired_tip: 'Os cupons expirados serão removidos do bolso do cupom após 7 dias.',
+    
     label:{
         redeem_coupon:"Use um cupom",
         hot_use_points:"Como usar os pontos?",

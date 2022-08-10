@@ -64,6 +64,9 @@ export const getCoupons = () => {
 export function useCoupon(id) {
     return axios.get(VPATH + '/shopping-cart/anon/use-coupon/' + id).then(data => data.result)
 }
+export const getCouponsHistory = ({state, skip, limit}) => {
+    return axios.get(VPATH + `/coupon/${skip}/${limit}/history?status=${state}`)
+}
 //credits
 export const getCredits = (skip) => {
     return axios.get('/pointsHistory/' + skip + '/0/getAll', {}, {}).then((data) => {

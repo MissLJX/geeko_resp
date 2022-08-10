@@ -8,27 +8,35 @@
             <span class="_font">{{ $t("label.use_points_redeem_coupon") }} ></span>
         </a>
 
-        <div v-show="coupons && coupons.length <= 0" class="el-list-loading"><i class="iconfont">&#xe69f;</i></div>
-        <div class="coupon" v-for="item in coupons" :key="item.coupon.id">
+        <!--  -->
+        <div class="tabBox">
+            <div :class="{'tabItem':true, 'tabItemSelect':showType == 0}" @click="() => showTypeChange(0)">{{$t("unused_coupons")}}</div>
+            <div :class="{'tabItem':true, 'tabItemSelect':showType == 1}" @click="() => showTypeChange(1)">{{$t("expired_coupons")}}</div>
+        </div>
+        <div class="tipBox" v-show="showType == 1">
+            {{$t("expired_tip")}}
+        </div>
+        
+        <div class="coupon" v-for="item in listData" :key="item.coupon.id">
             <div class="__vm x-fw __fixed"
-                :style="{background: `url('https://image.geeko.ltd/chicme/2021-12-17/coupon_available.png') no-repeat` ,
+                :style="{background: `url(${showType === 0 ? 'https://image.geeko.ltd/chicme/2021-12-17/coupon_available.png' :'https://image.geeko.ltd/chicme/2021-12-17/coupon_disavailable.png'}) no-repeat` ,
                     'background-size': '100% 100%', 'height':'100%'}"
                 >
                 <div class='couponMainInfo'>
                     <div class="x-cell" style="height: 100%">
                         <div style="display: flex; align-items: center; justify-content: flex-start">
-                            <span class="couponAmount" :style="{'color':'#ff782a'}">{{item.coupon.name}}</span>
+                            <span class="couponAmount" :style="{'color':showType === 0? '#ff782a': '#666'}">{{item.coupon.name}}</span>
                         </div>
                         
-                        <div v-if="item.coupon.condition" :style="{ 'margin-top': 6, 'color': '#ff782a' }">
+                        <div v-if="item.coupon.condition" :style="{ 'margin-top': 6, 'color': showType === 0? '#ff782a': '#666' }">
                             <span class='description'>{{item.coupon.condition}}</span>
                         </div>
                     
-                        <div v-if="item.coupon.description" :style="{ 'margin-top': 6, 'color': '#ff782a' }">
+                        <div v-if="item.coupon.description" :style="{ 'margin-top': 6, 'color': showType === 0? '#ff782a': '#666' }">
                             <span class='description'>{{item.coupon.description}}</span>
                         </div>
 
-                        <div v-if="item.coupon.infoMsg" :style="{ 'margin-top': 6, 'color': '#ff782a' }">
+                        <div v-if="item.coupon.infoMsg" :style="{ 'margin-top': 6, 'color': showType === 0? '#ff782a': '#666' }">
                             <span class='description'>{{item.coupon.infoMsg}}</span>
                         </div>
                     </div>
@@ -48,6 +56,12 @@
                 </div>
             </div>
         </div>
+
+        <div v-show="loading" class="el-list-loading"><i class="iconfont">&#xe69f;</i></div>
+        <div class="emptyIcon" v-show="showEmpty">
+            <i class="iconfont">&#xe7c6;</i>
+            <span class="empty_txt">{{$t("notification.empty_here")}}</span>
+        </div>
     </div>
 </template>
 
@@ -60,19 +74,37 @@
     export default {
         data(){
             return {
-                redeemCouponShow:false
+                showType: 0, // 0是可用,1是已过期
+                redeemCouponShow:false,
+                loading: false,
+                unUsedFinished: false,
+                usedFinished: false,
+                usedSkip: 0,
             }
         },
         computed: {
             ...mapGetters([
-                'coupons'
+                'coupons',
+                'couponsHistory'
             ]),
+            listData(){
+                if(this.showType){
+                    return this.couponsHistory
+                } else {
+                    return this.coupons
+                }
+            },
+            showEmpty(){
+                return (this.showType == 0 && this.loading == false && (!this.coupons || this.coupons.length == 0)) ||
+                       (this.showType == 1 && this.loading == false && (!this.couponsHistory || this.couponsHistory.length == 0))
+            }
         },
         created(){
             
         },
         activated(){
-            this.$store.dispatch('getCoupons');
+            window.addEventListener('scroll', this.scrollHandle)
+            this.getUnUsed()
             // console.log(this.coupons)
             getShowRedeemCoupons().then(data =>{
                 // console.log(data);
@@ -80,6 +112,9 @@
                     this.redeemCouponShow = data.result;
                 }
             });
+        },
+        deactivated(){
+            window.removeEventListener('scroll', this.scrollHandle)
         },
         methods:{
             useHandle(id){
@@ -109,6 +144,51 @@
                 }
 
                 this.$router.push({name:'redeem-coupon'})
+            },
+            showTypeChange(type){
+                console.log(type, this.showType, this.loading, this.unUsedFinished, this.usedFinished, this.usedSkip)
+                if(type != this.showType){
+                    this.showType = type
+                    if(type){
+                        this.getHistory()
+                    } else {
+                        this.getUnUsed()
+                    }
+                }
+            },
+            getUnUsed(){
+                if(!this.loading && !this.unUsedFinished){
+                    this.loading = true
+                    this.$store.dispatch('getCoupons').then(res => {
+                        this.loading = false
+                        this.unUsedFinished = true
+                    });
+                }
+            },
+            getHistory(){
+                if(!this.loading && !this.usedFinished){
+                    this.loading = true
+                    this.$store.dispatch('getCouponsHistory',this.usedSkip).then(res => {
+                        this.loading = false
+                        this.usedFinished = res.length < 20
+                        this.usedSkip += 20
+                    });
+                }
+            },
+            scrollHandle(evt){
+                evt.preventDefault()
+                let [scrollTop, documentHeight, windowHeight] = [
+                    document.documentElement.scrollTop || document.body.scrollTop,
+                    document.body.clientHeight,
+                    window.screen.height
+                ]
+
+
+                if (scrollTop + windowHeight >= documentHeight - 100) {
+                    if (this.showType == 1 && !this.loading && !this.usedFinished) {
+                        this.getHistory()
+                    }
+                }
             }
         }
     }
@@ -329,6 +409,65 @@
         }
         to {
             transform: rotate(360deg);
+        }
+    }
+
+    .tabBox{
+        margin-bottom: 12px;
+        & > .tabItem{
+            font-family: ACUMINPRO-BOLD, Roboto;
+            font-weight: bold;
+            color: #999999;
+            line-height: 19px;
+            font-size: 16px;
+            display: inline-block;
+            margin-right: 56px;
+            border-bottom: 2px solid transparent;
+            padding: 4px 0;
+            cursor: pointer;
+        }
+
+        & > .tabItemSelect{
+            color: #222;
+            border-bottom: 2px solid #222;
+        }
+    }
+
+    .tipBox{
+        font-size: 14px;
+        font-family: SlatePro, Roboto;
+        font-weight: 400;
+        color: #222222;
+        line-height: 16px;
+        padding: 12px 16px;
+        background: #FFF8E1;
+        margin-bottom: 20px;
+    }
+
+    .emptyIcon{
+        width: 100%;
+        height: 70vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        flex-direction: column;
+        font-size: 18px;
+        font-family: Roboto-Regular, Roboto;
+        font-weight: 400;
+        color: #B2B2B2;
+        line-height: 21px;
+
+        & >.iconfont{
+            font-size: 96px;
+            line-height: 96px;
+            color: #b2b2b2;
+            display: block;
+            margin-bottom: 18px;
+        }
+
+        .emptyTxt{
+
         }
     }
 </style>
