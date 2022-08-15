@@ -3,9 +3,10 @@
         <span class="iconfont close" 
               :style="btnCloseStyle" 
               v-if="cfg.btnClose" 
-              @click="cfg.no">&#xe69a;</span>
+              @click="cfg.no">&#xe69a;
+        </span>
 
-        <div class="bd">
+        <div class="bd" v-if="cfg.message">
             <p :style="messageStyle">{{cfg.message}}</p>
         </div>
 
