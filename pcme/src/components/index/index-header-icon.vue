@@ -191,13 +191,29 @@
         methods:{
             confirmEmail(){
                 this.$emit("update:isloding",true);
-                this.$store.dispatch('confirmEmail', this.me.email).then(() => {
+                this.$store.dispatch('confirmEmail', this.me.email).then((response) => {
+                    // this.$emit("update:isShowConfirm",true);
+                    // console.error('response',response)
+                    // response.prompt = {
+                    //     "bonusPoints": 100,
+		            //     "html": "<div style='text-align: center;'><img src='https://image.geeko.ltd/chicme/2021111101/modal_points.png' alt='ModalPoints' style='width:50%;'><p style='font-weight:bold;font-size:24px;margin: 0;'>100 Points</p><p style='margin: 0;font-size: 12px;'><span>100 points = 1 USD.</span><a href='https://www.chicme.com/fs/points-policy' style='vertical-align: middle;'><img src='https://image.geeko.ltd/chicme/2021111101/question.png' alt='Question' style='width: 14px;height: 14px;'></a></p><p style='margin: 0;font-size: 12px;line-height: 12px;margin-top: 10px;font-family: Roboto-Regular'>Saved Successfully!</p><p style='margin: 0;font-size: 12px;font-family: Roboto-Regular;'>You’ve got <span style='color: #e64545;font-weight: bold;font-family: Roboto-Regular;'>100 points</span> in your account</p></div>"
+                    // };
+                    if(response.prompt?.html){
+                        this.showPointsTip(response.prompt?.html);
+                    }else{
+                        let str = `<div style="min-height: 80px;padding-top: 40px;font-family: 'AcuminPro-Bold';font-size: 18px;">${this.$t('checkmailbox')}</div>`;
+                        this.showPointsTip(str);
+                    }
                     this.$emit("update:isloding",false);
-                    this.$emit("update:isShowConfirm",true);
                 }).catch((data) => {
                     this.$emit("update:isloding",false);
                     alert(data.result)
                 })
+            },
+            showPointsTip(conent){
+                this.$store.dispatch("setTipContent", conent);
+                this.$store.dispatch("setShowTip", true);
+                this.$store.dispatch("setTipType", 'points');
             },
             getName(value){
                 return value ? value : '';

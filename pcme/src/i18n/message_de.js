@@ -242,10 +242,11 @@ export default {
 
     modify: 'ÄNDERN',
 	please_sure_address_correct: 'Bitte vergewissern Sie sich, dass die von Ihnen eingegebene Adresse korrekt ist',
-
     products:'Produkte',
-
     return: "Zurückkehren",
+    unused_coupons:"Unbenutzte Gutscheine",
+    expired_coupons:"Abgelaufene Coupons",
+    expired_coupoons_message:"Abgelaufene Coupons werden nach 7 Tagen aus dem Couponfach entfernt.",
 
     used_coupons: 'Unbenutzte Gutscheine',
     expired_coupons: 'Abgelaufene Gutscheine',

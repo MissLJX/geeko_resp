@@ -7,7 +7,7 @@
 
         <span v-if="cfg.showSuccessIcon" class="iconfont success_icon" :style="iconStyle">&#xe6b7;</span>
 
-        <div class="bd">
+        <div class="bd" v-if="cfg.message">
             <p :style="messageStyle">{{cfg.message}}</p>
         </div>
 
@@ -27,12 +27,15 @@
 
         <div class="fd">
             
-            <button :class="{'l-vue-btn':true, 'no':item.type=='no'}" 
+            <template v-if="isButtonList">
+                <button :class="{'l-vue-btn':true, 'no':item.type=='no'}" 
                     @click="item.fuc || cfg.no" 
                     :style="styleTransform(item.style)"
                     v-for="item in cfg.btnFont"
-                    v-if="isButtonList"
+                    :key="item"
                     >{{item.text}}</button>
+            </template>
+            
             <button class="l-vue-btn yes" 
                     v-if="!isButtonList && cfg.btnFont && cfg.btnFont.yes"
                     @click="cfg.yes" 

@@ -11,7 +11,7 @@
         </div>
 
         <div class="redeem-coupon-list">
-            <coupon-list :loading="loading" :finished="finished" :coupons="coupons" @changeCoupons="changeCoupons"></coupon-list>
+            <coupon-list :loading="loading" :finished="finished" :coupons="coupons" @changeCoupons="changeCoupons" :isRedeem="true"></coupon-list>
         </div>
     </div>
 </template>

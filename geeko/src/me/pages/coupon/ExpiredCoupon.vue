@@ -3,10 +3,9 @@
         <coupon-list 
             :coupons="expiredCoupons" 
             :finished="finished" 
-            :scrollable="true" 
             :loading="loading"
             @listing="listingHandle"
-            :isExpried="true"
+            :isExpired="true"
         ></coupon-list>
     </div>
 </template>

@@ -149,7 +149,7 @@ export const changeAccountEmail = (data) => {
     return axios.post(VPATH + '/customer/send-change-account-email', qs.stringify(data), {'Content-Type': http_infos.default_post_content_type}).then(data => data.result)
 }
 export const confirmEmail = (email) => {
-    return axios.cpost(VPATH + '/customer/send-confirm-email',{email:email}).then(data => data.result)
+    return axios.cpost(VPATH + '/customer/send-confirm-email',{email:email});
 }
 
 export const changeEmail = (data) => {
@@ -442,3 +442,8 @@ export const getCashHistory = (skip, limit, type) => {
 export const getUserCash = () => {
     return axios.get(`/wallet/get-cash`);
 } 
+
+// 参数：status（1：已使用，2：已过期）
+export const getExpiredCoupons = (skip,status) => {
+    return axios.get(NVPATH + '/coupon/'+ skip +'/20/history',{status})
+}

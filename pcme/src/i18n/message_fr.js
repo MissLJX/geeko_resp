@@ -242,9 +242,11 @@ export default {
 
     modify: 'MODIFIER',
 	please_sure_address_correct: 'Veuillez vous assurer que l\'adresse que vous indiquez est correcte',
-
     products:'Des produits',
     return: "Revenir",
+    unused_coupons:"Coupons non utilisés",
+    expired_coupons:"Coupons périmés",
+    expired_coupoons_message:"Les coupons périmés seront retirés de la pochette de coupons après 7 jours.",
 
     unused_coupons : 'Coupons inutilisés',
     expired_coupons : 'Coupons expirés',

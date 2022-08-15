@@ -246,6 +246,9 @@ export default {
 
     products:'Products',
     return: "Return",
+    unused_coupons:"Unused Coupons",
+    expired_coupons:"Expired Coupons",
+    expired_coupoons_message:"Expired coupons will be removed from the coupon pocket after 7 days.",
 
     unused_coupons: 'Unused Coupons',
     expired_coupons: 'Expired Coupons',

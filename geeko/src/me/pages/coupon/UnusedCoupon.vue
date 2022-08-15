@@ -20,13 +20,15 @@
         computed: {
             ...mapGetters('me', ['coupons']),
         },
-        created(){
-            if(!(this.coupons && this.coupons.length > 0)){
-                this.loading = true;
-                store.dispatch('me/getCoupons').then(() => {
-                    this.loading = false;
-                })
-            }
+        activated(){
+            this.loading = true;
+            store.dispatch('me/getCoupons').then((data) => {
+                this.loading = false;
+
+                if(data && data.length <=0){
+                    this.finished = true;
+                }
+            })
         },
         components:{
             "coupon-list":CouponList

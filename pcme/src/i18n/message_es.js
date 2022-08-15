@@ -242,9 +242,11 @@ export default {
 
     modify: 'MODIFICAR',
 	please_sure_address_correct: 'Por favor, asegúrese de que la dirección que rellena es correcta',
-
     products:'Productos',
     return: "Devolver",
+    unused_coupons:"Cupones no utilizados",
+    expired_coupons:"Cupones caducados",
+    expired_coupoons_message:"Los cupones caducados se eliminarán de la bolsa de cupones después de 7 días.",
 
     unused_coupons: 'Cupones sin usar',
     expired_coupons: 'Cupones Caducados',
