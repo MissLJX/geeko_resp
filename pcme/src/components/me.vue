@@ -6,7 +6,6 @@
                 <index-header-icon 
                     :me="me"
                     :feed="feed"
-                    :isShowConfirm.sync="isShowConfirm"
                     :isloding.sync="isloding"
                 ></index-header-icon>
                 <div class="view-more" v-if="!vipShow">
@@ -88,13 +87,13 @@
             </div>
         </div>
 
-        <div class="mask" v-if="isShowConfirm">
+        <!-- <div class="mask" v-if="isShowConfirm">
             <div class="confirm-con confirm-con-l">
                 <p class="cancel-btn" @click="isShowConfirm=false"><i class="iconfont">&#xe69a;</i></p>
                 <p><i class="iconfont">&#xe73c;</i>{{$t('checkmailbox')}}</p>
                 <button class="n-btn tag-read" @click="isShowConfirm=false">{{$t('okay')}}</button>
             </div>
-        </div>
+        </div> -->
 
         <loding v-if="isloding"></loding>
     </div>
@@ -121,7 +120,7 @@
                 isloding:false,
                 isshowTerm:false,
                 isShowCopy:false,
-                isShowConfirm:false
+                // isShowConfirm:false
             }
         },
         components: {

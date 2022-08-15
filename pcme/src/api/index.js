@@ -146,7 +146,7 @@ export const changeAccountEmail = (data) => {
     return axios.post(VPATH + '/customer/send-change-account-email', qs.stringify(data), {'Content-Type': http_infos.default_post_content_type}).then(data => data.result)
 }
 export const confirmEmail = (email) => {
-    return axios.cpost(VPATH + '/customer/send-confirm-email',{email:email}).then(data => data.result)
+    return axios.cpost(VPATH + '/customer/send-confirm-email',{email:email});
 }
 
 export const changeEmail = (data) => {
