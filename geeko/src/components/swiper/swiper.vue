@@ -104,15 +104,25 @@
             verifyEmail(email){
                 let _this = this;
                 this.$store.dispatch("globalLoadingShow",true);
-                this.$store.dispatch('me/confirmEmail', email).then((data)=>{
+                this.$store.dispatch('me/confirmEmail', email).then((response)=>{
+                    // response.prompt = {
+                    //     "bonusPoints": 100,
+		            //     "html": "<div style='text-align: center;'><img src='https://image.geeko.ltd/chicme/2021111101/modal_points.png' alt='ModalPoints' style='width:50%;'><p style='font-weight:bold;font-size:24px;margin: 0;'>100 Points</p><p style='margin: 0;font-size: 12px;'><span>100 points = 1 USD.</span><a href='https://www.chicme.com/fs/points-policy' style='vertical-align: middle;'><img src='https://image.geeko.ltd/chicme/2021111101/question.png' alt='Question' style='width: 14px;height: 14px;'></a></p><p style='margin: 0;font-size: 12px;line-height: 12px;margin-top: 10px;font-family: Roboto-Regular'>Saved Successfully!</p><p style='margin: 0;font-size: 12px;font-family: Roboto-Regular;'>You’ve got <span style='color: #e64545;font-weight: bold;font-family: Roboto-Regular;'>100 points</span> in your account</p></div>"
+                    // };
+                    if(response?.prompt){
+                        _this.modalShow(response?.prompt?.html, true);
+                    }else{
+                        _this.modalShow(_this.$t('label.checkmailbox'), false);
+                    }
+                    // console.error("response",response)
                     this.$store.dispatch("globalLoadingShow",false);
-                    _this.modalShow(_this.$t('label.checkmailbox'),true);
+                    
                 }).catch((e) => {
                     this.$store.dispatch("globalLoadingShow",false);
-                    _this.modalShow(e.result,false);
+                    _this.modalShow(e.result, false);
                 });
             },
-            modalShow(message,flag){
+            modalShow(message, isHtml){
                 let _this = this;
                 _this.$store.dispatch('confirmShow', {
                     show: true,
@@ -120,10 +130,30 @@
                         btnFont:{
                             yes:_this.$t('label.ok'),
                         },
-                        message: message,
+                        message2: message,
+                        htmlMessage2:isHtml,
+                        style:{
+                            box:{
+                                padding:isHtml?"20px 0px":"25px",
+                            },
+                            message2:{
+                                fontFamily: isHtml?'SlatePro':'SlatePro-Medium',
+                                fontSize: '14px',
+                                lineHeight: isHtml?'normal':'17px',
+                                color:'#222222',
+                                textAlign: 'center'
+                            },
+                            btnYes:{
+                                fontSize:"14px",
+                                fontFamily: 'AcuminPro-Bold',
+                                width: isHtml?'90%':'100%',
+                                margin: '0 auto',
+                                display: 'block'
+                            }
+                        },
                         yes: function () {
                             _this.$store.dispatch('closeConfirm');
-                            flag && _this.$emit("update:notificationData",[]);
+                            // flag && _this.$emit("update:notificationData",[]);
                         },
                         no: function () {
                         }
