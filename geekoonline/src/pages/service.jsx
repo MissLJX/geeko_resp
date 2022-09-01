@@ -197,7 +197,7 @@ export default () => <div>
           <ICONTEXT>
             <div className="__icon">&#xe68b;</div>
             <div className="__title">销售区域</div>
-            <div className="__dsc">欧美及南美主要国家（美国、巴西、西班牙、德国、法国、英国、印度、加拿大、印度等）</div>
+            <div className="__dsc">北美（美国、加拿大）、欧洲（法国、德国及西欧北欧其他9个国家）、英国、墨西哥</div>
           </ICONTEXT>
         </RES1>
       </CONTAINER>

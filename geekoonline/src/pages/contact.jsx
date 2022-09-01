@@ -1,5 +1,5 @@
 import React from 'react'
-import {BANNER} from '../components/banner.jsx'
+import { BANNERCONTACT } from '../components/banner.jsx'
 import {BLOCKIMAGE} from '../components/elements.jsx'
 import {RES1, CONTAINER, CONTAINERGREY} from '../components/layout.jsx'
 import Styled from 'styled-components'
@@ -83,9 +83,9 @@ const Info = {
     email:'yuping@geeko.online'
   },
   g: {
-    name: '许女士',
-    phone:'19512360018',
-    email:'xuchenchen@geeko.online'
+    name: '温小姐',
+    phone:'15627396462',
+    email:'wenxiaojie@geeko.online'
   }
 }
 
@@ -116,17 +116,17 @@ export default class extends React.Component{
       }
     }else if(this.state.selectedcity === 'g'){
       _p = {
-        lng: 113.24404,
-        lat: 23.191372,
-        title: "穗新创意园",
-        dsc: '广州市 白云区 石井街道石槎路'
+        lng: 113.260776,
+        lat: 23.223391,
+        title: "夏茅十三社工业区",
+        dsc: '广州市白云区F栋七楼'
       }
     }else if(this.state.selectedcity === 'n'){
       _p = {
-        lng: 118.791886,
-        lat: 32.058007,
-        title: "同仁西街",
-        dsc: '南京市玄武区同仁西街'
+        lng: 118.76955,
+        lat: 31.987873,
+        title: "金地威新",
+        dsc: '南京市雨花台区安德门大街23号雨花创新中心A栋1001'
       }
     }
 
@@ -154,7 +154,9 @@ export default class extends React.Component{
 
     return <div>
     <section>
-      <BANNER src="/images/contact/2.jpg" src1="/images/contact/2_1.jpg"/>
+      <BANNERCONTACT src="/images/contact/contact_p.jpg">
+        <img className="contactImage" src="/images/contact/contact_m.jpg" alt="" />
+      </BANNERCONTACT>
     </section>
   
     <CONTAINER>
@@ -178,7 +180,7 @@ export default class extends React.Component{
             <BLOCKIMAGE  src="/images/contact/6.jpg"/>
             <figcaption>
               <div>南京公司</div>
-              <div>南京市玄武区</div>
+              <div>南京市雨花区</div>
             </figcaption>
           </FIGURE>
         </RES1>
