@@ -609,7 +609,7 @@ export default {
         wallet_used: 'Gebraucht',
         wallet_expired: 'Abgelaufen',
         date_and_time: 'Datum und Uhrzeit',
-        Typ: 'Typ',
+        type: 'Typ',
         amount: 'Betrag',
         expiration_date: 'Ablaufdatum',
         order: 'Bestellen',
