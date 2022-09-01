@@ -17,14 +17,14 @@
                 <span class="iconfont">&#xe6e6;</span>
             </a>
             
-            <!-- <a href="/cart">
+            <a href="/cart">
                 <span class="iconfont">&#xe6a4;</span>
                 <span 
                     class="_num" 
                     v-if="shoppingCartCount > 0"
                     :class="{'special-count' : shoppingCartCount && shoppingCartCount < 10}"
                 >{{shoppingCartCount}}</span>
-            </a> -->
+            </a>
         </div>
 
         <!-- <div class="login-message" v-if="!isLogin" @click="specificationLogin('/me/m')">
@@ -491,7 +491,7 @@
             }
         },
         created:async function(){
-            // store.dispatch("me/getShoppingCartNum");
+            store.dispatch("me/getShoppingCartNum");
             if(this.isLogin){
                 store.dispatch('me/countNotifications');
 
