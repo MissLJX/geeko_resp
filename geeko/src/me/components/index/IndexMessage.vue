@@ -1,30 +1,36 @@
 <template>
     <div class="index-message">
         <div class="_hd">
-            <a @click.prevent="specificationLogin('/me/m/wishlist',1)">
-                <span class="iconfont">&#xe6a2;</span>
-            </a>
+            <div>
+                <a @click.prevent="specificationLogin('/me/m/notification',1)" class="notification_icon">
+                    <!-- <span class="iconfont" :class="{'active' : notificationCount > 0}">&#xe60b;</span> -->
+                    <span class="iconfont" style="display: inline-block;transform: scale(1.3);margin-left:0;">&#xe70b;</span>
+                    <span class="no_read_num" v-if="notificationCount > 0" >
+                        {{notificationCount}}
+                    </span>
+                </a>
+            </div>
 
-            <a @click.prevent="specificationLogin('/me/m/notification',1)" class="notification_icon">
-                <!-- <span class="iconfont" :class="{'active' : notificationCount > 0}">&#xe60b;</span> -->
-                <span class="iconfont" style="display: inline-block;transform: scale(1.3);" :class="{'active' : notificationCount > 0}">&#xe70b;</span>
-                <span class="no_read_num" v-if="notificationCount > 0" >
-                    {{notificationCount}}
-                </span>
-            </a>
-            
-            <a @click.prevent="specificationLogin('/me/m/settings',1)">
-                <span class="iconfont">&#xe6e6;</span>
-            </a>
-            
-            <a href="/cart">
-                <span class="iconfont">&#xe6a4;</span>
-                <span 
-                    class="_num" 
-                    v-if="shoppingCartCount > 0"
-                    :class="{'special-count' : shoppingCartCount && shoppingCartCount < 10}"
-                >{{shoppingCartCount}}</span>
-            </a>
+            <div>
+                <a @click.prevent="specificationLogin('/me/m/wishlist',1)">
+                    <span class="iconfont">&#xe6a2;</span>
+                </a>
+
+                <a href="/cart">
+                    <span class="iconfont">&#xe6a4;</span>
+                    <span 
+                        class="_num" 
+                        v-if="shoppingCartCount > 0"
+                        :class="{'special-count' : shoppingCartCount && shoppingCartCount < 10}"
+                    >{{shoppingCartCount}}</span>
+                </a>
+
+                
+                
+                <a @click.prevent="specificationLogin('/me/m/settings',1)">
+                    <span class="iconfont">&#xe6e6;</span>
+                </a>
+            </div>
         </div>
 
         <!-- <div class="login-message" v-if="!isLogin" @click="specificationLogin('/me/m')">
@@ -568,60 +574,64 @@
 </script>
 
 <style scoped lang="scss">
-@font-face {
-  font-family: 'iconfont';  /* Project id 384296 */
-  src: url('//at.alicdn.com/t/font_384296_4k0ybw8fob4.woff2?t=1649817988386') format('woff2'),
-       url('//at.alicdn.com/t/font_384296_4k0ybw8fob4.woff?t=1649817988386') format('woff'),
-       url('//at.alicdn.com/t/font_384296_4k0ybw8fob4.ttf?t=1649817988386') format('truetype');
-}
-.animation_points_icon{
-    animation: icon_exchange 5s linear infinite;
-    position: absolute;
-    left: calc(50% - 12px);
-}
-.animation_points_text{
-    display: block;
-    position: absolute;
-    width: 100%;
-    line-height: 23px;
-    opacity: 0;
-    animation: icon_exchange 5s linear 2.5s infinite;
-}
-@keyframes icon_exchange{
-    0%{
+    @font-face {
+    font-family: 'iconfont';  /* Project id 384296 */
+    src: url('//at.alicdn.com/t/font_384296_4k0ybw8fob4.woff2?t=1649817988386') format('woff2'),
+        url('//at.alicdn.com/t/font_384296_4k0ybw8fob4.woff?t=1649817988386') format('woff'),
+        url('//at.alicdn.com/t/font_384296_4k0ybw8fob4.ttf?t=1649817988386') format('truetype');
+    }
+    .animation_points_icon{
+        animation: icon_exchange 5s linear infinite;
+        position: absolute;
+        left: calc(50% - 12px);
+    }
+    .animation_points_text{
+        display: block;
+        position: absolute;
+        width: 100%;
+        line-height: 23px;
         opacity: 0;
-        transform: rotateY(180deg);
+        animation: icon_exchange 5s linear 2.5s infinite;
     }
-    2%{
-        opacity: 0.6;
-        transform: rotateY(180deg);
+    @keyframes icon_exchange{
+        0%{
+            opacity: 0;
+            transform: rotateY(180deg);
+        }
+        2%{
+            opacity: 0.6;
+            transform: rotateY(180deg);
+        }
+        10%{
+            opacity: 1;
+            transform: rotateY(0deg);
+        }
+        42%{
+            opacity: 1;
+            // transform: rotateY(0deg);
+            // transform: rotateY(90deg);
+        }
+        50%{
+            opacity: 0;
+            // transform: rotateY(180deg);
+            // display: none;
+        }
+        100%{
+            opacity: 0;
+            // display: none;
+            // transform: rotateY(0);
+        }
     }
-    10%{
-        opacity: 1;
-        transform: rotateY(0deg);
-    }
-    42%{
-        opacity: 1;
-        // transform: rotateY(0deg);
-        // transform: rotateY(90deg);
-    }
-    50%{
-        opacity: 0;
-        // transform: rotateY(180deg);
-        // display: none;
-    }
-    100%{
-        opacity: 0;
-        // display: none;
-        // transform: rotateY(0);
-    }
-}
+
     .index-message{
         // padding-top: 20px;
         ._hd{
-            padding: 10px 0px;
-            padding-right: 20px;
-            text-align: right;
+            padding: 10px 20px;
+            // text-align: right;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
             & .iconfont{
                 font-size:18px;
                 color:#222222;
@@ -643,7 +653,7 @@
                 }
             }
 
-            & > a{
+            & a{
                 position: relative;
             }
 
@@ -1067,7 +1077,10 @@
                     }
 
                     .special-count{
-                        padding: 1px 7px;
+                        padding: 0;
+                        height: 18px;
+                        width: 18px;
+                        line-height: 18px;
                     }
                 }
             }
