@@ -10,28 +10,28 @@
         <!-- {{orderStatus}} -->
         <div class="hd" v-if="!showHistory">
             <div class="el-tbl">
-                <div class="el-tbl-cell" @click="clearSkip(getData(0,'all','click'))" :class="{active:0===orderStatus}">
+                <div class="el-tbl-cell" @click="clearSkip(getData(0,'all','click', 0))" :class="{active:0===orderStatus}">
                     {{$t('all')}}<span>{{orderCountAll}}</span>
                 </div>
-                <div class="el-tbl-cell" @click="clearSkip(getData(1,'Unpaid','click'))" :class="{active:1===orderStatus}">
+                <div class="el-tbl-cell" @click="clearSkip(getData(1,'Unpaid','click', 0))" :class="{active:1===orderStatus}">
                     {{$t('unpaid')}}<span>{{orderCountUnpaid}}</span>
                 </div>
                 <!-- <div class="el-tbl-cell" @click="clearSkip(getData(2,'Paid','click'))" :class="{active:2===orderStatus}">
                     {{$t('paid')}}<span>{{orderCountPaid}}</span>
                 </div> -->
-                <div class="el-tbl-cell" @click="clearSkip(getData(3,'Processing','click'))" :class="{active:3===orderStatus}">
+                <div class="el-tbl-cell" @click="clearSkip(getData(3,'Processing','click', 0))" :class="{active:3===orderStatus}">
                     {{$t('processing')}}<span>{{orderCountProcessing}}</span>
                 </div>
-                <div class="el-tbl-cell" @click="clearSkip(getData(4,'Shipped','click'))" :class="{active:4===orderStatus}">
+                <div class="el-tbl-cell" @click="clearSkip(getData(4,'Shipped','click', 0))" :class="{active:4===orderStatus}">
                     {{$t('ordershipped')}}<span>{{orderCountShipped}}</span>
                 </div>
-                <div class="el-tbl-cell" @click="clearSkip(getData(5,'Comfirmed','click'))" :class="{active:5===orderStatus}">
+                <div class="el-tbl-cell" @click="clearSkip(getData(5,'Comfirmed','click', 0))" :class="{active:5===orderStatus}">
                     {{$t('orderconfirm')}}<span>{{orderCountReceipt}}</span>
                 </div>
-                <div class="el-tbl-cell" @click="clearSkip(getData(6,'Canceled','click'))" :class="{active:6===orderStatus}">
+                <div class="el-tbl-cell" @click="clearSkip(getData(6,'Canceled','click', 0))" :class="{active:6===orderStatus}">
                     {{$t('cancelorder1')}}<span>{{orderCountCanceled}}</span>
                 </div>
-                <div class="el-tbl-cell" @click="clearSkip(getData(7,'Returns','click'))" :class="{active:7===orderStatus}">
+                <div class="el-tbl-cell" @click="clearSkip(getData(7,'Returns','click', 0))" :class="{active:7===orderStatus}">
                     {{$t('index.returns')}}<span>{{orderCountReturns}}</span>
                     <!-- orderCountReturns -->
                 </div>
@@ -265,7 +265,7 @@
             orderStatus(newStatus){
                 let orderName =  this.getOrderStatusName(this.orderStatus);
                 this.clearSkip(
-                    this.getData(newStatus,orderName,"click")
+                    this.getData(newStatus,orderName,"click",0)
                 )
             },
         },
@@ -288,11 +288,11 @@
             this.isloded = true
             if(this.$route.query && this.$route.query.type && this.$route.query.type == 'review'){
                 this.clearSkip(
-                    this.getData(5,'Comfirmed','click')
+                    this.getData(5,'Comfirmed','click',0)
                 )
             } else {
                 this.clearSkip(
-                    this.getData(this.orderStatus,orderName,"click")
+                    this.getData(this.orderStatus,orderName,"click",0)
                 )
             }
         },
@@ -482,10 +482,14 @@
             clearSkip(callback){
                 // console.log('sss')
                 // 切换类型时清空skip值
-                this.$store.dispatch('skipClear').then(() => callback)
+                this.$store.dispatch('skipClear').then((res) => {
+                    if(res == 'success'){
+                        callback
+                    }
+                })
             },
-            getData(index,method,flag){
-                console.log(index, method, flag)
+            getData(index, method, flag, skip){
+                // console.log(index, method, flag, )
                 // this.index = index
                 if(this.isloded){
                     this.changeOrderStatus(index);
@@ -495,55 +499,55 @@
                     }
                     this.isloded = false
                     if(method==='all'){
-                        this.$store.dispatch('loadAll',20).then(()=> {
+                        this.$store.dispatch('loadAll',{limit:20, skip:skip}).then(()=> {
                             this.orderMethod = this.all
                             this.isloded = true
                         })
                     }
                     if(method==='Unpaid'){
-                        this.$store.dispatch('loadUnpaid',20).then(()=> {
+                        this.$store.dispatch('loadUnpaid',{limit:20, skip:skip}).then(()=> {
                             this.orderMethod = this.unpaid
                             this.isloded = true
                         })
                     }
                     if(method==='Paid'){
-                        this.$store.dispatch('loadPaid',20).then(()=> {
+                        this.$store.dispatch('loadPaid',{limit:20, skip:skip}).then(()=> {
                             this.orderMethod = this.paid
                             this.isloded = true
                         })
                     }
                     if(method==='Processing'){
-                        this.$store.dispatch('loadProcessing',20).then(()=> {
+                        this.$store.dispatch('loadProcessing',{limit:20, skip:skip}).then(()=> {
                             this.orderMethod = this.processing
                             this.isloded = true
                         })
                     }
                     if(method==='Shipped'){
-                        this.$store.dispatch('loadShipped',20).then(()=> {
+                        this.$store.dispatch('loadShipped',{limit:20, skip:skip}).then(()=> {
                             this.orderMethod = this.shipped
                             this.isloded = true
                         })
                     }
                     if(method==='Comfirmed'){
-                        this.$store.dispatch('loadConfirmed',20).then(()=> {
+                        this.$store.dispatch('loadConfirmed',{limit:20, skip:skip}).then(()=> {
                             this.orderMethod = this.confirmed
                             this.isloded = true
                         })
                     }
                     if(method==='Canceled'){
-                        this.$store.dispatch('loadCanceled',20).then(()=> {
+                        this.$store.dispatch('loadCanceled',{limit:20, skip:skip}).then(()=> {
                             this.orderMethod = this.canceled
                             this.isloded = true
                         })
                     }
                     if(method==='History'){
-                        this.$store.dispatch('loadHistory',20).then(()=>{
+                        this.$store.dispatch('loadHistory',{limit:20, skip:skip}).then(()=>{
                             this.orderMethod = this.history
                             this.isloded = true
                         })
                     }
                     if(method==='Returns'){
-                        this.$store.dispatch('loadReturns',20).then(()=>{
+                        this.$store.dispatch('loadReturns',{limit:20, skip:skip}).then(()=>{
                             this.orderMethod = this.returns
                             this.isloded = true
                         })

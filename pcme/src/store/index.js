@@ -375,6 +375,7 @@ const mutations = {
         state.allSkip = 0;
         state.all = [];
         state.allDone = false;
+        console.log(state.allSkip)
     },
     [types.HOME_ALL_DONE](state) {
         state.allDone = true;
@@ -962,11 +963,11 @@ const actions = {
         })
     },
     //order
-    loadAll({ commit, state }, limit) {
+    loadAll({ commit, state }, {limit,skip}) {
         if (state.allDone) return;
         commit(types.HOME_LOADING_ALL, true);
-
-        return api.getOrders(state.allSkip, 'get-orders2').then( orders => {
+        let skipNum = skip !== undefined ? skip : state.allSkip
+        return api.getOrders(skipNum, 'get-orders2').then( orders => {
             if (orders && orders.length > 0) {
                 commit(types.HOME_ORDERS_ALL, orders);
                 commit(types.HOME_ORDER_ALL_SKIP, limit);
@@ -979,13 +980,13 @@ const actions = {
             return orders
         } );
     },
-    loadProcessing({ commit, state }, limit) {
+    loadProcessing({ commit, state }, {limit,skip}) {
         if (state.processingDone) {
             return;
         }
         commit(types.HOME_LOADING_PROCESSING, true);
-
-        return api.getOrders(state.processingSkip, 'get-proccessing-orders').then( orders => {
+        let skipNum = skip !== undefined ? skip : state.processingSkip
+        return api.getOrders(skipNum, 'get-proccessing-orders').then( orders => {
             if (orders && orders.length > 0) {
                 commit(types.HOME_ORDERS_PROCESSING, orders);
                 commit(types.HOME_ORDER_PROCESSING_SKIP, limit);
@@ -999,10 +1000,11 @@ const actions = {
     },
 
 
-    loadUnpaid({ commit, state }, limit) {
-        commit(types.HOME_LOADING_UNPAID, true);
+    loadUnpaid({ commit, state }, {limit,skip}) {
         if(state.unpaidDone){return}
-         return api.getOrders(state.unpaidSkip, 'get-unpaid-orders2').then( orders => {
+        commit(types.HOME_LOADING_UNPAID, true);
+        let skipNum = skip !== undefined ? skip : state.unpaidSkip
+         return api.getOrders(skipNum, 'get-unpaid-orders2').then( orders => {
             if (orders && orders.length > 0) {
                 commit(types.HOME_ORDERS_UNPAID, orders);
                 commit(types.HOME_ORDER_UNPAID_SKIP, limit);
@@ -1013,10 +1015,11 @@ const actions = {
         });
     },
 
-    loadPaid({ commit, state }, limit) {
-        commit(types.HOME_LOADING_PAID, true);
+    loadPaid({ commit, state }, {limit,skip}) {
         if(state.paidDone){return}
-        return api.getOrders(state.paidSkip, 'get-paid-orders').then( orders => {
+        commit(types.HOME_LOADING_PAID, true);
+        let skipNum = skip !== undefined ? skip : state.paidSkip
+        return api.getOrders(skipNum, 'get-paid-orders').then( orders => {
             if (orders && orders.length > 0) {
                 commit(types.HOME_ORDERS_PAID, orders);
                 commit(types.HOME_ORDER_PAID_SKIP, limit);
@@ -1028,12 +1031,13 @@ const actions = {
     },
 
 
-    loadConfirmed({ commit }, limit) {
+    loadConfirmed({ commit }, {limit,skip}) {
         if (state.confirmedDone) {
             return;
         }
         commit(types.HOME_LOADING_CONFIRMED, true);
-        return api.getOrders(state.confirmedSkip, 'get-receipt-orders').then( orders => {
+        let skipNum = skip !== undefined ? skip : state.confirmedSkip
+        return api.getOrders(skipNum, 'get-receipt-orders').then( orders => {
             if (orders && orders.length > 0) {
                 commit(types.HOME_ORDERS_CONFIRMED, orders);
                 commit(types.HOME_ORDER_CONFIRMED_SKIP, limit);
@@ -1046,11 +1050,13 @@ const actions = {
         });
     },
 
-    loadShipped({ commit }, limit) {
+    loadShipped({ commit }, {limit,skip}) {
         if (state.shippedDone) {
             return;
         }
-        return api.getOrders(state.shippedSkip, 'get-shipped-orders').then( orders => {
+        commit(types.HOME_LOADING_SHIPPED, true);
+        let skipNum = skip !== undefined ? skip : state.shippedSkip
+        return api.getOrders(skipNum, 'get-shipped-orders').then( orders => {
             if (orders && orders.length > 0) {
                 commit(types.HOME_ORDERS_SHIPPED, orders);
                 commit(types.HOME_ORDER_SHIPPED_SKIP, limit);
@@ -1063,12 +1069,13 @@ const actions = {
         });
     },
 
-    loadCanceled({ commit }, limit) {
+    loadCanceled({ commit }, {limit,skip}) {
         if (state.canceledDone) {
             return;
         }
         commit(types.HOME_LOADING_CANCELED, true);
-        return api.getOrders(state.canceledSkip, 'get-canceled-orders').then( orders => {
+        let skipNum = skip !== undefined ? skip : state.canceledSkip
+        return api.getOrders(skipNum, 'get-canceled-orders').then( orders => {
             if (orders && orders.length > 0) {
                 commit(types.HOME_ORDERS_CANCELED, orders);
                 commit(types.HOME_ORDER_CANCELED_SKIP, limit);
@@ -1081,12 +1088,13 @@ const actions = {
         });
     },
 
-    loadReturns({ commit }, limit) {
+    loadReturns({ commit }, {limit,skip}) {
         if (state.returnsDone) {
             return;
         }
         commit(types.HOME_LOADING_RETURNS, true);
-        return api.getReturns(state.returnsSkip).then( orders => {
+        let skipNum = skip !== undefined ? skip : state.returnsSkip
+        return api.getReturns(skipNum).then( orders => {
             if (orders && orders.length > 0) {
                 commit(types.HOME_ORDERS_RETURNS, orders);
                 commit(types.HOME_ORDER_RETURNS_SKIP, limit);
