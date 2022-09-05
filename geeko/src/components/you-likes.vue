@@ -13,6 +13,12 @@
                 event-title="me"
                 :requestId="requestId"
                 :experimentId="experimentId"
+                :sensors="{
+                    resourcepage_title: 'me',
+                    resource_position: '1',
+                    resource_type: '4',
+                    resource_content: 'You may also like'
+                }"
             />
         </div>
     </div>

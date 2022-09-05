@@ -141,6 +141,12 @@
             eventTitle:{
                 type:String,
                 default:""
+            },
+            sensors:{
+                type:Object,
+                default:() =>{
+                    return {}
+                }
             }
         },
         computed: {
@@ -187,6 +193,15 @@
                 this.$store.dispatch("getProductDetailMessage",productId).then((product) => {
                     this.$store.dispatch("addToCartIsShow",true);
                     this.$store.dispatch("globalLoadingShow",false);
+                    this.$store.dispatch("setAddToCartSensors", {
+                        position:index+1,
+                        ali_request_id: this.product.aliRequestId,
+                        geeko_request_id: this.geekoId,
+                        geeko_experiment_id: geeko_experiment_id,
+                        ali_experiment_id: this.product.aliExperimentId,
+                        data_source: this.product.dataSource,
+                        ...this.sensors
+                    });
                 });
             }
         },

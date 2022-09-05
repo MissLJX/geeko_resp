@@ -86,12 +86,27 @@
             unitedPrice(){
                 return unitprice(this.variantProduct.price)
             },
+            price(){
+                // 当有促销价格并且大于0的时候  售价显示促销价格
+                if (this.product && this.product.promotionPrice && this.product.promotionPrice.amount > 0) {
+                    return this.product.promotionPrice
+                }
+
+                // 当有价格并且大于0的时候  售价显示价格
+                if (this.product && this.product.price && this.product.price.amount > 0) {
+                    return this.product.price
+                }
+                return this.product.price;
+            },
             pointsPrice(){
                 if(getPointsMoney(this.variantProduct.pointsMallVariantSales)){
                     return getPointsMoney(this.variantProduct.pointsMallVariantSales) + '<span class="iconfont">&#xe6a8;</span>'
                 } else {
                     return ''
                 }
+            },
+            addToCartSensors(){
+                return this.$store.getters['addToCartSensors'];
             }
         },
         created(){
@@ -126,11 +141,143 @@
                     this.$store.dispatch("addToCartIsShow",false);
                     this.$store.dispatch("setIsPointsProduct", false);
                     window.countShoppingCart ? window.countShoppingCart() : "";
+
+                    this.addToCartEvent();
                 }).catch((e) => {
                     console.log("addToCart报错",e);
                     this.$store.dispatch("addToCartIsShow",false);
                     this.$store.dispatch("setIsPointsProduct", false);
                 });
+            },
+            addToCartEvent(quantity){
+                let _selectedproduct = this.product;
+                let realPrice = this.price;
+                let _selectedvariant = this.variantProduct;
+
+                if(window.FacebookTrack){
+					FacebookTrack.send('AddToCart', {
+						content_ids: [_selectedproduct.id],
+						content_type: 'product',
+						value: realPrice.amount,
+						currency: realPrice.currency
+					});
+				}
+				
+                if(window.ga){
+                    ga("ec:addProduct", {
+                        "id": _selectedvariant.sku,
+                        "name": _selectedproduct.name,
+                        "price": realPrice.amount,
+                        "quantity": quantity || 1
+                    });
+                    ga("ec:setAction", "add");
+                    ga("send", "event", "UX", "click", "add to cart")
+                }
+
+				if(window.pintrk){
+					pintrk('track','addtocart',{
+						value: Math.round(realPrice.amount*quantity),
+						currency: realPrice.currency,
+						line_items:[{
+							product_name:_selectedproduct.name,
+							product_id:_selectedproduct.id,
+							product_variant_id:_selectedvariant.id,
+							product_price:realPrice.amount,
+							product_quantity:quantity
+						}]
+					});
+				}
+
+				if(window.mkq){
+					mkq('track', 'AddToCart', {
+						value: realPrice.amount,
+						currency: realPrice.currency,
+						content_name: _selectedproduct.name,
+						content_type: 'product',
+						content_ids: [_selectedproduct.id]
+					});
+				}
+
+				if(window.snaptr){
+					snaptr('track','ADD_CART',{
+						'price': realPrice.amount,
+						'currency': realPrice.currency,
+						'item_ids': [_selectedproduct.id],
+						'number_items': quantity,
+						'item_category': _selectedproduct.productCategoryIds[0]
+
+					});
+				}
+
+				if(window.mobileAnalyticsClient){
+                    mobileAnalyticsClient.recordEvent('ADD_TO_CART', {
+                        'customerId':window.gobalCustomerId?window.gobalCustomerId:'',
+                        'info1':window.utm_source || "",
+                        'info2':window.utm_campaign || "",
+                        'info3':window.utm_medium || "",
+                        'currentPage':typeof(window.currentPage) == "undefined"?"":window.currentPage,
+                        'relatedId':_selectedvariant.id,
+                        'money':realPrice.amount,
+                        'unit':realPrice.unit,
+                        'quantity':quantity
+                    });
+                }
+				
+				
+				window.dotq = window.dotq || [];
+				window.dotq.push({
+					'projectId': '10000',
+					'properties': {
+						'pixelId': '10044597',
+						'qstrings': {
+							'et': 'custom',
+							'ea': 'AddToCart',
+							'product_id': _selectedproduct.id
+						}
+					}
+				});
+
+				if(window.GeekoSensors && this.addToCartSensors){
+                    let ali_request_id = this.addToCartSensors.ali_request_id
+                    let geeko_request_id = this.addToCartSensors.geeko_request_id
+                    let geeko_experiment_id = this.addToCartSensors.geeko_experiment_id
+                    let ali_experiment_id = this.addToCartSensors.ali_experiment_id
+                    let data_source = this.addToCartSensors.data_source;
+
+                    let resourcepage_title = this.addToCartSensors.resourcepage_title;
+                    let resource_position = this.addToCartSensors.resource_position;
+                    let resource_type = this.addToCartSensors.resource_type;
+                    let resource_content = this.addToCartSensors.resource_content;
+
+
+					window.GeekoSensors.Track('AddToCartButtonClick', {
+						page_type: window.sourceTitle || window.currentPage,
+						is_success: true,
+						resourcepage_title: resourcepage_title,
+						resource_position: resource_position,
+						resource_type: resource_type,
+						resource_content: resource_content,
+						ali_request_id: ali_request_id,
+						geeko_request_id: geeko_request_id,
+						geeko_experiment_id: geeko_experiment_id,
+						ali_experiment_id: ali_experiment_id,
+						data_source: data_source,
+					})
+
+					window.GeekoSensors.Track('AddToCartDetail', {
+						product_id: _selectedproduct.id,
+						product_qty: quantity,
+						resourcepage_title: resourcepage_title,
+						resource_position: resource_position,
+						resource_type: resource_type,
+						resource_content: resource_content,
+						ali_request_id: ali_request_id,
+						geeko_request_id: geeko_request_id,
+						ali_experiment_id: ali_experiment_id,
+						geeko_experiment_id: geeko_experiment_id,
+						data_source: data_source,
+					})
+				}
             },
             addToCartOrigin(){
                 if(window.isLoged == 'true'){

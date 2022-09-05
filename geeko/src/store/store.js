@@ -16,6 +16,7 @@ export const state = {
     addToCartModalShow:false,
     globalLoadingShow:false,
     isPointsProduct: false,
+    addToCartSensors:null
 }
 
 
@@ -32,6 +33,7 @@ export const getters = {
     addToCartModalShow:state => state.addToCartModalShow,
     globalLoadingShow:state => state.globalLoadingShow,
     isPointsProduct: state => state.isPointsProduct,
+    addToCartSensors: state => state.addToCartSensors
 }
 
 
@@ -101,6 +103,9 @@ export const mutations = {
         }
         
     },
+    [types.ADD_TO_CART_SENSORS_EVENT](state, data){
+        state.addToCartSensors = _.cloneDeep(data);
+    }
 }
 
 
@@ -178,4 +183,7 @@ export const actions = {
     setIsPointsProduct({commit},flag){
         commit(types.GLOBAL_IS_POINTS_PRODUCT, flag);
     },
+    setAddToCartSensors({ commit }, data){
+        commit(types.ADD_TO_CART_SENSORS_EVENT, data);
+    }
 }
