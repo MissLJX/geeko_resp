@@ -229,7 +229,7 @@ export default () => <div>
 
   <VIDEOCONTAINER>
     <section>
-      <video style={{width: '100%'}} src="/images/chic.mp4" preload autoplay="autoplay" controls/>
+      <video style={{width: '100%'}} src="/videos/chic2.mp4" preload autoplay="autoplay" controls/>
     </section>
   </VIDEOCONTAINER>
   
