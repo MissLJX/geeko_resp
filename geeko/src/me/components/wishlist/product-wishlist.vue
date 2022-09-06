@@ -2,7 +2,6 @@
     <div class="el-list-product">
         <a 
             :href="productUrl" 
-            :data-title="eventTitle" 
             :data-column="calssifyName" 
             :data-product-position="index+1"
             data-product-list-source 
@@ -13,8 +12,10 @@
 			:data-request-id="product.aliRequestId"
             :data-experiment-id="product.aliExperimentId"
 			:type="eventTitle"
-			:data-type="eventTitle"
-            :data-content="eventTitle"
+            :data-title="sensors.resourcepage_title || eventTitle" 
+            :data-position="sensors.resource_position || index+1"
+			:data-type="sensors.resource_type || eventTitle"
+            :data-content="sensors.resource_content || eventTitle"
             ref="oftenProduct"
         >
             <figure>
@@ -85,6 +86,12 @@
             eventTitle:{
                 type:String,
                 default:""
+            },
+            sensors:{
+                type:Object,
+                default:() =>{
+                    return {}
+                }
             }
         },
         created(){
@@ -208,6 +215,16 @@
                 this.$store.dispatch("getProductDetailMessage",productId).then((product) => {
                     this.$store.dispatch("addToCartIsShow",true);
                     this.$store.dispatch("globalLoadingShow",false);
+
+                    this.$store.dispatch("setAddToCartSensors", {
+                        position:this.index+1,
+                        ali_request_id: this.product.aliRequestId,
+                        geeko_request_id: this.geekoId,
+                        geeko_experiment_id: this.experimentId,
+                        ali_experiment_id: this.product.aliExperimentId,
+                        data_source: this.product.dataSource,
+                        ...this.sensors
+                    });
                 });
             },
             findSimlar(productId){

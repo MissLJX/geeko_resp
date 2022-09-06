@@ -104,7 +104,7 @@ export const mutations = {
         
     },
     [types.ADD_TO_CART_SENSORS_EVENT](state, data){
-        state.addToCartSensors = _.cloneDeep(data);
+        state.addToCartSensors = data ? _.cloneDeep(data) : null;
     }
 }
 

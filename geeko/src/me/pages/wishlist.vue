@@ -20,6 +20,12 @@
             event-title="wishlist"
             :request-id="wishlistEvent.requestId"
             :experiment-id="wishlistEvent.experimentId"
+            :sensors="{
+                resourcepage_title: 'wishlist',
+                resource_position: '1',
+                resource_type: '11',
+                resource_content: 'wishlist'
+            }"
          />
         <product-wishlist v-if="!ifEdit" :scrollable="false" :products="products" :loading="loading" :finished="finished" @listing="listingHandle" @refresh="refreshHandle"/>
         <loading v-if="ifloding"></loading>

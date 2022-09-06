@@ -141,11 +141,15 @@
                     this.$store.dispatch("addToCartIsShow",false);
                     this.$store.dispatch("setIsPointsProduct", false);
                     window.countShoppingCart ? window.countShoppingCart() : "";
-
                     this.addToCartEvent();
+
+                    this.$store.dispatch("setAddToCartSensors", null);
+
+                    this.$store.dispatch("me/getShoppingCartNum");
                 }).catch((e) => {
                     console.log("addToCart报错",e);
                     this.$store.dispatch("addToCartIsShow",false);
+                    this.$store.dispatch("setAddToCartSensors", null);
                     this.$store.dispatch("setIsPointsProduct", false);
                 });
             },
@@ -249,6 +253,8 @@
                     let resource_type = this.addToCartSensors.resource_type;
                     let resource_content = this.addToCartSensors.resource_content;
 
+                    let position = this.addToCartSensors.position;
+
 
 					window.GeekoSensors.Track('AddToCartButtonClick', {
 						page_type: window.sourceTitle || window.currentPage,
@@ -277,6 +283,24 @@
 						geeko_experiment_id: geeko_experiment_id,
 						data_source: data_source,
 					})
+
+                    window.GeekoSensors?.Track('Addtocart', {
+                        product_id: _selectedproduct.id,
+                        product_qty: quantity,
+                        is_success:true,
+                        size: _selectedvariant?.size,
+                        price: _selectedvariant?.salesPriceWithUSD?.amount,
+                        product_position: position,
+                        ali_request_id: ali_request_id,
+                        geeko_request_id: geeko_request_id,
+                        geeko_experiment_id: geeko_experiment_id,
+                        ali_experiment_id: ali_experiment_id,
+                        data_source: data_source,
+                        resourcepage_title: resourcepage_title,
+                        resource_position: resource_position,
+                        resource_type: resource_type,
+                        resource_content: resource_content,
+                    })
 				}
             },
             addToCartOrigin(){

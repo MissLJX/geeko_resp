@@ -177,6 +177,7 @@
             modalHide(){
                 this.$store.dispatch("addToCartIsShow",false);
                 this.$store.dispatch("setIsPointsProduct", false);
+                this.$store.dispatch("setAddToCartSensors", null);
             }
         }
     }

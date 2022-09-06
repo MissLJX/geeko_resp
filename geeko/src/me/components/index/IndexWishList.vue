@@ -11,6 +11,12 @@
             event-title="me"
             :request-id="wishlistEvent.requestId"
             :experiment-id="wishlistEvent.experimentId"
+            :sensors="{
+                resourcepage_title: 'me',
+                resource_position: '1',
+                resource_type: '11',
+                resource_content: 'wishlist'
+            }"
         />
 
         <div class="_bd" v-if="goShoppingShow || !isLogin">
