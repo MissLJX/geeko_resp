@@ -19,20 +19,21 @@
             @click="(e)=>handleProductClick(e)"
             ref="oftenProduct"
         >
+
             <figure>
                 <div class="img">
                     <img :src="imageUrl" :class="{'gray':isSoldOutProduct}"/>
 
-                    <span class="view-more" @click.prevent="clickViewMore" v-if="!suspendShow && suspendSumShow">
+                    <span class="view-more" @click.stop.prevent="clickViewMore" v-if="!suspendShow && suspendSumShow">
                         <span>...</span>
                     </span>
 
                     <div class="suspend-container" v-if="suspendShow && suspendSumShow">
-                        <div class="find-similar global-overflow" @click.prevent="findSimlar(product.id)">
+                        <div class="find-similar global-overflow" @click.stop.prevent="findSimlar(product.id)">
                             {{$t('label.find_similar')}}
                         </div>
 
-                        <div class="delete" @click.prevent="deleteLikeProduct">
+                        <div class="delete" @click.stop.prevent="deleteLikeProduct">
                             {{$t('label.delete')}}
                         </div>
                     </div>
@@ -249,7 +250,8 @@
                 }
                 this.$router.push({name:"relation-products",params:{productId}});
             },
-            clickViewMore(){
+            clickViewMore(e){
+                // e.stopPropagation()
                 this.suspendShow = true;
 
                 // 更多选择点击
