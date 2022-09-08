@@ -10,28 +10,28 @@
         <!-- {{orderStatus}} -->
         <div class="hd" v-if="!showHistory">
             <div class="el-tbl">
-                <div class="el-tbl-cell" @click="clearSkip(getData(0,'all','click', 0))" :class="{active:0===orderStatus}">
+                <div class="el-tbl-cell" @click="clearSkip(0,'all','click', 0)" :class="{active:0===orderStatus}">
                     {{$t('all')}}<span>{{orderCountAll}}</span>
                 </div>
-                <div class="el-tbl-cell" @click="clearSkip(getData(1,'Unpaid','click', 0))" :class="{active:1===orderStatus}">
+                <div class="el-tbl-cell" @click="clearSkip(1,'Unpaid','click', 0)" :class="{active:1===orderStatus}">
                     {{$t('unpaid')}}<span>{{orderCountUnpaid}}</span>
                 </div>
                 <!-- <div class="el-tbl-cell" @click="clearSkip(getData(2,'Paid','click'))" :class="{active:2===orderStatus}">
                     {{$t('paid')}}<span>{{orderCountPaid}}</span>
                 </div> -->
-                <div class="el-tbl-cell" @click="clearSkip(getData(3,'Processing','click', 0))" :class="{active:3===orderStatus}">
+                <div class="el-tbl-cell" @click="clearSkip(3,'Processing','click', 0)" :class="{active:3===orderStatus}">
                     {{$t('processing')}}<span>{{orderCountProcessing}}</span>
                 </div>
-                <div class="el-tbl-cell" @click="clearSkip(getData(4,'Shipped','click', 0))" :class="{active:4===orderStatus}">
+                <div class="el-tbl-cell" @click="clearSkip(4,'Shipped','click', 0)" :class="{active:4===orderStatus}">
                     {{$t('ordershipped')}}<span>{{orderCountShipped}}</span>
                 </div>
-                <div class="el-tbl-cell" @click="clearSkip(getData(5,'Comfirmed','click', 0))" :class="{active:5===orderStatus}">
+                <div class="el-tbl-cell" @click="clearSkip(5,'Comfirmed','click', 0)" :class="{active:5===orderStatus}">
                     {{$t('orderconfirm')}}<span>{{orderCountReceipt}}</span>
                 </div>
-                <div class="el-tbl-cell" @click="clearSkip(getData(6,'Canceled','click', 0))" :class="{active:6===orderStatus}">
+                <div class="el-tbl-cell" @click="clearSkip(6,'Canceled','click', 0)" :class="{active:6===orderStatus}">
                     {{$t('cancelorder1')}}<span>{{orderCountCanceled}}</span>
                 </div>
-                <div class="el-tbl-cell" @click="clearSkip(getData(7,'Returns','click', 0))" :class="{active:7===orderStatus}">
+                <div class="el-tbl-cell" @click="clearSkip(7,'Returns','click', 0)" :class="{active:7===orderStatus}">
                     {{$t('index.returns')}}<span>{{orderCountReturns}}</span>
                     <!-- orderCountReturns -->
                 </div>
@@ -255,7 +255,7 @@
                 if(this.method==='History'){
                     return this.historyDone
                 }
-                if(this.method==='Return'){
+                if(this.method==='Returns'){
                     return this.returnsDone
                 }
             },
@@ -265,7 +265,7 @@
             orderStatus(newStatus){
                 let orderName =  this.getOrderStatusName(this.orderStatus);
                 this.clearSkip(
-                    this.getData(newStatus,orderName,"click",0)
+                    newStatus,orderName,"click",0
                 )
             },
         },
@@ -288,11 +288,11 @@
             this.isloded = true
             if(this.$route.query && this.$route.query.type && this.$route.query.type == 'review'){
                 this.clearSkip(
-                    this.getData(5,'Comfirmed','click',0)
+                    5,'Comfirmed','click',0
                 )
             } else {
                 this.clearSkip(
-                    this.getData(this.orderStatus,orderName,"click",0)
+                    this.orderStatus,orderName,"click",0
                 )
             }
         },
@@ -479,12 +479,12 @@
                     }
                 }
             },
-            clearSkip(callback){
+            clearSkip(index, method, flag, skip, notGetData){
                 // console.log('sss')
                 // 切换类型时清空skip值
                 this.$store.dispatch('skipClear').then((res) => {
-                    if(res == 'success'){
-                        callback
+                    if(res == 'success' && !notGetData){
+                        this.getData(index, method, flag, skip)
                     }
                 })
             },
@@ -563,7 +563,7 @@
                 return utils.enTime(new Date(paymentTime))
             },
             checkDetail(item, isReturn){
-                this.clearSkip(()=>{});
+                this.clearSkip('','','','',true);
                 if(isReturn){
                     this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/order/return-detail/'+item.id})
                 } else {
@@ -585,7 +585,7 @@
                 this.isShowTicket = false;
             },
             checkLogistics(orderid){
-                this.clearSkip(()=>{});
+                this.clearSkip('','','','',true);
                 this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/order/logistics-detail', query: { orderid: orderid , method: 'orderlist' } })
             },
             orderoffset(order){
@@ -708,14 +708,14 @@
             showHistoryMethod(){
                 this.showHistory = true;
                 this.clearSkip(
-                    this.getData(0,'History','click')
+                    0,'History','click'
                 )
                 
             },
             hideHistoryMethod(){
                 this.showHistory = false;
                 this.clearSkip(
-                     this.getData(0,'all','click')
+                    0,'all','click'
                 )
             }
         },

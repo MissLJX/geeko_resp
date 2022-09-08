@@ -377,8 +377,8 @@ const mutations = {
         state.allDone = false;
         console.log(state.allSkip)
     },
-    [types.HOME_ALL_DONE](state) {
-        state.allDone = true;
+    [types.HOME_ALL_DONE](state, flag) {
+        state.allDone = flag !== undefined ? flag: true;
     },
 
     [types.HOME_ORDERS_HISTORY](state, orders) {
@@ -395,8 +395,8 @@ const mutations = {
         state.history = [];
         state.historyDone = false;
     },
-    [types.HOME_HISTORY_DONE](state) {
-        state.historyDone = true;
+    [types.HOME_HISTORY_DONE](state, flag) {
+        state.historyDone = flag !== undefined ? flag: true;
     },
 
     [types.HOME_ORDERS_PROCESSING](state, orders) {
@@ -413,8 +413,8 @@ const mutations = {
         state.processing = [];
         state.processingDone = false;
     },
-    [types.HOME_PROCESSING_DONE](state) {
-        state.processingDone = true;
+    [types.HOME_PROCESSING_DONE](state, flag) {
+        state.processingDone = flag !== undefined ? flag: true;
     },
 
     [types.HOME_ORDERS_UNPAID](state, orders) {
@@ -431,8 +431,8 @@ const mutations = {
         state.unpaid = [];
         state.unpaidDone = false;
     },
-    [types.HOME_UNPAID_DONE](state) {
-        state.unpaidDone = true;
+    [types.HOME_UNPAID_DONE](state, flag) {
+        state.unpaidDone = flag !== undefined ? flag: true;
     },
 
     [types.HOME_ORDERS_PAID](state, orders) {
@@ -449,8 +449,8 @@ const mutations = {
         state.paid = [];
         state.paidDone = false;
     },
-    [types.HOME_PAID_DONE](state) {
-        state.paidDone = true;
+    [types.HOME_PAID_DONE](state, flag) {
+        state.paidDone = flag !== undefined ? flag: true;
     },
 
 
@@ -468,8 +468,8 @@ const mutations = {
         state.shipped = [];
         state.shippedDone = false;
     },
-    [types.HOME_SHIPPED_DONE](state) {
-        state.shippedDone = true;
+    [types.HOME_SHIPPED_DONE](state, flag) {
+        state.shippedDone = flag !== undefined ? flag: true;
     },
 
     [types.HOME_ORDERS_CONFIRMED](state, orders) {
@@ -486,8 +486,8 @@ const mutations = {
         state.confirmed = [];
         state.confirmedDone = false;
     },
-    [types.HOME_CONFIRMED_DONE](state) {
-        state.confirmedDone = true;
+    [types.HOME_CONFIRMED_DONE](state, flag) {
+        state.confirmedDone = flag !== undefined ? flag: true;
     },
 
     [types.HOME_ORDERS_CANCELED](state, orders) {
@@ -504,8 +504,8 @@ const mutations = {
         state.canceled = [];
         state.canceledDone = false;
     },
-    [types.HOME_CANCELED_DONE](state) {
-        state.canceledDone = true;
+    [types.HOME_CANCELED_DONE](state, flag) {
+        state.canceledDone = flag !== undefined ? flag: true;
     },
 
     [types.HOME_ORDERS_RETURNS](state, orders) {
@@ -522,8 +522,8 @@ const mutations = {
         state.returns = [];
         state.returnsDone = false;
     },
-    [types.HOME_RETURNS_DONE](state) {
-        state.returnsDone = true;
+    [types.HOME_RETURNS_DONE](state, flag) {
+        state.returnsDone = flag !== undefined ? flag: true;
     },
 
     [types.HOME_CHANGE_TAB](state, tab) {
@@ -1108,15 +1108,29 @@ const actions = {
     },
 
     skipClear({commit}){
-        commit(types.HOME_ORDER_ALL_SKIP_CLEAR)
-        commit(types.HOME_ORDERS_HISTORY_SKIP_CLEAR)
-        commit(types.HOME_ORDER_PROCESSING_SKIP_CLEAR)
-        commit(types.HOME_ORDER_UNPAID_SKIP_CLEAR)
-        commit(types.HOME_ORDER_PAID_SKIP_CLEAR)
-        commit(types.HOME_ORDER_SHIPPED_SKIP_CLEAR)
-        commit(types.HOME_ORDER_CANCELED_SKIP_CLEAR)
-        commit(types.HOME_ORDER_CONFIRMED_SKIP_CLEAR)
-        commit(types.HOME_ORDER_RETURNS_SKIP_CLEAR)
+        return new Promise(function(reslove){
+            commit(types.HOME_ORDER_ALL_SKIP_CLEAR)
+            commit(types.HOME_ORDERS_HISTORY_SKIP_CLEAR)
+            commit(types.HOME_ORDER_PROCESSING_SKIP_CLEAR)
+            commit(types.HOME_ORDER_UNPAID_SKIP_CLEAR)
+            commit(types.HOME_ORDER_PAID_SKIP_CLEAR)
+            commit(types.HOME_ORDER_SHIPPED_SKIP_CLEAR)
+            commit(types.HOME_ORDER_CANCELED_SKIP_CLEAR)
+            commit(types.HOME_ORDER_CONFIRMED_SKIP_CLEAR)
+            commit(types.HOME_ORDER_RETURNS_SKIP_CLEAR)
+
+            commit(types.HOME_ALL_DONE, false)
+            commit(types.HOME_HISTORY_DONE, false)
+            commit(types.HOME_PROCESSING_DONE, false)
+            commit(types.HOME_UNPAID_DONE, false)
+            commit(types.HOME_PAID_DONE, false)
+            commit(types.HOME_SHIPPED_DONE, false)
+            commit(types.HOME_CANCELED_DONE, false)
+            commit(types.HOME_CONFIRMED_DONE, false)
+            commit(types.HOME_RETURNS_DONE, false)
+            reslove('success')
+        })
+        
     },
 
 
