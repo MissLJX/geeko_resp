@@ -16,6 +16,7 @@
             :data-position="sensors.resource_position || index+1"
 			:data-type="sensors.resource_type || eventTitle"
             :data-content="sensors.resource_content || eventTitle"
+            @click="(e)=>handleProductClick(e)"
             ref="oftenProduct"
         >
             <figure>
@@ -59,7 +60,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import {imageutil, unitprice , producturl , PROJECT} from '../../../utils/geekoutils.js'
+    import {imageutil, unitprice , producturl , PROJECT, getSensorsUrl } from '../../../utils/geekoutils.js'
     import _ from 'lodash'
 
     export default{
@@ -148,6 +149,16 @@
             }
         },
         methods: {
+            handleProductClick(event){
+                event.preventDefault();
+                const { currentTarget } = event;
+                window.location.href = getSensorsUrl(currentTarget?.href, {
+                    resourcepage_title: currentTarget.getAttribute("data-title"),
+                    resource_type: currentTarget.getAttribute("data-type"),
+                    resource_position: currentTarget.getAttribute("data-position"),
+                    resource_content: currentTarget.getAttribute("data-content"),
+                });
+            },
             likeHandle(){
                 if(!this.isLogin){
                     window.location.href = "/i/login?redirectUrl=/me/m";

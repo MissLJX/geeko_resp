@@ -186,5 +186,14 @@ export const isIOS = function(){
 	return !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
 }
 
+export const getSensorsUrl = (url, sensors) => {
+    if(!sensors) return url
+    const suffex = encodeURIComponent(`${sensors.resourcepage_title || ''}~${sensors.resource_type||''}~${sensors.resource_content||''}~${sensors.resource_position||''}~${sensors.product_position||''}`)
+	if(url?.indexOf('?') > 0){
+		return `${url}&gf=${suffex}`
+	}
+	return `${url}?gf=${suffex}`
+}
+
 
 
