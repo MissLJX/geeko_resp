@@ -163,37 +163,37 @@
                 if(this.isloded) {
                     this.isloded = false
                     if (tab === 'home-all') {
-                        this.$store.dispatch('loadAll', 20).then(() => {
+                        this.$store.dispatch('loadAll', {limit:20, skip:undefined}).then(() => {
                             this.orderMethod = this.all
                             this.isloded = true
                         })
                     }
                     if (tab === 'home-unpaid') {
-                        this.$store.dispatch('loadUnpaid', 20).then(() => {
+                        this.$store.dispatch('loadUnpaid', {limit:20, skip:undefined}).then(() => {
                             this.orderMethod = this.unpaid
                             this.isloded = true
                         })
                     }
                     if (tab === 'home-processing') {
-                        this.$store.dispatch('loadProcessing', 20).then(() => {
+                        this.$store.dispatch('loadProcessing', {limit:20, skip:undefined}).then(() => {
                             this.orderMethod = this.processing
                             this.isloded = true
                         })
                     }
                     if (tab === 'home-shipped') {
-                        this.$store.dispatch('loadShipped', 20).then(() => {
+                        this.$store.dispatch('loadShipped', {limit:20, skip:undefined}).then(() => {
                             this.orderMethod = this.shipped
                             this.isloded = true
                         })
                     }
                     if (tab === 'home-confirmed') {
-                        this.$store.dispatch('loadConfirmed', 20).then(() => {
+                        this.$store.dispatch('loadConfirmed', {limit:20, skip:undefined}).then(() => {
                             this.orderMethod = this.confirmed
                             this.isloded = true
                         })
                     }
                     if (tab === 'home-canceled') {
-                        this.$store.dispatch('loadCanceled', 20).then(() => {
+                        this.$store.dispatch('loadCanceled', {limit:20, skip:undefined}).then(() => {
                             this.orderMethod = this.canceled
                             this.isloded = true
                         })
