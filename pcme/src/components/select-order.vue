@@ -138,7 +138,7 @@
 
         },
         created() {
-            this.loadAll(20).then(()=> {
+            this.loadAll({limit:20, skip:undefined}).then(()=> {
                 this.orderMethod = this.all
                 this.isloded = true
             })

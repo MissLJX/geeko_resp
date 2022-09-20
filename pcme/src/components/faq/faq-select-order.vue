@@ -152,7 +152,7 @@
 
         },
         created() {
-            this.loadAll(20).then(()=> {
+            this.loadAll({limit:20, skip:undefined}).then(()=> {
                 this.orderMethod = this.all
                 this.isloded = true
             })
@@ -238,7 +238,7 @@
                 this.$emit('closeSelect');
             },
             submitTicket(){
-                console.log(this.pickedOrder)
+                // console.log(this.pickedOrder)
                 if(this.pickedOrder){
                     a+=1;
                     this.$emit('showTicket',this.pickedOrder)

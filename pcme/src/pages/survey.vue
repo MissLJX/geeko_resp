@@ -385,9 +385,6 @@
             this.$store.dispatch('getMessage', 'M1627')
             // 点击其他区域关闭弹窗
             document.addEventListener("click",this.closeItem,false) 
-            console.log=()=>{
-                
-            }
         },
         mounted(){
             this.$nextTick(() => {

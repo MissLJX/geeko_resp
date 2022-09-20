@@ -76,7 +76,7 @@ module.exports = {
         progress: true,
         proxy: {
 			'/api': {
-				target: 'https://www.chicme.xyz',
+				target: 'https://www.chicus.org',
 				// target: 'http://192.168.0.103:8080/',
 				pathRewrite: { '^/api': '' },
 				cookieDomainRewrite: 'localhost',

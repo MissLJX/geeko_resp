@@ -68,7 +68,7 @@ export default {
         
     },
     mounted(){
-        console.log(this.questions)
+        // console.log(this.questions)
         if(JSON.stringify(this.$router.currentRoute.query) != '{}' && this.$router.currentRoute.query){
             this.searchValue = this.$router.currentRoute.query.search
             this.searchValueFromUrl = this.$router.currentRoute.query.search

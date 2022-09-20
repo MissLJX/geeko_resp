@@ -125,7 +125,7 @@
                 }
             },
             list:function(newV, oldV){
-                console.log(newV, oldV)
+                // console.log(newV, oldV)
             }
         }
     }

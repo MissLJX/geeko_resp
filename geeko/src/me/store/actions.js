@@ -328,7 +328,7 @@ const actions = {
     },
 
     getWishproducts({commit, state}, {skip}){
-        return api.getWishProducts(state.me.id, skip).then((data) => {
+        return api.getWishProducts(state.me && state.me.id || 'undefined', skip).then((data) => {
             let products = data.result;
 
             if (products && products.length) {

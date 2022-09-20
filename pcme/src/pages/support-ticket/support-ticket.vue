@@ -124,7 +124,7 @@
         computed: {
             ...mapGetters(['tickets']),
             ticketList(){
-                console.log(this.tickets.length, this.listDefault)
+                // console.log(this.tickets.length, this.listDefault)
                 if(this.tickets.length > 0 && (this.tickets.length > this.listDefault.length)){
                     this.listDefault = this.listDefault.concat(this.tickets)
                     this.listDefault = this.listDefault.map(l => {
@@ -251,8 +251,8 @@
             this.$store.dispatch('getTickets', {skip:0,state:9})
         },
         mounted(){
-            console.log(this.$route)
-            console.log(this.$router.currentRoute)
+            // console.log(this.$route)
+            // console.log(this.$router.currentRoute)
             // /:id tkid
             if(this.$route.params?.id && !urlIdShowed){
                 localStorage.removeItem("_code")
@@ -287,7 +287,7 @@
             scrollBox.removeEventListener("scroll", (e)=>this.boxScroll(e), true)
         },
         beforeRouteEnter(to,from,next){
-            console.log(to.path, from.path, to.path != from.path)
+            // console.log(to.path, from.path, to.path != from.path)
             if(to.path != from.path){
                 next(vm => {
                     vm.listDefault = []

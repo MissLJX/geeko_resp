@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack-dev-server --config ./build/webpack.dev.config.js --port 3002 --inline --hot",
+    "start": "webpack-dev-server --config ./build/webpack.dev.config.js --port 3002 --inline --hot",
     "build": "webpack --config ./build/webpack.config.build.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

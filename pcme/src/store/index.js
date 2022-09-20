@@ -375,7 +375,6 @@ const mutations = {
         state.allSkip = 0;
         state.all = [];
         state.allDone = false;
-        console.log(state.allSkip)
     },
     [types.HOME_ALL_DONE](state, flag) {
         state.allDone = flag !== undefined ? flag: true;
@@ -1757,7 +1756,7 @@ const actions = {
         // console.log(params)
         return new Promise((reslove,reject) => {
             api.surveyGet(params).then((result) => {
-                console.log(result)
+                // console.log(result)
                 reslove(result);
                 commit(types.GET_SURVEY_ANSWER, params);
             });

@@ -122,7 +122,7 @@ export default {
             if(!this.loading){
                 this.loading = true
                 this.$store.dispatch("getCashHistoryData",{skip: this.skip, limit:this.limit, type}).then(res => {
-                    console.log(res)
+                    // console.log(res)
                     this.loading = false
                     if(res && res.code){
                         this.data = res.result
