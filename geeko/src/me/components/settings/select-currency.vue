@@ -11,10 +11,16 @@
                     <li 
                         class="__item"
                         v-for="(item,index) in currencyList" 
-                        :key="item+index"
-                        @click="toChangeCurrency(item)"
+                        :key="item.value+index"
+                        @click="toChangeCurrency(item.value)"
+                        :class="{'active' : currencyLocale == item.value}"
                     >
-                        <span :class="{'active' : currencyLocale == item}">{{item}}</span>
+                        <span 
+                            class="Image" 
+                            :style="`background-image: url(https://image.geeko.ltd/site/ninimour/flags/flag-${item.value}.png)`" 
+                            :alt="item.label"
+                        />
+                        <span>{{item.label}}</span>
                     </li>
                 </ul>
             </div>
@@ -42,7 +48,7 @@
         },
         computed:{
             currencyList:function(){
-                return store.getters["me/currencyList"];
+                return store.getters["currencies"];
             }
         },
         methods:{
@@ -62,9 +68,9 @@
                 return;
             }
             this.isLoadingShow = true;
-            store.dispatch("me/getCurrencyList").then(() => {
+            store.dispatch("getCurrencies").then(() => {
                 this.isLoadingShow = false;
-            });;
+            });
         }
     }
 </script>
@@ -80,6 +86,7 @@
         top:0;
         left: 0;
         z-index: 2;
+        padding-bottom: 51px;
 
         ._bd{
             position: relative;
@@ -92,12 +99,25 @@
                     font-size: 14px;
                     color: #121314;
 
-                    & > span{
-                        display: block;
-                        position: relative;
+                    .Image{
+                        width: 30px;
+                        height: 16px;
+                        display: inline-block;
+                        vertical-align: middle;
+                        background-size: 100% auto;
+                        border: 1px solid #e6e6e6;
+                        background-position: center;
+                        background-repeat: no-repeat;
+                        margin-right: 5px;
                     }
 
-                    & > .active::after{
+                    & > span{
+                        display: inline-block;
+                        position: relative;
+                        vertical-align: middle;
+                    }
+
+                    &.active::after{
                         font-family: iconfont;
                         content: '\E638';
                         font-size: 15px;
