@@ -114,15 +114,15 @@
             <div class="discount-container">
                 <a @click.prevent="specificationLogin('/me/m/coupons',1)" click-name="Coupons">
                     <p class="iconfont">
-                        <span :class="{'_font' : isLogin}">{{getFeedNum(feed && feed.canUseCouponCount,"&#xe6dc;")}}</span>
+                        <span :class="{'_font' : verilyValue(feed && feed.canUseCouponCount)}">{{getFeedNum(feed && feed.canUseCouponCount,"&#xe6dc;")}}</span>
                     </p>
                     <p>{{$t("label.coupons")}}</p>
                 </a>
                 <a @click.prevent="specificationLogin('/me/m/credits',1)" click-name="Points">
-                    <p class="iconfont" v-if="!isLogin">
-                        <span :class="{'_font' : isLogin}">{{getFeedNum(feed && feed.points,"&#xe6db;")}}</span>
+                    <p class="iconfont" v-if="!isLogin || !verilyValue(feed && feed.points)">
+                        <span :class="{'_font' : verilyValue(feed && feed.points)}">{{getFeedNum(feed && feed.points,"&#xe6db;")}}</span>
                     </p>
-                    <div style="position:relative;height:23px;" v-if="isLogin">
+                    <div style="position:relative;height:23px;" v-else>
                         <img class="animation_points_icon" style="width:23px;" src="https://image.geeko.ltd/2021-11-01-lottery/2021-11-01-lottery-points.png" alt="">
                         <span class="animation_points_text _font">{{getFeedNum(feed && feed.points,"&#xe6db;")}}</span>
                     </div>
@@ -363,12 +363,16 @@
         },
         methods:{
             getFeedNum(num,icon){
-                if(this.isLogin && num >= 0){
+                let count = num || 0;
+                if(this.isLogin && count > 0){
                     return num;
-                }else if(!this.isLogin && icon){
+                }else{
                     return icon;
                 }
-                return;
+            },
+            verilyValue(value){
+                let count = value || 0;
+                return count > 0;
             },
             isEmptyStr:function (s) {
                 if (s == undefined || s === '') {
@@ -504,6 +508,10 @@
                 store.dispatch('me/getOrderCountUnpaid');
 
                 store.dispatch('me/getHasNoCommentOrder')
+
+                if(!this.feed && this.me.id){
+                    store.dispatch('me/getFeed', this.me.id);
+                }
             }
 
             if(!this.isLogin){

@@ -46,6 +46,7 @@ module.exports = {
         ]
     },
     resolve:{
+        extensions: ['.vue', '.js'],
         alias: {
             process: "process/browser",
             // 'vue$': 'vue/dist/vue.esm.js',
@@ -76,7 +77,7 @@ module.exports = {
         progress: true,
         proxy: {
 			'/api': {
-				target: 'https://www.chicus.org',
+				target: 'https://www.chicme.xyz/',
 				// target: 'http://192.168.0.103:8080/',
 				pathRewrite: { '^/api': '' },
 				cookieDomainRewrite: 'localhost',
