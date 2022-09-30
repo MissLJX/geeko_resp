@@ -124,7 +124,7 @@ module.exports = ({
                 loader: 'vue-loader',
                 options: {
                     loaders: {
-                        'scss': 'style-loader!css-loader!sass-loader'
+                        'scss': 'vue-style-loader!css-loader!sass-loader'
                     },
                 }
             },

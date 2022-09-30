@@ -41,6 +41,7 @@
     import fecha from 'fecha';
     import { mapGetters } from "vuex"
     import { pointsCouponExchange } from "@/me/api/index.js"
+    import store from '@/me/store/index'
 
     export default {
         name:"RedeemCoupon",
@@ -54,7 +55,7 @@
             }
         },
         computed:{
-            ...mapGetters("me",["feed"]),
+            ...mapGetters("me",["me","feed"]),
             expireDate(){
                 var [beginDate, endDate] = [this.coupon.coupon.beginDate, this.coupon.coupon.endDate];
 
@@ -225,6 +226,11 @@
                         coupon_type:this.coupon.coupon.name
                     })
                 }
+            }
+        },
+        created(){
+            if(!this.feed && this.me.id){
+                store.dispatch('me/getFeed', this.me.id);
             }
         },
         mounted:function(){

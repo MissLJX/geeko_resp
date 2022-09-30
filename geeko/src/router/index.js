@@ -35,7 +35,12 @@ router.beforeEach((to, from, next) => {
     store.dispatch('paging', {paging: true})
 
     document.title = to.meta.title
-    if (to.path.startsWith(ROUTER_PATH_ME)) {
+
+    console.log('to.path', to.path)
+    console.log("to.path.includes(['/me/m', '/me/m/'])", ['/me/m', '/me/m/'].includes(to.path))
+    if(['/me/m', '/me/m/'].includes(to.path)){
+        next();
+    } else if (to.path.startsWith(ROUTER_PATH_ME)) {
         store.dispatch('me/init').then(() => {
             next()
         }).catch(e => {
