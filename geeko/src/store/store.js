@@ -121,7 +121,7 @@ export const actions = {
         })
     },
     getCurrencies({commit}){
-        api.getCurrencies().then((currencies) => {
+        return api.getCurrencies().then((currencies) => {
             commit(types.GLOBAL_GET_CURRENCIES, currencies)
         })
     },
