@@ -140,6 +140,11 @@
     .mt-20{
         margin-top: 20px;
         line-height: 25px;
+        word-break: break-all;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
     }
     .address-book{
         .add-new{
