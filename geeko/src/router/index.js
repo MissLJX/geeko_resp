@@ -36,12 +36,8 @@ router.beforeEach((to, from, next) => {
 
     document.title = to.meta.title
 
-    console.log('to.path', to.path)
-    console.log("to.path.includes(['/me/m', '/me/m/'])", ['/me/m', '/me/m/'].includes(to.path))
-    if(['/me/m', '/me/m/'].includes(to.path)){
-        next();
-    } else if (to.path.startsWith(ROUTER_PATH_ME)) {
-        store.dispatch('me/init').then(() => {
+    if(to.path.startsWith(ROUTER_PATH_ME)){
+        store.dispatch('me/init').then((data) => {
             next()
         }).catch(e => {
             next();
@@ -49,7 +45,6 @@ router.beforeEach((to, from, next) => {
     } else {
         next()
     }
-
 })
 
 router.afterEach(route => {
