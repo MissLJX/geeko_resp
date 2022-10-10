@@ -57,15 +57,19 @@
                     <div class="st-flex st-justify-b el-double-item-container">
                         <div>
                             <label v-if="showLabel" :class="{'el-label':true}">{{$t('label.country')}}</label>
-                            <p class="st-control">
-                                <select ref="country" class="st-select" v-model="countrySelected"
+                            <div class="st-control" style="position:relative;">
+                                <div class="countryIconDiv">
+                                    <img :src="countryIcon" alt="">
+                                </div>
+                                <select ref="country" class="st-select" style="padding-left:25px;" v-model="countrySelected"
                                         @change="changeCountry">
                                     <option disabled value="-1">{{$t("label.country")}}</option>
                                     <option v-for="c in countries" :value="c.value">{{c.label}}</option>
                                 </select>
                                 <span v-show="countrySelected == '-1'"
-                                      class="st-is-danger">{{$t('label.please_select_country')}}</span>
-                            </p>
+                                      class="st-is-danger">{{$t('label.please_select_country')}}
+                                </span>
+                            </div>
                         </div>
 
                         <div>
@@ -96,7 +100,7 @@
                         </p>
                     </div>
 
-                    <div class="st-flex st-justify-b el-double-item-container">
+                    <!-- <div class="st-flex st-justify-b el-double-item-container"> -->
                         <div>
                             <p class="st-control">
                                 <label v-if="showLabel" :class="{'el-label':true}">{{$t('label.zipCode')}}</label>
@@ -111,15 +115,21 @@
                         <div>
                             <p class="st-control">
                                 <label v-if="showLabel" :class="{'el-label':true}">{{$t('label.phoneNumber')}}</label>
-                                <input name="phoneNumber" v-model="shipping.phoneNumber" v-validate="'required'"
-                                       :class="{'st-input':true, 'st-input-danger':errors.has('phoneNumber')}"
-                                       type="text"
-                                       :placeholder="$t('label.phoneNumber')+' *'"/>
+                                <div class="phoneBlock">
+                                    <span v-if="countrySelected==='BR'">BR +55</span>
+                                    <span v-if="countrySelected != 'BR' && phoneAreaCode">{{phoneAreaCode}}</span>
+                                    <input v-if="countrySelected==='BR'" name="phoneArea" type="number" v-model="shipping.phoneArea" placeholder="Código" class="br-input"  oninput="if(value.length>2) value=value.slice(0,2)"></input>
+                                    <input name="phoneNumber" v-model="shipping.phoneNumber" v-validate="'required'"
+                                        :class="{'st-input':true, 'st-input-danger':errors.has('phoneNumber')}"
+                                        type="text"
+                                        :placeholder="$t('label.phoneNumber')+' *'"/>
+                                </div>
+                                
                                 <span v-show="errors.has('phoneNumber')"
                                       class="st-is-danger">{{$t('label.phone_required')}}</span>
                             </p>
                         </div>
-                    </div>
+                    <!-- </div> -->
 
                     <div>
                         <btn v-if="!submiting" class="fill el-address-submit" type="submit">{{$t('label.submit')}}</btn>
@@ -181,7 +191,7 @@
     }
 
     .el-media-size {
-        max-width: 300px;
+        // max-width: 300px;
         margin: 0 auto;
     }
 
@@ -207,7 +217,44 @@
         padding: 0 !important;
     }
 
+    .phoneBlock{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
 
+        span{
+            white-space: nowrap;
+        }
+
+        .br-input{
+            width: 70px;
+            margin: 0px 5px 0 ;
+            height: 30px;
+            padding: 0 3px;
+            text-align: center;
+        }
+
+        input{
+            border: 1px solid #cacaca;
+            margin-left: 5px;
+            padding: 0 3px;
+        }
+    }
+
+    .countryIconDiv{
+        position: absolute;
+        bottom: 9px;
+        left: 10px;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        overflow: hidden;
+
+        & > img{
+            width: 100%;
+            height: 100%;
+        }
+    }
 </style>
 
 <script type="text/ecmascript-6">
@@ -215,6 +262,7 @@
     import _ from 'lodash'
     import Btn from '../components/btn.vue'
     import CountryTipMask from './country-tip-mask.vue'
+    import {fetchPhoneAreaCode} from '../api'
 
     export default{
         data(){
@@ -256,6 +304,7 @@
                 submiting: false,
                 showCountryTip: false, // 展示国家跟ip不符提示弹窗
                 countrySelectChange: false, // 是否切换国家(未切换是弹窗的条件之一)
+                countryCodeList: null,
             }
         },
         props: {
@@ -286,6 +335,13 @@
             },
             countryLabel(){
                 return this.hasCountries ? this.countries.find(c => c.value == this.shipping.country).label : this.shipping.country
+            },
+            countryIcon(){
+                return this.countrySelected != -1 && `https://image.geeko.ltd/country/flag/${this.countrySelected}.png`
+            },
+            phoneAreaCode(){
+                let obj = this.countryCodeList?.find(code => code?.country == this.countrySelected)
+                return obj ? obj?.country + ' + ' + obj?.areaCode : ''
             }
         },
         methods: {
@@ -374,6 +430,11 @@
         },
         created(){
             this.getStates(false)
+            fetchPhoneAreaCode().then(res => {
+                if(res?.code == 200 && res?.result){
+                    this.countryCodeList = res?.result
+                }
+            })
         }
 
 

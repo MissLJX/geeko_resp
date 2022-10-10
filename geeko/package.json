@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "webpack serve --port 4000 --config webpack.config.js --inline --hot",
+    "start": "webpack serve --port 4000 --config webpack.config.js --inline --hot",
     "devb": "webpack",
     "build": "cross-env NODE_ENV=production webpack --config webpack.config.build.js --progress",
     "predeploy": "npm run build",

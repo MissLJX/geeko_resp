@@ -52,4 +52,7 @@ export const getProductDetailMessage = (productId) => {
     return axios.get(`/v9/product/anon/${productId}/show2`);
 }
 
-
+// 获取选中国家电话区号
+export const fetchPhoneAreaCode = headers => {
+	return axios.get(`/context/get-config?code=0482-W`,headers)
+}

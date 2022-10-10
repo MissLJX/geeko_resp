@@ -58,10 +58,16 @@
                 <div class="input-con required w-left">
                     <label>{{$t('country')}}:</label>
                     <div class="x-default-input">
-                        <select ref="country" class="x-select" v-model="countrySelected"
+                        <div class="countryIconDiv">
+                            <img :src="countryIcon" alt="">
+                        </div>
+                        <select ref="country" class="x-select" style="padding-left:35px;" v-model="countrySelected"
                                 @change="changeCountry">
                             <option disabled value="-1">{{$t('country')}}</option>
-                            <option v-for="c in countries" :value="c.value" :key="c.value">{{c.label}}</option>
+                            <option v-for="c in countries" :value="c.value" :key="c.value">
+                                
+                                {{c.label}}
+                            </option>
                         </select>
                         <span v-show="countrySelected === '-1'"
                               class="st-is-danger">{{$t('selectcountry')}}</span>
@@ -97,11 +103,13 @@
                 </div>
                 <div class="input-con required w-left">
                     <label>{{$t('phoneNumber')}}:</label>
-                    <div class="x-default-input">
+                    <div class="x-default-input" style="display:flex;align-items: center;justify-content: space-between;">
                         <span v-if="countrySelected==='BR'">BR +55</span>
-                        <input v-if="countrySelected==='BR'" name="phoneArea" type="number" v-model="shipping.phoneArea" placeholder="Código" class="x-default-input"  oninput="if(value.length>2) value=value.slice(0,2)" style="width: 55px;margin-right:10px; margin-left: 10px;eight: 40px; padding-left: 0px; text-align: center;">
+                        <span v-if="countrySelected != 'BR' && phoneAreaCode">{{phoneAreaCode}}</span>
+                        <input v-if="countrySelected==='BR'" name="phoneArea" type="number" v-model="shipping.phoneArea" placeholder="Código" class="x-default-input"  oninput="if(value.length>2) value=value.slice(0,2)" style="width: 55px;margin: 0 10px 0;height: 40px; padding-left: 0px; text-align: center;">
                         <input name="phoneNumber" v-model="shipping.phoneNumber" v-validate="phone_validate"
-                               :class="{'st-input':true, 'st-input-danger':errors.has('phoneNumber'),'phonenum':countrySelected==='BR'}"
+                               :class="{'st-input':true, 'st-input-danger':errors.has('phoneNumber'),'phonenum':countrySelected==='BR' || phoneAreaCode}"
+                               style="flex:1;"
                                type="text"
                                />
                         <span v-show="errors.has('phoneNumber')"
@@ -141,6 +149,7 @@
 <script>
     import _ from 'lodash'
     import CountryTipMask from './country-tip-mask.vue'
+    import {fetchPhoneAreaCode} from '../api'
     export default{
         data(){
             var initCountry = this.address && this.address.country ? this.address.country.value : window.__country ? window.__country :'US'
@@ -210,6 +219,7 @@
                 ifshowCPFtip:false,
                 showCountryTip: false, // 展示国家跟ip不符提示弹窗
                 countrySelectChange: false, // 是否切换国家(未切换是弹窗的条件之一)
+                phoneAreaCodeList: null, // 
             }
         },
         props: {
@@ -247,6 +257,13 @@
             },
             countryLabel(){
                 return this.hasCountries ? this.countries.find(c => c.value == this.shipping.country).label : this.shipping.country
+            },
+            countryIcon(){
+                return this.countrySelected != -1 && `https://image.geeko.ltd/country/flag/${this.countrySelected}.png`
+            },
+            phoneAreaCode(){
+                let obj = this.phoneAreaCodeList?.find(code => code?.country == this.countrySelected)
+                return obj ? obj?.country + ' + ' + obj?.areaCode : ''
             }
         },
         methods: {
@@ -340,6 +357,11 @@
         },
         created(){
             this.getStates(false);
+            fetchPhoneAreaCode().then(res => {
+                if(res?.code == 200 && res?.result){
+                    this.phoneAreaCodeList = res?.result
+                }
+            })
         },
         components:{
             "country-tip-mask":CountryTipMask
@@ -370,7 +392,8 @@
         margin: 0;
     }
     .phonenum{
-        width: calc(100% - 130px) !important;
+        // width: calc(100% - 130px) !important;
+        margin-left: 10px;
     }
     button{
         border: none;
@@ -438,7 +461,23 @@
                     cursor: pointer;
                     height: 40px;
                     border: 1px solid #cacaca;
-                    width: 100%; }
+                    width: 100%; 
+                }
+
+                .countryIconDiv{
+                    position: absolute;
+                    bottom: 10px;
+                    left: 10px;
+                    width: 20px;
+                    height: 20px;
+                    border-radius: 50%;
+                    overflow: hidden;
+
+                    & > img{
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
             }
         }
         .s-r-btn, .cancel-btn{

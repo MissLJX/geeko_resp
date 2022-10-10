@@ -138,13 +138,14 @@
         -moz-osx-font-smoothing: grayscale;
 	}
     .mt-20{
-        margin-top: 20px;
+        // margin-top: 20px;
         line-height: 25px;
         word-break: break-all;
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
+        text-overflow: ellipsis;
     }
     .address-book{
         .add-new{
@@ -212,6 +213,27 @@
                         bottom: -4px;
                         background-color: #fff;
                         border: 1px solid #cacaca;
+                    }
+                    
+                }
+                .address-info{
+                    display: flex;
+                    align-items: flex-start;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    height: 110px;
+
+                    & > p{
+                        word-break: normal;
+                        display: -webkit-box;
+                        -webkit-line-clamp: 2;
+                        -webkit-box-orient: vertical;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+
+                    & > p:last-child {
+                        -webkit-line-clamp: 1;
                     }
                 }
                 .add-edit-del{
