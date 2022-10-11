@@ -1,6 +1,7 @@
 import * as types from './mutation_types'
 import * as utils from '../../utils/geekoutils'
 import _ from 'lodash'
+import Vue from 'vue'
 
 const mutations = {
     [types.ME_GET](state, _me){
@@ -235,7 +236,9 @@ const mutations = {
     [types.CHANGE_GET_ME_DATA](state,customer){
         let name = customer.name;
         let changeValue = customer.customer[name];
-        state.me[name] = _.cloneDeep(changeValue);
+        // state.me[name] = _.cloneDeep(changeValue);
+        Vue.set(state.me, name ,changeValue);
+        // state.me = {...me, [name]:changeValue}
     },
     [types.GET_ME_CURRENCY_LIST](state,currency){
         state.currencyList = _.concat(state.currencyList,currency);

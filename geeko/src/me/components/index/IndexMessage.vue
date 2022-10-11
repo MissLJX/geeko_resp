@@ -61,7 +61,12 @@
                     </div>
                     <div class="edit">
                         <p>
-                            <template v-if="isLogin">
+                            <span class="user-name" 
+                                @click="changeToLogin" 
+                                :test="'nikename'+me.nickname"
+                            >{{ disposeName }}</span>
+                            
+                            <!-- <template v-if="isLogin">
                                 <span class="user-name" 
                                     @click="changeToLogin" 
                                     :test="'nikename'+me.nickname"
@@ -83,7 +88,7 @@
 
                             <template v-else>
                                 <span class="user-name" @click="changeToLogin">{{$t("index.login_or_register")}}</span>
-                            </template>
+                            </template> -->
                             
                             <!-- <span class="vip-level" @click="toVipPageEvent" v-if="showVip && me && me.vipUser">
                                 <span class="iconfont" :style="`color:${levelColor};`">&#xe783;</span>
@@ -247,7 +252,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 </template>
 
@@ -281,6 +285,10 @@
             ...mapGetters('me', [
                 'pointsAllSkip','me', "isLogin", 'feed', 'notificationCount', 'orderCountUnpaid',"shoppingCartCount","messageM1518","hasNoCommentOrder","dobulePoints","vipShow"
             ]),
+            getMe(){
+                console.log('this.me.bio', this.me.bio)
+                return this.me;
+            },
             baseHeaderUrl() {
                 if (window.name === 'chicme') {
                     return 'https://image.geeko.ltd/chicme/20210813/icon.png';
@@ -292,17 +300,17 @@
             },
             disposeName(){
                 let me = store.getters['me/me'];
-                console.log('me', me)
+                // console.log('me', me)
                 if(this.isLogin && me && me.nickname){
-                    console.log('nikename')
+                    // console.log('nikename')
                     return me.nickname;
                 }else if(this.isLogin && me.name && (!this.isEmptyStr(me.name.firstName) || !this.isEmptyStr(me.name.lastName))){
-                    console.log('name');
+                    // console.log('name');
                     return this.getName(me.name.firstName) + " " + this.getName(me.name.lastName);
                 }else if(this.isLogin && !(me && me.nickname && me.name && me.name.firstName && me.name.lastName)){
-                    console.log("email");
-                    console.log('me.email', me.email);
-                    console.log('me.email2', !!me.email);
+                    // console.log("email");
+                    // console.log('me.email', me.email);
+                    // console.log('me.email2', !!me.email);
                     return me.email;
                 }
 
