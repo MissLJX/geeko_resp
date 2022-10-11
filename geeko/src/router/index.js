@@ -32,23 +32,27 @@ router.beforeEach((to, from, next) => {
         window.location.href = baseurl + `${window.ctx || ''}/support`
     }
 
-    store.dispatch('paging', {paging: true})
-
     document.title = to.meta.title
-    if (to.path.startsWith(ROUTER_PATH_ME)) {
-        store.dispatch('me/init').then(() => {
+
+    if(['/me/m', '/me/m/'].includes(to.path)){
+        next();
+    }else if(to.path.startsWith(ROUTER_PATH_ME)){
+        store.dispatch('paging', {paging: true})
+        store.dispatch('me/init').then((data) => {
             next()
         }).catch(e => {
             next();
         });
     } else {
+        store.dispatch('paging', {paging: true})
         next()
     }
-
 })
 
-router.afterEach(route => {
-    store.dispatch('paging', {paging: false})
+router.afterEach((to, from) => {
+    if(!(['/me/m', '/me/m/'].includes(to.path))){
+        store.dispatch('paging', {paging: false})
+    }
 })
 
 export default router

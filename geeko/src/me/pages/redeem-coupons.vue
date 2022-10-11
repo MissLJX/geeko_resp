@@ -35,7 +35,7 @@
             }
         },
         computed:{
-            ...mapGetters("me",["feed"])
+            ...mapGetters("me",["feed", "me"])
         },
         components:{
             "page-header":PageHeader,
@@ -66,6 +66,10 @@
 
                 // this.loading = false;
             });
+
+            if(!this.feed && this.me.id){
+                store.dispatch('me/getFeed', this.me.id);
+            }
         },
         methods:{
             changeCoupons(id){

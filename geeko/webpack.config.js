@@ -46,6 +46,7 @@ module.exports = {
         ]
     },
     resolve:{
+        extensions: ['.vue', '.js'],
         alias: {
             process: "process/browser",
             // 'vue$': 'vue/dist/vue.esm.js',

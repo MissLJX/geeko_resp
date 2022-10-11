@@ -21,7 +21,7 @@ Vue.prototype.$toast = Toast;
 Vue.prototype.GLOBAL = common
 
 import './css/style.scss'
-import 'swiper/css/swiper.css'
+import 'swiper/swiper.scss'
 
 
 // Vue.use(VeeValidate)

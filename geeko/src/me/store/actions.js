@@ -19,12 +19,10 @@ const actions = {
                     throw new Error("The user does not exist.")
                 }
             }).then((me) => {
-                return dispatch('getFeed', me.id);
-            }).then((feed) => {
-                commit(types.ME_GET_FEED, feed)
                 commit(types.ME_INITIALIZED)
+                return me;
             }).catch((e) => {
-                // console.log("initcatch",e);
+                console.log("initcatch",e);
                 commit(types.ME_GET_NO_LOGIN,false);
             });
         }
@@ -34,10 +32,9 @@ const actions = {
             if(me && JSON.stringify(me) !== '{}'){
                 commit(types.ME_GET, me);
             }
-
             return me
         }).catch(e => {
-            console.log("e",e);
+            // console.log("e",e);
             commit(types.ME_GET_NO_LOGIN,false);
             return null
         })

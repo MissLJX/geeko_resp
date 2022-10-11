@@ -58,7 +58,7 @@
             }
         },
         computed: {
-            ...mapGetters('me', ['feed','me','pointsCustomerNum']),
+            ...mapGetters('me', ['me','pointsCustomerNum']),
             showPointsMall(){
                 return window.showPointsMall
             },

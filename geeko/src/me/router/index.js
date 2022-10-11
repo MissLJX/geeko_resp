@@ -8,7 +8,7 @@ const Me = [
         path: ROUTER_PATH_ME,
         component: () => import(/* webpackChunkName: "me" */ '../pages/index3.vue'),
         name: 'me',
-        meta: {title: 'me'}
+        meta: {title: 'me', keepAlive:true}
     },
     {
         path: ROUTER_PATH_ME + '/creditcards',

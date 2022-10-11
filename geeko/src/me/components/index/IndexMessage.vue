@@ -61,7 +61,12 @@
                     </div>
                     <div class="edit">
                         <p>
-                            <template v-if="isLogin">
+                            <span class="user-name" 
+                                @click="changeToLogin" 
+                                :test="'nikename'+me.nickname"
+                            >{{ disposeName }}</span>
+                            
+                            <!-- <template v-if="isLogin">
                                 <span class="user-name" 
                                     @click="changeToLogin" 
                                     :test="'nikename'+me.nickname"
@@ -83,7 +88,7 @@
 
                             <template v-else>
                                 <span class="user-name" @click="changeToLogin">{{$t("index.login_or_register")}}</span>
-                            </template>
+                            </template> -->
                             
                             <!-- <span class="vip-level" @click="toVipPageEvent" v-if="showVip && me && me.vipUser">
                                 <span class="iconfont" :style="`color:${levelColor};`">&#xe783;</span>
@@ -114,15 +119,15 @@
             <div class="discount-container">
                 <a @click.prevent="specificationLogin('/me/m/coupons',1)" click-name="Coupons">
                     <p class="iconfont">
-                        <span :class="{'_font' : isLogin}">{{getFeedNum(feed && feed.canUseCouponCount,"&#xe6dc;")}}</span>
+                        <span :class="{'_font' : verilyValue(feed && feed.canUseCouponCount)}">{{getFeedNum(feed && feed.canUseCouponCount,"&#xe6dc;")}}</span>
                     </p>
                     <p>{{$t("label.coupons")}}</p>
                 </a>
                 <a @click.prevent="specificationLogin('/me/m/credits',1)" click-name="Points">
-                    <p class="iconfont" v-if="!isLogin">
-                        <span :class="{'_font' : isLogin}">{{getFeedNum(feed && feed.points,"&#xe6db;")}}</span>
+                    <p class="iconfont" v-if="!isLogin || !verilyValue(feed && feed.points)">
+                        <span :class="{'_font' : verilyValue(feed && feed.points)}">{{getFeedNum(feed && feed.points,"&#xe6db;")}}</span>
                     </p>
-                    <div style="position:relative;height:23px;" v-if="isLogin">
+                    <div style="position:relative;height:23px;" v-else>
                         <img class="animation_points_icon" style="width:23px;" src="https://image.geeko.ltd/2021-11-01-lottery/2021-11-01-lottery-points.png" alt="">
                         <span class="animation_points_text _font">{{getFeedNum(feed && feed.points,"&#xe6db;")}}</span>
                     </div>
@@ -247,7 +252,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 </template>
 
@@ -281,6 +285,10 @@
             ...mapGetters('me', [
                 'pointsAllSkip','me', "isLogin", 'feed', 'notificationCount', 'orderCountUnpaid',"shoppingCartCount","messageM1518","hasNoCommentOrder","dobulePoints","vipShow"
             ]),
+            getMe(){
+                console.log('this.me.bio', this.me.bio)
+                return this.me;
+            },
             baseHeaderUrl() {
                 if (window.name === 'chicme') {
                     return 'https://image.geeko.ltd/chicme/20210813/icon.png';
@@ -292,17 +300,17 @@
             },
             disposeName(){
                 let me = store.getters['me/me'];
-                console.log('me', me)
+                // console.log('me', me)
                 if(this.isLogin && me && me.nickname){
-                    console.log('nikename')
+                    // console.log('nikename')
                     return me.nickname;
                 }else if(this.isLogin && me.name && (!this.isEmptyStr(me.name.firstName) || !this.isEmptyStr(me.name.lastName))){
-                    console.log('name');
+                    // console.log('name');
                     return this.getName(me.name.firstName) + " " + this.getName(me.name.lastName);
                 }else if(this.isLogin && !(me && me.nickname && me.name && me.name.firstName && me.name.lastName)){
-                    console.log("email");
-                    console.log('me.email', me.email);
-                    console.log('me.email2', !!me.email);
+                    // console.log("email");
+                    // console.log('me.email', me.email);
+                    // console.log('me.email2', !!me.email);
                     return me.email;
                 }
 
@@ -363,12 +371,16 @@
         },
         methods:{
             getFeedNum(num,icon){
-                if(this.isLogin && num >= 0){
+                let count = num || 0;
+                if(this.isLogin && count > 0){
                     return num;
-                }else if(!this.isLogin && icon){
+                }else{
                     return icon;
                 }
-                return;
+            },
+            verilyValue(value){
+                let count = value || 0;
+                return count > 0;
             },
             isEmptyStr:function (s) {
                 if (s == undefined || s === '') {
@@ -504,6 +516,10 @@
                 store.dispatch('me/getOrderCountUnpaid');
 
                 store.dispatch('me/getHasNoCommentOrder')
+
+                if(!this.feed && this.me.id){
+                    store.dispatch('me/getFeed', this.me.id);
+                }
             }
 
             if(!this.isLogin){
