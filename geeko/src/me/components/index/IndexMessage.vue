@@ -63,7 +63,6 @@
                         <p>
                             <span class="user-name" 
                                 @click="changeToLogin" 
-                                :test="'nikename'+me.nickname"
                             >{{ disposeName }}</span>
                             
                             <!-- <template v-if="isLogin">

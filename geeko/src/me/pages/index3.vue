@@ -7,7 +7,7 @@
         </template>
 
         <template v-else>
-            <vue-content-loading :width="400" :height="700">
+            <vue-content-loading :width="400" :height="700" :speed="1">
                 <rect x="0" y="15" width="400" height="40" />
                 <rect x="0" y="65" width="400" height="40" />
                 <rect x="10" y="117" rx="10" width="380" height="245" />
@@ -34,22 +34,18 @@
                 initFlag:false
             }
         },
-        beforeRouteEnter (to, from, next) {
+        created(){
             let me = store.getters['me/me'];
             
             if(!!me){
-                next(vm =>{
-                    vm.initFlag = true;
-                })
+                this.initFlag = true;
                 return;
             }
 
             store.dispatch('me/init').then((data) => {
-                next(vm =>{
-                    vm.initFlag = true;
-                })
+                this.initFlag = true;
             }).catch(e => {
-                next();
+                console.log('e', e)
             });
         },
         components:{
