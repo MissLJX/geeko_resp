@@ -17,7 +17,7 @@
                 <p :class="rulePass.minLength?'pass':'nopass'">{{$t("label.mininum_length_six")}}</p>
                 <p :class="rulePass.maxLength?'pass':'nopass'">{{$t("label.maximun_length_twenty")}}</p>
                 <p :class="rulePass.noEmojis?'pass':'nopass'">{{$t("label.no_emojis")}}</p>
-            </div>
+            </div>   
             
             <div class="agreement-vue">
                 <div class="item1">
