@@ -10,7 +10,7 @@
             <p style="text-transform:capitalize"><span @click="window.location.href = '/'">{{$t('home')}}</span><span  @click="$router.back(-1)">> Order Detail</span> > {{$t('trackinfo')}}</p>
         </div>
         <div class="detailCon">
-            <h2>{{$t('trackinfo')}}</h2>   
+            <h2>{{$t('trackinfo')}}</h2>
             <ul v-if="logistics && logistics.packages" class="packageTab">
                 <li class="tab" @click="changeTab(key)" :class="{'active': key===isActive}" v-for="(item,key) in logistics.packages" :key="key">
                     {{item.name}}{{trackName}}
