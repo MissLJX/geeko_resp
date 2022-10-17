@@ -50,7 +50,7 @@
             <div class="rulesBox">
                 <div class="rulesTitle">{{$t('my_vip.level_requirement')}}</div>
                 <div v-html="vipConfig.levelRequirement"></div>
-                <div><a href="/fs/vip-policy-pc">{{$t('my_vip.view_rules')}} {{'>'}}</a> </div>
+                <div><a href="/policy/vip-policy">{{$t('my_vip.view_rules')}} {{'>'}}</a> </div>
 
             </div>
         </div>

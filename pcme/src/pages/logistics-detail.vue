@@ -4,7 +4,7 @@
             <p style="text-transform:capitalize"><span @click="window.location.href = '/'">{{$t('home')}}</span><router-link :to="getUrl('/me/m')"> > {{$t('me')}}</router-link><router-link :to="getUrl('/me/m/order')"> > {{$t('myorders')}}</router-link> > {{$t('trackinfo')}}</p>
         </div>
         <div class="detailHd" v-if="method==='ordertracking'">
-            <p style="text-transform:capitalize"><span @click="window.location.href = '/'">{{$t('home')}}</span><a href = "/fs/shipping-guid">> Order Tracking</a> > {{$t('trackinfo')}}</p>
+            <p style="text-transform:capitalize"><span @click="window.location.href = '/'">{{$t('home')}}</span><a href = "/policy/order-tracking">> Order Tracking</a> > {{$t('trackinfo')}}</p>
         </div>
         <div class="detailHd" v-if="method==='ordercode'">
             <p style="text-transform:capitalize"><span @click="window.location.href = '/'">{{$t('home')}}</span><span  @click="$router.back(-1)">> Order Detail</span> > {{$t('trackinfo')}}</p>

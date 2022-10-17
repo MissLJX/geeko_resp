@@ -486,7 +486,7 @@
                             // this.getData()
                             if(res.prompt && res.prompt.html){
                                 let policyUrl = /(\/fs\/points-policy)/
-                                let text = res.prompt.html.indexOf('/fs/points-policy') != -1 ? res.prompt.html.replace(policyUrl, '/fs/points-policy-pc'): res.prompt.html
+                                let text = res.prompt.html.indexOf('/policy/bonus-point') != -1 ? res.prompt.html.replace(policyUrl, '/policy/bonus-point-pc'): res.prompt.html
                                 this.tipContent = text;
                             }
                         }
@@ -529,7 +529,7 @@
                     if(result){
                         const {answers:answersJSON,id} = result
                         let policyUrl = /(\/fs\/points-policy)/
-                        let text = this.message.message.indexOf('/fs/points-policy') != -1 ? this.message.message.replace(policyUrl, '/fs/points-policy-pc'): this.message.message
+                        let text = this.message.message.indexOf('/policy/bonus-point') != -1 ? this.message.message.replace(policyUrl, '/policy/bonus-point-pc'): this.message.message
                         this.tipContent = text;
                         let answers;
                         if(answersJSON){

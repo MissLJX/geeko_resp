@@ -2,7 +2,7 @@
     <div class="credits-points">
         <div class="_header">
             <p>{{$t("point.my_points")}}</p>
-            <a href="/fs/points-policy-pc">
+            <a href="/policy/bonus-point-pc">
                 {{$t("point.learn_about_points")}} {{this.GLOBAL.sitename}} {{$t("point.points")}}
                 <span class="iconfont">&#xe73f;</span>
             </a>

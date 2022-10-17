@@ -3,7 +3,7 @@
         <nav-bar>
             <i class="iconfont el-back-font" slot="left" @click="$router.go(-1)">&#xe693;</i>
             <span slot="center">{{$t("point.my_points")}}</span>
-            <a :href="GLOBAL.getUrl('/fs/points-policy')" slot="right">
+            <a :href="GLOBAL.getUrl('/policy/bonus-point')" slot="right">
                 <span class="iconfont" style="font-size:20px;color:#222222;">&#xe73f;</span>
             </a>
         </nav-bar>

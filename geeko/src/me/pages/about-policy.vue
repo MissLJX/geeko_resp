@@ -8,28 +8,28 @@
         <div class="policy-container">
             <ul class="el-me-tool-list">
                 <li>
-                    <a href="/fs/shipping-policy" class="el-me-tool-list-item">
+                    <a href="/policy/shipping-policy" class="el-me-tool-list-item">
                         <touch-go class="el-me-tool-list-touch" :label1="$t('index.shipping_policy')">
                         </touch-go>
                     </a>
                 </li>
 
                 <li>
-                    <a href="/fs/return-policy" class="el-me-tool-list-item">
+                    <a href="/policy/return-policy" class="el-me-tool-list-item">
                         <touch-go class="el-me-tool-list-touch" :label1="$t('index.return_policy')">
                         </touch-go>
                     </a>
                 </li>
 
                 <li>
-                    <a href="/fs/privacy-security-policy" class="el-me-tool-list-item">
+                    <a href="/policy/privacy-security-policy" class="el-me-tool-list-item">
                         <touch-go class="el-me-tool-list-touch" :label1="$t('index.privacy_policy')">
                         </touch-go>
                     </a>
                 </li>
 
                 <li>
-                    <a href="/fs/out-of-stock" class="el-me-tool-list-item">
+                    <a href="/policy/out-of-stock" class="el-me-tool-list-item">
                         <touch-go class="el-me-tool-list-touch" :label1="$t('index.out_of_stock_policy')">
                         </touch-go>
                     </a>
@@ -43,7 +43,7 @@
                 </li> -->
 
                 <li>
-                    <a href="/fs/terms-conditions-notice" class="el-me-tool-list-item">
+                    <a href="/policy/terms-conditions-notice" class="el-me-tool-list-item">
                         <touch-go class="el-me-tool-list-touch" :label1="$t('index.terms_conditions')">
                         </touch-go>
                     </a>

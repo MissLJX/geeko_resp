@@ -52,7 +52,7 @@ export default {
     },
     methods:{
         toPointsPolicy(){
-            window.location.href = "/fs/points-policy"
+            window.location.href = "/policy/bonus-point"
         },
         closeMask(){
             this.$store.dispatch("setShowTip", false)

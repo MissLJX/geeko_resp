@@ -6,7 +6,7 @@
             <div class="creditTitle">
                 <span class="iconfont">&#xe6dd;</span>
                 <span class="titleContent">{{$t("my_wallet.wallet_credit")}}</span>
-                <a class="walletRule" href="/fs/wallet-policy-pc">{{$t("my_wallet.whats_this")}}?</a>
+                <a class="walletRule" href="/policy/wallet-policy">{{$t("my_wallet.whats_this")}}?</a>
             </div>
             <div class="creditContent">
                 <div>{{$t("total")}}</div>

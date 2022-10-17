@@ -213,25 +213,25 @@
                         {
                             name:this.$t("index.shipping_info"),
                             routerName:"",
-                            routerPath:"/fs/shipping-policy-pc",
+                            routerPath:"/policy/shipping-policy",
                             pushButton:true
                         },
                         {
                             name:this.$t("index.return_policy"),
                             routerName:"",
-                            routerPath:"/fs/return-policy-pc",
+                            routerPath:"/policy/return-policy",
                             pushButton:true
                         },
                         {
                             name:this.$t("index.terms_notices"),
                             routerName:"",
-                            routerPath:"/fs/privacy-policy-pc",
+                            routerPath:"/policy/privacy-security-policy",
                             pushButton:true
                         },
                         {
                             name:this.$t("index.privacy_poilicy"),
                             routerName:"",
-                            routerPath:"/fs/term-of-service-pc",
+                            routerPath:"/policy/terms-conditions-notice",
                             pushButton:true
                         }
                     ]
