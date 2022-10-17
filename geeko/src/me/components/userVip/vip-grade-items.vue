@@ -37,7 +37,7 @@
         </div>
 
         <div class="view-rules">
-            <a :href="GLOBAL.getUrl(`/fs/vip-policy`)">{{ $t('label.view_rules') }} ></a>
+            <a :href="GLOBAL.getUrl(`/policy/vip-policy`)">{{ $t('label.view_rules') }} ></a>
         </div>
     </div>
 </template>

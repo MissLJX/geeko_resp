@@ -77,7 +77,7 @@ export default {
             var t = `<img src='https://image.geeko.ltd/chicme/2021111101/right_icon.png' alt='ModalPoints' style='width:54px;'><div style="font-family: 'ACUMINPRO-BOLD';font-size: 18px;font-weight: normal;font-stretch: normal;letter-spacing: 0px;color: #222222;margin-top: 18px;margin-bottom: 14px;">Order Confirmed Successfully</div><div style="font-family: 'SLATEPRO';font-size: 14px;font-weight: normal;font-stretch: normal;line-height: 16px;letter-spacing: 0px;color: #222222;margin-bottom: 40px;"><p>You’ve got <strong style="color:#e64545;">100 points</strong> in your account.</p><p>100 points = $1 USD.</p></div>`
             if(this.$route.params.tipContent){
                 let policyUrl = /(\/fs\/points-policy)/
-                let text = this.$route.params.tipContent.indexOf('/fs/points-policy') != -1 ? this.$route.params.tipContent.replace(policyUrl, '/fs/points-policy-pc'): this.$route.params.tipContent
+                let text = this.$route.params.tipContent.indexOf('/policy/bonus-point') != -1 ? this.$route.params.tipContent.replace(policyUrl, '/policy/bonus-point-pc'): this.$route.params.tipContent
                 this.tipContent = text
             } else {
                 this.tipContent = t

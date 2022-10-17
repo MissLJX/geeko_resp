@@ -118,9 +118,9 @@ export default {
         },
         toNewPage(){
             if(this.isApp){
-                window.location.href = window.ctx||''+'/fs/points-policy?isApp=1'
+                window.location.href = window.ctx||''+'/policy/bonus-point?isApp=1'
             } else {
-                window.location.href = window.ctx||''+'/fs/points-policy'
+                window.location.href = window.ctx||''+'/policy/bonus-point'
             }
             
         }

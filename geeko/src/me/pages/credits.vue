@@ -3,7 +3,7 @@
         <nav-bar style="position:sticky;top:0;background:#fff;z-index: 11;">
             <i class="iconfont el-back-font" slot="left" @click="$router.go(-1)">&#xe693;</i>
             <span slot="center">{{$t("point.my_points")}}</span>
-            <a href="/fs/points-policy" slot="right">
+            <a href="/policy/bonus-point" slot="right">
                 <span class="iconfont" style="font-size:20px;color:#222222;">&#xe73f;</span>
             </a>
         </nav-bar>
