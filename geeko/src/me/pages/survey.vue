@@ -318,7 +318,7 @@
                             if(prompt?.html){
                                 let str = prompt.html;
                                 if(window.isApp == "true"){
-                                    str = str.replace(/fs\/points-policy/,"fs/points-policy?isApp=1");
+                                    str = str.replace(/policy\/bonus-point/,"policy/bonus-point?isApp=1");
                                 }
                                 _this.reminderMessage = str;
                             }else{

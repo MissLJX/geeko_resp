@@ -120,9 +120,9 @@
                         this.showNormalTip()
                     } else {
                         if(result.prompt && result.prompt.html){
-                            let policyUrl = /(\/fs\/points-policy)/
-                            let text = result.prompt.html.indexOf('/policy/bonus-point') != -1 ? result.prompt.html.replace(policyUrl, '/policy/bonus-point-pc'): result.prompt.html
-                            this.tipContent = text
+                            // let policyUrl = /(\/fs\/points-policy)/
+                            // let text = result.prompt.html.indexOf('/policy/bonus-point') != -1 ? result.prompt.html.replace(policyUrl, '/policy/bresult.prompt.htmlonus-point-pc'): result.prompt.html
+                            this.tipContent = result.prompt.html;
                         }
                         this.showPointsTip()
                         this.haveDoneBefore = true

@@ -146,9 +146,7 @@
                         this.$store.dispatch('makeSuggestion', formData).then((res) => {
                             // alert("success")
                             if(res.prompt && res.prompt.html){
-                                let policyUrl = /(\/fs\/points-policy)/
-                                let text = res.prompt.html.indexOf('/policy/bonus-point') != -1 ? res.prompt.html.replace(policyUrl, '/policy/bonus-point-pc'): res.prompt.html
-                                this.tipContent = text
+                                this.tipContent = res.prompt.html;
                             }
                             this.showTip = true;
                             this.isloding = false

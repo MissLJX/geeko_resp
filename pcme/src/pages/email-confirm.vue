@@ -74,7 +74,7 @@ import {getMessage} from '../api/index';
             let reg = /(#email#)/
             let policy = /(#pointsPolicy#)/
             let points = /(#points#)/
-            let policyUrl = /(\/fs\/points-policy)/
+            // let policyUrl = /(\/fs\/points-policy)/
             getMessage('M1621').then(res => {
                 // console.log(res.message)
                 if(res && res.message){
@@ -82,14 +82,16 @@ import {getMessage} from '../api/index';
                     let text1 = this.emailAddress ? text.replace(reg, this.emailAddress): text
                     let text2 = this.pointsNum ? text1.replace(points, this.pointsNum): text1 
                     let text3 = this.pointsNum ? text2.replace(points, this.pointsNum): text2
-                    let text4 = text3.indexOf('/policy/bonus-point') != -1 ? text3.replace(policyUrl, '/policy/bonus-point-pc'): text3
+                    // let text4 = text3.indexOf('/policy/bonus-point') != -1 ? text3.replace(policyUrl, '/policy/bonus-point-pc'): text3
+                    let text4 = text3;
                     this.tipContent = this.pointsPolicy ? text4.replace(policy, this.pointsPolicy): text4
                 } else {
                     let text = "<div style='text-align: center;margin-bottom:30px;'><img src='https://image.geeko.ltd/chicme/2021111101/right_icon.png' alt='ModalPoints' style='width:54px;'><div style='font-family: ACUMINPRO-BOLD;font-size: 18px;color: #222222;margin-top: 18px;margin-bottom: 14px;'>Verified Successfully!</div><div class='font-family: SLATEPRO;font-size: 14px;line-height: 16px;letter-spacing: 0px;color: #222222;margin-bottom: 18px;'><p>Your registered email address is:</p><p>#email#</p><p>You’ve got <strong>#points# points</strong> for verifying the first time.</p></div></div><div style='display: flex;align-items: center;justify-content: center;width: 400px;height: 76px;background-color: #fff1f4;border-radius: 2px;margin: 0 auto;margin-top:18px;color: #f4546d;margin-bottom: 30px;' ><img src='https://image.geeko.ltd/20220113/message-points.png' alt='Question' style='width: 22px;height: 22px;margin-right:30px'><div><div><strong style='font-family: ACUMINPRO-BOLD;'>#points# points</strong> in your account</div><div>100 points = $#pointsPolicy# <a href='/policy/bonus-point' style='vertical-align: middle;'><img src='https://image.geeko.ltd/chicme/2021111101/question.png' alt='Question' style='width: 14px;height: 14px;'></a></div></div></div>"
                     let text1 = this.emailAddress ? text.replace(reg, this.emailAddress): text
                     let text2 = this.pointsNum ? text1.replace(points, this.pointsNum): text1 
                     let text3 = this.pointsNum ? text2.replace(points, this.pointsNum): text2
-                    let text4 = text3.indexOf('/policy/bonus-point') != -1 ? text3.replace(policyUrl, '/policy/bonus-point-pc'): text3
+                    // let text4 = text3.indexOf('/policy/bonus-point') != -1 ? text3.replace(policyUrl, '/policy/bonus-point-pc'): text3
+                    let text4 = text3;
                     this.tipContent = this.pointsPolicy ? text4.replace(policy, this.pointsPolicy): text4
                 }
             })

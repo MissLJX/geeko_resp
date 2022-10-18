@@ -485,9 +485,9 @@
                             this.clickSubmit = true;
                             // this.getData()
                             if(res.prompt && res.prompt.html){
-                                let policyUrl = /(\/fs\/points-policy)/
-                                let text = res.prompt.html.indexOf('/policy/bonus-point') != -1 ? res.prompt.html.replace(policyUrl, '/policy/bonus-point-pc'): res.prompt.html
-                                this.tipContent = text;
+                                // let policyUrl = /(\/fs\/points-policy)/
+                                // let text = res.prompt.html.indexOf('/policy/bonus-point') != -1 ? res.prompt.html.replace(policyUrl, '/policy/bonus-point-pc'): res.prompt.html
+                                this.tipContent = res.prompt.html;
                             }
                         }
                     })
@@ -528,9 +528,9 @@
                 this.$store.dispatch("getSurvey",{}).then(data => data.result).then(result => {
                     if(result){
                         const {answers:answersJSON,id} = result
-                        let policyUrl = /(\/fs\/points-policy)/
-                        let text = this.message.message.indexOf('/policy/bonus-point') != -1 ? this.message.message.replace(policyUrl, '/policy/bonus-point-pc'): this.message.message
-                        this.tipContent = text;
+                        // let policyUrl = /(\/fs\/points-policy)/
+                        // let text = this.message.message.indexOf('/policy/bonus-point') != -1 ? this.message.message.replace(policyUrl, '/policy/bonus-point-pc'): this.message.message
+                        this.tipContent = this.message.message;
                         let answers;
                         if(answersJSON){
                             answers = JSON.parse(answersJSON)

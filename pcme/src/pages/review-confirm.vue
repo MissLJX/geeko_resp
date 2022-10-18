@@ -90,9 +90,9 @@ export default {
         this.getReviewOrder()
         let t = "<img src='https://image.geeko.ltd/chicme/2021111101/right_icon.png' alt='ModalPoints' style='width:54px;vertical-align: middle;'><div style='font-family: ACUMINPRO-BOLD;font-size: 18px;font-weight: normal;font-stretch: normal;letter-spacing: 0px;color: #222222;margin-top: 18px;margin-bottom: 14px;'>Reviewed Successfully</div><div style='font-family: SLATEPRO;font-size: 14px;font-weight: normal;font-stretch: normal;line-height: 16px;letter-spacing: 0px;color: #222222;margin-bottom: 40px;'><p>Thanks for your time!</p><p>Accepted review will earn <strong style='color:#e64545;'>100 points</strong>, have a look and enjoy shopping at ChicMe!</p><p>100 points = $1 <a href='/policy/bonus-point' style='vertical-align: middle;'><img src='https://image.geeko.ltd/chicme/2021111101/question.png' alt='Question' style='width: 14px;height: 14px;'></a></p></div>"
         if(this.$route.params.tipContent){
-            let policyUrl = /(\/fs\/points-policy)/
-            let text = this.$route.params.tipContent.indexOf('/policy/bonus-point') != -1 ? this.$route.params.tipContent.replace(policyUrl, '/policy/bonus-point-pc'): this.$route.params.tipContent
-            this.tipContent = text
+            // let policyUrl = /(\/fs\/points-policy)/
+            // let text = this.$route.params.tipContent.indexOf('/policy/bonus-point') != -1 ? this.$route.params.tipContent.replace(policyUrl, '/policy/bonus-point-pc'): this.$route.params.tipContent
+            this.tipContent = this.$route.params.tipContent
         } else {
             this.tipContent = t
         }
