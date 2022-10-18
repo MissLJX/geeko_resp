@@ -7,7 +7,7 @@
                 <a :href="GLOBAL.getUrl('/policy/wallet-policy')" slot="right">
                     <span class="iconfont" style="font-size:20px;color:#fff;">&#xe73f;</span>
                 </a>
-            </nav-bar>
+            </nav-bar>   
 
             <div class="wallet-position">
                 <div class="wallet-credit">
