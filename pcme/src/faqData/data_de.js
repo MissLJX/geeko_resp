@@ -298,7 +298,7 @@ const question13 = {
 					<strong>Die Liefertage = Verarbeitungstage + Versandtage.</strong>
 				</p>
 				<p>Sie können den Bestellstatus unter dem Button "Meine Bestellungen" überprüfen.</p>
-				<p>Weitere Informationen finden Sie unter folgendem Link:  <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
+				<p>Weitere Informationen finden Sie unter folgendem Link:  <a href="https://www.chicme.com/policy/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
 			</section>
 		</article>
 	`
@@ -944,7 +944,7 @@ Die Lieferung dauert ungefähr 7 bis 25 Werktage, um die Zielländer zu erreiche
 				  Bitte beachten Sie: Gesamtlieferzeit = Bearbeitungszeit + Versandzeit
                 </p>
                 <p>
-              Das voraussichtliche Ankunftsdatum erfahren Sie unter  <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a>
+              Das voraussichtliche Ankunftsdatum erfahren Sie unter  <a href="https://www.chicme.com/policy/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a>
                 </p>
 			</section>
 		</article>
@@ -964,7 +964,7 @@ const question46 = {
 					Nachdem wir das Paket an Sie versendet haben, werden die Versandinformationen aktualisiert, nachdem sie im nächsten Sortierzentrum eingetroffen sind, was einige Tage dauern kann. Dann können Sie sich in Ihr Benutzerkonto einloggen und "Meine Bestellungen" finden, um den Bestellstatus zu überprüfen und zu verfolgen.
 				</p>
 				<p>
-				   Das voraussichtliche Ankunftsdatum erfahren Sie unter <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a>
+				   Das voraussichtliche Ankunftsdatum erfahren Sie unter <a href="https://www.chicme.com/policy/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a>
                 </p>
 			</section>
 		</article>
@@ -1136,7 +1136,7 @@ const question55 = {
 Die Lieferung dauert ungefähr 3 bis 25 Werktage, um die Zielländer zu erreichen.
 				</p>
 				<p>Bitte beachten Sie: Gesamtlieferzeit = Bearbeitungszeit + Versandzeit</p>
-				<p>Das voraussichtliche Ankunftsdatum erfahren Sie unter<a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
+				<p>Das voraussichtliche Ankunftsdatum erfahren Sie unter<a href="https://www.chicme.com/policy/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
 			</section>
 		</article>
 	`
@@ -1190,7 +1190,7 @@ const question58 = {
 Die Lieferung dauert ungefähr 3 bis 25 Werktage, um die Zielländer zu erreichen.
 				</p>
 				<p>Bitte beachten Sie: Gesamtlieferzeit = Bearbeitungszeit + Versandzeit</p>
-				<p>Das voraussichtliche Ankunftsdatum erfahren Sie unter <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
+				<p>Das voraussichtliche Ankunftsdatum erfahren Sie unter <a href="https://www.chicme.com/policy/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
 			</section>
 		</article>
 	`
@@ -1210,7 +1210,7 @@ const question59 = {
 Die Lieferung dauert ungefähr 3 bis 25 Werktage, um die Zielländer zu erreichen.
 				</p>
 				<p>Bitte beachten Sie: Gesamtlieferzeit = Bearbeitungszeit + Versandzeit</p>
-				<p>Das voraussichtliche Ankunftsdatum erfahren Sie unter <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
+				<p>Das voraussichtliche Ankunftsdatum erfahren Sie unter <a href="https://www.chicme.com/policy/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
 			</section>
 		</article>
 	`
@@ -1231,7 +1231,7 @@ const question60 = {
 Die Lieferung dauert ungefähr 3 bis 25 Werktage, um die Zielländer zu erreichen.
 				</p>
 				<p>Bitte beachten Sie: Gesamtlieferzeit = Bearbeitungszeit + Versandzeit</p>
-				<p>Das voraussichtliche Ankunftsdatum erfahren Sie unter <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
+				<p>Das voraussichtliche Ankunftsdatum erfahren Sie unter <a href="https://www.chicme.com/policy/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
 			</section>
 		</article>
 	`
@@ -1782,7 +1782,7 @@ const question88 = {
 				</p>
 				<p>Die Lieferung dauert ungefähr 3 bis 25 Werktage, um die Zielländer zu erreichen.</p>
 				<p>Bitte beachten Sie: Gesamtlieferzeit = Bearbeitungszeit + Versandzeit</p>
-				<p>Das voraussichtliche Ankunftsdatum erfahren Sie unter  <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
+				<p>Das voraussichtliche Ankunftsdatum erfahren Sie unter  <a href="https://www.chicme.com/policy/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
 			</section>
 		</article>
 	`
@@ -1798,7 +1798,7 @@ const question89 = {
 			</header>
 			<section>
 				<p>
-					Hallo, wir haben die Großhandelspolitik: <a href="https://www.chicme.com/fs/wholesale-program">https://www.chicme.com/fs/wholesale-program-pc</a> 
+					Hallo, wir haben die Großhandelspolitik: <a href="https://www.chicme.com/policy/wholesale-program">https://www.chicme.com/fs/wholesale-program-pc</a> 
 				</p>
 			</section>
 		</article>

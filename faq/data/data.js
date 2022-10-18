@@ -299,7 +299,7 @@ const question13 = {
 					<strong>The delivery days = processing days + shipping days.</strong>
 				</p>
 				<p>You can check order status under the button "My Orders"</p>
-				<p>More information please click this link : <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
+				<p>More information please click this link : <a href="https://www.chicme.com/policy/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
 			</section>
 		</article>
 	`
@@ -942,7 +942,7 @@ const question45 = {
 				    Please note: Total Delivery Time = Processing Time + Shipping Time
                 </p>
                 <p>
-                For the estimated arrival date, please refer to <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a>
+                For the estimated arrival date, please refer to <a href="https://www.chicme.com/policy/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a>
                 </p>
 			</section>
 		</article>
@@ -962,7 +962,7 @@ const question46 = {
 					After we ship the package to you, the shipping information will be updated after it arrives at the next sorting center which may take a few days. Then you can log in your account and find "My orders" to check the order status and track.
 				</p>
 				<p>
-				    For the estimated arrival date, please refer to <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a>
+				    For the estimated arrival date, please refer to <a href="https://www.chicme.com/policy/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a>
                 </p>
 			</section>
 		</article>
@@ -1133,7 +1133,7 @@ const question55 = {
 					For each shipping method, we need 3-7 business days to prepare the order,Shipment takes approximately 3 to 25 business days to reach destination countries.
 				</p>
 				<p>Please note: Total Delivery Time = Processing Time + Shipping Time</p>
-				<p>For the estimated arrival date, please refer to <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
+				<p>For the estimated arrival date, please refer to <a href="https://www.chicme.com/policy/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
 			</section>
 		</article>
 	`
@@ -1186,7 +1186,7 @@ const question58 = {
 					For each shipping method, we need 3-7 business days to prepare the order,Shipment takes approximately 3 to 25 business days to reach destination countries.
 				</p>
 				<p>Please note: Total Delivery Time = Processing Time + Shipping Time</p>
-				<p>For the estimated arrival date, please refer to <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
+				<p>For the estimated arrival date, please refer to <a href="https://www.chicme.com/policy/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
 			</section>
 		</article>
 	`
@@ -1205,7 +1205,7 @@ const question59 = {
 					For each shipping method, we need 3-7 business days to prepare the order,Shipment takes approximately 3 to 25 business days to reach destination countries.
 				</p>
 				<p>Please note: Total Delivery Time = Processing Time + Shipping Time</p>
-				<p>For the estimated arrival date, please refer to <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
+				<p>For the estimated arrival date, please refer to <a href="https://www.chicme.com/policy/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
 			</section>
 		</article>
 	`
@@ -1225,7 +1225,7 @@ const question60 = {
 					For each shipping method, we need 3-7 business days to prepare the order,Shipment takes approximately 3 to 25 business days to reach destination countries.
 				</p>
 				<p>Please note: Total Delivery Time = Processing Time + Shipping Time</p>
-				<p>For the estimated arrival date, please refer to <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
+				<p>For the estimated arrival date, please refer to <a href="https://www.chicme.com/policy/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
 			</section>
 		</article>
 	`
@@ -1771,7 +1771,7 @@ const question88 = {
 				</p>
 				<p>Shipment takes approximately 3 to 25 business days to reach destination countries.</p>
 				<p>Please note: Total Delivery Time = Processing Time + Shipping Time</p>
-				<p>For the estimated arrival date, please refer to <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
+				<p>For the estimated arrival date, please refer to <a href="https://www.chicme.com/policy/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
 			</section>
 		</article>
 	`
@@ -1787,7 +1787,7 @@ const question89 = {
 			</header>
 			<section>
 				<p>
-					Hello, we have the wholesale policy:<a href="https://www.chicme.com/fs/wholesale-program">https://www.chicme.com/fs/wholesale-program-pc</a> you can have a look
+					Hello, we have the wholesale policy:<a href="https://www.chicme.com/policy/wholesale-program">https://www.chicme.com/fs/wholesale-program-pc</a> you can have a look
 				</p>
 			</section>
 		</article>

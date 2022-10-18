@@ -299,7 +299,7 @@ const question13 = {
 					<strong>Os dias de entrega = dias de processamento + dias de envio.</strong>
 				</p>
 				<p>Você pode verificar o status do pedido no botão "Meus pedidos".</p>
-				<p>Mais informações por favor clique neste link:<a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
+				<p>Mais informações por favor clique neste link:<a href="https://www.chicme.com/policy/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
 			</section>
 		</article>
 	`
@@ -943,7 +943,7 @@ A remessa leva de 7 a 25 dias úteis para chegar aos países de destino.
 				    Por favor note: Tempo Total de Entrega = Tempo de Processamento + Tempo de Envio
                 </p>
                 <p>
-                Para a data de chegada prevista, consulte <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a>
+                Para a data de chegada prevista, consulte <a href="https://www.chicme.com/policy/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a>
                 </p>
 			</section>
 		</article>
@@ -963,7 +963,7 @@ const question46 = {
 					Depois de enviarmos o pacote para você, as informações de envio serão atualizadas depois que ele chegar ao próximo centro de classificação, o que pode levar alguns dias. Em seguida, você pode fazer login na sua conta e encontrar "Meus pedidos" para verificar o status do pedido e rastrear.to check the order status and track.
 				</p>
 				<p>
-				   Para a data de chegada prevista, consulte  <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a>
+				   Para a data de chegada prevista, consulte  <a href="https://www.chicme.com/policy/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a>
                 </p>
 			</section>
 		</article>
@@ -1134,7 +1134,7 @@ const question55 = {
 A remessa leva de 3 a 25 dias úteis para chegar aos países de destino.
 				</p>
 				<p>Por favor note: Tempo Total de Entrega = Tempo de Processamento + Tempo de Envio</p>
-				<p>Para a data de chegada prevista, consulte <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
+				<p>Para a data de chegada prevista, consulte <a href="https://www.chicme.com/policy/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
 			</section>
 		</article>
 	`
@@ -1188,7 +1188,7 @@ const question58 = {
 A remessa leva de 3 a 25 dias úteis para chegar aos países de destino.
 				</p>
 				<p>Por favor note: Tempo Total de Entrega = Tempo de Processamento + Tempo de Envio</p>
-				<p>Para a data de chegada prevista, consulte  <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
+				<p>Para a data de chegada prevista, consulte  <a href="https://www.chicme.com/policy/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
 			</section>
 		</article>
 	`
@@ -1208,7 +1208,7 @@ const question59 = {
 A remessa leva de 3 a 25 dias úteis para chegar aos países de destino.
 				</p>
 				<p>Por favor note: Tempo Total de Entrega = Tempo de Processamento + Tempo de Envio</p>
-				<p>Para a data de chegada prevista, consulte<a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
+				<p>Para a data de chegada prevista, consulte<a href="https://www.chicme.com/policy/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
 			</section>
 		</article>
 	`
@@ -1229,7 +1229,7 @@ const question60 = {
 A remessa leva de 3 a 25 dias úteis para chegar aos países de destino.
 				</p>
 				<p>Por favor note: Tempo Total de Entrega = Tempo de Processamento + Tempo de Envio</p>
-				<p>Para a data de chegada prevista, consulte  <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
+				<p>Para a data de chegada prevista, consulte  <a href="https://www.chicme.com/policy/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
 			</section>
 		</article>
 	`
@@ -1777,7 +1777,7 @@ const question88 = {
 				</p>
 				<p>A remessa leva de 3 a 25 dias úteis para chegar aos países de destino.</p>
 				<p>Por favor note: Tempo Total de Entrega = Tempo de Processamento + Tempo de Envio</p>
-				<p>Para a data de chegada prevista, consulte <a href="https://www.chicme.com/fs/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
+				<p>Para a data de chegada prevista, consulte <a href="https://www.chicme.com/policy/shipping-policy?isouter=1">https://www.chicme.com/fs/shipping-policy-pc</a></p>
 			</section>
 		</article>
 	`
@@ -1793,7 +1793,7 @@ const question89 = {
 			</header>
 			<section>
 				<p>
-					Olá, nós temos a política de atacado: <a href="https://www.chicme.com/fs/wholesale-program">https://www.chicme.com/fs/wholesale-program-pc</a> você pode dar uma olhada
+					Olá, nós temos a política de atacado: <a href="https://www.chicme.com/policy/wholesale-program">https://www.chicme.com/fs/wholesale-program-pc</a> você pode dar uma olhada
 				</p>
 			</section>
 		</article>
