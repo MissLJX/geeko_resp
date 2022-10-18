@@ -105,7 +105,7 @@ import {getMessage} from '../api/index';
                 this.$router.push("/me/m/credits")
             },
             toPolicy(){
-                window.location.href = '/policy/bonus-point-pc'
+                window.location.href = '/policy/bonus-point'
             }
         }
     }
