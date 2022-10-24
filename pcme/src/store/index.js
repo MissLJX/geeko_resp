@@ -193,6 +193,7 @@ const getters = {
     unpaid: state => state.unpaid,
     paid: state => state.paid,
     returns: state => state.returns,
+    history: state => state.history,
 
     allLoading: state => state.allLoading,
     processingLoading: state => state.processingLoading,
@@ -943,13 +944,14 @@ const actions = {
             commit(types.ME_ORDER_COUNT_RETURN, count)
         })
     },
-    loadHistory({commit,state}, limit){
+    loadHistory({commit,state}, {limit,skip}){
         if(state.historyDone){
             return
         }
         commit(types.HOME_LOADING_HISTORY,true);
-        return api.getHistoryOrder(state.historySkip).then(orders => {
-            let list = orders.result?order.result:[];
+        let skipNum = skip !== undefined ? skip : state.historySkip
+        return api.getHistoryOrder(skipNum).then(orders => {
+            let list = orders.result ? orders.result: [];
             if(list && list.length > 0){
                 commit(types.HOME_ORDERS_HISTORY,list);
                 commit(types.HOME_ORDERS_HISTORY_SKIP,limit);
