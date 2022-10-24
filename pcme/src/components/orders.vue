@@ -1,12 +1,12 @@
 <template>
     <div>
-        <!-- <div class="toHistoryOrderList" v-if="!showHistory">
-            <a @click="showHistoryMethod()">Click here to check your previous orders ></a> 
+        <div class="toHistoryOrderList" v-if="!showHistory">
+            <a @click="showHistoryMethod()">{{$t("click_to_check_history")}} ></a> 
         </div>
         <div class="backToOrder" v-if="showHistory">
-            <span class="backIcon" @click="hideHistoryMethod()">{{'< Back'}}</span>
-            <span>HISTORY ORDERS</span>
-        </div> -->
+            <span class="backIcon" @click="hideHistoryMethod()">{{'< '+$t("back")}}</span>
+            <span>{{$t("history_orders")}}</span>
+        </div>
         <!-- {{orderStatus}} -->
         <div class="hd" v-if="!showHistory">
             <div class="el-tbl">
@@ -360,9 +360,7 @@
                                     cancelReturnOrder(item.id).then(res => {
                                         if(res.code == 200){
                                             _this.isloded = true
-                                            _this.clearSkip(
-                                                _this.getData('7','Returns',"click")
-                                            )
+                                            _this.clearSkip('7','Returns',"click",0)
                                         }
                                     }).catch(err => {
                                         alert(err.result)
@@ -708,14 +706,14 @@
             showHistoryMethod(){
                 this.showHistory = true;
                 this.clearSkip(
-                    0,'History','click'
+                    0,'History','click',0
                 )
                 
             },
             hideHistoryMethod(){
                 this.showHistory = false;
                 this.clearSkip(
-                    0,'all','click'
+                    0,'all','click',0
                 )
             }
         },

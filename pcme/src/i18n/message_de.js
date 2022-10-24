@@ -252,6 +252,10 @@ export default {
     expired_coupons: 'Abgelaufene Gutscheine',
     expired_tip: 'Abgelaufene Gutscheine werden nach 7 Tagen aus der Gutscheintasche entfernt.',
 
+    back: "Zurück",
+    click_to_check_history: 'Klicken Sie hier, um Ihre bisherigen Bestellungen zu überprüfen',
+    history_orders: 'GESCHICHTE AUFTRÄGE',
+
     label:{
         redeem_coupon:"Coupon einl\u00f6sen",
         hot_use_points:"Wie werden Punkte verwendet?",

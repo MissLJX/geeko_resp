@@ -250,6 +250,10 @@ export default {
     unused_coupons:"Unused Coupons",
     expired_coupons:"Expired Coupons",
     expired_coupoons_message:"Expired coupons will be removed from the coupon pocket after 7 days.",
+
+    back: "Back",
+    click_to_check_history: 'Click here to check your previous orders',
+    history_orders: 'HISTORY ORDERS',
     
     label:{
         redeem_coupon:"Redeem Coupon",

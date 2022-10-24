@@ -252,6 +252,10 @@ export default {
     expired_coupons : 'Coupons expirés',
     expired_tip: 'Les coupons expirés seront supprimés de la poche des coupons après 7 jours.',
 
+    back: "Réinitialiser",
+    click_to_check_history: 'Cliquez ici pour vérifier vos commandes précédentes',
+    history_orders: 'COMMANDES D\'HISTOIRE',
+
     label:{
         redeem_coupon:"Utilisez le coupon",
         hot_use_points:"Comment utiliser les points?",

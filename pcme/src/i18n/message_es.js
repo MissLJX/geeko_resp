@@ -252,6 +252,10 @@ export default {
     expired_coupons: 'Cupones Caducados',
     expired_tip: 'Los cupones vencidos se eliminarán del bolsillo de cupones después de 7 días.',
 
+    back: "Volver",
+    click_to_check_history: 'Haga clic aquí para consultar sus pedidos anteriores',
+    history_orders: 'HISTORIAL DE PEDIDOS',
+
     label:{
         redeem_coupon:"Canjear cupón",
         hot_use_points:"¿Cómo usar los puntos?",

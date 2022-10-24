@@ -254,6 +254,10 @@ export default {
     expired_coupons: 'Expired Coupons',
     expired_tip: 'Expired coupons will be removed from the coupon pocket after 7 days.',
 
+    back: "Back",
+    click_to_check_history: 'Click here to check your previous orders',
+    history_orders: 'HISTORY ORDERS',
+
     label:{
         redeem_coupon:"Redeem Coupon",
         hot_use_points:"How to Use Points?",
