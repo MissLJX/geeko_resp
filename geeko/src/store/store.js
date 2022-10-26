@@ -28,7 +28,7 @@ export const getters = {
     confirmCfg: state => state.confirmCfg,
     screenLoading: state => state.screenLoading,
     currencies: state => state.currencies,
-    productDetail:state => state.productDetail.products,
+    productDetail:state => state.productDetail,
     productId:state => state.productId,
     addToCartModalShow:state => state.addToCartModalShow,
     globalLoadingShow:state => state.globalLoadingShow,
@@ -164,7 +164,7 @@ export const actions = {
     getProductDetailMessage({commit},productId){
         return api.getProductDetailMessage(productId).then((result) => {
             commit(types.GET_PRODUCT_DETAIL_MESSAGE,result.result);
-            commit(types.GET_PRODUCT_DETAIL_MESSAGE_PRODUCT_ID,productId);
+            commit(types.GET_PRODUCT_DETAIL_MESSAGE_PRODUCT_ID,result.result.selectedProductId || productId);
             return result.result;
         }).catch((e) => {
             console.log('getProductDetailMessage报错: ',e)

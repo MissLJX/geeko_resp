@@ -1,41 +1,49 @@
 <template>
-    <div class="add-to-cart-modal">
-        <div class="_bd">
-            <product-swiper :images="productImages"></product-swiper>
-
-            <product-price :product="product" :variant-product="variantProduct"></product-price>
-            <!-- <product-price-points v-if="isPointsProduct" :product="product" :variant-product="variantProduct"></product-price-points> -->
-
-            <product-color
-                :variant-product="variantProduct"
-                :images="changeProductImage"
-                @changeProduct="changeProduct"
-                :product-id="productId"
-            ></product-color>
-
-            <product-size 
-                :product="product" 
-                :variant-id.sync="variantId" 
-                :variant-product="variantProduct"
-            ></product-size>
-
-        </div>
-        <div class="_fd" @click="addToCart(false)" v-if="!isPointsProduct">
-            <div>{{$t('label.add_to_cart')}}</div>
-        </div>
-
-        <div class="_fd pointsBtnBox" v-if="isPointsProduct">
-            <span :class="saveProduct" :product-id="productId"><i class="iconfont" style="font-size: 22px;">&#xe631;</i></span>
-            <div class="pointsBtn" >
-                <div v-if="unitedPrice" @click="addToCartOrigin">
-                    {{unitedPrice}}
-                    <span class="iconfont">&#xe6a8;</span>
+    <div class="add-to-cart-modal"> 
+        <div class="add-to-cart-container">
+            <div class="_bd">
+                <div style="padding-left:20px;">
+                    <product-swiper :images="productImages"></product-swiper>
                 </div>
-                <div v-if="pointsPrice" v-html="pointsPrice" @click="addToCartPoints"></div>
+
+                <div class="padding-container">
+                    <product-price :product="product" :variant-product="variantProduct"></product-price>
+                    <!-- <product-price-points v-if="isPointsProduct" :product="product" :variant-product="variantProduct"></product-price-points> -->
+
+                    <product-color
+                        :variant-product="variantProduct"
+                        :products="products"
+                        :images="changeProductImage"
+                        @changeProduct="changeProduct"
+                        :is-beauty="isBeauty"
+                        :product-id="productId"
+                        v-if="products && products.length > 1"
+                    ></product-color>
+
+                    <product-size 
+                        :product="product" 
+                        :variant-id.sync="variantId" 
+                        :variant-product="variantProduct"
+                        v-if="!isBeauty"
+                    ></product-size>
+                </div>
+
+            </div>
+            <div class="_fd" @click="addToCart(false)" v-if="!isPointsProduct">
+                <div>{{$t('label.add_to_cart')}}</div>
+            </div>
+
+            <div class="_fd pointsBtnBox" v-if="isPointsProduct">
+                <span :class="saveProduct" :product-id="productId"><i class="iconfont" style="font-size: 22px;">&#xe631;</i></span>
+                <div class="pointsBtn" >
+                    <div v-if="unitedPrice" @click="addToCartOrigin">
+                        {{unitedPrice}}
+                        <span class="iconfont">&#xe6a8;</span>
+                    </div>
+                    <div v-if="pointsPrice" v-html="pointsPrice" @click="addToCartPoints"></div>
+                </div>
             </div>
         </div>
-
-        
     </div>
 </template>
 
@@ -57,6 +65,7 @@
                 productId:"0db00778-bf12-4d05-ad59-0cbccf655d46",
                 variantId:"1k6N2S7c7S24174y6m4b49740I",
                 isPointsProduct: false,
+                isBeauty:false
             }
         },
         computed:{
@@ -110,10 +119,12 @@
             }
         },
         created(){
-            this.products = this.$store.getters.productDetail;
+            let productVo = this.$store.getters.productDetail;
+            this.products = productVo.products;
             this.productId = this.$store.getters.productId;
             this.variantId = this.product.variants[0].id;
             this.isPointsProduct = this.$store.getters.isPointsProduct;
+            this.isBeauty = productVo.style === 1;
             // console.log(this.isPointsProduct, this.product, this.variantProduct)
         },
         components:{
@@ -355,54 +366,69 @@
         left: 0;
         width: 100%;
         transition: bottom .4s ease;
-        border-top-left-radius: 4px;
-        border-top-right-radius: 4px;
 
-        ._bd{
-            padding-left: 20px;
-            padding-right: 20px;
-            padding-top: 15px;
-        }
+        .add-to-cart-container{
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+            max-height: 80vh;
+            overflow-y: auto;
 
-        ._fd{
-            padding: 12px 20px;
-            box-shadow: 0px 2px 20px 0px rgba(153,153,153,.5);
-            margin-top: 30px;
-
-            & > div{
-                color: #fff;
-                font-family: SlatePro-Medium;
-                font-size: 18px;
-                text-align: center;
-                height: 42px;
-                line-height: 42px;
-                background-color: #121314;
-                border-radius: 2px;
-                cursor: pointer;
-                display: inline-block;
-                width: 100%;
-                text-transform: uppercase;
+            ._bd{
+                margin-bottom: 60px;
+                padding-top: 15px;
             }
-        }
-        .pointsBtnBox{
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
 
-            .pointsBtn{
-                background: transparent;
-                margin-left: 10px;
+            .padding-container{
+                padding-left: 20px;
+                padding-right: 20px;
+                padding-block: 20px;
+            }
+
+            ._fd{
+                padding: 12px 20px;
+                box-shadow: 0px 2px 20px 0px rgba(153,153,153,.5);
+                margin-top: 30px;
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+                z-index: 10;
+                background-color: #ffffff;
+
+                & > div{
+                    color: #fff;
+                    font-family: SlatePro-Medium;
+                    font-size: 18px;
+                    text-align: center;
+                    height: 42px;
+                    line-height: 42px;
+                    background-color: #121314;
+                    border-radius: 2px;
+                    cursor: pointer;
+                    display: inline-block;
+                    width: 100%;
+                    text-transform: uppercase;
+                }
+            }
+            .pointsBtnBox{
                 display: flex;
+                align-items: center;
                 justify-content: space-between;
 
-                &>div{
-                    flex: 1;
-                    margin-right: 18px;
-                    background: #222;
-                }
+                .pointsBtn{
+                    background: transparent;
+                    margin-left: 10px;
+                    display: flex;
+                    justify-content: space-between;
 
-                &>div:last-child{
-                    margin-right: 0;
+                    &>div{
+                        flex: 1;
+                        margin-right: 18px;
+                        background: #222;
+                    }
+
+                    &>div:last-child{
+                        margin-right: 0;
+                    }
                 }
             }
         }

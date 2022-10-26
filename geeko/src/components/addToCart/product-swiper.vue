@@ -14,7 +14,7 @@
                 :data-pproduct2="item.productId"
                 @click.native="changeProduct(item)"
             >
-                    <img :src="'https://image.geeko.ltd/medium/'+getDifferenceImage(item)" :alt="getDifferenceImage(item)">
+                <img :src="'https://image.geeko.ltd/medium/'+getDifferenceImage(item)" :alt="getDifferenceImage(item)">
             </swiper-slide>
         </swiper>
     </div>
@@ -92,7 +92,7 @@
 <style lang="scss" scoped>
     .product-swiper{
         .swiper-container{
-            overflow: initial;
+            // overflow: initial;
             .swiper-slide{
                 &.item{
                     background-color: #efebef;

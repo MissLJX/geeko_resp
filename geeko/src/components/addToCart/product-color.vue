@@ -6,24 +6,29 @@
         </div>
 
         <div class="color-swiper">
-            <product-swiper 
+            <!-- <product-swiper 
                 v-bind="$attrs" 
                 v-on='$listeners'
                 :type="2" 
                 :productId="productId"
-            ></product-swiper>
+            ></product-swiper> -->
+            <product-color-item
+                v-bind="$attrs" 
+                v-on='$listeners'
+                :product-id="productId"
+            />
         </div>
         
     </div>
 </template>
 
 <script>
-    import ProductSwiper from "./product-swiper.vue"
+    import ProductColorItem from "./product-color-item.vue"
 
     export default {
         name:"ProductColor",
         components:{
-            "product-swiper":ProductSwiper
+            "product-color-item":ProductColorItem
         },
         props:{
             variantProduct:{
@@ -59,7 +64,7 @@
         }
 
         .color-swiper{
-            margin-top: 8px;
+            // margin-top: 8px;
         }
     }
 </style>
