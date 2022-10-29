@@ -519,6 +519,7 @@
             color: #E64545;
             font-family: 'SlatePro-Medium';
             font-size: 40px;
+            line-height: 40px;
         }
         .tot-credits{
             font-size: 20px;
