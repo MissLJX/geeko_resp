@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.21",
     "react": "^16.12.0",
     "react-intl": "^2.4.0",
     "react-scripts": "1.1.4"
