@@ -125,8 +125,10 @@
                     return this.me.nickname;
                 }else if(this.me.name && (this.me.name.firstName || this.me.name.lastName)){
                     return this.getName(this.me.name.firstName) + " " + this.getName(this.me.name.lastName);
-                }else{
-                    return this.me.email;
+                } else if(this.me.email){
+                    return this.me.email
+                } else if(this.me.phoneNumber){
+                    return this.me.phoneNumber
                 }
             },
             hasOwnApp(){
