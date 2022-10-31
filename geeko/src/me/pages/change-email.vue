@@ -27,7 +27,7 @@
         </div>
 
 
-        <div class="el-email-block chan-email-padding">
+        <div class="el-email-block chan-email-padding" v-if="email">
             <div>
                 <p class="__font">{{$t('label.your_address')}}:</p>
                 <div class="st-flex st-justify-b el-email-hor">
@@ -148,7 +148,8 @@
                 },
                 subEmail: {
                     email: null
-                }
+                },
+                email:""
             }
         },
         methods: {
@@ -251,6 +252,7 @@
         },
         created(){
             this.subEmail.email = this.$store.getters['me/me'].communicationEmail
+            this.email = this.$store.getters['me/me'].email;
         }
     }
 </script>
