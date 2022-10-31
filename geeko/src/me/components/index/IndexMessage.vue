@@ -306,11 +306,13 @@
                 }else if(this.isLogin && me.name && (!this.isEmptyStr(me.name.firstName) || !this.isEmptyStr(me.name.lastName))){
                     // console.log('name');
                     return this.getName(me.name.firstName) + " " + this.getName(me.name.lastName);
-                }else if(this.isLogin && !(me && me.nickname && me.name && me.name.firstName && me.name.lastName)){
+                }else if(this.isLogin && me.email){
                     // console.log("email");
                     // console.log('me.email', me.email);
                     // console.log('me.email2', !!me.email);
                     return me.email;
+                }else if(this.isLogin && me.phoneNumber){
+                    return me.phoneNumber;
                 }
 
                 return this.$t("index.login_or_register");
