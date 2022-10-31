@@ -92,7 +92,8 @@
             </div>
             <div class="clearBoth">
                 <div class="input-con required w-left">
-                    <label>{{$t('zipCode')}}:</label>
+                    <label v-if="countrySelected!=='BR'">{{$t('zipCode')}}:</label>
+                    <label v-if="countrySelected==='BR'">CEP:</label>
                     <div class="x-default-input">
                         <input name="zipCode" v-model="shipping.zipCode" v-validate="zip_validate"
                                :class="{'st-input':true, 'st-input-danger':errors.has('zipCode')}" type="text"
@@ -103,18 +104,23 @@
                 </div>
                 <div class="input-con required w-left">
                     <label>{{$t('phoneNumber')}}:</label>
-                    <div class="x-default-input" style="display:flex;align-items: center;justify-content: space-between;">
-                        <span v-if="countrySelected==='BR'">BR +55</span>
+                    <div class="x-default-input" style="display:flex;align-items: center;justify-content: space-between;margin-bottom: 0;">
+                        <span v-if="countrySelected==='BR'" style="width:">BR +55</span>
                         <span v-if="countrySelected != 'BR' && phoneAreaCode">{{phoneAreaCode}}</span>
-                        <input v-if="countrySelected==='BR'" name="phoneArea" type="number" v-model="shipping.phoneArea" placeholder="Código" class="x-default-input"  oninput="if(value.length>2) value=value.slice(0,2)" style="width: 55px;margin: 0 10px 0;height: 40px; padding-left: 0px; text-align: center;">
-                        <input name="phoneNumber" v-model="shipping.phoneNumber" v-validate="phone_validate"
+                        <div>
+                            <input name="phoneNumber" 
+                               v-model="shipping.phoneNumber"
+                               v-validate="phone_validate"
                                :class="{'st-input':true, 'st-input-danger':errors.has('phoneNumber'),'phonenum':countrySelected==='BR' || phoneAreaCode}"
                                style="flex:1;"
                                type="text"
                                />
-                        <span v-show="errors.has('phoneNumber')"
-                              class="st-is-danger">{{errors.first("phoneNumber")}}</span>
+                           
+                        </div>
+                        
                     </div>
+                    <span v-show="errors.has('phoneNumber')"
+                                class="st-is-danger">{{errors.first("phoneNumber")}}</span>
                 </div>
             </div>
             <div class="input-con required p-relative" v-if="countrySelected==='BR'">
@@ -191,6 +197,9 @@
                         addressItem.lastName = "";
                     }
                 }
+                if(addressItem.phoneArea && addressItem.phoneNumber){
+                    addressItem.phoneNumber = addressItem.phoneArea + addressItem.phoneNumber
+                }
             }
 
             return {
@@ -264,7 +273,10 @@
             phoneAreaCode(){
                 let obj = this.phoneAreaCodeList?.find(code => code?.country == this.countrySelected)
                 return obj ? obj?.country + ' + ' + obj?.areaCode : ''
-            }
+            },
+            // phoneNumberC() {
+            //     return this.shipping.phoneArea+this.shipping.phoneNumber
+            // }
         },
         methods: {
             closeHandle(){
@@ -353,6 +365,9 @@
             maskGoOn(){
                 this.shipping.checkIPCountry = false
                 this.validateBeforeSubmit()
+            },
+            phoneNumberChange(e) {
+                console.log(e)
             }
         },
         created(){

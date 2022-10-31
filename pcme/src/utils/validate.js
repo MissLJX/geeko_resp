@@ -16,13 +16,13 @@ Validator.extend('phone', {
 });
 Validator.extend('phone_br', {
     getMessage: function () { 
-        if($t.locale && $t.messages){
-            return $t.messages[$t.locale].phone_enter_rule_br
-        }
-        return "Insira pelo menos 8-9 números." 
+        // if($t.locale && $t.messages){
+        //     return $t.messages[$t.locale].phone_enter_rule_br
+        // }
+        return "Insira pelo menos 10-11 números." 
     },
     validate: value => {
-        return /^\d{8,9}$/.test(value)
+        return /^\d{10,11}$/.test(value)
     }
 });
 Validator.extend('phone_ae', {

@@ -103,7 +103,8 @@
                     <!-- <div class="st-flex st-justify-b el-double-item-container"> -->
                         <div>
                             <p class="st-control">
-                                <label v-if="showLabel" :class="{'el-label':true}">{{$t('label.zipCode')}}</label>
+                                <label v-if="showLabel && shipping.country == 'BR'" :class="{'el-label':true}">CEP</label>
+                                <label v-if="showLabel && shipping.country !== 'BR'" :class="{'el-label':true}">{{$t('label.zipCode')}}</label>
                                 <input name="zipCode" v-model="shipping.zipCode" v-validate="'required'"
                                        :class="{'st-input':true, 'st-input-danger':errors.has('zipCode')}" type="text"
                                        :placeholder="$t('label.zipCode')+' *'"/>
@@ -118,8 +119,9 @@
                                 <div class="phoneBlock">
                                     <span v-if="countrySelected==='BR'">BR +55</span>
                                     <span v-if="countrySelected != 'BR' && phoneAreaCode">{{phoneAreaCode}}</span>
-                                    <input v-if="countrySelected==='BR'" name="phoneArea" type="number" v-model="shipping.phoneArea" placeholder="Código" class="br-input"  oninput="if(value.length>2) value=value.slice(0,2)"></input>
-                                    <input name="phoneNumber" v-model="shipping.phoneNumber" v-validate="'required'"
+                                    <input name="phoneNumber" 
+                                        v-model="shipping.phoneNumber" 
+                                        v-validate="'required'"
                                         :class="{'st-input':true, 'st-input-danger':errors.has('phoneNumber')}"
                                         type="text"
                                         :placeholder="$t('label.phoneNumber')+' *'"/>
@@ -280,6 +282,9 @@
                         addressItem.firstName = arrs[0];
                         addressItem.lastName = "";
                     }
+                }
+                if(addressItem.phoneArea && addressItem.phoneNumber){
+                    addressItem.phoneNumber = addressItem.phoneArea + addressItem.phoneNumber
                 }
             }
 

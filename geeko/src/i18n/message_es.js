@@ -212,7 +212,7 @@ export default {
         wallet:"Billetera",
         get_discount:"Obtén $ 10",
         my_order:"Mis Pedidos",
-        view_all:"Ver todo",
+        view_all:"Veja Tudo",
         unpaid:"No pagado",
         processing:"Procesando",
         shipped:"Enviado",
