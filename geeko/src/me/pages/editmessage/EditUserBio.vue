@@ -53,7 +53,9 @@
                 store.dispatch("me/updateCustomerSave",obj).then(result => {
                     _this.isLoadingShow = false;
                     _this.$router.go(-1);
-                });
+                }).catch(erros =>{
+                    _this.isLoadingShow = false;
+                })
             }
         },
         created(){
