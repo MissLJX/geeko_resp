@@ -13,10 +13,10 @@
                     {{fullName}}
                     <span v-if="vipShow" style="font-size:20px;" class="iconfont">&#xe783;</span>
                 </p>
-                <p class="el-me-email" :style="emailStyle">
+                <p class="el-me-email" :style="emailStyle" >
                     {{me.email}}
-                    <span class="verify" v-if="!me.isConfirmEmail" :style="verifyStyle" @click="confirmEmail">{{$t('verify')}}</span>
-                    <span class="have-verify" v-if="me.isConfirmEmail && !vipShow"><i class="iconfont">&#xe73d;</i>{{$t('verified')}}</span>
+                    <span class="verify" v-if="!me.isConfirmEmail && me.email" :style="verifyStyle" @click="confirmEmail">{{$t('verify')}}</span>
+                    <span class="have-verify" v-if="me.isConfirmEmail && !vipShow && me.email"><i class="iconfont">&#xe73d;</i>{{$t('verified')}}</span>
                 </p>
             </div>
             <div v-if="me.vipUser && vipShow">

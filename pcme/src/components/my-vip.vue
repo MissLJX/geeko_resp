@@ -8,7 +8,7 @@
             <div class="vipCard" :style="vipCardImg">
                 <div class="topLine">
                     <div class="cardNumber">
-                        <span>{{me.email}}</span>  
+                        <span>{{fullName}}</span>  
                         <span class="iconfont">&#xe70e;</span>  
                     </div>
                     <div class="expiredTime" v-if="vipExpiredDate">
@@ -941,7 +941,18 @@ export default {
         },
         vipLevelUpImg(){
             return this.vipConfig.vipStyles.find(v => v.level == this.vipLevel).cardImageURL
-        }
+        },
+        fullName() {
+            if(this.me && this.me.nickname){
+                return this.me.nickname;
+            }else if(this.me.name && (this.me.name.firstName || this.me.name.lastName)){
+                return this.getName(this.me.name.firstName) + " " + this.getName(this.me.name.lastName);
+            } else if(this.me.email){
+                return this.me.email
+            } else if(this.me.phoneNumber){
+                return this.me.phoneNumber
+            }
+        },
     },
     watch:{
         vipConfig(newV,oldV){
