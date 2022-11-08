@@ -258,33 +258,8 @@
         computed:{
             ...mapGetters(['orderdetail','shareurl','cancelReasons']),
             getPayUrl(){
-                switch(this.orderdetail.payMethod){
-                    case '20':
-                    case '21':
-                        return this.orderdetail.mercadopagoPayURL
-                    case '16':
-                    case '23':
-                    case '25':
-                    case '29':
-                    case '27':
-                    case '28':
-                    case '30':
-                    case '31':
-                    case '34':
-                    case '35':
-                    case '37':
-                    case '38':
-                    case '40':
-                    case '41':
-                    case '43':
-                    case '44':
-                        return this.orderdetail.boletoPayCodeURL
-                    case '129':	
-                    case '130':
-                        return this.orderdetail.payCodeUrl
-                    default:
-                        return null
-                }
+                let item = this.orderdetail;
+                return item.mercadopagoPayURL || item.boletoPayCodeURL || item.payCodeUrl;
             },
             getBtnText(){
                 switch(this.orderdetail.payMethod){
@@ -312,7 +287,7 @@
                     case '25':
                         return 'Imprimir boleto'
                     default:
-                        return null
+                        return this.$t("paynow")
                 }
             },
             getBtnText2(){

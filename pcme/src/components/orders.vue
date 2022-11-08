@@ -565,7 +565,15 @@
                 if(isReturn){
                     this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/order/return-detail/'+item.id})
                 } else {
-                    this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/order/detail/'+item.id})
+                    if(item.fulfillmentStatus === constant.TOTAL_STATUS_UNPAID){
+                        if(!this.getPayUrl(item)){
+                            window.location.href = `${utils.PROJECT}/checkout/${item.id}`;
+                        }else{
+                            window.location.href = this.getPayUrl(item);
+                        }
+                    }else{
+                        this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/order/detail/'+item.id})
+                    }
                 }
             },
             closeSelect1(){
@@ -602,7 +610,7 @@
             },
             checkoutUrl(id){
                 if(id){
-                    return window.ctx + '/checkout/' +id
+                    return `${utils.PROJECT}/checkout/${id}`;
                 }
             },
             addProducts(orderItems){
@@ -627,33 +635,7 @@
                 }
             },
             getPayUrl(item){
-                switch(item.payMethod){
-                    case '20':
-                    case '21':
-                        return item.mercadopagoPayURL
-                    case '16':
-                    case '23':
-                    case '25':
-                    case '29':
-                    case '27':
-                    case '28':
-                    case '30':
-                    case '31':
-                    case '34':
-                    case '35':
-                    case '37':
-                    case '38':
-                    case '40':
-                    case '41':
-                    case '43':
-                    case '44':
-                        return item.boletoPayCodeURL
-                    case '129':	
-                    case '130':
-                        return item.payCodeUrl
-                    default:
-                        return null
-                }
+                return item.mercadopagoPayURL || item.boletoPayCodeURL || item.payCodeUrl;
             },
             getBtnText(item){
                 switch(item.payMethod){
@@ -681,7 +663,7 @@
                     case '25':
                         return 'Imprimir boleto'
                     default:
-                        return null
+                        return this.$t("paynow")
                 }
             },
             getOrderStatusName(status){
