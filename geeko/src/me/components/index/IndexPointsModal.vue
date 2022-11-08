@@ -2,11 +2,6 @@
     <div class="index-points-modal">
         <transition name="fade">
             <div class="points_message" v-if="isShowMessage">
-                <!-- Vue-i18n  组件插值语法 -->
-                <!-- <i18n path="index.the_countdown_begins" tag="span" for="index.the_countdown_begins_discount">
-                    <span class="_font">{{ $t('index.the_countdown_begins_discount') }}</span>
-                </i18n> -->
-                <!-- <span>The countdown begins. <span class="_font">100 points = US$2.</span> Grab it or regret it! </span> -->
                 <span v-html="this.indexMessage"></span>
             </div>
         </transition>
