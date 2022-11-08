@@ -201,7 +201,6 @@ export default {
     sure_to_cancel_order: 'Are you sure to cancel this order? After cancelling, it can not be recovered.',
     choose_reason: 'Please choose the reason for cancelling the order',
     select_reason: 'Please select a reason',
-
     add_success: 'Add Success',
     confirm_your_order: 'Are you sure want to confirm your order?',
     phone_enter_rule: 'Incorrect phone number format (numbers only, no formatting)',
@@ -213,7 +212,6 @@ export default {
     zip_enter_rule_br: 'O formato do endereço está incorreto, preencha o formulário de [01310-000]',
     cpf_enter_rule: 'Wrong CPF',
     birth_date_error_alert: 'Date of birth must be less than the current time',
-
     return_logistics: 'Return Logistics',
     please_select_logistics: 'Please select your logistics',
     logistics_company_name: 'Logistics Company Name',
@@ -226,7 +224,6 @@ export default {
     logistics_info_not_empty: 'Logistics information and logistics voucher can not be empty at the same time',
     logistics_name_not_empty: 'Logistics Company Name Can not be empty',
     track_number_not_empty: 'trackingNumber can not be empty',
-
     cancel_return:'Cancel Return',
     edit_return_receipt: 'Edit Return Receipt',
     return_receipt: 'Return Receipt',
@@ -240,24 +237,19 @@ export default {
     loading:'loading',
     return_upload_tip: 'A photo of the receipt from the shipping company indicating the weight of the package and tracking number',
     total_reund:'Total Reund',
-
     modify: 'modify',
 	please_sure_address_correct: 'Please make sure the address you fill is correct',
-
     products:'Products',
     return: "Return",
     unused_coupons:"Unused Coupons",
     expired_coupons:"Expired Coupons",
     expired_coupoons_message:"Expired coupons will be removed from the coupon pocket after 7 days.",
-
     unused_coupons: 'Unused Coupons',
     expired_coupons: 'Expired Coupons',
     expired_tip: 'Expired coupons will be removed from the coupon pocket after 7 days.',
-
     back: "Back",
     click_to_check_history: 'Click here to check your previous orders',
     history_orders: 'HISTORY ORDERS',
-
     label:{
         redeem_coupon:"Redeem Coupon",
         hot_use_points:"How to Use Points?",
@@ -366,138 +358,8 @@ export default {
         survey_thanks_more: ' in your account, have a look and enjoy shopping at {website}!',
         survey_go_shopping: 'Go Shopping',
         survey_view_points: 'View Points',
-        survey_question_1: {
-            title: '*Regarding shopping fashion items, do you typically make a decision beforehand or at the time of shopping?',
-            answer1: 'Beforehand',
-            answer2: 'At the time of purchase'
-        },
-        survey_question_2: {
-            title: '*Which factors are important to you when you make the decision to purchase a product?（You can choose one or more）',
-            answer1: 'Brand',
-            answer2: 'Price',
-            answer3: 'Quality',
-            answer4: 'Style',
-            answer5: 'Color choices',
-            answer6: 'Return and change',
-            answer7: 'Customer services',
-            answer8: 'Free shipping',
-        },
-        survey_question_3: {
-            title: '*How often do you shop for fashion items?',
-            answer1: 'Several times a week',
-            answer2: 'About once a week',
-            answer3: 'Several times a month',
-            answer4: 'About once a month',
-            answer5: 'Less than once a month',
-        },
-        survey_question_4: {
-            title: '*What promotion would you prefer?',
-            answer1: 'Discount',
-            answer2: 'Coupon',
-            answer3: 'Purchase with gift',
-            answer4: 'Bonus point',
-            answer5: 'Exclusive code',
-        },
-        survey_question_5: {
-            title: '*Which kind of style would you prefer?',
-            answer1: 'Regular fit',
-            answer2: 'Oversize',
-            answer3: 'Slim',
-            answer4: "I'm willing to try differnet styles",
-        },
-        survey_question_6: {
-            title: '*How did you know {website}?（You can choose one or more）',
-            answer1: 'Google',
-            answer2: 'Facebook',
-            answer3: 'Instagram',
-            answer4: 'YouTube',
-            answer5: 'Tik Tok',
-            answer6: 'Pinterest',
-            answer7: 'Recommend by friends',
-            answer8: 'Others',
-        },
-        survey_question_7: {
-            title: '*How familiar are you with {website}?',
-            answer1: 'Extremely familiar',
-            answer2: 'Very familiar',
-            answer3: 'Somewhat familiar',
-            answer4: 'Not so familiar',
-            answer5: 'Not at all familiar',
-        },
-        survey_question_8: {
-            title: '*How well does our website & APP meet your needs?',
-            answer1: 'Extremely well',
-            answer2: 'Very well',
-            answer3: 'Somewhat well',
-            answer4: 'Not so well',
-            answer5: 'Not at all well',
-        },
-        survey_question_9: {
-            title: '*How easy was it to find what you were looking for on our website & APP？',
-            answer1: 'Extremely easy',
-            answer2: 'Very easy',
-            answer3: 'Somewhat easy',
-            answer4: 'Not so easy',
-            answer5: 'Not at all easy',
-        },
-        survey_question_10: {
-            title: '*Would you recommend {website} website and APP to friends or colleagues?',
-            answer1: 'Yes',
-            answer2: 'No'
-        },
-        survey_question_11: {
-            title: '*What are the brands that you typically buy ? Please list three of your favorite.',
-        },
-        survey_question_12: {
-            title: '*Do you have any comments about how we can improve our website & APP?',
-        },
-        survey_question_13: {
-            title: '*What is your age?',
-            answer1: 'Under 18',
-            answer2: '18-24',
-            answer3: '25-34',
-            answer4: '35-44',
-            answer5: '45-54',
-            answer6: '55-64',
-            answer7: '65 plus',
-        },
-        survey_question_14: {
-            title: '*What is your gender?',
-            answer1: 'Female',
-            answer2: 'Male',
-            answer3: 'Others'
-        },
-        survey_question_15: {
-            title: '*Which country do you live in?',
-        },
-        survey_question_16: {
-            title: '*What kind of occupation are you in?',
-            answer1: 'Agriculture, forestry, and fishing',
-            answer2: 'Energy',
-            answer3: 'Information technology/software',
-            answer4: 'Transportation',
-            answer5: 'Entertainment publishing/journalism',
-            answer6: 'Real Estate',
-            answer7: 'Education',
-            answer8: 'Sports',
-            answer9: 'Government',
-            answer10: 'Students',
-            answer11: 'Housewives',
-            answer12: 'Unemployment',
-            answer13: 'Others',
-        },
-        survey_question_17: {
-            title: '*On average, how much do you spend on fashion items each month?',
-            answer1: 'Under $30',
-            answer2: '$30-$50',
-            answer3: '$50-$100',
-            answer4: '$100-$200',
-            answer5: '$300-$500',
-            answer6: '$500 or more',
-        },
     },
     support:{
-        // support
         s_support: 'support',
         s_onlineHelp: 'Online Help',
         s_clickToFaq: 'For all Q&As Please Click on our ',
@@ -512,20 +374,14 @@ export default {
         s_payment: 'Payment & Promos',
         s_account: 'Account Issues',
         popular_search: 'Popular Searches:Refund,Return,Shipping',
-        // faq
         s_help_you: 'How Can I Help You?',
-        // faq-index
         s_tickets: 'tickets',
-        // faq-search
         s_search_results: 'Search Results',
         s_result: "{num} results for",
-        // faq-search-detail
         s_have_questions: 'Have more questions?',
         s_contact_us: 'Contact Us',
         s_related: 'Related Articles',
-        // faq-select
         s_select_ph: 'Please select your question type',
-        // faq-order-ticket
         s_textarea_ph: 'Type a message here...',
         s_submit_success: 'Submitted successfully!',
         s_submit_tips: "The reasons below are optional. You can click “X” if you don't want to choose any of them.",
@@ -537,7 +393,6 @@ export default {
         s_sumbit: "submit",
         s_img_upload: 'A single image should not exceed 10M',
         s_response_time: 'Expected response time：Within 24h',
-        // faq-select-order
         s_select_order: 'Please select your order',
         s_items: 'items',
         s_all: 'ALL',
