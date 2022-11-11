@@ -45,7 +45,7 @@ export default {
         changeCurrency: 'Alterar Moeda',
         wishlist: 'Lista de desejos',
         settings: 'Definições',
-        mayLike:'Você Também Pode Gostar',
+        mayLike:'Também Pode Gostar',
         logout:'Desconectar',
         logoff:'Sair',
         delete:'Excluir',
