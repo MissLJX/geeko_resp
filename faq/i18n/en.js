@@ -50,7 +50,6 @@ export default {
   unsatisfied: 'Unsatisfied',
   you_can_rate: 'You can comment customer service here.',
   please_rate: 'Please rate my service',
-  // support:
   click:'For all Q&As Please Click on our',
   faq:"FAQ",
   page:"page",
@@ -62,27 +61,21 @@ export default {
   product:"Product & Stock",
   payment:"Payment & Promos",
   account:"Account Issues",
-  // contact:
   Ticket:'Ticket',
   TicketTime:'ONLY for After-Sale Issue（Cancel/Edit Order/Shipping Status/Return/Exchange etc.)',
   OnlineTime: 'ONLY for Pre-Sale Issue. Online sales do not have access to order information.',
   online:'Online Help',
-  // faq
   search: "Search Results",
   resultFor: "results for \"<strong>{result}</strong>\"",
   question:"Have more questions?",
   articleHelpful:"Was this article helpful?",
   related:"Related Articles",
-  // ticket
   noTicket:"no Ticket",
-  // order
-  // ticket add
   textareaPlaceHolder:"Type a message here...",
   orderNo:"order NO",
   responseTime:"Expected response time：Within 24h",
   selectTip: 'Please select your question type',
   statuswating: 'Wating for Replied',
-  // question ticket
   defaultSelect: 'Please select your question type',
   submitSuccess: 'Submitted successfully!',
   submitTips: "The reasons below are optional. You can click “X” if you don't want to choose any of them.",
