@@ -62,14 +62,14 @@
                             <div class="proimg" v-if="(item.orderItems || item.returnOrderItems) && index < 4" v-for="(img,index) in (item.orderItems || item.returnOrderItems)">
                                 <link-image :href="productUrl(img.productName,img.sku,img.productId)" :src="img.productImageUrl" :title="img.productName"/>
                             </div>
-                            <div v-if="(item.orderItems && item.orderItems.length > 4) || (item.returnOrderItems && item.returnOrderItems.length > 4)" class="viewmore" @click="checkDetail(item, item.returnOrderItems)">
+                            <div v-if="(item.orderItems && item.orderItems.length > 4) || (item.returnOrderItems && item.returnOrderItems.length > 4)" class="viewmore" @click="toDetail(item, item.returnOrderItems)">
                                 <div class="bg"></div>
                                 <p>{{$t("view_detail")}}</p>
                             </div>
                         </div>
                         <div class="tbl-cell v-m w-180 tx-c">
                             <p>{{item.fulfillmentStatusView || status(item)}}</p>
-                            <p class="detail cur-p" @click="checkDetail(item, item.returnOrderItems)">{{$t('detail')}}</p>
+                            <p class="detail cur-p" @click="toDetail(item, item.returnOrderItems)">{{$t('detail')}}</p>
                             <p class="detail cur-p" v-if="item.fulfillmentStatus !== constant.TOTAL_STATUS_UNPAID && !item.returnOrderItems"  @click="checkLogistics(item.id)">{{$t('track')}}</p>
                         </div>
                         <div class="tbl-cell v-m w-190 tx-c">
@@ -88,7 +88,7 @@
                             </div>
                             <!--线上其他支付按钮+倒计时-->
                             <div class="pos-rel">
-                                <a class="b-btn" :href="checkoutUrl(item.id)"  v-if="item.id && item.fulfillmentStatus===constant.TOTAL_STATUS_UNPAID && !item.mercadopagoPayURL && !item.boletoPayCodeURL && !item.payCodeUrl && orderoffset(item) >= 0">{{$t("paynow")}}</a>
+                                <a class="b-btn" @click="()=>checkDetail(item)"  v-if="item.id && item.fulfillmentStatus===constant.TOTAL_STATUS_UNPAID && !item.mercadopagoPayURL && !item.boletoPayCodeURL && !item.payCodeUrl && orderoffset(item) >= 0">{{$t("paynow")}}</a>
                                 <div class="offTip" v-if="item.id && item.fulfillmentStatus===constant.TOTAL_STATUS_UNPAID && !item.mercadopagoPayURL && !item.boletoPayCodeURL && !item.payCodeUrl && orderoffset(item) >= 0">
                                     <div class="triangle"></div>
                                     <span class="label">{{$t("remaining")}}:</span>
@@ -560,20 +560,19 @@
                 }
                 return utils.enTime(new Date(paymentTime))
             },
-            checkDetail(item, isReturn){
+            checkDetail(item){
+                if(!this.getPayUrl(item)){
+                    window.location.href = `${utils.PROJECT}/checkout/${item.id}`;
+                }else{
+                    window.location.href = this.getPayUrl(item);
+                }
+            },
+            toDetail(item, isReturn){
                 this.clearSkip('','','','',true);
                 if(isReturn){
                     this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/order/return-detail/'+item.id})
-                } else {
-                    if(item.fulfillmentStatus === constant.TOTAL_STATUS_UNPAID){
-                        if(!this.getPayUrl(item)){
-                            window.location.href = `${utils.PROJECT}/checkout/${item.id}`;
-                        }else{
-                            window.location.href = this.getPayUrl(item);
-                        }
-                    }else{
-                        this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/order/detail/'+item.id})
-                    }
+                }else{
+                    this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/order/detail/'+item.id})
                 }
             },
             closeSelect1(){
