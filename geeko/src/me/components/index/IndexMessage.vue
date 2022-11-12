@@ -243,7 +243,7 @@
                     </a>
 
                     <template v-if="getDownLoadImage">
-                        <a href="/share" click-name="Get$10">
+                        <a @click.prevent="specificationLogin('/share')" click-name="Get$10">
                             <p class="iconfont">&#xe6da;</p>
                             <p>{{$t("label.refer")}}</p>
                         </a>

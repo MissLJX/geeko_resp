@@ -131,15 +131,23 @@
                 this.birthday = value;
             },
             infoSaveHandle(){
-                this.isloding = true
+                this.isloding = true;
+                let customer = {};
+                if(this.firstname){
+                    customer['name'] = {}
+                    customer['name']['firstName'] = this.firstname
+                }
+                if(this.lastname){
+                    if(!customer['name']){
+                        customer['name'] = {}
+                    }
+                    customer['name']['lastName'] = this.lastname
+                }
+                if(this.nickname){
+                    customer['nickname'] = this.nickname
+                }
                 let obj = {
-                    customer:{
-                        "name":{
-                            firstName:this.firstname,
-                            lastName:this.lastname,
-                        },
-                        "nickname":this.nickname
-                    },
+                    customer,
                     name:"name"
                 };
                 this.$store.dispatch('updateCustomerSave', obj).then(() => {

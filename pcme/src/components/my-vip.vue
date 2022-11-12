@@ -1106,7 +1106,10 @@ export default {
                 })
             }
             this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/' + url})
-        }
+        },
+        getName(value){
+            return value ? value : '';
+        },
     }
 
 }
