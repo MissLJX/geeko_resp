@@ -267,33 +267,6 @@
                     let position = this.addToCartSensors.position;
 
 
-					window.GeekoSensors.Track('AddToCartButtonClick', {
-						page_type: window.sourceTitle || window.currentPage,
-						is_success: true,
-						resourcepage_title: resourcepage_title,
-						resource_position: resource_position,
-						resource_type: resource_type,
-						resource_content: resource_content,
-						ali_request_id: ali_request_id,
-						geeko_request_id: geeko_request_id,
-						geeko_experiment_id: geeko_experiment_id,
-						ali_experiment_id: ali_experiment_id,
-						data_source: data_source,
-					})
-
-					window.GeekoSensors.Track('AddToCartDetail', {
-						product_id: _selectedproduct.id,
-						product_qty: quantity,
-						resourcepage_title: resourcepage_title,
-						resource_position: resource_position,
-						resource_type: resource_type,
-						resource_content: resource_content,
-						ali_request_id: ali_request_id,
-						geeko_request_id: geeko_request_id,
-						ali_experiment_id: ali_experiment_id,
-						geeko_experiment_id: geeko_experiment_id,
-						data_source: data_source,
-					})
 
                     window.GeekoSensors?.Track('Addtocart', {
                         product_id: _selectedproduct.id,
@@ -316,12 +289,6 @@
             },
             addToCartOrigin(){
                 if(window.isLoged == 'true'){
-                    if(window.GeekoSensors){
-                        window.GeekoSensors.Track('AddToCartButtonClick', {
-                            referrer: document.referrer,
-                            addtocart_type: "正常加购",
-                        })
-                    }
                     this.addToCart(false)
                 } else {
 
@@ -329,21 +296,6 @@
             },
             addToCartPoints(){
                 if(window.isLoged == 'true'){
-                    if(this.variantProduct.pointsMallVariantSales.price){
-                        if(window.GeekoSensors){
-                            window.GeekoSensors.Track('AddToCartButtonClick', {
-                                referrer: document.referrer,
-                                addtocart_type: "混合加购",
-                            })
-                        }
-                    } else {
-                        if(window.GeekoSensors){
-                            window.GeekoSensors.Track('AddToCartButtonClick', {
-                                referrer: document.referrer,
-                                addtocart_type: "积分加购",
-                            })
-                        }
-                    }
                     this.addToCart(true)
                 } else {
 
