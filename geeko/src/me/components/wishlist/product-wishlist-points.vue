@@ -238,39 +238,12 @@
                         button_pv:"more_choice",
                     })
                 }
-
-                // 相似款曝光
-                if(window.GeekoSensors){
-                    window.GeekoSensors.Track('WishlistButtonExpose', {
-                        page_sort:"wish list",
-                        page_type: "收藏夹页",
-                        button_pv:"findsimilar",
-                    })
-                }
-
-                // 单删曝光
-                if(window.GeekoSensors){
-                    window.GeekoSensors.Track('WishlistButtonExpose', {
-                        page_sort:"wish list",
-                        page_type: "收藏夹页",
-                        button_pv:"delete",
-                    })
-                }
             }
         },
         mounted(){
             let value = this.$refs.oftenProduct;
             if (window.productListObserver) {
                 window.productListObserver.observe(value)
-            }
-
-            // 更多选择曝光
-            if(window.GeekoSensors){
-                window.GeekoSensors.Track('WishlistButtonExpose', {
-                    page_sort:"wish list",
-                    page_type: "收藏夹页",
-                    button_pv:"more_choice",
-                })
             }
         }
     }
