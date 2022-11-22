@@ -415,22 +415,22 @@
             // },
             paymentItemTotal(){
                 if(this.returnLogistics && this.returnLogistics.refundTotal){
-                    return utils.unitprice(this.returnLogistics.refundTotal);
+                    return utils.unitPrice(this.returnLogistics.refundTotal);
                 }
             },
             shippingprice(){
                 if(this.orderdetail && this.orderdetail.shippingPrice){
-                    return utils.unitprice(this.orderdetail.shippingPrice);
+                    return utils.unitPrice(this.orderdetail.shippingPrice);
                 }
             },
             shippingInsurancePrice(){
                 if(this.orderdetail && this.orderdetail.shippingInsurancePrice){
-                    return utils.unitprice(this.orderdetail.shippingInsurancePrice);
+                    return utils.unitPrice(this.orderdetail.shippingInsurancePrice);
                 }
             },
             total(){
                 if(this.orderdetail && this.orderdetail.orderTotal){
-                    return utils.unitprice(this.orderdetail.orderTotal);
+                    return utils.unitPrice(this.orderdetail.orderTotal);
                 }
             },
             confirmedOrder(){
@@ -604,7 +604,7 @@
                 this.isShowTicket = false;
             },
             realprice(item){
-                return utils.unitprice(item);
+                return utils.unitPrice(item);
             },
             changeTab(index){
                 this.isActive = index;

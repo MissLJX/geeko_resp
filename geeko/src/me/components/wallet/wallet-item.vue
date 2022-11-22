@@ -67,7 +67,7 @@
 
 <script type="text/ecmascript-6">
     import fecha from 'fecha'
-    import { unitprice } from "../../../utils/geekoutils"
+    import { unitPrice } from "../../../utils/geekoutils"
 
     export default{
         props: {
@@ -81,7 +81,7 @@
                 return fecha.format(new Date(this.credit.createTime), 'MMM.DD.YYYY HH:mm:ss')
             },
             walletPrice(){
-                return `${this.credit.positive?"+":"-"}${unitprice(this.credit?.amount)}`;
+                return `${this.credit.positive?"+":"-"}${unitPrice(this.credit?.amount)}`;
             },
             walletType(){
                 let wallet = this.credit;

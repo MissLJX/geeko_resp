@@ -34,15 +34,15 @@
             },
             price(product){
                 if (product.promotion && product.promotion.enabled) {
-                    return utils.unitprice(product.promotion.promotionPrice)
+                    return utils.unitPrice(product.promotion.promotionPrice)
                 }
-                return utils.unitprice(product.price)
+                return utils.unitPrice(product.price)
             },
             delPrice(product){
                 if (product.msrp && product.msrp.amount > 0)
-                    return utils.unitprice(product.msrp)
+                    return utils.unitPrice(product.msrp)
                 if (product.promotion && product.promotion.enabled)
-                    return utils.unitprice(product.price)
+                    return utils.unitPrice(product.price)
                 return ''
             }
         }

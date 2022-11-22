@@ -28,7 +28,7 @@
     import NavBar from "../components/nav-bar.vue";
     import WalletHistory from "../components/wallet/wallet-history.vue";
     import { getCashWallet } from "../api/index";
-    import { unitprice } from "./../../utils/geekoutils";
+    import { unitPrice } from "./../../utils/geekoutils";
 
     export default {
         name:"Wallet",
@@ -44,7 +44,7 @@
         },
         computed:{
             price(){
-                return this.walletPrice ? unitprice(this.walletPrice) : "$0.00";
+                return this.walletPrice ? unitPrice(this.walletPrice) : "$0.00";
             }
         },
         created(){

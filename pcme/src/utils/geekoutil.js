@@ -140,6 +140,19 @@ export const unitprice = (money) => {
 	}
 }
 
+export const unitPrice = price => {
+	if(!price) return ''
+	if(price.currency === 'EUR'){
+		return `${price.amount}${price.unit}`
+	}
+
+	if(price.currency === 'BRL'){
+		return `${ price.amount ? price.amount.replace('.',',') : '0,00'}${price.unit}`
+	}
+
+	return `${price.unit}${price.amount}`
+}
+
 const _url_analyst = function (name) {
     if (name) {
         return name.replace(new RegExp(/\s/g), '-');

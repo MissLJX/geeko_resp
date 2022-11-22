@@ -14,7 +14,7 @@
 </template>
 
 <script>
-    import {unitprice, getPointsMoney} from "../../utils/geekoutils.js"
+    import {unitPrice, getPointsMoney} from "../../utils/geekoutils.js"
 
     export default {
         name:"ProductPrice",
@@ -40,12 +40,12 @@
 
                 // 当有促销价格并且大于0的时候  售价显示促销价格
                 if (this.variantProduct && this.variantProduct.promotionPrice && this.variantProduct.promotionPrice.amount > 0) {
-                    return unitprice(this.variantProduct.promotionPrice)
+                    return unitPrice(this.variantProduct.promotionPrice)
                 }
 
                 // 当有价格并且大于0的时候  售价显示价格
                 if (this.variantProduct && this.variantProduct.price && this.variantProduct.price.amount > 0) {
-                    return unitprice(this.variantProduct.price)
+                    return unitPrice(this.variantProduct.price)
                 }
                 
                 return "";
@@ -53,13 +53,13 @@
             delPrice(){
                 if(this.variantProduct && this.variantProduct.promotionPrice){
                     if(this.variantProduct.msrp && this.variantProduct.msrp.amount > 0){
-                        return unitprice(this.variantProduct.msrp);
+                        return unitPrice(this.variantProduct.msrp);
                     }else{
-                        return unitprice(this.variantProduct.price);
+                        return unitPrice(this.variantProduct.price);
                     }
                 }else{
                     if(this.variantProduct.msrp && this.variantProduct.msrp.amount > 0){
-                        return unitprice(this.variantProduct.msrp);
+                        return unitPrice(this.variantProduct.msrp);
                     }
                 }
                 return "";

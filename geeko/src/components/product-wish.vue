@@ -86,7 +86,7 @@
 </style>
 
 <script type="text/ecmascript-6">
-    import {imageutil, unitprice , producturl} from '../utils/geekoutils'
+    import {imageutil, unitPrice , producturl} from '../utils/geekoutils'
     import _ from 'lodash'
 
     export default{

@@ -166,7 +166,7 @@
                 'changeTab','getM1135','loadAll'
             ]),
             unitFormate(price){
-                return utils.unitprice(price)
+                return utils.unitPrice(price)
             },
             status_color(status) {
                 return utils.STATUS_COLOR(status)

@@ -141,7 +141,7 @@
 </style>
 
 <script type="text/ecmascript-6">
-    import {imageutil, unitprice , producturl , PROJECT, getPointsMoney} from '../utils/geekoutils'
+    import {imageutil, unitPrice , producturl , PROJECT, getPointsMoney} from '../utils/geekoutils'
     import _ from 'lodash'
 
     export default{
@@ -179,21 +179,21 @@
                 }
                 // if(this.product)
                 if (this.product.promotion && this.product.promotion.enabled) {
-                    return unitprice(this.product.promotion.promotionPrice)
+                    return unitPrice(this.product.promotion.promotionPrice)
                 }
-                return unitprice(this.product.price)
+                return unitPrice(this.product.price)
             },
             delPrice(){
                 // if (this.product.pointsMallSales && ((this.product.promotion && this.product.promotion.enabled) || this.product.price)){
                 //     if (this.product.promotion && this.product.promotion.enabled) {
-                //         return unitprice(this.product.promotion.promotionPrice)
+                //         return unitPrice(this.product.promotion.promotionPrice)
                 //     }
-                //     return unitprice(this.product.price)
+                //     return unitPrice(this.product.price)
                 // }
                 if (this.product.msrp && this.product.msrp.amount > 0)
-                    return unitprice(this.product.msrp)
+                    return unitPrice(this.product.msrp)
                 if (this.product.promotion && this.product.promotion.enabled)
-                    return unitprice(this.product.price)
+                    return unitPrice(this.product.price)
                 return ''
             },
             productUrl(){

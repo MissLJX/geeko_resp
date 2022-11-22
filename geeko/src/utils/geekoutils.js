@@ -89,6 +89,19 @@ export const unitprice = (money) => {
 	}
 }
 
+export const unitPrice = price => {
+	if(!price) return ''
+	if(price.currency === 'EUR'){
+		return `${price.amount}${price.unit}`
+	}
+
+	if(price.currency === 'BRL'){
+		return `${ price.amount ? price.amount.replace('.',',') : '0,00'}${price.unit}`
+	}
+
+	return `${price.unit}${price.amount}`
+}
+
 export const pricePoints = (points,type)=>{
     if(points){
         if(type==1){
@@ -106,11 +119,11 @@ export const getPointsMoney = (money) => {
     if(!!!money)return '';
     var moneyTxt = '';
     if(money.price && money.points && money.price.amount && money.price.amount != 0){
-        moneyTxt = unitprice(money.price) + pricePoints(money.points,1);
+        moneyTxt = unitPrice(money.price) + pricePoints(money.points,1);
     } else if(money.price && money.points && (!money.price.amount || money.price.amount == 0)){
         moneyTxt = pricePoints(money.points,2);
     } else if(money.price && !!!money.points && money.price.amount > 0){
-        moneyTxt = unitprice(money.price)
+        moneyTxt = unitPrice(money.price)
     } else if(!!!money.price && money.points){
         moneyTxt = pricePoints(money.points,2)
     }

@@ -153,7 +153,7 @@ export default {
             return date ? utils.dateFormatFunc(date) : '-'
         },
         getMoney(money){
-            return money ? utils.unitprice(money) : '0.00'
+            return money ? utils.unitPrice(money) : '0.00'
         }
     }
 }

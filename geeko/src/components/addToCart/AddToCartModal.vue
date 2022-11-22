@@ -55,7 +55,7 @@
     import ProductColor from "./product-color.vue"
     import ProductSize from "./product-size.vue"
     import ProductPricePoints from './product-price-points.vue'
-    import {getPointsMoney,unitprice} from '../../utils/geekoutils.js'
+    import {getPointsMoney,unitPrice} from '../../utils/geekoutils.js'
 
     export default {
         name:"AddToCartModal",
@@ -93,7 +93,7 @@
                 }
             },
             unitedPrice(){
-                return unitprice(this.variantProduct.price)
+                return unitPrice(this.variantProduct.price)
             },
             price(){
                 // 当有促销价格并且大于0的时候  售价显示促销价格
@@ -266,6 +266,19 @@
 
                     let position = this.addToCartSensors.position;
 
+					window.GeekoSensors.Track('AddToCartDetail', {
+						product_id: _selectedproduct.id,
+						product_qty: quantity,
+						resourcepage_title: resourcepage_title,
+						resource_position: resource_position,
+						resource_type: resource_type,
+						resource_content: resource_content,
+						ali_request_id: ali_request_id,
+						geeko_request_id: geeko_request_id,
+						ali_experiment_id: ali_experiment_id,
+						geeko_experiment_id: geeko_experiment_id,
+						data_source: data_source,
+					})
 
 
                     window.GeekoSensors?.Track('Addtocart', {
