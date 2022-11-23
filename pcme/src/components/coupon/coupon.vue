@@ -11,7 +11,7 @@
                 <div class='couponMainInfo'>
                     <div class="x-cell" style="height: 100%">
                         <div style="display: flex; align-items: center; justify-content: flex-start">
-                            <span class="couponAmount" :style="{'color': `${isExpired?'#666666':'#ff782a'}`}">{{coupon.coupon.name}}</span>
+                            <span class="couponAmount" :style="{'color': `${isExpired?'#666666':'#ff782a'}`}">{{coupontAmount}}</span>
                         </div>
                         
                         <div v-if="coupon.coupon.condition" :style="{ 'margin-top': 6, 'color': `${isExpired?'#666666':'#ff782a'}` }">
@@ -32,9 +32,9 @@
                     </div>
                 </div>
                 <div class='dateInfo'>
-                    <li v-if="expireDate(coupon.coupon)">
+                    <li v-if="expireDate">
                         <span class='dot'>.</span>
-                        <span class="el-coupon-date">{{expireDate(coupon.coupon)}}</span>
+                        <span class="el-coupon-date">{{expireDate}}</span>
                     </li>
                         
                     <li v-if="coupon.coupon.usageReminder">
@@ -48,6 +48,7 @@
 
 <script>
     import fecha from 'fecha'
+    import {couponName} from '../../utils/geekoutil'
 
     export default {
         name:"Coupon",
@@ -63,10 +64,14 @@
         },
         mounted(){
         },
-        methods:{
-            expireDate(item){
-                var [beginDate, endDate] = [item.beginDate, item.endDate]
-
+        computed:{
+            coupontAmount(){
+                if(this.coupon && this.coupon.coupon){
+                    return couponName(this.coupon.coupon.name);
+                }
+            },
+            expireDate(){
+                var [beginDate, endDate] = [this.coupon.coupon.beginDate, this.coupon.coupon.endDate];
 
                 if (beginDate && endDate) {
                     return fecha.format(beginDate,"DD/MM/YYYY HH:mm") + "~" + fecha.format(endDate,"DD/MM/YYYY HH:mm");
@@ -75,6 +80,9 @@
                 return ''
 
             }
+        },
+        methods:{
+
         }
     }
 </script>

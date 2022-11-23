@@ -41,6 +41,7 @@
     import fecha from 'fecha';
     import { pointsCouponExchange } from "../../api/index.js"
     import { mapGetters } from "vuex"
+    import {couponName} from '../../utils/geekoutil'
 
     export default {
         name:"RedeemCoupon",
@@ -55,6 +56,11 @@
         },
         computed:{
             ...mapGetters(["feed"]),
+            coupontAmount(){
+                if(this.coupon && this.coupon.coupon){
+                    return couponName(this.coupon.coupon.name);
+                }
+            },
             expireDate(){
                 var [beginDate, endDate] = [this.coupon.coupon.beginDate, this.coupon.coupon.endDate];
 

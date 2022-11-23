@@ -102,6 +102,7 @@
 
 <script type="text/ecmascript-6">
     import fecha from 'fecha'
+    import { couponName } from '../../../utils/geekoutils'
     // name，condition，description，infoMsg，日期，usageReminder
 
     export default{
@@ -117,7 +118,7 @@
         computed: {
             coupontAmount(){
                 if(this.coupon && this.coupon.coupon){
-                    return this.coupon.coupon.name;
+                    return couponName(this.coupon.coupon.name);
                 }
             },
             expireDate(){

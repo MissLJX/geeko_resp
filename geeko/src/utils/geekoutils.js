@@ -96,10 +96,18 @@ export const unitPrice = price => {
 	}
 
 	if(price.currency === 'BRL'){
-		return `${ price.amount ? price.amount.replace('.',',') : '0,00'}${price.unit}`
+		return `${price.unit}${ price.amount ? String(price.amount || '').replace('.',',') : '0,00'}`
 	}
 
 	return `${price.unit}${price.amount}`
+}
+
+export const couponName = name => {
+	if(!name)return ''
+	if(name.indexOf('R$') != -1 && name.indexOf('.') != -1){
+		return String(name || '').replace(".", ",");
+	}
+	return name
 }
 
 export const pricePoints = (points,type)=>{

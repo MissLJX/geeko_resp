@@ -2,7 +2,7 @@
     <div class="redeem-coupon">
         <div class="_top">
             <div class="_left">
-                <p class="name">{{coupon.coupon.name}}</p>
+                <p class="name">{{coupontAmount}}</p>
                 <p class="description" v-if="coupon.coupon.condition" style="margin-top:5px;">{{coupon.coupon.condition}}</p>
                 <p class="description" v-if="coupon.coupon.description">{{coupon.coupon.description}}</p>
                 <p class="description" v-if="coupon.coupon.infoMsg">{{coupon.coupon.infoMsg}}</p>
@@ -42,6 +42,7 @@
     import { mapGetters } from "vuex"
     import { pointsCouponExchange } from "@/me/api/index.js"
     import store from '@/me/store/index'
+    import { couponName } from '../../../utils/geekoutils'
 
     export default {
         name:"RedeemCoupon",
@@ -56,6 +57,11 @@
         },
         computed:{
             ...mapGetters("me",["me","feed"]),
+            coupontAmount(){
+                if(this.coupon && this.coupon.coupon){
+                    return couponName(this.coupon.coupon.name);
+                }
+            },
             expireDate(){
                 var [beginDate, endDate] = [this.coupon.coupon.beginDate, this.coupon.coupon.endDate];
 
