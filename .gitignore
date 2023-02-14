@@ -6,3 +6,4 @@ dist_confirm_pc/
 dist_confirm/
 .svn/
 .idea/
+bin/
