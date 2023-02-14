@@ -357,7 +357,7 @@ export const getYouLikeProducts = (skip) => {
 
 // 获取recently view产品
 export const getRecentlyViewProducts = (productIds) => {
-    return axios.post(VPATH + '/product/anon/get-by-ids', {productIds: productIds}, {}).then((data) => {
+    return axios.cpost(VPATH + '/product/anon/get-by-ids', {productIds}, {}).then((data) => {
         return data.result
     })
 }

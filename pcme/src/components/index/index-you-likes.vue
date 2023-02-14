@@ -1,8 +1,8 @@
 <template>
     <div class="index-you-likes">
         <div class="_hd">
-            <!-- {{$t("recently_view")}} -->
-            {{$t("index.you_may_also_ilke")}}
+            {{$t("recently_view")}}
+            <!-- {{$t("index.you_may_also_ilke")}} -->
         </div>
 
         <div class="_bd">
@@ -29,18 +29,18 @@
         methods:{
             listingHandle(){
                 this.loading = true
-                // const ids = localStorage.getItem("recently_view_products")
-                // if(ids && JSON.parse(ids)?.data){
-                    // getRecentlyViewProducts {productIds: JSON.parse(ids)?.data}
-                    this.$store.dispatch("getYouLikeProducts", {skip: this.youlikeskip}).then(({finished,empty}) => {
+                const ids = localStorage.getItem("recently_view_products")
+                if(ids && JSON.parse(ids)?.data){
+                    //  getYouLikeProducts - getRecentlyViewProducts {skip: this.youlikeskip} - {productIds: JSON.parse(ids)?.data}
+                    this.$store.dispatch("getRecentlyViewProducts", {productIds: JSON.parse(ids)?.data?.join(',')}).then(({finished,empty}) => {
                         if(finished) this.finished = finished;
                         this.loading = false
-                        if(!!empty){
-                            this.$store.dispatch("getYouLikeProductsSkip");
-                        }
+                        // if(!!empty){
+                        //     this.$store.dispatch("getYouLikeProductsSkip");
+                        // }
                         
                     })
-                // }
+                }
                 
             },
         },
