@@ -256,6 +256,8 @@ export default {
     click_to_check_history: 'Klicken Sie hier, um Ihre bisherigen Bestellungen zu überprüfen',
     history_orders: 'GESCHICHTE AUFTRÄGE',
 
+    recently_view: 'recently view',
+
     label:{
         redeem_coupon:"Coupon einl\u00f6sen",
         hot_use_points:"Wie werden Punkte verwendet?",

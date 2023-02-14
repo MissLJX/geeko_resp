@@ -5,13 +5,13 @@
         </div>
 
         <div class="_bd">
-            <router-link :to="url+'faq/support-ticket'">
+            <router-link :to="getUrl('/me/m/faq/support-ticket')">
                 <p style="font-size:25px;" class="iconfont">&#xe6e8;</p>
                 <p>{{$t("ticket")}}</p>
             </router-link>
                 
                 <!-- to="/me/m/notification" -->
-            <router-link :to="url+'notification'" class="notification_icon">
+            <router-link :to="getUrl('/me/m/notification')" class="notification_icon">
                 <!-- <p class="iconfont">&#xe60b;</p> -->
                 <p class="iconfont">
                     &#xe70b;
@@ -42,6 +42,7 @@
 
 <script>
     import {getNoReadNotificationNum} from '../../api/index.js'
+    import * as utils from '../../utils/geekoutil.js';
 
     export default {
         name:"IndexServiceContainer",
@@ -57,9 +58,6 @@
             }
         },
         computed:{
-            url(){
-                return window.location.pathname + "/"
-            },
             vipShow:function(){
                 return this.$store.getters.vipShow;
             },
@@ -80,6 +78,12 @@
             },
             vipLevel(){
                 return this.me.vipUser ? this.me.vipUser.level ? this.me.vipUser.level : 0 : 0
+            },
+            
+        },
+        methods:{
+            getUrl(suffix){
+                return utils.PROJECT + suffix;
             },
         },
         created(){

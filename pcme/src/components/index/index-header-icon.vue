@@ -32,7 +32,7 @@
         </div>
 
         <div class="m-header-icon" :style="headerIconStyle">
-            <router-link :to="url+'coupons'">
+            <router-link :to="getUrl('/me/m/coupons')">
                 <p class="iconfont">
                     <span class="_font" v-if="feed && feed.canUseCouponCount">{{feed && feed.canUseCouponCount}}</span>
                     <span v-else>&#xe6dc;</span>
@@ -40,7 +40,7 @@
                 <p>{{$t("index.coupons")}}</p>
             </router-link>
 
-            <router-link :to="url+'credits'">
+            <router-link :to="getUrl('/me/m/credits')">
                 <p class="iconfont" v-if="!isLogin">
                     <span class="_font" v-if="feed && feed.points">{{feed && feed.points}}</span>
                     <span v-else>&#xe6db;</span>
@@ -52,7 +52,7 @@
                 <p>{{$t("point.points")}}</p>
             </router-link>
             
-            <router-link :to="url+'cards'">
+            <router-link :to="getUrl('/me/m/wallet')">
                 <p class="iconfont">&#xe6dd;</p>
                 <p>{{$t("index.wallet")}}</p>
             </router-link>
@@ -62,7 +62,7 @@
                 <p>{{$t("points_mall.referAFriend")}}</p>
             </a>
 
-            <router-link class="hasNew" :to="url+'vip'" v-if="me.vipUser && vipShow">
+            <router-link class="hasNew" :to="getUrl('/me/m/vip')" v-if="me.vipUser && vipShow">
                 <p style="font-size:24px;" class="iconfont">&#xe783;</p>
                 <p style="margin-top: 4px;">VIP</p>
                 <span class="newTip" v-if="showVipNew">
@@ -104,9 +104,6 @@
             // },
             vipShow:function(){
                 return this.$store.getters.vipShow;
-            },
-            url(){
-                return window.location.pathname + "/"
             },
             isLogin(){
                 return window.__is_login__

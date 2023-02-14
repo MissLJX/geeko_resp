@@ -355,6 +355,13 @@ export const getYouLikeProducts = (skip) => {
     })
 }
 
+// 获取recently view产品
+export const getRecentlyViewProducts = (productIds) => {
+    return axios.post(VPATH + '/product/anon/get-by-ids', {productIds: productIds}, {}).then((data) => {
+        return data.result
+    })
+}
+
 // 传body体修改用户的信息
 export const updateCustomerSave = (customer) => {
     // console.log("customer",customer);

@@ -1,6 +1,7 @@
 <template>
     <div class="index-you-likes">
         <div class="_hd">
+            <!-- {{$t("recently_view")}} -->
             {{$t("index.you_may_also_ilke")}}
         </div>
 
@@ -28,14 +29,19 @@
         methods:{
             listingHandle(){
                 this.loading = true
-                this.$store.dispatch("getYouLikeProducts", {skip:this.youlikeskip}).then(({finished,empty}) => {
-                    if(finished) this.finished = finished;
-                    this.loading = false
-                    if(!!empty){
-                        this.$store.dispatch("getYouLikeProductsSkip");
-                    }
-                    
-                })
+                // const ids = localStorage.getItem("recently_view_products")
+                // if(ids && JSON.parse(ids)?.data){
+                    // getRecentlyViewProducts {productIds: JSON.parse(ids)?.data}
+                    this.$store.dispatch("getYouLikeProducts", {skip: this.youlikeskip}).then(({finished,empty}) => {
+                        if(finished) this.finished = finished;
+                        this.loading = false
+                        if(!!empty){
+                            this.$store.dispatch("getYouLikeProductsSkip");
+                        }
+                        
+                    })
+                // }
+                
             },
         },
         created(){
@@ -54,6 +60,7 @@
             font-size: 18px;
             color: #000000;
             padding: 0px 18px;
+            text-transform: capitalize;
         }
     }
 </style>

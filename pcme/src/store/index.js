@@ -1717,6 +1717,18 @@ const actions = {
             }
         });
     },
+    getRecentlyViewProducts({commit}, {productIds}){
+        return api.getRecentlyViewProducts(productIds).then((result) => {
+            if(result && result.length > 0){
+                commit(types.GET_INDEX_YOU_MAY_ALSO_LIKES_PRODUCTS,result);
+                return {finished:false,empty:true}
+            }else{
+                return {finished:true,empty:false};
+            }
+        }).catch(err => {
+            return {finished:true,empty:true};
+        });
+    },
     getYouLikeProductsSkip({commit}){
         commit(types.GET_INDEX_YOU_MAY_ALSO_LIKES_PRODUCTS_SKIP);
     },

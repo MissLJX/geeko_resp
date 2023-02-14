@@ -256,6 +256,8 @@ export default {
     click_to_check_history: 'Haga clic aquí para consultar sus pedidos anteriores',
     history_orders: 'HISTORIAL DE PEDIDOS',
 
+    recently_view: 'recently view',
+
     label:{
         redeem_coupon:"Canjear cupón",
         hot_use_points:"¿Cómo usar los puntos?",

@@ -1488,7 +1488,7 @@ class TicketAdd extends React.Component {
         </div>
         <RateTextArea 
           defaultValue={rateTxt}
-          placeholder={intl.formatMessage({id: 'rateTextPlaceHolder'})}
+          placeholder={intl.formatMessage({id: 'you_can_rate'})}
           onBlur={(e)=>{
             console.log(e.target.value)
             rateTextAreaChange(e.target.value)

@@ -3,7 +3,7 @@
         <div class="_hd st-table st-fullwidth">
             <div class="st-cell st-v-m">{{$t("mywishlist")}}</div>
             <div class="st-cell st-v-m st-t-r" v-show="disposeWishlistProducts">
-                <router-link :to="url+'/wishlist'">
+                <router-link :to="getUrl('/me/m/wishlist')">
                     {{$t("index.view_all")}} >
                 </router-link>
             </div>
@@ -75,9 +75,6 @@
             disposeWishlistProducts(){
                 return this.wishProducts && this.wishProducts.length > 0;
             },
-            url(){
-                return window.location.pathname
-            }
         },
         methods:{
             getProUrl(product){
@@ -111,7 +108,10 @@
                 if (product.promotion && product.promotion.enabled)
                     return utils.unitPrice(product.price)
                 return ''
-            }
+            },
+            getUrl(suffix){
+                return utils.PROJECT + suffix;
+            },
         }
     }
 </script>

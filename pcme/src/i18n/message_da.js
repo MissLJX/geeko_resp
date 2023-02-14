@@ -254,6 +254,8 @@ export default {
     back: "Back",
     click_to_check_history: 'Click here to check your previous orders',
     history_orders: 'HISTORY ORDERS',
+
+    recently_view: 'recently view',
     
     label:{
         redeem_coupon:"Redeem Coupon",

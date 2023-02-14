@@ -250,6 +250,9 @@ export default {
     back: "Voltar",
     click_to_check_history: 'Clique aqui para verificar seus pedidos anteriores',
     history_orders: 'HISTÓRICO DE PEDIDOS',
+
+    recently_view: 'recently view',
+    
     label:{
         redeem_coupon:"Use um cupom",
         hot_use_points:"Como usar os pontos?",
