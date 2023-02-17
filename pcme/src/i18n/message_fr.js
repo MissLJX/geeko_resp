@@ -256,7 +256,8 @@ export default {
     click_to_check_history: 'Cliquez ici pour vérifier vos commandes précédentes',
     history_orders: 'COMMANDES D\'HISTOIRE',
 
-    recently_view: 'recently view',
+    recently_view: 'vue récemment',
+    recently_view_nothing: 'Vous n\'avez rien vu.',
 
     label:{
         redeem_coupon:"Utilisez le coupon",

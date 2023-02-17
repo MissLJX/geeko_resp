@@ -256,7 +256,8 @@ export default {
     click_to_check_history: 'Klicken Sie hier, um Ihre bisherigen Bestellungen zu überprüfen',
     history_orders: 'GESCHICHTE AUFTRÄGE',
 
-    recently_view: 'recently view',
+    recently_view: 'Kürzlich ansehen',
+    recently_view_nothing: 'Sie haben nichts angesehen.',
 
     label:{
         redeem_coupon:"Coupon einl\u00f6sen",

@@ -252,7 +252,8 @@ export default {
     history_orders: 'HISTORY ORDERS',
 
     recently_view: 'recently view',
-    
+    recently_view_nothing: 'You have not viewed anything.',
+
     label:{
         redeem_coupon:"Redeem Coupon",
         hot_use_points:"How to Use Points?",

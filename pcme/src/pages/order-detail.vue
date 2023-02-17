@@ -1,5 +1,6 @@
 <template>
     <div class="datail">
+        
         <div class="detailHd">
             <p style="text-transform:capitalize"><span @click="window.location.href = '/'">{{$t('home')}}</span><router-link :to="getUrl('/me/m')"> > {{$t('me')}}</router-link><router-link :to="getUrl('/me/m/order')"> > {{$t('myorders')}}</router-link> > {{$t('detail')}}</p>
         </div>
