@@ -90,7 +90,7 @@
                         {{$t('ordertotal')}}:
                         <span class="price r-p">
                             {{total}} 
-                            <span style="position:relative;" v-if="orderdetail.doublePointsMultiple">
+                            <span style="position:relative;" v-if="showDoublePoints">
                                 <img style="width: 22px;vertical-align: middle;" src="https://image.geeko.ltd/2021-11-01-lottery/2021-11-01-lottery-points.png" alt="">
                                 <span style="position: absolute;font-size: 14px;bottom: -6px;left: 15px;font-family: 'ACUMINPRO-BOLD';text-shadow: 1px 0 0 #e64545;">X{{orderdetail.doublePointsMultiple}}</span>
                             </span>
@@ -376,7 +376,13 @@
                     return utils.STATUS_COLOR(this.orderpro.status)
                 }
             },
-
+            showDoublePoints() {
+                if(!this.orderdetail.doublePointsMultiple || this.orderdetail.doublePointsMultiple == '0' || this.orderdetail.doublePointsMultiple == 'null' || this.orderdetail.doublePointsMultiple == 'undefined'){
+                    return false
+                } else {
+                    return true
+                }
+            }
         },
         methods:{
             review(id,variantId){
