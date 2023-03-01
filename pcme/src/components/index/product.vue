@@ -1,7 +1,16 @@
 <template>
-    <div class="product">
+    <div
+        class="product"
+        :product-id="sensorProductId"
+        :data-product-position="sensorProductPosition"
+        :data-title="sensorResourceTitle"
+        :data-position="sensorResourcePosition"
+        :data-type="sensorResourceType"
+        :data-content="sensorResourceContent"
+        :data-price="sensorProductPrice"
+        ref="productRef">
         <div class="_image">
-            <a :href="getProUrl(product)">
+            <a :href="getProUrl(product)" @click="toDetailPage($event)">
                 <img :src="imageUrl(product.pcMainImage)" alt="MainIMage">
             </a>
         </div>
@@ -20,11 +29,42 @@
         props:{
             product:{
                 type:Object
+            },
+            sensors:{
+                type: Object,
+                default: {}
+            },
+            index:{
+                type: Number,
+                default: 0
             }
+        },
+        computed:{
+            sensorProductId(){
+                return this.product?.id || ''
+            },
+            sensorProductPosition(){
+                return this.index + 1
+            },
+            sensorResourceTitle(){
+                return this.sensors?.resourcepage_title
+            },
+            sensorResourceType(){
+                return this.sensors?.resource_type
+            },
+            sensorResourceContent(){
+                return this.sensors?.resource_content
+            },
+            sensorResourcePosition(){
+                return this.sensors?.resource_position
+            },
+            sensorProductPrice(){
+                return this.product?.usdPrice?.amount || 0
+            },
         },
         methods:{
             getProUrl(product){
-                return window.ctx + '/' + utils.producturl(product)
+                return (window.ctx || '') + '/' + utils.producturl(product)
             },
             imageUrl(imgurl){
                 return utils.imageutil.getMedium(imgurl)
@@ -41,8 +81,33 @@
                 if (product.promotion && product.promotion.enabled)
                     return utils.unitPrice(product.price)
                 return ''
+            },
+            toDetailPage(e){
+                e.preventDefault();
+                let sensorsObj = {
+                        ...this.sensors,
+                        price: this.product?.usdPrice?.amount || '',
+                        product_id: this.product?.id,
+                        product_position: this.index + 1
+                    }
+                let url = utils.getSensorsUrl(
+                    this.getProUrl(this.product),
+                    sensorsObj
+                )
+
+                if(window.GeekoSensors){
+                    window.GeekoSensors.Track('ProductListClick', sensorsObj)
+                }
+                window.location.href = url
+                return
             }
-        }
+        },
+        mounted(){
+            let value = this.$refs.productRef;
+            if (window.productListObserver && Object.keys(this.sensors)?.length > 0) {
+                window.productListObserver.observe(value)
+            }
+        },
     }
 </script>
 

@@ -167,7 +167,7 @@
                         padding-top: 7px;
                         display: flex;
                         justify-content: space-between;
-                        align-items: center;
+                        align-items: flex-start;
                         i{
                             font-size: 16px;
                             color: #999999;
@@ -176,6 +176,7 @@
                         .p-info-price{
                             display: flex;
                             align-items: center;
+                            flex-wrap: wrap;
                         }
                     }
                     .p-soldout-con{
@@ -200,11 +201,11 @@
                         color: #000000;
                         font-size: 16px;
                         font-family: 'SlatePro-Medium';
+                        margin-right: 5px;
                     }
                     .f-gray{
                         color: #999999;
                         font-size: 14px;
-                        margin-left: 5px;
                     }
                 }
             }

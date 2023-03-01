@@ -176,6 +176,15 @@ export const productIdUrl = function (product) {
     return _.concat('product', _url_analyst(product.productName || product.name), (product.id || product.productId) + '.html').join('/')
 }
 
+export const getSensorsUrl = (url, sensors) => {
+	if (!sensors) return url
+	const suffex = encodeURIComponent(`${sensors.resourcepage_title || ''}~${sensors.resource_type || ''}~${sensors.resource_content || ''}~${sensors.resource_position || ''}~${sensors.product_position || ''}~${sensors.filter || ''}`)
+	if (url?.indexOf('?') > 0) {
+		return `${url}&gf=${suffex}`
+	}
+	return `${url}?gf=${suffex}`
+}
+
 export const STATUS_COLOR = function (value) {
     var label;
     let color;

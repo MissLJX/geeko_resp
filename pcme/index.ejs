@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <script>
-            window.accessToken = 'ff9b9ab7-5695-4f99-9750-b05f975e6239';
-            window.wid = 'ff9b9ab7-5695-4f99-9750-b05f975e6239'   
+            window.accessToken = 'b8e5e59d-3fe2-4316-bbdf-698afe7bb612';
+            window.wid = 'b8e5e59d-3fe2-4316-bbdf-698afe7bb612'
             window.secret = "S8lCMWNgmoDl05sNu6mA0Ea0u0zP14XRpBd7uuAo8y8Tx6mHoAyB1RlaU3+d7uK3qk8eJiPp4WE=";
             window.locale = "en";
 
@@ -110,6 +110,283 @@
             head.appendChild(script)
         
     }
+</script>
+
+<script>
+    var StaticSensorsData = {
+        platform_type: 'pc',
+        site_type: 'pc',
+        site_id: '111',
+        site_language: window.locale,
+        currency: 'US',
+        is_login: true,
+        local_time: new Date(),
+        browser_language: navigator.language,
+        $url: location.href,
+        client_id: window.wid,
+        page_sort: window.currentPage,
+        page_content: window.pageContent || window.currentPage,
+        customer_id: window.customerId || '',
+        pdetai_product_id: window.pdetai_product_id,
+        pdetai_product_sku: window.pdetai_product_sku,
+        geeko_country: window.country,
+        geeko_referrer:document.referrer,
+        server_type: 'node',
+        is_first_order: window.is_first_order,
+        utm_sku: window.utm_sku,
+        page_title: window.pageTitle
+    };
+
+    (function(para) {
+        var p = para.sdk_url, n = para.name, w = window, d = document, s = 'script',x = null,y = null;
+        if(typeof(w['sensorsDataAnalytic201505']) !== 'undefined') {
+            return false;
+        }
+        w['sensorsDataAnalytic201505'] = n;
+        w[n] = w[n] || function(a) {return function() {(w[n]._q = w[n]._q || []).push([a, arguments]);}};
+        var ifs = ['track','quick','register','registerPage','registerOnce','clearAllRegister','trackSignup', 'trackAbtest', 'setProfile','setOnceProfile','appendProfile', 'incrementProfile', 'deleteProfile', 'unsetProfile','identify','login','logout','trackLink'];
+        for (var i = 0; i < ifs.length; i++) {
+            w[n][ifs[i]] = w[n].call(null, ifs[i]);
+        }
+        if (!w[n]._t) {
+            x = d.createElement(s), y = d.getElementsByTagName(s)[0];
+            x.async = 1;
+            x.src = p;
+            x.setAttribute('charset','UTF-8');
+            w[n].para = para;
+            y.parentNode.insertBefore(x, y);
+        }
+    })({
+        sdk_url: 'https://static.geeko.ltd/js/sensors/sensorsdata.min.js',
+        name: 'sensors',
+        server_url: window.sensorsUrl,
+        heatmap: {
+            //是否开启点击图，default 表示开启，自动采集 $WebClick 事件，可以设置 'not_collect' 表示关闭。
+            // clickmap:'not_collect',
+            //是否开启触达注意力图，not_collect 表示关闭，不会自动采集 $WebStay 事件，可以设置 'default' 表示开启。
+            // scroll_notice_map:'not_collect'
+        },
+        send_type:'beacon',
+        show_log: true,
+        app_js_bridge:true,
+        is_track_single_page:true             
+    });
+
+
+
+
+    sensors.registerPage(StaticSensorsData)
+
+    sensors.identify(window.wid, true)
+
+    sensors.quick('autoTrack')
+    // sensors.use('PageLeave', { heartbeat_interval_time: 5 })
+
+    sensors.quick('isReady',function(){
+        sensors.use('PageLeave', { heartbeat_interval_time: 5 })
+    })
+
+    if(window.isLogin && window.customerId){
+        sensors.login(window.customerId)
+    }
+
+
+    window.GeekoSensors = (function(){
+        var _track = function(event, opts){
+            var options = Object.assign({}, {$option: {send_type: 'beacon'}}, {page_sort: window.currentPage, page_title: window.pageTitle}, opts, window.filterOpts || {})
+            sensors.track(event,options);
+        }
+        return {
+            Track: _track
+        }
+    })();
+
+
+
+    var SendProductExpose = (function(){
+        var timing
+        var waitingTargets=[]
+        return function(entries){
+            clearTimeout(timing)
+            waitingTargets = waitingTargets.filter(t => {
+                var boundingClientRect = t.target.getBoundingClientRect()
+                return boundingClientRect.top >=0 && boundingClientRect.bottom >=0 && !t.target.hasAttribute("product-list-viewed")
+            })
+    
+            if(entries && entries.length > 0){
+                for(var i=0, len=entries.length; i< len; i++){
+                    waitingTargets.push(entries[i])
+                }
+            }
+    
+            timing =  setTimeout(function(){
+                waitingTargets.forEach(function(entry){
+                    var element = entry.target
+    
+                    element.setAttribute("product-list-viewed", "yes")
+                    var pdetai_product_id = window.pdetai_product_id|| ''
+                    var column = element.getAttribute("data-column") || ''
+
+                    console.log({
+                        product_id: element.getAttribute("product-id"),
+                        product_position: element.getAttribute("data-product-position"),
+                        pdetai_product_id:pdetai_product_id,
+                        column: column,
+                        resourcepage_title: element.getAttribute("data-title"),
+                        resource_position: element.getAttribute("data-position"),
+                        resource_type: element.getAttribute("data-type"),
+                        resource_content: element.getAttribute("data-content"),
+                        filter: element.getAttribute("data-filter"),
+                        ali_request_id: element.getAttribute("data-request-id"),
+                        ali_experiment_id: element.getAttribute("data-experiment-id"),
+                        geeko_request_id: element.getAttribute("data-geeko-id"),
+                        geeko_experiment_id: element.getAttribute("data-geeko-experiment"),
+                        data_source: element.getAttribute("data-product-source"),
+                        data_layer_name: element.getAttribute("data-layer"),
+                        data_tracking_records: element.getAttribute("data-tracking"),
+                        promotion_type: element.getAttribute("data-promotion"),
+                        product_type: element.getAttribute("data-product-type"),
+                        price_tag: element.getAttribute("data-price-tag"),
+                        price: element.getAttribute("data-price"),
+                    })
+    
+                    window.GeekoSensors.Track("ProductListExposure", {
+                        product_id: element.getAttribute("product-id"),
+                        product_position: element.getAttribute("data-product-position"),
+                        pdetai_product_id:pdetai_product_id,
+                        column: column,
+                        resourcepage_title: element.getAttribute("data-title"),
+                        resource_position: element.getAttribute("data-position"),
+                        resource_type: element.getAttribute("data-type"),
+                        resource_content: element.getAttribute("data-content"),
+                        filter: element.getAttribute("data-filter"),
+                        ali_request_id: element.getAttribute("data-request-id"),
+                        ali_experiment_id: element.getAttribute("data-experiment-id"),
+                        geeko_request_id: element.getAttribute("data-geeko-id"),
+                        geeko_experiment_id: element.getAttribute("data-geeko-experiment"),
+                        data_source: element.getAttribute("data-product-source"),
+                        data_layer_name: element.getAttribute("data-layer"),
+                        data_tracking_records: element.getAttribute("data-tracking"),
+                        promotion_type: element.getAttribute("data-promotion"),
+                        product_type: element.getAttribute("data-product-type"),
+                        price_tag: element.getAttribute("data-price-tag"),
+                        price: element.getAttribute("data-price"),
+                    })
+                    window.productListObserver.unobserve(element)
+                })
+    
+            }, 1000)
+        }
+    
+    })();
+
+
+    var SendPitExpose = (function(){
+        var timing
+        var waitingTargets=[]
+        return function(entries){
+            clearTimeout(timing)
+            waitingTargets = waitingTargets.filter(t => {
+                var boundingClientRect = t.target.getBoundingClientRect()
+                return boundingClientRect.top >=0 && boundingClientRect.bottom >=0 && !t.target.hasAttribute("source-viewed")
+            })
+    
+            if(entries && entries.length > 0){
+                for(var i=0, len=entries.length; i< len; i++){
+                    waitingTargets.push(entries[i])
+                }
+            }
+    
+            timing =  setTimeout(function(){
+                waitingTargets.forEach(function(entry){
+                    var element = entry.target
+    
+                    element.setAttribute("source-viewed", "yes")
+                    window.GeekoSensors.Track("PitPositionExposure", {
+                        resourcepage_title: element.getAttribute("data-title"),
+                        resource_position: element.getAttribute("data-position"),
+                        resource_type: element.getAttribute("data-type"),
+                        resource_content: element.getAttribute("data-content"),
+                        pdetai_product_id:window.pdetai_product_id
+                    })
+    
+                    window.sourceObserver.unobserve(element)
+                })
+    
+            }, 1000)
+        }
+    
+    })();
+
+
+    window.productListObserver =window.IntersectionObserver ? new IntersectionObserver(function(entries) {
+        var enteredEntries = []
+        entries.forEach(function(entry){
+            if(entry.intersectionRatio >= 0.8 && !entry.target.hasAttribute("product-list-viewed")){
+                enteredEntries.push(entry)
+            }
+        })
+        SendProductExpose(enteredEntries)
+    }, {threshold: [0.8]}): {
+        observe: function(){},
+        unobserve: function(){}
+    }
+
+
+    window.sourceObserver = window.IntersectionObserver ?  new IntersectionObserver(function(entries){
+        var enteredEntries = []
+        entries.forEach(function(entry){
+            if(entry.intersectionRatio > 0.8 && !entry.target.hasAttribute("source-viewed")){
+                enteredEntries.push(entry)
+            }
+        })
+        SendPitExpose(enteredEntries)
+    }, {threshold: [0.8]}) : {
+        observe: function(){},
+        unobserve: function(){}
+    }
+
+
+    window.elObserver = window.IntersectionObserver ?  new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+            if(entry.intersectionRatio > 0 && !entry.target.hasAttribute("el-viewed")){
+                var element = entry.target
+                element.setAttribute("el-viewed", "yes")
+                window.GeekoSensors.Track("ELExpose", {
+                    product_sku: element.getAttribute("data-sku"),
+                    resource_position: element.getAttribute("data-position"),
+                    resource_content: element.getAttribute("data-content"),
+                    expose: element.getAttribute("data-type"),
+                    pdetai_product_id:window.pdetai_product_id
+                })
+                window.sourceObserver.unobserve(element)
+            }
+        })
+    }) : {
+        observe: function(){},
+        unobserve: function(){}
+    }
+
+    window.clogSourceObserver = window.IntersectionObserver ?  new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+            if(entry.intersectionRatio > 0 && !entry.target.hasAttribute("clog-source-viewed")){
+                var element = entry.target
+                element.setAttribute("clog-source-viewed", "yes")
+                window.GeekoSensors.Track("ClogExpose", {
+                    type: element.getAttribute("data-type"),
+                    clog_id: element.getAttribute("data-id"),
+                    position: element.getAttribute("data-position"),
+                    tab: element.getAttribute("data-tab"),
+                })
+                window.clogSourceObserver.unobserve(element)
+            }
+        })
+    }) : {
+        observe: function(){},
+        unobserve: function(){}
+    }
+
+
 </script>
 
 </body>

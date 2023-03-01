@@ -251,8 +251,9 @@ export default {
     click_to_check_history: 'Clique aqui para verificar seus pedidos anteriores',
     history_orders: 'HISTÓRICO DE PEDIDOS',
 
-    recently_view: 'recently view',
-    
+    recently_viewed: 'Visto recentemente',
+    recently_view_nothing: 'Você não visualizou nada.',
+
     label:{
         redeem_coupon:"Use um cupom",
         hot_use_points:"Como usar os pontos?",

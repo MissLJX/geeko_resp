@@ -251,8 +251,9 @@ export default {
     click_to_check_history: 'Click here to check your previous orders',
     history_orders: 'HISTORY ORDERS',
 
-    recently_view: 'recently view',
-    
+    recently_viewed: 'recently viewed',
+    recently_view_nothing: 'You have not viewed anything.',
+
     label:{
         redeem_coupon:"Redeem Coupon",
         hot_use_points:"How to Use Points?",

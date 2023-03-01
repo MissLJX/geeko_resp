@@ -38,7 +38,7 @@ export default ( deepLink ) => {
 		_url = '/me/m/order/detail/' + params[0]
 		break
 	case 9:
-		_url = '/me/m/order/ticket/' + params[0]
+		_url = '/me/m/faq/support-ticket/' + params[0]
 		break
 	case 10:
 		_url = '/i/lottery'

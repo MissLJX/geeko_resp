@@ -65,11 +65,14 @@ export default {
     },
     mounted(){
         // console.log(window.location.href.split('faq/')[1].split('/')[0])
-        let routeNow = window.location.href.split('faq/')[1].split('/')[0]
-        if(routeNow != 'online-help' && routeNow != 'support-ticket'){
+        let routeNow = window.location.href.split('faq/')?.length > 1 ? 
+                    window.location.href.split('faq/')[1].split('/')[0]:
+                    window.location.href.split('support/')[1].split('/')[0]
+                    console.log(routeNow)
+        if(routeNow != 'online-help' && routeNow != 'support-ticket' && routeNow != 'ticket'){
             this.tabChoose = 'faq'
         } else {
-            this.tabChoose = routeNow
+            this.tabChoose = routeNow?.indexOf('ticket') != -1 ? 'support-ticket': 'faq'
         }
     },
     watch:{

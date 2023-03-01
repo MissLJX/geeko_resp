@@ -1,9 +1,16 @@
 <template>
     <div class="you-likes-list">
-        <list :items="products" class="el-product" @listing="$emit('listing')" :loading="loading" :finished="finished">
+        <list
+            :items="products"
+            class="el-product"
+            @listing="$emit('listing')"
+            :loading="loading"
+            :finished="finished"
+            :type="type"
+            >
             <template slot="li" slot-scope="props">
                 <li :key="props.item.id">
-                    <product class="el-notification" :product="props.item"/>
+                    <product class="el-notification" :product="props.item" :index="props.itemIndex"/>
                 </li>
             </template>
         </list>
@@ -31,6 +38,10 @@
             finished: {
                 type: Boolean,
                 default: false
+            },
+            sensors:{
+                type: Object,
+                default: {}
             }
         },
     }
