@@ -256,7 +256,7 @@ export default {
     click_to_check_history: 'Haga clic aquí para consultar sus pedidos anteriores',
     history_orders: 'HISTORIAL DE PEDIDOS',
 
-    recently_view: 'ver recientemente',
+    recently_viewed: 'Visto recientemente',
     recently_view_nothing: 'No has visto nada.',
 
     label:{

@@ -256,7 +256,7 @@ export default {
     click_to_check_history: 'Cliquez ici pour vérifier vos commandes précédentes',
     history_orders: 'COMMANDES D\'HISTOIRE',
 
-    recently_view: 'vue récemment',
+    recently_viewed: 'Récemment consultés',
     recently_view_nothing: 'Vous n\'avez rien vu.',
 
     label:{

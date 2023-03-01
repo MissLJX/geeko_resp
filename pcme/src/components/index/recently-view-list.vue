@@ -11,10 +11,6 @@
                 <i class="iconfont">&#xe69f;</i>
             </div>
 
-            <div class="el-no-more" v-show="showDefaultNoMore">
-                {{$t('nomoredata')}}
-            </div>
-
             <div class="view-no-more" v-show="showRecentNoMore">
                 <span>{{$t('recently_view_nothing')}}</span>
                 <button class="goShoppingBtn" @click="goShopping()">{{$t('survey.survey_go_shopping')}}</button>
@@ -31,7 +27,7 @@
         name:"RecentlyViewList",
         data(){
             return {
-                type: "recently_view"
+                type: "recently_viewed"
             }
         },
         components:{
@@ -56,11 +52,8 @@
             }
         },
         computed:{
-            showDefaultNoMore(){
-                return this.type != 'recently_view' && this.finished && this.scrollable
-            },
             showRecentNoMore(){
-                return this.type == 'recently_view' && this.finished && this.scrollable
+                return !this.products || this.products.length == 0
             }
         },
         methods:{

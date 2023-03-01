@@ -1,7 +1,7 @@
 <template>
     <div class="index-you-likes">
         <div class="_hd">
-            {{$t("recently_view")}}
+            {{$t("recently_viewed")}}
             <!-- {{$t("index.you_may_also_ilke")}} -->
         </div>
 
@@ -39,7 +39,7 @@
             }
         },
         computed:{
-            ...mapGetters(["youlikeProducts","youlikeskip"])
+            ...mapGetters(["youlikeProducts", "youlikeskip"])
         },
         methods:{
             listingHandle(){

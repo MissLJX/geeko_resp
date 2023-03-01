@@ -23,11 +23,6 @@
 
     export default {
         name:"YouLikesList",
-        data(){
-            return {
-                type: "recently_view"
-            }
-        },
         components:{
             "list":List,
             "product":Product

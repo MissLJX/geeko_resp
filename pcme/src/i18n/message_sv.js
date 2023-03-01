@@ -259,7 +259,7 @@ export default {
     click_to_check_history: 'Click here to check your previous orders',
     history_orders: 'HISTORY ORDERS',
 
-    recently_view: 'recently view',
+    recently_viewed: 'recently view',
     recently_view_nothing: 'You have not viewed anything.',
     
 

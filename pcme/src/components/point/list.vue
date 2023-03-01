@@ -136,10 +136,10 @@
         },
         computed:{
             showDefaultNoMore(){
-                return this.type != 'recently_view' && this.finished && this.scrollable
+                return this.type != 'recently_viewed' && this.finished && this.scrollable
             },
             showRecentNoMore(){
-                return this.type == 'recently_view' && this.finished && this.scrollable
+                return this.type == 'recently_viewed' && this.finished && this.scrollable
             }
         }
     }
