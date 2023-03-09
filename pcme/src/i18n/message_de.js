@@ -259,6 +259,9 @@ export default {
     recently_viewed: 'Zuletzt angesehen',
     recently_view_nothing: 'Sie haben nichts angesehen.',
 
+    my_size_infomation: 'Meine Größeninformationen (optional)',
+    comments_not_empty: "Kommentare dürfen nicht leer sein!",
+
     label:{
         redeem_coupon:"Coupon einl\u00f6sen",
         hot_use_points:"Wie werden Punkte verwendet?",

@@ -1384,8 +1384,8 @@ const actions = {
     },
 
     //comments
-    loadComment({commit}, productId){
-        return api.getComment(productId).then((comment) => {
+    loadComment({commit}, orderId){
+        return api.fetchOrderReviewByOrderId(orderId).then((comment) => {
             commit(types.REVIEW_LOAD_COMMENT, comment);
         })
     },

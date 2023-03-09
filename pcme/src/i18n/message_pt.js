@@ -254,6 +254,9 @@ export default {
     recently_viewed: 'Visto recentemente',
     recently_view_nothing: 'Você não visualizou nada.',
 
+    my_size_infomation: 'Minha informação de tamanho (opcional)',
+    comments_not_empty: "Os comentários não podem estar vazios!",
+
     label:{
         redeem_coupon:"Use um cupom",
         hot_use_points:"Como usar os pontos?",

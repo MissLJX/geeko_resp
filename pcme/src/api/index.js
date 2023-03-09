@@ -179,7 +179,7 @@ export const shareProduct = (id) => {
 }
 //comments
 export const getComment = (productId) => {
-    return axios.get('/comment/' + productId + '/get').then(data => data.result)
+    return axios.get('/comment/' + productId + '/get', {_:new Date().getTime()}).then(data => data.result)
 }
 export const sendComment = (comment) => {
     return axios.post('/product-comment/add', comment, {'Content-Type': http_infos.upload_image_content_type}).then(data => data)
@@ -458,4 +458,16 @@ export const getExpiredCoupons = (skip,status) => {
 // 获取选中国家电话区号
 export const fetchPhoneAreaCode = headers => {
 	return axios.get(`/context/get-config?code=0482-W`,headers)
+}
+
+export const fetchUploadImage = (imageFile, headers) =>{
+	return axios.post(`/context/upload`, imageFile,  headers);
+}
+
+export const fetchOrderReviewByOrderId = (orderId, headers) =>{
+	return axios.postStringify(`/product-comment/get-product-comments-by-order-id`, {orderId}, headers);
+}
+
+export const fetchSaveComments = (comments, headers) =>{
+	return axios.post(`/product-comment/save`, comments, {}, headers);
 }
