@@ -80,19 +80,19 @@
                 </div>
             </div>
             <div class="upload-container" id="imgboxid">
-                <ul v-if="commentImage">
-                    <li v-for="(image, index) in commentImage" class="uploadImage">
+                <ul v-if="commentsData.images">
+                    <li v-for="(image, index) in commentsData.images" class="uploadImage">
                         <img :src="formateImgUrl(image)" />
                         <span class="removeImg" @click="removeImg(index)">&times;</span>
                     </li>
                 </ul>
-                <div class="upload-img" id="uploadimg" v-show="showUploadImag">
+                <div class="upload-img" id="uploadimg" v-show="commentsData.images.length < 6">
                     <form ref="imageLoader">
                         <input type="file" name="imageFiles" multiple="multiple" @change="uploadImgApi"
                             accept="image/jpg,image/jpeg,image/png,image/gif">
                     </form>
                     <div class="addbtn">+</div>
-                    <div class="addnum">{{ addnum }} / 5</div>
+                    <div class="addnum">{{ addnum }} / 6</div>
                 </div>
             </div>
 
@@ -138,6 +138,7 @@ export default {
                 id: null,
                 productId: null,
                 score: 5,
+                images: [],
                 sizingRecommendation: '2'
             },
             sizeData: {
@@ -178,12 +179,6 @@ export default {
                 'agreeText': 'Yes'
             }
         },
-        commentImage() {
-            return this.commentsData?.images
-        },
-        showUploadImag() {
-            return this.commentsData?.images?.length <= 6
-        }
     },
     methods: {
         starClickHandle(data) {
@@ -214,8 +209,8 @@ export default {
                 const { result } = response;
                 let urls = result?.map(item => item?.url);
                 this.commentsData.images = this.commentsData?.images?.length > 0 ?
-                    [...this.commentsData?.images, ...urls]?.slice(0, 5) :
-                    [...urls]?.slice(0, 5)
+                    [...this.commentsData?.images, ...urls]?.slice(0, 6) :
+                    [...urls]?.slice(0, 6)
                 this.addnum = this.commentsData?.images?.length
             }
             this.isloding = false;
@@ -243,13 +238,20 @@ export default {
             this.isloding = true
             let comments = [...this.lastComments];
             let flag = false;
+            let varaintId = this.commentsData?.varaintId || this.commentsData?.variantId || this.$route.query.variantId
 
             let initData = {
-                id: this.commentsData?.id,
-                productId: this.commentsData?.productId,
+                productId: this.commentsData?.productId || this.$route.query.productid,
                 orderId: this.order?.id,
-                varaintId: this.commentsData?.varaintId || this.commentsData?.variantId,
             };
+
+            if(this.commentsData?.id){
+                initData['id'] = this.commentsData?.id
+            }
+
+            if(varaintId){
+                initData['varaintId'] = varaintId
+            }
 
             this.commentsData.content.trim()
 
@@ -263,11 +265,19 @@ export default {
                 initData['sizingRecommendation'] = this.commentsData.sizingRecommendation;
             }
 
-            if (this.commentsData?.images.length > 0) {
+            if (this.commentsData?.images && this.commentsData?.images?.length > 0) {
                 initData['images'] = this.commentsData.images;
             }
 
+            
+
             comments.push(initData);
+
+            comments.forEach((c) => {
+                if (c['createTime']) {
+                    delete c['createTime']
+                }
+            })
 
             if (!flag) {
                 alert(this.$t("comments_not_empty"))
@@ -308,7 +318,8 @@ export default {
                 let comment = this.comment.result?.comments?.find(c => c.productId === this.$route.query.productid) || {}
                 this.lastComments = this.comment.result?.comments?.filter(c => c.productId != this.$route.query.productid) || []
                 if (comment) {
-                    this.commentsData = comment
+                    this.commentsData = {...this.commentsData, ...comment}
+                    this.addnum = this.commentsData.images.length
                 }
                 this.sizeData = { ...this.sizeData, ...(this.comment.result?.mySizeInformation || {}) } || null
             }

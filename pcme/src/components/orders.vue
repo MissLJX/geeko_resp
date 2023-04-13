@@ -75,7 +75,7 @@
                         <div class="tbl-cell v-m w-190 tx-c">
                             <div class="pos-rel">
                                 <a class="r-btn" :href="getPayUrl(item)" target="_blank" v-if="getPayUrl(item) && item.fulfillmentStatus === constant.TOTAL_STATUS_UNPAID">{{getBtnText(item)}}</a>
-                                <div class="offTip" v-if="orderoffset(item) >= 0 && getBtnText(item)==='Imprimir boleto' && item.fulfillmentStatus === constant.TOTAL_STATUS_UNPAID && getPayUrl(item)">
+                                <!-- <div class="offTip" v-if="orderoffset(item) >= 0 && getBtnText(item)==='Imprimir boleto' && item.fulfillmentStatus === constant.TOTAL_STATUS_UNPAID && getPayUrl(item)">
                                     <div class="triangle"></div>
                                     <span class="label">Presente de cupão expirs</span>
                                     <count-down :timeStyle="{color:'#fff'}" :timeLeft="orderoffset(item)"></count-down>
@@ -83,6 +83,10 @@
                                 <div class="offTip" v-if="orderoffset(item) >= 0 && (getBtnText(item)==='Generar Ticket' || getBtnText(item)==='Gerar Ticket') && item.fulfillmentStatus === constant.TOTAL_STATUS_UNPAID && getPayUrl(item)">
                                     <div class="triangle"></div>
                                     <span class="label" >Tiempo restante para realizar el pago</span>
+                                    <count-down :timeStyle="{color:'#fff'}" :timeLeft="orderoffset(item)"></count-down>
+                                </div> -->
+                                <div class="offTip" v-if="orderoffset(item) >= 0">
+                                    <div class="triangle"></div>
                                     <count-down :timeStyle="{color:'#fff'}" :timeLeft="orderoffset(item)"></count-down>
                                 </div>
                             </div>
@@ -594,6 +598,7 @@
                 this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/order/logistics-detail', query: { orderid: orderid , method: 'orderlist' } })
             },
             orderoffset(order){
+                console.log(order,  order.expiredPaymentTime - order.serverTime)
                 if(order && order.expiredPaymentTime){
                     return  order.expiredPaymentTime - order.serverTime;
                 }
@@ -652,7 +657,7 @@
                     case '41':
                     case '43':
                     case '44':
-                    case '129':	
+                    case '129':
                     case '130':
                         return 'Generar Ticket'
                     case '29':

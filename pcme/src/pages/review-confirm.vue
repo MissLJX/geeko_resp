@@ -22,7 +22,7 @@
             </div>
 
             <div class="_bd">
-                <!-- 等待评价的订单列表 -->
+                <!-- 等待评价的订单列表  -->
                 <div v-if="listShow==1 && reviewOrderList && reviewOrderList.length > 0">
                     <review-order-list :orderList="reviewOrderList"></review-order-list>
                 </div>
@@ -38,7 +38,7 @@ import { mapGetters } from "vuex"
 import YouLikesList from "../components/often-bougth-with.vue"
 import ReviewOrderList from '../components/review-order-list.vue'
 export default {
-    data(){  
+    data(){
         return {
             loading: false,
             finished: false,
@@ -77,13 +77,11 @@ export default {
         },
         getReviewOrder(){
             this.$store.dispatch("getReviewOrder").then(res => {
-                // console.log(res)
-                if(!this.reviewOrderList || this.reviewOrderList.length < 0){
+                if(!this.reviewOrderList || this.reviewOrderList.length <= 0){
                     this.chanegData(2)
                 }
             })
         },
-        
     },
     created(){
         //  this.listingHandle();

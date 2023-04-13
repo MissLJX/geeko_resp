@@ -406,7 +406,7 @@ export const getOftenBoughtWith = (id) => {
 
 // wait for review
 export const getReviewOrder = () => {
-    return axios.get(`/${NVPATH}/order/10/get-not-comment-orders`, {}, {}).then(data => data)
+    return axios.get(`${NVPATH}/order/10/get-not-comment-orders`, {}, {}).then(data => data)
 }
 
 // 获取积分商城优惠券列表

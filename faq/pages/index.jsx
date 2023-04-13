@@ -8,7 +8,7 @@ import {Switch, Route, BrowserRouter} from 'react-router-dom'
 // import Ticket from './ticket.jsx'
 // import Orders from './orders.jsx'
 // import OnlineHelp from './onlinehelpframe.jsx'
-import Rate from './rate.jsx'
+// import Rate from './rate.jsx'
 
 import SupportNew from './support/support.jsx';
 import FAQ from './FAQ/FAQ.jsx'

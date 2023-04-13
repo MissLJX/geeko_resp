@@ -439,7 +439,7 @@ export default {
         shop_now:'comprar ahora',
         get_more_points:'obtener más puntos',
         to_review:"revisar",
-        ver_más:'ver más',
+        view_more:'ver más',
         often_bought_with:'A menudo comprado con',
         buyAndEarn:'Comprar y Ganar',
         referAFriend:'Recomendar a un amigo',

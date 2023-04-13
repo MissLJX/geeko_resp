@@ -30,6 +30,10 @@
                     <div class="x-cell expired-cla" v-if="isExpired">
                         {{ $t("point.expired") }}
                     </div>
+
+                    <div class="x-cell share" v-if="true" @click="shareCoupon">
+                        {{ 'share' }}
+                    </div>
                 </div>
                 <div class='dateInfo'>
                     <li v-if="expireDate">
@@ -82,7 +86,9 @@
             }
         },
         methods:{
-
+            shareCoupon() {
+                // 
+            }
         }
     }
 </script>
@@ -188,6 +194,18 @@
             background: #BBBBBB;
             padding: 5px 29px;
             color: #444444;
+        }
+
+        & > div.share{
+            text-align: center;
+            position:relative;
+            // padding: 5px 29px;
+            min-width: 71px;
+            height: 19px;
+            background: #FF8533;
+            border-radius: 10px;
+            color: #fff;
+            cursor: pointer;
         }
     }
     .dateInfo{

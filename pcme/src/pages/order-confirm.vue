@@ -62,13 +62,13 @@ export default {
             },
             viewOrder(){
                 if(this.orderId){
-                    this.$router.push("/me/m/order/"+this.orderId)
+                    this.$router.push("/me/m/order/detail/"+this.orderId)
                 } else {
                     this.$router.go(-1);
                 }
             },
             toReview(){
-                this.$router.push("/me/m/order?type=review'")
+                this.$router.push("/me/m/order?type=review")
             }
         },
         created(){

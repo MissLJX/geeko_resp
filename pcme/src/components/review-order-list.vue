@@ -2,7 +2,7 @@
     <div class="order_list_box">
         <div class="order_list_item" v-for="item in orderList">
             <div class="order_title">
-                <span>Order No. <span class="order_id">{{item.id}}</span></span>
+                <span>{{$t("orderno")}}. <span class="order_id">{{item.id}}</span></span>
             </div>
             <div class="order_info">
                 <ul class="order_img">
@@ -12,7 +12,7 @@
                     <span v-if="item.orderItems.length > 5" class="iconfont img_more_icon">&#xe74d;</span>
                 </ul>
                 <div class="to_review">
-                    <span @click="()=>toReview(item.id)">{{$t("points_mall.to_review")}}</span>
+                    <span @click="()=>toReview(item.id, item)">{{$t("points_mall.to_review")}}</span>
                 </div>
             </div>
         </div>
@@ -42,8 +42,10 @@ export default {
         // ...mapGetters(["reviewOrderList","loadAll","all"]),
     },
     methods:{
-        toReview(id){
-            this.$router.push("/me/m/order-review?orderid="+id)
+        toReview(id, item){
+            let productId = item?.orderItems?.[0].productId
+            let varaintId = item?.orderItems?.[0].variantId
+            this.$router.push(`/me/m/order-review?orderid=${id}&productid=${productId}&variantId=${varaintId}`)
         },
         viewMore(){
             this.$router.push({path:"/me/m/order?type=review", params:{type: 'review'}})
@@ -137,7 +139,7 @@ export default {
         text-transform: uppercase;
     }
     .view_more{
-        width: 200px;
+        width: 300px;
         height: 42px;
         background-color: #222222;
         border-radius: 21px;
@@ -153,5 +155,6 @@ export default {
         margin-top: 30px;
         text-transform: uppercase;
         cursor: pointer;
+        padding: 0 10px;
     }
 </style>
