@@ -85,8 +85,9 @@
                                     <span class="label" >Tiempo restante para realizar el pago</span>
                                     <count-down :timeStyle="{color:'#fff'}" :timeLeft="orderoffset(item)"></count-down>
                                 </div> -->
-                                <div class="offTip" v-if="orderoffset(item) >= 0">
+                                <div class="offTip" v-if="getPayUrl(item) && orderoffset(item) >= 0 && item.fulfillmentStatus === constant.TOTAL_STATUS_UNPAID">
                                     <div class="triangle"></div>
+                                    <span class="label">{{$t("remaining")}}:</span>
                                     <count-down :timeStyle="{color:'#fff'}" :timeLeft="orderoffset(item)"></count-down>
                                 </div>
                             </div>
