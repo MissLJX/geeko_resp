@@ -31,7 +31,7 @@
                         {{ $t("point.expired") }}
                     </div>
 
-                    <div class="x-cell share" v-if="true" @click="shareCoupon">
+                    <div class="x-cell share" v-if="false" @click="shareCoupon">
                         {{ 'share' }}
                     </div>
                 </div>
