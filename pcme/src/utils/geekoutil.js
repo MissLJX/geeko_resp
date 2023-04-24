@@ -163,17 +163,17 @@ export const couponName = name => {
 
 const _url_analyst = function (name) {
     if (name) {
-        return name.replace(new RegExp(/\s/g), '-');
+        return name.replace('&', ' ').replace(/\s+/g,' ').replace(new RegExp(/[\s|\%|\?|\&|#]/g),'-').replace(new RegExp(/"/g),'').replace(new RegExp(/'/g),'').replace(/\//g, '') || '-';
     }
     return 'empty-name';
 }
 
 export const producturl = function (product) {
-    return _.concat('product', _url_analyst(product.name), product.id + '.html').join('/')
+    return _.concat('product', _url_analyst(product.name).toLowerCase(), product.id + '.html').join('/')
 }
 
 export const productIdUrl = function (product) {
-    return _.concat('product', _url_analyst(product.productName || product.name), (product.id || product.productId) + '.html').join('/')
+    return _.concat('product', _url_analyst(product.productName || product.name).toLowerCase(), (product.id || product.productId) + '.html').join('/')
 }
 
 export const getSensorsUrl = (url, sensors) => {
