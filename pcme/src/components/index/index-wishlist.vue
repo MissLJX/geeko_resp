@@ -87,8 +87,9 @@
                 this.$emit("update:isloding",true);
                 if(productIds){
                     this.$store.dispatch("removeWishProducts",{productIds}).then(()=>{
-                        this.$store.dispatch("getWishproducts", 0).then(()=>{
+                        this.$store.dispatch("getWishproducts", 0).then(({finished})=>{
                             this.$emit("update:isloding",false);
+                            if(finished) this.isWishListEmptyShow = finished;
                         })
                     }).catch(e => {
                         this.$emit("update:isloding",false);

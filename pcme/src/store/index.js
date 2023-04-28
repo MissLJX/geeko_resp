@@ -1225,6 +1225,11 @@ const actions = {
                     }
                     return {finished:false}
                 } else {
+                    if(products && products.length == 0){
+                        state.wishProducts = [];
+                        commit(types.ME_GET_WISH_PRODUCTS, products)
+                        return {finished: true}
+                    }
                     if (skip === 0) {
                         return {finished: true}
                     }
