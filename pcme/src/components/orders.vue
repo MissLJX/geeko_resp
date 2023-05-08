@@ -268,6 +268,9 @@
         },
         watch:{
             orderStatus(newStatus){
+                if(newStatus !== 0){
+                    this.showHistory = false
+                }
                 let orderName =  this.getOrderStatusName(this.orderStatus);
                 this.clearSkip(
                     newStatus,orderName,"click",0
@@ -275,7 +278,6 @@
             },
         },
         created(){
-            
             this.$store.dispatch('getOrderCountAll');
             this.$store.dispatch('getOrderCountProcessing');
             this.$store.dispatch('getOrderCountShipped');
@@ -695,7 +697,6 @@
                 this.clearSkip(
                     0,'History','click',0
                 )
-                
             },
             hideHistoryMethod(){
                 this.showHistory = false;
