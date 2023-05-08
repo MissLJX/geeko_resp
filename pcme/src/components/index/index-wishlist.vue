@@ -63,10 +63,9 @@
                 return;
             }
             this.ifloding = true;
-            this.$store.dispatch("getWishproducts",this.wishskip).then(({finished}) => {
-                this.$store.dispatch("getWishskip");
+            this.$store.dispatch("getWishproducts",0).then(({finished}) => {
+                this.$store.dispatch("getWishskip",0);
                 this.ifloding = false;
-                // console.log("finished",finished);
                 if(finished) this.isWishListEmptyShow = finished;
             });
         },
@@ -75,6 +74,13 @@
             disposeWishlistProducts(){
                 return this.wishProducts && this.wishProducts.length > 0;
             },
+        },
+        watch:{
+            wishProducts(newV, oldV){
+                if(newV && newV.length == 0){
+                    this.isWishListEmptyShow = true
+                }
+            }
         },
         methods:{
             getProUrl(product){

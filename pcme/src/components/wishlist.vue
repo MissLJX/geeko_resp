@@ -2,7 +2,7 @@
 
     <div>
         <div class="imghd">
-            <p>{{wannalistNum}} {{$t("products")}}</p>
+            <p>{{listNum}} {{$t("products")}}</p>
             <p class="remove" v-if="wishProducts && wishProducts.length > 0" @click="clearAllHandle()">{{$t("remove_all_invaild")}}</p>
         </div>
         <div class="imgCon">
@@ -31,6 +31,7 @@
             <div v-show="ifloding" class="el-list-loading"><i class="iconfont">&#xe69f;</i></div>
             <div class="el-no-more" v-show="finished">{{$t('nomoredata')}}</div>
         </div>
+
         <div class="mask" v-if="isAlert">
             <div class="confirm-con">
                 <p class="cancel-btn" @click="removeAll(0)"><i class="iconfont">&#xe69a;</i></p>
@@ -68,17 +69,21 @@
                 'wishProducts',
                 'wishskip',
                 'wannalistNum'
-            ])
+            ]),
+            listNum(){
+                return this.wishProducts.length
+            }
         },
         created(){
             this.$store.dispatch('getMe').then(()=>{
                 this.$store.dispatch("getFeedSummary")
                 if(!this.finished && !this.ifloding ){
                     this.ifloding=true;
-                    this.$store.dispatch("getWishproducts",this.wishskip).then(({finished})=>{
+                    this.$store.dispatch("getWishproducts",0).then(({finished})=>{
+                        console.log(finished)
                         this.ifloding=false;
                         this.finished= finished;
-                        this.$store.dispatch("getWishskip")
+                        this.$store.dispatch("getWishskip",0)
                     });
                 }
             })
@@ -89,10 +94,18 @@
         destroyed(){
             window.removeEventListener('scroll',this.scrollHandle)
         },
+        watch:{
+            wishProducts(newV, oldV){
+                if(newV && newV.length == 0){
+                    this.finished = true
+                    this.ifloding = false
+                }
+            }
+        },
         methods:{
             scrollHandle(evt){
                 evt.preventDefault();
-                if(document.documentElement.scrollTop + window.innerHeight >= document.body.offsetHeight) {
+                if(document.documentElement.scrollTop + window.innerHeight + 200 >= document.body.offsetHeight) {
                     if(!this.finished && !this.ifloding){
                         this.ifloding = true
                         this.$store.dispatch("getWishproducts",this.wishskip).then(({finished})=>{
@@ -243,6 +256,8 @@
     .imgCon{
         width: 916px;
         ul{
+            display: inline-block;
+            width: 100%;
             li{
                 width: 25%;
                 float: left;

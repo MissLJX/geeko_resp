@@ -561,8 +561,12 @@ const mutations = {
     [types.ME_GET_WISH_PRODUCTS](state, wishProducts){
         state.wishProducts = _.concat(state.wishProducts, wishProducts)
     },
-    [types.ME_GET_WISH_SKIP](state){
-        state.wishskip += 20
+    [types.ME_GET_WISH_SKIP](state, skip){
+        if(skip || skip === 0){
+            state.wishskip = skip
+        } else {
+            state.wishskip += 20
+        }
     },
     //crdits-cards
     [types.ME_GET_CREDITCARDS](state,creditcards){
@@ -1215,31 +1219,31 @@ const actions = {
     },
     //wishlist
     getWishproducts({commit, state}, skip){
-            return api.getWishProducts(state.me.id, skip).then((products) => {
-                if (products && products.length) {
-                    if (skip === 0){
-                        state.wishProducts = [];
-                        commit(types.ME_GET_WISH_PRODUCTS, products)
-                    }else{
-                        commit(types.ME_GET_WISH_PRODUCTS, products)
-                    }
-                    return {finished:false}
-                } else {
-                    if(products && products.length == 0){
-                        state.wishProducts = [];
-                        commit(types.ME_GET_WISH_PRODUCTS, products)
-                        return {finished: true}
-                    }
-                    if (skip === 0) {
-                        return {finished: true}
-                    }
+        return api.getWishProducts(state.me.id, skip).then((products) => {
+            if (products && products.length) {
+                if (skip === 0){
+                    state.wishProducts = [];
+                    commit(types.ME_GET_WISH_PRODUCTS, products)
+                }else{
+                    commit(types.ME_GET_WISH_PRODUCTS, products)
+                }
+                return {finished:false}
+            } else {
+                if(products && products.length == 0 && skip == 0){
+                    state.wishProducts = [];
+                    commit(types.ME_GET_WISH_PRODUCTS, products)
                     return {finished: true}
                 }
+                if (skip === 0) {
+                    return {finished: true}
+                }
+                return {finished: true}
+            }
 
-            })
+        })
     },
-    getWishskip({commit}){
-        commit(types.ME_GET_WISH_SKIP)
+    getWishskip({commit}, skip){
+        commit(types.ME_GET_WISH_SKIP, skip)
     },
     //remove-wishlist-product
     removeWishProducts(context,data){
