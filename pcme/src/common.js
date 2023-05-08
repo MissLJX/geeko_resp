@@ -9,4 +9,6 @@ data.getUrl = function(url){
     return PROJECT + url;
 }
 
+data.IMAGE_GEEKO_LTD = "https://image.geeko.ltd"
+
 export default data;

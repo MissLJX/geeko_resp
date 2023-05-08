@@ -1176,7 +1176,7 @@ const actions = {
     },
     //coupons
     getCoupons({commit}){
-        return api.getCoupons().then((coupons) => {
+        return api.getWalletCoupons().then((coupons) => {
             commit(types.ME_COUPONS,coupons);
             return coupons;
         })

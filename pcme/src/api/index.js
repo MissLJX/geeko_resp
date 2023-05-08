@@ -61,6 +61,9 @@ export const cancelOrder = (id,reason) =>{
 export const getCoupons = () => {
     return axios.get(VPATH + '/coupon/get-coupon-selections').then(data => data.result)
 }
+export const getWalletCoupons = (headers) => {
+    return axios.get(`/wallet/get-coupons`, {}, headers).then(data => data.result)
+}
 export function useCoupon(id) {
     return axios.get(VPATH + '/shopping-cart/anon/use-coupon/' + id).then(data => data.result)
 }
