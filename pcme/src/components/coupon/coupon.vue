@@ -112,7 +112,6 @@
             }
         },
         mounted(){
-
         },
         computed:{
             coupontAmount(){
@@ -139,9 +138,11 @@
         methods:{
             shareCoupon() {
                 // 
+                
             },
             toShare(){
                 console.log(this.coupon)
+                this.$emit("showShareCoupon", this.coupon?.couponMouldId)
             }
         }
     }
@@ -226,6 +227,7 @@
         height: 177px;
         // border: solid 1px #e6e6e6;
         float: left;
+        margin-right: 20px;
         margin-bottom: 20px;
         position: relative;
         background: #F6B1A5;
