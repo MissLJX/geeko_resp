@@ -60,7 +60,7 @@
                     <div class="tbl">
                         <div class="tbl-cell w-523">
                             <div class="proimg" v-if="(item.orderItems || item.returnOrderItems) && index < 4" v-for="(img,index) in (item.orderItems || item.returnOrderItems)">
-                                <link-image :href="productUrl(img.productName,img.sku,img.productId)" :src="img.productImageUrl" :title="img.productName"/>
+                                <link-image :href="productUrl(img)" :src="img.productImageUrl" :title="img.productName"/>
                             </div>
                             <div v-if="(item.orderItems && item.orderItems.length > 4) || (item.returnOrderItems && item.returnOrderItems.length > 4)" class="viewmore" @click="toDetail(item, item.returnOrderItems)">
                                 <div class="bg"></div>
@@ -612,8 +612,9 @@
                     this.getData(this.orderStatus,this.method,'scroll')
                 }
             },
-            productUrl(name,sku,id){
-                return window.ctx + "/product/"+name+"/"+id+".html"
+            productUrl(product){
+                // return window.ctx + "/product/"+(name || '-')+"/"+(id || '-')+".html"
+                return '/' + utils.productIdUrl(product)
             },
             checkoutUrl(id){
                 if(id){

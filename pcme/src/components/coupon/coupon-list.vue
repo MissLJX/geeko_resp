@@ -3,7 +3,7 @@
         <list :items="coupons" :loading="loading" :scrollable="scrollable" :finished="finished" @listing="$emit('listing')">
             <template slot="li" slot-scope="props">
                 <li :key="props.item.id || props.item.coupon.id">
-                    <coupon v-if="!isRedeem" :coupon="props.item" :isExpired="isExpired" @showShareCoupon="(id) => $emit('showShareCoupon', id)"/>
+                    <coupon v-if="!isRedeem" :coupon="props.item" :isExpired="isExpired" @showShareCoupon="(params) => $emit('showShareCoupon', params)"/>
                     <redeem-coupon v-else :coupon="props.item" :index="props.index" v-on="$listeners" />
                 </li>
             </template>

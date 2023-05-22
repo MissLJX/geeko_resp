@@ -23,7 +23,7 @@
             return {
                 loading:false,
                 finished:false,
-                couponIframeSrc: 'http://192.168.2.81/order-confirm-alert',
+                couponIframeSrc: '/order-confirm-alert',
                 showShareCoupon: false
             }
         },
@@ -44,10 +44,11 @@
         components:{
             "CouponList":CouponList,
         },
-        created(){
+        mounted(){
+            let _this = this
             window.closeHandle = () => {
-                this.showShareCoupon = false
-                this.couponIframeSrc = this.couponIframeSrc.split("?couponMouldId=")?.[0]
+                _this.showShareCoupon = false
+                _this.couponIframeSrc = _this.couponIframeSrc.split("?showShareCoupon=")?.[0]
             }
         },
         destroyed(){
@@ -64,9 +65,13 @@
             })
         },
         methods:{
-            shareCoupon(id){
-                console.log("this active", id)
-                this.couponIframeSrc += '?showShareCoupon='+id
+            shareCoupon(params){
+                if(window.GeekoSensors){
+                    window.GeekoSensors.Track("GiftCardShare",{
+                        button: `clickshare`,
+                    })
+                }
+                this.couponIframeSrc += '?showShareCoupon='+params?.couponMouldId+'&showShareCouponId='+params?.couponId
                 this.showShareCoupon = true
             }
         }

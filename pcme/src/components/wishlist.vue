@@ -68,16 +68,19 @@
                 'wishProducts',
                 'wishskip',
                 'wannalistNum'
-            ])
+            ]),
+            wannaListNumber(){
+                return this.wishProducts?.length
+            }
         },
         created(){
             this.$store.dispatch('getMe').then(()=>{
                 this.$store.dispatch("getFeedSummary")
                 if(!this.finished && !this.ifloding ){
                     this.ifloding=true;
-                    this.$store.dispatch("getWishproducts",this.wishskip).then(({finished})=>{
+                    this.$store.dispatch("getWishproducts",0).then(({finished})=>{
                         this.ifloding=false;
-                        this.finished= finished;
+                        this.finished = finished;
                         this.$store.dispatch("getWishskip")
                     });
                 }
@@ -93,7 +96,7 @@
             scrollHandle(evt){
                 evt.preventDefault();
                 if(document.documentElement.scrollTop + window.innerHeight >= document.body.offsetHeight) {
-                    if(!this.finished && !this.ifloding){
+                    if(!this.finished && !this.ifloding && !this.isloding){
                         this.ifloding = true
                         this.$store.dispatch("getWishproducts",this.wishskip).then(({finished})=>{
                             this.ifloding=false;
@@ -121,15 +124,15 @@
                 return ''
             },
             cancelSaveHandle(productIds){
-                this.isloding = true;
-                if(productIds){
+                if(productIds && !this.isloding){
+                    this.isloding = true;
                     this.$store.dispatch("removeWishProducts",{productIds}).then(()=>{
+                        this.finished = false;
                         this.$store.dispatch("getWishproducts", 0).then(()=>{
                             this.isloding = false;
-                            this.$store.dispatch("getFeedSummary");
                         })
                     }).catch(e => {
-                        this.isloding = false
+                        this.isloding = false;
                         alert(e.result)
                     })
                 }
@@ -141,10 +144,11 @@
             },
             removeAll(flag){
                 this.isAlert = false;
-                if(flag === '1'){
+                if(flag === '1' && !this.isloding){
                     this.isloding = true;
                     this.$store.dispatch("removeExpiredProducts").then(()=>{
                         this.isloding = false;
+                        this.finished = false;
                         this.$store.dispatch("getWishproducts", 0);
                     }).catch((e) => {
                         this.isloding = false;
@@ -243,6 +247,7 @@
     .imgCon{
         width: 916px;
         ul{
+            display: inline-block;
             li{
                 width: 25%;
                 float: left;

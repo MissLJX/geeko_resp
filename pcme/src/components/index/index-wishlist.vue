@@ -63,11 +63,15 @@
                 return;
             }
             this.ifloding = true;
-            this.$store.dispatch("getWishproducts",this.wishskip).then(({finished}) => {
-                this.$store.dispatch("getWishskip");
+            this.$store.dispatch("getWishproducts",0).then(({finished}) => {
+                // this.$store.dispatch("getWishskip");
                 this.ifloding = false;
                 // console.log("finished",finished);
-                if(finished) this.isWishListEmptyShow = finished;
+                if(finished) {
+                    this.isWishListEmptyShow = finished
+                } else {
+                    this.isWishListEmptyShow = false
+                };
             });
         },
         computed:{
@@ -89,7 +93,11 @@
                     this.$store.dispatch("removeWishProducts",{productIds}).then(()=>{
                         this.$store.dispatch("getWishproducts", 0).then(({finished})=>{
                             this.$emit("update:isloding",false);
-                            if(finished) this.isWishListEmptyShow = finished;
+                            if(finished) {
+                                this.isWishListEmptyShow = finished
+                            } else {
+                                this.isWishListEmptyShow = false
+                            };
                         })
                     }).catch(e => {
                         this.$emit("update:isloding",false);

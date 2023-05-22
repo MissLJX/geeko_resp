@@ -15,16 +15,16 @@
                             <span class="couponAmount" :style="{'color': `${isExpired?'#666666':'#ff782a'}`}">{{coupontAmount}}</span>
                         </div>
 
-                        <div v-if="coupon.condition" :style="{ 'margin-top': 6, 'color': `${isExpired?'#666666':'#ff782a'}` }">
-                            <span class='description'>{{coupon.condition}}</span>
+                        <div v-if="displayCoupon.condition" :style="{ 'margin-top': 6, 'color': `${isExpired?'#666666':'#ff782a'}` }">
+                            <span class='description'>{{displayCoupon.condition}}</span>
                         </div>
 
-                        <div v-if="coupon.description" :style="{ 'margin-top': 6, 'color': `${isExpired?'#666666':'#ff782a'}` }">
-                            <span class='description'>{{coupon.description}}</span>
+                        <div v-if="displayCoupon.description" :style="{ 'margin-top': 6, 'color': `${isExpired?'#666666':'#ff782a'}` }">
+                            <span class='description'>{{displayCoupon.description}}</span>
                         </div>
 
-                        <div v-if="coupon.infoMsg" :style="{ 'margin-top': 6, 'color': `${isExpired?'#666666':'#ff782a'}` }">
-                            <span class='description'>{{coupon.infoMsg}}</span>
+                        <div v-if="displayCoupon.infoMsg" :style="{ 'margin-top': 6, 'color': `${isExpired?'#666666':'#ff782a'}` }">
+                            <span class='description'>{{displayCoupon.infoMsg}}</span>
                         </div>
                     </div>
 
@@ -38,9 +38,9 @@
                         <span class="el-coupon-date">{{expireDate}}</span>
                     </li>
 
-                    <li v-if="coupon.usageReminder">
+                    <li v-if="displayCoupon.usageReminder">
                         <span class='dot'>.</span>
-                        <span class="el-coupon-date">{{coupon.usageReminder}}</span>
+                        <span class="el-coupon-date">{{displayCoupon.usageReminder}}</span>
                     </li>
                 </div>
             </div>
@@ -57,16 +57,16 @@
                                 <span class="couponAmount" :style="{'color': `${isExpired?'#666666':'#ff782a'}`}">{{coupontAmount}}</span>
                             </div>
 
-                            <div v-if="coupon.condition" :style="{ 'margin-top': 6, 'color': `${isExpired?'#666666':'#ff782a'}` }">
-                                <span class='description'>{{coupon.condition}}</span>
+                            <div v-if="displayCoupon.condition" :style="{ 'margin-top': 6, 'color': `${isExpired?'#666666':'#ff782a'}` }">
+                                <span class='description'>{{displayCoupon.condition}}</span>
                             </div>
 
-                            <div v-if="coupon.description" :style="{ 'margin-top': 6, 'color': `${isExpired?'#666666':'#ff782a'}` }">
-                                <span class='description'>{{coupon.description}}</span>
+                            <div v-if="displayCoupon.description" :style="{ 'margin-top': 6, 'color': `${isExpired?'#666666':'#ff782a'}` }">
+                                <span class='description'>{{displayCoupon.description}}</span>
                             </div>
 
-                            <div v-if="coupon.infoMsg" :style="{ 'margin-top': 6, 'color': `${isExpired?'#666666':'#ff782a'}` }">
-                                <span class='description'>{{coupon.infoMsg}}</span>
+                            <div v-if="displayCoupon.infoMsg" :style="{ 'margin-top': 6, 'color': `${isExpired?'#666666':'#ff782a'}` }">
+                                <span class='description'>{{displayCoupon.infoMsg}}</span>
                             </div>
 
                             <div class="ShareBtn">
@@ -78,9 +78,9 @@
                                 <span class="el-coupon-date">{{expireDate}}</span>
                             </div>
 
-                            <div v-if="coupon.usageReminder" class="useReminder">
+                            <div v-if="displayCoupon.usageReminder" class="useReminder">
                                 <span class='dot'>.</span>
-                                <span class="el-coupon-date">{{coupon.usageReminder}}</span>
+                                <span class="el-coupon-date">{{displayCoupon.usageReminder}}</span>
                             </div>
                         </div>
                     </div>
@@ -114,13 +114,14 @@
         mounted(){
         },
         computed:{
+            displayCoupon(){
+                return this.coupon.coupon || this.coupon
+            },
             coupontAmount(){
-                if(this.coupon){
-                    return couponName(this.coupon.name);
-                }
+                return couponName(this.displayCoupon.name)
             },
             expireDate(){
-                var [beginDate, endDate] = [this.coupon.beginDate, this.coupon.endDate];
+                var [beginDate, endDate] = [this.displayCoupon.beginDate, this.displayCoupon.endDate];
 
                 if (beginDate && endDate) {
                     return fecha.format(beginDate,"DD/MM/YYYY HH:mm") + "~" + fecha.format(endDate,"DD/MM/YYYY HH:mm");
@@ -132,7 +133,7 @@
                 return data.IMAGE_GEEKO_LTD + '/chicme/20230413/gift.png'
             },
             isShareCoupon(){
-                return this.coupon.giftCard
+                return this.displayCoupon?.giftCard
             }
         },
         methods:{
@@ -141,8 +142,7 @@
                 
             },
             toShare(){
-                console.log(this.coupon)
-                this.$emit("showShareCoupon", this.coupon?.couponMouldId)
+                this.$emit("showShareCoupon", {couponMouldId:this.displayCoupon?.couponMouldId, couponId:this.displayCoupon?.id})
             }
         }
     }

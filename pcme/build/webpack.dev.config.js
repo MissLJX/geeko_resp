@@ -47,8 +47,8 @@ const config = {
     contentBase: './dist',
     proxy: {
 			'/api': {
-				// target: 'https://www.chicme.xyz',
-        target: 'https://www.crostechno.com',
+				target: 'https://www.chicme.xyz',
+        // target: 'https://www.crostechno.com',
         // target: 'https://www.neobosen.com/',
         // target: 'https://www.boutiquefeel.com/',
 				// target: 'http://192.168.1.59:8080/wanna/',
