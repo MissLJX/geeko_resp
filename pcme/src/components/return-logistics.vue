@@ -147,8 +147,10 @@
                     <p>{{$t("receipt")}}</p>
                     <ul>
                         <li v-for="(item,index) in returnLogisticsValue.receiptFiles" :key="item+index">
-                            <img :src="getDifferenceImage(item)" alt="Image" @click="magnifyImage($event)">
-                            <a 
+                            <div @click="magnifyImage($event)">
+                                <img :src="getDifferenceImage(item)" alt="Image"/>
+                            </div>
+                            <a
                                 class="pdf-click"
                                 :href="'https://image.geeko.ltd'+item.url"
                                 target="_blank"
@@ -715,7 +717,7 @@
                             background-color: #fafafa;
                             cursor: pointer;
 
-                            & img{
+                            & > div > img{
                                 width: 100%;
                             }
 

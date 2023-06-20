@@ -1,4 +1,6 @@
 export default {
+    wrong_zip_code_us: 'CEP: deve ter 5 dígitos ou 5 dígitos seguidos de um número de 4 dígitos, ex. 20001 ou 20001-0000',
+    wrong_zip_code_uk: 'CEP: deve conter 6-8 letras, dígitos e espaços no formato M2 5BQ, CW8 3AD, TN37 7HL',
     addnewaddress : 'ADICIONAR NOVO ENDEREÇO',
     default:'Padrão',
     edit:'Editar',

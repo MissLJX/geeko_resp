@@ -15,8 +15,8 @@
                     </div>
                     <div class="p-info" v-if="item.status !== '2'">
                         <div class="p-info-price">
-                            <span class="f-red">{{price(item)}}</span>
-                            <del class="f-gray">{{delPrice(item)}}</del>
+                            <span :class="{'f-red':true, 'color-red': !!delPrice(item)}">{{lowerPrice(item)}}</span>
+                            <del class="f-gray" v-if="delPrice(item)">{{delPrice(item)}}</del>
                         </div>
                         <i class="iconfont" @click="cancelSaveHandle(item.id)">&#xe629;</i>
                     </div>
@@ -95,7 +95,7 @@
         methods:{
             scrollHandle(evt){
                 evt.preventDefault();
-                if(document.documentElement.scrollTop + window.innerHeight >= document.body.offsetHeight) {
+                if(document.documentElement.scrollTop + window.innerHeight + 20 >= document.body.offsetHeight) {
                     if(!this.finished && !this.ifloding && !this.isloding){
                         this.ifloding = true
                         this.$store.dispatch("getWishproducts",this.wishskip).then(({finished})=>{
@@ -109,19 +109,6 @@
             },
             imageUrl(imgurl){
                 return utils.imageutil.getMedium(imgurl)
-            },
-            price(product){
-                if (product.promotion && product.promotion.enabled) {
-                    return utils.unitPrice(product.promotion.promotionPrice)
-                }
-                return utils.unitPrice(product.price)
-            },
-            delPrice(product){
-                if (product.msrp && product.msrp.amount > 0)
-                    return utils.unitPrice(product.msrp)
-                if (product.promotion && product.promotion.enabled)
-                    return utils.unitPrice(product.price)
-                return ''
             },
             cancelSaveHandle(productIds){
                 if(productIds && !this.isloding){
@@ -158,6 +145,14 @@
             },
             getProUrl(product){
                 return window.ctx + '/' + utils.producturl(product)
+            },
+            lowerPrice(item){
+                let price = utils.getLowerPrice(item)
+                return utils.unitPrice(price)
+            },
+            delPrice(item){
+                let price = utils.getDelPrice(item)
+                return utils.unitPrice(price)
             }
         }
     }
@@ -235,9 +230,13 @@
         }
     }
     .f-red{
-        color: #E64545;
+        color: #222;
         font-size: 16px;
         font-weight: bold;
+    }
+
+    .color-red{
+        color: #E64545;
     }
     .f-gray{
         color: #666;
@@ -248,6 +247,7 @@
         width: 916px;
         ul{
             display: inline-block;
+            width: 100%;
             li{
                 width: 25%;
                 float: left;

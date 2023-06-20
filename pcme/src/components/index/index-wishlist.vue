@@ -21,8 +21,8 @@
                     </div>
                     <div class="p-info" v-if="item.status !== '2'">
                         <div class="p-info-price">
-                            <span class="f-red">{{price(item)}}</span>
-                            <del class="f-gray">{{delPrice(item)}}</del>
+                            <span :class="{'f-red': true, 'color-red': !!delPrice(item)}" >{{lowerPrice(item)}}</span>
+                            <del class="f-gray" v-if="delPrice(item)">{{delPrice(item)}}</del>
                         </div>
                         <i class="iconfont" @click="cancelSaveHandle(item.id)">&#xe629;</i>
                     </div>
@@ -105,22 +105,17 @@
                     })
                 }
             },
-            price(product){
-                if (product.promotion && product.promotion.enabled) {
-                    return utils.unitPrice(product.promotion.promotionPrice)
-                }
-                return utils.unitPrice(product.price)
-            },
-            delPrice(product){
-                if (product.msrp && product.msrp.amount > 0)
-                    return utils.unitPrice(product.msrp)
-                if (product.promotion && product.promotion.enabled)
-                    return utils.unitPrice(product.price)
-                return ''
-            },
             getUrl(suffix){
                 return utils.PROJECT + suffix;
             },
+            lowerPrice(item){
+                let price = utils.getLowerPrice(item)
+                return utils.unitPrice(price)
+            },
+            delPrice(item){
+                let price = utils.getDelPrice(item)
+                return utils.unitPrice(price)
+            }
         }
     }
 </script>
@@ -207,10 +202,14 @@
                     }
 
                     .f-red{
-                        color: #000000;
+                        color: #222;
                         font-size: 16px;
                         font-family: 'SlatePro-Medium';
                         margin-right: 5px;
+                    }
+
+                    .color-red{
+                        color: #E64545;
                     }
                     .f-gray{
                         color: #999999;
