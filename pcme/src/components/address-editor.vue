@@ -161,6 +161,42 @@
             var initCountry = this.address && this.address.country ? this.address.country.value : window.__country ? window.__country :'US'
             var initState = this.address && this.address.state ? this.address.state.value : '-1'
             var initPhoneValidate = 'required|phone';
+            var zipValidateCountryObj = {
+                "US": 'required|zip_us',
+                "GB": 'required|zip_uk',
+                "UK": 'required|zip_uk',
+                "BR": 'required|zip_br',
+                "MX": 'required|zip_mx',
+                "DE": 'required|zip_de',
+                "FR": 'required|zip_fr',
+                "ES": 'required|zip_es',
+                "IT": 'required|zip_it',
+                "AT": 'required|zip_at',
+                "CH": 'required|zip_ch',
+                "BE": 'required|zip_be',
+                "AU": 'required|zip_au',
+                "BG": 'required|zip_bg',
+                "CA": 'required|zip_ca',
+                "CH": 'required|zip_ch',
+                "CY": 'required|zip_cy',
+                "CZ": 'required|zip_cz',
+                "EE": 'required|zip_ee',
+                "FI": 'required|zip_fi',
+                "GR": 'required|zip_gr',
+                "HR": 'required|zip_hr',
+                "IE": 'required|zip_ie',
+                "LT": 'required|zip_lt',
+                "LU": 'required|zip_lu',
+                "LV": 'required|zip_lv',
+                "NL": 'required|zip_nl',
+                "NO": 'required|zip_no',
+                "NZ": 'required|zip_nz',
+                "PL": 'required|zip_pl',
+                "PT": 'required|zip_pt',
+                "RO": 'required|zip_ro',
+                "SE": 'required|zip_se',
+                "DK": 'required|zip_dk',
+            }
             if(this.address && this.address.country){
                 if(this.address.country.value==='BR'){
                     initPhoneValidate = 'required|phone_br'
@@ -173,14 +209,9 @@
                 }
             }
             var initZipValidate = 'required|zip_us';
-            if(this.address && this.address.country){
-                if(this.address.country.value==='BR'){
-                    initZipValidate = 'required|zip_br'
-                }
-                if(this.address.country.value==='GB'){
-                    initZipValidate = 'required|zip_uk'
-                }
-            }else{
+            if(this.address && this.address.country && zipValidateCountryObj[this.address.country?.value || 'US']){
+                initZipValidate = zipValidateCountryObj[this.address.country?.value || 'US']
+            } else {
                 initZipValidate = 'required|zip_us'
             }
 
@@ -228,7 +259,8 @@
                 ifshowCPFtip:false,
                 showCountryTip: false, // 展示国家跟ip不符提示弹窗
                 countrySelectChange: false, // 是否切换国家(未切换是弹窗的条件之一)
-                phoneAreaCodeList: null, // 
+                phoneAreaCodeList: null, //
+                zipValidateCountryObj: zipValidateCountryObj,
             }
         },
         props: {
@@ -341,13 +373,16 @@
 
                 if(this.countrySelected === 'BR'){
                     this.phone_validate = 'required|phone_br'
-                    this.zip_validate = 'required|zip_br'
+                    // this.zip_validate = 'required|zip_br'
                 }
-                if(this.countrySelected === 'GB'){
-                    this.zip_validate = 'required|zip_uk'
-                }
-                if(this.countrySelected === 'US'){
-                    this.zip_validate = 'required|zip_us'
+                // if(this.countrySelected === 'GB'){
+                //     this.zip_validate = 'required|zip_uk'
+                // }
+                // if(this.countrySelected === 'US'){
+                //     this.zip_validate = 'required|zip_us'
+                // }
+                if(this.zipValidateCountryObj[this.countrySelected || 'US']){
+                    this.zip_validate = this.zipValidateCountryObj[this.countrySelected || 'US']
                 }
                 if(this.countrySelected === 'AE'){
                     this.phone_validate = 'required|phone_ae'
@@ -408,7 +443,7 @@
     }
     .phonenum{
         // width: calc(100% - 130px) !important;
-        margin-left: 10px;
+        // margin-left: 10px;
     }
     button{
         border: none;
@@ -416,7 +451,7 @@
     }
     .st-is-danger{
         color: #E64545;
-        line-height: 30px;
+        line-height: 18px;
     }
     .edit-con{
         width: 696px;

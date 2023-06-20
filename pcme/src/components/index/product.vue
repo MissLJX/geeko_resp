@@ -15,8 +15,8 @@
             </a>
         </div>
         <div class="p-info-price">
-            <span class="f-red">{{price(product)}}</span>
-            <del class="f-gray">{{delPrice(product)}}</del>
+            <span :class="{'f-red':true,'color-red': !!delPrice}">{{ lowerPrice }}</span>
+            <del class="f-gray" v-if="delPrice">{{ delPrice }}</del>
         </div>
     </div>
 </template>
@@ -61,6 +61,14 @@
             sensorProductPrice(){
                 return this.product?.usdPrice?.amount || 0
             },
+            lowerPrice(){
+                let price = utils.getLowerPrice(this.product)
+                return utils.unitPrice(price)
+            },
+            delPrice(){
+                let price = utils.getDelPrice(this.product)
+                return utils.unitPrice(price)
+            }
         },
         methods:{
             getProUrl(product){
@@ -68,19 +76,6 @@
             },
             imageUrl(imgurl){
                 return utils.imageutil.getMedium(imgurl)
-            },
-            price(product){
-                if (product.promotion && product.promotion.enabled) {
-                    return utils.unitPrice(product.promotion.promotionPrice)
-                }
-                return utils.unitPrice(product.price)
-            },
-            delPrice(product){
-                if (product.msrp && product.msrp.amount > 0)
-                    return utils.unitPrice(product.msrp)
-                if (product.promotion && product.promotion.enabled)
-                    return utils.unitPrice(product.price)
-                return ''
             },
             toDetailPage(e){
                 e.preventDefault();
@@ -141,7 +136,11 @@
             .f-red{
                 font-family: 'SlatePro-Medium';
                 font-size: 14px;
-                color: #000000;
+                color: #222;
+            }
+
+            .color-red{
+                color: #E64545;
             }
 
             .f-gray{

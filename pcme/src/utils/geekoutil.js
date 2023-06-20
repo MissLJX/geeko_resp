@@ -285,3 +285,28 @@ export const dateFormatFunc = function(times) {
     // 拼接
     return year + "/" + month + "/" + day + " " + hours + ":" + minutes + ":" + seconds;
 }
+
+export const isPromotion = product => {
+	if(!product) return
+	return product.promotion && product.promotion.enabled && product.promotion.promotionPrice
+}
+
+export const getLowerPrice = (product) => {
+	if(!product) return
+	const _is_promotion = isPromotion(product)
+	if(_is_promotion){
+		return product.promotion.promotionPrice
+	}else{
+		return product.price
+	}
+}
+
+export const getDelPrice = (product) => {
+	if(!product) return
+	const _is_promotion = isPromotion(product)
+	if(_is_promotion){
+		return product.msrp || product.price
+	}else{
+		return product.msrp
+	}
+}

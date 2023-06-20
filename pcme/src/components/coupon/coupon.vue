@@ -1,8 +1,9 @@
 <template>
-    <div class="coupon-item">
+    <div class="coupon-box">
+        <div class="coupon-item" v-if="!isShareCoupon">
             <div class="__vm x-fw __fixed"
                 :style="{background: `url(${
-                    isExpired ? 
+                    isExpired ?
                     'https://image.geeko.ltd/chicme/20220801/expired_coupon-3.png': 
                     'https://image.geeko.ltd/chicme/2021-12-17/coupon_available.png'
                 }) no-repeat` ,
@@ -13,26 +14,22 @@
                         <div style="display: flex; align-items: center; justify-content: flex-start">
                             <span class="couponAmount" :style="{'color': `${isExpired?'#666666':'#ff782a'}`}">{{coupontAmount}}</span>
                         </div>
-                        
-                        <div v-if="coupon.coupon.condition" :style="{ 'margin-top': 6, 'color': `${isExpired?'#666666':'#ff782a'}` }">
-                            <span class='description'>{{coupon.coupon.condition}}</span>
-                        </div>
-                    
-                        <div v-if="coupon.coupon.description" :style="{ 'margin-top': 6, 'color': `${isExpired?'#666666':'#ff782a'}` }">
-                            <span class='description'>{{coupon.coupon.description}}</span>
+
+                        <div v-if="displayCoupon.condition" :style="{ 'margin-top': 6, 'color': `${isExpired?'#666666':'#ff782a'}` }">
+                            <span class='description'>{{displayCoupon.condition}}</span>
                         </div>
 
-                        <div v-if="coupon.coupon.infoMsg" :style="{ 'margin-top': 6, 'color': `${isExpired?'#666666':'#ff782a'}` }">
-                            <span class='description'>{{coupon.coupon.infoMsg}}</span>
+                        <div v-if="displayCoupon.description" :style="{ 'margin-top': 6, 'color': `${isExpired?'#666666':'#ff782a'}` }">
+                            <span class='description'>{{displayCoupon.description}}</span>
+                        </div>
+
+                        <div v-if="displayCoupon.infoMsg" :style="{ 'margin-top': 6, 'color': `${isExpired?'#666666':'#ff782a'}` }">
+                            <span class='description'>{{displayCoupon.infoMsg}}</span>
                         </div>
                     </div>
 
                     <div class="x-cell expired-cla" v-if="isExpired">
                         {{ $t("point.expired") }}
-                    </div>
-
-                    <div class="x-cell share" v-if="false" @click="shareCoupon">
-                        {{ 'share' }}
                     </div>
                 </div>
                 <div class='dateInfo'>
@@ -40,19 +37,63 @@
                         <span class='dot'>.</span>
                         <span class="el-coupon-date">{{expireDate}}</span>
                     </li>
-                        
-                    <li v-if="coupon.coupon.usageReminder">
+
+                    <li v-if="displayCoupon.usageReminder">
                         <span class='dot'>.</span>
-                        <span class="el-coupon-date">{{coupon.coupon.usageReminder}}</span>
+                        <span class="el-coupon-date">{{displayCoupon.usageReminder}}</span>
                     </li>
                 </div>
             </div>
         </div>
+        <div v-else class="GiftCardCoupon" :style="styles" @click="toShare">
+            <div class="GiftCardBox">
+                <div class="GiftBox">
+                    <img :src="giftSrc" alt="" />
+                </div>
+                <div class="GiftCardInfo">
+                    <div class='couponMainInfo'>
+                        <div class="x-cell" style="height: 100%">
+                            <div style="display: flex; align-items: center; justify-content: flex-start">
+                                <span class="couponAmount" :style="{'color': `${isExpired?'#666666':'#ff782a'}`}">{{coupontAmount}}</span>
+                            </div>
+
+                            <div v-if="displayCoupon.condition" :style="{ 'margin-top': 6, 'color': `${isExpired?'#666666':'#ff782a'}` }">
+                                <span class='description'>{{displayCoupon.condition}}</span>
+                            </div>
+
+                            <div v-if="displayCoupon.description" :style="{ 'margin-top': 6, 'color': `${isExpired?'#666666':'#ff782a'}` }">
+                                <span class='description'>{{displayCoupon.description}}</span>
+                            </div>
+
+                            <div v-if="displayCoupon.infoMsg" :style="{ 'margin-top': 6, 'color': `${isExpired?'#666666':'#ff782a'}` }">
+                                <span class='description'>{{displayCoupon.infoMsg}}</span>
+                            </div>
+
+                            <div class="ShareBtn">
+                                {{ $t("share") }}
+                            </div>
+
+                            <div v-if="expireDate" class="expireDate">
+                                <span class='dot'>.</span>
+                                <span class="el-coupon-date">{{expireDate}}</span>
+                            </div>
+
+                            <div v-if="displayCoupon.usageReminder" class="useReminder">
+                                <span class='dot'>.</span>
+                                <span class="el-coupon-date">{{displayCoupon.usageReminder}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
     import fecha from 'fecha'
     import {couponName} from '../../utils/geekoutil'
+    import data from '../../common'
 
     export default {
         name:"Coupon",
@@ -64,30 +105,44 @@
             isExpired:{
                 type:Boolean,
                 default:false
+            },
+            styles:{
+                type: Object,
+                required:false
             }
         },
         mounted(){
         },
         computed:{
+            displayCoupon(){
+                return this.coupon.coupon || this.coupon
+            },
             coupontAmount(){
-                if(this.coupon && this.coupon.coupon){
-                    return couponName(this.coupon.coupon.name);
-                }
+                return couponName(this.displayCoupon.name)
             },
             expireDate(){
-                var [beginDate, endDate] = [this.coupon.coupon.beginDate, this.coupon.coupon.endDate];
+                var [beginDate, endDate] = [this.displayCoupon.beginDate, this.displayCoupon.endDate];
 
                 if (beginDate && endDate) {
                     return fecha.format(beginDate,"DD/MM/YYYY HH:mm") + "~" + fecha.format(endDate,"DD/MM/YYYY HH:mm");
                 }
 
                 return ''
-
+            },
+            giftSrc(){
+                return data.IMAGE_GEEKO_LTD + '/chicme/20230413/gift.png'
+            },
+            isShareCoupon(){
+                return this.displayCoupon?.giftCard
             }
         },
         methods:{
             shareCoupon() {
                 // 
+                
+            },
+            toShare(){
+                this.$emit("showShareCoupon", {couponMouldId:this.displayCoupon?.couponMouldId, couponId:this.displayCoupon?.id})
             }
         }
     }
@@ -167,6 +222,104 @@
         }
     }
 
+    .GiftCardCoupon{
+        width: 435px;
+        height: 177px;
+        // border: solid 1px #e6e6e6;
+        float: left;
+        margin-right: 20px;
+        margin-bottom: 20px;
+        position: relative;
+        background: #F6B1A5;
+        // box-shadow: 0px 2px 10px 0px #FF782A;
+        border-radius: 8px;
+        padding: 5px;
+        cursor: pointer;
+
+        .GiftCardBox{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: 12px;
+            background-color: #FFF6F3;
+            position: relative;
+            height: 100%;
+
+            &::after{
+                content: '';
+                display: block;
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 150px;
+                background-image: url(https://image.geeko.ltd/chicme/20230413/cou.png);
+                background-size: 100% 100%;
+                background-repeat: no-repeat;
+                // border: 1px solid green;
+                height: 100%;
+                z-index: 0;
+            }
+
+            .GiftCardInfo{
+                height: 100%;
+                flex:1;
+                width: 285px;
+            }
+
+            .GiftBox{
+                width: 150px;
+                height: 100%;
+                padding-right: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1;
+
+                img{
+                    width: 100px;
+                    height: auto;
+                }
+            }
+
+            .couponMainInfo{
+                height: 100%;
+                border-bottom: none;
+                text-align: center;
+                padding: 0;
+                justify-content: center;
+
+                & > div:first-child{
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                }
+            }
+
+            .ShareBtn{
+                min-width: 100px;
+                max-width: 200px;
+                height: 22px;
+                background: #FF8533;
+                border-radius: 11px;
+                color: #fff;
+                text-align: center;
+                line-height: 22px;
+                font-size: 16px;
+                margin: 5px;
+            }
+
+            .couponAmount{
+                white-space: pre-line;
+            }
+
+            .expireDate, .useReminder{
+                font-size: 14px;
+                color: #999;
+                font-family: Roboto-Regular, Roboto;
+            }
+        }
+    }
 
     .couponAmount{
         font-weight: normal;

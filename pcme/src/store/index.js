@@ -558,15 +558,17 @@ const mutations = {
         state.message = message;
     },
     //wishlist
-    [types.ME_GET_WISH_PRODUCTS](state, wishProducts){
+    [types.ME_GET_WISH_PRODUCTS_INIT](state, wishProducts){
+        state.wishProducts = wishProducts
+    },
+    [types.ME_GET_WISH_PRODUCTS_APPEND](state, wishProducts){
         state.wishProducts = _.concat(state.wishProducts, wishProducts)
     },
-    [types.ME_GET_WISH_SKIP](state, skip){
-        if(skip || skip === 0){
-            state.wishskip = skip
-        } else {
-            state.wishskip += 20
-        }
+    [types.ME_GET_WISH_SKIP](state){
+        state.wishskip += 20
+    },
+    [types.ME_GET_WISH_SKIP_CLEAR](state, skip){
+        state.wishskip = skip || 0
     },
     //crdits-cards
     [types.ME_GET_CREDITCARDS](state,creditcards){
@@ -1180,7 +1182,7 @@ const actions = {
     },
     //coupons
     getCoupons({commit}){
-        return api.getCoupons().then((coupons) => {
+        return api.getWalletCoupons().then((coupons) => {
             commit(types.ME_COUPONS,coupons);
             return coupons;
         })
@@ -1223,15 +1225,17 @@ const actions = {
             if (products && products.length) {
                 if (skip === 0){
                     state.wishProducts = [];
-                    commit(types.ME_GET_WISH_PRODUCTS, products)
+                    commit(types.ME_GET_WISH_PRODUCTS_INIT, products)
+                    commit(types.ME_GET_WISH_SKIP_CLEAR)
                 }else{
-                    commit(types.ME_GET_WISH_PRODUCTS, products)
+                    commit(types.ME_GET_WISH_PRODUCTS_APPEND, products)
                 }
                 return {finished:false}
             } else {
-                if(products && products.length == 0 && skip == 0){
+                if(products && products.length == 0 &&skip ==0 ){
                     state.wishProducts = [];
-                    commit(types.ME_GET_WISH_PRODUCTS, products)
+                    commit(types.ME_GET_WISH_PRODUCTS_INIT, products)
+                    commit(types.ME_GET_WISH_SKIP_CLEAR)
                     return {finished: true}
                 }
                 if (skip === 0) {
@@ -1242,12 +1246,17 @@ const actions = {
 
         })
     },
-    getWishskip({commit}, skip){
-        commit(types.ME_GET_WISH_SKIP, skip)
+    getWishskip({commit}){
+        commit(types.ME_GET_WISH_SKIP)
     },
     //remove-wishlist-product
-    removeWishProducts(context,data){
-        return api.removeWishProducts(data)
+    removeWishProducts({commit, state, dispatch},data){
+        return api.removeWishProducts(data).then((res) => {
+            // let list = [...(state?.wishProducts || [])]
+            // let list1 = list.filter(l => data?.indexOf(l?.id) == -1)
+            // commit(types.ME_GET_WISH_PRODUCTS_INIT, list1)
+            dispatch("getFeedSummary",state?.me?.id)
+        })
     },
     //remove-all-expiredproducts
     removeExpiredProducts({commit}){

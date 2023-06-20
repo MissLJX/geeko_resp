@@ -2,7 +2,7 @@
 
     <div>
         <div class="imghd">
-            <p>{{listNum}} {{$t("products")}}</p>
+            <p>{{wannalistNum}} {{$t("products")}}</p>
             <p class="remove" v-if="wishProducts && wishProducts.length > 0" @click="clearAllHandle()">{{$t("remove_all_invaild")}}</p>
         </div>
         <div class="imgCon">
@@ -15,8 +15,8 @@
                     </div>
                     <div class="p-info" v-if="item.status !== '2'">
                         <div class="p-info-price">
-                            <span class="f-red">{{price(item)}}</span>
-                            <del class="f-gray">{{delPrice(item)}}</del>
+                            <span :class="{'f-red':true, 'color-red': !!delPrice(item)}">{{lowerPrice(item)}}</span>
+                            <del class="f-gray" v-if="delPrice(item)">{{delPrice(item)}}</del>
                         </div>
                         <i class="iconfont" @click="cancelSaveHandle(item.id)">&#xe629;</i>
                     </div>
@@ -31,7 +31,6 @@
             <div v-show="ifloding" class="el-list-loading"><i class="iconfont">&#xe69f;</i></div>
             <div class="el-no-more" v-show="finished">{{$t('nomoredata')}}</div>
         </div>
-
         <div class="mask" v-if="isAlert">
             <div class="confirm-con">
                 <p class="cancel-btn" @click="removeAll(0)"><i class="iconfont">&#xe69a;</i></p>
@@ -70,8 +69,8 @@
                 'wishskip',
                 'wannalistNum'
             ]),
-            listNum(){
-                return this.wishProducts.length
+            wannaListNumber(){
+                return this.wishProducts?.length
             }
         },
         created(){
@@ -80,10 +79,9 @@
                 if(!this.finished && !this.ifloding ){
                     this.ifloding=true;
                     this.$store.dispatch("getWishproducts",0).then(({finished})=>{
-                        console.log(finished)
                         this.ifloding=false;
-                        this.finished= finished;
-                        this.$store.dispatch("getWishskip",0)
+                        this.finished = finished;
+                        this.$store.dispatch("getWishskip")
                     });
                 }
             })
@@ -94,19 +92,11 @@
         destroyed(){
             window.removeEventListener('scroll',this.scrollHandle)
         },
-        watch:{
-            wishProducts(newV, oldV){
-                if(newV && newV.length == 0){
-                    this.finished = true
-                    this.ifloding = false
-                }
-            }
-        },
         methods:{
             scrollHandle(evt){
                 evt.preventDefault();
-                if(document.documentElement.scrollTop + window.innerHeight + 200 >= document.body.offsetHeight) {
-                    if(!this.finished && !this.ifloding){
+                if(document.documentElement.scrollTop + window.innerHeight + 20 >= document.body.offsetHeight) {
+                    if(!this.finished && !this.ifloding && !this.isloding){
                         this.ifloding = true
                         this.$store.dispatch("getWishproducts",this.wishskip).then(({finished})=>{
                             this.ifloding=false;
@@ -120,29 +110,16 @@
             imageUrl(imgurl){
                 return utils.imageutil.getMedium(imgurl)
             },
-            price(product){
-                if (product.promotion && product.promotion.enabled) {
-                    return utils.unitPrice(product.promotion.promotionPrice)
-                }
-                return utils.unitPrice(product.price)
-            },
-            delPrice(product){
-                if (product.msrp && product.msrp.amount > 0)
-                    return utils.unitPrice(product.msrp)
-                if (product.promotion && product.promotion.enabled)
-                    return utils.unitPrice(product.price)
-                return ''
-            },
             cancelSaveHandle(productIds){
-                this.isloding = true;
-                if(productIds){
+                if(productIds && !this.isloding){
+                    this.isloding = true;
                     this.$store.dispatch("removeWishProducts",{productIds}).then(()=>{
+                        this.finished = false;
                         this.$store.dispatch("getWishproducts", 0).then(()=>{
                             this.isloding = false;
-                            this.$store.dispatch("getFeedSummary");
                         })
                     }).catch(e => {
-                        this.isloding = false
+                        this.isloding = false;
                         alert(e.result)
                     })
                 }
@@ -154,10 +131,11 @@
             },
             removeAll(flag){
                 this.isAlert = false;
-                if(flag === '1'){
+                if(flag === '1' && !this.isloding){
                     this.isloding = true;
                     this.$store.dispatch("removeExpiredProducts").then(()=>{
                         this.isloding = false;
+                        this.finished = false;
                         this.$store.dispatch("getWishproducts", 0);
                     }).catch((e) => {
                         this.isloding = false;
@@ -167,6 +145,14 @@
             },
             getProUrl(product){
                 return window.ctx + '/' + utils.producturl(product)
+            },
+            lowerPrice(item){
+                let price = utils.getLowerPrice(item)
+                return utils.unitPrice(price)
+            },
+            delPrice(item){
+                let price = utils.getDelPrice(item)
+                return utils.unitPrice(price)
             }
         }
     }
@@ -244,9 +230,13 @@
         }
     }
     .f-red{
-        color: #E64545;
+        color: #222;
         font-size: 16px;
         font-weight: bold;
+    }
+
+    .color-red{
+        color: #E64545;
     }
     .f-gray{
         color: #666;

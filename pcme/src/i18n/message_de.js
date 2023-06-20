@@ -1,4 +1,6 @@
 export default {
+    wrong_zip_code_us: 'Code postal : 5 chiffres ou 5 chiffres avec un numéro à 4 chiffres, par ex. 20001 ou 20001-0000',
+    wrong_zip_code_uk: 'Code postal : 6-8 lettres, chiffres et espaces dans le format M2 5BQ, CW8 3AD, TN37 7HL',
     addnewaddress : 'Neu hinzuf\u00fcgen Adresse',
     default:'Standard',
     edit:'Bearbeiten',
