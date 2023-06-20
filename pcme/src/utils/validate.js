@@ -24,7 +24,7 @@ const __reg_zip_ee__ = /^[0-9]{5}$/ // 爱沙尼亚
 const __reg_zip_fi__ = /^[0-9]{5}$/ // 芬兰
 const __reg_zip_gr__ = /^[0-9]{3}\s?[0-9]{2}$/ //希腊
 const __reg_zip_hr__ = /^[0-9]{5}$/ // 克罗地亚
-const __reg_zip_ie__ = /^[AC-FHKNPRTV-Y][0-9]{2}|D6W\s?[0-9AC-FHKNPRTV-Y]{4}$/i // 爱尔兰
+const __reg_zip_ie__ = /^([AC-FHKNPRTV-Y][0-9]{2}|D6W)\s?[0-9AC-FHKNPRTV-Y]{4}$/i // 爱尔兰
 const __reg_zip_lt__ = /^([Ll][Tt][-\s]?)?[0-9]{5}$/ // 立陶宛
 const __reg_zip_lu__ = /^[0-9]{4}$/ // 卢森堡
 const __reg_zip_lv__ = /^[Ll][Vv][-\s]?[0-9]{4}$/ // 拉脱维亚
@@ -78,7 +78,7 @@ const countryErrorTipObj = {
     // "US": $t.messages[$t.locale].wrong_zip_code_us,
     // "GB": $t.messages[$t.locale].wrong_zip_code_uk,
     // "UK": $t.messages[$t.locale].wrong_zip_code_uk,
-    "BR": 'O código postal deve conter pelo menos 5 dígitos. Exemplo: 12345.',
+    "BR": $t.messages[$t.locale].wrong_address_br,
     "MX": 'El código postal debe ser un número de 5 dígitos, por ejemplo: 12345.' ,
     "DE": 'Die Postleitzahl sollte aus mindestens 5 Ziffern bestehen. Beispiel: 12345.' ,
     "FR": 'Le code postal doit contenir 5 chiffres, par exemple : 12345.',

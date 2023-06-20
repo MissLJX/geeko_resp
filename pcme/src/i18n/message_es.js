@@ -1,6 +1,7 @@
 export default {
     wrong_zip_code_us: 'Código postal: debe tener 5 dígitos o 5 dígitos seguidos de un número de 4 dígitos, ej. 20001 o 20001-0000',
     wrong_zip_code_uk: 'Código postal: debe contener 6-8 letras, dígitos y espacios en el formato M2 5BQ, CW8 3AD, TN37 7HL',
+    wrong_address_br: 'El formato de la dirección es incorrecto, complete el formulario desde [01310-000]',
     addnewaddress : 'Agregar Nuevo Direcci\u00f3n',
     default:'Por defecto',
     edit:'Editar',

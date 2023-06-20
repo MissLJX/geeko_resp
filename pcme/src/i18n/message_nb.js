@@ -3,6 +3,7 @@
 export default {
     wrong_zip_code_us: 'ZIP/Postal code should be 5 digits or 5 digits with a 4-digit number, e.g. 20001 or 20001-0000',
     wrong_zip_code_uk: 'ZIP/Postal code should contain 6-8 letters, digits and spaces in the format M2 5BQ, CW8 3AD, TN37 7HL.',
+    wrong_address_br: 'O formato do endereço está incorreto, preencha o formulário de [01310-000]',
     addnewaddress : 'LEGG TIL NY ADRESSE',  //google
     default:'Misligholde',  //google
     edit:'Rediger',
