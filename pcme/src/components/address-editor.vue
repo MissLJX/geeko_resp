@@ -105,19 +105,25 @@
                 <div class="input-con required w-left">
                     <label>{{$t('phoneNumber')}}:</label>
                     <div class="x-default-input" style="display:flex;align-items: center;justify-content: space-between;margin-bottom: 0;">
-                        <span v-if="countrySelected==='BR'" style="width:">BR +55</span>
-                        <span v-if="countrySelected != 'BR' && phoneAreaCode">{{phoneAreaCode}}</span>
-                        <div>
-                            <input name="phoneNumber" 
+                        <!-- <span v-if="countrySelected==='BR'" style="width:">BR +55</span> -->
+                        <span v-if="countrySelected != 'PR' && phoneAreaCode" style="margin-right:10px;">{{phoneAreaCode}}</span>
+                        <select v-if="countrySelected == 'PR'"
+                            ref="phoneArea" class="x-select-fill"
+                            style="width:100px;"
+                            v-model="shipping.phoneArea"
+                            v-validate="phoneAreaValidate">
+                            <option value='1787'>PR +1787</option>
+                            <option value='1939'>PR +1939</option>
+                        </select>
+                        <!-- <div> -->
+                            <input name="phoneNumber"
                                v-model="shipping.phoneNumber"
                                v-validate="phone_validate"
                                :class="{'st-input':true, 'st-input-danger':errors.has('phoneNumber'),'phonenum':countrySelected==='BR' || phoneAreaCode}"
                                style="flex:1;"
                                type="text"
                                />
-                           
-                        </div>
-                        
+                        <!-- </div> -->
                     </div>
                     <span v-show="errors.has('phoneNumber')"
                                 class="st-is-danger">{{errors.first("phoneNumber")}}</span>
@@ -228,7 +234,7 @@
                         addressItem.lastName = "";
                     }
                 }
-                if(addressItem.phoneArea && addressItem.phoneNumber){
+                if(addressItem.phoneArea && addressItem.phoneNumber && addressItem.country.value != "PR"){
                     addressItem.phoneNumber = addressItem.phoneArea + addressItem.phoneNumber
                 }
             }
@@ -256,6 +262,7 @@
                 phone_validate:initPhoneValidate,
                 zip_validate:initZipValidate,
                 cpfValidate:'required|cpf',
+                phoneAreaValidate: 'required|phoneArea',
                 ifshowCPFtip:false,
                 showCountryTip: false, // 展示国家跟ip不符提示弹窗
                 countrySelectChange: false, // 是否切换国家(未切换是弹窗的条件之一)
@@ -390,6 +397,11 @@
                 if(this.countrySelected === 'SA'){
                     this.phone_validate = 'required|phone_sa'
                 }
+                if(this.countrySelected === 'PR'){
+                    this.shipping.phoneArea = '1787'
+                } else {
+                    this.shipping.phoneArea = ''
+                }
 
                 this.stateSelected = '-1'
                 this.getStates(true)
@@ -512,6 +524,24 @@
                     height: 40px;
                     border: 1px solid #cacaca;
                     width: 100%; 
+                }
+
+                .x-select-fill {
+                    border: none;
+                    appearance: none;
+                    -moz-appearance: none;
+                    -webkit-appearance: none;
+                    // padding-right: 14px;
+                    // padding-left: 5px;
+                    box-shadow: none;
+                    color: #666;
+                    cursor: pointer;
+                    height: 40px;
+                    // border: 1px solid #cacaca;
+                    width: 100%;
+                    position: relative;
+                    background: url(https://image.geeko.ltd/chicme/20230626062237549003.png) no-repeat scroll calc(100% - 10px) center transparent;
+                    background-size: 10px;
                 }
 
                 .countryIconDiv{

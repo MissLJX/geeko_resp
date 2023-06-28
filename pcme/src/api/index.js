@@ -95,6 +95,34 @@ export const removeWishProducts = (data) => {
 //remove-all-expiredproducts
 export const removeExpiredProducts = () => axios.get(VPATH + '/wanna-list/clear-products')
 
+export const fetchWishListFilterResult = (filter) => {
+	return axios.post(`/wishlist/filter`, filter)
+}
+
+export const fetchWishListCount = (filter) => {
+	return axios.post('/wishlist/count', filter)
+}
+
+export const getWishListFilter = () => {
+	return axios.get(`/wishlist/get-filter`)
+}
+
+export const getWishListTotalCount = () => {
+	return axios.get(`/wishlist/get-total-count`, {_:new Date().getTime()})
+}
+
+export const removeWishListProduct = (productIds) => {
+	return axios.postStringify(`/wishlist/remove`, {productIds, _:new Date().getTime()})
+}
+
+export const saveWishListProduct = (productId) => {
+	return axios.postStringify(`/wishlist/save`, {productId, _:new Date().getTime()})
+}
+
+export const removeWishListExpired = () => {
+    return axios.get(`/wishlist/clear-off-shelf-products`, {_:new Date().getTime()})
+}
+
 //get-credit-cards
 
 export const getCreditCards = () => {

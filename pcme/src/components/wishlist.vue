@@ -2,12 +2,12 @@
 
     <div>
         <div class="imghd">
-            <p>{{wannalistNum}} {{$t("products")}}</p>
-            <p class="remove" v-if="wishProducts && wishProducts.length > 0" @click="clearAllHandle()">{{$t("remove_all_invaild")}}</p>
+            <p>{{wishListCount}} {{$t("products")}}</p>
+            <p class="remove" v-if="wishListFilterResult && wishListFilterResult.length > 0" @click="clearAllHandle()">{{$t("remove_all_invaild")}}</p>
         </div>
         <div class="imgCon">
             <ul>
-                <li v-for="item in wishProducts">
+                <li v-for="item in wishListFilterResult">
                     <div>
                         <a :href="getProUrl(item)">
                             <img :src="imageUrl(item.pcMainImage)"/>
@@ -28,8 +28,8 @@
                     </div>
                 </li>
             </ul>
-            <div v-show="ifloding" class="el-list-loading"><i class="iconfont">&#xe69f;</i></div>
-            <div class="el-no-more" v-show="finished">{{$t('nomoredata')}}</div>
+            <div v-show="wishListLoading" class="el-list-loading"><i class="iconfont">&#xe69f;</i></div>
+            <div class="el-no-more" v-show="wishListFinished">{{$t('nomoredata')}}</div>
         </div>
         <div class="mask" v-if="isAlert">
             <div class="confirm-con">
@@ -41,7 +41,7 @@
                 </div>
             </div>
         </div>
-        <loding v-if="isloding"></loding>
+        <loding v-if="wishListLoading"></loding>
     </div>
 </template>
 
@@ -67,23 +67,18 @@
                 'me',
                 'wishProducts',
                 'wishskip',
-                'wannalistNum'
+                'wannalistNum',
+
+                'wishListFilterResult',
+                'wishListLoading',
+                'wishListFinished',
+                'wishListCount'
             ]),
-            wannaListNumber(){
-                return this.wishProducts?.length
-            }
         },
         created(){
             this.$store.dispatch('getMe').then(()=>{
-                this.$store.dispatch("getFeedSummary")
-                if(!this.finished && !this.ifloding ){
-                    this.ifloding=true;
-                    this.$store.dispatch("getWishproducts",0).then(({finished})=>{
-                        this.ifloding=false;
-                        this.finished = finished;
-                        this.$store.dispatch("getWishskip")
-                    });
-                }
+                this.$store.dispatch("initWishListProducts", {})
+                this.$store.dispatch("getWishListCount")
             })
         },
         mounted(){
@@ -96,14 +91,9 @@
             scrollHandle(evt){
                 evt.preventDefault();
                 if(document.documentElement.scrollTop + window.innerHeight + 20 >= document.body.offsetHeight) {
-                    if(!this.finished && !this.ifloding && !this.isloding){
-                        this.ifloding = true
-                        this.$store.dispatch("getWishproducts",this.wishskip).then(({finished})=>{
-                            this.ifloding=false;
-                            this.finished= finished;
-                            this.$store.dispatch("getWishskip");
-                            this.$store.dispatch("getFeedSummary");
-                        });
+                    console.log(this.wishListLoading, this.wishListFinished)
+                    if(!this.wishListLoading && !this.wishListFinished){
+                        this.$store.dispatch("appendWishListProducts", {})
                     }
                 }
             },
@@ -111,36 +101,19 @@
                 return utils.imageutil.getMedium(imgurl)
             },
             cancelSaveHandle(productIds){
-                if(productIds && !this.isloding){
-                    this.isloding = true;
-                    this.$store.dispatch("removeWishProducts",{productIds}).then(()=>{
-                        this.finished = false;
-                        this.$store.dispatch("getWishproducts", 0).then(()=>{
-                            this.isloding = false;
-                        })
-                    }).catch(e => {
-                        this.isloding = false;
-                        alert(e.result)
-                    })
+                if(productIds && !this.wishListLoading){
+                    this.$store.dispatch("removeWishListProduct", productIds)
                 }
             },
             clearAllHandle(){
-                if(this.wishProducts && this.wishProducts.length > 0){
+                if(this.wishListFilterResult && this.wishListFilterResult.length > 0){
                     this.isAlert = true;
                 }
             },
             removeAll(flag){
                 this.isAlert = false;
-                if(flag === '1' && !this.isloding){
-                    this.isloding = true;
-                    this.$store.dispatch("removeExpiredProducts").then(()=>{
-                        this.isloding = false;
-                        this.finished = false;
-                        this.$store.dispatch("getWishproducts", 0);
-                    }).catch((e) => {
-                        this.isloding = false;
-                        alert(e.result);
-                    })
+                if(flag === '1' && !this.wishListLoading){
+                    this.$store.dispatch("removeExpiredProducts")
                 }
             },
             getProUrl(product){

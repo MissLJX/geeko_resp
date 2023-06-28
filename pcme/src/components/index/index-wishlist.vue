@@ -11,7 +11,7 @@
 
         <div class="_bd">
             <ul v-if="!isWishListEmptyShow">
-                <li v-for="(item,index) in wishProducts.slice(0,8)" :key="index+item.id">
+                <li v-for="(item,index) in wishListFilterResult.slice(0,8)" :key="index+item.id">
                     <div>
                         <a :href="getProUrl(item)">
                             <div class="image-item">
@@ -41,7 +41,7 @@
             </div>
         </div>
 
-        <div v-show="ifloding" class="el-list-loading"><i class="iconfont">&#xe69f;</i></div>
+        <div v-show="wishListLoading" class="el-list-loading"><i class="iconfont">&#xe69f;</i></div>
     </div>
 </template>
 
@@ -55,30 +55,35 @@
         data(){
             return {
                 ifloding:false,
-                isWishListEmptyShow:false
+                // isWishListEmptyShow:false
             }
         },
         created(){
-            if(checkArray(this.wishProducts)){
+            if(checkArray(this.wishListFilterResult)){
                 return;
             }
-            this.ifloding = true;
-            this.$store.dispatch("getWishproducts",0).then(({finished}) => {
-                // this.$store.dispatch("getWishskip");
-                this.ifloding = false;
-                // console.log("finished",finished);
-                if(finished) {
-                    this.isWishListEmptyShow = finished
-                } else {
-                    this.isWishListEmptyShow = false
-                };
-            });
+            this.$store.dispatch("initWishListProducts", {})
+            // this.ifloding = true;
+            // this.$store.dispatch("getWishproducts",0).then(({finished}) => {
+            //     // this.$store.dispatch("getWishskip");
+            //     this.ifloding = false;
+            //     // console.log("finished",finished);
+            //     if(finished) {
+            //         this.isWishListEmptyShow = finished
+            //     } else {
+            //         this.isWishListEmptyShow = false
+            //     };
+            // });
         },
         computed:{
-            ...mapGetters(['wishProducts','wishskip']),
+            ...mapGetters(['wishListFilterResult','wishListLoading','wishListFinished']),
             disposeWishlistProducts(){
-                return this.wishProducts && this.wishProducts.length > 0;
+                return this.wishListFilterResult?.length > 0;
             },
+            isWishListEmptyShow(){
+                console.log(this.wishListFilterResult, this.wishListFinished)
+                return (!this.wishListFilterResult || this.wishListFilterResult?.length <= 0) && this.wishListFinished
+            }
         },
         methods:{
             getProUrl(product){
@@ -88,21 +93,8 @@
                 return utils.imageutil.getMedium(imgurl)
             },
             cancelSaveHandle(productIds){
-                this.$emit("update:isloding",true);
                 if(productIds){
-                    this.$store.dispatch("removeWishProducts",{productIds}).then(()=>{
-                        this.$store.dispatch("getWishproducts", 0).then(({finished})=>{
-                            this.$emit("update:isloding",false);
-                            if(finished) {
-                                this.isWishListEmptyShow = finished
-                            } else {
-                                this.isWishListEmptyShow = false
-                            };
-                        })
-                    }).catch(e => {
-                        this.$emit("update:isloding",false);
-                        alert(e.result)
-                    })
+                    this.$store.dispatch("removeWishListProduct",productIds)
                 }
             },
             getUrl(suffix){

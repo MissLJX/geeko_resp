@@ -171,6 +171,14 @@ const state = {
     vipShow: false,
     cashHistory: [],
     cashFinished: false,
+
+    wishListFilter: null,
+	wishListFilterResult: null,
+	wishListCount: 0,
+	wishListFilterCount: null,
+	wishListLoading: false,
+	wishListFinished: false,
+	wishListLastToken: null,
 };
 const getters = {
     me: state => state.me,
@@ -322,6 +330,14 @@ const getters = {
     vipShow: state => state.vipShow,
     cashHistory: state => state.cashHistory,
     cashFinished: state => state.cashFinished,
+
+    wishListFilter: state => state.wishListFilter,
+	wishListFilterResult: state => state.wishListFilterResult,
+	wishListCount: state => state.wishListCount,
+	wishListFilterCount: state => state.wishListFilterCount,
+	wishListLoading: state => state.wishListLoading,
+	wishListFinished: state => state.wishListFinished,
+	wishListLastToken: state => state.wishListLastToken,
 };
 const mutations = {
     [types.INIT_ME](state, me){
@@ -865,7 +881,35 @@ const mutations = {
     },
     [types.SET_CASH_HISTORY_FINISHED](state,flag){
         state.cashFinished = flag
-    }
+    },
+    // wishlist 23/6/28
+    [types.CUSTOMER_WISH_LIST_FILTER](state, filter){
+        state.wishListFilter = filter
+    },
+    [types.CUSTOMER_WISH_LIST_INIT](state, list){
+        state.wishListFilterResult = list
+    },
+    [types.CUSTOMER_WISH_LIST_APPEND](state, list){
+        state.wishListFilterResult = [...(state.wishListFilterResult || []), ...list]
+    },
+    [types.CUSTOMER_WISH_LIST_UNSHIFT](state, data){
+        state.wishListFilter = [data, ...(state.wishListFilterResult || [])]
+    },
+    [types.CUSTOMER_WISH_LIST_FILTER_COUNT](state, count){
+        state.wishListFilterCount = count
+    },
+    [types.CUSTOMER_WISH_LIST_COUNT](state, count){
+        state.wishListCount = count
+    },
+    [types.CUSTOMER_WISH_LIST_LOADING](state, flag){
+        state.wishListLoading = flag
+    },
+    [types.CUSTOMER_WISH_LIST_FINISHED](state, flag){
+        state.wishListFinished = flag
+    },
+    [types.CUSTOMER_WISH_LIST_LAST_TOKEN](state, data){
+        state.wishListLastToken = data
+    },
 }
 const actions = {
     // init({commit}){
@@ -1259,8 +1303,108 @@ const actions = {
         })
     },
     //remove-all-expiredproducts
-    removeExpiredProducts({commit}){
-        return api.removeExpiredProducts()
+    removeExpiredProducts({commit, state, dispatch}){
+        const {wishListLoading} = state || {}
+        if(!wishListLoading){
+            commit(types.CUSTOMER_WISH_LIST_LOADING, true)
+            return api.removeWishListExpired().then(res => {
+                commit(types.CUSTOMER_WISH_LIST_LOADING, false)
+                dispatch("initWishListProducts")
+            }).catch(err => {
+                alert(err.result)
+                commit(types.CUSTOMER_WISH_LIST_LOADING, false)
+            })
+        }
+    },
+    initWishListProducts({commit, state}, filter){
+        const {wishListLoading} = state || {}
+        if(!wishListLoading){
+            commit(types.CUSTOMER_WISH_LIST_LOADING, true)
+            return api.fetchWishListFilterResult(filter).then(res => {
+                commit(types.CUSTOMER_WISH_LIST_LOADING, false)
+                if(res?.code == 200 && res?.result){
+                    const products = res?.result?.products
+                    commit(types.CUSTOMER_WISH_LIST_INIT, products)
+                    if(!res?.result?.lastToken || products?.length <= 1){
+                        commit(types.CUSTOMER_WISH_LIST_FINISHED, true)
+                    }
+                    commit(types.CUSTOMER_WISH_LIST_LAST_TOKEN, res?.result?.lastToken)
+                }
+            }).catch(err => {
+                alert(err.result)
+                commit(types.CUSTOMER_WISH_LIST_LOADING, false)
+            })
+        }
+    },
+    appendWishListProducts({commit, state, dispatch}, filter){
+        const {wishListLoading, wishListFinished, wishListLastToken} = state || {}
+        if(!wishListLoading && !wishListFinished){
+            commit(types.CUSTOMER_WISH_LIST_LOADING, true)
+            return api.fetchWishListFilterResult({...(filter || {}), lastToken: wishListLastToken}).then(res => {
+                commit(types.CUSTOMER_WISH_LIST_LOADING, false)
+                if(res?.code == 200 && res?.result){
+                    const products = res?.result?.products
+                    commit(types.CUSTOMER_WISH_LIST_APPEND, products)
+                    if(!res?.result?.lastToken || products?.length <= 1){
+                        commit(types.CUSTOMER_WISH_LIST_FINISHED, true)
+                    }
+                    commit(types.CUSTOMER_WISH_LIST_LAST_TOKEN, res?.result?.lastToken)
+                }
+            }).catch(err => {
+                alert(err.result)
+                commit(types.CUSTOMER_WISH_LIST_LOADING, false)
+            })
+        }
+    },
+    getWishListFilter({commit, state}){
+        return api.getWishListFilter().then(res => {
+            if(res?.code == 200 && res?.result){
+                commit(types.CUSTOMER_WISH_LIST_FILTER, res?.result)
+            }
+        })
+    },
+    getWishListCount({commit}){
+        return api.fetchWishListCount().then(res => {
+            if(res?.code == 200){
+                commit(types.CUSTOMER_WISH_LIST_COUNT, res?.result || 0)
+            }
+        })
+    },
+    fetchWishListFilterCount({commit}, filter){
+        return api.fetchWishListFilterCount(filter).then(res => {
+            if(res?.code == 200){
+                commit(types.CUSTOMER_WISH_LIST_FILTER_COUNT, res?.result || 0)
+            }
+        })
+    },
+    removeWishListProduct({commit, state, dispatch}, id){
+        const {wishListFilterResult, wishListLoading} = state
+        if(!wishListLoading){
+            commit(types.CUSTOMER_WISH_LIST_LOADING, true)
+            return api.removeWishListProduct(id).then(res => {
+                commit(types.CUSTOMER_WISH_LIST_LOADING, false)
+                let newList = wishListFilterResult?.filter(w => w?.id != id)
+                console.log("newList", newList)
+                commit(types.CUSTOMER_WISH_LIST_INIT, newList)
+                dispatch("getWishListCount")
+            }).catch(err => {
+                alert(err.result)
+                commit(types.CUSTOMER_WISH_LIST_LOADING, false)
+            })
+        }
+    },
+    saveWishListProduct({commit, state, dispatch}, id){
+        const {wishListLoading} = state
+        if(!wishListLoading){
+            commit(types.CUSTOMER_WISH_LIST_LOADING, true)
+            return api.saveWishListProduct(id).then(res => {
+                commit(types.CUSTOMER_WISH_LIST_LOADING, false)
+                dispatch("initWishListProducts",{})
+            }).catch(err => {
+                alert(err.result)
+                commit(types.CUSTOMER_WISH_LIST_LOADING, false)
+            })
+        }
     },
     //get-credit-cards
     getCreditCards({commit}){
