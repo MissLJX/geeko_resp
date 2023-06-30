@@ -476,3 +476,11 @@ Validator.extend('cpf', {
         return result
     }
 });
+Validator.extend('phoneArea', {
+    getMessage: function () {
+        return $t.messages[$t.locale].required
+    },
+    validate: value => {
+        return !!value
+    }
+});
