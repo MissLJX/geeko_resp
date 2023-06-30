@@ -34,7 +34,7 @@
                                 <span>{{$t("select_courier_company")}}</span>
                             </div>
                             <ul>
-                                <template v-if="logisticsCompanies != null && logisticsCompanies.commonlyUsed.length > 0">
+                                <template v-if="showCompanyBox">
                                     <li 
                                         class="__item" 
                                         v-for="(commonly,index) in logisticsCompanies.commonlyUsed" 
@@ -47,10 +47,10 @@
                                     </li>
                                 </template>
 
-                                <template v-if="logisticsCompanies != null && logisticsCompanies.logisticsCompanies.length > 0">
+                                <template v-if="showCompanyOtherBox">
                                     <li 
                                         class="__item" 
-                                        v-for="(logistics,index) in logisticsCompanies.logisticsCompanies"  
+                                        v-for="(logistics,index) in logisticsCompanies.logisticsCompanies"
                                         @click="getLogisticsValue(logistics.name,'1')"
                                         :key="logistics.name+index"
                                         :class="{'active' : logistics.name === itemName}"
@@ -180,8 +180,6 @@
 
 <script>
     import HtmlImageCompress from 'html-image-compress';
-    
-
     import { mapGetters } from 'vuex';
 
     export default {
@@ -223,10 +221,10 @@
                 // console.log("result",result);
                 if(result){
                     var item = result.logistics;
-                    this.logisticsSelect = item.logisticsCompany ? item.logisticsCompany : "";
-                    this.logisticsNumber = item.trackingNumber ? item.trackingNumber : "";
-                    this.uploadedImages = item.receiptFiles && item.receiptFiles.length > 0 ? item.receiptFiles : [];
-                    this.addnum = item.receiptFiles && item.receiptFiles.length > 0 ? item.receiptFiles.length : 0;
+                    this.logisticsSelect = item?.logisticsCompany ? item.logisticsCompany : "";
+                    this.logisticsNumber = item?.trackingNumber ? item.trackingNumber : "";
+                    this.uploadedImages = item?.receiptFiles && item?.receiptFiles.length > 0 ? item.receiptFiles : [];
+                    this.addnum = item?.receiptFiles && item?.receiptFiles.length > 0 ? item.receiptFiles.length : 0;
                 }
                 this.$emit("update:loddingShow",false);
             });
@@ -235,18 +233,23 @@
             HtmlImageCompress,
         },
         computed:{
-            ...mapGetters(['logisticsCompanies','returnLogistics']),
+            ...mapGetters(['logisticsCompanies', 'returnLogistics']),
             returnLogisticsShow(){
-                return !!this.returnLogistics && this.returnLogistics.length < 0 || this.returnLogisticsShowActive;
+                return !!this.returnLogistics && !Array.isArray(this.returnLogistics) || this.returnLogisticsShowActive;
             },
             returnLogisticsValue(){
                 // console.log(this.returnLogistics)
-                return !!this.returnLogistics && this.returnLogistics.length > 0 ? this.returnLogistics[0] : {};
+                return !!this.returnLogistics && Array.isArray(this.returnLogistics) && this.returnLogistics.length > 0 ? this.returnLogistics[0] : {};
             },
             fill_courier_company(){
                 return this.$t("fill_courier_company")
+            },
+            showCompanyBox(){
+                return !!this.logisticsCompanies && this.logisticsCompanies?.commonlyUsed?.length > 0
+            },
+            showCompanyOtherBox(){
+                return !!this.logisticsCompanies && this.logisticsCompanies?.logisticsCompanies?.length > 0
             }
-            
         },
         methods:{
             getLogisticsValue(name,type){

@@ -11,7 +11,7 @@
 
         <div class="_bd">
             <ul v-if="!isWishListEmptyShow">
-                <li v-for="(item,index) in wishListFilterResult.slice(0,8)" :key="index+item.id">
+                <li v-for="(item,index) in wishListShow" :key="index+item.id">
                     <div>
                         <a :href="getProUrl(item)">
                             <div class="image-item">
@@ -79,6 +79,9 @@
             ...mapGetters(['wishListFilterResult','wishListLoading','wishListFinished']),
             disposeWishlistProducts(){
                 return this.wishListFilterResult?.length > 0;
+            },
+            wishListShow(){
+                return [...(this.wishListFilterResult || [])]?.slice(0,8)
             },
             isWishListEmptyShow(){
                 console.log(this.wishListFilterResult, this.wishListFinished)
