@@ -1475,14 +1475,16 @@ const actions = {
         // console.log('ss')
         commit(types.GLOBAL_GET_TICKETS, [])
     },
-    getTicket({commit},id){
+    getTicket({commit, dispatch},id){
         api.getTicket(id).then((ticket) => {
             if(ticket){
                 // console.log(ticket)
+                let id = ticket.order? ticket.order.id: ( ticket.ticket? ticket.ticket.operaId: '')
                 commit(types.GLOBAL_GET_TICKET, ticket.order?ticket.order:{})
                 commit(types.GLOBAL_GET_TICKET_CON, ticket.ticket?ticket.ticket:{})
-                commit(types.GLOBAL_GET_TICKET_ID, ticket.order?ticket.order.id:(ticket.ticket?ticket.ticket.operaId:''))
+                commit(types.GLOBAL_GET_TICKET_ID, id)
                 commit(types.GLOBAL_GET_TICKET_SUB, ticket.subjectSelections)
+                dispatch("getOrder", id)
             }
         }).catch(err => {
             alert(err.result)

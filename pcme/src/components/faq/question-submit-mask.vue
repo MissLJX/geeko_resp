@@ -118,13 +118,19 @@ export default {
             type: Array,
             default: []
         },
-        searchList:{
-            type:Array,
-            default:[]
+        questionObject:{
+            type: Object,
+            default: {
+                questionTypeInput: '',
+                showSelectItem: false,
+                descriptionInput: '',
+                uploadImgList: [],
+                uploadImgFileList: []
+            }
         },
-        placeHolder:{
-            type:String,
-            // default: 'Popular Searches:Refund,Return,Shipping'
+        descriptionRequired:{
+            type: Boolean,
+            default: false
         }
     },
     data(){
@@ -154,8 +160,11 @@ export default {
         questionImgUpload(e){
             this.$emit("questionImgUpload", e)
         },
-        inputClear(){
-            this.$emit("inputChange", '')
+        questionSubmit(){
+            this.$emit("questionSubmit")
+        },
+        descriptionTextAreaChange(e){
+            this.$emit("descriptionTextAreaChange", e)
         },
         regTxt(txt){
             let reg = new RegExp(''+this.inputValue+'', "ig")
@@ -175,4 +184,312 @@ export default {
 
 
 <style scoped lang="scss">
+.questionSubmitMask{
+    position: absolute;
+    top: 0;
+    z-index: 11;
+    height: 100vh;
+    width: 100%;
+    background: rgba(0,0,0,0.6);
+    text-align: left;
+
+    .questionSubmitContent{
+        width: 100%;
+        height: 70%;
+        position: absolute;
+        bottom: 0;
+        background: #fff;
+
+        .clearTicketData{
+            color:#666;
+            line-height: 12px;
+            font-size: 12px;
+            display: inline-block;
+            position: absolute;
+            right: 8px;
+            top: 6px;
+            cursor: pointer;
+        }
+
+        .userInputBox{
+            height: 100%;
+            overflow:auto;
+            margin-top:20px;
+            padding-bottom:102px;
+
+            &::-webkit-scrollbar{
+                display: none;
+            }
+        }
+
+        .submitTips{
+            background-color: #e6e6e6;
+            font-family: SlatePro-Regular;
+            font-size: 14px;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0px;
+            color: #666666;
+            padding: 10px 24px;
+            text-align: left;
+        }
+
+        .selectReasonTitle{
+            font-family: SlatePro-Medium;
+            font-size: 14px;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0px;
+            color:#222;
+            & > span{
+                color: #e64545;
+            }
+        }
+
+        .submitSelectReason{
+            width: 100%;
+            min-height: 78px;
+            padding: 10px 24px;
+            border-bottom: 10px solid #f6f6f6;
+            font-family: SlatePro-Medium;
+
+            .selectReasonInput{
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-top: 10px;
+                cursor: pointer;
+
+                & > span:first-child{
+                    font-family: Roboto-Regular;
+                    font-size: 12px;
+                    font-weight: normal;
+                    font-stretch: normal;
+                    letter-spacing: 0px;
+                    color: #666666;
+                    margin-left: 10px;
+                }
+
+                & > .selectReasonIcon{
+                    color: #222222;
+                    font-weight: 600;
+                    transform: rotate(0deg);
+                    transition: transform 0.3s;
+                }
+
+                & > .selected{
+                    transform: rotate(180deg);
+                    transition: transform 0.3s;
+                }
+            }
+
+            .selectReasonItemBox{
+                margin: 12px 0 16px;
+
+                .selectReasonItem{
+                    padding-left: 10px;
+                    // padding-bottom: ${props => props.showTextArea ? '17px':'0'};
+                    margin-left: 10px;
+                    margin-bottom: 2px;
+                    width: 427px;
+                    min-height: 46px;
+                    background-color: #f5f5f5;
+                    border-radius: 2px;
+                    cursor: pointer;
+
+                    & > div{
+                        display: flex;
+                        align-items: center;
+                        justify-content: flex-start;
+                    }
+                }
+
+                .showTextArea{
+                    padding-bottom: 17px;
+                }
+
+                .reasonItemIcon{
+                    display: inline-block;
+                    border: 1px solid #999;
+                    width: 12px;
+                    height: 12px;
+                    border-radius: 50%;
+
+                    & > span{
+                        width: 6px;
+                        height: 6px;
+                        display: none;
+                        border: 1px solid #222;
+                        background: #222;
+                        border-radius: 50%;
+                        margin: 2px;
+                    }
+                }
+                .reasonItemIconSelect{
+                    border: 1px solid #222;
+
+                    & > span{
+                        display: block;
+                    }
+                }
+
+                .reasonItem{
+                    margin-left: 10px;
+                    color: #666;
+                    line-height: 46px;
+                }
+                .reasonItemSelect{
+                    color: #222;
+                }
+
+                .reasonTextArea{
+                    width: 332px;
+                        height: 36px;
+                        background-color: #ffffff;
+                        border-radius: 2px;
+                        border: solid 1px #e6e6e6;
+                    width: 97%;
+                    resize: none;
+                    padding: 5px;
+                }
+            }
+        }
+
+        .submitDescriptionBox{
+            width: 100%;
+            min-height: 235px;
+            padding: 23px 24px;
+            border-bottom: 10px solid #f6f6f6;
+
+            .descriptionTextArea{
+                width: 100%;
+                height: 127px;
+                background-color: #f5f5f5;
+                border-radius: 2px;
+                border: solid 1px #eeeeee;
+                outline: none;
+                resize: none;
+                padding: 12px 10px;
+                margin-top:12px;
+
+                &::-webkit-input-placeholder{
+                    font-family: SlatePro-Regular;
+                    font-size: 12px;
+                    font-weight: normal;
+                    font-stretch: normal;
+                    letter-spacing: 0px;
+                    color: #bbbbbb;
+                }
+            }
+
+            .textAreaInputLength{
+                width: 100%;
+                text-align: right;
+                font-family: SlatePro-Regular;
+                font-size: 12px;
+                font-weight: normal;
+                font-stretch: normal;
+                letter-spacing: 0px;
+                color: #999999;
+                margin-top: 10px;
+                // margin-bottom: 16px;
+            }
+        }
+        
+        .submitImageBox{
+            width: 100%;
+            min-height: 72px;
+            padding: 23px 24px;
+            
+            .uploadTips{
+                font-family: Roboto-Regular;
+                font-size: 12px;
+                font-weight: normal;
+                font-stretch: normal;
+                letter-spacing: 0px;
+                color: #999999;
+                margin-top: 8px;
+            }
+
+            .uploadBox{
+                height: 80px;
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                margin-top: 12px;
+
+                .uploadItem{
+                    width: 80px;
+                    height: 80px;
+                    background-color: #f5f5f5;
+                    border: solid 1px #eeeeee;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin: 5px;
+                    position:relative;
+                    cursor: pointer;
+
+                    & > span{
+                        color: #bbb;
+                        font-size: 32px;
+                        line-height: 32px;
+                    }
+
+                    & > .deleteImg{
+                        position: absolute;
+                        right: 0;
+                        top: 0;
+                        font-size: 18px;
+                        line-height: 16px;
+                        color: #fff;
+                        background: #222;
+                        display: block;
+                        width: 18px;
+                        height: 18px;
+                        border-radius: 50%;
+                        text-align: center;
+                        cursor: pointer;
+                    }
+
+                    & > img {
+                        width: 80px;
+                        height: 80px;
+                        display: inline-block;
+                    }
+                }
+            }
+        }
+
+        .questionSubmitBtnBox{
+            width: 100%;
+            height: 81px;
+            background: #fff;
+            // box-shadow:
+            position: absolute;
+            bottom: 0;
+            z-index: 1;
+            padding: 12px 0;
+            box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.5);
+
+            .questionSubmitBtn{
+                width: 472px;
+                height: 49px;
+                background-color: #222222;
+                border-radius: 2px;
+                text-transform: uppercase;
+                font-family: AcuminPro-Bold;
+                font-size: 14px;
+                font-weight: normal;
+                font-stretch: normal;
+                letter-spacing: 0px;
+                color: #ffffff;
+                text-align: center;
+                line-height: 49px;
+                margin: 0 auto;
+                cursor: pointer;
+            }
+        }
+    }
+}
 </style>

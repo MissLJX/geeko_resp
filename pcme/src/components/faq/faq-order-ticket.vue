@@ -163,10 +163,20 @@
         <question-submit-mask
             v-if="questionMaskShow"
             @clearTicketData="clearTicketData()"
+            :questionObject="questionObject"
             :questionsReason="questionsReason"
+            :descriptionRequired="descriptionRequired"
             @changeQuestionObject="obj => changeQuestionObject(obj)"
             @questionTypeChange="data => questionTypeChange(data)"
             @questionImgUpload="e => questionImgUpload(e)"
+            @questionSubmit="questionSubmit()"
+            @descriptionTextAreaChange="e => descriptionTextAreaChange(e)"
+            />
+        
+        <mask-1
+            v-if="returnMaskShow"
+            :orderId="ticket.id"
+            @returnSelectClose="returnSelectClose()"
             />
     </div>
 </template>
@@ -179,6 +189,8 @@
     import _ from 'lodash'
     import HtmlImageCompress from 'html-image-compress'
     import QuestionSubmitMask from './question-submit-mask.vue';
+    import ReturnSelectMask from './return-select-mask.vue';
+    import Mask1 from './mask1.vue';
 
     let list = [{
         "value":"01",
@@ -288,12 +300,16 @@
                 descriptionRequired: false, // description是否必填
                 _orderId: '',
                 isLoading: false,
+
+                returnMaskShow: false, // 退货的弹窗是否显示
             }
         },
         components: {
             'star-list': StarList,
             'faq-select': faqSelect,
             'question-submit-mask': QuestionSubmitMask,
+            'return-select-mask': ReturnSelectMask,
+            'mask-1': Mask1,
         },
         mounted(){
             this.$store.dispatch("getQuestionType")
@@ -306,7 +322,7 @@
                 setTimeout(()=>{
                     localStorage.removeItem('_orderId')
                 }, 400)
-            } 
+            }
             if(localStorage._code){
                 localStorage.removeItem('_code')
             }
@@ -331,7 +347,7 @@
             }
         },
         computed: {
-            ...mapGetters(['ticket','ticket_con','ticketid','ticket_sub','questionType']),
+            ...mapGetters(['ticket','ticket_con','ticketid','ticket_sub','questionType', "orderdetail"]),
             baseHeaderUrl() {
                 return 'https://image.geeko.ltd/site/pc/icon35.png';
             },
@@ -407,10 +423,11 @@
                 }
             },
             usedQuestionType(){
+                const showReturn = true || this.orderdetail?.logistics?.packages?.find(p => p?.status == 3)
                 if((this.questionType && this.questionType.length ==0) || !this.questionType){
-                    return this.list
+                    return showReturn? this.list: this.list?.filter(l => l.value != '04')
                 } else {
-                    return this.questionType
+                    return showReturn? this.questionType: this.questionType?.filter(q => q.value != '04')
                 }
             },
             groupReplies(){
@@ -463,37 +480,39 @@
                 this.isLoading = true
                 this.$store.dispatch("addTicket",fData).then(res=>{
                     this.isLoading = false
-                    // console.log(e.value)
                     this.selected = e.value;
-                    // console.log(this.selected)
-                    
                     this.isRequired = false
-                    let qTReasonList = this.usedQuestionType.find(q => q.value == e.value).reasons ? 
+                    if(e.value == '04'){
+                        // 退货走新逻辑
+                        this.returnMaskShow = true;
+
+                    } else {
+                        let qTReasonList = this.usedQuestionType.find(q => q.value == e.value).reasons ? 
                                     this.usedQuestionType.find(q => q.value == e.value).reasons :
                                     []
-                    let showed = this.ticket_con ? 
-                                this.ticket_con?.ticketReplies ? 
-                                this.ticket_con?.ticketReplies.find(t => 
-                                        t.questionTypeCode == e.value && t.reasonCode && t.reason
-                                ) : false : false
-                    this.questionsReason.forEach(q=>{
-                        q.isSelected=false
-                        if(q.value == e.value){
-                            q.isSelected = true
+                        let showed = this.ticket_con ?
+                                    this.ticket_con?.ticketReplies ?
+                                    this.ticket_con?.ticketReplies.find(t =>
+                                            t.questionTypeCode == e.value && t.reasonCode && t.reason
+                                    ) : false : false
+                        this.questionsReason.forEach(q=>{
+                            q.isSelected=false
+                            if(q.value == e.value){
+                                q.isSelected = true
+                            }
+                        })
+                        console.log((qTReasonList.length > 0 || e.value == this.usedQuestionType[this.usedQuestionType.length - 1].value),  showed)
+                        if((qTReasonList.length > 0 || e.value == this.usedQuestionType[this.usedQuestionType.length - 1].value) && !showed){
+                            if(e.value == this.usedQuestionType[this.usedQuestionType.length - 1].value){
+                                this.descriptionRequired = true
+                            } else {
+                                this.descriptionRequired = false
+                            }
+                            this.questionsReason = qTReasonList
+                            this.questionMaskShow = true
                         }
-                    })
-
-                    if((qTReasonList.length > 0 || e.value == this.usedQuestionType[this.usedQuestionType.length - 1].value) && !showed){
-                        if(e.value == this.usedQuestionType[this.usedQuestionType.length - 1].value){
-                            this.descriptionRequired = true
-                        } else {
-                            this.descriptionRequired = false
-                        }
-                        this.questionsReason = qTReasonList
-                        this.questionMaskShow = true
                     }
                 })
-                
             },
             getDate(paymentTime){
                 if(paymentTime == null){
@@ -829,6 +848,9 @@
             },
             addRate(){
                 this.showAddRate = true;
+            },
+            returnSelectClose(){
+                this.returnMaskShow = false
             }
         },
     };
@@ -1283,315 +1305,6 @@
                 display: block;
                 clear: both;
                 content: '';
-            }
-        }
-
-        .questionSubmitMask{
-            position: absolute;
-            top: 0;
-            z-index: 11;
-            height: 100vh;
-            width: 100%;
-            background: rgba(0,0,0,0.6);
-            text-align: left;
-
-            .questionSubmitContent{
-                width: 100%;
-                height: 70%;
-                position: absolute;
-                bottom: 0;
-                background: #fff;
-
-                .clearTicketData{
-                    color:#666;
-                    line-height: 12px;
-                    font-size: 12px;
-                    display: inline-block;
-                    position: absolute;
-                    right: 8px;
-                    top: 6px;
-                    cursor: pointer;
-                }
-
-                .userInputBox{
-                    height: 100%;
-                    overflow:auto;
-                    margin-top:20px;
-                    padding-bottom:102px;
-
-                    &::-webkit-scrollbar{
-                        display: none;
-                    }
-                }
-
-                .submitTips{
-                    background-color: #e6e6e6;
-                    font-family: SlatePro-Regular;
-                    font-size: 14px;
-                    font-weight: normal;
-                    font-stretch: normal;
-                    letter-spacing: 0px;
-                    color: #666666;
-                    padding: 10px 24px;
-                    text-align: left;
-                }
-
-                .selectReasonTitle{
-                    font-family: SlatePro-Medium;
-                    font-size: 14px;
-                    font-weight: normal;
-                    font-stretch: normal;
-                    letter-spacing: 0px;
-                    color:#222;
-                    & > span{
-                        color: #e64545;
-                    }
-                }
-
-                .submitSelectReason{
-                    width: 100%;
-                    min-height: 78px;
-                    padding: 10px 24px;
-                    border-bottom: 10px solid #f6f6f6;
-                    font-family: SlatePro-Medium;
-
-                    .selectReasonInput{
-                        display: flex;
-                        align-items: center;
-                        justify-content: space-between;
-                        margin-top: 10px;
-                        cursor: pointer;
-
-                        & > span:first-child{
-                            font-family: Roboto-Regular;
-                            font-size: 12px;
-                            font-weight: normal;
-                            font-stretch: normal;
-                            letter-spacing: 0px;
-                            color: #666666;
-                            margin-left: 10px;
-                        }
-
-                        & > .selectReasonIcon{
-                            color: #222222;
-                            font-weight: 600;
-                            transform: rotate(0deg);
-                            transition: transform 0.3s;
-                        }
-
-                        & > .selected{
-                            transform: rotate(180deg);
-                            transition: transform 0.3s;
-                        }
-                    }
-
-                    .selectReasonItemBox{
-                        margin: 12px 0 16px;
-
-                        .selectReasonItem{
-                            padding-left: 10px;
-                            // padding-bottom: ${props => props.showTextArea ? '17px':'0'};
-                            margin-left: 10px;
-                            margin-bottom: 2px;
-                            width: 427px;
-                            min-height: 46px;
-                            background-color: #f5f5f5;
-                            border-radius: 2px;
-                            cursor: pointer;
-
-                            & > div{
-                                display: flex;
-                                align-items: center;
-                                justify-content: flex-start;
-                            }
-                        }
-
-                        .showTextArea{
-                            padding-bottom: 17px;
-                        }
-
-                        .reasonItemIcon{
-                            display: inline-block;
-                            border: 1px solid #999;
-                            width: 12px;
-                            height: 12px;
-                            border-radius: 50%;
-
-                            & > span{
-                                width: 6px;
-                                height: 6px;
-                                display: none;
-                                border: 1px solid #222;
-                                background: #222;
-                                border-radius: 50%;
-                                margin: 2px;
-                            }
-                        }
-                        .reasonItemIconSelect{
-                            border: 1px solid #222;
-
-                            & > span{
-                                display: block;
-                            }
-                        }
-
-                        .reasonItem{
-                            margin-left: 10px;
-                            color: #666;
-                            line-height: 46px;
-                        }
-                        .reasonItemSelect{
-                            color: #222;
-                        }
-
-                        .reasonTextArea{
-                            width: 332px;
-                                height: 36px;
-                                background-color: #ffffff;
-                                border-radius: 2px;
-                                border: solid 1px #e6e6e6;
-                            width: 97%;
-                            resize: none;
-                            padding: 5px;
-                        }
-                    }
-                }
-
-                .submitDescriptionBox{
-                    width: 100%;
-                    min-height: 235px;
-                    padding: 23px 24px;
-                    border-bottom: 10px solid #f6f6f6;
-
-                    .descriptionTextArea{
-                        width: 100%;
-                        height: 127px;
-                        background-color: #f5f5f5;
-                        border-radius: 2px;
-                        border: solid 1px #eeeeee;
-                        outline: none;
-                        resize: none;
-                        padding: 12px 10px;
-                        margin-top:12px;
-
-                        &::-webkit-input-placeholder{
-                            font-family: SlatePro-Regular;
-                            font-size: 12px;
-                            font-weight: normal;
-                            font-stretch: normal;
-                            letter-spacing: 0px;
-                            color: #bbbbbb;
-                        }
-                    }
-
-                    .textAreaInputLength{
-                        width: 100%;
-                        text-align: right;
-                        font-family: SlatePro-Regular;
-                        font-size: 12px;
-                        font-weight: normal;
-                        font-stretch: normal;
-                        letter-spacing: 0px;
-                        color: #999999;
-                        margin-top: 10px;
-                        // margin-bottom: 16px;
-                    }
-                }
-                
-                .submitImageBox{
-                    width: 100%;
-                    min-height: 72px;
-                    padding: 23px 24px;
-                    
-                    .uploadTips{
-                        font-family: Roboto-Regular;
-                        font-size: 12px;
-                        font-weight: normal;
-                        font-stretch: normal;
-                        letter-spacing: 0px;
-                        color: #999999;
-                        margin-top: 8px;
-                    }
-
-                    .uploadBox{
-                        height: 80px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: flex-start;
-                        margin-top: 12px;
-
-                        .uploadItem{
-                            width: 80px;
-                            height: 80px;
-                            background-color: #f5f5f5;
-                            border: solid 1px #eeeeee;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            margin: 5px;
-                            position:relative;
-                            cursor: pointer;
-
-                            & > span{
-                                color: #bbb;
-                                font-size: 32px;
-                                line-height: 32px;
-                            }
-
-                            & > .deleteImg{
-                                position: absolute;
-                                right: 0;
-                                top: 0;
-                                font-size: 18px;
-                                line-height: 16px;
-                                color: #fff;
-                                background: #222;
-                                display: block;
-                                width: 18px;
-                                height: 18px;
-                                border-radius: 50%;
-                                text-align: center;
-                                cursor: pointer;
-                            }
-
-                            & > img {
-                                width: 80px;
-                                height: 80px;
-                                display: inline-block;
-                            }
-                        }
-                    }
-                }
-
-                .questionSubmitBtnBox{
-                    width: 100%;
-                    height: 81px;
-                    background: #fff;
-                    // box-shadow:
-                    position: absolute;
-                    bottom: 0;
-                    z-index: 1;
-                    padding: 12px 0;
-                    box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.5);
-
-                    .questionSubmitBtn{
-                        width: 472px;
-                        height: 49px;
-                        background-color: #222222;
-                        border-radius: 2px;
-                        text-transform: uppercase;
-                        font-family: AcuminPro-Bold;
-                        font-size: 14px;
-                        font-weight: normal;
-                        font-stretch: normal;
-                        letter-spacing: 0px;
-                        color: #ffffff;
-                        text-align: center;
-                        line-height: 49px;
-                        margin: 0 auto;
-                        cursor: pointer;
-                    }
-                }
             }
         }
 
