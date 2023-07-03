@@ -1310,6 +1310,7 @@ const actions = {
             return api.removeWishListExpired().then(res => {
                 commit(types.CUSTOMER_WISH_LIST_LOADING, false)
                 dispatch("initWishListProducts")
+                dispatch("getWishListCount")
             }).catch(err => {
                 alert(err.result)
                 commit(types.CUSTOMER_WISH_LIST_LOADING, false)
@@ -1384,7 +1385,6 @@ const actions = {
             return api.removeWishListProduct(id).then(res => {
                 commit(types.CUSTOMER_WISH_LIST_LOADING, false)
                 let newList = wishListFilterResult?.filter(w => w?.id != id)
-                console.log("newList", newList)
                 commit(types.CUSTOMER_WISH_LIST_INIT, newList)
                 dispatch("getWishListCount")
             }).catch(err => {
