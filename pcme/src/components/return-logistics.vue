@@ -389,11 +389,12 @@
                     uploadFiles['receiptFiles'] = this.uploadedImages;
                 }
 
+
                 _this.$store.dispatch(apiName,uploadFiles).then(result => {
                     // alert(this.$t("success")+'!');
                     this.$emit('logisticsShow', true);
+                    _this.$emit("update:loddingShow",false);
                 });
-                    
             },
             closeMask(){
                 this.$emit('logisticsShow', false);

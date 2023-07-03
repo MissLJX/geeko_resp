@@ -468,36 +468,27 @@
                 this.modalconfirmshow = true;
 
                 this.confirmCfg =  {
-                    btnFont:[
-                        {
-                            type: 'no',
-                            text: this.$t("cancel"),
-                            fuc: function () {
-                                _this.modalconfirmshow = false;
-                                _this.$store.dispatch('closeConfirm').then(()=>{
+                    btnFont:{
+                        yes:this.$t("confirm"),
+                        no:this.$t("cancel"),
+                    },
+                    yes: function () {
+                        _this.modalconfirmshow = false;
+                        _this.$store.dispatch('closeConfirm').then(() => {
+                            cancelReturnOrder(item.logistics.id).then(res => {
+                                // console.log(res)
+                                _this.refreshData()
+                            }).catch(err => {
+                                alert(err.result)
+                            })
+                        });
+                    },
+                    no: function () {
+                        _this.modalconfirmshow = false;
+                        _this.$store.dispatch('closeConfirm').then(()=>{
 
-                                });
-                            },
-                            style:{}
-                        },
-                        {
-                            type: 'yes',
-                            text: this.$t("confirm"),
-                            fuc: function () {
-                                _this.modalconfirmshow = false;
-                                _this.$store.dispatch('closeConfirm').then(() => {
-                                    cancelReturnOrder(item.logistics.id).then(res => {
-                                        // console.log(res)
-                                        _this.refreshData()
-                                    }).catch(err => {
-                                        alert(err.result)
-                                    })
-                                });
-                            },
-                            style:{}
-                        },
-                        
-                    ],
+                        });
+                    },
                     btnClose: true,
                     showSuccessIcon: false,
                     message: this.$t("sure_to_cancel_return")+"?",
@@ -688,37 +679,23 @@
                     this.modalconfirmshow = true;
 
                     this.confirmCfg =  {
-                        btnFont:[
-                            {
-                                type: 'yes',
-                                text: this.$t("edit_return_receipt"),
-                                fuc: function () {
-                                    _this.modalconfirmshow = false;
-                                    _this.$store.dispatch('closeConfirm').then(() => {
-                                        _this.returnProducts(_this.showReturnOrder);
-                                    });
-                                },
-                                style:{
-                                }
-                            },
-                            {
-                                type: 'no',
-                                text: this.$t("points_mall.viewOrder"),
-                                fuc: function () {
-                                    _this.modalconfirmshow = false;
-                                    _this.$store.dispatch('closeConfirm').then(()=>{
-                                        _this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/order/return-detail/'+_this.showReturnOrder.id})
-                                    });
-                                },
-                                style:{
-                                    background:'#222222',
-                                    backgroundColor: '#222222',
-                                    lineHeight: '36px',
-                                    color: '#ffffff'
-                                }
-                            },
-                        ],
+                        btnFont: {
+                            yes: this.$t("edit_return_receipt"),
+                            no: this.$t("points_mall.viewOrder")
+                        },
                         btnClose: true,
+                        yes: function () {
+                            _this.modalconfirmshow = false;
+                            _this.$store.dispatch('closeConfirm').then(() => {
+                                _this.returnProducts(_this.showReturnOrder);
+                            });
+                        },
+                        no: function () {
+                            _this.modalconfirmshow = false;
+                            _this.$store.dispatch('closeConfirm').then(()=>{
+                                _this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/order/return-detail/'+_this.showReturnOrder.id})
+                            });
+                        },
                         showSuccessIcon: true,
                         message: this.$t("support.s_submit_success"),
                         message2:this.$t("check_return_detail"),
@@ -750,6 +727,12 @@
                                 fontSize: '18px !important',
                                 color: '#222',
                             },
+                            btnNo:{
+                                background:'#222222',
+                                backgroundColor: '#222222',
+                                lineHeight: '36px',
+                                color: '#ffffff'
+                            }
                         }
                     }
                 }

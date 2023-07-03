@@ -68,7 +68,6 @@ export default {
         let routeNow = window.location.href.split('faq/')?.length > 1 ? 
                     window.location.href.split('faq/')[1].split('/')[0]:
                     window.location.href.split('support/')[1].split('/')[0]
-                    console.log(routeNow)
         if(routeNow != 'online-help' && routeNow != 'support-ticket' && routeNow != 'ticket'){
             this.tabChoose = 'faq'
         } else {
