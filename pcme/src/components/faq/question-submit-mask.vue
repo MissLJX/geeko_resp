@@ -101,7 +101,7 @@
             </div>
 
             <div class="questionSubmitBtnBox">
-                <div class="questionSubmitBtn" @click="questionSubmit()">
+                <div class="questionSubmitBtn" @click="questionSubmit">
                     {{ $t("support.s_sumbit") }}
                 </div>
             </div>

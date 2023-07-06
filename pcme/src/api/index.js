@@ -206,6 +206,9 @@ export const getTicketByCode = (code) => {
 export const addTicket = (ticket) => {
     return axios.post('/ticket/order/add', ticket, {'Content-Type': http_infos.upload_image_content_type}).then(data => data.result)
 }
+export const makeReturnTicket = (ticket) => {
+    return axios.post('/ticket/order/add', ticket, {'Content-Type': 'application/json'}).then(data => data.result)
+}
 export const getM1135 = () =>{
     return axios.get('/message/get-m1135')
 }

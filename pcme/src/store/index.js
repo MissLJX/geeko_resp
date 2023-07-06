@@ -1525,6 +1525,9 @@ const actions = {
     addTicket({commit},formData){
         return api.addTicket(formData)
     },
+    addReturnTicket({commit}, json){
+        return api.makeReturnTicket(json)
+    },
     getLogistics({commit},id){
         return api.getLogistics(id).then((logistics) => {
             commit(types.GLOBAL_GET_LOGISTICS,logistics)

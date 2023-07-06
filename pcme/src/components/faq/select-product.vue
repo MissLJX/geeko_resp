@@ -1,8 +1,8 @@
 <template>
-    <div :class="{'product': true, 'valiad': !hasSelect}">
-        <div :class="{'selectBox': true, 'hasBorder':!isLast}" v-if="hasSelect">
-            <input :id="id" type="checkbox" :value="id" @change="e => selectChange(e)"/>
-            <label :for="id"></label>
+    <div :class="{'product': true, 'valiad': !isValiad, 'hasBorder': !isLast}">
+        <div :class="{'selectBox': true, 'canNotSelect': isReturned, 'selected1': hasSelected}" v-if="isValiad">
+            <!-- <input type="radio" :id="id" :value="id" @change="e => selectChange(e)"> -->
+            <label @click="e => selectChange(e)"></label>
         </div>
         <div class="itemBox">
             <div class="image">
@@ -15,7 +15,7 @@
                 </div>
                 <div class="otherInfo">
                     <div class="sku">
-                        {{ 'SKU: ' +  sku }}
+                        {{ 'SKU: ' + sku }}
                     </div>
                     <div class="skc">
                         {{ skc }}
@@ -27,81 +27,86 @@
 </template>
 
 <script>
-import * as utils from "../../utils/geekoutil.js";
-export default {
-    props:{
-        product:{
-            type: Object,
-            default: {}
+    import * as utils from '../../utils/geekoutil.js'
+    export default{
+        props:{
+            product:{
+                type: Object,
+                default: {}
+            },
+            isValiad:{
+                type: Boolean,
+                default: true
+            },
+            isLast:{
+                type: Boolean,
+                default: false
+            },
+            isReturned:{
+                type: Boolean,
+                default: false
+            },
+            hasSelected:{
+                type: Boolean,
+                default: false
+            }
         },
-        hasSelect:{
-            type: Boolean,
-            default: true
-        },
-        isLast:{
-            type: Boolean,
-            default: false
-        }
-    },
-    data(){
-        return{
+        data(){
+            return {
 
-        }
-    },
-    created() {
-        console.log(product)
-    },
-    computed:{
-        id(){
-            return this.product?.productId || '-'
+            }
         },
-        price(){
-            return this.product?.price ? utils.unitPrice(this.product.price): '$0.00'
+        created() {
+            console.log(this.product)
         },
-        sku(){
-            return this.product?.parentSku
+        computed:{
+            id(){
+                return this.product?.productId || '-'
+            },
+            price(){
+                return this.product?.price ?
+                    utils.unitPrice(this.product.price):
+                    '$0.00'
+            },
+            sku(){
+                return this.product?.sku || '-'
+            },
+            skc(){
+                return (this.product?.color || '')+','+(this.product?.size || '')+' x '+(this.product?.quantity || 1)
+            },
+            image(){
+                return this.product?.imageURL || '-'
+            },
+            name(){
+                return this.product?.name || '-'
+            }
         },
-        skc(){
-            return (this.product.color ? this.product.color  + ',':'') + this.product.size + ' x ' + this.product.quantity
-        },
-        image(){
-            return this.product?.productImageUrl
-        },
-        name(){
-            return this.product?.productName
-        }
-    },
-    methods:{
-        selectChange(e){
-            this.$emit("selectChange", e)
+        methods:{
+            selectChange(e){
+                if(!this.isReturned){
+                    this.$emit("selectChange", this.product)
+                }
+            }
         }
     }
-}
-
 </script>
 
-<script scoped lang="scss">
+<style lang="scss" scoped>
 .product {
     display: flex;
     align-items: center;
     padding: 10px;
+    position: relative;
 
     .selectBox {
         width: 20px;
         margin-right: 10px;
-        position: relative;
-
-        input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            opacity: 0;
-            display: none;
-        }
 
         label {
             position: absolute;
             // left: 20px;
-            top: 50px;
+            top: 65px;
+            left: 10px;
             width: 20px;
             height: 20px;
             border-radius: 50%;
@@ -111,22 +116,43 @@ export default {
                 opacity: .8;
             }
         }
-        input:checked+label {
-            background-color: #222;
-            border: 1px solid #222;
+
+        &.canNotSelect{
+            label{
+                background: rgba(34,34,34,0.5);
+                cursor: not-allowed;
+            }
+            label::after {
+                position: absolute;
+                content: "";
+                width: 5px;
+                height: 10px;
+                top: 3px;
+                left: 6px;
+                border: 2px solid #fff;
+                border-top: none;
+                border-left: none;
+                transform: rotate(45deg)
+            }
         }
 
-        input:checked+label::after {
-            position: absolute;
-            content: "";
-            width: 5px;
-            height: 10px;
-            top: 3px;
-            left: 6px;
-            border: 2px solid #fff;
-            border-top: none;
-            border-left: none;
-            transform: rotate(45deg)
+        &.selected1{
+            label{
+                background: #222;
+                cursor: pointer;
+            }
+            label::after {
+                position: absolute;
+                content: "";
+                width: 5px;
+                height: 10px;
+                top: 3px;
+                left: 6px;
+                border: 2px solid #fff;
+                border-top: none;
+                border-left: none;
+                transform: rotate(45deg)
+            }
         }
     }
 
@@ -135,7 +161,7 @@ export default {
             content: '';
             display: block;
             height: 1px;
-            width: 331px;
+            width: 450px;
             background: #e6e6e6;
             position: absolute;
             bottom: 0;
@@ -143,14 +169,16 @@ export default {
         }
     }
 
+    
+
     .itemBox {
         flex: 1;
         display: flex;
         align-items: center;
 
         .image {
-            width: 77px;
-            height: 98px;
+            width: 103px;
+            height: 131px;
 
             img {
                 width: 100%;
@@ -164,34 +192,38 @@ export default {
             align-items: flex-start;
             flex-direction: column;
             justify-content: space-between;
+            height: 131px;
+            padding: 10px 0px 10px 15px;
 
             .mainInfo {
                 flex: 1;
                 display: flex;
-                align-items: center;
+                align-items: flex-start;
                 justify-content: space-between;
+                width: 100%;
 
                 .title {
                     flex: 1;
-                    font-size: 14px;
+                    font-size: 16px;
                     font-family: Roboto-Regular, Roboto;
                     font-weight: 400;
                     color: #222222;
-                    line-height: 16px;
+                    line-height: 18px;
+                    text-align: left;
                 }
 
                 .price {
-                    width: 70px;
-                    font-size: 14px;
+                    width: 100px;
+                    font-size: 16px;
                     font-family: Roboto-Medium, Roboto;
                     font-weight: 500;
                     color: #222222;
-                    line-height: 16px;
+                    line-height: 18px;
                 }
             }
 
             .otherInfo {
-
+                text-align: left;
                 .sku {
                     font-size: 14px;
                     font-family: Roboto-Regular, Roboto;
@@ -223,4 +255,4 @@ export default {
         }
     }
 }
-</script>
+</style>

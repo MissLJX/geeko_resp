@@ -43,13 +43,34 @@
                         </div>
                         <div class="buyer" v-if="item.sender === 'buyers' && (item.reasonCode || item.message || item.imageUrls)">
                             <div class="el-me-headerImage" :style="{'background-image': 'url('+headerImage+'),url('+baseHeaderUrl+')' }"></div>
-                            <div class="cet" >
-                                <div class="sanjiao-right"></div>
-                                <div v-if="!(item.reasonCode && item.reason) && item.message!=='-'" class="txtcontent">{{item.message}}</div>
-                                <div v-if="!(item.reasonCode && item.reason) && item.imageUrls" class="imgarea">
+                            <div :class="{'cet': true, 'grey': item.messageType == 1}" >
+                                <div :class="{'sanjiao-right': true, 'grey': item.messageType == 1}"></div>
+                                <div v-if="item.messageType == 1">
+                                    <div class="returnMessageBox">
+                                        <div class="returnMessageTitle">
+                                            <div>Return the Order</div>
+                                            <div class="returnItemsNum">{{ item.message.items ? item.message.items.length: 0 }}{{ 'Item(s)' }}</div>
+                                        </div>
+                                        <div class="returnProductList">
+                                            <img v-for="(item, index) in item.message.items.slice(0, 4)" :src="item.imageURL" :key="index"/>
+                                            <div v-if="item.message.items.length > 4" class="imgMore">...</div>
+                                        </div>
+                                        <div class="returnOrderId">
+                                            <span>{{ 'Order no.' }}</span>
+                                            {{ item.message.orderId }}
+                                        </div>
+                                        <div class="returnView">
+                                            <div class="returnViewBtn" @click="() => returnView()">
+                                                {{ 'View' }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div v-if="item.messageType != 1 && !(item.reasonCode && item.reason) && item.message!=='-'" class="txtcontent">{{item.message}}</div>
+                                <div v-if="item.messageType != 1 && !(item.reasonCode && item.reason) && item.imageUrls" class="imgarea">
                                     <img v-for="(img, index) in item.imageUrls" :key="index" :src="imgUrl(img)">
                                 </div>
-                                <div v-if="item.reasonCode && item.reason">
+                                <div v-if="item.messageType != 1 && item.reasonCode && item.reason">
                                     <div v-if="item.reason" style="color:#222;font-size: 14px;border-bottom:2px solid #999;padding-bottom:5px;text-align:left;">
                                         {{item.reason}}
                                     </div>
@@ -162,21 +183,23 @@
         </div>
         <question-submit-mask
             v-if="questionMaskShow"
-            @clearTicketData="clearTicketData()"
+            @clearTicketData="clearTicketData"
             :questionObject="questionObject"
             :questionsReason="questionsReason"
             :descriptionRequired="descriptionRequired"
             @changeQuestionObject="obj => changeQuestionObject(obj)"
             @questionTypeChange="data => questionTypeChange(data)"
             @questionImgUpload="e => questionImgUpload(e)"
-            @questionSubmit="questionSubmit()"
+            @questionSubmit="questionSubmit"
             @descriptionTextAreaChange="e => descriptionTextAreaChange(e)"
             />
-        
-        <mask-1
+
+        <return-select-mask
             v-if="returnMaskShow"
-            :orderId="ticket.id"
-            @returnSelectClose="returnSelectClose()"
+            :orderdetail="orderdetail"
+            @updateTicket="msg => updateTicket(msg)"
+            @returnSelectClose="returnSelectClose"
+            @returnView="returnView"
             />
     </div>
 </template>
@@ -190,7 +213,6 @@
     import HtmlImageCompress from 'html-image-compress'
     import QuestionSubmitMask from './question-submit-mask.vue';
     import ReturnSelectMask from './return-select-mask.vue';
-    import Mask1 from './mask1.vue';
 
     let list = [{
         "value":"01",
@@ -309,7 +331,6 @@
             'faq-select': faqSelect,
             'question-submit-mask': QuestionSubmitMask,
             'return-select-mask': ReturnSelectMask,
-            'mask-1': Mask1,
         },
         mounted(){
             this.$store.dispatch("getQuestionType")
@@ -443,7 +464,10 @@
                         replies: []
                     }
                     groups[g].forEach(group => {
-                        if(group.message || group.imageUrls || group.reasonCode || group.reason){
+                        if(group.message || group.imageUrls || group.reasonCode || group.reason ){
+                            if(group.messageType == 1){
+                                group.message = JSON.parse(group.message)
+                            }
                             obj.replies.push(group)
                         }
                     })
@@ -452,7 +476,7 @@
                     }   
                     obj = ''
                 })
-                // console.log(output)
+                console.log(output)
                 return output
             }
         },
@@ -485,7 +509,6 @@
                     if(e.value == '04'){
                         // 退货走新逻辑
                         this.returnMaskShow = true;
-
                     } else {
                         let qTReasonList = this.usedQuestionType.find(q => q.value == e.value).reasons ? 
                                     this.usedQuestionType.find(q => q.value == e.value).reasons :
@@ -501,7 +524,6 @@
                                 q.isSelected = true
                             }
                         })
-                        console.log((qTReasonList.length > 0 || e.value == this.usedQuestionType[this.usedQuestionType.length - 1].value),  showed)
                         if((qTReasonList.length > 0 || e.value == this.usedQuestionType[this.usedQuestionType.length - 1].value) && !showed){
                             if(e.value == this.usedQuestionType[this.usedQuestionType.length - 1].value){
                                 this.descriptionRequired = true
@@ -851,7 +873,38 @@
             },
             returnSelectClose(){
                 this.returnMaskShow = false
-            }
+            },
+            updateTicket(message){
+                var fData = new FormData();
+                if(this.ticket_con?.operaId){
+                    fData.append("operaId",this.ticket_con.operaId)
+                }else{
+                    fData.append("operaId",this._orderId ? this._orderId :this.ticketid)
+                }
+                // console.log(fData.operaId)
+                fData.append("questionType",this.list.find(q => q.value == '04').label)
+                fData.append("questionTypeCode", '04')
+                fData.append("message", message)
+                fData.append("messageType", '1')
+                this.$store.dispatch("addTicket",fData).then(res=>{
+                    if (JSON.stringify(this.ticket_con) !== '{}') {
+                        this.$store.dispatch('getTicketByTicketId', this.ticket_con.id)
+                    } else {
+                        this.$store.dispatch('getTicket', this.ticket.id)
+                    }
+                })
+                this.returnMaskShow = false
+            },
+            returnView(){
+                if(this.orderdetail?.returnOrders?.id){
+                    // 去退货详情
+                    window.location.href = `/me/m/order/return-detail/${this.orderdetail?.returnOrders?.id}`
+                } else {
+                    // 去订单详情
+                    window.location.href = `/me/m/order/detail/${this.orderdetail?.id}`
+                }
+                return
+            },
         },
     };
 </script>
@@ -1083,6 +1136,96 @@
                         float: right;
                         img{
                             width: 100%;
+                        }
+                    }
+
+                    .returnMessageBox{
+                        width: 230px;
+                        background: #E6E6E6;
+                        // padding: 12px 10px 10px;
+
+                        .returnMessageTitle{
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+                            margin-bottom: 10px;
+                            font-size: 12px;
+                            font-family: Roboto-Bold, Roboto;
+                            font-weight: bold;
+                            color: #222222;
+                            line-height: 14px;
+
+                            .returnItemsNum{
+                                font-size: 12px;
+                                font-family: Roboto-Regular, Roboto;
+                                font-weight: 400;
+                                color: #222222;
+                                line-height: 12px;
+                            }
+                        }
+                        .returnProductList{
+                            display: flex;
+                            align-items: center;
+                            justify-content: flex-start;
+                            position: relative;
+                            margin-bottom: 12px;
+
+                            & > img{
+                                display: inline-block;
+                                width: 40px;
+                                height: 50px;
+                                margin-right: 10px;
+                            }
+
+                            & > img:last-child{
+                                margin-right: 0;
+                            }
+
+                            .imgMore{
+                                position: absolute;
+                                top: 0;
+                                right: 7px;
+                                width: 40px;
+                                height: 50px;
+                                background-color: rgba(34,34,34,0.5);
+                                text-align: center;
+                                line-height: 50px;
+                                color: #fff;
+                                font-size: 12px;
+                                letter-spacing: 2px;
+                            }
+                        }
+
+                        .returnOrderId{
+                            font-size: 12px;
+                            font-family: Roboto-Regular, Roboto;
+                            font-weight: 400;
+                            line-height: 14px;
+                            color: #666;
+                            text-align: left;
+
+                            & > span{
+                                color: #222222;
+                            }
+                        }
+
+                        .returnView{
+                            margin-top: 10px;
+
+                            .returnViewBtn{
+                                float: right;
+                                width: 62px;
+                                height: 21px;
+                                border-radius: 11px;
+                                border: 1px solid #222222;
+                                cursor: pointer;
+                                text-align: center;
+                                line-height: 21px;
+                                text-transform: capitalize;
+                                overflow: hidden;
+                                font-size: 12px;
+                                color: #222;
+                            }
                         }
                     }
                 }
@@ -1370,5 +1513,8 @@
     margin-top: 7px;
 }
 
+.grey{
+    background: #e6e6e6 !important;
+}
 
 </style>
