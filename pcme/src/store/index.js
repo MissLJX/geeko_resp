@@ -1312,7 +1312,9 @@ const actions = {
                 dispatch("initWishListProducts")
                 dispatch("getWishListCount")
             }).catch(err => {
-                alert(err.result)
+                if(err?.code != 300){
+                    alert(err.result)
+                }
                 commit(types.CUSTOMER_WISH_LIST_LOADING, false)
             })
         }
@@ -1332,7 +1334,9 @@ const actions = {
                     commit(types.CUSTOMER_WISH_LIST_LAST_TOKEN, res?.result?.lastToken)
                 }
             }).catch(err => {
-                alert(err.result)
+                if(err?.code != 300){
+                    alert(err.result)
+                }
                 commit(types.CUSTOMER_WISH_LIST_LOADING, false)
             })
         }
@@ -1352,7 +1356,9 @@ const actions = {
                     commit(types.CUSTOMER_WISH_LIST_LAST_TOKEN, res?.result?.lastToken)
                 }
             }).catch(err => {
-                alert(err.result)
+                if(err?.code != 300){
+                    alert(err.result)
+                }
                 commit(types.CUSTOMER_WISH_LIST_LOADING, false)
             })
         }
@@ -1388,7 +1394,9 @@ const actions = {
                 commit(types.CUSTOMER_WISH_LIST_INIT, newList)
                 dispatch("getWishListCount")
             }).catch(err => {
-                alert(err.result)
+                if(err?.code != 300){
+                    alert(err.result)
+                }
                 commit(types.CUSTOMER_WISH_LIST_LOADING, false)
             })
         }
@@ -1401,7 +1409,9 @@ const actions = {
                 commit(types.CUSTOMER_WISH_LIST_LOADING, false)
                 dispatch("initWishListProducts",{})
             }).catch(err => {
-                alert(err.result)
+                if(err?.code != 300){
+                    alert(err.result)
+                }
                 commit(types.CUSTOMER_WISH_LIST_LOADING, false)
             })
         }
