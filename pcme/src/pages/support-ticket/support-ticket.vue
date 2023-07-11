@@ -225,7 +225,9 @@
             getlastmsg(replies){
                 if(replies){
                     // console.log(replies[replies.length-1])
-                    if(replies?.[replies?.length-1]?.message === '-'){
+                    if(replies?.[replies?.length-1]?.messageType == 1){
+                        return this.$t("retrun_the_order")
+                    } else if(replies?.[replies?.length-1]?.message === '-'){
                         return '[image]'
                     }else{
                         return replies?.[replies?.length-1]?.message || '-'

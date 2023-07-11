@@ -293,6 +293,17 @@ export default {
 
     my_size_infomation: 'Mes informations de taille (facultatif)',
     comments_not_empty: "Les commentaires ne peuvent pas être vides !",
+    retrun_the_order: 'Retourner la commande',
+
+    please_select_items: 'Veuillez sélectionner le(s) article(s).',
+    please_select_reason: 'Veuillez sélectionner la raison ({x}/{y})',
+    please_submit_detail: 'Veuillez fournir plus de détails.',
+    next: 'suivant(e)',
+    please_select_items_to_return: 'Veuillez sélectionner le(s) article(s) à retourner.',
+    please_select_reason_for_items: 'Veuillez sélectionner la raison pour laquelle tous les articles doivent être retournés.',
+    items_are_returned: 'Le(s) article(s) sont en cours de retour.',
+    items_cannot_returned: 'Ce type d\'article ne peut pas être retourné.',
+    require_support: 'nécessiter de l\'aide',
 
     label:{
         redeem_coupon:"Utilisez le coupon",

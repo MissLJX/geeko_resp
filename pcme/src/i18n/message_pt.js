@@ -288,6 +288,17 @@ export default {
 
     my_size_infomation: 'Minha informação de tamanho (opcional)',
     comments_not_empty: "Os comentários não podem estar vazios!",
+    retrun_the_order: 'Devolver o pedido',
+
+    please_select_items: 'Por favor, selecione o(s) item(ns).',
+    please_select_reason: 'Por favor, selecione o motivo ({x}/{y})',
+    please_submit_detail: 'Por favor, envie mais detalhes.',
+    next: 'próximo(a)',
+    please_select_items_to_return: 'Por favor, selecione o(s) item(ns) a ser(em) devolvido(s).',
+    please_select_reason_for_items: 'Por favor, selecione o motivo pelo qual todos os itens devem ser devolvidos.',
+    items_are_returned: 'O(s) item(ns) está(ão) sendo devolvido(s).',
+    items_cannot_returned: 'Este tipo de item não pode ser devolvido.',
+    require_support: 'requerer suporte',
 
     label:{
         redeem_coupon:"Use um cupom",

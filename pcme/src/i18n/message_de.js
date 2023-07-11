@@ -293,6 +293,17 @@ export default {
 
     my_size_infomation: 'Meine Größeninformationen (optional)',
     comments_not_empty: "Kommentare dürfen nicht leer sein!",
+    retrun_the_order: 'Rückgabe der Bestellung',
+
+    please_select_items: 'Bitte wählen Sie den/die Artikel aus.',
+    please_select_reason: 'Bitte wählen Sie den Grund ({x}/{y})',
+    please_submit_detail: 'Bitte geben Sie weitere Details an.',
+    next: 'nächste',
+    please_select_items_to_return: 'Bitte wählen Sie den/die Artikel, die zurückgegeben werden sollen.',
+    please_select_reason_for_items: 'Bitte wählen Sie den Grund, warum alle Artikel zurückgegeben werden sollen.',
+    items_are_returned: 'Der/die Artikel werden zurückgegeben.',
+    items_cannot_returned: 'Dieser Art von Artikel kann nicht zurückgegeben werden.',
+    require_support: 'benötigen Unterstützung',
 
     label:{
         redeem_coupon:"Coupon einl\u00f6sen",

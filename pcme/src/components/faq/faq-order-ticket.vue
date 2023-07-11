@@ -43,13 +43,34 @@
                         </div>
                         <div class="buyer" v-if="item.sender === 'buyers' && (item.reasonCode || item.message || item.imageUrls)">
                             <div class="el-me-headerImage" :style="{'background-image': 'url('+headerImage+'),url('+baseHeaderUrl+')' }"></div>
-                            <div class="cet" >
-                                <div class="sanjiao-right"></div>
-                                <div v-if="!(item.reasonCode && item.reason) && item.message!=='-'" class="txtcontent">{{item.message}}</div>
-                                <div v-if="!(item.reasonCode && item.reason) && item.imageUrls" class="imgarea">
+                            <div :class="{'cet': true, 'grey': item.messageType == 1}" >
+                                <div :class="{'sanjiao-right': true, 'grey': item.messageType == 1}"></div>
+                                <div v-if="item.messageType == 1">
+                                    <div class="returnMessageBox">
+                                        <div class="returnMessageTitle">
+                                            <div>Return the Order</div>
+                                            <div class="returnItemsNum">{{ item.message.items ? item.message.items.length: 0 }}{{ 'Item(s)' }}</div>
+                                        </div>
+                                        <div class="returnProductList">
+                                            <img v-for="(item, index) in item.message.items.slice(0, 4)" :src="item.imageUrl" :key="index"/>
+                                            <div v-if="item.message.items.length > 4" class="imgMore">...</div>
+                                        </div>
+                                        <div class="returnOrderId">
+                                            <span>{{ 'Order no.' }}</span>
+                                            {{ item.message.orderId }}
+                                        </div>
+                                        <div class="returnView">
+                                            <div class="returnViewBtn" @click="() => returnView()">
+                                                {{ $t('view') }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div v-if="item.messageType != 1 && !(item.reasonCode && item.reason) && item.message!=='-'" class="txtcontent">{{item.message}}</div>
+                                <div v-if="item.messageType != 1 && !(item.reasonCode && item.reason) && item.imageUrls" class="imgarea">
                                     <img v-for="(img, index) in item.imageUrls" :key="index" :src="imgUrl(img)">
                                 </div>
-                                <div v-if="item.reasonCode && item.reason">
+                                <div v-if="item.messageType != 1 && item.reasonCode && item.reason">
                                     <div v-if="item.reason" style="color:#222;font-size: 14px;border-bottom:2px solid #999;padding-bottom:5px;text-align:left;">
                                         {{item.reason}}
                                     </div>
@@ -160,124 +181,29 @@
             </div>
             <div class="sendbtn" @click="sendticket">{{$t('send')}}</div> -->
         </div>
+        <question-submit-mask
+            v-if="questionMaskShow"
+            @clearTicketData="clearTicketData"
+            :questionObject="questionObject"
+            :questionsReason="questionsReason"
+            :descriptionRequired="descriptionRequired"
+            @changeQuestionObject="obj => changeQuestionObject(obj)"
+            @questionTypeChange="data => questionTypeChange(data)"
+            @questionImgUpload="e => questionImgUpload(e)"
+            @questionSubmit="questionSubmit"
+            @descriptionTextAreaChange="e => descriptionTextAreaChange(e)"
+            />
 
-        <div class="questionSubmitMask" v-if="questionMaskShow">
-          <div class="questionSubmitContent">
-
-            <span style="display:block;width:100%;text-align:right;background-color:#fff;" @click="()=>clearTicketData()">
-              <span class="iconfont clearTicketData">&#xe69a;</span>
-            </span>
-
-            <div class="userInputBox">
-                <!-- {/* 提示语 */} -->
-                <div class="submitTips" id="top">
-                  <span>{{$t("support.s_submit_tips")}}</span> 
-                </div>
-
-                <!-- {/* 原因选择 */} -->
-                <div class="submitSelectReason" id="submitSelect" v-if="questionsReason && questionsReason.length > 0">
-                    <!-- {/* 选择标题 */} -->
-                    <div class="selectReasonTitle">
-                    <span>*</span> {{$t("support.s_select_reason")}}
-                    </div>
-
-                    <!-- {/* 选择下拉框 */} -->
-                    <div class="selectReasonBox" id="selectReason">
-                        <div class="selectReasonInput" @click="()=>questionObject={...questionObject, showSelectItem:!questionObject.showSelectItem}">
-                            <span>{{questionsReason.find(q => q.isSelected == true) ? questionsReason.find(q => q.isSelected == true).label : $t("support.s_select_reason")}}</span>
-                            <span :class="{'iconfont selectReasonIcon':true, 'selected':questionObject.showSelectItem}">&#xe692;</span>
-                        </div>
-                        
-                        <!-- {/* 选项框 */} -->
-                        <div class="selectReasonItemBox" v-if="questionObject.showSelectItem">
-                            <!-- {/* 选项 */} -->
-                            <div :class="{'selectReasonItem':true,'showTextArea':item.value === questionsReason[questionsReason.length - 1].value && item.isSelected}" 
-                                 :key="index" 
-                                 @click="()=>questionTypeChange(item)"
-                                 v-for="(item,index) in questionsReason"
-                                >
-                                <div>
-                                    <div :class="{'reasonItemIcon': true, 'reasonItemIconSelect': item.isSelected}">
-                                        <span class="reasonItemIconSelected"></span>
-                                    </div>
-                                    <div :class="{'reasonItem':true, 'reasonItemSelect': item.isSelected}">{{item.label}}</div>
-                                </div>
-                                
-                                <textarea 
-                                    v-if="item.value === questionsReason[questionsReason.length - 1].value && item.isSelected"
-                                    :class="{'reasonTextArea':true}"
-                                    :id="'reasonInput'+item.label"
-                                    @change="(e)=>{
-                                        questionObject={
-                                        ...questionObject, 
-                                        questionTypeInput: e.target.value
-                                        }
-                                    }">
-                                </textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                    
-                <!-- {/* 文字描述 */} -->
-                <div class="submitDescriptionBox" id="description">
-                    <!-- {/* 标题 */} -->
-                    <div class="selectReasonTitle">
-                      <span v-if="descriptionRequired">*</span> {{$t("support.s_description")}}
-                    </div>
-
-                    <!-- {/* 输入框 */} -->
-                    <textarea class="descriptionTextArea" 
-                        :placeholder="$t('support.s_description_ph')"
-                        :value="questionObject.descriptionInput"
-                        @input="(e)=>descriptionTextAreaChange(e)"
-                        ></textarea>
-                    <div class="textAreaInputLength">
-                      {{(questionObject.descriptionInput ? questionObject.descriptionInput.length : '0')+'/1000'}}
-                    </div>
-                </div>
-
-                <!-- {/* 图片上传 */} -->
-                <div class="submitImageBox" id="imgUpload">
-                  <!-- {/* 标题 */} -->
-                  <div class="selectReasonTitle">
-                    {{$t("support.s_upload_image")}}
-                  </div>
-
-                  <!-- {/* 上传提示 */} -->
-                  <div class="uploadTips">{{$t("support.s_upload_tips")}} </div>
-
-                  <div class="uploadBox">
-                    <div class="uploadItem" v-for="(item,index) in questionObject.uploadImgList" :key="index">
-                        <span class="deleteImg" @click="()=>deleteImg(index)">&times;</span>
-                        <img :src="item" alt="" />
-                    </div>
-
-                    <div class="uploadItem" v-if="questionObject.uploadImgList.length < 3">
-                        <span class="iconfont">&#xe6d3;</span>
-                        <!-- <form ref="questionImg"> -->
-                        <input style="opacity:0;position:absolute;width:80px;height:80px;" 
-                            type="file" 
-                            id="imageFiles" 
-                            multiple="multiple" 
-                            @change="(e)=>questionImgUpload(e)"
-                            accept="image/jpg,image/jpeg,image/png,image/gif" />
-                        <!-- </form> -->
-                    </div>
-                                        
-                  </div>
-                </div>
-            </div>
-
-            <div class="questionSubmitBtnBox">
-              <div class="questionSubmitBtn" @click="questionSubmit()">
-                {{$t("support.s_sumbit")}}
-              </div>
-            </div>
-            
-            
-          </div>
-        </div>
+        <return-select-mask
+            v-if="returnMaskShow"
+            :orderdetail="ticket"
+            @updateTicket="msg => updateTicket(msg)"
+            @returnSelectClose="returnSelectClose"
+            @returnView="returnView"
+            :productCanSelect="productCanSelect"
+            :productCannotSelect="productCannotSelect"
+            :productReturned="productReturned"
+            />
     </div>
 </template>
 
@@ -288,6 +214,8 @@
     import faqSelect from'./faq-select.vue';
     import _ from 'lodash'
     import HtmlImageCompress from 'html-image-compress'
+    import QuestionSubmitMask from './question-submit-mask.vue';
+    import ReturnSelectMask from './return-select-mask.vue';
 
     let list = [{
         "value":"01",
@@ -397,24 +325,30 @@
                 descriptionRequired: false, // description是否必填
                 _orderId: '',
                 isLoading: false,
+
+                returnMaskShow: false, // 退货的弹窗是否显示
+                productCanSelect: [],
+                productCannotSelect: [],
+                productReturned: [],
             }
         },
         components: {
             'star-list': StarList,
             'faq-select': faqSelect,
+            'question-submit-mask': QuestionSubmitMask,
+            'return-select-mask': ReturnSelectMask,
         },
         mounted(){
             this.$store.dispatch("getQuestionType")
-            // console.log(localStorage._orderId)
             if(localStorage._orderId){
-                this._orderId = localStorage._orderId
+                this._orderId = localStorage._orderId?.replaceAll('"', '')
                 setTimeout(()=>{
                     this.selectChange({label:'Return the order',value:'04'})
                 }, 200)
                 setTimeout(()=>{
                     localStorage.removeItem('_orderId')
                 }, 400)
-            } 
+            }
             if(localStorage._code){
                 localStorage.removeItem('_code')
             }
@@ -436,10 +370,10 @@
             },
             selected:function(oldValue,newValue){
                 // console.log("selected newValue",newValue,"oldValue",oldValue);
-            }
+            },
         },
         computed: {
-            ...mapGetters(['ticket','ticket_con','ticketid','ticket_sub','questionType']),
+            ...mapGetters(['ticket','ticket_con','ticketid','ticket_sub','questionType', "orderdetail"]),
             baseHeaderUrl() {
                 return 'https://image.geeko.ltd/site/pc/icon35.png';
             },
@@ -515,10 +449,11 @@
                 }
             },
             usedQuestionType(){
+                const showReturn = this.ticket?.logistics?.packages?.find(p => p?.status == 3)
                 if((this.questionType && this.questionType.length ==0) || !this.questionType){
-                    return this.list
+                    return showReturn? this.list: this.list?.filter(l => l.value != '04')
                 } else {
-                    return this.questionType
+                    return showReturn? this.questionType: this.questionType?.filter(q => q.value != '04')
                 }
             },
             groupReplies(){
@@ -534,7 +469,12 @@
                         replies: []
                     }
                     groups[g].forEach(group => {
-                        if(group.message || group.imageUrls || group.reasonCode || group.reason){
+                        if(group.message || group.imageUrls || group.reasonCode || group.reason ){
+                            if(group.messageType == 1){
+                                if(typeof(group.message) == 'string' && group.message?.startsWith("{")){
+                                    group.message = JSON.parse(group.message)
+                                }
+                            }
                             obj.replies.push(group)
                         }
                     })
@@ -543,11 +483,13 @@
                     }   
                     obj = ''
                 })
-                // console.log(output)
                 return output
             }
         },
         methods: {
+            changeQuestionObject(obj){
+                this.questionObject = { ...obj}
+            },
             selectChange(e){
                 if(this.isLoading){
                     return
@@ -568,37 +510,45 @@
                 this.isLoading = true
                 this.$store.dispatch("addTicket",fData).then(res=>{
                     this.isLoading = false
-                    // console.log(e.value)
                     this.selected = e.value;
-                    // console.log(this.selected)
-                    
                     this.isRequired = false
-                    let qTReasonList = this.usedQuestionType.find(q => q.value == e.value).reasons ? 
+                    if(e.value == '04'){
+                        // 退货走新逻辑
+                        const packageList = this.orderdetail?.logistics?.packages || []
+                        const products = packageList?.map(p => p.products)?.flat(Infinity)
+                        const all = products?.length > 0 ? products : []
+                        this.productCanSelect = all?.filter(p => p?.returnStatus == 1)?.map(p => { return { ...p, selected: false } }) || []
+                        this.productCannotSelect = all?.filter(p => p?.returnStatus == 3)?.map(p => { return { ...p, selected: false } }) || []
+                        this.productReturned = all?.filter(p => p?.returnStatus == 2) || []
+                        if(this.productCanSelect?.length > 0 || this.productCannotSelect?.length > 0 || this.productReturned?.length > 0){
+                            this.returnMaskShow = true;
+                        }
+                    } else {
+                        let qTReasonList = this.usedQuestionType.find(q => q.value == e.value).reasons ? 
                                     this.usedQuestionType.find(q => q.value == e.value).reasons :
                                     []
-                    let showed = this.ticket_con ? 
-                                this.ticket_con?.ticketReplies ? 
-                                this.ticket_con?.ticketReplies.find(t => 
-                                        t.questionTypeCode == e.value && t.reasonCode && t.reason
-                                ) : false : false
-                    this.questionsReason.forEach(q=>{
-                        q.isSelected=false
-                        if(q.value == e.value){
-                            q.isSelected = true
+                        let showed = this.ticket_con ?
+                                    this.ticket_con?.ticketReplies ?
+                                    this.ticket_con?.ticketReplies.find(t =>
+                                            t.questionTypeCode == e.value && t.reasonCode && t.reason
+                                    ) : false : false
+                        this.questionsReason.forEach(q=>{
+                            q.isSelected=false
+                            if(q.value == e.value){
+                                q.isSelected = true
+                            }
+                        })
+                        if((qTReasonList.length > 0 || e.value == this.usedQuestionType[this.usedQuestionType.length - 1].value) && !showed){
+                            if(e.value == this.usedQuestionType[this.usedQuestionType.length - 1].value){
+                                this.descriptionRequired = true
+                            } else {
+                                this.descriptionRequired = false
+                            }
+                            this.questionsReason = qTReasonList
+                            this.questionMaskShow = true
                         }
-                    })
-
-                    if((qTReasonList.length > 0 || e.value == this.usedQuestionType[this.usedQuestionType.length - 1].value) && !showed){
-                        if(e.value == this.usedQuestionType[this.usedQuestionType.length - 1].value){
-                            this.descriptionRequired = true
-                        } else {
-                            this.descriptionRequired = false
-                        }
-                        this.questionsReason = qTReasonList
-                        this.questionMaskShow = true
                     }
                 })
-                
             },
             getDate(paymentTime){
                 if(paymentTime == null){
@@ -690,6 +640,9 @@
             },
             imgUrl(url){
                 return 'https://image.geeko.ltd/ticket/'+url
+            },
+            geekoImgUrl(url){
+                return 'https://image.geeko.ltd/'+url
             },
             starClickHandle(data){
                 this.rateData.rate = data;
@@ -934,7 +887,75 @@
             },
             addRate(){
                 this.showAddRate = true;
-            }
+            },
+            returnSelectClose(){
+                this.returnMaskShow = false
+            },
+            updateTicket(message){
+                var fData = new FormData();
+                if(this.ticket_con?.operaId){
+                    fData.append("operaId",this.ticket_con.operaId)
+                }else{
+                    fData.append("operaId",this._orderId ? this._orderId :this.ticket.id)
+                }
+                console.log(fData.operaId, typeof(fData.operaId))
+                fData.append("questionType",this.list.find(q => q.value == '04').label)
+                fData.append("questionTypeCode", '04')
+                fData.append("message", message)
+                fData.append("messageType", 1)
+                this.$store.dispatch("addTicket",fData).then(res=>{
+                    if (JSON.stringify(this.ticket_con) !== '{}') {
+                        this.$store.dispatch('getTicketByTicketId', this.ticket_con.id)
+                    } else {
+                        this.$store.dispatch('getTicket', this.ticket.id)
+                    }
+                })
+                this.returnMaskShow = false
+            },
+            returnView(obj){
+                if(obj){
+                    // 退货流程里点击 view
+                    if(obj?.id){
+                        if(obj?.to == 'detail'){
+                            // 去退货详情
+                            // window.location.href = `/me/m/order/return-detail/${obj?.id}`
+                            this.$router.push({path: `/me/m/order/return-detail/${obj?.id}`})
+                        } else {
+                            // 去退货列表
+                            // window.location.href = `/me/m/order/`
+                            // this.$router.push({path: '/me/m/order', params: {status: 7}})
+                            window.location.href = '/me/m/order?type=return'
+                        }
+                    } else {
+                        // 去订单详情
+                        if(window.location.href?.indexOf('/me/m/order/detail') != -1){
+                            this.close()
+                        } else {
+                            this.$router.push({path: `/me/m/order/detail/${this.ticket?.id}`})
+                        }
+                    }
+                } else {
+                    // ticket 里面点击 view
+                    const packageList = this.ticket?.logistics?.packages || []
+                    const products = packageList?.map(p => p.products)?.flat(Infinity)
+                    const all = products?.length > 0 ? products : []
+                    const productReturned = all?.filter(p => p?.returnStatus == 2)
+                    const hasReturnOrderIdNum = productReturned?.filter( p => p?.returnOrderId)?.length || 0
+                    if(productReturned?.length == 1 && productReturned?.[0]?.returnOrderId){
+                        const returnId = productReturned[0].returnOrderId
+                        this.$router.push(`/me/m/order/return-detail/${returnId}`)
+                    } else if(hasReturnOrderIdNum > 1){
+                        window.location.href = '/me/m/order?type=return'
+                        return
+                    } else {
+                        if(window.location.href?.indexOf('/me/m/order/detail') != -1){
+                            this.close()
+                        } else {
+                            this.$router.push({path: `/me/m/order/detail/${this.ticket?.id}`})
+                        }
+                    }
+                }
+            },
         },
     };
 </script>
@@ -1168,6 +1189,96 @@
                             width: 100%;
                         }
                     }
+
+                    .returnMessageBox{
+                        width: 230px;
+                        background: #E6E6E6;
+                        // padding: 12px 10px 10px;
+
+                        .returnMessageTitle{
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+                            margin-bottom: 10px;
+                            font-size: 12px;
+                            font-family: Roboto-Bold, Roboto;
+                            font-weight: bold;
+                            color: #222222;
+                            line-height: 14px;
+
+                            .returnItemsNum{
+                                font-size: 12px;
+                                font-family: Roboto-Regular, Roboto;
+                                font-weight: 400;
+                                color: #222222;
+                                line-height: 12px;
+                            }
+                        }
+                        .returnProductList{
+                            display: flex;
+                            align-items: center;
+                            justify-content: flex-start;
+                            position: relative;
+                            margin-bottom: 12px;
+
+                            & > img{
+                                display: inline-block;
+                                width: 40px;
+                                height: 50px;
+                                margin-right: 10px;
+                            }
+
+                            & > img:last-child{
+                                margin-right: 0;
+                            }
+
+                            .imgMore{
+                                position: absolute;
+                                top: 0;
+                                right: 7px;
+                                width: 40px;
+                                height: 50px;
+                                background-color: rgba(34,34,34,0.5);
+                                text-align: center;
+                                line-height: 50px;
+                                color: #fff;
+                                font-size: 12px;
+                                letter-spacing: 2px;
+                            }
+                        }
+
+                        .returnOrderId{
+                            font-size: 12px;
+                            font-family: Roboto-Regular, Roboto;
+                            font-weight: 400;
+                            line-height: 14px;
+                            color: #666;
+                            text-align: left;
+
+                            & > span{
+                                color: #222222;
+                            }
+                        }
+
+                        .returnView{
+                            margin-top: 10px;
+
+                            .returnViewBtn{
+                                float: right;
+                                width: 62px;
+                                height: 21px;
+                                border-radius: 11px;
+                                border: 1px solid #222222;
+                                cursor: pointer;
+                                text-align: center;
+                                line-height: 21px;
+                                text-transform: capitalize;
+                                overflow: hidden;
+                                font-size: 12px;
+                                color: #222;
+                            }
+                        }
+                    }
                 }
                 .el-me-headerImage {
                     float: right;
@@ -1391,315 +1502,6 @@
             }
         }
 
-        .questionSubmitMask{
-            position: absolute;
-            top: 0;
-            z-index: 11;
-            height: 100vh;
-            width: 100%;
-            background: rgba(0,0,0,0.6);
-            text-align: left;
-
-            .questionSubmitContent{
-                width: 100%;
-                height: 70%;
-                position: absolute;
-                bottom: 0;
-                background: #fff;
-
-                .clearTicketData{
-                    color:#666;
-                    line-height: 12px;
-                    font-size: 12px;
-                    display: inline-block;
-                    position: absolute;
-                    right: 8px;
-                    top: 6px;
-                    cursor: pointer;
-                }
-
-                .userInputBox{
-                    height: 100%;
-                    overflow:auto;
-                    margin-top:20px;
-                    padding-bottom:102px;
-
-                    &::-webkit-scrollbar{
-                        display: none;
-                    }
-                }
-
-                .submitTips{
-                    background-color: #e6e6e6;
-                    font-family: SlatePro-Regular;
-                    font-size: 14px;
-                    font-weight: normal;
-                    font-stretch: normal;
-                    letter-spacing: 0px;
-                    color: #666666;
-                    padding: 10px 24px;
-                    text-align: left;
-                }
-
-                .selectReasonTitle{
-                    font-family: SlatePro-Medium;
-                    font-size: 14px;
-                    font-weight: normal;
-                    font-stretch: normal;
-                    letter-spacing: 0px;
-                    color:#222;
-                    & > span{
-                        color: #e64545;
-                    }
-                }
-
-                .submitSelectReason{
-                    width: 100%;
-                    min-height: 78px;
-                    padding: 10px 24px;
-                    border-bottom: 10px solid #f6f6f6;
-                    font-family: SlatePro-Medium;
-
-                    .selectReasonInput{
-                        display: flex;
-                        align-items: center;
-                        justify-content: space-between;
-                        margin-top: 10px;
-                        cursor: pointer;
-
-                        & > span:first-child{
-                            font-family: Roboto-Regular;
-                            font-size: 12px;
-                            font-weight: normal;
-                            font-stretch: normal;
-                            letter-spacing: 0px;
-                            color: #666666;
-                            margin-left: 10px;
-                        }
-
-                        & > .selectReasonIcon{
-                            color: #222222;
-                            font-weight: 600;
-                            transform: rotate(0deg);
-                            transition: transform 0.3s;
-                        }
-
-                        & > .selected{
-                            transform: rotate(180deg);
-                            transition: transform 0.3s;
-                        }
-                    }
-
-                    .selectReasonItemBox{
-                        margin: 12px 0 16px;
-
-                        .selectReasonItem{
-                            padding-left: 10px;
-                            // padding-bottom: ${props => props.showTextArea ? '17px':'0'};
-                            margin-left: 10px;
-                            margin-bottom: 2px;
-                            width: 427px;
-                            min-height: 46px;
-                            background-color: #f5f5f5;
-                            border-radius: 2px;
-                            cursor: pointer;
-
-                            & > div{
-                                display: flex;
-                                align-items: center;
-                                justify-content: flex-start;
-                            }
-                        }
-
-                        .showTextArea{
-                            padding-bottom: 17px;
-                        }
-
-                        .reasonItemIcon{
-                            display: inline-block;
-                            border: 1px solid #999;
-                            width: 12px;
-                            height: 12px;
-                            border-radius: 50%;
-
-                            & > span{
-                                width: 6px;
-                                height: 6px;
-                                display: none;
-                                border: 1px solid #222;
-                                background: #222;
-                                border-radius: 50%;
-                                margin: 2px;
-                            }
-                        }
-                        .reasonItemIconSelect{
-                            border: 1px solid #222;
-
-                            & > span{
-                                display: block;
-                            }
-                        }
-
-                        .reasonItem{
-                            margin-left: 10px;
-                            color: #666;
-                            line-height: 46px;
-                        }
-                        .reasonItemSelect{
-                            color: #222;
-                        }
-
-                        .reasonTextArea{
-                            width: 332px;
-                                height: 36px;
-                                background-color: #ffffff;
-                                border-radius: 2px;
-                                border: solid 1px #e6e6e6;
-                            width: 97%;
-                            resize: none;
-                            padding: 5px;
-                        }
-                    }
-                }
-
-                .submitDescriptionBox{
-                    width: 100%;
-                    min-height: 235px;
-                    padding: 23px 24px;
-                    border-bottom: 10px solid #f6f6f6;
-
-                    .descriptionTextArea{
-                        width: 100%;
-                        height: 127px;
-                        background-color: #f5f5f5;
-                        border-radius: 2px;
-                        border: solid 1px #eeeeee;
-                        outline: none;
-                        resize: none;
-                        padding: 12px 10px;
-                        margin-top:12px;
-
-                        &::-webkit-input-placeholder{
-                            font-family: SlatePro-Regular;
-                            font-size: 12px;
-                            font-weight: normal;
-                            font-stretch: normal;
-                            letter-spacing: 0px;
-                            color: #bbbbbb;
-                        }
-                    }
-
-                    .textAreaInputLength{
-                        width: 100%;
-                        text-align: right;
-                        font-family: SlatePro-Regular;
-                        font-size: 12px;
-                        font-weight: normal;
-                        font-stretch: normal;
-                        letter-spacing: 0px;
-                        color: #999999;
-                        margin-top: 10px;
-                        // margin-bottom: 16px;
-                    }
-                }
-                
-                .submitImageBox{
-                    width: 100%;
-                    min-height: 72px;
-                    padding: 23px 24px;
-                    
-                    .uploadTips{
-                        font-family: Roboto-Regular;
-                        font-size: 12px;
-                        font-weight: normal;
-                        font-stretch: normal;
-                        letter-spacing: 0px;
-                        color: #999999;
-                        margin-top: 8px;
-                    }
-
-                    .uploadBox{
-                        height: 80px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: flex-start;
-                        margin-top: 12px;
-
-                        .uploadItem{
-                            width: 80px;
-                            height: 80px;
-                            background-color: #f5f5f5;
-                            border: solid 1px #eeeeee;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            margin: 5px;
-                            position:relative;
-                            cursor: pointer;
-
-                            & > span{
-                                color: #bbb;
-                                font-size: 32px;
-                                line-height: 32px;
-                            }
-
-                            & > .deleteImg{
-                                position: absolute;
-                                right: 0;
-                                top: 0;
-                                font-size: 18px;
-                                line-height: 16px;
-                                color: #fff;
-                                background: #222;
-                                display: block;
-                                width: 18px;
-                                height: 18px;
-                                border-radius: 50%;
-                                text-align: center;
-                                cursor: pointer;
-                            }
-
-                            & > img {
-                                width: 80px;
-                                height: 80px;
-                                display: inline-block;
-                            }
-                        }
-                    }
-                }
-
-                .questionSubmitBtnBox{
-                    width: 100%;
-                    height: 81px;
-                    background: #fff;
-                    // box-shadow:
-                    position: absolute;
-                    bottom: 0;
-                    z-index: 1;
-                    padding: 12px 0;
-                    box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.5);
-
-                    .questionSubmitBtn{
-                        width: 472px;
-                        height: 49px;
-                        background-color: #222222;
-                        border-radius: 2px;
-                        text-transform: uppercase;
-                        font-family: AcuminPro-Bold;
-                        font-size: 14px;
-                        font-weight: normal;
-                        font-stretch: normal;
-                        letter-spacing: 0px;
-                        color: #ffffff;
-                        text-align: center;
-                        line-height: 49px;
-                        margin: 0 auto;
-                        cursor: pointer;
-                    }
-                }
-            }
-        }
-
         .submitSuccessTip{
             position: absolute;
             left: calc(50% - 100px);
@@ -1762,5 +1564,8 @@
     margin-top: 7px;
 }
 
+.grey{
+    background: #e6e6e6 !important;
+}
 
 </style>

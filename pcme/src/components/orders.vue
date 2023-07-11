@@ -293,10 +293,20 @@
             //     this.isloded = true
             // })
             this.isloded = true
-            if(this.$route.query && this.$route.query.type && this.$route.query.type == 'review'){
-                this.clearSkip(
-                    5,'Comfirmed','click',0
-                )
+            if(this.$route.query && this.$route.query.type){
+                if(this.$route.query.type == 'review'){
+                    this.clearSkip(
+                        5,'Comfirmed','click',0
+                    )
+                } else if(this.$route.query.type == 'return'){
+                    this.clearSkip(
+                        7,'Returns','click',0
+                    )
+                } else {
+                    this.clearSkip(
+                        this.orderStatus,orderName,"click",0
+                    )
+                }
             } else {
                 this.clearSkip(
                     this.orderStatus,orderName,"click",0
@@ -346,38 +356,29 @@
                 this.modalconfirmshow = true;
 
                 this.confirmCfg =  {
-                    btnFont:[
-                        {
-                            type: 'no',
-                            text: this.$t("cancel"),
-                            fuc: function () {
-                                _this.modalconfirmshow = false;
-                                _this.$store.dispatch('closeConfirm').then(()=>{
+                    btnFont:{
+                        'yes': this.$t("confirm"),
+                        'no': this.$t("cancel")
+                    },
+                    yes:function () {
+                        _this.modalconfirmshow = false;
+                        _this.$store.dispatch('closeConfirm').then(() => {
+                            cancelReturnOrder(item.id).then(res => {
+                                if(res.code == 200){
+                                    _this.isloded = true
+                                    _this.clearSkip('7','Returns',"click",0)
+                                }
+                            }).catch(err => {
+                                alert(err.result)
+                            })
+                        });
+                    },
+                    no:function () {
+                        _this.modalconfirmshow = false;
+                        _this.$store.dispatch('closeConfirm').then(()=>{
 
-                                });
-                            },
-                            style:{}
-                        },
-                        {
-                            type: 'yes',
-                            text: this.$t("confirm"),
-                            fuc: function () {
-                                _this.modalconfirmshow = false;
-                                _this.$store.dispatch('closeConfirm').then(() => {
-                                    cancelReturnOrder(item.id).then(res => {
-                                        if(res.code == 200){
-                                            _this.isloded = true
-                                            _this.clearSkip('7','Returns',"click",0)
-                                        }
-                                    }).catch(err => {
-                                        alert(err.result)
-                                    })
-                                });
-                            },
-                            style:{}
-                        },
-                        
-                    ],
+                        });
+                    },
                     btnClose: true,
                     showSuccessIcon: false,
                     message: this.$t("sure_to_cancel_return")+"?",
@@ -418,36 +419,22 @@
                     this.modalconfirmshow = true;
 
                     this.confirmCfg =  {
-                        btnFont:[
-                            {
-                                type: 'yes',
-                                text: this.$t("edit_return_receipt"),
-                                fuc: function () {
-                                    _this.modalconfirmshow = false;
-                                    _this.$store.dispatch('closeConfirm').then(() => {
-                                        _this.returnProducts(_this.showReturnOrder);
-                                    });
-                                },
-                                style:{
-                                }
-                            },
-                            {
-                                type: 'no',
-                                text: this.$t("points_mall.viewOrder"),
-                                fuc: function () {
-                                    _this.modalconfirmshow = false;
-                                    _this.$store.dispatch('closeConfirm').then(()=>{
-                                        _this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/order/return-detail/'+_this.showReturnOrder.id})
-                                    });
-                                },
-                                style:{
-                                    background:'#222222',
-                                    backgroundColor: '#222222',
-                                    lineHeight: '36px',
-                                    color: '#ffffff'
-                                }
-                            },
-                        ],
+                        btnFont: {
+                            yes: this.$t("edit_return_receipt"),
+                            no: this.$t("points_mall.viewOrder")
+                        },
+                        yes: function () {
+                            _this.modalconfirmshow = false;
+                            _this.$store.dispatch('closeConfirm').then(() => {
+                                _this.returnProducts(_this.showReturnOrder);
+                            });
+                        },
+                        no: function () {
+                            _this.modalconfirmshow = false;
+                            _this.$store.dispatch('closeConfirm').then(()=>{
+                                _this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/order/return-detail/'+_this.showReturnOrder.id})
+                            });
+                        },
                         btnClose: true,
                         showSuccessIcon: true,
                         message: this.$t("support.s_submit_success"),
@@ -480,6 +467,12 @@
                                 fontSize: '18px !important',
                                 color: '#222',
                             },
+                            btnNo:{
+                                background:'#222222',
+                                backgroundColor: '#222222',
+                                lineHeight: '36px',
+                                color: '#ffffff'
+                            }
                         }
                     }
                 }
@@ -601,7 +594,6 @@
                 this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/order/logistics-detail', query: { orderid: orderid , method: 'orderlist' } })
             },
             orderoffset(order){
-                console.log(order,  order.expiredPaymentTime - order.serverTime)
                 if(order && order.expiredPaymentTime){
                     return  order.expiredPaymentTime - order.serverTime;
                 }
