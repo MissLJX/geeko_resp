@@ -296,6 +296,17 @@ export default {
     
     my_size_infomation: 'My Size Information (Optional)',
     comments_not_empty: "Comments cannot be empty!",
+    retrun_the_order: 'Return the order',
+
+    please_select_items: 'Please select the item(s)',
+    please_select_reason: 'Please select the reason ({x}/{y})',
+    please_submit_detail: 'Please submit further details',
+    next: 'next',
+    please_select_items_to_return: 'Please select the item(s) to be returned',
+    please_select_reason_for_items: 'Please select the reason for all items to be returned',
+    items_are_returned: 'Item(s) are being returned',
+    items_cannot_returned: 'This kind of item cannot be returned',
+    require_support: 'require support',
 
     label:{
         redeem_coupon:"Redeem Coupon",

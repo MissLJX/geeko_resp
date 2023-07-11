@@ -52,7 +52,7 @@
                                             <div class="returnItemsNum">{{ item.message.items ? item.message.items.length: 0 }}{{ 'Item(s)' }}</div>
                                         </div>
                                         <div class="returnProductList">
-                                            <img v-for="(item, index) in item.message.items.slice(0, 4)" :src="item.imageURL" :key="index"/>
+                                            <img v-for="(item, index) in item.message.items.slice(0, 4)" :src="item.imageUrl" :key="index"/>
                                             <div v-if="item.message.items.length > 4" class="imgMore">...</div>
                                         </div>
                                         <div class="returnOrderId">
@@ -61,7 +61,7 @@
                                         </div>
                                         <div class="returnView">
                                             <div class="returnViewBtn" @click="() => returnView()">
-                                                {{ 'View' }}
+                                                {{ $t('view') }}
                                             </div>
                                         </div>
                                     </div>
@@ -196,10 +196,13 @@
 
         <return-select-mask
             v-if="returnMaskShow"
-            :orderdetail="orderdetail"
+            :orderdetail="ticket"
             @updateTicket="msg => updateTicket(msg)"
             @returnSelectClose="returnSelectClose"
             @returnView="returnView"
+            :productCanSelect="productCanSelect"
+            :productCannotSelect="productCannotSelect"
+            :productReturned="productReturned"
             />
     </div>
 </template>
@@ -324,6 +327,9 @@
                 isLoading: false,
 
                 returnMaskShow: false, // 退货的弹窗是否显示
+                productCanSelect: [],
+                productCannotSelect: [],
+                productReturned: [],
             }
         },
         components: {
@@ -334,9 +340,8 @@
         },
         mounted(){
             this.$store.dispatch("getQuestionType")
-            // console.log(localStorage._orderId)
             if(localStorage._orderId){
-                this._orderId = localStorage._orderId
+                this._orderId = localStorage._orderId?.replaceAll('"', '')
                 setTimeout(()=>{
                     this.selectChange({label:'Return the order',value:'04'})
                 }, 200)
@@ -365,7 +370,7 @@
             },
             selected:function(oldValue,newValue){
                 // console.log("selected newValue",newValue,"oldValue",oldValue);
-            }
+            },
         },
         computed: {
             ...mapGetters(['ticket','ticket_con','ticketid','ticket_sub','questionType', "orderdetail"]),
@@ -444,7 +449,7 @@
                 }
             },
             usedQuestionType(){
-                const showReturn = true || this.orderdetail?.logistics?.packages?.find(p => p?.status == 3)
+                const showReturn = this.ticket?.logistics?.packages?.find(p => p?.status == 3)
                 if((this.questionType && this.questionType.length ==0) || !this.questionType){
                     return showReturn? this.list: this.list?.filter(l => l.value != '04')
                 } else {
@@ -466,7 +471,9 @@
                     groups[g].forEach(group => {
                         if(group.message || group.imageUrls || group.reasonCode || group.reason ){
                             if(group.messageType == 1){
-                                group.message = JSON.parse(group.message)
+                                if(typeof(group.message) == 'string' && group.message?.startsWith("{")){
+                                    group.message = JSON.parse(group.message)
+                                }
                             }
                             obj.replies.push(group)
                         }
@@ -476,7 +483,6 @@
                     }   
                     obj = ''
                 })
-                console.log(output)
                 return output
             }
         },
@@ -508,7 +514,15 @@
                     this.isRequired = false
                     if(e.value == '04'){
                         // 退货走新逻辑
-                        this.returnMaskShow = true;
+                        const packageList = this.orderdetail?.logistics?.packages || []
+                        const products = packageList?.map(p => p.products)?.flat(Infinity)
+                        const all = products?.length > 0 ? products : []
+                        this.productCanSelect = all?.filter(p => p?.returnStatus == 1)?.map(p => { return { ...p, selected: false } }) || []
+                        this.productCannotSelect = all?.filter(p => p?.returnStatus == 3)?.map(p => { return { ...p, selected: false } }) || []
+                        this.productReturned = all?.filter(p => p?.returnStatus == 2) || []
+                        if(this.productCanSelect?.length > 0 || this.productCannotSelect?.length > 0 || this.productReturned?.length > 0){
+                            this.returnMaskShow = true;
+                        }
                     } else {
                         let qTReasonList = this.usedQuestionType.find(q => q.value == e.value).reasons ? 
                                     this.usedQuestionType.find(q => q.value == e.value).reasons :
@@ -626,6 +640,9 @@
             },
             imgUrl(url){
                 return 'https://image.geeko.ltd/ticket/'+url
+            },
+            geekoImgUrl(url){
+                return 'https://image.geeko.ltd/'+url
             },
             starClickHandle(data){
                 this.rateData.rate = data;
@@ -879,13 +896,13 @@
                 if(this.ticket_con?.operaId){
                     fData.append("operaId",this.ticket_con.operaId)
                 }else{
-                    fData.append("operaId",this._orderId ? this._orderId :this.ticketid)
+                    fData.append("operaId",this._orderId ? this._orderId :this.ticket.id)
                 }
-                // console.log(fData.operaId)
+                console.log(fData.operaId, typeof(fData.operaId))
                 fData.append("questionType",this.list.find(q => q.value == '04').label)
                 fData.append("questionTypeCode", '04')
                 fData.append("message", message)
-                fData.append("messageType", '1')
+                fData.append("messageType", 1)
                 this.$store.dispatch("addTicket",fData).then(res=>{
                     if (JSON.stringify(this.ticket_con) !== '{}') {
                         this.$store.dispatch('getTicketByTicketId', this.ticket_con.id)
@@ -895,15 +912,49 @@
                 })
                 this.returnMaskShow = false
             },
-            returnView(){
-                if(this.orderdetail?.returnOrders?.id){
-                    // 去退货详情
-                    window.location.href = `/me/m/order/return-detail/${this.orderdetail?.returnOrders?.id}`
+            returnView(obj){
+                if(obj){
+                    // 退货流程里点击 view
+                    if(obj?.id){
+                        if(obj?.to == 'detail'){
+                            // 去退货详情
+                            // window.location.href = `/me/m/order/return-detail/${obj?.id}`
+                            this.$router.push({path: `/me/m/order/return-detail/${obj?.id}`})
+                        } else {
+                            // 去退货列表
+                            // window.location.href = `/me/m/order/`
+                            // this.$router.push({path: '/me/m/order', params: {status: 7}})
+                            window.location.href = '/me/m/order?type=return'
+                        }
+                    } else {
+                        // 去订单详情
+                        if(window.location.href?.indexOf('/me/m/order/detail') != -1){
+                            this.close()
+                        } else {
+                            this.$router.push({path: `/me/m/order/detail/${this.ticket?.id}`})
+                        }
+                    }
                 } else {
-                    // 去订单详情
-                    window.location.href = `/me/m/order/detail/${this.orderdetail?.id}`
+                    // ticket 里面点击 view
+                    const packageList = this.ticket?.logistics?.packages || []
+                    const products = packageList?.map(p => p.products)?.flat(Infinity)
+                    const all = products?.length > 0 ? products : []
+                    const productReturned = all?.filter(p => p?.returnStatus == 2)
+                    const hasReturnOrderIdNum = productReturned?.filter( p => p?.returnOrderId)?.length || 0
+                    if(productReturned?.length == 1 && productReturned?.[0]?.returnOrderId){
+                        const returnId = productReturned[0].returnOrderId
+                        this.$router.push(`/me/m/order/return-detail/${returnId}`)
+                    } else if(hasReturnOrderIdNum > 1){
+                        window.location.href = '/me/m/order?type=return'
+                        return
+                    } else {
+                        if(window.location.href?.indexOf('/me/m/order/detail') != -1){
+                            this.close()
+                        } else {
+                            this.$router.push({path: `/me/m/order/detail/${this.ticket?.id}`})
+                        }
+                    }
                 }
-                return
             },
         },
     };

@@ -12,8 +12,8 @@
             </div>
 
             <div class="valiadTips" v-if="productReturned.length > 0">
-                <span>Item(s) are being returned</span>
-                <span class="view" @click="toView">{{ 'view >' }}</span>
+                <span>{{ $t('items_are_returned') }}</span>
+                <span class="view" @click="toView">{{ $t('view')+ ' >' }}</span>
             </div>
 
             <div class="product" v-for="(product1, index1) in productReturned" :key="'productRetrun'+index1">
@@ -26,7 +26,7 @@
             </div>
 
             <div class="valiadTips" v-if="productCannotSelect.length > 0">
-                <span>This kind of item cannot be returned</span>
+                <span>{{ $t('items_cannot_returned') }}</span>
                 <span class="ask" @click="showConfirm">?</span>
             </div>
 
@@ -73,13 +73,20 @@ export default {
             this.$emit("selectChange", product)
         },
         toView(){
-            this.$emit('toView')
+            const hasReturnOrderIdNum = this.productReturned?.filter( p => p?.returnOrderId)?.length || 0
+            if(this.productReturned?.length == 1){
+                const returnId = this.productReturned?.[0]?.returnOrderId
+                this.$emit('toView', {id: returnId, to: 'detail'})
+            } else if(hasReturnOrderIdNum > 1){
+                this.$emit('toView', {id: returnId, to: 'list'})
+            } else {
+                this.$emit("toView", {id: '', to: 'detail'})
+            }
         },
         showConfirm(){
             this.$emit("showConfirm")
         },
         isLast(num1, num2){
-            console.log(num1, num2)
             return num1 == num2
         },
     },

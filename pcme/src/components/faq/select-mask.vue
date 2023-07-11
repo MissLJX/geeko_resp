@@ -17,7 +17,7 @@
       >
 
       <div class="bd" v-if="cfg.message">
-        <p :style="messageStyle">{{ cfg.message }}</p>
+        <p :style="messageStyle" v-html="cfg.message"></p>
       </div>
 
       <template>

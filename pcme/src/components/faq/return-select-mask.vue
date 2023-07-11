@@ -11,11 +11,11 @@
 
         <step-1
           v-if="stepNow === 1"
-          :productCanSelect="productCanSelect"
+          :productCanSelect="productCanSelectList"
           :productReturned="productReturned"
-          :productCannotSelect="productCannotSelect"
+          :productCannotSelect="productCannotSelectList"
           @selectChange="(p) => selectChange(p)"
-          @toView="toView"
+          @toView="id => toView(id)"
           @showConfirm="showConfirm"
           @toNext="toNext"
         />
@@ -24,7 +24,6 @@
           v-if="stepNow === 2"
           :productSelected="productSelected"
           :reasonList="reasonList"
-          @changeProduct="(p) => changeProduct(p)"
           @changeProductReason="
             ({ product, reason, reasonCode }) =>
               changeProductReason(product, reason, reasonCode)
@@ -62,12 +61,24 @@ import SelectToast from './select-toast.vue'
 import Step1 from './step-1.vue'
 import Step2 from './step-2.vue'
 import Step3 from './step-3.vue'
-import { fetchUploadImage, getSurveyQuestions } from '../../api/index.js';
+import { fetchUploadImage, getSurveyQuestions, getMessage } from '../../api/index.js';
 
 export default {
   props: {
     orderdetail: {
       type: Object
+    },
+    productCanSelect: {
+        type: Array,
+        default: []
+    },
+    productCannotSelect: {
+        type: Array,
+        default: []
+    },
+    productReturned: {
+        type: Array,
+        default: []
     }
   },
   data () {
@@ -75,9 +86,9 @@ export default {
       stepNow: 1, // 当前步骤
       toastMessage: '',
 
-      productCanSelect: [],
-      productCannotSelect: [],
-      productReturned: [],
+      productCanSelectList: [],
+      productCannotSelectList: [],
+
       productSelected: [],
       showMaskConfig: null,
 
@@ -88,57 +99,51 @@ export default {
         uploadImgFileList: []
       },
       submitLoading: false,
-
+      maskMessage: '',
     }
   },
-  created () {
-    console.log(this.orderdetail)
-  },
-  mounted(){
-    const packageList = this.orderdetail?.logistics?.packages?.filter(p => p?.status == 3) || []
-    const products = packageList?.map(p => p.products)?.flat(Infinity)
-    console.log(packageList, products)
-    const all = products?.length > 0 ? products : []
-    this.productCanSelect = all?.filter(p => p?.status == 0 && !p?.unsupportReturn)?.map(p => { return { ...p, selected: false } }) || []
-    this.productCannotSelect = all?.filter(p => p?.status == 0 && p?.unsupportReturn) || []
-    this.productReturned = all?.filter(p => p?.status != 0)
-    console.log(this.productCanSelect, this.productReturned, this.productCannotSelect)
-  },
-  watch: {
-    questionObject (newV, oldV) {
-      console.log("questionObject", newV, oldV)
-    }
+  mounted (){
+    this.getMessageFunc()
+    this.productCanSelectList = [...this.productCanSelect]
+    this.productCannotSelectList = [...this.productCannotSelect]
   },
   computed: {
     maskTitle () {
       const hasSelectReasonProduct = this.productSelected?.filter(p => !!p?.reason)?.length || 1
-      return this.stepNow == 1 ? 'Please select the item(s)' :
-        this.stepNow == 2 ? `Please select the reason (${hasSelectReasonProduct}/${this.productSelected?.length || 1})` :
-          'Please submit further details'
+      return this.stepNow == 1 ? this.$t('please_select_items') :
+        this.stepNow == 2 ? this.$t('please_select_reason', {x:hasSelectReasonProduct, y:this.productSelected?.length || 1}) :
+          this.$t("please_submit_detail")
     },
   },
   methods: {
+    getMessageFunc(){
+        getMessage("M1808").then(res => {
+            if(res?.message){
+                let msg1 = res?.message
+                let msg = msg1.replaceAll('\\n', '<br/>')
+                this.maskMessage = msg
+            }
+        })
+    },
     close () {
       this.$emit("returnSelectClose")
     },
     showConfirm () {
-      console.log('showConfirm')
       let _this = this
       this.showMaskConfig = {
-        message: 'Kind reminder: Returns and exchanges are not supported in any of the following situations.1. You have 14 days to decide if an item is right for you, if you would like to return or exchange the item please contact us within 14 days of delivery. 2. The following items cannot be returned or exchanged: beauty, bodysuits, lingerie, swimwear, jewelry,mask and accessories.',
+        message: _this.maskMessage,
         btnFont: {
-          no: 'require support',
-          yes: 'confirm',
+          no: _this.$t('require_support'),
+          yes: _this.$t('confirm'),
         },
         yes: () => {
           // 关闭弹窗
           _this.showMaskConfig = null
         },
         no: () => {
-            console.log(_this)
           // 将不可选择的加到可选择的里面
-          _this.productCanSelect = [..._this.productCanSelect, ..._this.productCannotSelect]
-          _this.productCannotSelect = []
+          _this.productCanSelectList = [..._this.productCanSelectList, ..._this.productCannotSelectList]
+          _this.productCannotSelectList = []
           _this.showMaskConfig = null
         },
         close: () => {
@@ -178,7 +183,7 @@ export default {
     toNext () {
       // this.$emit("toNext")
       if (this.stepNow == 1) {
-        const selectedProducts = this.productCanSelect?.filter(p => p?.selected == true)
+        const selectedProducts = this.productCanSelectList?.filter(p => p?.selected == true)
         if (selectedProducts?.length > 0) {
           // 去下一步
           this.productSelected = selectedProducts
@@ -186,13 +191,13 @@ export default {
           this.getReasonList()
         } else {
           // 提示不行
-          this.toastMessage = 'Please select the item(s) to be returned'
+          this.toastMessage = this.$t('please_select_items_to_return')
         }
       } else if (this.stepNow == 2) {
         const productSelectedNoReason = this.productSelected?.filter(p => !p?.reason)
         if (productSelectedNoReason?.length > 0) {
           // 提示不行
-          this.toastMessage = 'Please select the reason for all items to be returned'
+          this.toastMessage = this.$t('please_select_reason_for_items')
         } else {
           // 去下一步
           this.stepNow = 3
@@ -202,25 +207,23 @@ export default {
         this.submit()
       }
     },
-    toView () {
-      console.log('toView')
-      this.$emit('returnView')
+    toView (id) {
+      this.$emit('returnView', id)
     },
     selectChange (product) {
-      let newList = [...(this.productCanSelect || [])]
+      let newList = [...(this.productCanSelectList || [])]
       newList.forEach(n => {
-        if (n?.productId == product?.productId) {
+        if (n?.variantId == product?.variantId) {
           n.selected = !n.selected
         }
       })
-      this.productCanSelect = newList
+      this.productCanSelectList = newList
     },
     hasSelected (product) {
-      return !!this.productSelected?.find(p => p?.productId == product?.productId) || false
+      return !!this.productSelected?.find(p => p?.variantId == product?.variantId) || false
     },
     getReasonList () {
       getSurveyQuestions('M1799').then(res => {
-        console.log(res)
         if (res?.code == 200 && res?.result?.length > 0) {
           this.reasonList = res?.result
         }
@@ -228,13 +231,10 @@ export default {
         alert(err?.result || err)
       })
     },
-    changeProduct (product) {
-      // 切换选择的产品
-    },
     changeProductReason (product, reason, reasonCode) {
       let newList = [...(this.productSelected || [])]
       newList?.forEach(n => {
-        if (n?.productId == product?.productId) {
+        if (n?.variantId == product?.variantId) {
           n.reason = reason
           n.reasonCode = reasonCode
         }
@@ -288,19 +288,18 @@ export default {
         customImages:  this.questionObject?.uploadImgList || [],
       }
 
-      const formData = new FormData()
       if(this.productSelected && this.productSelected?.length > 0){
         let items = this.productSelected.map(p => {
             return {
                 variantId: p?.variantId,
                 productId: p?.productId,
                 imageUrl: p?.imageURL,
-                reason: p?.reason?.label
+                sku: p?.sku,
+                reason: p?.reason
             }
         })
         params['items'] = ("items", items)
       }
-      console.log(params, JSON.stringify(params))
       this.$emit("updateTicket", JSON.stringify(params))
     }
   },

@@ -293,10 +293,20 @@
             //     this.isloded = true
             // })
             this.isloded = true
-            if(this.$route.query && this.$route.query.type && this.$route.query.type == 'review'){
-                this.clearSkip(
-                    5,'Comfirmed','click',0
-                )
+            if(this.$route.query && this.$route.query.type){
+                if(this.$route.query.type == 'review'){
+                    this.clearSkip(
+                        5,'Comfirmed','click',0
+                    )
+                } else if(this.$route.query.type == 'return'){
+                    this.clearSkip(
+                        7,'Returns','click',0
+                    )
+                } else {
+                    this.clearSkip(
+                        this.orderStatus,orderName,"click",0
+                    )
+                }
             } else {
                 this.clearSkip(
                     this.orderStatus,orderName,"click",0
@@ -584,7 +594,6 @@
                 this.$router.push({ path: utils.ROUTER_PATH_ME + '/m/order/logistics-detail', query: { orderid: orderid , method: 'orderlist' } })
             },
             orderoffset(order){
-                console.log(order,  order.expiredPaymentTime - order.serverTime)
                 if(order && order.expiredPaymentTime){
                     return  order.expiredPaymentTime - order.serverTime;
                 }

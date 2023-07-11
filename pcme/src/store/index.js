@@ -1484,7 +1484,6 @@ const actions = {
                 commit(types.GLOBAL_GET_TICKET_CON, ticket.ticket?ticket.ticket:{})
                 commit(types.GLOBAL_GET_TICKET_ID, id)
                 commit(types.GLOBAL_GET_TICKET_SUB, ticket.subjectSelections)
-                dispatch("getOrder", id)
             }
         }).catch(err => {
             alert(err.result)

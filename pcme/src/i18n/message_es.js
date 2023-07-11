@@ -293,6 +293,17 @@ export default {
 
     my_size_infomation: 'Información de mi talla (opcional)',
     comments_not_empty: "¡Los comentarios no pueden estar vacíos!",
+    retrun_the_order: 'Devolver el pedido',
+
+    please_select_items: 'Seleccione el/los artículo(s).',
+    please_select_reason: 'Seleccione el motivo ({x}/{y})',
+    please_submit_detail: 'Envíe más detalles.',
+    next: 'siguiente',
+    please_select_items_to_return: 'Seleccione el/los artículo(s) a devolver.',
+    please_select_reason_for_items: 'Seleccione el motivo por el cual todos los artículos deben ser devueltos.',
+    items_are_returned: 'El/los artículo(s) se están devolviendo.',
+    items_cannot_returned: 'Este tipo de artículo no se puede devolver.',
+    require_support: 'requerir soporte',
 
     label:{
         redeem_coupon:"Canjear cupón",

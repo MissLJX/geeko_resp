@@ -49,7 +49,6 @@ export default {
     },
     computed:{
         productReasonCode(){
-            console.log(this.choosedProduct?.reasonCode)
             return this.choosedValue || this.choosedProduct?.reasonCode || ''
         }
     },
@@ -64,7 +63,6 @@ export default {
                 this.$emit("changeProductReason", {product:this.choosedProduct, reason: null, reasonCode: null})
             } else {
                 this.choosedValue = reason?.value
-                console.log(this.choosedProduct)
                 this.$emit("changeProductReason", {product:this.choosedProduct, reason, reasonCode: reason?.value})
             }
         }
