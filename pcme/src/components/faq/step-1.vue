@@ -73,12 +73,13 @@ export default {
             this.$emit("selectChange", product)
         },
         toView(){
-            const hasReturnOrderIdNum = this.productReturned?.filter( p => p?.returnOrderId)?.length || 0
-            if(this.productReturned?.length == 1){
-                const returnId = this.productReturned?.[0]?.returnOrderId
+            const hasReturnOrderIdNums = this.productReturned?.filter(p => p?.returnOrderId)?.map(p => p?.returnOrderId) || []
+            const numUnique = Array.from(new Set(hasReturnOrderIdNums))
+            if(numUnique?.length == 1){
+                const returnId = numUnique?.[0]
                 this.$emit('toView', {id: returnId, to: 'detail'})
-            } else if(hasReturnOrderIdNum > 1){
-                this.$emit('toView', {id: returnId, to: 'list'})
+            } else if(numUnique?.length > 1){
+                this.$emit('toView', {id: 'returnId', to: 'list'})
             } else {
                 this.$emit("toView", {id: '', to: 'detail'})
             }

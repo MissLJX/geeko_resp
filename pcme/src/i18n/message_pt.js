@@ -299,6 +299,7 @@ export default {
     items_are_returned: 'O(s) item(ns) está(ão) sendo devolvido(s).',
     items_cannot_returned: 'Este tipo de item não pode ser devolvido.',
     require_support: 'requerer suporte',
+    returning: "Devolução",
 
     label:{
         redeem_coupon:"Use um cupom",

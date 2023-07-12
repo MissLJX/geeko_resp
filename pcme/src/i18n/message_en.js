@@ -300,6 +300,7 @@ export default {
     items_are_returned: 'Item(s) are being returned',
     items_cannot_returned: 'This kind of item cannot be returned',
     require_support: 'require support',
+    returning: 'Returning',
 
     label:{
         redeem_coupon:"Redeem Coupon",

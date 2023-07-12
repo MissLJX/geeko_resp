@@ -304,6 +304,7 @@ export default {
     items_are_returned: 'Le(s) article(s) sont en cours de retour.',
     items_cannot_returned: 'Ce type d\'article ne peut pas être retourné.',
     require_support: 'nécessiter de l\'aide',
+    returning: "Retour",
 
     label:{
         redeem_coupon:"Utilisez le coupon",

@@ -210,6 +210,11 @@
                     color: #222222;
                     line-height: 18px;
                     text-align: left;
+                    display: -webkit-box;
+                    text-overflow: ellipsis;
+                    -webkit-line-clamp: 3;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
                 }
 
                 .price {

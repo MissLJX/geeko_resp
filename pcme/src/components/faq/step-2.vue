@@ -2,9 +2,9 @@
     <div class="setp2Box">
         <div class="productsSwiper">
             <div class="productsSwiperItem" v-for="(pro, index) in productSelected" :key="index" @click="() => changeProduct(pro)">
-                <div :class="{'productBox':true, 'choosed': pro.productId == choosedProduct.productId}">
+                <div :class="{'productBox':true, 'choosed': pro.variantId == choosedProduct.variantId}">
                     <div class="imageBox">
-                        <img :src="pro.imageURL || ''" :alt="pro.productId">
+                        <img :src="pro.imageURL || ''" :alt="pro.variantId">
                     </div>
                 </div>
                 <div :class="{'selectBox': true, 'selected': pro.reason? true: false}">
@@ -29,11 +29,15 @@ export default {
     props:{
         productSelected:{
             type: Array,
-            default: ''
+            default: []
         },
         reasonList:{
             type: Array,
             default: []
+        },
+        selectedProduct:{
+            type: Object,
+            default: {variantId: '0'}
         }
     },
     data(){
@@ -47,6 +51,13 @@ export default {
             this.choosedProduct = this.productSelected[0]
         }
     },
+    watch:{
+        selectedProduct(newV, oldV){
+            if(newV){
+                this.changeProduct(newV)
+            }
+        },
+    },
     computed:{
         productReasonCode(){
             return this.choosedValue || this.choosedProduct?.reasonCode || ''
@@ -54,15 +65,13 @@ export default {
     },
     methods:{
         changeProduct(pro){
-            this.choosedProduct = pro
+            this.choosedProduct = {...pro}
             this.choosedValue = null
         },
         reasonChange(reason){
-            if(this.choosedProduct?.reasonCode == reason?.value){
-                this.choosedValue = null
-                this.$emit("changeProductReason", {product:this.choosedProduct, reason: null, reasonCode: null})
-            } else {
+            if(this.choosedProduct?.reasonCode != reason?.value){
                 this.choosedValue = reason?.value
+                this.choosedProduct = {...this.choosedProduct, reason: reason, reasonCode: reason?.value}
                 this.$emit("changeProductReason", {product:this.choosedProduct, reason, reasonCode: reason?.value})
             }
         }

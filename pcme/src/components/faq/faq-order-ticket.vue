@@ -518,8 +518,8 @@
                         const products = packageList?.map(p => p.products)?.flat(Infinity)
                         const all = products?.length > 0 ? products : []
                         this.productCanSelect = all?.filter(p => p?.returnStatus == 1)?.map(p => { return { ...p, selected: false } }) || []
-                        this.productCannotSelect = all?.filter(p => p?.returnStatus == 3)?.map(p => { return { ...p, selected: false } }) || []
-                        this.productReturned = all?.filter(p => p?.returnStatus == 2) || []
+                        this.productCannotSelect = all?.filter(p => p?.returnStatus == 4)?.map(p => { return { ...p, selected: false } }) || []
+                        this.productReturned = all?.filter(p => p?.returnStatus == 2 || p?.returnStatus == 3) || []
                         if(this.productCanSelect?.length > 0 || this.productCannotSelect?.length > 0 || this.productReturned?.length > 0){
                             this.returnMaskShow = true;
                         }
@@ -939,12 +939,13 @@
                     const packageList = this.ticket?.logistics?.packages || []
                     const products = packageList?.map(p => p.products)?.flat(Infinity)
                     const all = products?.length > 0 ? products : []
-                    const productReturned = all?.filter(p => p?.returnStatus == 2)
-                    const hasReturnOrderIdNum = productReturned?.filter( p => p?.returnOrderId)?.length || 0
-                    if(productReturned?.length == 1 && productReturned?.[0]?.returnOrderId){
-                        const returnId = productReturned[0].returnOrderId
+                    const productReturned = all?.filter(p => p?.returnStatus == 2 || p?.returnStatus == 3)
+                    const hasReturnOrderIdNums = productReturned?.filter(p => p?.returnOrderId)?.map(p => p?.returnOrderId) || []
+                    const numUnique = Array.from(new Set(hasReturnOrderIdNums))
+                    if(numUnique?.length == 1){
+                        const returnId = numUnique[0]
                         this.$router.push(`/me/m/order/return-detail/${returnId}`)
-                    } else if(hasReturnOrderIdNum > 1){
+                    } else if(numUnique?.length > 1){
                         window.location.href = '/me/m/order?type=return'
                         return
                     } else {

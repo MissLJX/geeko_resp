@@ -304,6 +304,7 @@ export default {
     items_are_returned: 'El/los artículo(s) se están devolviendo.',
     items_cannot_returned: 'Este tipo de artículo no se puede devolver.',
     require_support: 'requerir soporte',
+    returning: "Volviendo",
 
     label:{
         redeem_coupon:"Canjear cupón",

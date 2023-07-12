@@ -304,6 +304,7 @@ export default {
     items_are_returned: 'Der/die Artikel werden zurückgegeben.',
     items_cannot_returned: 'Dieser Art von Artikel kann nicht zurückgegeben werden.',
     require_support: 'benötigen Unterstützung',
+    returning: "Rückgabe",
 
     label:{
         redeem_coupon:"Coupon einl\u00f6sen",

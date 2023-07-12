@@ -72,12 +72,18 @@
                         <div v-if="confirmedOrder" class="review-btn" :class="{'b-btn':confirmedOrder,'black':shippedOrder || processingOrder}">
                             <span  @click="review(item.productId,item.variantId)">{{$t('review')}}</span>
                         </div>
-                        <div @click="addProduct(item.variantId)" v-if="item.variantId && orderdetail.fulfillmentStatus===constant.TOTAL_STATUS_CANCELED" class="review-btn">
+
+                        <div v-if="item.variantId && orderdetail.fulfillmentStatus===constant.TOTAL_STATUS_CANCELED" @click="addProduct(item.variantId)" class="review-btn">
                             <span>{{$t("repurchase")}}</span>
                         </div>
 
                         <!-- <div v-if="confirmedOrder" class="returns-btn" @click="showTicket(orderdetail.id)">Return</div> -->
-                        <div v-if="orderpro.status === constant.PACKAGE_STATUS_DELIVERED && isNormalOrder" class="returns-btn" @click="showTicketReturn(orderdetail.id)">{{$t("return")}}</div>
+                        <div v-if="orderpro.status === constant.PACKAGE_STATUS_DELIVERED && isNormalOrder && item.returnStatus == 1" class="returns-btn" @click="showTicketReturn(orderdetail.id)">
+                            {{$t("return")}}
+                        </div>
+                        <div v-if="orderpro.status === constant.PACKAGE_STATUS_DELIVERED && isNormalOrder && (item.returnStatus == 2)" class="returns-btn" @click="toReturnDetail(item)">
+                            {{$t("returning")}}
+                        </div>
                     </td>
                 </tr>
             </table>
@@ -532,10 +538,16 @@
             logisticsShow(){
                 this.isReturnLogistics = false;
                 this.isloding = false;
+            },
+            toReturnDetail(product){
+                if(product?.returnOrderId){
+                    this.$router.push(`/me/m/order/return-detail/${returnId}`)
+                } else {
+                    this.showTicketReturn(this.orderdetail?.id)
+                }
             }
         },
         created(){
-            
             this.$store.dispatch('getOrder',this.$route.params.orderId).then((order)=>{
                 if(!order){
                     window.location.href='/me/m/order';
@@ -573,6 +585,12 @@
         -webkit-text-stroke-width: 0.2px;
         -moz-osx-font-smoothing: grayscale;
     }
+    .btnsBox{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
     .review-btn{
         width: 140px;
         height: 32px;
@@ -582,6 +600,7 @@
         text-align: center;
         line-height: 32px;
         cursor: pointer;
+        margin-bottom: 10px;
     }
     .returns-btn{
         width: 140px;
@@ -594,7 +613,6 @@
         cursor: pointer;
         font-size: 14px;
         color: #222222;
-        margin-top: 10px;
     }
     .grey{
         color: #999;

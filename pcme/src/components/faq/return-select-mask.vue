@@ -23,6 +23,7 @@
         <step-2
           v-if="stepNow === 2"
           :productSelected="productSelected"
+          :selectedProduct="selectedProduct"
           :reasonList="reasonList"
           @changeProductReason="
             ({ product, reason, reasonCode }) =>
@@ -90,6 +91,7 @@ export default {
       productCannotSelectList: [],
 
       productSelected: [],
+      selectedProduct: null,
       showMaskConfig: null,
 
       reasonList: [],
@@ -198,6 +200,9 @@ export default {
         if (productSelectedNoReason?.length > 0) {
           // 提示不行
           this.toastMessage = this.$t('please_select_reason_for_items')
+          this.selectedProduct = productSelectedNoReason?.[0]
+          console.log(productSelectedNoReason?.[0])
+          console.log(this.selectedProduct)
         } else {
           // 去下一步
           this.stepNow = 3
