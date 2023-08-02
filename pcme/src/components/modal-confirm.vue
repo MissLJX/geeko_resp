@@ -50,7 +50,7 @@
     </div>
 </template>
 
-<style>
+<style lang="scss" scoped>
     .st-confirm {
         position: fixed;
         /* width: 80%; */

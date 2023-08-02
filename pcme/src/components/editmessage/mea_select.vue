@@ -9,7 +9,7 @@
                     <div
                         v-for="(item, index) in selectList"
                         :key="item+index"
-                        :class="{'mea_select_option':true, 'mea_option_selected':optionLabel(item) == slotDefaultV}"
+                        :class="{'mea_select_option':true, 'mea_option_selected':optionLabel(item) == slotDefaultV || inputLabel(slotDefaultV) == optionLabel(item)}"
                         @click="() => optionChange(item)"
                         >
                         {{ optionLabel(item) }}
@@ -104,15 +104,18 @@
                     return this.$t("measurements.mea_prefer_no_select")
                 } else if(this.selectList?.find(s => s == data || s?.[this.unit] == data)){
                     return data
+                } else if(this.selectList?.find(s => s == data + this.unit)){
+                    return data + this.unit
                 } else if(this.selectList?.find((s, i) => i == data)){
                     return this.selectList?.find((s, i) => i == data)
                 }
             },
             noEditingLabel(data){
-                if( !data){
+                if(!data){
                     return '- -'
-                } else if(this.selectList?.find(s => s == data || s?.[this.unit] == data)){
-                    return data + ' ' + this.unit
+                } else if(this.selectList?.find(s => s == data || s == data + this.unit || s?.[this.unit] == data)){
+                    let strReg = /[A-Za-z]/g //判断数据是否存在字母
+                    return strReg.test(data)? data: data + ' ' + this.unit
                 } else if(this.selectList?.find((s, i) => i == data)){
                     return this.selectList?.find((s, i) => i == data) + ' ' + this.unit
                 }

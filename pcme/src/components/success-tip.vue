@@ -87,7 +87,7 @@ export default {
     }
     .success_icon{
         font-size: 21px;
-        line-height: 21px;
+        line-height: 62px;
         color: #20b759;
         margin-right: 7px;
     }

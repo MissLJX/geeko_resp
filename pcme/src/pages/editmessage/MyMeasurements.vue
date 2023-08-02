@@ -306,12 +306,8 @@
                 }
                 for(let i = 0; i < this.slotList.length; i++){
                     for(let item in result){
-                        // if(item == 'sizingRecommendation' && this.slotList[i]?.['valueLabel']){
-                        //     this.slotList[i].slotDefaultV = this.slotList[i].selectList?.[result[item]]
-                        // } else
                         if(item == this.slotList[i]?.['valueLabel']){
                             if(item === 'sizingRecommendation'){
-                                console.log(result[item])
                                 this.slotList[i].slotDefaultV = this.slotList[i].selectList[result[item]]
                             } else {
                                 this.slotList[i].slotDefaultV = result[item]
