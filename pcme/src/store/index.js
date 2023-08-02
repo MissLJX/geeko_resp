@@ -1378,7 +1378,7 @@ const actions = {
         })
     },
     fetchWishListFilterCount({commit}, filter){
-        return api.fetchWishListFilterCount(filter).then(res => {
+        return api.fetchWishListCount(filter).then(res => {
             if(res?.code == 200){
                 commit(types.CUSTOMER_WISH_LIST_FILTER_COUNT, res?.result || 0)
             }

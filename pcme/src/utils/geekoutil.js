@@ -310,3 +310,50 @@ export const getDelPrice = (product) => {
 		return product.msrp
 	}
 }
+
+export const formateMeaData = (meaData, type, intl) => {
+    const maskSlotTitle = (type) => {
+        let title = ''
+        switch(type){
+            case 'height':
+                title = intl("measurements.mea_height")
+                break
+            case 'weight':
+                title = intl("measurements.mea_weight")
+                break
+            case 'bust':
+                title = intl("measurements.mea_bust_size")
+                break
+            case 'bra':
+                title = intl("measurements.mea_bra_size")
+                break
+            case 'waist':
+                title = intl("measurements.mea_waist")
+                break
+            case 'hips':
+                title = intl("measurements.mea_hips")
+                break
+        }
+        return title
+    }
+
+    const maskUnitList = (data) => {
+        if(data?.length > 0 && (typeof(data?.[0]) == 'object')){
+            return Object.keys(data[0])
+        }
+        return ''
+    }
+
+    let data = meaData?.[type] || []
+    let unitLabel = type + 'Unit'
+    const obj = {
+        slotTitle: maskSlotTitle(type),
+        unitList: maskUnitList(data),
+        selectList: data,
+        slotDefaultV: '',
+        unit: maskUnitList(data)?.[0],
+        valueLabel: type,
+        unitLabel: unitLabel,
+    }
+    return obj
+}
