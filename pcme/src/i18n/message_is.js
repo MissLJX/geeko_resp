@@ -401,7 +401,7 @@ export default {
         mea_waist: 'Waist',
         mea_hips: 'Hips',
         mea_perference: 'What is your preference?',
-        mea_perf: 'Prederence',
+        mea_perf: 'Preference',
         mea_true_to_size: 'True to size',
         mea_large: 'Large',
         mea_small: 'Small',

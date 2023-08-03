@@ -5,7 +5,7 @@ const NVPATH = '/v9'
 import * as http_infos from "./http_infos";
 
 export const get = () => {
-    return axios.get(VPATH + '/customer/get', {}, {}).then(data => data.result).catch(err => console.log(err))
+    return axios.get(VPATH + '/customer/get', {_: new Date().getTime()}, {}).then(data => data.result).catch(err => console.log(err))
 }
 //logout
 export function logout(){

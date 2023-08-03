@@ -323,7 +323,14 @@
                 let midList = this.slotList.slice(0)
                 midList?.forEach((s) => {
                     if(s?.valueLabel == label){
-                        s.slotDefaultV = data
+                        if(label == 'bra'){
+                            let strReg = /[A-Za-z]/g //判断数据是否存在字母
+                            let numReg = /[0-9]/g
+                            s.slotDefaultV = data?.match(numReg)?.join('')
+                            s.unit = data?.match(strReg)?.join('')
+                        } else {
+                            s.slotDefaultV = data
+                        }
                     } else if(s?.unitLabel == label){
                         s.unit = data
                         s.slotDefaultV = ''

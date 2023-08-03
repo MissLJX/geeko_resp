@@ -74,12 +74,12 @@
         methods:{
             optionLabel(data){
                 if(typeof(data) == 'object'){
-                    return data?.[this.unit] || ''
+                    return data?.[this.unit] + this.unit || ''
                 }
                 return data
             },
             optionChange(item){
-                console.log(item)
+                // console.log(item)
                 if(typeof(item) == 'object'){
                     item?.[this.unit] && this.$emit("selectChange", this.valueLabel, item?.[this.unit])
                 } else {
@@ -95,15 +95,15 @@
                 }
             },
             unitChange(unit){
-                console.log(unit)
+                // console.log(unit)
                 this.$emit("selectChange", this.unitLabel, unit)
             },
             inputLabel(data){
-                console.log(data, this.unit, this.selectList?.find(s => s == data || s?.[this.unit] == data), this.selectList?.find((s, i) => i == data), this.slotDefaultV)
+                // console.log(data, this.unit, this.selectList?.find(s => s == data || s?.[this.unit] == data), this.selectList?.find((s, i) => i == data), this.slotDefaultV)
                 if( !data){
                     return this.$t("measurements.mea_prefer_no_select")
                 } else if(this.selectList?.find(s => s == data || s?.[this.unit] == data)){
-                    return data
+                    return data + this.unit
                 } else if(this.selectList?.find(s => s == data + this.unit)){
                     return data + this.unit
                 } else if(this.selectList?.find((s, i) => i == data)){
