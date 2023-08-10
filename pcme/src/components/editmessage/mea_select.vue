@@ -1,5 +1,5 @@
 <template>
-    <div class="mea_select_box">
+    <div class="mea_select_box" :style="pStyle">
         <div class="mea_select_title">{{ slotTitle }}</div>
         <template v-if="isEditing">
             <div class="mea_select" @click="() => openOptions()">
@@ -59,6 +59,10 @@
             isEditing:{
                 type: Boolean,
                 default: false
+            },
+            pStyle: {
+                type: String,
+                default: ''
             }
         },
         data(){
@@ -99,6 +103,7 @@
                 this.$emit("selectChange", this.unitLabel, unit)
             },
             inputLabel(data){
+                // console.log("inputLabel", data)
                 // console.log(data, this.unit, this.selectList?.find(s => s == data || s?.[this.unit] == data), this.selectList?.find((s, i) => i == data), this.slotDefaultV)
                 if( !data){
                     return this.$t("measurements.mea_prefer_no_select")
@@ -106,18 +111,26 @@
                     return data + this.unit
                 } else if(this.selectList?.find(s => s == data + this.unit)){
                     return data + this.unit
-                } else if(this.selectList?.find((s, i) => i == data)){
-                    return this.selectList?.find((s, i) => i == data)
+                } else if(this.selectList?.find((s, i) => i == data) && this.valueLabel == "sizingRecommendation"){
+                    const selectData = this.selectList?.find((s, i) => i == data)
+                    return typeof(selectData) == 'object'?
+                        (selectData?.[this.unit]? selectData?.[this.unit]+this.unit: this.$t("measurements.mea_prefer_no_select")):
+                        selectData
+                } else {
+                    return this.$t("measurements.mea_prefer_no_select")
                 }
             },
             noEditingLabel(data){
+                // console.log('noEditingLabel',data, this.selectList)
                 if(!data){
                     return '- -'
                 } else if(this.selectList?.find(s => s == data || s == data + this.unit || s?.[this.unit] == data)){
                     let strReg = /[A-Za-z]/g //判断数据是否存在字母
                     return strReg.test(data)? data: data + ' ' + this.unit
-                } else if(this.selectList?.find((s, i) => i == data)){
+                } else if(this.selectList?.find((s, i) => i == data) && this.valueLabel == "sizingRecommendation"){
                     return this.selectList?.find((s, i) => i == data) + ' ' + this.unit
+                } else {
+                    return '- -'
                 }
             }
         },

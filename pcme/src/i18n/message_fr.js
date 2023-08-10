@@ -395,7 +395,7 @@ mea_info5: 'En fournissant vos mesures, vous pouvez les associer facilement à n
         mea_weight: "Poids",
         mea_bust_size: 'Taille du buste',
         mea_bra_size: 'Taille de soutien-gorge',
-        mea_waist: 'Taille',
+        mea_waist_title: 'Taille',
         mea_hips: 'Hanches',
         mea_perference: 'Quelle est votre préférence ?',
         mea_perf: 'Préférence',

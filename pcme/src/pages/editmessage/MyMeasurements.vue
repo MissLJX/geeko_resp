@@ -298,7 +298,7 @@
             },
             getData(){
                 let result = this.me.mySizeInformation;
-                // console.log(this.me)
+                console.log(result)
                 if(result){
                     this.haveDoneBefore = true;
                 } else {
@@ -317,6 +317,7 @@
                         }
                     }
                 }
+                console.log('slotList',this.slotList)
             },
             selectChange(label, data){
                 this.dataChange = true
@@ -396,6 +397,7 @@
                 this.$store.dispatch("setTipType", 'points');
             },
             cancelFunc(){
+                this.getData()
                 this.isEditing = false
             },
             startEdit(){

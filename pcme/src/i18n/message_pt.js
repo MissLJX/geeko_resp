@@ -390,7 +390,7 @@ export default {
         mea_weight: "Peso",
         mea_bust_size: 'Tamanho do busto',
         mea_bra_size: 'Tamanho do sutiã',
-        mea_waist: 'Cintura',
+        mea_waist_title: 'Cintura',
         mea_hips: 'Quadril',
         mea_perference: 'Qual é a sua preferência?',
         mea_perf: 'Preferência',

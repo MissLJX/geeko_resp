@@ -328,7 +328,7 @@ export const formateMeaData = (meaData, type, intl) => {
                 title = intl("measurements.mea_bra_size")
                 break
             case 'waist':
-                title = intl("measurements.mea_waist")
+                title = intl("measurements.mea_waist_title")
                 break
             case 'hips':
                 title = intl("measurements.mea_hips")

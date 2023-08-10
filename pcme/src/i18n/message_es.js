@@ -396,7 +396,7 @@ mea_info5: 'Al proporcionar tus medidas, puedes compararlas fácilmente con nues
         mea_weight: "Peso",
         mea_bust_size: 'Tamaño del busto',
         mea_bra_size: 'Talla de sujetador',
-        mea_waist: 'Cintura',
+        mea_waist_title: 'Cintura',
         mea_hips: 'Caderas',
         mea_perference: '¿Cuál es tu preferencia?',
         mea_perf: 'Preferencia',

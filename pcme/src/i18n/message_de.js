@@ -395,7 +395,7 @@ export default {
         mea_weight: "Gewicht",
         mea_bust_size : 'Brustumfang',
         mea_bra_size: 'BH-Größe',
-        mea_waist: 'Taille',
+        mea_waist_title: 'Taille',
         mea_hips: 'Hüften',
         mea_perference: 'Was ist deine Präferenz?',
         mea_perf: 'Präferenz',
