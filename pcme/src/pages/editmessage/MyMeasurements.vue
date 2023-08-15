@@ -293,12 +293,12 @@
                     },
                 ]
                 this.slotList = initList
-                // console.log('initSlotList: ', this.slotList)
+                console.log('initSlotList: ', this.slotList)
                 this.getData()
             },
             getData(){
                 let result = this.me.mySizeInformation;
-                console.log(result)
+                // console.log(result)
                 if(result){
                     this.haveDoneBefore = true;
                 } else {
@@ -308,16 +308,20 @@
                     for(let item in result){
                         if(item == this.slotList[i]?.['valueLabel']){
                             if(item === 'sizingRecommendation'){
-                                this.slotList[i].slotDefaultV = this.slotList[i].selectList[result[item]]
+                                this.slotList[i].slotDefaultV = this.slotList[i].selectList[result[item]] || ''
                             } else {
-                                this.slotList[i].slotDefaultV = result[item]
+                                let data = result[item]
+                                if(this.slotList[i]?.selectList?.some(item => Object.values(item).includes(data)) || item == 'bra'){
+                                    this.slotList[i].slotDefaultV = data
+                                }
                             }
-                        } else if (item == this.slotList[i]?.['unitLabel']){
-                            this.slotList[i].unit = result[item]
+                        } else if (item == this.slotList[i]?.['unitLabel'] && result[item]){
+                            if(this.slotList[i]?.['unitList'] && this.slotList[i]?.['unitList']?.find(u => u == result[item]) || !this.slotList[i]['unitList']){
+                                this.slotList[i].unit = result[item]
+                            }
                         }
                     }
                 }
-                console.log('slotList',this.slotList)
             },
             selectChange(label, data){
                 this.dataChange = true

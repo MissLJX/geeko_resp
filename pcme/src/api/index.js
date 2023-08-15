@@ -505,3 +505,8 @@ export const fetchOrderReviewByOrderId = (orderId, headers) =>{
 export const fetchSaveComments = (comments, headers) =>{
 	return axios.post(`/product-comment/save`, comments, {}, headers);
 }
+
+// 获取support所有数据
+export const fetchTicketQuestionsTree = (headers) => {
+	return axios.get(`/shop/support/get-tree`, { _:new Date().getTime() }, headers);
+}
