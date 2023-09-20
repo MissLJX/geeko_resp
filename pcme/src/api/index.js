@@ -505,3 +505,7 @@ export const fetchOrderReviewByOrderId = (orderId, headers) =>{
 export const fetchSaveComments = (comments, headers) =>{
 	return axios.post(`/product-comment/save`, comments, {}, headers);
 }
+
+export const getAppMessage = (code, headers) => {
+	return axios.get(`${VPATH}/message/anon/app-message/${code}`, {_:new Date().getTime()}, headers)
+}

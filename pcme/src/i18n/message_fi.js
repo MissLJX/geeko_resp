@@ -309,6 +309,9 @@ export default {
     require_support: 'require support',
     returning: 'Returning',
 
+    privacy_protection: 'Proteção da privacidade',
+    security_privacy: 'Segurança e privacidade',
+
     label:{
         redeem_coupon:"Redeem Coupon",
         hot_use_points:"How to Use Points?",

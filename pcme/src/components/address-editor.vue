@@ -3,6 +3,10 @@
         <form @submit.prevent="submit">
             <p class="cancel-btn1" @click="closeHandle"><i class="iconfont">&#xe69a;</i></p>
             <h4>{{$t('shippingaddress')}}</h4>
+            <div class="privacy-box">
+                <img :src="privacyImg" alt="" />
+				<span>{{ $t("privacy_protection") }}</span>
+            </div>
 
             <div class="clearBoth">
                 <div class="input-con required w-left">
@@ -143,6 +147,19 @@
                 <button  class="input-con required w-left s-r-btn" :class="{'grey': submiting}" type="submit">{{tipmsg}}</button>
                 <div class="input-con required w-left cancel-btn" @click="closeHandle">{{$t('cancel')}}</div>
             </div>
+
+            <div class="PrivacyPartBox">
+                <div class="PrivacyTitle">
+                    <img :src="privacyBottomImg" alt="" />
+                    <span>{{ $t("security_privacy") }}</span>
+                </div>
+
+                <div class="PrivacyPic">
+                    <img v-show="privacyPic" :src="privacyPic" alt="" />
+
+                    <span class="PrivacyInfo">{{ privacyInfo }}</span>
+                </div>
+            </div>
         </form>
 
         <country-tip-mask 
@@ -161,7 +178,9 @@
 <script>
     import _ from 'lodash'
     import CountryTipMask from './country-tip-mask.vue'
-    import {fetchPhoneAreaCode} from '../api'
+    import {fetchPhoneAreaCode, getAppMessage} from '../api'
+    import data from '../common'
+
     export default{
         data(){
             var initCountry = this.address && this.address.country ? this.address.country.value : window.__country ? window.__country :'US'
@@ -268,6 +287,8 @@
                 countrySelectChange: false, // 是否切换国家(未切换是弹窗的条件之一)
                 phoneAreaCodeList: null, //
                 zipValidateCountryObj: zipValidateCountryObj,
+                privacyPic: '',
+                privacyInfo: '',
             }
         },
         props: {
@@ -316,6 +337,12 @@
             // phoneNumberC() {
             //     return this.shipping.phoneArea+this.shipping.phoneNumber
             // }
+            privacyImg(){
+                return data.IMAGE_GEEKO_LTD + '/chicme/20230914024938035294.png'
+            },
+            privacyBottomImg(){
+                return data.IMAGE_GEEKO_LTD + '/chicme/20230914024920994622.png'
+            }
         },
         methods: {
             closeHandle(){
@@ -424,6 +451,12 @@
                     this.phoneAreaCodeList = res?.result
                 }
             })
+            getAppMessage("M1829").then(res => {
+                if(res && res.code == 200){
+                    this.privacyPic = res.result.imageUrl,
+                    this.privacyInfo = res.result.message
+                }
+            })
         },
         components:{
             "country-tip-mask":CountryTipMask
@@ -488,6 +521,7 @@
             cursor: pointer;
         }
         h4{
+            display: inline-block;
             font-size: 24px;
             margin-bottom: 22px;
         }
@@ -693,6 +727,67 @@
             .whiteBtn{
                 background-color: #fff;
                 color: #222;
+            }
+        }
+    }
+
+    .privacy-box{
+        margin-left: 10px;
+        line-height: 14px;
+        display: inline-block;
+        vertical-align: text-top;
+
+        img{
+            width: 8px;
+            height: 9px;
+            margin-right: 2px;
+        }
+
+        span{
+            display: inline-block;
+            font-size: 12px;
+            font-family: Roboto-Regular, Roboto;
+            font-weight: 400;
+            color: #218316;
+            line-height: 14px;
+        }
+    }
+
+    .PrivacyPartBox{
+        width: 100%;
+        padding: 12px 0;
+
+        .PrivacyTitle{
+            font-size: 12px;
+            font-family: Roboto-Regular, Roboto;
+            font-weight: 400;
+            color: #222222;
+            line-height: 14px;
+            margin-bottom: 6px;
+
+            img{
+                display: inline-block;
+                width: 14px;
+                height: 14px;
+                margin-right: 3px;
+                vertical-align: bottom;
+            }
+        }
+
+        .PrivacyPic{
+            img{
+                display: block;
+                width: 350px;
+                height: auto;
+                margin-bottom: 8px;
+            }
+
+            .PrivacyInfo{
+                font-size: 12px;
+                font-family: Roboto-Regular, Roboto;
+                font-weight: 400;
+                color: #666666;
+                line-height: 14px;
             }
         }
     }
