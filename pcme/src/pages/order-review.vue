@@ -37,39 +37,19 @@
 
             <div id="review-measure-area">
                 <p>{{ $t("my_size_infomation") }} </p>
-                <table>
-                    <tr>
-                        <td>
-                            <span class="_title">{{ $t("measurements.mea_height") }}:</span>
-                            <input class="_input" type="number" v-model="sizeData.height" />
-                            <span class="_size">cm/ in</span>
-                        </td>
-                        <td>
-                            <span class="_title">{{ $t("measurements.mea_weight") }}:</span>
-                            <input class="_input" type="number" v-model="sizeData.weight" />
-                            <span class="_size">kg/ lbs</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span class="_title">{{ $t("measurements.mea_bust_size") }}:</span>
-                            <input class="_input" type="number" v-model="sizeData.bust" />
-                            <span class="_size">cm/ in</span>
-                        </td>
-                        <td>
-                            <span class="_title">{{ $t("measurements.mea_hips") }}:</span>
-                            <input class="_input" type="number" v-model="sizeData.hips" />
-                            <span class="_size">cm/ in</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span class="_title">{{ $t("measurements.mea_waist") }}:</span>
-                            <input class="_input" type="number" v-model="sizeData.waist" />
-                            <span class="_size">cm/ in</span>
-                        </td>
-                    </tr>
-                </table>
+                <div class="SelectBox" v-for="(item, index) in slotList" :key="index">
+                    <mea-select
+                        :unitList="item.unitList || []"
+                        :unit="item.unit"
+                        :slotTitle="item.slotTitle"
+                        :slotDefaultV="item.slotDefaultV"
+                        :selectList="item.selectList"
+                        :unitLabel="item.unitLabel"
+                        :valueLabel="item.valueLabel"
+                        @selectChange="(label, data) => selectChange(label, data)"
+                        :isEditing="true"
+                        />
+                </div>
 
             </div>
 
@@ -115,7 +95,9 @@ import uploadImg from '../components/upload-img.vue';
 import CommentAlert from '../components/comment-alert.vue';
 import loding from '../components/loding.vue';
 import HtmlImageCompress from 'html-image-compress';
-import { fetchUploadImage, fetchSaveComments } from '../api/index'
+import { fetchUploadImage, fetchSaveComments, getMessage } from '../api/index'
+import MeaSelect from '../components/editmessage/mea_select.vue';
+import { formateMeaData } from '../utils/geekoutil';
 
 export default {
     data() {
@@ -148,6 +130,9 @@ export default {
                 hips: "",
                 waist: ""
             },
+            meaData: '',
+            slotList: [],
+            unitSelect: 'cm', // 选中的单位
         }
     },
     components: {
@@ -156,10 +141,11 @@ export default {
         'upload-img': uploadImg,
         'comment-alert': CommentAlert,
         'loding': loding,
-        HtmlImageCompress
+        'mea-select': MeaSelect,
+        HtmlImageCompress,
     },
     computed: {
-        ...mapGetters(['orderdetail', 'comment']),
+        ...mapGetters(['orderdetail', 'comment', 'me']),
         remnant1() {
             if (this.commentsData && this.commentsData.content) {
                 return this.commentsData.content.length
@@ -285,7 +271,25 @@ export default {
                 return;
             }
             let params = { comments };
-            params['mySizeInformation'] = this.sizeData;
+            let obj = {}
+            let strReg = /[A-Za-z]/g //判断数据是否存在字母
+            let numReg = /[0-9]/g
+            this.slotList?.forEach(item => {
+                if(item?.['unit']){
+                    obj[item?.unitLabel] = item.unit
+                }
+                if(item?.slotDefaultV || item?.slotDefaultV == 0){
+                    if(item?.valueLabel == 'sizingRecommendation'){
+                        obj[item?.valueLabel] = item.selectList.findIndex(s => s == item?.slotDefaultV)
+                    } else if(strReg.test(item?.slotDefaultV)){
+                        obj[item?.valueLabel] = item.slotDefaultV?.match(numReg)?.join('')
+                        obj[item?.unitLabel] = item.slotDefaultV?.match(strReg)?.join('')
+                    } else {
+                        obj[item?.valueLabel] = item.slotDefaultV.toString()
+                    }
+                }
+            });
+            params['mySizeInformation'] = obj;
             let response = await fetchSaveComments(params);
             this.isloding = false
             if (response?.code == 200) {
@@ -300,6 +304,53 @@ export default {
             } else {
                 alert(response?.result || 'Fail!')
             }
+        },
+        initSlotList(){
+            const initList = [
+                {...formateMeaData(this.meaData, 'height', this.$t)},
+                {...formateMeaData(this.meaData, 'weight', this.$t)},
+                {...formateMeaData(this.meaData, 'bust', this.$t)},
+                {...formateMeaData(this.meaData, 'waist', this.$t)},
+                {...formateMeaData(this.meaData, 'hips', this.$t)},
+            ]
+            this.slotList = initList
+            this.getData()
+        },
+        getData(){
+            let result = this.sizeData;
+            console.log(result)
+            for(let i = 0; i < this.slotList.length; i++){
+                for(let item in result){
+                    if(item == this.slotList[i]?.['valueLabel']){
+                        this.slotList[i].slotDefaultV = result[item]
+                    } else if (item == this.slotList[i]?.['unitLabel']){
+                        this.slotList[i].unit = result[item]
+                    }
+                }
+            }
+            console.log(this.slotList)
+            // this.heightSizeData = this.slotList?.find(s => s?.valueLabel == 'height')
+        },
+        selectChange(label, data){
+            this.dataChange = true
+            let midList = this.slotList.slice(0)
+            midList?.forEach((s) => {
+                if(s?.valueLabel == label){
+                    if(label == 'bra'){
+                        let strReg = /[A-Za-z]/g //判断数据是否存在字母
+                        let numReg = /[0-9]/g
+                        s.slotDefaultV = data?.match(numReg)?.join('')
+                        s.unit = data?.match(strReg)?.join('')
+                    } else {
+                        s.slotDefaultV = data
+                    }
+                } else if(s?.unitLabel == label){
+                    s.unit = data
+                    s.slotDefaultV = ''
+                }
+            })
+            // console.log(label, data, midList)
+            this.slotList = midList
         },
     },
     created() {
@@ -322,8 +373,16 @@ export default {
                     this.addnum = this.commentsData.images.length
                 }
                 this.sizeData = { ...this.sizeData, ...(this.comment.result?.mySizeInformation || {}) } || null
+                getMessage("M1813").then(res => {
+                    // console.log(res)
+                    if(res?.message){
+                        this.meaData = JSON.parse(res?.message)
+                        this.initSlotList()
+                    }
+                })
             }
         });
+        
     }
 }
 </script>
@@ -449,37 +508,15 @@ export default {
 #review-measure-area {
     padding-bottom: 15px;
 
-    &>table {
-        width: 50%;
-
-        &>tr {
-            &>td {
-                vertical-align: middle;
-                padding: 10px;
-
-                ._title {
-                    font-size: 14px;
-                    color: #999999;
-                }
-
-                ._size {
-                    font-size: 14px;
-                    color: #222222;
-                }
-
-                ._input {
-                    border: none;
-                    border-bottom: 1px solid #dddddd;
-                    width: calc(50% - 25px);
-                    text-align: center;
-                }
-            }
-        }
-    }
-
     &>p {
         font-size: 16px;
         padding-bottom: 5px;
+        margin-bottom: 15px;
+    }
+
+    .SelectBox{
+        width: 50%;
+        display: inline-block;
     }
 }
 

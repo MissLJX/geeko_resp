@@ -65,7 +65,7 @@ export default {
 <style scoped>
     
     .success_box{
-        width: 210px;
+        width: 300px;
         height: 62px;
         background-color: #ffffff;
         box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.2);
@@ -87,7 +87,7 @@ export default {
     }
     .success_icon{
         font-size: 21px;
-        line-height: 21px;
+        line-height: 62px;
         color: #20b759;
         margin-right: 7px;
     }

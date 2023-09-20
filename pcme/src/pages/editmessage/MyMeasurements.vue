@@ -1,37 +1,37 @@
 <template>
     <div class="my-measurements-page">
-        <!-- 标题 -->
-        <!-- <nav-bar>
-            <i class="iconfont el-back-font" slot="left" @click="$router.go(-1)">&#xe693;</i>
-            <span slot="center">My Measurements</span>
-        </nav-bar> -->
         <div class="_hd">
             {{$t("index.my_measurements")}}
         </div>
 
         <!-- 页面介绍 -->
         <div class="pageInfo">
-            <p>{{$t("measurements.mea_info1")}}</p> 
-            <p>{{$t("measurements.mea_info2")}}</p> 
-            <p>{{$t("measurements.mea_info3")}}</p> 
+            <p>{{$t("measurements.mea_info4")}}</p>
+            <p>{{$t("measurements.mea_info5")}}</p>
         </div>
 
         <div class="contentBox">
             <div class="content_left">
                 <div class="line">
-                    <!-- 输入框 -->    
-                    <m-input title="Height" :slotList="slotList" :inputData="inputData" @onchange="inputChange"></m-input>
-                </div>
-                <!-- save按钮 -->
-                <div class="footer-btn">
-                    <div class="saveBtn" @click="saveData">
-                        {{$t("save")}}
-                    </div>
+                    <!-- 输入框 -->
+                    <mea-select
+                        v-for="(item, index) in slotList"
+                        :key="index"
+                        :unitList="item.unitList || []"
+                        :unit="item.unit"
+                        :slotTitle="item.slotTitle"
+                        :slotDefaultV="item.slotDefaultV"
+                        :selectList="item.selectList"
+                        :unitLabel="item.unitLabel"
+                        :valueLabel="item.valueLabel"
+                        @selectChange="(label, data) => selectChange(label, data)"
+                        :isEditing="isEditing"
+                        />
                 </div>
             </div>
-            
+
             <!-- 说明文字 -->
-            <div class="m-m-page-info">
+            <div class="m-m-page-info" v-show="isEditing">
                 <div class="m-m-info-content-box">
                     <div class="m-m-page-info-img">
                         <img :src="infoPart.imageUrl" alt="">
@@ -43,9 +43,20 @@
                             <div class="m-m-info-content-txt">{{item.infoContent}}</div>
                         </div>
                     </div>
-                    
                 </div>
-                
+            </div>
+        </div>
+
+        <!-- save按钮 -->
+        <div class="footer-btn">
+            <div v-show="!isEditing" class="saveBtn" @click="() => startEdit()">
+                {{ $t("edit") }}
+            </div>
+            <div v-show="isEditing" class="saveBtn" @click="() => saveData()">
+                {{ $t("save") }}
+            </div>
+            <div v-show="isEditing" class="saveBtn cancelBtn" @click="() => cancelFunc()">
+                {{ $t("cancel") }}
             </div>
         </div>
 
@@ -59,7 +70,8 @@
         .contentBox{
             display: flex;
             align-items: flex-start;
-            justify-content: center;
+            justify-content: flex-start;
+            min-height: 400px;
         }
     }
     ._hd{
@@ -111,10 +123,10 @@
         & > .m-m-info-content-box{
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
+            align-items: center;
 
             & > .m-m-page-info-text-box{
-                width: 70%;
+                width: 60%;
                 font-family: Roboto-Regular;
                 font-size: 14px;
                 font-weight: normal;
@@ -122,7 +134,7 @@
                 letter-spacing: 0px;
                 color: #222222;
                 padding-right: 20px;
-                margin-bottom: 23px;
+                // margin-bottom: 23px;
 
                 & > .m-m-info-content{
                     margin-bottom: 24px;
@@ -144,8 +156,8 @@
             }
 
             & > .m-m-page-info-img{
-                width: 30%;
-                height: 211px;
+                width: 40%;
+                // height: 211px;
                 display: flex;
                 align-items: flex-start;
                 justify-content: center;
@@ -153,46 +165,47 @@
                 & > img {
                     width: 60%;
                     object-fit: contain;
-                    max-height: 305px;
+                    max-height: 400px;
                 }
             }
         }
     }
 
-    .saveBtn{
-        width: 300px;
-        text-transform: uppercase;
-        height: 42px;
-        font-family: AcuminPro-Bold;
-        font-size: 14px;
-        font-weight: 600;
-        font-stretch: normal;
-        letter-spacing: 0px;
-        color: #ffffff;
-        background-color: #222;
-        text-align: center;
-        line-height: 42px;
-        /* margin: 0 auto; */
-        margin-top: 100px;
-        transition: all 0.1s;
-        padding-bottom: 20px;
-        cursor: pointer;
-    }
-    .saveBtn:active{
-        background-color: rgba(35,35,35,0.6);
-    }
-    
     .footer-btn{
-        // width: 100%;
-        // position: fixed;
-        // bottom: 51px;
-        // left: 0px;
-        // right: 0px;
-        // text-align: center;
-        // padding: 0px 13px 20px 13px;
-        // background-color: #ffffff;
+        display: flex;
+        padding-left: 130px;
+        margin-top:  100px;
+
+        .saveBtn{
+            width: 300px;
+            text-transform: uppercase;
+            height: 42px;
+            font-family: AcuminPro-Bold;
+            font-size: 14px;
+            font-weight: 600;
+            font-stretch: normal;
+            letter-spacing: 0px;
+            color: #ffffff;
+            background-color: #222;
+            text-align: center;
+            line-height: 42px;
+            /* margin: 0 auto; */
+            // margin-top: 100px;
+            transition: all 0.1s;
+            padding-bottom: 20px;
+            cursor: pointer;
+        }
+        .saveBtn:active{
+            background-color: rgba(35,35,35,0.6);
+        }
+
+        .cancelBtn{
+            margin-left: 20px;
+            background: #fff;
+            color: #222;
+            border: 1px solid #222;
+        }
     }
-    
 </style>
 
 <script>
@@ -202,148 +215,18 @@
     import store from "../../store/index.js"
     import {mapGetters, mapActions} from 'vuex';
     import loding from "../../components/loding.vue"
+    import { getMessage } from '../../api';
+    import { formateMeaData } from '../../utils/geekoutil';
+    import MeaSelect from '../../components/editmessage/mea_select.vue';
+    import data from '../../common'
 
     export default {
         name:"MyMeasurements",
         data(){
             return{
-                size: "cm",
-                checkList: ["cm","inch"],
-                dataList:[1,2,3,4],
-                isSelecting: false,
-                slotList: [
-                            {
-                                slotTitle: this.$t("measurements.mea_height"), // 标题
-                                slotList:[
-                                    {
-                                        slotType: "input", // input & checkbox
-                                        slotDefaultV: "", // 默认值
-                                        slotInputType: "number", // 控制input框的输入类型
-                                        slotCheckList: [], // 如果type是checkbox需要这个不为空
-                                        slotSize: "primary", // primary为固定54px宽，large为父容器宽度
-                                    },
-                                    {
-                                        slotType: "checkbox", // input & checkbox
-                                        slotDefaultV: "", // 默认值
-                                        slotCheckList: [this.$t("measurements.mea_cm"),this.$t("measurements.mea_inch")], // 如果type是checkbox需要这个不为空
-                                        slotInputType: "", // 控制input框的输入类型
-                                        slotSize: "primary", // primary为固定54px宽，large为父容器宽度
-                                    }
-                                ]
-                            },
-                            {
-                                slotTitle: this.$t("measurements.mea_weight"), // 标题
-                                slotList:[
-                                    {
-                                        slotType: "input", // input & checkbox
-                                        slotDefaultV: "", // 默认值
-                                        slotInputType: "number", // 控制input框的输入类型
-                                        slotCheckList: [], // 如果type是checkbox需要这个不为空
-                                        slotSize: "primary", // primary为固定54px宽，large为父容器宽度
-                                    },
-                                    {
-                                        slotType: "checkbox", // input & checkbox
-                                        slotDefaultV: "", // 默认值
-                                        slotCheckList: [this.$t("measurements.mea_kg"),this.$t("measurements.mea_lbs")], // 如果type是checkbox需要这个不为空
-                                        slotInputType: "", // 控制input框的输入类型
-                                        slotSize: "primary", // primary为固定54px宽，large为父容器宽度
-                                    }
-                                ]
-                            },
-                            {
-                                slotTitle: this.$t("measurements.mea_bust_size"), // 标题
-                                slotList:[
-                                    {
-                                        slotType: "input", // input & checkbox
-                                        slotDefaultV: "", // 默认值
-                                        slotInputType: "number", // 控制input框的输入类型
-                                        slotCheckList: [], // 如果type是checkbox需要这个不为空
-                                        slotSize: "primary", // primary为固定54px宽，large为父容器宽度
-                                    },
-                                    {
-                                        slotType: "checkbox", // input & checkbox
-                                        slotDefaultV: "", // 默认值
-                                        slotCheckList: [this.$t("measurements.mea_cm"),this.$t("measurements.mea_inch")], // 如果type是checkbox需要这个不为空
-                                        slotInputType: "", // 控制input框的输入类型
-                                        slotSize: "primary", // primary为固定54px宽，large为父容器宽度
-                                    }
-                                ]
-                            },
-                            {
-                                slotTitle: this.$t("measurements.mea_bra_size"), // 标题
-                                slotList:[
-                                    {
-                                        slotType: "input", // input & checkbox
-                                        slotDefaultV: "", // 默认值
-                                        slotInputType: "number", // 控制input框的输入类型
-                                        slotCheckList: [], // 如果type是checkbox需要这个不为空
-                                        slotSize: "primary", // primary为固定54px宽，large为父容器宽度
-                                    },
-                                    {
-                                        slotType: "checkbox", // input & checkbox
-                                        slotDefaultV: "", // 默认值
-                                        slotCheckList: ["A","AA","B","C","D","E","F"], // 如果type是checkbox需要这个不为空
-                                        slotInputType: "text", // 控制input框的输入类型
-                                        slotSize: "primary", // primary为固定54px宽，large为父容器宽度
-                                    }
-                                ]
-                            },
-                            {
-                                slotTitle: this.$t("measurements.mea_waist"), // 标题
-                                slotList:[
-                                    {
-                                        slotType: "input", // input & checkbox
-                                        slotDefaultV: "", // 默认值
-                                        slotInputType: "number", // 控制input框的输入类型
-                                        slotCheckList: [], // 如果type是checkbox需要这个不为空
-                                        slotSize: "primary", // primary为固定54px宽，large为父容器宽度
-                                    },
-                                    {
-                                        slotType: "checkbox", // input & checkbox
-                                        slotDefaultV: "", // 默认值
-                                        slotCheckList: [this.$t("measurements.mea_cm"),this.$t("measurements.mea_inch")], // 如果type是checkbox需要这个不为空
-                                        slotInputType: "", // 控制input框的输入类型
-                                        slotSize: "primary", // primary为固定54px宽，large为父容器宽度
-                                    }
-                                ]
-                            },
-                            {
-                                slotTitle: this.$t("measurements.mea_hips"), // 标题
-                                slotList:[
-                                    {
-                                        slotType: "input", // input & checkbox
-                                        slotDefaultV: "", // 默认值
-                                        slotInputType: "number", // 控制input框的输入类型
-                                        slotCheckList: [], // 如果type是checkbox需要这个不为空
-                                        slotSize: "primary", // primary为固定54px宽，large为父容器宽度
-                                    },
-                                    {
-                                        slotType: "checkbox", // input & checkbox
-                                        slotDefaultV: "", // 默认值
-                                        slotCheckList: [this.$t("measurements.mea_cm"),this.$t("measurements.mea_inch")], // 如果type是checkbox需要这个不为空
-                                        slotInputType: "", // 控制input框的输入类型
-                                        slotSize: "primary", // primary为固定54px宽，large为父容器宽度
-                                    }
-                                ]
-                            },
-                            {
-                                slotTitle: this.$t("measurements.mea_perference"), // 标题
-                                slotList:[
-                                    {
-                                        slotType: "radio", // input & checkbox & radio
-                                        slotDefaultV: "", // 默认值
-                                        slotCheckList: [this.$t("measurements.mea_true_to_size"),this.$t("measurements.mea_large"), this.$t("measurements.mea_small")], // 如果type是checkbox需要这个不为空
-                                        slotInputType: "", // 控制input框的输入类型
-                                        slotSize: "large", // primary为固定54px宽，large为父容器宽度
-                                    }
-                                ]
-                            },
-
-                        ],
-                submitData: {},
                 infoPart:{
                     title: this.$t("measurements.mea_how"),
-                    imageUrl: "https://s3.us-west-2.amazonaws.com/image.chic-fusion.com/chicme/2021-08-11/2021-08-11-select-body.png",
+                    imageUrl: data.IMAGE_GEEKO_LTD + "/chicme/2021-08-11/2021-08-11-select-body.png",
                     infoList: [
                         {
                             infoTitle:this.$t("measurements.mea_bust"),
@@ -359,63 +242,63 @@
                         }
                     ]
                 },
-                testShow: true,
                 isLoadingShow:false,
-                inputData:{},
-                sizingList: ["True to size","Large","Small"],
                 haveDoneBefore: false,
                 tipContent:'',
                 tipPoints:'',
+
+                isEditing: false, // 是否正在编辑
+                meaData: '', // 配置项
+                slotList: [],
+                unitSelect: 'cm', // 选中的单位
+                dataChange: false, // 数据是否被操作
+
             }
         },
         computed:{
             ...mapGetters(['me']),
-            defaultV:function(){
-                return this.checkList.length > 0 ? this.checkList[0] : " "
-            },
         },
-        watch:{
-
-        },
-        created:function(){
-           this.getData()
+        created(){
            this.tipContent = "<div style='text-align: center;'><img src='https://image.geeko.ltd/chicme/2021111101/modal_points.png' alt='ModalPoints' style='width:50%;'><p style='font-weight:bold;font-size:24px;margin: 0;'>100 Points</p><p style='margin: 0;font-size: 12px;'><span>100 points = $1 USD.</span><a href='/policy/bonus-point' style='vertical-align: middle;'><img src='https://image.geeko.ltd/chicme/2021111101/question.png' alt='Question' style='width: 14px;height: 14px;'></a></p><p style='margin: 0;font-size: 12px;line-height: 12px;margin-top: 10px;font-family: Roboto-Regular'>Saved Successfully!</p><p style='margin: 0;font-size: 12px;font-family: Roboto-Regular;'>You’ve got <span style='color: #e64545;font-weight: bold;font-family: Roboto-Regular;'>100 points</span> in your account</p></div>"
-        //    console.log(this.$t("measurements.mea_height"))
+           getMessage("M1813").then(res => {
+            // console.log(res)
+            if(res?.message){
+                this.meaData = JSON.parse(res?.message)
+                this.initSlotList()
+            }
+           })
         },
         mounted(){
-             
         },
         methods:{
-            inputChange(value){
-                // console.log(this.inputData)
-                // console.log(value)
-                // console.log(this.slotList);
-                this.inputData = value;
-                this.submitData = value;
-
-                for(let i in this.slotList){
-                    // console.log(this.slotList[i])
-                    for(let item in value){
-                        // console.log(item)
-                        if(this.slotList[i].slotTitle === item){
-                            // console.log(this.slotList[i])
-                            for(let j = 0; j < this.slotList[i]['slotList'].length; j++){
-                                if(this.slotList[i]['slotList'][j]['slotType'] == "checkbox"){
-                                    this.slotList[i]['slotList'][j]['slotDefaultV'] = value[item]['select'];
-                                } else if(this.slotList[i]['slotList'][j]['slotType'] == "input" && this.slotList[i]['slotList'][j]['slotInputType'] == "number"){
-                                    this.slotList[i]['slotList'][j]['slotDefaultV'] = value[item]['number'];
-                                } else {
-                                    this.slotList[i]['slotList'][j]['slotDefaultV'] = value[item]['text'];
-                                }
-                            }
-                        }
-                    }
-                }
-                // console.log(this.slotList)
+            initSlotList(){
+                const initList = [
+                    {...formateMeaData(this.meaData, 'height', this.$t)},
+                    {...formateMeaData(this.meaData, 'weight', this.$t)},
+                    {...formateMeaData(this.meaData, 'bust', this.$t)},
+                    {...formateMeaData(this.meaData, 'bra', this.$t), type: 'normal',},
+                    {...formateMeaData(this.meaData, 'waist', this.$t)},
+                    {...formateMeaData(this.meaData, 'hips', this.$t)},
+                    {
+                        slotTitle: this.$t("measurements.mea_perf"), // 标题
+                        selectList:[
+                            this.$t("measurements.mea_true_to_size"),
+                            this.$t("measurements.mea_large"),
+                            this.$t("measurements.mea_small")
+                        ],
+                        valueLabel: 'sizingRecommendation',
+                        type: 'normal',
+                        slotDefaultV: '',
+                        unit: '',
+                    },
+                ]
+                this.slotList = initList
+                console.log('initSlotList: ', this.slotList)
+                this.getData()
             },
             getData(){
                 let result = this.me.mySizeInformation;
-                // console.log(this.me)
+                // console.log(result)
                 if(result){
                     this.haveDoneBefore = true;
                 } else {
@@ -423,60 +306,74 @@
                 }
                 for(let i = 0; i < this.slotList.length; i++){
                     for(let item in result){
-                        if(item == this.slotList[i].slotTitle.split(" ")[0].toLocaleLowerCase()){
-                            this.slotList[i].slotList[0].slotDefaultV = result[item]
-                        } else if(item == this.slotList[i].slotTitle.split(" ")[0].toLocaleLowerCase()+"Unit"){
-                            this.slotList[i].slotList[1].slotDefaultV = result[item]
-                        } else if((item == "sizingRecommendation") && this.slotList[i].slotTitle == "What is your preference?" ){
-                            this.slotList[i].slotList[0].slotDefaultV = this.sizingList[result[item]];
+                        if(item == this.slotList[i]?.['valueLabel']){
+                            if(item === 'sizingRecommendation'){
+                                this.slotList[i].slotDefaultV = this.slotList[i].selectList[result[item]] || ''
+                            } else {
+                                let data = result[item]
+                                if(this.slotList[i]?.selectList?.some(item => Object.values(item).includes(data)) || item == 'bra'){
+                                    this.slotList[i].slotDefaultV = data
+                                }
+                            }
+                        } else if (item == this.slotList[i]?.['unitLabel'] && result[item]){
+                            if(this.slotList[i]?.['unitList'] && this.slotList[i]?.['unitList']?.find(u => u == result[item]) || !this.slotList[i]['unitList']){
+                                this.slotList[i].unit = result[item]
+                            }
                         }
                     }
                 }
-                this.initInputData();
+            },
+            selectChange(label, data){
+                this.dataChange = true
+                let midList = this.slotList.slice(0)
+                midList?.forEach((s) => {
+                    if(s?.valueLabel == label){
+                        if(label == 'bra'){
+                            let strReg = /[A-Za-z]/g //判断数据是否存在字母
+                            let numReg = /[0-9]/g
+                            s.slotDefaultV = data?.match(numReg)?.join('')
+                            s.unit = data?.match(strReg)?.join('')
+                        } else {
+                            s.slotDefaultV = data
+                        }
+                    } else if(s?.unitLabel == label){
+                        s.unit = data
+                        s.slotDefaultV = ''
+                    }
+                })
+                // console.log(label, data, midList)
+                this.slotList = midList
             },
             saveData(){
-                // console.log(this.submitData)
-                let _this = this;
-                this.isLoadingShow = true;
-                let final = {};
-                for(let item in this.submitData){
-                    // console.log(item)
-                    if(item == "What is your preference?"){
-                        /**
-                         * this.submitData['What is your preference?']['select'] == "True to size" ? 0 :
-                                                        this.submitData['What is your preference?']['select'] == "Large" ? 1 : 2;
-                         */
-                        final['sizingRecommendation'] = this.sizingList.indexOf(this.submitData["What is your preference?"]["select"]);
-                    } else {
-                        let key = item.split(" ")[0].toLocaleLowerCase();
-                        final[key] = "";
-                        final[key + "Unit"] = "";
-                        for(let item1 in this.submitData[item]){
-                            if(item1 == "number"){
-                                final[key] = this.submitData[item][item1];
-                            } else {
-                                final[key + "Unit"] = this.submitData[item][item1];
-                            }
+                if(!this.dataChange){
+                    this.isEditing = false
+                    return
+                }
+                let obj = {}
+                let strReg = /[A-Za-z]/g //判断数据是否存在字母
+                let numReg = /[0-9]/g
+                this.slotList?.forEach(item => {
+                    if(item?.['unit']){
+                        obj[item?.unitLabel] = item.unit
+                    }
+                    if(item?.slotDefaultV || item?.slotDefaultV == 0){
+                        if(item?.valueLabel == 'sizingRecommendation'){
+                            obj[item?.valueLabel] = item.selectList.findIndex(s => s == item?.slotDefaultV)
+                        } else if(strReg.test(item?.slotDefaultV)){
+                            obj[item?.valueLabel] = item.slotDefaultV?.match(numReg)?.join('')
+                            obj[item?.unitLabel] = item.slotDefaultV?.match(strReg)?.join('')
+                        } else {
+                            obj[item?.valueLabel] = item.slotDefaultV.toString()
                         }
                     }
+                });
+                let params = {
+                    "customer":{"mySizeInformation": obj},
+                    "name":"mySizeInformation"
                 }
-                // console.log(final)
-                // return;
-
-                if(Object.keys(this.submitData).length <= 0){
-                    alert(this.$t('label.my_measurements_error_message'));
+                store.dispatch("updateCustomerSave", params).then(res => {
                     this.isLoadingShow = false;
-                    return;
-                }
-
-                let obj = {
-                            "customer":{"mySizeInformation": final},
-                            "name":"mySizeInformation"
-                            }
-
-                store.dispatch("updateCustomerSave", obj).then(res => {
-                    this.isLoadingShow = false;
-                    
+                    this.isEditing = false
                     if(this.haveDoneBefore){
                         this.showNormalTip()
                     } else {
@@ -488,6 +385,9 @@
                         this.showPointsTip()
                         this.haveDoneBefore = true
                     }
+                }).catch(err => {
+                    alert(err?.result || err)
+                    this.isLoadingShow = false;
                 })
             },
             showNormalTip(){
@@ -500,39 +400,19 @@
                 this.$store.dispatch("setShowTip", true);
                 this.$store.dispatch("setTipType", 'points');
             },
-            initInputData(){
-                // console.log("触发");
-                let data = {};
-                for(let i = 0; i < this.slotList.length; i++){
-                    let title = this.slotList[i]['slotTitle'];
-                    data[title] = {}
-                    for(let j = 0; j < this.slotList[i]['slotList'].length; j ++){
-                        let type = this.slotList[i]['slotList'][j]['slotType'];
-                        // console.log(title,type)
-                        if(type === "input"){
-                            let inputType = this.slotList[i]['slotList'][j]['slotInputType'] ? 
-                                            this.slotList[i]['slotList'][j]['slotInputType'] : "text";
-                            let inputValue = this.slotList[i]['slotList'][j]['slotDefaultV'] ?
-                                            this.slotList[i]['slotList'][j]['slotDefaultV'] : ""
-                            data[title][inputType] = inputValue;
-                        } else if(type === "checkbox" || type === "radio"){
-                            let selectChild = this.slotList[i]['slotList'][j]['slotDefaultV'] ?
-                                            this.slotList[i]['slotList'][j]['slotDefaultV'] :
-                                            this.slotList[i]['slotList'][j]['slotCheckList'].length > 0 ? 
-                                            this.slotList[i]['slotList'][j]['slotCheckList'][0] : ""
-                            data[title]["select"] = selectChild;
-                        }
-                    }
-                }
-                // console.log(data)
-                this.inputData = data;
+            cancelFunc(){
+                this.getData()
+                this.isEditing = false
+            },
+            startEdit(){
+                this.isEditing = true
             }
         },
         components:{
-            // "nav-bar": NavBar,
             "m-select": MMSelect,
             "m-input": MMInput,
             "loading":loding,
+            "mea-select": MeaSelect,
         }
     }
 </script>

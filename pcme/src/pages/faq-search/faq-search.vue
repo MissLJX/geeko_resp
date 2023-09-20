@@ -28,9 +28,9 @@
                     <div class="resultItemContent" v-html="removeHeader(item.richText)"></div>
                 </div>
 
-                <dir v-if="searchAboutList.length == 0" class="noResultBox">
+                <div v-if="searchAboutList.length == 0" class="noResultBox">
                     <span class="iconfont">&#xe7c6;</span>
-                </dir>
+                </div>
 
                 <div :class="{'noData':true, 'noMarginTop': searchAboutList.length == 0}">
                     <div class="contactUsBox">

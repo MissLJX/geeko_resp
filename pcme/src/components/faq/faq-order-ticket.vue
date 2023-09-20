@@ -519,12 +519,12 @@
                         const all = products?.length > 0 ? products : []
                         this.productCanSelect = all?.filter(p => p?.returnStatus == 1)?.map(p => { return { ...p, selected: false } }) || []
                         this.productCannotSelect = all?.filter(p => p?.returnStatus == 4)?.map(p => { return { ...p, selected: false } }) || []
-                        this.productReturned = all?.filter(p => p?.returnStatus == 2 || p?.returnStatus == 3) || []
+                        this.productReturned = all?.filter(p => p?.returnStatus == 2) || []
                         if(this.productCanSelect?.length > 0 || this.productCannotSelect?.length > 0 || this.productReturned?.length > 0){
                             this.returnMaskShow = true;
                         }
                     } else {
-                        let qTReasonList = this.usedQuestionType.find(q => q.value == e.value).reasons ? 
+                        let qTReasonList = this.usedQuestionType.find(q => q.value == e.value).reasons ?
                                     this.usedQuestionType.find(q => q.value == e.value).reasons :
                                     []
                         let showed = this.ticket_con ?
@@ -939,7 +939,7 @@
                     const packageList = this.ticket?.logistics?.packages || []
                     const products = packageList?.map(p => p.products)?.flat(Infinity)
                     const all = products?.length > 0 ? products : []
-                    const productReturned = all?.filter(p => p?.returnStatus == 2 || p?.returnStatus == 3)
+                    const productReturned = all?.filter(p => p?.returnStatus == 2)
                     const hasReturnOrderIdNums = productReturned?.filter(p => p?.returnOrderId)?.map(p => p?.returnOrderId) || []
                     const numUnique = Array.from(new Set(hasReturnOrderIdNums))
                     if(numUnique?.length == 1){

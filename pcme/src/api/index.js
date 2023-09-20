@@ -5,7 +5,7 @@ const NVPATH = '/v9'
 import * as http_infos from "./http_infos";
 
 export const get = () => {
-    return axios.get(VPATH + '/customer/get', {}, {}).then(data => data.result).catch(err => console.log(err))
+    return axios.get(VPATH + '/customer/get', {_: new Date().getTime()}, {}).then(data => data.result).catch(err => console.log(err))
 }
 //logout
 export function logout(){
@@ -508,4 +508,9 @@ export const fetchSaveComments = (comments, headers) =>{
 
 export const getAppMessage = (code, headers) => {
 	return axios.get(`${VPATH}/message/anon/app-message/${code}`, {_:new Date().getTime()}, headers)
+}
+
+// 获取support所有数据
+export const fetchTicketQuestionsTree = (headers) => {
+	return axios.get(`/shop/support/get-tree`, { _:new Date().getTime() }, headers);
 }
