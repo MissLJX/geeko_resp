@@ -68,6 +68,9 @@
                     this.isloding = false
                     this.tipmsg = data
                     this.isAlert = true;
+                }).catch(err => {
+                    alert(err?.result || err)
+                    this.isloding = false
                 });
             },
             changePasswordHandle(){
